@@ -1,17 +1,6 @@
-<div id="employees" class="min-w-full">
-  <ul role="list" class="divide-y divide-gray-100">
-    <li  class="flex items-center justify-between gap-x-6 py-5">
-      <div class="min-w-0 w-full columns-2 md:columns-3 lg:columns-4">
-        <%= render_text_column    field: t('.name'), css: "font-bold truncate" %>
-        <%= render_number_column  field: t(".locale"), css: "font-bold text-right" %>
-        <%= render_text_column    field: t(".time_zone"), css: "hidden md:block font-bold " %>
-        <%= render_text_column    field: t(".updated_at"), css: "hidden lg:block font-bold " %>
-      </div>
-      <div class="flex flex-none items-center gap-x-4 ">
-        <%= render_contextmenu list: @resources %>
-      </div>
-    </li>
-
-    <%= render @resources %>
-  </ul>
+<div class="min-w-0 w-full columns-2 md:columns-3 lg:columns-4">
+  <%= render_text_column    field: t('.name'), css: "font-bold truncate" %>
+  <%= render_number_column  field: t(".locale"), css: "font-bold text-right" %>
+  <%= render_text_column    field: t(".time_zone"), css: "hidden md:block font-bold " %>
+  <%= render_text_column    field: t(".updated_at"), css: "hidden lg:block font-bold " %>
 </div>
