@@ -1,24 +1,15 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Mortimer Time & Attendance (MTA) is a lean take on the centuries old 'punch clock'. You get a back office 
+with accounts, users, locations, punch_clocks, teams, employees, and you get a front office with 
+punch_cards, and punches.
 
-Things you may want to cover:
+You may spin up MTA on your local host with `dev` and hit https://localhost:3000 in your browser - it will 
+respect SSL.
 
-* Ruby version
+Deploying MTA with [Kamal](https://kamal-deploy.org/) on a hosting platform like [Hetzner](https://hetzner.com) is 
+as easy as can be - follow [this guide](https://dev.to/adrienpoly/deploying-a-rails-app-with-mrsk-on-hetzner-a-beginners-guide-39kp)
 
-* System dependencies
+Out of the box MTA will seed your database (it defaults to SQLite3 in the spirit of current Rails philosophy) with a 
+small dataset. All you have to do is sign up - with the first user being a 'superuser'
 
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
