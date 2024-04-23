@@ -1,0 +1,21 @@
+da:
+ 
+  punches:
+    create:
+      post: Stemplingen blev oprettet
+    update:
+      post: Stemplingen blev opdateret
+    destroy:
+      post: Stemplingen blev slettet
+
+    form:
+      new: Ny stempling
+      edit: Redigér stempling
+
+    list:
+      new: Ny stempling
+      title: Stemplinger
+      name: Medarbejder 
+      punched_at: Stemplet den 
+      state: Status
+      updated_at: Opdateret den

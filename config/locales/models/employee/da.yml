@@ -1,0 +1,38 @@
+da:
+
+  employees:
+    create:
+      post: Medarbejderen blev oprettet
+    update:
+      post: Medarbejderen blev opdateret
+    destroy:
+      post: Medarbejderen blev slettet
+
+    list:
+      title: Medarbejdere
+      new: Ny medarbejder
+      edit: Rediger
+      delete: Slet
+      show: Vis
+      name: Navn
+      email: Email
+      phone: Telefon
+      pincode: Pinkode
+      state: Status
+      updated_at: Opdateret den
+
+    form:
+      new: Ny medarbejder
+      edit: Rediger medarbejder
+
+    new:
+      title: Ny medarbejder
+      create: Opret
+
+    edit:
+      title: Rediger medarbejder
+      update: Opdater
+
+    show:
+      title: Medarbejder
+      back: Tilbage
