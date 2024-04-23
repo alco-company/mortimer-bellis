@@ -1,0 +1,42 @@
+da:
+
+  punch_cards:
+    create:
+      post: Stempelkortet blev oprettet
+    update:
+      post: Stempelkortet blev opdateret
+    destroy:
+      post: Stempelkortet blev slettet
+
+    index:
+      title: Stempelkort
+
+    form:
+      new: Nyt stempelkort
+      edit: Rediger stempelkort
+
+    list:
+      title: Stempelkort
+      new: Nyt stempelkort
+      name: Medarbejder
+      work_date: Arbejdsdato
+      work_minutes: Arbejdstid
+      break_minutes: Pauser
+      updated_at: Opdateret den
+
+  pos: 
+    punch_cards: 
+      index: 
+        today: I dag 
+        this_payroll: Denne lønperiode
+        todays_punches: Stemplinger idag 
+        for_employee: for %{name}
+
+        add_time: Tilføj tid
+        this_payroll_punches: Stemplinger i denne lønperiode
+        time_added: Tid allerede tilføjet
+
+        from_at: Fra
+        to_at: Til
+        cancel: Annuller
+        submit: Tilføj

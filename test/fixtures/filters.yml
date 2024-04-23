@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  account: one
+  view: MyString
+  filter: 
+
+two:
+  account: two
+  view: MyString
+  filter: 

@@ -1,0 +1,35 @@
+da:
+
+  punch_clocks:
+    create:
+      post: Stempeluret blev oprettet
+    update:
+      post: Stempeluret blev opdateret
+    destroy:
+      post: Stempeluret blev slettet
+
+    list:
+      title: Stempelure
+      new: Nyt stempelur
+      name: Navn
+      ip_addr: IP adresse
+      locale: Sprog
+      time_zone: Tidszone
+      updated_at: Opdateret den
+
+  pos: 
+    punch_clocks: 
+      edit: 
+        today: I dag 
+        this_payroll: Denne lønperiode
+        todays_punches: Stemplinger idag 
+        for_employee: for %{name}
+
+        add_time: Tilføj tid
+        this_payroll_punches: Stemplinger i denne lønperiode
+        time_added: Tid allerede tilføjet
+
+        from_at: Fra
+        to_at: Til
+        cancel: Annuller
+        submit: Tilføj

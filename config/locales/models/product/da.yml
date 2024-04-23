@@ -1,0 +1,35 @@
+da:
+
+  products:
+    create:
+      post: Produktet blev oprettet
+    update:
+      post: Produktet blev opdateret
+    destroy:
+      post: Produktet blev slettet
+
+    list:
+      title: Produkter
+      new: Nyt produkt
+      edit: Rediger
+      delete: Slet
+      show: Vis
+      name: Navn
+      barcode: Stregkode
+      updated_at: Opdateret den
+
+    form:
+      new: Ny medarbejder
+      edit: Rediger medarbejder
+
+    new:
+      title: Ny medarbejder
+      create: Opret
+
+    edit:
+      title: Rediger medarbejder
+      update: Opdater
+
+    show:
+      title: Medarbejder
+      back: Tilbage

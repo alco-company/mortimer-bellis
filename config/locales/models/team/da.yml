@@ -1,0 +1,30 @@
+da:
+
+  teams:
+
+    create:
+      post: Holdet blev oprettet
+    update:
+      post: Holdet blev opdateret
+    destroy:
+      post: Holdet blev slettet
+        
+    list:
+      title: Hold/grupper
+      new: Nyt hold
+      edit: Rediger
+      delete: Slet
+      show: Vis
+      name: Navn
+      team_color: Hold farve
+      locale: Sprog
+      time_zone: Tidszone
+      email: Email
+      phone: Telefon
+      pincode: Pinkode
+      state: Status
+      updated_at: Opdateret den
+
+    form:
+      new: Nyt hold
+      edit: Rediger hold

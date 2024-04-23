@@ -1,0 +1,35 @@
+da:
+  accounts:
+    create:
+      post: Kontoen blev oprettet
+    update:
+      post: Kontoen blev opdateret
+    destroy:
+      post: Kontoen blev slettet
+
+    list:
+      title: Konti
+      new: Ny konto
+      edit: Rediger
+      delete: Slet
+      show: Vis
+      name: Navn
+      locale: Sprog
+      time_zone: Tidszone
+      updated_at: Opdateret den
+
+    form:
+      new: Ny konto
+      edit: Rediger konto
+
+    new:
+      title: Ny konto
+      create: Opret
+
+    edit:
+      title: Rediger konto
+      update: Opdater
+
+    show:
+      title: Konto
+      back: Tilbage

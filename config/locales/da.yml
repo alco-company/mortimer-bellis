@@ -1,0 +1,588 @@
+da:
+  hours_minutes: "%{hours}t %{minutes}m"
+  select_team: Vælg hold
+  last_payroll_at: Lønperiode til og med
+  import_employee: Videre
+  import_employees: Indlæs medarbejder stamdata
+  form_errors_prohibited: "%{errors} fejl forhindrede denne post i at blive gemt"
+
+  menu:
+    home: Hjem
+    accounts: Konti
+    teams: Hold
+    punch_clocks: Stempelure
+    employees: Medarbejdere
+    punch_cards: Stempelkort
+    punches: Stemplinger
+    motds: Dagens beskeder
+
+    pos:
+      profile: Profil
+      today: I dag
+      payroll_period: Lønperiode
+
+  pos:
+    punch_clocks:
+      edit:
+        in: Ind
+        out: Ud
+        break: Pause
+      show:
+        network_not_available: Netværket er ikke tilgængeligt
+
+
+# Standard localization ------------------------------
+
+  activerecord:
+    attributes:
+      account:
+        name: Kontonavn
+        pp_identification: Lønbureau ID
+        eu_work_directive: EU regulativ (2003/88/EC)
+        time_zone: Tidszone
+        locale: Sprog
+        logo: Logo (80 x 40)
+      asset:
+        name: 'Navn'
+        asset_teams: 'Hold/grupper'
+        last_punched_at: sidst stemplet 
+        should_reload: Skal genstartes
+        user: admin bruger 
+        state: Status
+      asset_work_session:
+        employee_id: Medarbejder
+        start_at: Startet den 
+        stop_at: Stoppet den
+        session_type: Type 
+        reason: Årsag
+        comment: Kommentar
+        adjust_next: Tilpas øvrige
+
+      asset_work_transaction:
+        punched_at: "stemplet kl:"
+        days: Dage
+        hours: Timer
+        comment: Beskrivelse - især ved overarbejde, vikariat, evt sygdom og mere
+        reason: Årsag - '15MIN', og 'XTRA' ved aftalte særlige indstemplinger
+      background_job:
+        klass: Klasse 
+        active: Aktiv 
+        schedule: Plan 
+        params: Argumenter
+      dashboard:
+        name: Navn
+        layout: Skabelon
+        body: Indhold
+      employee:
+        name: Navn
+        import: Indlæs CSV fil med medarbejdere
+        access_token: nøgle
+        flex_balance_minutes: flex minutter
+        mug_shot: profil billede
+        blocked: tidsregistrering spærret
+        time_zone: Tidszone
+        locale: Sprog
+        hired_at: ansat den
+        birthday: fødselsdag
+        pincode: pinkode
+        state: status
+        employee_number: medarbejder nummer
+        pbx_extension: omstillingsnr
+        job_title: job titel
+        base_salary: grundløn
+        ot1_hr_pay: OT1 tillæg
+        ot2_hr_pay: OT2 tillæg
+        norm_time_minutes: timer:min i et rul
+        roll_days: antal dage i et rul
+        week_workdays: arbejdsdage/uge
+        ot1_minutes: Overtid 1
+        next_roll_at: næste rul starter
+        teams: Hold/grupper
+
+      event:
+        minutes: Minutter
+        employee_id: Medarbejder
+      faq:
+        endpoint: URL 
+        field: felt 
+        action: handling 
+        title: titel 
+        description: beskrivelse
+      lead:
+        email_address: Email adresse
+        trial_ends_at: Prøveperioden slutter
+        converted_at: Kunde fra    
+      location:
+        long_lat: Position (long,lat)
+      message:
+        subject: Overskrift
+        body: Besked 
+        rrule: gentagelser 
+        recipients: Modtagere
+        recipients_taglist: Modtagere
+        attachments: Vedhæftet fil/vedhæftede filer
+      motd:
+        valid_from_at: Gælder fra 
+        valid_to_at: Gælder indtil
+        content: Beskeden
+      notification:
+        uris: Modtagere
+      participant:
+        name: Navn
+        teams: Hold/grupper
+        roles: Roller
+        work_schedules: Arbejdsplaner
+      print_template:
+        name: Skabelon navn
+        context: Bruges af
+        cmd: Data opsamling
+        body: Indhold
+      printserver:
+        name: navn 
+        mac_addr: MAC adresse 
+        port: port 
+        state: status 
+
+      profile: 
+        name: Brugernavn
+        avatar: Profil billede
+        time_zone: Tidszone 
+        color: Farve
+        locale: Sprog 
+
+      punch:
+        punched_at: "stemplet kl:"
+        employee_id: Medarbejder
+        state: Status
+        
+      punch_card:
+        punched_at: "stemplet kl:"
+        employee_id: Medarbejder
+        location_id: Arbejdssted
+        punch_clock_id: Stempelur
+        punch_type: Type
+        comment: Beskrivelse
+        work_date: Arbejdsdato
+        work_minutes: Arbejdstid (minutter)
+        break_minutes: Pauser (minutter)
+        reason: Årsag
+        state: Status
+      punch_clock:
+        name: Navn
+        ip_addr: IP adresse 
+        location: lokation 
+        time_zone: Tidszone
+        locale: Sprog
+        last_punched_at: sidst stemplet 
+        location_id: Arbejdssted
+        access_token: API nøgle
+      reporting: 
+        print_template_id: Skabelon 
+        destination: medie 
+        secure: Krypteret 
+        format: format
+        priority: prioritet
+      role:
+        name: Navn
+        context: Situation/kontekst
+        state: Status 
+        role: Rettigheder
+      sentence:
+        reference: Ord/sætning
+        language: Sprog
+        translation: Oversættelse 
+      service: 
+        name: Navn
+        state: Aktiv 
+        menu_label: Menu navn 
+        index_url: URL til index 
+        service_group: Gruppe 
+        service_model: Beregningsmodel
+        menu_icon: Icon (html)
+      stocked_product:
+        name: Navn
+        stock: Lager
+        stock_location: Lagerlokation 
+        product: Produkt
+        stock_unit: Lagerenhed
+        minimum_stock_level: Min enheder på lager
+      system_parameter:
+        name: Navn
+        system_key: Nøgle
+        position: Rækkefølge
+        value: Værdi
+      team:
+        norm_time_minutes: timer:min i et rul
+        name: Hold navn
+        time_zone: Tidszone
+        team_color: Hold farve
+        locale: Sprog
+        roll_days: antal dage i et rul
+        week_workdays: arbejdsdage/uge
+        ot1_minutes: Overtid 1
+        next_roll_at: næste rul starter
+      uri_scheme: 
+        scheme: skema
+        purpose: Anvendelse
+        reference: RFC / reference
+        general_format: Format
+        state: status
+        notes: Kommentarer
+        language: sprog 
+        country: land 
+        region: region 
+        version: version 
+        sub_scheme: Under skema
+      user:
+        user_name: Brugernavn
+        password: Adgangskode
+        password_confirmation: Bekræft adgangskode
+        confirmed_at: Bekræftet den
+        receive_notifications: Modtager notifikationer
+
+    models:
+      account:
+        one: konto
+        other: konti
+      asset_work_session:
+        one: komme/gå stempling
+        other: komme/gå stemplinger
+      asset_work_transaction:
+        one: transaktion 
+        other: transaktioner
+      asset_workday_sum:
+        one: stempelkort
+        other: stempelkort
+      background_job:
+        one: baggrundsjob
+        other: baggrundsjob
+      dashboard:
+        one: Overblik 
+        other: Overblik
+      employee:
+        one: medarbejder
+        other: medarbejdere
+      equipment:
+        one: materiel 
+        other: materiel 
+      eu_work_time_directive_day:
+        one: registrering 
+        other: registreringer
+      faq:
+        one: FAQ
+        other: FAQs
+      invitation:
+        one: invitation
+        other: invitationer
+      motd:
+        one: dagens besked
+        other: dagens beskeder
+      lead:
+        one: emne
+        other: emner
+      location:
+        one: arbejdssted
+        other: arbejdssteder
+      organization:
+        one: virksomhed 
+        other: virksomheder
+      print_template:
+        one: skabelon
+        other: skabeloner
+      printserver:
+        one: printserver
+        other: printservere
+      product: 
+        one: produkt 
+        other: produkter
+      punch:
+        one: Stempling
+        other: stemplinger
+      punch_card:
+        one: stempelkort
+        other: stempelkort
+      punch_clock: 
+        one: stempelur
+        other: stempelure
+      reporting:
+        one: rapport
+        other: rapporter
+      role: 
+        one: rolle
+        other: roller
+      sentence: 
+        one: oversættelse
+        other: oversættelser
+      service: 
+        one: tjeneste
+        other: tjenester
+      stock:
+        one: lager
+        other: lagre
+      stock_location:
+        one: lagerlokation 
+        other: lagerlokationer
+      stocked_product: 
+        one: lagervare 
+        other: lagervarer
+      system_parameter:
+        one: konto indstilling
+        other: konto indstillinger
+      team:
+        one: hold
+        other: hold
+      uri_scheme:
+        one: URI skema 
+        other: URI skemaer
+      user:
+        one: bruger
+        other: brugere
+      
+
+    errors:
+      messages:
+        record_invalid: 'Godkendelse gik galt: %{errors}'
+        restrict_dependent_destroy:
+          has_one: Kunne ikke slette posten fordi en afhængig %{record} findes
+          has_many: Kunne ikke slette posten fordi afhængige %{record} findes
+
+  date:
+    single_day_names:
+    - M
+    - T
+    - O
+    - T
+    - F
+    - L
+    - S
+    abbr_day_names:
+    - søn
+    - man
+    - tir
+    - ons
+    - tor
+    - fre
+    - lør
+    abbr_month_names:
+    - 
+    - jan
+    - feb
+    - mar
+    - apr
+    - maj
+    - jun
+    - jul
+    - aug
+    - sep
+    - okt
+    - nov
+    - dec
+    day_names:
+    - søndag
+    - mandag
+    - tirsdag
+    - onsdag
+    - torsdag
+    - fredag
+    - lørdag
+    formats:
+      default: "%d.%m.%Y"
+      dm: "%d/%m"
+      dmy: "%d/%m/%y"
+      long: "%e. %B %Y"
+      short: "%e. %b %Y"
+      short_iso: "%Y-%m-%d"
+      week_number: "%W"
+      short_week_number: "%w"
+      week_string: "uge %W"
+      month_name: "%B"
+    month_names:
+    - 
+    - januar
+    - februar
+    - marts
+    - april
+    - maj
+    - juni
+    - juli
+    - august
+    - september
+    - oktober
+    - november
+    - december
+    order:
+    - :day
+    - :month
+    - :year
+  datetime:
+    distance_in_words:
+      about_x_hours:
+        one: cirka en time
+        other: cirka %{count} timer
+      about_x_months:
+        one: cirka en måned
+        other: cirka %{count} måneder
+      about_x_years:
+        one: cirka et år
+        other: cirka %{count} år
+      almost_x_years:
+        one: næsten et år
+        other: næsten %{count} år
+      half_a_minute: et halvt minut
+      less_than_x_seconds:
+        one: mindre end et sekund
+        other: mindre end %{count} sekunder
+      less_than_x_minutes:
+        one: mindre end et minut
+        other: mindre end %{count} minutter
+      over_x_years:
+        one: mere end et år
+        other: mere end %{count} år
+      x_seconds:
+        one: et sekund
+        other: "%{count} sekunder"
+      x_minutes:
+        one: et minut
+        other: "%{count} minutter"
+      x_days:
+        one: en dag
+        other: "%{count} dage"
+      x_months:
+        one: en måned
+        other: "%{count} måneder"
+      x_years:
+        one: et år
+        other: "%{count} år"
+    prompts:
+      second: Sekund
+      minute: Minut
+      hour: Time
+      day: Dag
+      month: Måned
+      year: År
+  errors:
+    format: "%{attribute} %{message}"
+    messages:
+      accepted: skal accepteres
+      blank: skal udfyldes
+      confirmation: stemmer ikke overens med %{attribute}
+      empty: må ikke udelades
+      equal_to: skal være %{count}
+      even: skal være et lige tal
+      exclusion: er reserveret
+      greater_than: skal være større end %{count}
+      greater_than_or_equal_to: skal være større end eller lig med %{count}
+      inclusion: er ikke på listen
+      invalid: er ikke gyldig
+      less_than: skal være mindre end %{count}
+      less_than_or_equal_to: skal være mindre end eller lig med %{count}
+      model_invalid: 'Godkendelse gik galt: %{errors}'
+      not_a_number: er ikke et tal
+      not_an_integer: er ikke et heltal
+      odd: skal være et ulige tal
+      other_than: skal være forskellig fra %{count}
+      present: skal være tom
+      required: skal udfyldes
+      taken: er allerede brugt
+      too_long:
+        one: er for lang (højst 1 tegn)
+        other: er for lang (højst %{count} tegn)
+      too_short:
+        one: er for kort (mindst 1 tegn)
+        other: er for kort (mindst %{count} tegn)
+      wrong_length:
+        one: har forkert længde (skulle være 1 tegn)
+        other: har forkert længde (skulle være %{count} tegn)
+    template:
+      body: 'Der var problemer med følgende felter:'
+      header:
+        one: En fejl forhindrede %{model} i at blive gemt
+        other: "%{count} fejl forhindrede %{model} i at blive gemt"
+  helpers:
+    select:
+      prompt: Vælg...
+    submit:
+      create: Opret %{model}
+      submit: Gem %{model}
+      update: Opdater %{model}
+    label:
+      asset_work_transaction:
+        punched_at: "stemplet kl:"
+  number:
+    currency:
+      format:
+        delimiter: "."
+        format: "%u %n"
+        precision: 2
+        separator: ","
+        significant: false
+        strip_insignificant_zeros: false
+        unit: DKK
+    format:
+      delimiter: "."
+      precision: 3
+      separator: ","
+      significant: false
+      strip_insignificant_zeros: false
+    human:
+      decimal_units:
+        format: "%n %u"
+        units:
+          billion:
+            one: Milliard
+            other: Milliarder
+          million:
+            one: Million
+            other: Millioner
+          quadrillion:
+            one: Billiard
+            other: Billiarder
+          thousand: Tusind
+          trillion:
+            one: Billion
+            other: Billioner
+          unit: ''
+      format:
+        delimiter: ''
+        precision: 3
+        significant: true
+        strip_insignificant_zeros: true
+      storage_units:
+        format: "%n %u"
+        units:
+          byte:
+            one: Byte
+            other: Bytes
+          gb: GB
+          kb: KB
+          mb: MB
+          tb: TB
+    percentage:
+      format:
+        delimiter: ''
+        format: "%n %"
+    precision:
+      format:
+        delimiter: ''
+  support:
+    array:
+      last_word_connector: " og "
+      two_words_connector: " og "
+      words_connector: ", "
+  time:
+    am: ''
+    formats:
+      default: "%e. %B %Y, %H.%M"
+      long: "%A d. %e. %B %Y, %H.%M"
+      date_long: "%A d. %e. %B %Y"
+      ultra_short: "%H:%M"
+      short: "%e. %b %Y, %H.%M"
+      date_text: "%e. %B %Y"
+      short_iso: "%Y-%m-%d"
+      date: "%d/%m/%Y"
+      dm: "%d/%m"
+      time_day_date: "kl %H:%M, %A den %d. %B, %Y"
+      week_number: "%W"
+      short_week_number: "%w"
+    pm: ''
+

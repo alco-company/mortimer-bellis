@@ -1,0 +1,20 @@
+da:
+ 
+  motds:
+    create:
+      post: Beskeden blev oprettet
+    update:
+      post: Beskeden blev opdateret
+    destroy:
+      post: Beskeden blev slettet
+
+    form:
+      new: Ny besked
+      edit: Redigér besked
+
+    list:
+      new: Ny besked
+      title: Beskeder
+      content: Indhold 
+      valid_from_at: Gyldig fra
+      valid_to_at: Gyldig til
