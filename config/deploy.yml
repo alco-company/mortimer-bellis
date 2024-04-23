@@ -15,9 +15,10 @@ servers:
     hosts:
       - 65.108.89.110
     options:
-      "add-host": host.docker.internal:host-gateway
+      # "add-host": host.docker.internal:host-gateway
       # network: "mortimer"    
     labels:
+      traefik.enable: true
       traefik.http.routers.mortimer.entrypoints: websecure
       traefik.http.routers.mortimer.rule: Host(`bellis.mortimer.pro`)
       traefik.http.routers.mortimer.tls.certresolver: letsencrypt
@@ -50,15 +51,17 @@ traefik:
     certificatesResolvers.letsencrypt.acme.storage: "/letsencrypt/acme.json"
     certificatesResolvers.letsencrypt.acme.httpchallenge: true
     certificatesResolvers.letsencrypt.acme.httpchallenge.entrypoint: web
+    # certificatesResolvers.letsencrypt.acme.tlschallenge: true
+    # certificatesResolvers.letsencrypt.acme.caserver: https://acme-staging-v02.api.letsencrypt.org/directory
 
   labels:
-      traefik.enable: true
-      traefik.http.routers.dashboard.rule: Host(`traefik.mortimer.pro`)
-      traefik.http.routers.dashboard.service: api@internal
-      traefik.http.routers.dashboard.middlewares: redirect-to-https, auth
-      traefik.http.routers.dashboard.tls: true
-      traefik.http.middlewares.redirect-to-https.redirectscheme.scheme: https
-      traefik.http.middlewares.auth.basicauth.users: test:what_a_password
+    traefik.enable: true
+    traefik.http.routers.dashboard.rule: Host(`traefik.mortimer.pro`)
+    traefik.http.routers.dashboard.service: api@internal
+    traefik.http.routers.dashboard.middlewares: redirect-to-https, auth
+    traefik.http.routers.dashboard.tls: true
+    traefik.http.middlewares.redirect-to-https.redirectscheme.scheme: https
+    traefik.http.middlewares.auth.basicauth.users: test:what_a_password
 
 
 volumes:

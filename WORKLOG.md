@@ -12,3 +12,5 @@
 
 ## CHANGELOG
 
+* https://guillaumebriday.fr/how-to-deploy-rails-with-kamal-and-ssl-certificate-on-vps to the rescue on setting up Letsencrypt
+* 
