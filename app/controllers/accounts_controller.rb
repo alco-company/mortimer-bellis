@@ -1,4 +1,4 @@
-class AccountsController < ApplicationController
+class AccountsController < MortimerController
   private
 
     # Only allow a list of trusted parameters through.
