@@ -1,26 +1,42 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title><%= content_for(:title) || "Mortimer" %></title>
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <%= csrf_meta_tags %>
-    <%= csp_meta_tag %>
+<% 
 
-    <%= yield :head %>
 
-    <link rel="manifest" href="/manifest.json">
-    <link rel="icon" href="/icon.png" type="image/png">
-    <link rel="icon" href="/icon.svg" type="image/svg+xml">
-    <link rel="apple-touch-icon" href="/icon.png">
-    <%= stylesheet_link_tag "tailwind", "inter-font", "data-turbo-track": "reload" %>
-    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
-    <%= javascript_importmap_tags %>
-  </head>
+def items 
+  items = []
+  items << { title: I18n.t('menu.accounts'), url: accounts_url } if Rails.env.local?
+  items + [
+    # { title: I18n.t('menu.teams'), url: teams_url },
+    # { title: I18n.t('menu.punch_clocks'), url: punch_clocks_url },
+    # { title: I18n.t('menu.employees'), url: employees_url },
+    # { title: I18n.t('menu.punch_cards'), url: punch_cards_url },
+    # { title: I18n.t('menu.punches'), url: punches_url },
+    # { title: I18n.t('menu.motds'), url: motds_url },
+  ]
+end
 
-  <body>
-    <main class="container mx-auto mt-28 px-5 flex">
-      <%= yield %>
-    </main>
-  </body>
+%>
+<html lang="da" class=""h-full bg-white">
+<head>
+  <title><%= "M O R T I M E R #{ 'DEV' if Rails.env.local?}" %></title>
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="preconnect" href="https://rsms.me/">
+  <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+
+  <%= stylesheet_link_tag "tailwind", "inter-font", data_turbo_track: "reload" %>      
+  <%= stylesheet_link_tag "application", data_turbo_track: "reload" %>      
+  <%= javascript_importmap_tags %>      
+
+</head>
+<body class="h-full">
+  <%= render NavigationComponent.new items: items %>
+  <main class="m-4">
+    <%= yield %>
+  </main>
+</body>
 </html>
