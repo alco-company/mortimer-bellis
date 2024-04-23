@@ -27,15 +27,34 @@ traefik:
       - "/root/letsencrypt/acme.json:/letsencrypt/acme.json"
     # network: "mortimer"
   args:
+    api.dashboard: true
+    log.level: INFO
+    accesslog.format: json
+    accesslog.filters.statusCodes: "400-599"
+    accesslog.filters.retryAttempts: true
+    accesslog.filters.minDuration: 101ms
+
     entryPoints.web.address: ":80"
     entryPoints.websecure.address: ":443"
-    # entryPoints.web.http.redirections.entryPoint.to: websecure
-    # entryPoints.web.http.redirections.entryPoint.scheme: https
-    # entryPoints.web.http.redirections.entrypoint.permanent: true
+
+    entryPoints.web.http.redirections.entryPoint.to: websecure
+    entryPoints.web.http.redirections.entryPoint.scheme: https
+    entryPoints.web.http.redirections.entrypoint.permanent: true
+
     certificatesResolvers.letsencrypt.acme.email: "walther@alco.dk"
     certificatesResolvers.letsencrypt.acme.storage: "/letsencrypt/acme.json"
     certificatesResolvers.letsencrypt.acme.httpchallenge: true
     certificatesResolvers.letsencrypt.acme.httpchallenge.entrypoint: web
+
+  labels:
+      traefik.enable: true
+      traefik.http.routers.dashboard.rule: Host(`traefik.mortimer.pro`)
+      traefik.http.routers.dashboard.service: api@internal
+      traefik.http.routers.dashboard.middlewares: redirect-to-https, auth
+      traefik.http.routers.dashboard.tls: true
+      traefik.http.middlewares.redirect-to-https.redirectscheme.scheme: https
+      traefik.http.middlewares.test-auth.basicauth.users: test:what_a_password
+
 
 volumes:
   - "storage:/rails/storage"
