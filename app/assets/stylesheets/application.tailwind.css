@@ -1,13 +1,78 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-/*
-
 @layer components {
-  .btn-primary {
-    @apply py-2 px-4 bg-blue-200;
+  .mort-btn-primary {
+    @apply flex justify-center rounded-md bg-sky-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-sky-500 hover:cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600;
+  }
+
+  .mort-btn-cancel {
+    @apply flex justify-center rounded-md bg-gray-200 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-gray-300 hover:cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600;
+  }
+
+  .mort-btn-alert {
+    @apply flex justify-center rounded-md bg-red-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-red-500 hover:cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600;
+  }
+
+  .mort-form-text {
+    @apply block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full;
+  }
+
+  .mort-filter-field {
+    @apply block shadow rounded-md border border-gray-200 outline-none px-3 py-2 w-5/6;
+  }
+
+  .mort-nav-link {
+    /* bg-gray-900 text-white block rounded-md px-3 py-2 text-base font-medium */
+    @apply bg-transparent text-white hover:text-sky-500 block rounded-md px-3 py-2 text-base font-medium;
+  }
+
+  .mort-link-primary {
+    /* bg-gray-900 text-white block rounded-md px-3 py-2 text-base font-medium */
+    @apply bg-transparent text-sky-500 hover:text-sky-700 text-base font-medium;
+  }
+
+}
+
+
+
+/* https: //github.com/tailwindlabs/tailwindcss/discussions/10909 */
+html {
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+}
+
+dialog {
+  &::backdrop {
+    background: gray;
+    opacity: 0.2;
   }
 }
 
-*/
+.pagy {
+  @apply flex space-x-1 font-thin text-sm text-sky-600;
+
+  a:not(.gap) {
+    @apply block rounded-lg px-3 py-1 bg-sky-200;
+  }
+
+  a:not(.gap):hover {
+    @apply bg-sky-300 cursor-pointer;
+  }
+
+  a:not(.gap):not([href]) {
+    /* disabled links */
+    @apply text-gray-300 bg-sky-100 cursor-default;
+  }
+
+  a:not(.gap).current {
+    @apply text-white bg-sky-400 font-semibold;
+  }
+
+  label {
+    /* @apply inline-block whitespace-nowrap bg-sky-200 rounded-lg px-3 py-0.5; */
+
+    input {
+      @apply bg-sky-100 border-none rounded-md;
+    }
+  }
+}
