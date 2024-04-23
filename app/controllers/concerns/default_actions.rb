@@ -3,13 +3,17 @@ module DefaultActions
 
   included do
     before_action :set_resource, only: %i[ new show edit update destroy ]
+    before_action :set_filter, only: %i[ index ]
     before_action :set_resources, only: %i[ index ]
-
 
     # GET /employees or /employees.json
     def index
+      params[:url] = resources_url
+      # @pagy, @records = pagy(@resources)
+      @records = @resources
+
       respond_to do |format|
-        format.html {}
+        format.html { }
         format.csv { send_data resource_class.to_csv( @resources), filename: "#{resource_class.name.pluralize.downcase}-#{Date.today}.csv" }
       end
     end
@@ -32,6 +36,7 @@ module DefaultActions
 
       respond_to do |format|
         if @resource.save
+          create_callback @resource
           format.html { redirect_to resources_url, notice: t('.post') }
           format.json { render :show, status: :created, location: @resource }
         else
@@ -45,6 +50,7 @@ module DefaultActions
     def update
       respond_to do |format|
         if @resource.update(resource_params)
+          update_callback @resource
           format.html { redirect_to resources_url, notice: t('.post') }
           format.json { render :show, status: :ok, location: @resource }
         else
@@ -64,6 +70,11 @@ module DefaultActions
       end
     end
 
+    #
+    # implement on the controller inheriting this concern
+    def create_callback obj
+    end
+    def update_callback obj
+    end
   end
-
 end

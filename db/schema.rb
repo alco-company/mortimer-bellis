@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_04_23_090808) do
+ActiveRecord::Schema[7.2].define(version: 2024_04_23_160003) do
   create_table "accounts", force: :cascade do |t|
     t.string "name"
     t.string "email"
@@ -20,4 +20,15 @@ ActiveRecord::Schema[7.2].define(version: 2024_04_23_090808) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
+
+  create_table "filters", force: :cascade do |t|
+    t.integer "account_id", null: false
+    t.string "view"
+    t.json "filter"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_filters_on_account_id"
+  end
+
+  add_foreign_key "filters", "accounts"
 end

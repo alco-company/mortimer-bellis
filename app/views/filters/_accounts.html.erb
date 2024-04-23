@@ -1,0 +1,11 @@
+<div class="min-w-0 w-full columns-2 md:columns-3 lg:columns-4">
+  <div class="flex justify-start">
+    <%= form.text_field :name, value: (filter["name"] rescue ''), class: "mort-filter-field" %>
+  </div>
+  <div class="flex justify-end">
+    <%= form.text_field :work_date, value: (filter["locale"] rescue ''), class: "mort-filter-field" %>
+  </div>
+  <div class="hidden md:flex justify-start">
+    <%= form.text_field :work_minutes, value: (filter["time_zone"] rescue ''), class: "mort-filter-field w-3/4" %>
+  </div>
+</div>
