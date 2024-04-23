@@ -4,6 +4,11 @@ service: mortimer-bellis
 # Name of the container image.
 image: wdiechmann/mortimer-bellis
 
+builder:
+  remote:
+    arch: arm64
+    host: ssh://root@65.108.89.110
+
 # Deploy to these servers.
 servers:
   web:
@@ -53,7 +58,7 @@ traefik:
       traefik.http.routers.dashboard.middlewares: redirect-to-https, auth
       traefik.http.routers.dashboard.tls: true
       traefik.http.middlewares.redirect-to-https.redirectscheme.scheme: https
-      traefik.http.middlewares.test-auth.basicauth.users: test:what_a_password
+      traefik.http.middlewares.auth.basicauth.users: test:what_a_password
 
 
 volumes:
