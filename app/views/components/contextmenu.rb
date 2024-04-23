@@ -5,7 +5,7 @@ class Contextmenu < Phlex::HTML
 
   attr_accessor :resource, :list
 
-  def initialize(resource: nil, list: nil, turbo_frame: '_top', alter: true, links: [])
+  def initialize(resource: nil, list: nil, turbo_frame: "_top", alter: true, links: [])
     @resource = resource
     @list = list
     @turbo_frame = turbo_frame
@@ -42,7 +42,7 @@ class Contextmenu < Phlex::HTML
         whitespace
       end
       whitespace
-      case true 
+      case true
       when !resource.nil?; dropdown
       when !list.nil?; list_dropdown
       end
@@ -65,9 +65,10 @@ class Contextmenu < Phlex::HTML
       whitespace
       comment { %(Active: "bg-gray-50", Not Active: "") }
       whitespace
-      link_to "#", 
-        class: "block px-3 py-1 text-sm leading-6 text-gray-900", 
-        role: "menuitem", 
+      link_to helpers.filtering_url(), 
+        data: { turbo_stream: true, action: "click->contextmenu#hide" },
+        class: "block px-3 py-1 text-sm leading-6 text-gray-900",
+        role: "menuitem",
         tabindex: "-1" do
         plain "Filter"
         span(class: "sr-only") do
@@ -76,11 +77,12 @@ class Contextmenu < Phlex::HTML
         end
       end
       whitespace
-      link_to( helpers.resources_url() + '.csv',
+      link_to(
+        helpers.resources_url() + ".csv",
         class: "block px-3 py-1 text-sm leading-6 text-gray-900",
         role: "menuitem",
         tabindex: "-1",
-        data: { turbo_frame: @turbo_frame } ) do
+        data: { turbo_frame: @turbo_frame }) do
         plain "Eksportér"
         span(class: "sr-only") do
           plain ", "
@@ -88,7 +90,6 @@ class Contextmenu < Phlex::HTML
         end
       end
     end
-
   end
 
   def dropdown
@@ -124,7 +125,7 @@ class Contextmenu < Phlex::HTML
         class: "block px-3 py-1 text-sm leading-6 text-gray-900",
         role: "menuitem",
         tabindex: "-1",
-        data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' } ) do
+        data: { turbo_method: :delete, turbo_confirm: "Ar you sure?" }) do
         plain "Slet"
         span(class: "sr-only") do
           plain ", "
@@ -132,6 +133,5 @@ class Contextmenu < Phlex::HTML
         end
       end
     end
-
   end
 end
