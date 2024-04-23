@@ -8,7 +8,7 @@ class TextColumn < Phlex::HTML
     @class = css || "truncate"
   end
 
-  def template
+  def view_template
     field.blank? ? 
       div { "&nbsp;".html_safe } :
       div( class: @class ) {field}

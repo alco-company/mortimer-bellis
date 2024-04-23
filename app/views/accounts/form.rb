@@ -1,5 +1,5 @@
 class Accounts::Form < ApplicationForm
-  def template(&)
+  def view_template(&)
     row field(:name).input(class: "mort-form-text").focus
     row field(:email).input(class: "mort-form-text")
     row field(:pp_identification).input(class: "mort-form-text")

@@ -13,7 +13,7 @@ class Contextmenu < Phlex::HTML
     @links = links
   end
 
-  def template
+  def view_template
     div(data_controller: "contextmenu", class: "relative flex-none") do
       whitespace
       button(
