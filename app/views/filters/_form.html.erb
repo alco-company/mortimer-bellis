@@ -3,7 +3,7 @@
       <%= form.hidden_field :url, value: @url %>
       <%= form.hidden_field :filter_form, value: @filter_form %>
       <%= form.hidden_field :account_id, value: 1 %>
-      <%= render partial: "filters/#{@filter_form}", locals: { form: form, filter: @json_filter } %>
+      <%= render partial: "filters/#{@filter_form}", locals: { form: form, filter: @filter.filter } %>
       <div class="flex flex-none items-center gap-x-4 ">
         <%= form.button :submit do %>
           <div  class="text-gray-400 hover:font-bold hover:text-green-800 hover:cursor-pointer">

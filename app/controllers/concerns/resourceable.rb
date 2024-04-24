@@ -10,7 +10,7 @@ module Resourceable
     def set_resource
       @resource = params.dig(:id) ? resource_class.find(params[:id]) : resource_class.new
       if %w[employee punch].include? resource_class.to_s.downcase
-        @resource.state = "OUT"
+        @resource.state = "OUT" if @resource.state.nil?
       end
     end
 
@@ -22,7 +22,7 @@ module Resourceable
       @filter_form = params[:controller].split("/").last
       @url = resources_url
       @filter = Filter.where(account: Current.account).where(view: params[:controller].split("/").last).take || Filter.new
-      @json_filter = @filter.filter ? JSON.parse(@filter.filter) : {}
+      @filter.filter ||= {}
     end
 
     def new_resource_url
@@ -50,6 +50,7 @@ module Resourceable
     end
 
     def any_filters?
+      return false if @filter.nil? or params[:controller].split("/").last == "filters"
       !@filter.id.nil?
     end
   end

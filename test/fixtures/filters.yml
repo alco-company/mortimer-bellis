@@ -2,8 +2,8 @@
 
 one:
   account: one
-  view: MyString
-  filter: 
+  view: accounts
+  filter: {"name":"nish"}
 
 two:
   account: two

@@ -1,0 +1,8 @@
+<div class="min-w-0 w-full columns-2 ">
+  <div class="flex justify-start">
+    <%= form.text_field :view, value: (filter["view"] rescue ''), class: "mort-filter-field" %>
+  </div>
+  <div class="flex justify-end">
+    <%= form.text_field :filter, value: (filter["filter"] rescue ''), class: "mort-filter-field" %>
+  </div>
+</div>

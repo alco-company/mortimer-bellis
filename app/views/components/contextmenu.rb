@@ -100,7 +100,7 @@ class Contextmenu < Phlex::HTML
     div(
       data_contextmenu_target: "popup",
       class:
-        "hidden absolute right-0 z-10 mt-2 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none",
+        "hidden absolute right-0 z-10 mt-2 w-auto min-w-18 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none",
       role: "menu",
       aria_orientation: "vertical",
       aria_labelledby: "options-menu-0-button",
@@ -117,7 +117,7 @@ class Contextmenu < Phlex::HTML
         plain "Ret"
         span(class: "sr-only") do
           plain ", "
-          plain resource.name
+          plain resource.name rescue ''
         end
       end
       whitespace
@@ -129,7 +129,7 @@ class Contextmenu < Phlex::HTML
         plain "Slet"
         span(class: "sr-only") do
           plain ", "
-          plain resource.name
+          plain resource.name rescue ''
         end
       end
     end
