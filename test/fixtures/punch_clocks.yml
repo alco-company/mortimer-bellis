@@ -1,0 +1,21 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  account: one
+  location: one
+  name: MyString
+  ip_addr: 1.2.3.4
+  last_punched_at: 2024-04-24 19:58:47
+  access_token: MyString
+  locale: da
+  time_zone: Copenhagen
+
+two:
+  account: two
+  location: two
+  name: MyString
+  ip_addr: 2.3.4.2
+  last_punched_at: 2024-04-24 19:58:47
+  access_token: MyString
+  locale: en
+  time_zone: London

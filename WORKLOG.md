@@ -20,6 +20,7 @@
 * added a17t for default styled building blocks/components supporting TailwindCSS
 * add rqrcode affording QR codes to easy distributing URLs for punch_clocks, more
 * add location
+* add punch_clock
 
 23/4/2024
 

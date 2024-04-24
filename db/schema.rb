@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_04_24_153442) do
+ActiveRecord::Schema[7.2].define(version: 2024_04_24_185551) do
   create_table "accounts", force: :cascade do |t|
     t.string "name"
     t.string "email"
@@ -39,6 +39,25 @@ ActiveRecord::Schema[7.2].define(version: 2024_04_24_153442) do
     t.index ["account_id"], name: "index_locations_on_account_id"
   end
 
+  create_table "punch_clocks", force: :cascade do |t|
+    t.integer "account_id", null: false
+    t.integer "location_id", null: false
+    t.string "name"
+    t.string "ip_addr"
+    t.datetime "last_punched_at"
+    t.string "access_token"
+    t.string "locale"
+    t.string "time_zone"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_punch_clocks_on_account_id"
+    t.index ["location_id"], name: "index_punch_clocks_on_location_id"
+  end
+
   add_foreign_key "filters", "accounts"
-  add_foreign_key "locations", "accounts"
+  add_foreign_key "filters", "accounts"
+  add_foreign_key "filters", "accounts"
+  add_foreign_key "locations", "accounts", on_delete: :cascade
+  add_foreign_key "punch_clocks", "accounts", on_delete: :cascade
+  add_foreign_key "punch_clocks", "locations", on_delete: :cascade
 end

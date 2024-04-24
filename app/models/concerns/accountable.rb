@@ -7,7 +7,7 @@ module Accountable
     # there every time. We get this protection for free
     # because of the `Current.account_or_raise!`
     # and also through FK constraints.
-    belongs_to :account, optional: true
+    belongs_to :account
     default_scope { where(account: Current.account_or_raise!) }
   end
 end
