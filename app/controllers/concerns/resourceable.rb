@@ -3,14 +3,14 @@ module Resourceable
 
   included do
     def resource_class
-      @resource_class ||= params[:controller].split("/").last.classify.constantize
+      @resource_class ||= rc_params.split("/").last.classify.constantize
     end
 
     # Use callbacks to share common setup or constraints between actions.
     def set_resource
       @resource = params.dig(:id) ? resource_class.find(params[:id]) : resource_class.new
       if %w[employee punch].include? resource_class.to_s.downcase
-        @resource.state = "OUT"
+        @resource.state = "OUT" if @resource.state.nil?
       end
     end
 
@@ -22,7 +22,7 @@ module Resourceable
       @filter_form = params[:controller].split("/").last
       @url = resources_url
       @filter = Filter.where(account: Current.account).where(view: params[:controller].split("/").last).take || Filter.new
-      @json_filter = @filter.filter ? JSON.parse(@filter.filter) : {}
+      @filter.filter ||= {}
     end
 
     def new_resource_url
@@ -50,7 +50,13 @@ module Resourceable
     end
 
     def any_filters?
+      return false if @filter.nil? or params[:controller].split("/").last == "filters"
       !@filter.id.nil?
     end
   end
+
+  private
+    def rc_params
+      params.permit(:controller)
+    end
 end

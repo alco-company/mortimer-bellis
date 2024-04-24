@@ -4,15 +4,15 @@ class ApplicationForm < Superform::Rails::Form
   class MultipleSelectField < Superform::Rails::Components::SelectField
     def options(*collection)
       map_options(collection).each do |key, value|
-        option(selected: field.value.include?( key), value: key) { value }
+        option(selected: field.value.include?(key), value: key) { value }
       end
     end
   end
 
-  class Field < Field 
+  class Field < Field
     def multiple_select(*collection, **attributes, &)
       MultipleSelectField.new(self, attributes: attributes, collection: collection, &)
-    end    
+    end
   end
 
   def hidden(component)
@@ -23,8 +23,8 @@ class ApplicationForm < Superform::Rails::Form
 
   def row(component)
     div(class: "my-5") do
-      render component.field.label do 
-        plain I18n.t("activerecord.attributes.#{component.field.parent.key.to_s}.#{component.field.key.to_s}" )
+      render component.field.label do
+        plain I18n.t("activerecord.attributes.#{component.field.parent.key}.#{component.field.key}")
       end
       render component
     end

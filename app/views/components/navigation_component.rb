@@ -1,15 +1,14 @@
 # frozen_string_literal: true
 
 class NavigationComponent < ApplicationComponent
-
   attr_accessor :items
 
-  def initialize items: []
+  def initialize(items: [])
     @items = items
   end
 
   def view_template
-    nav(class: "sticky top-0 z-40 bg-gradient-to-r from-cyan-200 to-sky-600", data: { controller: "navigation"}) do
+    nav(class: "sticky top-0 z-40 bg-gradient-to-r from-cyan-200 to-sky-600", data: { controller: "navigation" }) do
       div(class: "mx-auto  px-2 sm:px-6 lg:px-8") do
         div(class: "relative flex h-16 items-center justify-between") do
           div(class: "absolute inset-y-0 left-0 flex items-center lg:hidden") do
@@ -26,9 +25,9 @@ class NavigationComponent < ApplicationComponent
               desktop_menu
             end
           end
-          div( class: " absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0" ) do
-            div(class: "relative ml-3 text-lime-400 font-thin") { "public rc2"}
-            div(class: "relative ml-3 text-lime-400 font-thin") { " #{ Time.zone.name}"}
+          div(class: " absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0") do
+            div(class: "relative ml-3 text-lime-400 font-thin") { "public rc2" }
+            div(class: "relative ml-3 text-lime-400 font-thin") { " #{ Time.zone.name}" }
             # view_notifications
             # profile_dropdown
           end
@@ -42,7 +41,7 @@ class NavigationComponent < ApplicationComponent
     comment { "Mobile menu button" }
     button(
       type: "button",
-      data: { action: "click->navigation#toggleMenu"},
+      data: { action: "click->navigation#toggleMenu" },
       class:
         "relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-sky-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-cyan-300",
       aria_controls: "mobile-menu",
@@ -55,7 +54,7 @@ class NavigationComponent < ApplicationComponent
       end
       svg(
         class: "block h-6 w-6",
-        data: { navigation_target: "menuClose"},
+        data: { navigation_target: "menuClose" },
         fill: "none",
         viewbox: "0 0 24 24",
         stroke_width: "1.5",
@@ -73,7 +72,7 @@ class NavigationComponent < ApplicationComponent
       end
       svg(
         class: "hidden h-6 w-6",
-        data: { navigation_target: "menuOpen"},
+        data: { navigation_target: "menuOpen" },
         fill: "none",
         viewbox: "0 0 24 24",
         stroke_width: "1.5",
@@ -104,7 +103,7 @@ class NavigationComponent < ApplicationComponent
         a(
           href: item[:url],
           class:
-            "mort-nav-link", #bg-gray-900 text-white block rounded-md px-3 py-2 text-sm font-medium
+            "mort-nav-link", # bg-gray-900 text-white block rounded-md px-3 py-2 text-sm font-medium
           aria_current: "page"
         ) { item[:title] }
       end
@@ -113,7 +112,7 @@ class NavigationComponent < ApplicationComponent
 
   def mobile_menu
     comment { "Mobile menu, show/hide based on menu state." }
-    div( data:{ navigation_target: "mobileMenu" }, class: "hidden lg:hidden", id: "mobile-menu") do
+    div(data: { navigation_target: "mobileMenu" }, class: "hidden lg:hidden", id: "mobile-menu") do
       div(class: "space-y-1 px-2 pb-3 pt-2") do
         a(
           href: helpers.root_path,
@@ -217,8 +216,5 @@ class NavigationComponent < ApplicationComponent
         ) { "Sign out" }
       end
     end
-
   end
-
-
 end

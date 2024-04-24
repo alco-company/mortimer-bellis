@@ -29,3 +29,314 @@
 
 en:
   hello: "Hello world"
+
+
+
+
+# Standard localization ------------------------------
+
+  activerecord:
+    attributes:
+      account:
+        name: Kontonavn
+        pp_identification: Lønbureau ID
+        eu_work_directive: EU regulativ (2003/88/EC)
+        time_zone: Tidszone
+        locale: Sprog
+        logo: Logo (80 x 40)
+      asset:
+        name: 'Navn'
+        asset_teams: 'Hold/grupper'
+        last_punched_at: sidst stemplet 
+        should_reload: Skal genstartes
+        user: admin bruger 
+        state: Status
+      asset_work_session:
+        employee_id: Medarbejder
+        start_at: Startet den 
+        stop_at: Stoppet den
+        session_type: Type 
+        reason: Årsag
+        comment: Kommentar
+        adjust_next: Tilpas øvrige
+
+      asset_work_transaction:
+        punched_at: "stemplet kl:"
+        days: Dage
+        hours: Timer
+        comment: Beskrivelse - især ved overarbejde, vikariat, evt sygdom og mere
+        reason: Årsag - '15MIN', og 'XTRA' ved aftalte særlige indstemplinger
+      background_job:
+        klass: Klasse 
+        active: Aktiv 
+        schedule: Plan 
+        params: Argumenter
+      dashboard:
+        name: Navn
+        layout: Skabelon
+        body: Indhold
+      employee:
+        name: Navn
+        import: Indlæs CSV fil med medarbejdere
+        access_token: nøgle
+        flex_balance_minutes: flex minutter
+        mug_shot: profil billede
+        blocked: tidsregistrering spærret
+        time_zone: Tidszone
+        locale: Sprog
+        hired_at: ansat den
+        birthday: fødselsdag
+        pincode: pinkode
+        state: status
+        employee_number: medarbejder nummer
+        pbx_extension: omstillingsnr
+        job_title: job titel
+        base_salary: grundløn
+        ot1_hr_pay: OT1 tillæg
+        ot2_hr_pay: OT2 tillæg
+        norm_time_minutes: timer:min i et rul
+        roll_days: antal dage i et rul
+        week_workdays: arbejdsdage/uge
+        ot1_minutes: Overtid 1
+        next_roll_at: næste rul starter
+        teams: Hold/grupper
+
+      event:
+        minutes: Minutter
+        employee_id: Medarbejder
+      faq:
+        endpoint: URL 
+        field: felt 
+        action: handling 
+        title: titel 
+        description: beskrivelse
+      lead:
+        email_address: Email adresse
+        trial_ends_at: Prøveperioden slutter
+        converted_at: Kunde fra    
+      location:
+        long_lat: Position (long,lat)
+      message:
+        subject: Overskrift
+        body: Besked 
+        rrule: gentagelser 
+        recipients: Modtagere
+        recipients_taglist: Modtagere
+        attachments: Vedhæftet fil/vedhæftede filer
+      motd:
+        valid_from_at: Gælder fra 
+        valid_to_at: Gælder indtil
+        content: Beskeden
+      notification:
+        uris: Modtagere
+      participant:
+        name: Navn
+        teams: Hold/grupper
+        roles: Roller
+        work_schedules: Arbejdsplaner
+      print_template:
+        name: Skabelon navn
+        context: Bruges af
+        cmd: Data opsamling
+        body: Indhold
+      printserver:
+        name: navn 
+        mac_addr: MAC adresse 
+        port: port 
+        state: status 
+
+      profile: 
+        name: Brugernavn
+        avatar: Profil billede
+        time_zone: Tidszone 
+        color: Farve
+        locale: Sprog 
+
+      punch:
+        punched_at: "stemplet kl:"
+        employee_id: Medarbejder
+        state: Status
+        
+      punch_card:
+        punched_at: "stemplet kl:"
+        employee_id: Medarbejder
+        location_id: Arbejdssted
+        punch_clock_id: Stempelur
+        punch_type: Type
+        comment: Beskrivelse
+        work_date: Arbejdsdato
+        work_minutes: Arbejdstid (minutter)
+        break_minutes: Pauser (minutter)
+        reason: Årsag
+        state: Status
+      punch_clock:
+        name: Navn
+        ip_addr: IP adresse 
+        location: lokation 
+        time_zone: Tidszone
+        locale: Sprog
+        last_punched_at: sidst stemplet 
+        location_id: Arbejdssted
+        access_token: API nøgle
+      reporting: 
+        print_template_id: Skabelon 
+        destination: medie 
+        secure: Krypteret 
+        format: format
+        priority: prioritet
+      role:
+        name: Navn
+        context: Situation/kontekst
+        state: Status 
+        role: Rettigheder
+      sentence:
+        reference: Ord/sætning
+        language: Sprog
+        translation: Oversættelse 
+      service: 
+        name: Navn
+        state: Aktiv 
+        menu_label: Menu navn 
+        index_url: URL til index 
+        service_group: Gruppe 
+        service_model: Beregningsmodel
+        menu_icon: Icon (html)
+      stocked_product:
+        name: Navn
+        stock: Lager
+        stock_location: Lagerlokation 
+        product: Produkt
+        stock_unit: Lagerenhed
+        minimum_stock_level: Min enheder på lager
+      system_parameter:
+        name: Navn
+        system_key: Nøgle
+        position: Rækkefølge
+        value: Værdi
+      team:
+        norm_time_minutes: timer:min i et rul
+        name: Hold navn
+        time_zone: Tidszone
+        team_color: Hold farve
+        locale: Sprog
+        roll_days: antal dage i et rul
+        week_workdays: arbejdsdage/uge
+        ot1_minutes: Overtid 1
+        next_roll_at: næste rul starter
+      uri_scheme: 
+        scheme: skema
+        purpose: Anvendelse
+        reference: RFC / reference
+        general_format: Format
+        state: status
+        notes: Kommentarer
+        language: sprog 
+        country: land 
+        region: region 
+        version: version 
+        sub_scheme: Under skema
+      user:
+        user_name: Brugernavn
+        password: Adgangskode
+        password_confirmation: Bekræft adgangskode
+        confirmed_at: Bekræftet den
+        receive_notifications: Modtager notifikationer
+
+    models:
+      account:
+        one: account
+        other: accounts
+      asset_work_session:
+        one: komme/gå stempling
+        other: komme/gå stemplinger
+      asset_work_transaction:
+        one: transaktion 
+        other: transaktioner
+      asset_workday_sum:
+        one: stempelkort
+        other: stempelkort
+      background_job:
+        one: baggrundsjob
+        other: baggrundsjob
+      dashboard:
+        one: Overblik 
+        other: Overblik
+      employee:
+        one: medarbejder
+        other: medarbejdere
+      equipment:
+        one: materiel 
+        other: materiel 
+      eu_work_time_directive_day:
+        one: registrering 
+        other: registreringer
+      faq:
+        one: FAQ
+        other: FAQs
+      invitation:
+        one: invitation
+        other: invitationer
+      motd:
+        one: dagens besked
+        other: dagens beskeder
+      lead:
+        one: emne
+        other: emner
+      location:
+        one: arbejdssted
+        other: arbejdssteder
+      organization:
+        one: virksomhed 
+        other: virksomheder
+      print_template:
+        one: skabelon
+        other: skabeloner
+      printserver:
+        one: printserver
+        other: printservere
+      product: 
+        one: produkt 
+        other: produkter
+      punch:
+        one: Stempling
+        other: stemplinger
+      punch_card:
+        one: stempelkort
+        other: stempelkort
+      punch_clock: 
+        one: stempelur
+        other: stempelure
+      reporting:
+        one: rapport
+        other: rapporter
+      role: 
+        one: rolle
+        other: roller
+      sentence: 
+        one: oversættelse
+        other: oversættelser
+      service: 
+        one: tjeneste
+        other: tjenester
+      stock:
+        one: lager
+        other: lagre
+      stock_location:
+        one: lagerlokation 
+        other: lagerlokationer
+      stocked_product: 
+        one: lagervare 
+        other: lagervarer
+      system_parameter:
+        one: konto indstilling
+        other: konto indstillinger
+      team:
+        one: hold
+        other: hold
+      uri_scheme:
+        one: URI skema 
+        other: URI skemaer
+      user:
+        one: bruger
+        other: brugere
+      

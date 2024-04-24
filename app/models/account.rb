@@ -1,10 +1,10 @@
 class Account < ApplicationRecord
   has_many :filters, dependent: :destroy
 
-  scope :by_name, ->(name) { here("name LIKE ?", "%#{name}%") if name.present? }
+  scope :by_name, ->(name) { where("name LIKE ?", "%#{name}%") if name.present? }
 
   def self.filtered(filter)
-    flt = JSON.parse filter.filter
+    flt = filter.filter
 
     all
       .by_name(flt["name"])

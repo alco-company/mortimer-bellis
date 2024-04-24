@@ -4,7 +4,7 @@ class Filter < ApplicationRecord
   scope :by_view, ->(view) { here("view LIKE ?", "%#{view}%") if view.present? }
 
   def self.filtered(filter)
-    flt = JSON.parse filter.filter
+    flt = filter.filter
 
     all
       .by_view(flt["view"])

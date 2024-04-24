@@ -65,7 +65,7 @@ class Contextmenu < Phlex::HTML
       whitespace
       comment { %(Active: "bg-gray-50", Not Active: "") }
       whitespace
-      link_to helpers.filtering_url(), 
+      link_to helpers.filtering_url(),
         data: { turbo_stream: true, action: "click->contextmenu#hide" },
         class: "block px-3 py-1 text-sm leading-6 text-gray-900",
         role: "menuitem",
@@ -100,7 +100,7 @@ class Contextmenu < Phlex::HTML
     div(
       data_contextmenu_target: "popup",
       class:
-        "hidden absolute right-0 z-10 mt-2 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none",
+        "hidden absolute right-0 z-10 mt-2 w-auto min-w-18 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none",
       role: "menu",
       aria_orientation: "vertical",
       aria_labelledby: "options-menu-0-button",
@@ -109,19 +109,19 @@ class Contextmenu < Phlex::HTML
       whitespace
       comment { %(Active: "bg-gray-50", Not Active: "") }
       whitespace
-      link_to( (@links[0] || helpers.edit_resource_url(resource)), 
-        class: "block px-3 py-1 text-sm leading-6 text-gray-900", 
-        role: "menuitem", 
+      link_to((@links[0] || helpers.edit_resource_url(resource)),
+        class: "block px-3 py-1 text-sm leading-6 text-gray-900",
+        role: "menuitem",
         data: { turbo_action: "advance", turbo_frame: @turbo_frame },
         tabindex: "-1") do
         plain "Ret"
         span(class: "sr-only") do
           plain ", "
-          plain resource.name
+          plain resource.name rescue ""
         end
       end
       whitespace
-      link_to( (@links[1] || resource), 
+      link_to((@links[1] || resource),
         class: "block px-3 py-1 text-sm leading-6 text-gray-900",
         role: "menuitem",
         tabindex: "-1",
@@ -129,7 +129,7 @@ class Contextmenu < Phlex::HTML
         plain "Slet"
         span(class: "sr-only") do
           plain ", "
-          plain resource.name
+          plain resource.name rescue ""
         end
       end
     end

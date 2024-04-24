@@ -9,8 +9,8 @@ class NumberColumn < Phlex::HTML
   end
 
   def view_template
-    field.blank? ? 
+    field.blank? ?
       div { "&nbsp;".html_safe } :
-      div( class: @class ) {field}
+      div(class: @class) { field }
   end
 end

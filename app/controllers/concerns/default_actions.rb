@@ -9,12 +9,11 @@ module DefaultActions
     # GET /employees or /employees.json
     def index
       params[:url] = resources_url
-      # @pagy, @records = pagy(@resources)
-      @records = @resources
+      @pagy, @records = pagy(@resources)
 
       respond_to do |format|
         format.html { }
-        format.csv { send_data resource_class.to_csv( @resources), filename: "#{resource_class.name.pluralize.downcase}-#{Date.today}.csv" }
+        format.csv { send_data resource_class.to_csv(@resources), filename: "#{resource_class.name.pluralize.downcase}-#{Date.today}.csv" }
       end
     end
 
@@ -37,7 +36,7 @@ module DefaultActions
       respond_to do |format|
         if @resource.save
           create_callback @resource
-          format.html { redirect_to resources_url, notice: t('.post') }
+          format.html { redirect_to resources_url, notice: t(".post") }
           format.json { render :show, status: :created, location: @resource }
         else
           format.html { render :new, status: :unprocessable_entity }
@@ -51,7 +50,7 @@ module DefaultActions
       respond_to do |format|
         if @resource.update(resource_params)
           update_callback @resource
-          format.html { redirect_to resources_url, notice: t('.post') }
+          format.html { redirect_to resources_url, notice: t(".post") }
           format.json { render :show, status: :ok, location: @resource }
         else
           format.html { render :edit, status: :unprocessable_entity }
@@ -65,16 +64,16 @@ module DefaultActions
       @resource.destroy!
 
       respond_to do |format|
-        format.html { redirect_to resources_url, notice: t('.post') }
+        format.html { redirect_to resources_url, notice: t(".post") }
         format.json { head :no_content }
       end
     end
 
     #
     # implement on the controller inheriting this concern
-    def create_callback obj
+    def create_callback(obj)
     end
-    def update_callback obj
+    def update_callback(obj)
     end
   end
 end
