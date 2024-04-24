@@ -10,6 +10,7 @@ da:
   menu:
     home: Hjem
     accounts: Konti
+    locations: Arbejdssteder
     teams: Hold
     punch_clocks: Stempelure
     employees: Medarbejdere
@@ -38,6 +39,7 @@ da:
     attributes:
       account:
         name: Kontonavn
+        email: Email adresse - konto ansvarlig
         pp_identification: Lønbureau ID
         eu_work_directive: EU regulativ (2003/88/EC)
         time_zone: Tidszone
@@ -114,6 +116,8 @@ da:
         trial_ends_at: Prøveperioden slutter
         converted_at: Kunde fra    
       location:
+        name: Navn/Betegnelse
+        location_color: Farve
         long_lat: Position (long,lat)
       message:
         subject: Overskrift

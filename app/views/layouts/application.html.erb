@@ -6,6 +6,7 @@ def items
   items = []
   items << { title: I18n.t('menu.accounts'), url: accounts_url } if Rails.env.local?
   items + [
+    { title: I18n.t('menu.locations'), url: locations_url }
     # { title: I18n.t('menu.teams'), url: teams_url },
     # { title: I18n.t('menu.punch_clocks'), url: punch_clocks_url },
     # { title: I18n.t('menu.employees'), url: employees_url },
