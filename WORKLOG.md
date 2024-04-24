@@ -15,6 +15,7 @@
 
 * add pagy for pagination
 * refactor filtering
+* deploy 12:47
 
 23/4/2024
 
