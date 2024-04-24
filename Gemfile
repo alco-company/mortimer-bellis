@@ -67,3 +67,5 @@ end
 gem "phlex-rails"
 
 gem "superform", "~> 0.4.6"
+
+gem "pagy", "~> 8.2"

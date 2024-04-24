@@ -9,8 +9,7 @@ module DefaultActions
     # GET /employees or /employees.json
     def index
       params[:url] = resources_url
-      # @pagy, @records = pagy(@resources)
-      @records = @resources
+      @pagy, @records = pagy(@resources)
 
       respond_to do |format|
         format.html { }

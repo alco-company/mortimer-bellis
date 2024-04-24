@@ -4,5 +4,5 @@ class MortimerController < ApplicationController
   include DefaultActions
   include TimezoneLocale
 
-  # include Pagy::Backend
+  include Pagy::Backend
 end
