@@ -26,8 +26,8 @@ class NavigationComponent < ApplicationComponent
             end
           end
           div(class: " absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0") do
-            div(class: "relative ml-3 text-lime-400 font-thin") { "public rc2" }
-            div(class: "relative ml-3 text-lime-400 font-thin") { " #{ Time.zone.name}" }
+            div(class: "relative ml-3 text-lime-400 font-thin") { ENV["MORTIMER_VERSION"] }
+            div(class: "relative ml-3 text-lime-400 font-thin") { " #{I18n.locale}/#{ Time.zone.name}" }
             # view_notifications
             # profile_dropdown
           end
