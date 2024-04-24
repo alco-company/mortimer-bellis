@@ -3,7 +3,7 @@ module Resourceable
 
   included do
     def resource_class
-      @resource_class ||= params.permit![:controller].split("/").last.classify.constantize
+      @resource_class ||= params.permit(:controller).split("/").last.classify.constantize
     end
 
     # Use callbacks to share common setup or constraints between actions.
