@@ -12,13 +12,14 @@ function withOpacity(variableName) {
 
 module.exports = {
   content: [
-    "./app/views/**/*.rb",
+    "./app/views/**/*.{rb,erb}",
     "./app/models/**/*.rb",
-    "./app/views/components/**/*rb",
-    "./public/*.html",
+    // "./app/views/components/**/*rb",
     "./app/helpers/**/*.rb",
     "./app/javascript/**/*.js",
     "./app/views/**/*.{erb,haml,html,slim}",
+    "./public/*.html",
+    "./config/locales/*.yml",
   ],
   theme: {
     extend: {

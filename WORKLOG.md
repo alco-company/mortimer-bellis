@@ -3,10 +3,11 @@
 ## ROADMAP
 
 * add handling of constants - https://dev.to/vladhilko/say-goodbye-to-messy-constants-a-new-approach-to-moving-constants-away-from-your-model-58i1
+* add Traefik dashboard to traefik.mortimer.pro - https://www.luizkowalski.net/traefik-with-kamal-tips-and-tricks/
+* add exporting ICS files - https://www.driftingruby.com/episodes/exporting-ics-files
+* add Stripe payments - https://gorails.com/episodes/one-time-payments-with-pay-and-stripe
 * add devise gem and user class
-* add rqrcode affording QR codes to easy distributing URLs for punch_clocks, more
 * add solid_queue for offloading background jobs
-* add location
 
 ## CHANGELOG
 
@@ -16,6 +17,9 @@
 * refactor filtering
 * deploy 12:47
 * add development gems: dotenv-rails, amazing_print, rails_live_reload
+* added a17t for default styled building blocks/components supporting TailwindCSS
+* add rqrcode affording QR codes to easy distributing URLs for punch_clocks, more
+* add location
 
 23/4/2024
 

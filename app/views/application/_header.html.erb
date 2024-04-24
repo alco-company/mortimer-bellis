@@ -1,6 +1,6 @@
 <div class="flex justify-between items-center">
   <div>
-    <h1 class="font-bold text-4xl"> <%= t("#{ resource_class.table_name}.list.title") %> </h1>
+    <h1 class="font-bold text-4xl"> <%= t("#{resource_class.table_name}.list.title") %> </h1>
     <% case @filter_form %>
     <% when 'punch_cards' %>
       <%= link_to t(:payroll_order), modal_new_url(modal_form: 'payroll'), class: "inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10", data: { turbo_stream: true } %>

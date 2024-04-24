@@ -1,0 +1,38 @@
+da:
+
+  locations:
+    create:
+      post: Arbejdsstedet blev oprettet
+    update:
+      post: Arbejdsstedet blev opdateret
+    destroy:
+      post: Arbejdsstedet blev slettet
+
+    list:
+      title: Arbejdssteder
+      new: Nyt arbejdssted
+      edit: Rediger
+      delete: Slet
+      show: Vis
+      name: Navn
+      email: Email
+      phone: Telefon
+      pincode: Pinkode
+      state: Status
+      updated_at: Opdateret den
+
+    form:
+      new: Nyt arbejdssted
+      edit: Rediger arbejdssted
+
+    new:
+      title: Nyt arbejdssted
+      create: Opret
+
+    edit:
+      title: Rediger arbejdssted
+      update: Opdater
+
+    show:
+      title: Arbejdssted
+      back: Tilbage

@@ -2,6 +2,7 @@ require "test_helper"
 
 class AccountsControllerTest < ActionDispatch::IntegrationTest
   setup do
+    Current.account = accounts(:one)
     @account = accounts(:one)
   end
 
