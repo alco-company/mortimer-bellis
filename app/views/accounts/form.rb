@@ -5,5 +5,6 @@ class Accounts::Form < ApplicationForm
     row field(:pp_identification).input(class: "mort-form-text")
     row field(:locale).input(class: "mort-form-text")
     row field(:time_zone).input(class: "mort-form-text")
+    # qr_code field(:account).input, helpers.resource_url(@resource)
   end
 end

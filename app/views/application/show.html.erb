@@ -1,5 +1,14 @@
-<div class="mx-auto md:w-2/3 w-full">
-  <h1 class="font-bold text-4xl"> <%= @resource.name %> </h1>
-
-  <%= render resource_class.form @resource %>
+<div class="w-full">
+  <div class="flex justify-between items-center">
+    <div>
+      <h1 class="font-bold text-4xl"> <%= @resource.name %> </h1>
+    </div>
+    <div class="grid gap-2 grid-cols-1 lg:grid-cols-2 items-center">
+      <%= svg_qr_code_link(resource_url(@resource))  %>
+      <%= link_to t("#{ resource_class.table_name}.form.edit"), edit_resource_url(@resource), class: "mort-btn-primary" %>
+    </div>
+  </div>
+  <div class="">
+    <%= render resource_class.form @resource, false %>
+  </div>
 </div>

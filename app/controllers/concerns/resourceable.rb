@@ -8,7 +8,7 @@ module Resourceable
 
     # Use callbacks to share common setup or constraints between actions.
     def set_resource
-      @resource = params.dig(:id) ? resource_class.find(params[:id]) : resource_class.new
+      @resource = params_id ? resource_class.find(params_id) : resource_class.new
       if %w[employee punch].include? resource_class.to_s.downcase
         @resource.state = "OUT" if @resource.state.nil?
       end
@@ -58,5 +58,9 @@ module Resourceable
   private
     def rc_params
       params.permit(:controller)[:controller]
+    end
+
+    def params_id
+      params.permit(:id)[:id]
     end
 end

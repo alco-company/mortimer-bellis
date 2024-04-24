@@ -88,7 +88,7 @@ module.exports = {
     },
   },
   plugins: [
-    require("a17t"),
+    // require("a17t"),
     require("@tailwindcss/forms"),
     require("@tailwindcss/aspect-ratio"),
     require("@tailwindcss/typography"),
