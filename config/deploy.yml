@@ -84,6 +84,7 @@ env:
     DB_HOST: 65.108.89.110
     SSL_DOMAIN: 'bellis.mortimer.pro'
     WEB_HOST: 'bellis.mortimer.pro'
+    MORTIMER_VERSION: '0.0.2'
   secret:
     - RAILS_MASTER_KEY
 
