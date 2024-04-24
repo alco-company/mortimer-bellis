@@ -9,9 +9,9 @@ module Resourceable
     # Use callbacks to share common setup or constraints between actions.
     def set_resource
       @resource = params_id ? resource_class.find(params_id) : resource_class.new
-      if %w[employee punch].include? resource_class.to_s.downcase
-        @resource.state = "OUT" if @resource.state.nil?
-      end
+      # if %w[employee punch].include? resource_class.to_s.downcase
+      #   @resource.state = "OUT" if @resource.state.nil?
+      # end
     end
 
     def set_resources

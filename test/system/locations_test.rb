@@ -2,6 +2,7 @@ require "application_system_test_case"
 
 class LocationsTest < ApplicationSystemTestCase
   setup do
+    Current.account = accounts(:one)
     @location = locations(:one)
   end
 

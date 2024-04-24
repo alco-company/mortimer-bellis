@@ -2,6 +2,7 @@ require "test_helper"
 
 class LocationsControllerTest < ActionDispatch::IntegrationTest
   setup do
+    Current.account = accounts(:one)
     @location = locations(:one)
   end
 
@@ -17,10 +18,10 @@ class LocationsControllerTest < ActionDispatch::IntegrationTest
 
   test "should create location" do
     assert_difference("Location.count") do
-      post locations_url, params: { location: { account_id: @location.account_id, location_color: @location.location_color, name: @location.name } }
+      post locations_url, params: { location: { account_id: @location.account.id, location_color: @location.location_color, name: @location.name } }
     end
 
-    assert_redirected_to location_url(Location.last)
+    assert_redirected_to locations_url()
   end
 
   test "should show location" do
@@ -34,8 +35,8 @@ class LocationsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update location" do
-    patch location_url(@location), params: { location: { account_id: @location.account_id, location_color: @location.location_color, name: @location.name } }
-    assert_redirected_to location_url(@location)
+    patch location_url(@location), params: { location: { account_id: @location.account.id, location_color: @location.location_color, name: @location.name } }
+    assert_redirected_to locations_url()
   end
 
   test "should destroy location" do
@@ -43,6 +44,6 @@ class LocationsControllerTest < ActionDispatch::IntegrationTest
       delete location_url(@location)
     end
 
-    assert_redirected_to locations_url
+    assert_redirected_to locations_url()
   end
 end
