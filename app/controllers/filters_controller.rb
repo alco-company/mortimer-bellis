@@ -24,7 +24,7 @@ class FiltersController < ApplicationController
     json_filters = params[:filter].except(:filter_form, :url, :account_id, :submit)
     filter = Filter.where(view: params[:filter][:filter_form]).take
 
-    filter.update(account_id: params[:filter][:account_id], view: params[:filter][:filter_form], filter: json_filters)
+    filter.update(account: Current.account, view: params[:filter][:filter_form], filter: json_filters)
     redirect_to redirect_params
   end
 
@@ -34,6 +34,6 @@ class FiltersController < ApplicationController
   end
 
   def redirect_params
-    params.require(:filter).permit(:url)
+    params.require(:filter).permit(:url)[:url]
   end
 end

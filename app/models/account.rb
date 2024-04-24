@@ -2,12 +2,16 @@ class Account < ApplicationRecord
   has_many :filters, dependent: :destroy
 
   scope :by_name, ->(name) { where("name LIKE ?", "%#{name}%") if name.present? }
+  scope :by_locale, ->(locale) { where("locale LIKE ?", "%#{locale}%") if locale.present? }
+  scope :by_time_zone, ->(time_zone) { where("time_zone LIKE ?", "%#{time_zone}%") if time_zone.present? }
 
   def self.filtered(filter)
     flt = filter.filter
 
     all
       .by_name(flt["name"])
+      .by_locale(flt["locale"])
+      .by_time_zone(flt["time_zone"])
   rescue
     filter.destroy if filter
     all

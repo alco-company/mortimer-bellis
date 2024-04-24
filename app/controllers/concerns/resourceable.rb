@@ -57,6 +57,6 @@ module Resourceable
 
   private
     def rc_params
-      params.permit(:controller)
+      params.permit(:controller)[:controller]
     end
 end
