@@ -45,6 +45,8 @@ contributions to Open Source Software have in each their own way made a crucial 
 * consider using [puma-dev](https://github.com/puma/puma-dev) as development webserver
 * when [SQL cmds](https://zaidesanton.substack.com/p/the-most-underrated-skill-sql-for) need a little something
 * [How to do multi-step forms](https://www.codewithjason.com/rails-multi-step-forms/)
+* [Deleting data at scale](https://planetscale.com/blog/ruby-on-rails-3-tips-for-deleting-data-at-scale)
+* [Cascading deletes on foreign keys](https://stackoverflow.com/questions/37447531/how-do-i-create-a-rails-migration-that-updates-a-foreign-key-with-an-on-delete-c)
 
 https://blog.alco.dk/2021/03/18/tailwind-hotwire-more/
 

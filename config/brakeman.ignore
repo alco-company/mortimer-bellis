@@ -1,0 +1,52 @@
+{
+  "ignored_warnings": [
+    {
+      "warning_type": "Mass Assignment",
+      "warning_code": 105,
+      "fingerprint": "0ce856371f971a2a7cc95ca235c77524bc3f1d5df5ccd589706b89210cfbb82f",
+      "check_name": "PermitAttributes",
+      "message": "Potentially dangerous key allowed for mass assignment",
+      "file": "app/controllers/punch_clocks_controller.rb",
+      "line": 6,
+      "link": "https://brakemanscanner.org/docs/warning_types/mass_assignment/",
+      "code": "params.require(:punch_clock).permit(:account_id, :location_id, :name, :ip_addr, :last_punched_at, :access_token, :locale, :time_zone)",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "PunchClocksController",
+        "method": "resource_params"
+      },
+      "user_input": ":account_id",
+      "confidence": "High",
+      "cwe_id": [
+        915
+      ],
+      "note": ""
+    },
+    {
+      "warning_type": "Mass Assignment",
+      "warning_code": 105,
+      "fingerprint": "8c787b46305e7f058b1f9a2a8a577b8b67e339626d0a09805203dad7e165cc55",
+      "check_name": "PermitAttributes",
+      "message": "Potentially dangerous key allowed for mass assignment",
+      "file": "app/controllers/locations_controller.rb",
+      "line": 5,
+      "link": "https://brakemanscanner.org/docs/warning_types/mass_assignment/",
+      "code": "params.require(:location).permit(:id, :account_id, :name, :location_color)",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "LocationsController",
+        "method": "resource_params"
+      },
+      "user_input": ":account_id",
+      "confidence": "High",
+      "cwe_id": [
+        915
+      ],
+      "note": ""
+    }
+  ],
+  "updated": "2024-04-24 21:22:57 +0200",
+  "brakeman_version": "6.1.2"
+}
