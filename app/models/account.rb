@@ -17,7 +17,7 @@ class Account < ApplicationRecord
     all
   end
 
-  def self.form(resource)
-    Accounts::Form.new resource
+  def self.form(resource, editable = true)
+    Accounts::Form.new resource, editable: editable
   end
 end

@@ -47,11 +47,14 @@ group :development, :test do
   gem "rubocop-rails-omakase", require: false
 
   gem "amazing_print"
+
+  gem "dotenv-rails"
 end
 
 group :development do
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem "web-console"
+  gem "rails_live_reload"
 
   # Add speed badges [https://github.com/MiniProfiler/rack-mini-profiler]
   # gem "rack-mini-profiler"
@@ -71,3 +74,5 @@ gem "phlex-rails"
 gem "superform", "~> 0.4.6"
 
 gem "pagy", "~> 8.2"
+
+gem "rqrcode", "~> 2.2"

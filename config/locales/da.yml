@@ -5,7 +5,8 @@ da:
   import_employee: Videre
   import_employees: Indlæs medarbejder stamdata
   form_errors_prohibited: "%{errors} fejl forhindrede denne post i at blive gemt"
-
+  edit: Redigér
+  
   menu:
     home: Hjem
     accounts: Konti
