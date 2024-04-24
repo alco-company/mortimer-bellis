@@ -1,5 +1,5 @@
 class LogoComponent < ApplicationComponent
-  include Phlex::Rails::Helpers::ImageTag  
+  include Phlex::Rails::Helpers::ImageTag
 
   def view_template
     logo_image
@@ -11,7 +11,7 @@ class LogoComponent < ApplicationComponent
         span(class: "sr-only") { "Mortimer Employee App" }
         image_tag "bluewing16by16.svg", class: "h-8 w-auto"
       end
-    end    
+    end
   end
 
   def logo_svg
@@ -33,5 +33,4 @@ class LogoComponent < ApplicationComponent
       )
     end
   end
-
 end

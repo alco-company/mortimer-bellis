@@ -9,9 +9,9 @@ class DateColumn < Phlex::HTML
   end
 
   def view_template
-    field.blank? ? 
+    field.blank? ?
       div { "&nbsp;".html_safe } :
-      div( class: @class ) { format_date field}
+      div(class: @class) { format_date field }
   end
 
   def format_date(date)

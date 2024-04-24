@@ -2,7 +2,6 @@ module TimezoneLocale
   extend ActiveSupport::Concern
 
   included do
-
     #
     # handling locale
     #
@@ -13,7 +12,6 @@ module TimezoneLocale
     # https://nandovieira.com/working-with-dates-on-ruby-on-rails
     #
     around_action :user_time_zone
-    
   end
 
 
@@ -39,11 +37,11 @@ module TimezoneLocale
     #   127.0.0.1 application.pl
     # in your /etc/hosts file to try this out locally
     def extract_locale_from_tld
-      parsed_locale = request.host.split('.').last
+      parsed_locale = request.host.split(".").last
       I18n.available_locales.map(&:to_s).include?(parsed_locale) ? parsed_locale : nil
     end
 
-    def get_locale_from_user_or_account 
+    def get_locale_from_user_or_account
       locale = Current.user&.locale || Current.account&.locale
     end
 
@@ -52,10 +50,8 @@ module TimezoneLocale
     #
     def user_time_zone(&block)
       timezone = Current.user.time_zone || Current.account.time_zone rescue nil
-      timezone.blank? ? 
-        Time.use_zone('Europe/Copenhagen',&block) :
-        Time.use_zone(timezone, &block) 
+      timezone.blank? ?
+        Time.use_zone("Europe/Copenhagen", &block) :
+        Time.use_zone(timezone, &block)
     end
-
-
 end
