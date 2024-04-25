@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  account: one
+  name: Team 1
+  team_color: green
+  locale: da
+  time_zone: Copenhagen
+
+two:
+  account: two
+  name: Team 2
+  team_color: sky
+  locale: en
+  time_zone: London

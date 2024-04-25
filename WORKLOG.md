@@ -15,8 +15,6 @@
 * add export payroll data
 * add punch_cards
 * add employee import
-* add employees
-* add teams
 
 ## CHANGELOG
 
@@ -25,6 +23,13 @@
 * added access_token for punch_clocks
 * added filter to punch_clocks
 * added SQLite3 performance enhancement gems
+* add teams
+* add date, datetime, time field formats - add-ons for superform
+* add employees
+* add punch_clocks to locations
+* add employees to teams
+* removed fingerprint - 04da67036737a473cae0e30551635be46588c707fe88c372fbe7518e99fe968b
+* brakeman + rails test
 
 ### 24/4/2024
 

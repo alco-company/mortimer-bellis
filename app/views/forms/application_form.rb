@@ -6,6 +6,22 @@ class ApplicationForm < Superform::Rails::Form
     @editable = options[:editable]
   end
 
+  class Phlex::SGML
+    # class << self      
+    # end
+    def format_object(object)
+      case object
+      when ActiveSupport::TimeWithZone; object.strftime("%d-%m-%y")
+      when Date; object.strftime("%Y-%m-%d")
+      when DateTime; object.strftime("%Y-%m-%d %H:%M:%S")
+      when Float, Integer; object.to_s
+      else 
+        # debugger
+        object
+      end
+    end
+  end
+
   class MultipleSelectField < Superform::Rails::Components::SelectField
     def options(*collection)
       map_options(collection).each do |key, value|
@@ -14,9 +30,51 @@ class ApplicationForm < Superform::Rails::Form
     end
   end
 
+  class WeekField < Superform::Rails::Components::InputComponent
+    def field_attributes
+      super.merge(type: "week")
+    end
+  end
+
+  class TimeField < Superform::Rails::Components::InputComponent
+    def field_attributes
+      super.merge(type: "time")
+    end
+    def template(&)
+      input(**attributes, value: field.value&.strftime("%H:%M"))
+    end
+  end
+
+  class DateField < Superform::Rails::Components::InputComponent
+    def field_attributes
+      super.merge(type: "date")
+    end
+    def template(&)
+      input(**attributes, value: field.value&.strftime("%Y-%m-%d"))
+    end
+  end
+
+  class DateTimeField < Superform::Rails::Components::InputComponent
+    def field_attributes
+      super.merge(type: "datetime-local")
+    end
+  end
+
   class Field < Field
     def multiple_select(*collection, **attributes, &)
       MultipleSelectField.new(self, attributes: attributes, collection: collection, &)
+    end
+    def week(**attributes)
+      WeekField.new(self, attributes: attributes)
+    end
+    def time(**attributes)
+      TimeField.new(self, attributes: attributes)
+    end
+    def date(**attributes)
+      DateField.new(self, attributes: attributes)
+    end
+    def datetime(**attributes)
+      DateTimeField.new(self, attributes: attributes)
     end
   end
 
@@ -55,8 +113,16 @@ class ApplicationForm < Superform::Rails::Form
       @editable ?
         render(component) :
         div(class: "mr-5") do
-          plain(component.field.value)
+          plain(fformat(model,component.field.key))
         end
+    end
+  end
+
+  def fformat(model,key)
+    case model.field_formats(key)
+    when :date; model.send(key).strftime("%d-%m-%Y") rescue nil
+    when :time; model.send(key).strftime("%H:%M") rescue nil
+    else; model.send key
     end
   end
 
@@ -64,8 +130,12 @@ class ApplicationForm < Superform::Rails::Form
     super do
       error_messages
       yield
-      submit(class: "mort-btn-primary mt-5") if @editable
+      submit(submit_string, class: "mort-btn-primary mt-5") if @editable
     end
+  end
+
+  def submit_string 
+    model.new_record? ? I18n.t(:create) : I18n.t(:update)
   end
 
   def error_messages

@@ -13,7 +13,7 @@ class Filter < ApplicationRecord
     all
   end
 
-  def self.form(resource)
+  def self.form(resource, editable = true)
     Filters::Form.new resource
   end
 end

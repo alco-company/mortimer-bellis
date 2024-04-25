@@ -5,7 +5,7 @@
     <% when 'punch_cards' %>
       <%= link_to t(:payroll_order), modal_new_url(modal_form: 'payroll'), class: "inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10", data: { turbo_stream: true } %>
     <% when 'employees' %>
-      <%= link_to t(:import_employees), modal_new_url(modal_form: 'import_employee'), class: "inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10", data: { turbo_stream: true } %>
+      <%#= link_to t(:import_employees), modal_new_url(modal_form: 'import_employee'), class: "inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10", data: { turbo_stream: true } %>
     <% end %>
   </div>
   <div class="grid gap-2 grid-cols-1 lg:grid-cols-2 items-center">

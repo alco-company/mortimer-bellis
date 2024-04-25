@@ -26,33 +26,10 @@ ActiveRecord::Schema[7.2].define(version: 2024_04_25_104956) do
     t.integer "team_id", null: false
     t.string "name"
     t.string "pincode"
-    t.string "payroll_employee_ident"
+    t.string "employee_ident"
     t.string "access_token"
     t.datetime "last_punched_at"
-    t.datetime "punches_settled_at"
     t.string "state"
-    t.string "job_title"
-    t.datetime "birthday"
-    t.datetime "hired_at"
-    t.text "description"
-    t.string "email"
-    t.string "cell_phone"
-    t.string "pbx_extension"
-    t.integer "contract_minutes"
-    t.integer "contract_days_per_payroll"
-    t.integer "contract_days_per_week"
-    t.integer "flex_balance_minutes"
-    t.string "hour_pay"
-    t.string "ot1_add_hour_pay"
-    t.string "ot2_add_hour_pay"
-    t.integer "hour_rate_cent", default: 0
-    t.integer "ot1_hour_add_cent", default: 0
-    t.integer "ot2_hour_add_cent", default: 0
-    t.datetime "tmp_overtime_allowed"
-    t.string "eu_state"
-    t.boolean "blocked"
-    t.string "locale"
-    t.string "time_zone"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["account_id"], name: "index_employees_on_account_id"
@@ -100,14 +77,11 @@ ActiveRecord::Schema[7.2].define(version: 2024_04_25_104956) do
     t.string "time_zone"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.datetime "punches_settled_at"
     t.index ["account_id"], name: "index_teams_on_account_id"
   end
 
   add_foreign_key "employees", "accounts"
-  add_foreign_key "employees", "accounts", on_delete: :cascade
   add_foreign_key "employees", "teams"
-  add_foreign_key "employees", "teams", on_delete: :cascade
   add_foreign_key "filters", "accounts"
   add_foreign_key "filters", "accounts"
   add_foreign_key "filters", "accounts"
