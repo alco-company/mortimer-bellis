@@ -109,7 +109,7 @@ class Contextmenu < Phlex::HTML
       whitespace
       comment { %(Active: "bg-gray-50", Not Active: "") }
       whitespace
-      link_to((@links[0] || helpers.edit_resource_url(resource)),
+      link_to((@links[0] || helpers.edit_resource_url(id: resource.id)),
         class: "block px-3 py-1 text-sm leading-6 text-gray-900",
         role: "menuitem",
         data: { turbo_action: "advance", turbo_frame: @turbo_frame },
