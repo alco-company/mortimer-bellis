@@ -2,6 +2,7 @@ class Team < ApplicationRecord
   include Accountable
   TEAM_COLORS = %w[border-red-700 border-blue-700 border-green-700 border-yellow-700 border-purple-700 border-orange-700 border-pink-700 border-brown-700 border-black-700]
 
+  has_many :employees, dependent: :destroy
   # has_and_belongs_to_many :employees
 
   scope :by_name, ->(name) { where("name LIKE ?", "%#{name}%") if name.present? }

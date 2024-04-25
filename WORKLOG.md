@@ -26,6 +26,8 @@
 * add teams
 * add date, datetime, time field formats - add-ons for superform
 * add employees
+* add punch_clocks to locations
+* add employees to teams
 
 ### 24/4/2024
 
