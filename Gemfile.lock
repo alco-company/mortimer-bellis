@@ -191,7 +191,7 @@ GEM
       racc (~> 1.4)
     nokogiri (1.16.4-x86_64-linux)
       racc (~> 1.4)
-    pagy (8.2.2)
+    pagy (8.3.0)
     parallel (1.24.0)
     parser (3.3.0.5)
       ast (~> 2.4.1)
@@ -356,7 +356,7 @@ DEPENDENCIES
   dotenv-rails
   importmap-rails
   jbuilder
-  pagy (~> 8.2)
+  pagy (~> 8.3)
   phlex-rails
   propshaft
   puma (>= 5.0)
