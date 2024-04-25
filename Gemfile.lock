@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/rails/rails.git
-  revision: 1d13a7c44d205a67cdd692bad56399e41a4eea44
+  revision: 9fd8b33ebba3c281c6cc5bbf8f48cde38c6fb0da
   branch: main
   specs:
     actioncable (7.2.0.alpha)
@@ -191,7 +191,7 @@ GEM
       racc (~> 1.4)
     nokogiri (1.16.4-x86_64-linux)
       racc (~> 1.4)
-    pagy (8.2.2)
+    pagy (8.3.0)
     parallel (1.24.0)
     parser (3.3.0.5)
       ast (~> 2.4.1)
@@ -277,7 +277,7 @@ GEM
       rubocop-rails
     ruby-progressbar (1.13.0)
     rubyzip (2.3.2)
-    selenium-webdriver (4.19.0)
+    selenium-webdriver (4.20.0)
       base64 (~> 0.2)
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 3.0)
@@ -332,19 +332,11 @@ GEM
 
 PLATFORMS
   aarch64-linux
-  aarch64-linux-gnu
-  aarch64-linux-musl
   arm-linux
-  arm-linux-gnu
-  arm-linux-musl
   arm64-darwin
   x86-linux
-  x86-linux-gnu
-  x86-linux-musl
   x86_64-darwin
   x86_64-linux
-  x86_64-linux-gnu
-  x86_64-linux-musl
 
 DEPENDENCIES
   activerecord-enhancedsqlite3-adapter (~> 0.6.0)
@@ -374,4 +366,4 @@ DEPENDENCIES
   web-console
 
 BUNDLED WITH
-   2.5.7
+   2.5.9

@@ -25,6 +25,7 @@
 * added filter to punch_clocks
 * added SQLite3 performance enhancement gems
 * add teams
+* add date, datetime, time field formats - add-ons for superform
 
 ### 24/4/2024
 
