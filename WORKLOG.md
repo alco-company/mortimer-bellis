@@ -2,6 +2,7 @@
 
 ## ROADMAP
 
+* add litestream - https://fractaledmind.github.io/2024/04/15/sqlite-on-rails-the-how-and-why-of-optimal-performance/
 * add handling of constants - https://dev.to/vladhilko/say-goodbye-to-messy-constants-a-new-approach-to-moving-constants-away-from-your-model-58i1
 * add Traefik dashboard to traefik.mortimer.pro - https://www.luizkowalski.net/traefik-with-kamal-tips-and-tricks/
 * add exporting ICS files - https://www.driftingruby.com/episodes/exporting-ics-files
@@ -23,6 +24,7 @@
 
 * added access_token for punch_clocks
 * added filter to punch_clocks
+* added SQLite3 performance enhancement gems
 
 ### 24/4/2024
 
