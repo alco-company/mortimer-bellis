@@ -16,7 +16,6 @@
 * add punch_cards
 * add employee import
 * add employees
-* add teams
 
 ## CHANGELOG
 
@@ -25,6 +24,7 @@
 * added access_token for punch_clocks
 * added filter to punch_clocks
 * added SQLite3 performance enhancement gems
+* add teams
 
 ### 24/4/2024
 
