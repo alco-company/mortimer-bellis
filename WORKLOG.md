@@ -22,6 +22,7 @@
 ### 25/4/2024
 
 * added access_token for punch_clocks
+* added filter to punch_clocks
 
 ### 24/4/2024
 
