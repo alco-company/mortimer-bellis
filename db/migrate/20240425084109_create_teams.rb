@@ -10,6 +10,5 @@ class CreateTeams < ActiveRecord::Migration[7.2]
       t.timestamps
     end
     add_foreign_key "teams", "accounts", on_delete: :cascade
-    # add_foreign_key "teams", "employees", on_delete: :cascade
   end
 end
