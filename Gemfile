@@ -76,3 +76,5 @@ gem "superform", "~> 0.4.6"
 gem "pagy", "~> 8.2"
 
 gem "rqrcode", "~> 2.2"
+
+gem "activerecord-enhancedsqlite3-adapter", "~> 0.6.0"

@@ -35,6 +35,7 @@ contributions to Open Source Software have in each their own way made a crucial 
 * ActiveStorage Routes eaten by _catchall_: [Justin Searls](https://github.com/rails/rails/issues/31228#issuecomment-1947387804)
 * a17t building blocks designed for TailwindCSS [Miles McCain](https://github.com/milesmcc/a17t)
 * QR Codes [Duncan Robertson](https://github.com/whomwah/rqrcode)
+* Optimizing SQLite3 [Stephen Margheim](https://fractaledmind.github.io/2024/04/15/sqlite-on-rails-the-how-and-why-of-optimal-performance/)
 
 ## Resources
 
