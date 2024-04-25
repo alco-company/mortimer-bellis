@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :employees
   resources :teams
   resources :punch_clocks
   resources :locations do

@@ -10,7 +10,7 @@ class ApplicationRecord < ActiveRecord::Base
   def field_formats(key)
     case key
     when :updated_at, :created_at, :last_punched_at;  :datetime
-    when :punches_settled_at;                         :date
+    when :birthday, :hired_at, :punches_settled_at;   :date
     else; nil
     end
   end

@@ -16,7 +16,7 @@ class ApplicationForm < Superform::Rails::Form
       when DateTime; object.strftime("%Y-%m-%d %H:%M:%S")
       when Float, Integer; object.to_s
       else 
-        debugger
+        # debugger
         object
       end
     end
@@ -120,8 +120,8 @@ class ApplicationForm < Superform::Rails::Form
 
   def fformat(model,key)
     case model.field_formats(key)
-    when :date; model.send(key).strftime("%d-%m-%Y")
-    when :time; model.send(key).strftime("%H:%M")
+    when :date; model.send(key).strftime("%d-%m-%Y") rescue nil
+    when :time; model.send(key).strftime("%H:%M") rescue nil
     else; model.send key
     end
   end

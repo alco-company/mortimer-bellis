@@ -15,7 +15,6 @@
 * add export payroll data
 * add punch_cards
 * add employee import
-* add employees
 
 ## CHANGELOG
 
@@ -26,6 +25,7 @@
 * added SQLite3 performance enhancement gems
 * add teams
 * add date, datetime, time field formats - add-ons for superform
+* add employees
 
 ### 24/4/2024
 

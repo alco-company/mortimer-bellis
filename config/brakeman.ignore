@@ -3,6 +3,29 @@
     {
       "warning_type": "Mass Assignment",
       "warning_code": 105,
+      "fingerprint": "04da67036737a473cae0e30551635be46588c707fe88c372fbe7518e99fe968b",
+      "check_name": "PermitAttributes",
+      "message": "Potentially dangerous key allowed for mass assignment",
+      "file": "app/controllers/teams_controller.rb",
+      "line": 6,
+      "link": "https://brakemanscanner.org/docs/warning_types/mass_assignment/",
+      "code": "params.require(:team).permit(:account_id, :name, :team_color, :locale, :time_zone)",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "TeamsController",
+        "method": "resource_params"
+      },
+      "user_input": ":account_id",
+      "confidence": "High",
+      "cwe_id": [
+        915
+      ],
+      "note": ""
+    },
+    {
+      "warning_type": "Mass Assignment",
+      "warning_code": 105,
       "fingerprint": "0ce856371f971a2a7cc95ca235c77524bc3f1d5df5ccd589706b89210cfbb82f",
       "check_name": "PermitAttributes",
       "message": "Potentially dangerous key allowed for mass assignment",
@@ -18,6 +41,29 @@
       },
       "user_input": ":account_id",
       "confidence": "High",
+      "cwe_id": [
+        915
+      ],
+      "note": ""
+    },
+    {
+      "warning_type": "Mass Assignment",
+      "warning_code": 70,
+      "fingerprint": "1544db94b9bfccd66b1571a30ec7cba67d2eccc82234abc518f9e070be0c0810",
+      "check_name": "MassAssignment",
+      "message": "Specify exact keys allowed for mass assignment instead of using `permit!` which allows any keys",
+      "file": "app/controllers/filters_controller.rb",
+      "line": 50,
+      "link": "https://brakemanscanner.org/docs/warning_types/mass_assignment/",
+      "code": "params.require(:filter).permit!",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "FiltersController",
+        "method": "create_params"
+      },
+      "user_input": null,
+      "confidence": "Medium",
       "cwe_id": [
         915
       ],
@@ -45,8 +91,31 @@
         915
       ],
       "note": ""
+    },
+    {
+      "warning_type": "Mass Assignment",
+      "warning_code": 105,
+      "fingerprint": "9de2e82f9ed231bf5fc83c22c7af00c6f680cbf4f83900d3c7c1306626f63570",
+      "check_name": "PermitAttributes",
+      "message": "Potentially dangerous key allowed for mass assignment",
+      "file": "app/controllers/filters_controller.rb",
+      "line": 46,
+      "link": "https://brakemanscanner.org/docs/warning_types/mass_assignment/",
+      "code": "params.require(:filter).permit(:url, :filter_form, :account_id, :name)",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "FiltersController",
+        "method": "filter_params"
+      },
+      "user_input": ":account_id",
+      "confidence": "High",
+      "cwe_id": [
+        915
+      ],
+      "note": ""
     }
   ],
-  "updated": "2024-04-24 21:22:57 +0200",
+  "updated": "2024-04-25 12:31:28 +0200",
   "brakeman_version": "6.1.2"
 }
