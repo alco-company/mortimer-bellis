@@ -3,29 +3,6 @@
     {
       "warning_type": "Mass Assignment",
       "warning_code": 105,
-      "fingerprint": "04da67036737a473cae0e30551635be46588c707fe88c372fbe7518e99fe968b",
-      "check_name": "PermitAttributes",
-      "message": "Potentially dangerous key allowed for mass assignment",
-      "file": "app/controllers/teams_controller.rb",
-      "line": 6,
-      "link": "https://brakemanscanner.org/docs/warning_types/mass_assignment/",
-      "code": "params.require(:team).permit(:account_id, :name, :team_color, :locale, :time_zone)",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "TeamsController",
-        "method": "resource_params"
-      },
-      "user_input": ":account_id",
-      "confidence": "High",
-      "cwe_id": [
-        915
-      ],
-      "note": ""
-    },
-    {
-      "warning_type": "Mass Assignment",
-      "warning_code": 105,
       "fingerprint": "0ce856371f971a2a7cc95ca235c77524bc3f1d5df5ccd589706b89210cfbb82f",
       "check_name": "PermitAttributes",
       "message": "Potentially dangerous key allowed for mass assignment",
@@ -114,8 +91,54 @@
         915
       ],
       "note": ""
+    },
+    {
+      "warning_type": "Mass Assignment",
+      "warning_code": 105,
+      "fingerprint": "ad5342b42e2289517db164db332377294e700a2d837036a5cb025b5c67001d99",
+      "check_name": "PermitAttributes",
+      "message": "Potentially dangerous key allowed for mass assignment",
+      "file": "app/controllers/teams_controller.rb",
+      "line": 6,
+      "link": "https://brakemanscanner.org/docs/warning_types/mass_assignment/",
+      "code": "params.require(:team).permit(:account_id, :name, :team_color, :locale, :time_zone, :punches_settled_at)",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "TeamsController",
+        "method": "resource_params"
+      },
+      "user_input": ":account_id",
+      "confidence": "High",
+      "cwe_id": [
+        915
+      ],
+      "note": ""
+    },
+    {
+      "warning_type": "Mass Assignment",
+      "warning_code": 105,
+      "fingerprint": "fb222178f5d03b8ecaf3d2d9ca0010e8a8e54f2635196abf6371a8af6e8770b4",
+      "check_name": "PermitAttributes",
+      "message": "Potentially dangerous key allowed for mass assignment",
+      "file": "app/controllers/employees_controller.rb",
+      "line": 7,
+      "link": "https://brakemanscanner.org/docs/warning_types/mass_assignment/",
+      "code": "params.require(:employee).permit(:account_id, :team_id, :name, :pincode, :access_token, :last_punched_at, :state, :payroll_employee_ident, :punches_settled_at, :job_title, :birthday, :hired_at, :description, :email, :cell_phone, :pbx_extension, :contract_minutes, :contract_days_per_payroll, :contract_days_per_week, :flex_balance_minutes, :hour_pay, :ot1_add_hour_pay, :ot2_add_hour_pay, :hour_rate_cent, :ot1_hour_add_cent, :ot2_hour_add_cent, :tmp_overtime_allowed, :eu_state, :blocked, :locale, :time_zone)",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "EmployeesController",
+        "method": "resource_params"
+      },
+      "user_input": ":account_id",
+      "confidence": "High",
+      "cwe_id": [
+        915
+      ],
+      "note": ""
     }
   ],
-  "updated": "2024-04-25 12:31:28 +0200",
+  "updated": "2024-04-25 23:03:49 +0200",
   "brakeman_version": "6.1.2"
 }

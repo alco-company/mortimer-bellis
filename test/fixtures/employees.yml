@@ -5,17 +5,17 @@ one:
   team: one
   name: MyString
   pincode: MyString
-  employee_ident: MyString
+  payroll_employee_ident: MyString
   access_token: MyString
   last_punched_at: 2024-04-25 12:49:56
-  state: MyString
+  state: OUT
 
 two:
   account: two
   team: two
   name: MyString
   pincode: MyString
-  employee_ident: MyString
+  payroll_employee_ident: MyString
   access_token: MyString
   last_punched_at: 2024-04-25 12:49:56
-  state: MyString
+  state: OUT

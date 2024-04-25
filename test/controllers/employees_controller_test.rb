@@ -2,6 +2,7 @@ require "test_helper"
 
 class EmployeesControllerTest < ActionDispatch::IntegrationTest
   setup do
+    Current.account = accounts(:one)
     @employee = employees(:one)
   end
 
@@ -17,10 +18,10 @@ class EmployeesControllerTest < ActionDispatch::IntegrationTest
 
   test "should create employee" do
     assert_difference("Employee.count") do
-      post employees_url, params: { employee: { access_token: @employee.access_token, account_id: @employee.account_id, employee_ident: @employee.employee_ident, last_punched_at: @employee.last_punched_at, name: @employee.name, pincode: @employee.pincode, state: @employee.state, team_id: @employee.team_id } }
+      post employees_url, params: { employee: { access_token: @employee.access_token, account_id: @employee.account_id, payroll_employee_ident: @employee.payroll_employee_ident, last_punched_at: @employee.last_punched_at, name: @employee.name, pincode: @employee.pincode, state: @employee.state, team_id: @employee.team_id } }
     end
 
-    assert_redirected_to employee_url(Employee.last)
+    assert_redirected_to employees_url
   end
 
   test "should show employee" do
@@ -34,8 +35,8 @@ class EmployeesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update employee" do
-    patch employee_url(@employee), params: { employee: { access_token: @employee.access_token, account_id: @employee.account_id, employee_ident: @employee.employee_ident, last_punched_at: @employee.last_punched_at, name: @employee.name, pincode: @employee.pincode, state: @employee.state, team_id: @employee.team_id } }
-    assert_redirected_to employee_url(@employee)
+    patch employee_url(@employee), params: { employee: { access_token: @employee.access_token, account_id: @employee.account_id, payroll_employee_ident: @employee.payroll_employee_ident, last_punched_at: @employee.last_punched_at, name: @employee.name, pincode: @employee.pincode, state: @employee.state, team_id: @employee.team_id } }
+    assert_redirected_to employees_url
   end
 
   test "should destroy employee" do

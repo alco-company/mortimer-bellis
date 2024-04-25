@@ -28,6 +28,8 @@
 * add employees
 * add punch_clocks to locations
 * add employees to teams
+* removed fingerprint - 04da67036737a473cae0e30551635be46588c707fe88c372fbe7518e99fe968b
+* brakeman + rails test
 
 ### 24/4/2024
 
