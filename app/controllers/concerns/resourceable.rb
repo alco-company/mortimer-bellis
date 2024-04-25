@@ -29,12 +29,13 @@ module Resourceable
       url_for(controller: params[:controller], action: :new)
     end
 
-    def resource_url(resource)
-      url_for(resource)
+    def resource_url(**options)
+      url_for(controller: params[:controller], action: :show, id: @resource.id, **options)
     end
 
-    def edit_resource_url(resource)
-      url_for(resource) + "/edit"
+    def edit_resource_url(**options)
+      options[:id] = @resource.try(:id) || options.delete(:id)
+      url_for(controller: params[:controller], action: :edit, **options)
     end
 
     def delete_resource_url(resource)

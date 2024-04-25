@@ -8,10 +8,22 @@
 * add Stripe payments - https://gorails.com/episodes/one-time-payments-with-pay-and-stripe
 * add devise gem and user class
 * add solid_queue for offloading background jobs
+* add web push notifications
+* add login
+* add punches
+* add export payroll data
+* add punch_cards
+* add employee import
+* add employees
+* add teams
 
 ## CHANGELOG
 
-24/4/2024
+### 25/4/2024
+
+* added access_token for punch_clocks
+
+### 24/4/2024
 
 * add pagy for pagination
 * refactor filtering
@@ -22,7 +34,7 @@
 * add location
 * add punch_clock
 
-23/4/2024
+### 23/4/2024
 
 * https://guillaumebriday.fr/how-to-deploy-rails-with-kamal-and-ssl-certificate-on-vps to the rescue on setting up Letsencrypt
 * add account

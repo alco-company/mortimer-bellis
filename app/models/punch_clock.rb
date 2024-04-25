@@ -2,7 +2,7 @@ class PunchClock < ApplicationRecord
   include Accountable
   belongs_to :location
 
-  include Accountable
+  has_secure_token :access_token
 
   scope :by_name, ->(name) { where("name LIKE ?", "%#{name}%") if name.present? }
   scope :by_location, ->(location) { joins(:location).where("locations.name LIKE ?", "%#{location}%") if location.present? }

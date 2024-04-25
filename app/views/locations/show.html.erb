@@ -5,7 +5,7 @@
     </div>
     <div class="grid gap-2 grid-cols-1 lg:grid-cols-2 items-center">
       <%= svg_qr_code_link(resource_url(@resource))  %>
-      <%= link_to t("#{ resource_class.table_name}.form.edit"), edit_resource_url(@resource), class: "mort-btn-primary" %>
+      <%= link_to t("#{ resource_class.table_name}.form.edit"), edit_resource_url, class: "mort-btn-primary" %>
     </div>
   </div>
   <div class="">

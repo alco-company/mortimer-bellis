@@ -29,7 +29,20 @@ class ApplicationForm < Superform::Rails::Form
   def hidden(component)
     div do
       render component
-    end if @editable
+    end
+  end
+
+  def view_only(component)
+    div do
+      render(component.field.label) do
+        span(class: "font-bold") do
+          plain I18n.t("activerecord.attributes.#{component.field.parent.key}.#{component.field.key}")
+        end
+      end
+      div(class: "my-5") do
+        plain(component.field.value)
+      end
+    end
   end
 
   def row(component)
