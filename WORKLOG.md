@@ -14,9 +14,14 @@
 * add punches
 * add export payroll data
 * add punch_cards
-* add employee import
 
 ## CHANGELOG
+
+### 26/4/2024
+
+* bumped rails 
+* add console - `t` setting Current.account
+* add employee import
 
 ### 25/4/2024
 
