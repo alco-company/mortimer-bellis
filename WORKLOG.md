@@ -21,6 +21,7 @@
 
 * bumped rails 
 * add console - `t` setting Current.account
+* add CSV export on every model
 * add employee import
 
 ### 25/4/2024

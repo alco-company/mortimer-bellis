@@ -71,8 +71,15 @@ module DefaultActions
 
     #
     # implement on the controller inheriting this concern
+    # in order to not having to extend the create method on this concern
+    #
     def create_callback(obj)
     end
+
+    #
+    # implement on the controller inheriting this concern
+    # in order to not having to extend the update method on this concern
+    #
     def update_callback(obj)
     end
   end
