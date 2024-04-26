@@ -1,6 +1,10 @@
 class Employee < ApplicationRecord
   include Accountable
+  include TimeZoned
+  
   belongs_to :team
+
+  has_secure_token :access_token
 
   scope :by_name, ->(name) { where("name LIKE ? or pincode LIKE ? or employee_ident LIKE ? or job_title LIKE ? or cell_phone LIKE ? or email LIKE ?", "%#{name}%", "%#{name}%", "%#{name}%", "%#{name}%", "%#{name}%", "%#{name}%") if name.present? }
   scope :by_team, ->(team) { where("team LIKE ?", "%#{team}%") if team.present? }

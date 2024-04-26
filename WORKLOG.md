@@ -16,7 +16,6 @@
 * add blackhole
 * add solid_queue for offloading background jobs
 * add CSV import on every model
-* add modal
 
 ## CHANGELOG
 
@@ -26,6 +25,8 @@
 * add console - `t` setting Current.account
 * add CSV export on every model
 * fix link CSS
+* add modal
+* add time_zoned - lookup module for time_zone field on models
 
 ### 25/4/2024
 
