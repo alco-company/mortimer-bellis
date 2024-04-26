@@ -8,21 +8,24 @@
 * add exporting ICS files - https://www.driftingruby.com/episodes/exporting-ics-files
 * add Stripe payments - https://gorails.com/episodes/one-time-payments-with-pay-and-stripe
 * add devise gem and user class
-* add solid_queue for offloading background jobs
 * add web push notifications
 * add login
 * add punches
 * add export payroll data
 * add punch_cards
+* add blackhole
+* add solid_queue for offloading background jobs
+* add CSV import on every model
+* add modal
 
 ## CHANGELOG
 
 ### 26/4/2024
 
-* bumped rails 
+* bumped rails
 * add console - `t` setting Current.account
 * add CSV export on every model
-* add employee import
+* fix link CSS
 
 ### 25/4/2024
 
