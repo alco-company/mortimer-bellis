@@ -3,10 +3,11 @@ class Contextmenu < Phlex::HTML
   include Phlex::Rails::Helpers::LinkTo
   include Rails.application.routes.url_helpers
 
-  attr_accessor :resource, :list
+  attr_accessor :resource, :resource_class, :list
 
-  def initialize(resource: nil, list: nil, turbo_frame: "_top", alter: true, links: [])
+  def initialize(resource: nil, list: nil, resource_class: nil, turbo_frame: "_top", alter: true, links: [])
     @resource = resource
+    @resource_class = resource_class
     @list = list
     @turbo_frame = turbo_frame
     @alter = alter
@@ -74,6 +75,18 @@ class Contextmenu < Phlex::HTML
         span(class: "sr-only") do
           plain ", "
           plain "filter"
+        end
+      end
+      whitespace
+      link_to(
+        helpers.modal_new_url(modal_form: "import", resource_class: resource_class.to_s.underscore), 
+        class: "block px-3 py-1 text-sm leading-6 text-gray-900", 
+        data: { turbo_stream: true }
+        ) do 
+        plain "Importér"
+        span(class: "sr-only") do
+          plain ", "
+          plain "import"
         end
       end
       whitespace

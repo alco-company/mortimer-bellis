@@ -1,5 +1,13 @@
 da:
 
+  employee:
+    modal:
+      import:
+        title: Indlæs fil med medarbejder stamdata
+        instruction: Tryk på <a href="/modal/show?resource_class=employee" class="mort-link-primary" target="_top">dette link</a> - for at se en skabelon, som du kan bruge til at oprette en fil med medarbejder stamdata
+        label: Opdater medarbejder stamdata
+        description: Når du har set skabelonen, oprettet/rettet filen, og indlæst den - kan du trykke videre for at opdatere medarbejder stamdata. Eksisterende medarbejdere opdateres, nye medarbejdere oprettes.
+
   employees:
     create:
       post: Medarbejderen blev oprettet

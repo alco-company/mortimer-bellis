@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
+  get "modal/new"
+  get "modal/show"
+  post "modal/create"
+  
   resources :employees
   resources :teams
   resources :punch_clocks

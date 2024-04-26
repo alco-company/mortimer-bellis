@@ -1,0 +1,9 @@
+name;phone;email;pin_code;employee_number;ot1_minutes;job_title;base_salary;ot1_hr_pay;ot2_hr_pay;norm_time_minutes;flex_balance_minutes;roll_days;next_roll_at;week_workdays;birthday;hired_at;pbx_extension;description;eu_work_directive
+Donald Duck;;;1234;190112;;apprentice;1000;1,5;2,25;100;0;42;;6;;;;;
+S Ulley;;;;34;;foreman;1500;;;125;0;0;;;;;;;
+Po Cahontas;;;;202020;;team lead;2000;;;;0;0;;;;;;;
+Lady V;;;;1101;;assistant;1250;20%;75%;166;0;30;;5;;;;;
+B Lightyear;;;666;1102;120;welder;1175;50%;100%;;0;7;;5;;;845;;
+G Root;;;;1103;;;800;50%;100%;160;0;7;;6;01.04.2000;;510;;
+S Woody;;;;;;team lead;1950;;;;0;0;;;2001-09-11;;;;
+Bell Flower;;;;;-1;shop steward;2200;;;166;0;0;;;20/12/1958;;845;;
