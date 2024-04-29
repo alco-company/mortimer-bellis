@@ -80,3 +80,5 @@ gem "rqrcode", "~> 2.2"
 gem "activerecord-enhancedsqlite3-adapter", "~> 0.6.0"
 
 gem "solid_queue", "~> 0.3.0"
+
+gem "get_process_mem", "~> 0.2.7"

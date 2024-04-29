@@ -141,6 +141,8 @@ GEM
     fugit (1.9.0)
       et-orbi (~> 1, >= 1.2.7)
       raabro (~> 1.4)
+    get_process_mem (0.2.7)
+      ffi (~> 1.0)
     globalid (1.2.1)
       activesupport (>= 6.1)
     i18n (1.14.4)
@@ -358,6 +360,7 @@ DEPENDENCIES
   capybara
   debug
   dotenv-rails
+  get_process_mem (~> 0.2.7)
   importmap-rails
   jbuilder
   pagy (~> 8.2)
