@@ -21,6 +21,7 @@
 ### 29/4/2024
 
 * add CSV import on every model - use employee as template
+* prepare background jobs
 
 ### 26/4/2024
 
