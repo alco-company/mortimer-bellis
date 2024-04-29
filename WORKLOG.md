@@ -24,7 +24,7 @@
 * add solid_queue for offloading background jobs
 * add punch_card
 * add memory_logger - see config/initializers/memory_logger.rb
-
+* postpone tests for now
 
 ### 26/4/2024
 

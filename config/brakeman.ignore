@@ -49,6 +49,75 @@
     {
       "warning_type": "Mass Assignment",
       "warning_code": 105,
+      "fingerprint": "1bf508edb670ba95fc1dc6a6cb26707c56dbbbac9860b3bc664f4466e5d43906",
+      "check_name": "PermitAttributes",
+      "message": "Potentially dangerous key allowed for mass assignment",
+      "file": "app/controllers/punch_cards_controller.rb",
+      "line": 63,
+      "link": "https://brakemanscanner.org/docs/warning_types/mass_assignment/",
+      "code": "params.require(:punch_card).permit(:account_id, :employee_id, :work_date, :work_minutes, :ot1_minutes, :ot2_minutes, :break_minutes, :punches_settled_at)",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "PunchCardsController",
+        "method": "resource_params"
+      },
+      "user_input": ":account_id",
+      "confidence": "High",
+      "cwe_id": [
+        915
+      ],
+      "note": ""
+    },
+    {
+      "warning_type": "SQL Injection",
+      "warning_code": 0,
+      "fingerprint": "204483b3410dd77b5dfe9a53b0b9ce06a7f2da33035953e8df9fde01fa17d988",
+      "check_name": "SQL",
+      "message": "Possible SQL injection",
+      "file": "app/models/concerns/datalon.rb",
+      "line": 80,
+      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
+      "code": "PunchCard.find_by_sql(\"        SELECT\\n        SUM(\\\"payroll\\\".\\\"work_minutes\\\") AS work_minutes,\\n        SUM(\\\"payroll\\\".\\\"ot1_minutes\\\") AS ot1_minutes,\\n        SUM(\\\"payroll\\\".\\\"ot2_minutes\\\") AS ot2_minutes,\\n        '#{name}' AS group_name,\\n        \\\"employees\\\".\\\"employee_number\\\" AS emp_number,\\n        \\\"employees\\\".\\\"id\\\" AS emp_id,\\n        \\\"employees\\\".\\\"name\\\" AS emp_name\\n        FROM \\\"punch_cards\\\" AS \\\"payroll\\\"\\n        INNER JOIN \\\"employees\\\" ON \\\"payroll\\\".\\\"employee_id\\\" = \\\"employees\\\".\\\"id\\\"\\n        WHERE \\\"payroll\\\".\\\"account_id\\\" = #{Current.account.id} AND\\n        payroll.settled_at IS NULL AND\\n        payroll.work_date >= '#{fd}' AND\\n        payroll.work_date <= '#{td}' #{(\" \" or \" AND employees.id IN (#{[ids].flatten.join(\",\")}) \")} \\n  \\t\\t\\tGROUP BY \\\"group_name\\\", \\\"employees\\\".\\\"employee_number\\\", \\\"employees\\\".\\\"name\\\", \\\"employees\\\".\\\"id\\\"\\n        ORDER BY \\\"employees\\\".\\\"employee_number\\\"\\n\")",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Datalon",
+        "method": "payroll_view"
+      },
+      "user_input": "name",
+      "confidence": "Medium",
+      "cwe_id": [
+        89
+      ],
+      "note": ""
+    },
+    {
+      "warning_type": "SQL Injection",
+      "warning_code": 0,
+      "fingerprint": "8149c22b8f6bedaf187a3547b05ae47b6281ecee08868074c695e245479e632a",
+      "check_name": "SQL",
+      "message": "Possible SQL injection",
+      "file": "app/models/punch_card.rb",
+      "line": 16,
+      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
+      "code": "where(\"(ot1_minutes + ot2_minutes) >= #{ot_minutes}\")",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "PunchCard",
+        "method": null
+      },
+      "user_input": "ot_minutes",
+      "confidence": "Medium",
+      "cwe_id": [
+        89
+      ],
+      "note": ""
+    },
+    {
+      "warning_type": "Mass Assignment",
+      "warning_code": 105,
       "fingerprint": "8c787b46305e7f058b1f9a2a8a577b8b67e339626d0a09805203dad7e165cc55",
       "check_name": "PermitAttributes",
       "message": "Potentially dangerous key allowed for mass assignment",
@@ -116,6 +185,29 @@
       "note": ""
     },
     {
+      "warning_type": "SQL Injection",
+      "warning_code": 0,
+      "fingerprint": "ce40e3e2509473222e02932db12322f91d90afdd3ed9876cbe2730a036684cc6",
+      "check_name": "SQL",
+      "message": "Possible SQL injection",
+      "file": "app/models/concerns/datalon.rb",
+      "line": 104,
+      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
+      "code": "PunchCard.find_by_sql(\"        SELECT\\n        \\\"punch_cards\\\".\\\"id\\\"\\n        FROM \\\"punch_cards\\\"\\n        INNER JOIN \\\"employees\\\" ON \\\"punch_cards\\\".\\\"employee_id\\\" = \\\"employees\\\".\\\"id\\\"\\n        WHERE \\\"punch_cards\\\".\\\"account_id\\\" = #{Current.account.id} AND\\n        punch_cards.settled_at IS NULL AND\\n        punch_cards.work_date >= '#{fd}' AND\\n        punch_cards.work_date <= '#{td}' #{(\" \" or \" AND employees.id IN (#{[ids].flatten.join(\",\")}) \")}\\n\")",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Datalon",
+        "method": "punch_card_view"
+      },
+      "user_input": "fd",
+      "confidence": "Medium",
+      "cwe_id": [
+        89
+      ],
+      "note": ""
+    },
+    {
       "warning_type": "Mass Assignment",
       "warning_code": 105,
       "fingerprint": "fb222178f5d03b8ecaf3d2d9ca0010e8a8e54f2635196abf6371a8af6e8770b4",
@@ -139,6 +231,6 @@
       "note": ""
     }
   ],
-  "updated": "2024-04-25 23:03:49 +0200",
+  "updated": "2024-04-29 21:31:07 +0200",
   "brakeman_version": "6.1.2"
 }
