@@ -6,18 +6,20 @@ class ImportEmployeesJob < ApplicationJob
   #
   def perform(**args)
     super(**args)
-    importable_employees = CSV.parse(File.read(args[:import_file]), headers: true, col_sep: ";")
-    attributes = Employee.new.attributes.keys.reject { |key| key == "id" }
-    importable_employees.each do |employee|
-      record = Employee.new
-      attributes.each do |key|
-        record = field(record, employee, key)
+    switch_locale do
+      importable_employees = CSV.parse(File.read(args[:import_file]), headers: true, col_sep: ";")
+      attributes = Employee.new.attributes.keys.reject { |key| key == "id" }
+      importable_employees.each do |employee|
+        record = Employee.new
+        attributes.each do |key|
+          record = field(record, employee, key)
+        end
+        record.account_id = Current.account.id
+        record = set_team(record, employee)
+        record.save
       end
-      record.account_id = Current.account.id
-      record = set_team(record, employee)
-      record.save
+      File.delete(args[:import_file])
     end
-    File.delete(args[:import_file])
   end
 
   #

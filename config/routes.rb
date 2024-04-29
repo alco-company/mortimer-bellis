@@ -1,8 +1,7 @@
 Rails.application.routes.draw do
-  get "modal/new"
-  get "modal/show"
-  post "modal/create"
-  
+  resources :punch_cards do
+    # resources :punches
+  end
   resources :employees
   resources :teams
   resources :punch_clocks
@@ -16,6 +15,10 @@ Rails.application.routes.draw do
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.
   get "up" => "rails/health#show", as: :rails_health_check
+
+  get "modal/new"
+  get "modal/show"
+  post "modal/create"
 
   # Render dynamic PWA files from app/views/pwa/*
   get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker

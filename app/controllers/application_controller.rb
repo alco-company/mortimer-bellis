@@ -36,6 +36,12 @@ class ApplicationController < ActionController::Base
   #
   #
   include Pagy::Backend
+  #
+  # the COUNT(*) can be avoided by implementing the following
+  # method on the model
+  def pagy_get_count(collection, vars)
+    collection.respond_to?(:count_documents) ? collection.count_documents : super
+  end
 
   def say(msg)
     Rails.logger.info "==============================="

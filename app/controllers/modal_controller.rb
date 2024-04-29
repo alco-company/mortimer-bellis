@@ -5,6 +5,7 @@ class ModalController < ApplicationController
   def new
     case @resource_class
     when "employee"; process_employee_new
+    when "punch_card"; process_punch_card_new
     else; head :not_found and return
     end
   end
@@ -20,6 +21,7 @@ class ModalController < ApplicationController
   def create
     case @resource_class
     when "employee"; process_employee_create
+    when "punch_card"; process_punch_card_create
     end
   end
 
@@ -31,6 +33,8 @@ class ModalController < ApplicationController
       @step = params[:step]
     end
 
+    #
+    # --------------------------- NEW --------------------------------
     def process_employee_new
       case @modal_form
       when "import"
@@ -38,6 +42,15 @@ class ModalController < ApplicationController
       end
     end
 
+    def process_punch_card_new
+      case @modal_form
+      when "payroll"
+        @step = "preview"
+      end
+    end
+
+    #
+    # --------------------------- SHOW --------------------------------
     def process_employee_show
       case params[:step]
       when "template"
@@ -48,6 +61,9 @@ class ModalController < ApplicationController
       end
     end
 
+
+    #
+    # --------------------------- CREATE --------------------------------
     def process_employee_create
       case params[:step]
       when "preview"
@@ -59,6 +75,14 @@ class ModalController < ApplicationController
       when "approve"
         ImportEmployeesJob.perform_later account: Current.account, import_file: params[:import_file]
         render turbo_stream: turbo_stream.replace("modal_container", partial: "modal/import_approved")
+      end
+    end
+
+    def process_punch_card_create
+      case params[:modal_form]
+      when "payroll"
+        params[:update_payroll] = params[:update_payroll] == "on" ? true : false
+        DatalonPreparationJob.perform_later account: Current.account, last_payroll_at: Date.parse(params[:last_payroll_at]), update_payroll: params[:update_payroll]
       end
     end
 end

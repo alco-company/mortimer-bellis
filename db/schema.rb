@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_04_29_092717) do
+ActiveRecord::Schema[7.2].define(version: 2024_04_29_113700) do
   create_table "accounts", force: :cascade do |t|
     t.string "name"
     t.string "email"
@@ -103,6 +103,21 @@ ActiveRecord::Schema[7.2].define(version: 2024_04_29_092717) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["account_id"], name: "index_locations_on_account_id"
+  end
+
+  create_table "punch_cards", force: :cascade do |t|
+    t.integer "account_id", null: false
+    t.integer "employee_id", null: false
+    t.date "work_date"
+    t.integer "work_minutes"
+    t.integer "ot1_minutes"
+    t.integer "ot2_minutes"
+    t.integer "break_minutes"
+    t.datetime "punches_settled_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_punch_cards_on_account_id"
+    t.index ["employee_id"], name: "index_punch_cards_on_employee_id"
   end
 
   create_table "punch_clocks", force: :cascade do |t|
@@ -245,6 +260,10 @@ ActiveRecord::Schema[7.2].define(version: 2024_04_29_092717) do
   add_foreign_key "filters", "accounts"
   add_foreign_key "filters", "accounts"
   add_foreign_key "locations", "accounts", on_delete: :cascade
+  add_foreign_key "punch_cards", "accounts"
+  add_foreign_key "punch_cards", "accounts", on_delete: :cascade
+  add_foreign_key "punch_cards", "employees"
+  add_foreign_key "punch_cards", "employees", on_delete: :cascade
   add_foreign_key "punch_clocks", "accounts", on_delete: :cascade
   add_foreign_key "punch_clocks", "locations", on_delete: :cascade
   add_foreign_key "solid_queue_blocked_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
