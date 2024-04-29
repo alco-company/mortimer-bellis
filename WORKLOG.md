@@ -14,7 +14,6 @@
 * add export payroll data
 * add punch_cards
 * add blackhole
-* add solid_queue for offloading background jobs
 
 ## CHANGELOG
 
@@ -22,6 +21,7 @@
 
 * add CSV import on every model - use employee as template
 * prepare background jobs
+* add solid_queue for offloading background jobs
 
 ### 26/4/2024
 
