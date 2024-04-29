@@ -1,0 +1,11 @@
+team;name;pincode;payroll_employee_ident;job_title;birthday;hired_at;description;email;cell_phone;pbx_extension;contract_minutes;contract_days_per_payroll;contract_days_per_week;flex_balance_minutes;hour_pay;ot1_add_hour_pay;ot2_add_hour_pay;tmp_overtime_allowed;blocked;locale;time_zone
+team 1;John Doe;1234;1234;Manager;1970-01-01;2024-04-16;Manager on team 1;john@doe.com;1234567890;1234;444;0;5;0;50;25;50;180;false;en;America/New_York
+team 2;Maggie OR;1235;1235;CFO;1991-11-14;2021-12-24;CFO;maggie@or.ai;112;112;444;0;5;0;60;0;0;-1;true;en;London
+team 1;Donald Duck;;8100;-;1931-12-01;1946-10-01;painter;donald@disney.com;1235553360;90112;444;14;5;0;40;20;40;0;false;en;Tokyo
+;S Ulley;;8102;-;2001-01-01;;-;;;;444;14;6;0;20;15;25;0;false;fr;Paris
+team 2;Po Cahontas;;250032;-;1998-02-25;;squaw;;;;300;35;4;0;70;25;38;0;false;en;San Francisco
+team 2;Lady V;;258963;princess;1970-05-06;;crown princess;;;007;360;21;4;0;40;20;0;60;false;en;Glasgow
+team 1;B Lightyear;;;aeronaut;1997-04-29;1999-09-09;supporting character;;;;360;21;6;0;80;0;0;-1;false;en;Miami
+team 1;G Root;;;super hero;2010-08-22;;Crew on Guardians of The Galaxy;;;;360;21;6;0;50;0;0;-1;false;en;Los Angeles
+team 1;S Woody;;;cartoon;1965-03-28;;Andy’s Best Friend;;545454;;444;0;5;0;90;0;0;-1;false;en;Los Angeles
+team 3;Bell Flower;;;mythological actress;1901-02-03;;Peter Pan’s ;;;;444;0;5;0;30;20;30;0;false;en;Los Angeles

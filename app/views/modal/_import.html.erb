@@ -1,0 +1,32 @@
+<%= form_with(url: modal_create_url, method: :post, multipart: true) do |form| %>
+  <div class="sm:flex sm:items-start">
+    <div class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-sky-100 sm:mx-0 sm:h-10 sm:w-10">
+      <svg class="h-6 w-6 text-sky-700" fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"  stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+        <path d="M440-320v-326L336-542l-56-58 200-200 200 200-56 58-104-104v326h-80ZM240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5 56.5T720-160H240Z"/>
+      </svg>
+    </div>
+    <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
+      <h3 class="text-base font-semibold leading-6 text-gray-900" id="modal_title"> <%= t("#{@resource_class.to_s.underscore}.modal.import.title") %></h3>
+      <div class="mt-2">
+        <p class="text-sm text-gray-500 pb-3"> <%== t("#{@resource_class.to_s.underscore}.modal.import.instruction") %></p>
+
+        <%= form.hidden_field :modal_form, value: @modal_form %>
+        <%= form.hidden_field :resource_class, value: @resource_class %>
+        <%= form.hidden_field :step, value: @step %>
+        <%= form.label :import_file, t("#{@resource_class.to_s.underscore}.modal.import.file"), class: "" %>
+        <%= form.file_field :import_file, autofocus: true, accept: ".csv", class: "mort-form-text py-3" %>
+
+        <div class="relative flex items-start mt-3">
+          <div class="ml-3 text-sm leading-6">
+            <label for="import_model" class="font-medium text-gray-900"><%= t("#{@resource_class.to_s.underscore}.modal.import.label") %></label>
+            <p id="comments-description" class="text-gray-500"><%= t("#{@resource_class.to_s.underscore}.modal.import.description") %></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
+    <%= form.button t("#{@resource_class.to_s.underscore}.modal.import.button"), class: "mort-btn-primary sm:ml-3" %>
+    <%= button_tag t(:cancel), form: "dialog_form", formmethod: :dialog, class: "mort-btn-cancel" %>
+  </div>
+<% end %>

@@ -2,21 +2,39 @@
 
 ## ROADMAP
 
+* endless scroll - https://www.stefanwienert.de/blog/2021/04/17/endless-scroll-with-turbo-streams/
 * add litestream - https://fractaledmind.github.io/2024/04/15/sqlite-on-rails-the-how-and-why-of-optimal-performance/
 * add handling of constants - https://dev.to/vladhilko/say-goodbye-to-messy-constants-a-new-approach-to-moving-constants-away-from-your-model-58i1
 * add Traefik dashboard to traefik.mortimer.pro - https://www.luizkowalski.net/traefik-with-kamal-tips-and-tricks/
 * add exporting ICS files - https://www.driftingruby.com/episodes/exporting-ics-files
+* add blackhole
 * add Stripe payments - https://gorails.com/episodes/one-time-payments-with-pay-and-stripe
 * add devise gem and user class
-* add solid_queue for offloading background jobs
 * add web push notifications
 * add login
-* add punches
 * add export payroll data
-* add punch_cards
-* add employee import
+* add punches
 
 ## CHANGELOG
+
+### 29/4/2024
+
+* add CSV import on every model - use employee as template
+* prepare background jobs
+* add solid_queue for offloading background jobs
+* add punch_card
+* add memory_logger - see config/initializers/memory_logger.rb
+* postpone tests for now
+
+### 26/4/2024
+
+* bumped rails
+* add console - `t` setting Current.account
+* add CSV export on every model
+* fix link CSS
+* add modal
+* add time_zoned - lookup module for time_zone field on models
+* add upload field
 
 ### 25/4/2024
 

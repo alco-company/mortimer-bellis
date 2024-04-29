@@ -1,4 +1,11 @@
 class Account < ApplicationRecord
+  #
+  # add time zone support - if eg there is no user assigned when
+  # some process executes
+  #
+  include TimeZoned
+
+
   has_many :filters, dependent: :destroy
   has_many :locations, dependent: :destroy
   has_many :punch_clocks, dependent: :destroy

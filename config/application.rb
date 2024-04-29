@@ -27,5 +27,12 @@ module Mortimer
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
+
+    console do
+      require 'alco/console'
+      Rails::ConsoleMethods.send :include, Alco::Console
+      TOPLEVEL_BINDING.eval('self').extend Alco::Console # PRY
+    end
+
   end
 end

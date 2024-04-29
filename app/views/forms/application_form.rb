@@ -7,15 +7,16 @@ class ApplicationForm < Superform::Rails::Form
   end
 
   class Phlex::SGML
-    # class << self      
-    # end
     def format_object(object)
       case object
       when ActiveSupport::TimeWithZone; object.strftime("%d-%m-%y")
       when Date; object.strftime("%Y-%m-%d")
       when DateTime; object.strftime("%Y-%m-%d %H:%M:%S")
       when Float, Integer; object.to_s
-      else 
+      when FalseClass; I18n.t(:no)
+      when TrueClass; I18n.t(:yes)
+      when NilClass; ""
+      else
         # debugger
         object
       end

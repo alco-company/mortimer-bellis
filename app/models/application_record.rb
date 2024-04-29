@@ -1,3 +1,5 @@
+require 'csv'
+
 class ApplicationRecord < ActiveRecord::Base
   primary_abstract_class
 
@@ -12,6 +14,19 @@ class ApplicationRecord < ActiveRecord::Base
     when :updated_at, :created_at, :last_punched_at;  :datetime
     when :birthday, :hired_at, :punches_settled_at;   :date
     else; nil
+    end
+  end
+
+  #
+  # generic method to return a dataset for a model
+  # as CSV
+  #
+  def self.to_csv(resources)
+    CSV.generate do |csv|
+      csv << column_names
+      resources.each do |resource|
+        csv << resource.attributes.values_at(*column_names)
+      end
     end
   end
 end
