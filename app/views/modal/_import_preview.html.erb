@@ -1,0 +1,52 @@
+<div id="modal_container">
+  <%= form_with(url: modal_create_url, method: :post, multipart: true) do |form| %>
+
+    <%= form.hidden_field :modal_form, value: @modal_form %>
+    <%= form.hidden_field :import_file, value: @import_file %>
+    <%= form.hidden_field :resource_class, value: @resource_class %>
+    <%= form.hidden_field :step, value: @step %>
+
+    <div class="sm:flex sm:items-start">
+      <div class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-sky-100 sm:mx-0 sm:h-10 sm:w-10">
+        <svg class="h-6 w-6 text-sky-700" fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"  stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+          <path d="M440-320v-326L336-542l-56-58 200-200 200 200-56 58-104-104v326h-80ZM240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5 56.5T720-160H240Z"/>
+        </svg>
+      </div>
+      <div class="mt-3 text-center overflow-hidden h-3/5 sm:ml-4 sm:mt-0 sm:text-left">
+        <h3 class="text-base font-semibold leading-6 text-gray-900" id="modal_title"> <%= t("#{@resource_class.to_s.underscore}.modal.import.title") %></h3>
+        <div class="mt-2 overflow-scroll max-h-[400px] max-w-[400px]">
+
+          <% if @records.empty? %>
+            <div class="flex justify-center items-center h-64"><%= I18n.t('.no_data') %>
+            </div>
+          <% else %>
+            <table class="table-auto divide-y divide-gray-300 text-xs ">
+              <thead class="bg-gray-50">
+                <tr>
+                  <% @records.headers.each do |fld| %>
+                  <th class=" py-4 pl-4 pr-3 whitespace-nowrap font-medium"><%= fld.to_s %></th>
+                  <% end %>
+                </tr>
+              </thead>
+              <tbody class="bg-white divide-y divide-gray-200">
+                <% @records.by_row.each do |record| %>
+                  <tr class="text-xs text-gray-500">
+                  <% @records.headers.each do |fld| %>
+                    <td class=" py-4 pl-4 pr-3 whitespace-nowrap"><%= record[fld] %></td>
+                  <% end %>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          <% end %>
+
+        </div>
+      </div>
+      <div class="mx-1 flex"></div>
+    </div>
+    <div class="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
+      <%= form.button t("#{@resource_class.to_s.underscore}.modal.import.button"), class: "mort-btn-primary sm:ml-3" %>
+      <%= button_tag t(:cancel), form: "dialog_form", formmethod: :dialog, class: "mort-btn-cancel" %>
+    </div>
+  <% end %>
+</div>

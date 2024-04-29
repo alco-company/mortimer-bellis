@@ -1,8 +1,8 @@
-<%= form_with(url: modal_create_url) do |form| %>
+<%= form_with(url: modal_create_url, method: :post, multipart: true) do |form| %>
   <div class="sm:flex sm:items-start">
-    <div class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
-      <svg class="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+    <div class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-sky-100 sm:mx-0 sm:h-10 sm:w-10">
+      <svg class="h-6 w-6 text-sky-700" fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"  stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+        <path d="M440-320v-326L336-542l-56-58 200-200 200 200-56 58-104-104v326h-80ZM240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5 56.5T720-160H240Z"/>
       </svg>
     </div>
     <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
@@ -11,9 +11,11 @@
         <p class="text-sm text-gray-500 pb-3"> <%== t("#{@resource_class.to_s.underscore}.modal.import.instruction") %></p>
 
         <%= form.hidden_field :modal_form, value: @modal_form %>
+        <%= form.hidden_field :resource_class, value: @resource_class %>
+        <%= form.hidden_field :step, value: @step %>
         <%= form.label :import_file, t("#{@resource_class.to_s.underscore}.modal.import.file"), class: "" %>
-        <%= form.file_field :import_file, autofocus: true, required: true, disabled: true, class: "mort-form-text py-3" %>
-:attachments, accepted_file_types: "text/csv"
+        <%= form.file_field :import_file, autofocus: true, accept: ".csv", class: "mort-form-text py-3" %>
+
         <div class="relative flex items-start mt-3">
           <div class="ml-3 text-sm leading-6">
             <label for="import_model" class="font-medium text-gray-900"><%= t("#{@resource_class.to_s.underscore}.modal.import.label") %></label>

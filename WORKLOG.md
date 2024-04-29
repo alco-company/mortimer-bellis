@@ -15,9 +15,12 @@
 * add punch_cards
 * add blackhole
 * add solid_queue for offloading background jobs
-* add CSV import on every model
 
 ## CHANGELOG
+
+### 29/4/2024
+
+* add CSV import on every model - use employee as template
 
 ### 26/4/2024
 
@@ -27,6 +30,7 @@
 * fix link CSS
 * add modal
 * add time_zoned - lookup module for time_zone field on models
+* add upload field
 
 ### 25/4/2024
 

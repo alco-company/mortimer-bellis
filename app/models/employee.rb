@@ -1,7 +1,7 @@
 class Employee < ApplicationRecord
   include Accountable
   include TimeZoned
-  
+
   belongs_to :team
 
   has_secure_token :access_token
@@ -10,6 +10,9 @@ class Employee < ApplicationRecord
   scope :by_team, ->(team) { where("team LIKE ?", "%#{team}%") if team.present? }
   scope :by_locale, ->(locale) { where("locale LIKE ?", "%#{locale}%") if locale.present? }
   scope :by_time_zone, ->(time_zone) { where("time_zone LIKE ?", "%#{time_zone}%") if time_zone.present? }
+  scope :by_pincode, ->(pincode) { where("pincode LIKE ?", "%#{pincode}%").order(pincode: :asc) if pincode.present? }
+
+  validates :name, presence: true
 
   def self.filtered(filter)
     flt = filter.filter
@@ -28,4 +31,15 @@ class Employee < ApplicationRecord
     Employees::Form.new resource, editable: editable
   end
 
+  def self.next_pincode(pin)
+    pins = Employee.pluck(:pincode).compact.sort
+    pin = "0001" if pin.blank?
+    return pin if pins.empty?
+    pin = pins.last.to_i + 1 if pin.to_i < pins.last.to_i
+    return pin unless pins.include? pin
+    while pins.include? pin
+      pin = pin.to_i + 1
+    end
+    pin.to_s
+  end
 end
