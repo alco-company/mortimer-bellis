@@ -1,0 +1,14 @@
+<div class="min-w-0 w-full columns-3 md:columns-4 lg:columns-5">
+  <div class="flex justify-start">
+    <%= form.text_field :name, value: (filter["name"] rescue ''), class: "mort-filter-field" %>
+  </div>
+  <div class="flex justify-end">
+    <%= form.text_field :punched_at, value: (filter["punched_at"] rescue ''), class: "mort-filter-field" %>
+  </div>
+  <div class="flex justify-start">
+    <%= form.text_field :state, value: (filter["state"] rescue ''), class: "mort-filter-field" %>
+  </div>
+  <div class="flex justify-start">
+    <%= form.text_field :punch_clock, value: (filter["punch_clock"] rescue ''), class: "mort-filter-field" %>
+  </div>
+</div>

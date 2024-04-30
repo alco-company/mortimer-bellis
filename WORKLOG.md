@@ -9,13 +9,16 @@
 * add exporting ICS files - https://www.driftingruby.com/episodes/exporting-ics-files
 * add blackhole
 * add Stripe payments - https://gorails.com/episodes/one-time-payments-with-pay-and-stripe
-* add devise gem and user class
 * add web push notifications
+* add devise gem and user class
 * add login
 * add export payroll data
-* add punches
 
 ## CHANGELOG
+
+### 30/4/2024
+
+* add punches
 
 ### 29/4/2024
 

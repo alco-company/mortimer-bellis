@@ -33,6 +33,6 @@ class PunchCard < ApplicationRecord
   end
 
   def ot_minutes
-    ot1_minutes + ot2_minutes
+    (ot1_minutes || 0) + (ot2_minutes || 0)
   end
 end
