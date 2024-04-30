@@ -10,8 +10,8 @@
 * add blackhole
 * add Stripe payments - https://gorails.com/episodes/one-time-payments-with-pay-and-stripe
 * add web push notifications
-* add devise gem and user class
 * add login
+* add devise gem and user class
 * add export payroll data
 
 ## CHANGELOG
@@ -21,6 +21,7 @@
 * add punches
 * refactor CSV
 * test touchstart on iPad
+* don't show 'import' on contextmenu where it's not applied
 
 ### 29/4/2024
 

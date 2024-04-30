@@ -88,7 +88,7 @@ class Contextmenu < Phlex::HTML
           plain ", "
           plain "import"
         end
-      end
+      end if resource_class.to_s == 'Employee'
       whitespace
       link_to(
         helpers.resources_url() + ".csv",
