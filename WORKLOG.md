@@ -22,6 +22,7 @@
 * test touchstart on iPad - was SW update on iPad!
 * don't show 'import' on contextmenu where it's not applied
 * add export payroll data
+* add account_mailer - lon_email
 
 ### 29/4/2024
 
