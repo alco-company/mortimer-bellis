@@ -12,7 +12,6 @@
 * add web push notifications
 * add login
 * add devise gem and user class
-* add export payroll data
 
 ## CHANGELOG
 
@@ -20,8 +19,9 @@
 
 * add punches
 * refactor CSV
-* test touchstart on iPad
+* test touchstart on iPad - was SW update on iPad!
 * don't show 'import' on contextmenu where it's not applied
+* add export payroll data
 
 ### 29/4/2024
 

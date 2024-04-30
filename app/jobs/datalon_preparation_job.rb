@@ -25,7 +25,7 @@ class DatalonPreparationJob < ApplicationJob
 
     output = PunchCard.lon_export_to_csv(last_payroll_at, update_payroll)
     persist tmpfiles, output, "csv"
-    AccountMailer.with(rcpt: Current.account, tmpfiles: tmpfiles).lon_email.deliver_now
+    AccountMailer.with(rcpt: Current.account, tmpfiles: tmpfiles).lon_email.deliver_later
   end
 
 

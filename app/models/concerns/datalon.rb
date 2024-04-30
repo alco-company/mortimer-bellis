@@ -39,16 +39,16 @@ module Datalon
   class_methods do
     #
     # return an array of CSV 'files' with the data
-    def lon_export_to_csv(last_payroll_at, update_payroll)
+    def lon_export_to_csv(punches_settled_at, update_payroll)
       arr = []
-      Current.account.payroll_teams.each do |team|
+      Current.account.teams.each do |team|
         ids = team.employees.pluck(:id)
-        resources = lon_payroll_export team.name, team.last_payroll_at, last_payroll_at, ids
-        arr << lon_to_csv(resources, last_payroll_at)
+        resources = lon_payroll_export team.name, team.punches_settled_at, punches_settled_at, ids
+        arr << lon_to_csv(resources, punches_settled_at)
         if update_payroll
-          punch_cards_to_update team.last_payroll_at, last_payroll_at, ids
-          team.update last_payroll_at: last_payroll_at
-          team.employees.update_all punches_settled_at: last_payroll_at
+          punch_cards_to_update team.punches_settled_at, punches_settled_at, ids
+          team.update punches_settled_at: punches_settled_at
+          team.employees.update_all punches_settled_at: punches_settled_at
         end
       end
       arr
@@ -63,7 +63,7 @@ module Datalon
     def punch_cards_to_update(from_date, to_date, ids = nil)
       from_date = from_date || Date.parse("2024-05-04").beginning_of_day
       to_date = to_date || Date.today.end_of_day
-      PunchCard.where(id: punch_card_view(from_date, to_date, ids)).update_all settled_at: to_date
+      PunchCard.where(id: punch_card_view(from_date, to_date, ids)).update_all punches_settled_at: to_date
     end
 
     #
@@ -78,17 +78,17 @@ module Datalon
         SUM("payroll"."ot1_minutes") AS ot1_minutes,
         SUM("payroll"."ot2_minutes") AS ot2_minutes,
         '#{name}' AS group_name,
-        "employees"."employee_number" AS emp_number,
+        "employees"."payroll_employee_ident" AS emp_number,
         "employees"."id" AS emp_id,
         "employees"."name" AS emp_name
         FROM "punch_cards" AS "payroll"
         INNER JOIN "employees" ON "payroll"."employee_id" = "employees"."id"
         WHERE "payroll"."account_id" = #{Current.account.id} AND
-        payroll.settled_at IS NULL AND
+        payroll.punches_settled_at IS NULL AND
         payroll.work_date >= '#{fd}' AND
         payroll.work_date <= '#{td}' #{ where_ids } 
-  			GROUP BY "group_name", "employees"."employee_number", "employees"."name", "employees"."id"
-        ORDER BY "employees"."employee_number"
+  			GROUP BY "group_name", "employees"."payroll_employee_ident", "employees"."name", "employees"."id"
+        ORDER BY "employees"."payroll_employee_ident"
       SQL
     end
 
@@ -100,7 +100,7 @@ module Datalon
         FROM "punch_cards"
         INNER JOIN "employees" ON "punch_cards"."employee_id" = "employees"."id"
         WHERE "punch_cards"."account_id" = #{Current.account.id} AND
-        punch_cards.settled_at IS NULL AND
+        punch_cards.punches_settled_at IS NULL AND
         punch_cards.work_date >= '#{fd}' AND
         punch_cards.work_date <= '#{td}' #{ where_ids }
       SQL
