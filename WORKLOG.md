@@ -23,6 +23,7 @@
 * don't show 'import' on contextmenu where it's not applied
 * add export payroll data
 * add account_mailer - lon_email
+* fix unsupported argument_type PathName
 
 ### 29/4/2024
 

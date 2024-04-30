@@ -35,7 +35,7 @@ class DatalonPreparationJob < ApplicationJob
     output.each_with_index do |o, i|
       mark = DateTime.now.strftime("%s")
       tmpfile = Rails.root.join("tmp", "lon_#{i}_#{mark}.#{format}")
-      tmpfiles << tmpfile
+      tmpfiles << tmpfile.to_s
       file = File.open tmpfile, "wb"
       file.write o
       file.close
