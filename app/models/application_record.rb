@@ -1,7 +1,7 @@
-require 'csv'
-
 class ApplicationRecord < ActiveRecord::Base
   primary_abstract_class
+
+  include ExportCsv
 
   # 
   # extend this method on the model to define the field formats
@@ -11,22 +11,9 @@ class ApplicationRecord < ActiveRecord::Base
   #
   def field_formats(key)
     case key
-    when :updated_at, :created_at, :last_punched_at;  :datetime
-    when :birthday, :hired_at, :punches_settled_at;   :date
+    when :updated_at, :created_at, :punched_at, :last_punched_at;   :datetime
+    when :birthday, :hired_at, :punches_settled_at;                 :date
     else; nil
-    end
-  end
-
-  #
-  # generic method to return a dataset for a model
-  # as CSV
-  #
-  def self.to_csv(resources)
-    CSV.generate do |csv|
-      csv << column_names
-      resources.each do |resource|
-        csv << resource.attributes.values_at(*column_names)
-      end
     end
   end
 end

@@ -9,13 +9,21 @@
 * add exporting ICS files - https://www.driftingruby.com/episodes/exporting-ics-files
 * add blackhole
 * add Stripe payments - https://gorails.com/episodes/one-time-payments-with-pay-and-stripe
-* add devise gem and user class
 * add web push notifications
 * add login
-* add export payroll data
-* add punches
+* add devise gem and user class
 
 ## CHANGELOG
+
+### 30/4/2024
+
+* add punches
+* refactor CSV
+* test touchstart on iPad - was SW update on iPad!
+* don't show 'import' on contextmenu where it's not applied
+* add export payroll data
+* add account_mailer - lon_email
+* fix unsupported argument_type PathName
 
 ### 29/4/2024
 

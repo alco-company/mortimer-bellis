@@ -25,7 +25,7 @@ class DatalonPreparationJob < ApplicationJob
 
     output = PunchCard.lon_export_to_csv(last_payroll_at, update_payroll)
     persist tmpfiles, output, "csv"
-    AccountMailer.with(rcpt: Current.account, tmpfiles: tmpfiles).lon_email.deliver_now
+    AccountMailer.with(rcpt: Current.account, tmpfiles: tmpfiles).lon_email.deliver_later
   end
 
 
@@ -35,7 +35,7 @@ class DatalonPreparationJob < ApplicationJob
     output.each_with_index do |o, i|
       mark = DateTime.now.strftime("%s")
       tmpfile = Rails.root.join("tmp", "lon_#{i}_#{mark}.#{format}")
-      tmpfiles << tmpfile
+      tmpfiles << tmpfile.to_s
       file = File.open tmpfile, "wb"
       file.write o
       file.close

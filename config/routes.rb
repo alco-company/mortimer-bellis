@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :punches
   resources :punch_cards do
     # resources :punches
   end

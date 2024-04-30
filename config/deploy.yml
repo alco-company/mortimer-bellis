@@ -82,11 +82,19 @@ registry:
 env:
   clear:
     DB_HOST: 65.108.89.110
+    SMTP_USER_NAME: 'info@mortimer.pro'
+    SMTP_DOMAIN: 'mortimer.pro'
+    SMTP_HOST: 'hosting.alco.company'
+    SMTP_PORT: '587'
+    SMTP_AUTHENTICATION: 'plain'
+    SMTP_ENABLE_STARTTLS_AUTO: 'false'
     SSL_DOMAIN: 'bellis.mortimer.pro'
     WEB_HOST: 'bellis.mortimer.pro'
     MORTIMER_VERSION: '0.0.2'
   secret:
     - RAILS_MASTER_KEY
+    - SMTP_PASSWORD
+    - WAVIX_APP_ID
 
 # Use a different ssh user than root
 ssh:

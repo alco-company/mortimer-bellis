@@ -34,3 +34,14 @@ da:
     show:
       title: Konto
       back: Tilbage
+      
+    account_mailer:
+        datalon_email:
+          subject: Datafil til Datalon vedhæftet
+          body: |
+            Hej,
+
+            Her er den datafil, du har bedt om.
+
+            Med venlig hilsen,
+            M O R T I M E R
