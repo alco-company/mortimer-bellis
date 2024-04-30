@@ -20,6 +20,7 @@
 
 * add punches
 * refactor CSV
+* test touchstart on iPad
 
 ### 29/4/2024
 

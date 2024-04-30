@@ -20,7 +20,7 @@ class Contextmenu < Phlex::HTML
       button(
         type: "button",
         data_contextmenu_target: "button",
-        data_action: " click->contextmenu#tap click@window->contextmenu#hide",
+        data_action: "touchstart->contextmenu#tap click->contextmenu#tap click@window->contextmenu#hide",
         class: "-m-2.5 block p-2.5 text-gray-500 hover:text-gray-900",
         id: "options-menu-0-button",
         aria_expanded: "false",
