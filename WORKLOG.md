@@ -19,6 +19,7 @@
 * add devise gem
 * add user_mailer
 * add label field css
+* handle profile dropdown menu
 
 ### 30/4/2024
 
