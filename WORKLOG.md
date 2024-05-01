@@ -20,6 +20,7 @@
 * add user_mailer
 * add label field css
 * handle profile dropdown menu
+* refactor filter on users
 
 ### 30/4/2024
 
