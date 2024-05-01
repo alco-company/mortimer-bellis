@@ -1,0 +1,56 @@
+<div class="mx-auto w-96">
+  <h1 class="font-bold text-4xl"> <%= t("users.edit_profile.name") %> </h1>
+
+  <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
+    <%= render "devise/shared/error_messages", resource: resource %>
+
+    <div class="mort-field">
+      <%= f.label :email %><br />
+      <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "mort-form-text" %>
+    </div>
+
+    <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
+      <div class="">Currently waiting confirmation for: <%= resource.unconfirmed_email %></div>
+    <% end %>
+
+    <div class="mort-field">
+      <%= f.label :password %> <br />
+      <%= f.password_field :password, autocomplete: "new-password", class: "mort-form-text" %>
+      <% if @minimum_password_length %>
+        <em class="text-xs font-medium"><%= @minimum_password_length %> characters minimum</em>
+      <% end %>
+      <i class="text-xs">(leave blank if you don't want to change it)</i>
+    </div>
+
+    <div class="mort-field">
+      <%= f.label :password_confirmation %><br />
+      <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "mort-form-text" %>
+    </div>
+
+    <div class="mort-field">
+      <%= f.label :current_password %><br />
+      <%= f.password_field :current_password, autocomplete: "current-password", class: "mort-form-text" %>
+       <i class="text-xs">(we need your current password to confirm your changes)</i>
+    </div>
+
+    <div class="actions mort-field">
+      <%= f.submit t(:save), class: "mort-btn-primary" %>
+    </div>
+  <% end %>
+
+  <h2 class="font-bold text-2xl"><%= t("users.edit_profile.cancel.title") %></h2>
+
+  <div>
+    <p class="text-sm">
+      <%= t("users.edit_profile.cancel.unhappy") %>
+    </p> 
+    <p>
+      <%= button_to t("users.edit_profile.cancel.action"), 
+      registration_path(resource_name), 
+      data: { confirm: "Are you sure?", turbo_confirm: "Are you sure?" }, 
+      method: :delete, 
+      class: "mort-btn-alert my-5" %>
+    </p>
+  </div>
+
+</div>

@@ -1,0 +1,34 @@
+<div class="mx-auto w-96">
+  <div class="flex flex-shrink-0 items-center">
+  <%= render_logo %>
+  </div>
+  <h1 class="font-bold text-4xl mb-10"> <%= t(".change_password") %> </h1>
+
+  <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :put }) do |f| %>
+    <%= render "devise/shared/error_messages", resource: resource %>
+    <%= f.hidden_field :reset_password_token %>
+
+    <div class="mort-field">
+      <%= f.label :password %><br />
+      <% if @minimum_password_length %>
+      <% end %>
+      <%= f.password_field :password, autofocus: true, autocomplete: "new-password", class: "mort-form-text" %>
+        <em class="text-xs">(<%= @minimum_password_length %> characters minimum)</em><br />
+    </div>
+
+    <div class="mort-field">
+      <%= f.label :password_confirmation %><br />
+      <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "mort-form-text"  %>
+    </div>
+
+    <div class="actions mort-field">
+      <%= f.submit t(".change_password_action"), class: "mort-btn-primary" %>
+    </div>
+  <% end %>
+
+  <hr>
+  <div class="actions mort-field">
+    <%= render "users/shared/links" %>
+  </div>
+
+</div>

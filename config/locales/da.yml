@@ -6,12 +6,15 @@ da:
   import_employees: Indlæs medarbejder stamdata
   form_errors_prohibited: "%{errors} fejl forhindrede denne post i at blive gemt"
   edit: Redigér
+  save: Gem
+  create: Opret 
   
   menu:
     home: Hjem
     accounts: Konti
-    locations: Arbejdssteder
+    users: Brugere
     teams: Hold
+    locations: Arbejdssteder
     punch_clocks: Stempelure
     employees: Medarbejdere
     punch_cards: Stempelkort
