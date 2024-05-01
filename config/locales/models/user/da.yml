@@ -29,6 +29,13 @@ da:
       new: Ny bruger
       edit: Rediger bruger
 
+    confirmations:
+      new:
+        resend: Send igen
+        resend_confirmation: 
+          title: Bekræftelses email
+          action: Send igen
+
     sessions:
       new: 
         sign_in: Log ind
