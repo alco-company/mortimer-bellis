@@ -18,6 +18,7 @@
 
 * add devise gem
 * add user_mailer
+* add label field css
 
 ### 30/4/2024
 
