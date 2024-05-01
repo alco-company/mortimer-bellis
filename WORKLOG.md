@@ -17,7 +17,7 @@
 ### 1/5/2024
 
 * add devise gem
-* install devise + user model
+* add user_mailer
 
 ### 30/4/2024
 
