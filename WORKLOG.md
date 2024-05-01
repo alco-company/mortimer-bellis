@@ -11,9 +11,12 @@
 * add Stripe payments - https://gorails.com/episodes/one-time-payments-with-pay-and-stripe
 * add web push notifications
 * add login
-* add devise gem and user class
 
 ## CHANGELOG
+
+### 1/5/2024
+
+* add devise gem
 
 ### 30/4/2024
 
