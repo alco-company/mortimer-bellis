@@ -1,4 +1,6 @@
 class FiltersController < ApplicationController
+  include Authentication
+
   def new
     @filter_form = params[:filter_form]
     @filter = Filter.where(view: params[:filter_form]).take || Filter.new
@@ -15,7 +17,6 @@ class FiltersController < ApplicationController
   #
   def create
     json_filters = create_params.except(:filter_form, :url, :account_id, :submit)
-
     Filter.create(account: Current.account, view: filter_params[:filter_form], filter: json_filters)
     redirect_to redirect_params[:url]
   end

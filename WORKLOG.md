@@ -21,6 +21,7 @@
 * add label field css
 * handle profile dropdown menu
 * refactor filter on users
+* implement Devise authentication
 
 ### 30/4/2024
 

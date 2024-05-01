@@ -1,5 +1,5 @@
 class Current < ActiveSupport::CurrentAttributes
-  attribute :account, :user
+  attribute :account, :user, :locale
 
   resets { Time.zone = nil }
 
@@ -14,6 +14,7 @@ class Current < ActiveSupport::CurrentAttributes
   def user=(user)
     super
     self.account      = user.account
+    self.locale       = user.locale
     Time.zone         = user.time_zone
   end
 end
