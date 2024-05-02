@@ -1,5 +1,4 @@
 class ModalController < ApplicationController
-  skip_before_action :ensure_authenticated_user, only: [ :show ]
   before_action :set_vars, only: [ :new, :show, :create ]
 
   def new

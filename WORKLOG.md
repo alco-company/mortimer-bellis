@@ -21,6 +21,8 @@
 * refactor filter - redirects
 * authorize accounts and users
 * add name, more to user + edit profile
+* remove skip_before... on modal_controller
+* delete_all item on contextmenu for lists
 
 ### 1/5/2024
 
