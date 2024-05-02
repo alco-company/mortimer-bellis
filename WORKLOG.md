@@ -17,6 +17,9 @@
 ### 2/5/2024
 
 * add invitable to user
+* refactor default_scope to by_account
+* refactor filter - redirects
+* authorize accounts and users
 
 ### 1/5/2024
 
