@@ -32,6 +32,7 @@ module DefaultActions
     # POST /employees or /employees.json
     def create
       @resource = resource_class.new(resource_params)
+      @resource.account_id = Current.account.id if resource_class.has_attribute? :account_id
 
       respond_to do |format|
         if @resource.save

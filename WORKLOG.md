@@ -24,6 +24,7 @@
 * remove skip_before... on modal_controller
 * eager_load on production
 * delete_all item on contextmenu for lists
+* account not being set on models
 
 ### 1/5/2024
 
