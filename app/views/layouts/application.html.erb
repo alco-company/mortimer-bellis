@@ -4,7 +4,7 @@
 
 def items 
   items = []
-  items << { title: I18n.t('menu.accounts'), url: accounts_url } if Rails.env.local?
+  items << { title: I18n.t('menu.accounts'), url: accounts_url } if Current.user.superadmin?
   items + [
     { title: I18n.t('menu.teams'), url: teams_url },
     { title: I18n.t('menu.users'), url: users_url },

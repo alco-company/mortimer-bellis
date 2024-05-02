@@ -3,11 +3,26 @@ class User < ApplicationRecord
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
-  devise :database_authenticatable, :registerable,
+  devise :invitable, :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable,
          :omniauthable, :confirmable, :trackable, :timeoutable
 
   enum :role, { user: 0, admin: 1, superadmin: 2 } 
+
+  scope :by_account, ->() { 
+    if Current.user.present?
+       case Current.user.role
+       when "superadmin"
+         all
+       when "admin"
+         where(account: Current.account)
+       when "user"
+         where(account: Current.account, id: Current.user.id)
+       end
+    else 
+      all 
+    end
+  }
 
   scope :by_email, ->(email) { where("email LIKE ?", "%#{email}%") if email.present? }
   scope :by_role, ->(role) { where(role: role) if role.present? }
@@ -18,6 +33,7 @@ class User < ApplicationRecord
     flt = filter.filter
 
     all
+      .by_account
       .by_email(flt["email"])
       .by_role(flt["role"])
       .by_locale(flt["locale"])

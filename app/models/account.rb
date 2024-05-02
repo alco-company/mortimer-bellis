@@ -11,6 +11,7 @@ class Account < ApplicationRecord
   has_many :punch_clocks, dependent: :destroy
   has_many :teams, dependent: :destroy
 
+  scope :by_account, ->() { all }
 
   scope :by_name, ->(name) { where("name LIKE ?", "%#{name}%") if name.present? }
   scope :by_locale, ->(locale) { where("locale LIKE ?", "%#{locale}%") if locale.present? }

@@ -15,7 +15,7 @@ module Resourceable
     end
 
     def set_resources
-      @resources = any_filters? ? resource_class.filtered(@filter) : resource_class.all
+      @resources = any_filters? ? resource_class.filtered(@filter) : resource_class.by_account
     end
 
     def set_filter
