@@ -1,12 +1,14 @@
 Rails.application.routes.draw do
   devise_for :users, controllers: {
-    registrations: 'users/registrations',
-    sessions: 'users/sessions',
-    confirmations: 'users/confirmations',
-    passwords: 'users/passwords',
-    unlocks: 'users/unlocks',
-    omniauth_callbacks: 'users/omniauth_callbacks'
+    invitations: "users/invitations",
+    registrations: "users/registrations",
+    sessions: "users/sessions",
+    confirmations: "users/confirmations",
+    passwords: "users/passwords",
+    unlocks: "users/unlocks",
+    omniauth_callbacks: "users/omniauth_callbacks"
   }
+
   resources :users
   resources :punches
   resources :punch_cards do
@@ -35,5 +37,5 @@ Rails.application.routes.draw do
   get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
 
   # Defines the root path route ("/")
-  root "accounts#index"
+  root "employees#index"
 end

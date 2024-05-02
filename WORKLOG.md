@@ -14,6 +14,10 @@
 
 ## CHANGELOG
 
+### 2/5/2024
+
+* add invitable to user
+
 ### 1/5/2024
 
 * add devise gem

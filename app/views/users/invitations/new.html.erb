@@ -1,0 +1,18 @@
+<div class="mx-auto w-96">
+  <h1 class="font-bold text-4xl"> <%= t("devise.invitations.new.header") %> </h1>
+
+  <%= form_for(resource, as: resource_name, url: invitation_path(resource_name), html: { method: :post }) do |f| %>
+    <%= render "users/shared/error_messages", resource: resource %>
+    <%= f.hidden_field :account_id, value: Current.account.id %>
+    <% resource.class.invite_key_fields.each do |field| -%>
+      <div class="field">
+        <%= f.label field %><br />
+        <%= f.text_field field %>
+      </div>
+    <% end -%>
+
+    <div class="actions mort-field">
+      <%= f.submit t("devise.invitations.new.submit_button"), class: "mort-btn-primary" %>
+    </div>
+  <% end %>
+</div>
