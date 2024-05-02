@@ -5,32 +5,51 @@
     <%= render "devise/shared/error_messages", resource: resource %>
 
     <div class="mort-field">
+      <%= f.label :name %><br />
+      <%= f.text_field :name, autofocus: true, autocomplete: "name", class: "mort-form-text" %>
+    </div>
+
+    <div class="mort-field">
       <%= f.label :email %><br />
-      <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "mort-form-text" %>
+      <%= f.email_field :email, autocomplete: "email", class: "mort-form-text" %>
+    </div>
+
+    <div class="mort-field">
+      <%= f.label :locale %><br />
+      <%= f.text_field :locale, class: "mort-form-text" %>
+    </div>
+
+    <div class="mort-field">
+      <%= f.label :time_zone %><br />
+      <%= f.text_field :time_zone, class: "mort-form-text" %>
     </div>
 
     <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
       <div class="">Currently waiting confirmation for: <%= resource.unconfirmed_email %></div>
     <% end %>
 
-    <div class="mort-field">
-      <%= f.label :password %> <br />
-      <%= f.password_field :password, autocomplete: "new-password", class: "mort-form-text" %>
-      <% if @minimum_password_length %>
-        <em class="text-xs font-medium"><%= @minimum_password_length %> characters minimum</em>
-      <% end %>
-      <i class="text-xs">(leave blank if you don't want to change it)</i>
-    </div>
+    <div class="p-4 rounded-md shadow-sm bg-sky-100">
 
-    <div class="mort-field">
-      <%= f.label :password_confirmation %><br />
-      <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "mort-form-text" %>
+      <div class="mort-field">
+        <%= f.label :password %> <br />
+        <%= f.password_field :password, autocomplete: "new-password", class: "mort-form-text" %>
+        <% if @minimum_password_length %>
+          <em class="text-xs font-medium"><%= @minimum_password_length %> characters minimum</em>
+        <% end %>
+        <i class="text-xs">(leave blank if you don't want to change it)</i>
+      </div>
+
+      <div class="mort-field">
+        <%= f.label :password_confirmation %><br />
+        <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "mort-form-text" %>
+      </div>
+
     </div>
 
     <div class="mort-field">
       <%= f.label :current_password %><br />
       <%= f.password_field :current_password, autocomplete: "current-password", class: "mort-form-text" %>
-       <i class="text-xs">(we need your current password to confirm your changes)</i>
+      <i class="text-xs">(we need your current password to confirm your changes)</i>
     </div>
 
     <div class="actions mort-field">

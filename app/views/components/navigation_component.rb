@@ -200,7 +200,10 @@ class NavigationComponent < ApplicationComponent
         tabindex: "-1"
       ) do
         comment { %(Active: "bg-gray-100", Not Active: "") }
+        p( class: "text-sm font-medium px-4 py-2") { Current.user.name }
+        hr
         link_to( "Your Profile", edit_user_registration_path, class: "block px-4 py-2 text-sm text-gray-700", role: "menuitem", tabindex: "-1", id: "user-menu-item-0")
+        link_to( "Invite New User", new_user_invitation_path, class: "block px-4 py-2 text-sm text-gray-700", role: "menuitem", tabindex: "-1", id: "user-menu-item-0") unless Current.user.user?
         # link_to( "Settings", "#", class: "block px-4 py-2 text-sm text-gray-700", role: "menuitem", tabindex: "-1", id: "user-menu-item-1")
         link_to( "Sign out", destroy_user_session_path(), class: "block px-4 py-2 text-sm text-gray-700", method: :delete, data: { turbo_method: :delete }, role: "menuitem", tabindex: "-1", id: "user-menu-item-2")
       end

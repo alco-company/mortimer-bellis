@@ -20,6 +20,7 @@
 * refactor default_scope to by_account
 * refactor filter - redirects
 * authorize accounts and users
+* add name, more to user + edit profile
 
 ### 1/5/2024
 

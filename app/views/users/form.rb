@@ -1,9 +1,37 @@
 class Users::Form < ApplicationForm
   def view_template(&)
+    view_only field(:account_id).input(class: "mort-form-text")
+    row field(:name).input(class: "mort-form-text")
     row field(:email).input(class: "mort-form-text")
     row field(:role).input(class: "mort-form-text")
     row field(:locale).input(class: "mort-form-text")
     row field(:time_zone).input(class: "mort-form-text")
-    # qr_code field(:account).input, helpers.resource_url
+
+    row field(:encrypted_password).input(class: "mort-form-text")
+    row field(:reset_password_token).input(class: "mort-form-text")
+    row field(:reset_password_sent_at).datetime(class: "mort-form-text")
+    row field(:remember_created_at).datetime(class: "mort-form-text")
+    row field(:sign_in_count).input(class: "mort-form-text")
+    row field(:current_sign_in_at).datetime(class: "mort-form-text")
+    row field(:last_sign_in_at).datetime(class: "mort-form-text")
+    row field(:current_sign_in_ip).input(class: "mort-form-text")
+    row field(:last_sign_in_ip).input(class: "mort-form-text")
+    row field(:confirmation_token).input(class: "mort-form-text")
+    row field(:confirmed_at).datetime(class: "mort-form-text")
+    row field(:confirmation_sent_at).datetime(class: "mort-form-text")
+    row field(:role).input(class: "mort-form-text")
+    row field(:locale).input(class: "mort-form-text")
+    row field(:time_zone).input(class: "mort-form-text")
+    row field(:created_at).datetime(class: "mort-form-text")
+    row field(:updated_at).datetime(class: "mort-form-text")
+    row field(:invitation_token).input(class: "mort-form-text")
+    row field(:invitation_created_at).datetime(class: "mort-form-text")
+    row field(:invitation_sent_at).datetime(class: "mort-form-text")
+    row field(:invitation_accepted_at).datetime(class: "mort-form-text")
+    row field(:invitation_limit).input(class: "mort-form-text")
+    row field(:invited_by_type).input(class: "mort-form-text")
+    row field(:invited_by_id).input(class: "mort-form-text")
+    row field(:invitations_count).input(class: "mort-form-text")
+
   end
 end
