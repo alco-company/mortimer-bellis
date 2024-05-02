@@ -4,7 +4,7 @@ class ApplicationController < ActionController::Base
 
   #
   #
-  protect_from_forgery with: :exception
+  protect_from_forgery with: :exception, prepend: true
 
   #
   #
@@ -17,15 +17,6 @@ class ApplicationController < ActionController::Base
   #
   # rescue_from Exception, with: :handle_all_errors
   #
-  # This is essential to all controllers which is
-  # why it gets included on the ApplicationController
-  # and not the MortimerController - by inheriting
-  # from the ApplicationController you may skip some of the
-  # automagic - but authentication cannot be skipped; you can
-  # override this, however, on controllers by calling
-  # skip_before_action :authenticate_user!
-  #
-  include Authentication
 
   #
   # will redirect_to root_path if a 404 is encountered
@@ -39,9 +30,9 @@ class ApplicationController < ActionController::Base
   #
   # the COUNT(*) can be avoided by implementing the following
   # method on the model
-  def pagy_get_count(collection, vars)
-    collection.respond_to?(:count_documents) ? collection.count_documents : super
-  end
+  # def pagy_get_count(collection, vars)
+  #   collection.respond_to?(:count_documents) ? collection.count_documents : super
+  # end
 
   def say(msg)
     Rails.logger.info "==============================="

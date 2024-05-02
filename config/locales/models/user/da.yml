@@ -1,0 +1,148 @@
+da:
+
+  users:
+
+    create:
+      post: Bruger blev oprettet
+    update:
+      post: Bruger blev opdateret
+    destroy:
+      post: Bruger blev slettet
+        
+    list:
+      title: Brugere
+      new: Ny bruger
+      edit: Rediger
+      delete: Slet
+      show: Vis
+      name: Navn
+      role: Rolle
+      locale: Sprog
+      time_zone: Tidszone
+      email: Email
+      phone: Telefon
+      pincode: Pinkode
+      state: Status
+      updated_at: Opdateret den
+
+    form:
+      new: Ny bruger
+      edit: Rediger bruger
+
+    confirmations:
+      new:
+        resend: Send igen
+        resend_confirmation: 
+          title: Bekræftelses email
+          action: Send igen
+
+    sessions:
+      new: 
+        sign_in: Log ind
+
+    sign_in:
+      title: Log ind
+      email: Email
+      password: Adgangskode
+      remember_me: Husk mig
+      forgot_password: Glemt adgangskode?
+      sign_in: Log ind
+      sign_up: Opret en ny konto
+
+    registrations:
+      new:
+        create: Opret kontoen
+        sign_up:
+          title: Opret en ny konto
+        
+    passwords:
+      new: 
+        reset_password: Nulstil adgangskoden
+      edit:
+        change_password: Skift din adgangskode
+        password: Adgangskode
+        password_confirmation: Bekræft/Gentag adgangskoden
+        change_password_action: Skift adgangskoden
+
+    edit_profile:
+      title: Rediger profil
+      name: Redigér din profil
+      update: Opdater profil
+      cancel:
+        title: Slet min konto
+        unhappy: Er du utilfreds med vores service, eller har du bare ikke brug for det længere? Trykker du på [slet] knappen her nedenfor, vil din konto blive slettet. Vi vil være kede af at skulle sige farvel, men respekterer naturligvis dit valg.
+        action: Slet!
+
+  user_mailer:
+    welcome:
+      subject: Velkommen til vores service
+      body: |
+        Hej %{name},
+        Velkommen til vores service.
+
+
+        Med venlig hilsen
+        M O R T I M E R
+
+  devise:
+    confirmations:
+      confirmed: "Din email-adresse er blevet bekræftet. Tak!"
+      send_instructions: "Du vil modtage en email med instruktioner om hvordan du bekræfter din email-adresse om et par minutter."
+      send_paranoid_instructions: "Hvis din email adresse eksisterer i vores database, vil du modtage en email med instruktioner om hvordan du bekræfter din email-adresse om et par minutter."
+    failure:
+      already_authenticated: "Du er allerede logget ind."
+      inactive: "Din konto er endnu ikke aktiveret."
+      invalid: "Invalid %{authentication_keys} or password."
+      locked: "Din konto er låst."
+      last_attempt: "Du har et forsøg tilbage før din konto låses."
+      not_found_in_database: "Invalid %{authentication_keys} or password."
+      timeout: "Din session er udløbet. Log venligst ind igen for at fortsætte."
+      unauthenticated: "Du skal logge ind eller oprette en konto for at fortsætte."
+      unconfirmed: "Du skal bekræfte din email-adresse for at fortsætte."
+    mailer:
+      confirmation_instructions:
+        subject: "Instruktioner til at bekræfte din email-adresse"
+      reset_password_instructions:
+        subject: "Instruktioner til at nulstille din adgangskode"
+      unlock_instructions:
+        subject: "Instruktioner til at låse din konto op"
+      email_changed:
+        subject: "Din email adressen er blevet ændret"
+      password_change:
+        subject: "Din adgangskode er blevet ændret"
+    omniauth_callbacks:
+      failure: "Kunne ikke godkende dig fra %{kind} fordi \"%{reason}\"."
+      success: "Godkendte dig fra %{kind} kontoen."
+    passwords:
+      no_token: "Du kan ikke tilgå denne side uden at komme fra en email med instruktioner til at nulstille din adgangskode. Hvis du kommer fra en email med instruktioner til at nulstille din adgangskode, så sørg for at du brugte den fulde URL."
+      send_instructions: "Du vil modtage en email med instruktioner om hvordan du nulstiller din adgangskode om et par minutter."
+      send_paranoid_instructions: "Hvis din email adresse eksisterer i vores database, vil du modtage et link til at nulstille din adgangskode om et par minutter."
+      updated: "Din adgangskode er blevet ændret korrekt. Du er nu logget ind."
+      updated_not_active: "Din adgangskode er blevet ændret korrekt."
+    registrations:
+      destroyed: "Farvel! Din konto er blevet annulleret korrekt. Det ville glæde os at se dig tilbage."
+      signed_up: "Velkommen! Du er blevet oprettet korrekt."
+      signed_up_but_inactive: "Du er blevet oprettet korrekt. Dog kunne vi ikke logge dig ind, da din konto endnu ikke er aktiveret."
+      signed_up_but_locked: "Du er blevet oprettet korrekt. Dog kunne vi ikke logge dig ind, da din konto er låst."
+      signed_up_but_unconfirmed: "En besked med et bekræftelseslink er blevet sendt til din email-adresse. Følg venligst linket for at aktivere din konto."
+      update_needs_confirmation: "You updated your account successfully, but we need to verify your new email address. Please check your email and follow the confirmation link to confirm your new email address."
+      updated: "Din konto er blevet opdateret korrekt."
+      updated_but_not_signed_in: "Your account has been updated successfully, but since your password was changed, you need to sign in again."
+    sessions:
+      signed_in: "Du blev logget korrekt ind."
+      signed_out: "Du blev logget korrekt af."
+      already_signed_out: "Du er allerede korrekt logget af."
+    unlocks:
+      send_instructions: "Du vil modtage en email med instruktioner om hvordan du låser din konto op om et par minutter."
+      send_paranoid_instructions: "Hvis din konto eksisterer, vil du modtage en email med instruktioner om hvordan du låser den op om et par minutter."
+      unlocked: "Din konto er blevet låst op. Log venligst ind for at fortsætte."
+  errors:
+    messages:
+      already_confirmed: "er allerede bekræftet, prøv venligst at logge ind"
+      confirmation_period_expired: "skal bekræftes inden %{period}, forespørg venligst om en ny"
+      expired: "er udløbet, venligst anmod om en ny"
+      not_found: "blev ikke fundet"
+      not_locked: "blev ikke låst"
+      not_saved:
+        one: "1 fejl forhindrede at %{resource} kunne gemmes:"
+        other: "%{count} fejl forhindrede at %{resource} kunne gemmes:"

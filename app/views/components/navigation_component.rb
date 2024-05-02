@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class NavigationComponent < ApplicationComponent
+  include Phlex::Rails::Helpers::LinkTo
+  
   attr_accessor :items
 
   def initialize(items: [])
@@ -27,9 +29,9 @@ class NavigationComponent < ApplicationComponent
           end
           div(class: " absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0") do
             div(class: "relative ml-3 text-lime-400 font-thin") { ENV["MORTIMER_VERSION"] }
-            div(class: "relative ml-3 text-lime-400 font-thin") { " #{I18n.locale}/#{ Time.zone.name}" }
+            div(class: "relative ml-3 text-lime-400 font-thin") { " #{Current.locale}/#{Current.user.time_zone}" }
             # view_notifications
-            # profile_dropdown
+            profile_dropdown
           end
         end
       end
@@ -165,6 +167,10 @@ class NavigationComponent < ApplicationComponent
       div do
         button(
           type: "button",
+          data: { 
+            navigation_target: "profileMenuButton",
+            action: "touchstart->navigation#tapDrop click->navigation#tapDrop click@window->navigation#hideDrop" 
+          },
           class:
             "relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800",
           id: "user-menu-button",
@@ -186,34 +192,20 @@ class NavigationComponent < ApplicationComponent
       end
       div(
         class:
-          "absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none",
+          "hidden absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none",
         role: "menu",
+        data: { navigation_target: "profileMenu" },
         aria_orientation: "vertical",
         aria_labelledby: "user-menu-button",
         tabindex: "-1"
       ) do
         comment { %(Active: "bg-gray-100", Not Active: "") }
-        a(
-          href: "#",
-          class: "block px-4 py-2 text-sm text-gray-700",
-          role: "menuitem",
-          tabindex: "-1",
-          id: "user-menu-item-0"
-        ) { "Your Profile" }
-        a(
-          href: "#",
-          class: "block px-4 py-2 text-sm text-gray-700",
-          role: "menuitem",
-          tabindex: "-1",
-          id: "user-menu-item-1"
-        ) { "Settings" }
-        a(
-          href: "#",
-          class: "block px-4 py-2 text-sm text-gray-700",
-          role: "menuitem",
-          tabindex: "-1",
-          id: "user-menu-item-2"
-        ) { "Sign out" }
+        p( class: "text-sm font-medium px-4 py-2") { Current.user.name }
+        hr
+        link_to( "Your Profile", edit_user_registration_path, class: "block px-4 py-2 text-sm text-gray-700", role: "menuitem", tabindex: "-1", id: "user-menu-item-0")
+        link_to( "Invite New User", new_user_invitation_path, class: "block px-4 py-2 text-sm text-gray-700", role: "menuitem", tabindex: "-1", id: "user-menu-item-0") unless Current.user.user?
+        # link_to( "Settings", "#", class: "block px-4 py-2 text-sm text-gray-700", role: "menuitem", tabindex: "-1", id: "user-menu-item-1")
+        link_to( "Sign out", destroy_user_session_path(), class: "block px-4 py-2 text-sm text-gray-700", method: :delete, data: { turbo_method: :delete }, role: "menuitem", tabindex: "-1", id: "user-menu-item-2")
       end
     end
   end

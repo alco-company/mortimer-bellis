@@ -5,7 +5,9 @@ export default class extends Controller {
   static targets = [ 
     "menuOpen", 
     "mobileMenu", 
-    "menuClose"
+    "menuClose",
+    "profileMenu",
+    "profileMenuButton",
   ]
 
   connect() {
@@ -20,4 +22,48 @@ export default class extends Controller {
     // this.menuCloseTarget;
     // this.element.classList.toggle("hidden")
   }
+
+  toggleProfileMenu() {
+    this.profileMenuTarget.classList.toggle("hidden")
+  }
+
+  tapDrop(event) {
+      // removed event.stopPropagation() to continue the bubbling for others dropdowns
+    event.preventDefault();
+
+    if (this.profileMenuButtonTarget.getAttribute("aria-expanded") == "false") {
+      this.showDrop();
+    } else {
+      this.hideDrop(null);
+    }
+  }
+
+  showDrop() {
+    this.profileMenuButtonTarget.setAttribute('aria-expanded', 'true');
+    this.profileMenuButtonTarget.classList.add('active');
+    this.profileMenuTarget.classList.remove("hidden");
+  }
+
+  hideDrop(event) {
+    try {      
+      if (
+        event &&
+        (this.profileMenuTarget.contains(event.target) ||
+          this.profileMenuButtonTarget.contains(event.target))
+      ) {
+        // changed your solution with crispinheneise's recommendation and added additional check:
+        // event.preventDefault();
+        if (event.target.tagName != "A") return;
+      }
+
+      this.profileMenuButtonTarget.setAttribute("aria-expanded", "false");
+      this.profileMenuButtonTarget.classList.remove("active");
+      this.profileMenuTarget.classList.add("hidden");
+    } catch (error) {
+      console.error("Error in hide function: ", error);
+      return
+    }
+  }  
+
+
 }

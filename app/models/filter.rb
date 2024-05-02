@@ -1,7 +1,7 @@
 class Filter < ApplicationRecord
-  belongs_to :account
+  include Accountable
 
-  scope :by_view, ->(view) { here("view LIKE ?", "%#{view}%") if view.present? }
+  scope :by_view, ->(view) { where("view LIKE ?", "%#{view}%") if view.present? }
 
   def self.filtered(filter)
     flt = filter.filter

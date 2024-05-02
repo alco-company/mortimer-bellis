@@ -28,7 +28,18 @@
 #       enabled: "ON"
 
 en:
-  hello: "Hello world"
+
+  menu:
+    home: Home
+    accounts: Accounts
+    users: Users
+    teams: Teams
+    locations: Locations
+    punch_clocks: PunchClocks
+    employees: Employees
+    punch_cards: PunchCards
+    punches: Punches
+    motds: MessageOfTheDay
 
 
 

@@ -1,0 +1,26 @@
+<div class="mx-auto w-96">
+  <div class="flex flex-shrink-0 items-center">
+  <%= render_logo %>
+  </div>
+  <h1 class="font-bold text-4xl mb-10"> <%= t(".reset_password") %> </h1>
+
+  <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }, class: "my-5") do |f| %>
+    <%= render "devise/shared/error_messages", resource: resource %>
+
+    <div class="mort-field">
+      <%= f.label :email %><br />
+      <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "mort-form-text" %>
+    </div>
+
+    <div class="actions mort-field">
+      <%= f.submit t(".reset_password"), class: "mort-btn-primary" %>
+    </div>
+  <% end %>
+
+  <hr>
+  <div class="actions mort-field">
+    <%= render "users/shared/links" %>
+  </div>
+
+</div>
+

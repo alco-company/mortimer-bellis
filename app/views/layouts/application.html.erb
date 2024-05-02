@@ -4,11 +4,12 @@
 
 def items 
   items = []
-  items << { title: I18n.t('menu.accounts'), url: accounts_url } if Rails.env.local?
+  items << { title: I18n.t('menu.accounts'), url: accounts_url } if Current.user.superadmin?
   items + [
+    { title: I18n.t('menu.teams'), url: teams_url },
+    { title: I18n.t('menu.users'), url: users_url },
     { title: I18n.t('menu.locations'), url: locations_url },
     { title: I18n.t('menu.punch_clocks'), url: punch_clocks_url },
-    { title: I18n.t('menu.teams'), url: teams_url },
     { title: I18n.t('menu.employees'), url: employees_url },
     { title: I18n.t('menu.punch_cards'), url: punch_cards_url },
     { title: I18n.t('menu.punches'), url: punches_url },
@@ -35,7 +36,7 @@ end
 
 </head>
 <body class="h-full">
-  <%= render NavigationComponent.new items: items %>
+  <%= render NavigationComponent.new items: items if user_signed_in? %>
   <main class="m-4">
     <%= yield %>
   </main>

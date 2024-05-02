@@ -80,7 +80,7 @@ class ApplicationForm < Superform::Rails::Form
   end
 
   def qr_code(component, value)
-    div(class: "my-5") do
+    div(class: "mort-field") do
       helpers.svg_qr_code_link(value)
     end
   end
@@ -98,14 +98,14 @@ class ApplicationForm < Superform::Rails::Form
           plain I18n.t("activerecord.attributes.#{component.field.parent.key}.#{component.field.key}")
         end
       end
-      div(class: "my-5") do
+      div(class: "mort-field") do
         plain(component.field.value)
       end
     end
   end
 
   def row(component)
-    div(class: "my-5") do
+    div(class: "mort-field") do
       render(component.field.label) do
         span(class: "font-bold") do
           plain I18n.t("activerecord.attributes.#{component.field.parent.key}.#{component.field.key}")

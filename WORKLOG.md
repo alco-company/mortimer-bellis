@@ -11,9 +11,26 @@
 * add Stripe payments - https://gorails.com/episodes/one-time-payments-with-pay-and-stripe
 * add web push notifications
 * add login
-* add devise gem and user class
 
 ## CHANGELOG
+
+### 2/5/2024
+
+* add invitable to user
+* refactor default_scope to by_account
+* refactor filter - redirects
+* authorize accounts and users
+* add name, more to user + edit profile
+
+### 1/5/2024
+
+* add devise gem
+* add user_mailer
+* add label field css
+* handle profile dropdown menu
+* refactor filter on users
+* implement Devise authentication
+* add trackable, confirmable to user
 
 ### 30/4/2024
 
