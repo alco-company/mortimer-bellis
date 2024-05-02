@@ -3,13 +3,13 @@ class FiltersController < ApplicationController
 
   def new
     @filter_form = params[:filter_form]
-    @filter = Filter.where(view: params[:filter_form]).take || Filter.new
+    @filter = Filter.by_account.where(view: params[:filter_form]).take || Filter.new
     @url = params[:url]
     @filter.filter ||= {}
   end
 
   def index
-    @pagy, @records = pagy(Filter.all)
+    @pagy, @records = pagy(Filter.by_account)
   end
 
   # Parameters: {"authenticity_token"=>"[FILTERED]",
@@ -18,24 +18,24 @@ class FiltersController < ApplicationController
   def create
     json_filters = create_params.except(:filter_form, :url, :account_id, :submit)
     Filter.create(account: Current.account, view: filter_params[:filter_form], filter: json_filters)
-    redirect_to redirect_params[:url]
+    redirect_to redirect_url
   end
 
   def update
     json_filters = params[:filter].except(:filter_form, :url, :account_id, :submit)
-    filter = Filter.where(view: filter_params[:filter_form]).take
+    filter = Filter.by_account.where(view: filter_params[:filter_form]).take
 
     filter.update(account: Current.account, view: filter_params[:filter_form], filter: json_filters)
-    redirect_to redirect_params[:url]
+    redirect_to redirect_url
   end
 
   def destroy
     Filter.find(params[:id]).destroy
-    redirect_to redirect_params[:url]
+    redirect_to redirect_url, status: 303, notice: "Filter was successfully destroyed."
   end
 
-  def redirect_params
-    params.require(:filter).permit(:url)
+  def redirect_url
+    params.require(:filter).permit(:url)[:url].split("?").first
   end
 
   #

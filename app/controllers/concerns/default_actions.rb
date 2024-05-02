@@ -64,7 +64,7 @@ module DefaultActions
       @resource.destroy!
 
       respond_to do |format|
-        format.html { redirect_to resources_url, notice: t(".post") }
+        format.html { redirect_to resources_url, status: 303, notice: t(".post") }
         format.json { head :no_content }
       end
     end
