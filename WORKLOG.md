@@ -28,6 +28,8 @@
 * missing filter on employees
 * translate attributes on team and user
 * add employee status views
+* add links to employee status view on teams, employees
+* refine translations for invitations, more
 
 ### 2/5/2024
 

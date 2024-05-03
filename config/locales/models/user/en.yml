@@ -1,6 +1,89 @@
-# Additional translations at https://github.com/heartcombo/devise/wiki/I18n
+da:
 
-en:
+  users:
+
+    create:
+      post: Bruger blev oprettet
+    update:
+      post: Bruger blev opdateret
+    destroy:
+      post: Bruger blev slettet
+        
+    list:
+      title: Brugere
+      new: Ny bruger
+      edit: Rediger
+      delete: Slet
+      show: Vis
+      name: Navn
+      role: Rolle
+      locale: Sprog
+      time_zone: Tidszone
+      email: Email
+      phone: Telefon
+      pincode: Pinkode
+      state: Status
+      updated_at: Opdateret den
+
+    form:
+      new: Ny bruger
+      edit: Rediger bruger
+
+    confirmations:
+      new:
+        resend: Send igen
+        resend_confirmation: 
+          title: Bekræftelses email
+          action: Send igen
+
+    sessions:
+      new: 
+        sign_in: Log ind
+
+    sign_in:
+      title: Log ind
+      email: Email
+      password: Adgangskode
+      remember_me: Husk mig
+      forgot_password: Glemt adgangskode?
+      sign_in: Log ind
+      sign_up: Opret en ny konto
+
+    registrations:
+      new:
+        create: Opret kontoen
+        sign_up:
+          title: Opret en ny konto
+        
+    passwords:
+      new: 
+        reset_password: Nulstil adgangskoden
+      edit:
+        change_password: Skift din adgangskode
+        password: Adgangskode
+        password_confirmation: Bekræft/Gentag adgangskoden
+        change_password_action: Skift adgangskoden
+
+    edit_profile:
+      title: Rediger profil
+      name: Redigér din profil
+      update: Opdater profil
+      cancel:
+        title: Slet min konto
+        unhappy: Er du utilfreds med vores service, eller har du bare ikke brug for det længere? Trykker du på [slet] knappen her nedenfor, vil din konto blive slettet. Vi vil være kede af at skulle sige farvel, men respekterer naturligvis dit valg.
+        action: Slet!
+
+  user_mailer:
+    welcome:
+      subject: Velkommen til vores service
+      body: |
+        Hej %{name},
+        Velkommen til vores service.
+
+
+        Med venlig hilsen
+        M O R T I M E R
+        
   devise:
     confirmations:
       confirmed: "Your email address has been successfully confirmed."
