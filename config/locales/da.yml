@@ -6,8 +6,14 @@ da:
   import_employees: Indlæs medarbejder stamdata
   form_errors_prohibited: "%{errors} fejl forhindrede denne post i at blive gemt"
   edit: Redigér
+  update: Opdatér
   save: Gem
   create: Opret 
+  filter: Filtrér
+  delete: Slet
+  delete_all: Slet alle
+  import: Importér
+  export: Eksportér
   
   menu:
     home: Hjem

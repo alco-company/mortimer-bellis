@@ -31,6 +31,13 @@ class Team < ApplicationRecord
     TEAM_COLORS
   end
 
+  def get_allowed_ot_minutes
+    return 24*60 if allowed_ot_minutes.nil?
+    return 24*60 if allowed_ot_minutes == 0
+    return -1 if allowed_ot_minutes < 0
+    allowed_ot_minutes
+  end
+
   # def color
   #   self.class.colors[id % self.class.colors.size]
   # end
