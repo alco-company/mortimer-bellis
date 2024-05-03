@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class PosPunchClockLayout < ApplicationView
+class PosEmployeeLayout < ApplicationView
   include Phlex::Rails::Layout
 
   def view_template(&block)

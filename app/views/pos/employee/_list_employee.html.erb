@@ -1,0 +1,22 @@
+<div 
+  id="<%= dom_id(employee) %>" 
+  data-controller="employee-pos-overview" 
+  class=" relative flex items-center space-x-3 rounded-lg border-l-8 <%= set_border_color employee %> <%= set_bg_color_on_state employee.state %> px-6 py-3 shadow-sm focus-within:ring-2 focus-within:ring-sky-500 focus-within:ring-offset-2 hover:border-gray-400">
+  <div class="flex-shrink-0">
+    <%#= render_mugshot( employee, class: "h-8 w-8 rounded-full ring-4 ring-white sm:h-10 sm:w-10" )  %>
+  </div>
+  <div class="min-w-0 flex-1">
+    <div >
+      <p>
+        <div class="text-sm font-medium text-gray-900 truncate">
+          <%= display_public employee.name %>
+        </div>
+        <span class="works text-xs text-gray-500 float-right"><%= display_todays_work employee %></span>
+      </p>
+      <p class="truncate text-xs text-gray-500">
+        <span class=""><%= display_short_work_date employee %></span>
+        <span class="breaks float-right mr-1"><%= display_todays_break employee %></span>
+      </p>
+    </div>
+  </div>
+</div>

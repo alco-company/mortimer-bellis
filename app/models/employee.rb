@@ -45,4 +45,10 @@ class Employee < ApplicationRecord
     end
     pin.to_s
   end
+
+  def get_team_color
+    team.team_color.blank? ? "border-gray-50" : team.team_color
+  rescue
+    "border-white"
+  end
 end
