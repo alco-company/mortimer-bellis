@@ -27,6 +27,11 @@ Rails.application.routes.draw do
     get "punch_clock" => "pos/punch_clock#show", as: :pos_punch_clock
     get "punch_clock/edit" => "pos/punch_clock#edit", as: :pos_punch_clock_edit
     post "punch_clock" => "pos/punch_clock#create", as: :pos_punch_clock_create
+
+    get "employee" => "pos/employee#show", as: :pos_employee
+    get "employees" => "pos/employee#index", as: :pos_employees
+    get "employee/edit" => "pos/employee#edit", as: :pos_employee_edit
+    post "employee" => "pos/employee#create", as: :pos_employee_create
   end
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html

@@ -1,0 +1,24 @@
+<% content_for :motd do %>
+  <!-- Motd -->
+  <div class="fixed bottom-0  h-32 w-full">
+    <div class="absolute inset-x-0 bottom-0 h-20 " style="background-color: #000203">
+      <div class="fixed right-2 mt-2 mr-4">
+        <%#= image_tag Current.account.logo, style: "height: 64px;" rescue "" %>
+      </div>
+      <%#= render partial: "motds/today" %>
+    </div>
+  </div>    
+<% end %>
+
+<div class="m-2">
+  <% if params[:t] %>
+    <%= render partial: "pos/employee/team_list" %>
+  <% else %>
+    <%= render partial: "pos/employee/employee_list" %>
+  <% end %>
+</div>
+<script>
+  setInterval(() => {
+    window.location.reload();
+  }, 36000);
+</script>

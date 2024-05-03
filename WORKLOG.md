@@ -10,6 +10,9 @@
 * add blackhole
 * add Stripe payments - https://gorails.com/episodes/one-time-payments-with-pay-and-stripe
 * add web push notifications
+* add mail report
+* add EU state report
+* add pos/employee
 
 ## CHANGELOG
 
@@ -24,6 +27,7 @@
 * add pos/punch_clock
 * missing filter on employees
 * translate attributes on team and user
+* add employee status views
 
 ### 2/5/2024
 
