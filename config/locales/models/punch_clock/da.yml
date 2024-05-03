@@ -8,6 +8,8 @@ da:
     destroy:
       post: Stempeluret blev slettet
 
+    show:
+      pos_punch_clock: Stempelur
     list:
       title: Stempelure
       new: Nyt stempelur
