@@ -23,6 +23,7 @@
 * fix import employee regression
 * add pos/punch_clock
 * missing filter on employees
+* translate attributes on team and user
 
 ### 2/5/2024
 
