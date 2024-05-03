@@ -19,6 +19,8 @@
 * refactor inheritance to base_controller
 * refactor punch code
 * delete_all item on contextmenu for lists
+* add wage fields to teams and employees
+* refactor punch_card recalculate
 
 ### 2/5/2024
 
