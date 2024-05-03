@@ -31,6 +31,7 @@
 * add links to employee status view on teams, employees
 * refine translations for invitations, more
 * translations and validations
+* remove reader_schema.rb - not using AON
 
 ### 2/5/2024
 
