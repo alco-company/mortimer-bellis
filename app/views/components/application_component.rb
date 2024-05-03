@@ -9,4 +9,13 @@ class ApplicationComponent < Phlex::HTML
       super
     end
   end
+
+
+  def say msg, level = :info
+    Rails.logger.send( level, '-----------------')
+    Rails.logger.send( level, msg)
+    Rails.logger.send( level, '-----------------')
+  end
+
+  
 end

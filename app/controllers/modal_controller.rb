@@ -1,5 +1,4 @@
-class ModalController < ApplicationController
-  skip_before_action :ensure_authenticated_user, only: [ :show ]
+class ModalController < BaseController
   before_action :set_vars, only: [ :new, :show, :create ]
 
   def new
@@ -67,13 +66,18 @@ class ModalController < ApplicationController
     def process_employee_create
       case params[:step]
       when "preview"
+        require 'csv'
+
         @import_file = Rails.root.join("tmp/storage",DateTime.current.strftime("%Y%m%d%H%M%S"))
         File.open(@import_file, "wb") { |f| f.write(params[:import_file].read) }
         @records = CSV.parse(File.read(@import_file), headers: true, col_sep: ";")
         @step = "approve"
         render turbo_stream: turbo_stream.replace("modal_container", partial: "modal/import_preview", local: { records: @records, import_file: @import_file })
       when "approve"
-        ImportEmployeesJob.perform_later account: Current.account, import_file: params[:import_file]
+        Rails.env.local? ? 
+          ImportEmployeesJob.new.perform(account: Current.account, import_file: params[:import_file]) :
+          ImportEmployeesJob.perform_later(account: Current.account, import_file: params[:import_file])
+
         render turbo_stream: turbo_stream.replace("modal_container", partial: "modal/import_approved")
       end
     end

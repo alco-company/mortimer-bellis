@@ -5,9 +5,17 @@ da:
   import_employee: Videre
   import_employees: Indlæs medarbejder stamdata
   form_errors_prohibited: "%{errors} fejl forhindrede denne post i at blive gemt"
+  yes: Ja
+  no: Nej
   edit: Redigér
+  update: Opdatér
   save: Gem
   create: Opret 
+  filter: Filtrér
+  delete: Slet
+  delete_all: Slet alle
+  import: Importér
+  export: Eksportér
   
   menu:
     home: Hjem
@@ -110,7 +118,7 @@ da:
         blocked: tidsregistrering spærret
         locale: sprog
         time_zone: tidszone
-
+        allowed_ot_minutes: Tilladt overtid
         team_id: Hold/arbejdsgruppe
 
       event:
@@ -238,6 +246,23 @@ da:
         week_workdays: arbejdsdage/uge
         ot1_minutes: Overtid 1
         next_roll_at: næste rul starter
+        payroll_team_ident: Løn hold nummer
+        state: status
+        description: beskrivelse
+        email: Email adresse
+        cell_phone: Mobil
+        pbx_extension: omstillingsnr
+        contract_minutes: Aftalt arbejdstid
+        contract_days_per_payroll: Aftalt dage/lønperiode
+        contract_days_per_week: Aftalt dage/uge
+        hour_pay: Timeløn
+        ot1_add_hour_pay: Overtid 1 tillæg 
+        ot2_add_hour_pay: Overtid 2 tillæg
+        tmp_overtime_allowed: Overtid midlertidigt tilladt
+        eu_state: EU regulativ (2003/88/EC) status
+        blocked: Blokeret for tidsregistrering
+        allowed_ot_minutes: Tilladt overtid
+
       uri_scheme: 
         scheme: skema
         purpose: Anvendelse
@@ -251,11 +276,28 @@ da:
         version: version 
         sub_scheme: Under skema
       user:
+        name: Navn
+        account_id: Konto
+        email: Email adresse
+        role: Rolle
         user_name: Brugernavn
         password: Adgangskode
         password_confirmation: Bekræft adgangskode
+        encrypted_password: Krypteret adgangskode
         confirmed_at: Bekræftet den
+        confirmation_sent_at: Bekræftelse sendt den
+        confirmation_token: Bekræftelsestoken
         receive_notifications: Modtager notifikationer
+        last_sign_in_ip: sidst logget ind fra
+        current_sign_in_ip: nuværende login fra
+        current_sign_in_at: nuværende login
+        last_sign_in_at: sidst logget ind
+        sign_in_count: antal logins
+        reset_password_token: Token t/nulstil adgangskode
+        remember_created_at: Husk login
+        reset_password_sent_at: Nulstilling sendt den
+        locale: sprog
+        time_zone: tidszone
 
     models:
       account:

@@ -1,4 +1,4 @@
-class FiltersController < ApplicationController
+class FiltersController < BaseController
   include Authentication
 
   def new

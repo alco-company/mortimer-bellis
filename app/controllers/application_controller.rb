@@ -1,6 +1,4 @@
 class ApplicationController < ActionController::Base
-  # Only allow modern browsers supporting webp images, web push, badges, import maps, CSS nesting, and CSS :has.
-  allow_browser versions: :modern
 
   #
   #
@@ -10,10 +8,6 @@ class ApplicationController < ActionController::Base
   #
   before_action :set_cache_buster
 
-  layout "application"
-  # TODO - make Phlex layouts work
-  # layout -> { ApplicationLayout }
-
   #
   # rescue_from Exception, with: :handle_all_errors
   #
@@ -22,17 +16,6 @@ class ApplicationController < ActionController::Base
   # will redirect_to root_path if a 404 is encountered
   #
   include ErrorHandling
-
-  #
-  #
-  #
-  include Pagy::Backend
-  #
-  # the COUNT(*) can be avoided by implementing the following
-  # method on the model
-  # def pagy_get_count(collection, vars)
-  #   collection.respond_to?(:count_documents) ? collection.count_documents : super
-  # end
 
   def say(msg)
     Rails.logger.info "==============================="

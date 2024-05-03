@@ -10,9 +10,20 @@
 * add blackhole
 * add Stripe payments - https://gorails.com/episodes/one-time-payments-with-pay-and-stripe
 * add web push notifications
-* add login
 
 ## CHANGELOG
+
+### 3/5/2024
+
+* refactor inheritance to base_controller
+* refactor punch code
+* delete_all item on contextmenu for lists
+* add wage fields to teams and employees
+* refactor punch_card recalculate
+* fix import employee regression
+* add pos/punch_clock
+* missing filter on employees
+* translate attributes on team and user
 
 ### 2/5/2024
 
@@ -21,6 +32,9 @@
 * refactor filter - redirects
 * authorize accounts and users
 * add name, more to user + edit profile
+* remove skip_before... on modal_controller
+* eager_load on production
+* account not being set on models
 
 ### 1/5/2024
 
