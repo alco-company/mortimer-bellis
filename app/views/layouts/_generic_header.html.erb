@@ -1,0 +1,24 @@
+<!-- generic_header.html -------------------------------------------------------------->
+<title>M O R T I M E R <%= " - D E V " if Rails.env.local? %></title>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+<%= csrf_meta_tags %>
+<%= csp_meta_tag %>
+
+<%#  https://realfavicongenerator.net %>
+<link rel="apple-touch-icon" sizes="180x180" href="<%= asset_path('apple-touch-icon.png') %>"> 
+<link rel="icon" type="image/png" sizes="32x32" href="<%= asset_path('favicon-32x32.png') %>">
+<link rel="icon" type="image/png" sizes="16x16" href="<%= asset_path('favicon-16x16.png') %>">
+<link rel="mask-icon" href="<%= asset_path('safari-pinned-tab.svg') %>" color="#5bbad5">
+<meta name="application-name" content="Mortimer">
+<meta name="theme-color" content="#ffffff">
+
+<%# <link rel="manifest" crossorigin="use-credentials" href="/manifest.json?start_url=<%= request.url %>"> %>
+<%#= tag :meta, name: :vapid_public_key, content: Rails.application.credentials.vapid.public_key %>
+
+<%= stylesheet_link_tag "tailwind", data_turbo_track: "reload" %>
+<%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+<%= javascript_importmap_tags %>
+
+<%= yield :head %>

@@ -1,0 +1,20 @@
+<% content_for :head do %>
+    <%= render partial: 'layouts/mobile_header' %>
+    <meta name="screen-orientation"  content="landscape">
+<% end %>
+<% content_for :nav do 
+    render NavigationComponent.new( items: [])
+  end %>
+
+<div
+  data-controller="punch-clock"
+  data-punch-clock-punch-clock-asset-id-value="<%= @resource.id %>"
+  data-punch-clock-apikey-value="<%= @resource.access_token %>"
+  data-punch-clock-url-value="<%= pos_punch_clock_path %>"
+  data-action="keydown@window->punch-clock#keydownHandler"
+  class="h-screen w-full divide-y divide-gray-200 overflow-hidden bg-white">
+  <%= render_punch_clock_header(resource: @resource, employee: @employee) %>
+  <%= render partial: 'register' %>
+
+</div>
+  <%= render_mortimer_footer(request: request)  %>

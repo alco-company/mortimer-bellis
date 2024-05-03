@@ -10,7 +10,6 @@
 * add blackhole
 * add Stripe payments - https://gorails.com/episodes/one-time-payments-with-pay-and-stripe
 * add web push notifications
-* add pos/punch_clock
 
 ## CHANGELOG
 
@@ -22,6 +21,8 @@
 * add wage fields to teams and employees
 * refactor punch_card recalculate
 * fix import employee regression
+* add pos/punch_clock
+* 
 
 ### 2/5/2024
 

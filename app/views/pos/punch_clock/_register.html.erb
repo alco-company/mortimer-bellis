@@ -1,0 +1,51 @@
+<div id="keypad" data-punch-clock-target="keypad" class="h-4/5 grid grid-cols-1 content-center">
+  <fieldset class="mb-6 bg-white">
+    <div class=" -space-y-px rounded-none" style="font-family: 'Roboto Mono'">
+      <div class="flex space-x-2 justify-center">
+        <label for="employee-pincode" class="sr-only"><%= t('.employee_pincode') %></label>
+        <div data-punch-clock-target="key" data-action="click->punch-clock#digitboxTap" class="text-3xl flex items-center justify-center w-14 rounded-md h-20 border border-gray-300">
+        <span data-punch-clock-target="digitbox" class="hidden">0</span>
+        </div>
+        <div data-punch-clock-target="key" data-action="click->punch-clock#digitboxTap" class="text-3xl flex items-center justify-center w-14 rounded-md h-20 border border-gray-300">
+        <span data-punch-clock-target="digitbox" class="hidden">0</span>
+        </div>
+        <div data-punch-clock-target="key" data-action="click->punch-clock#digitboxTap" class="text-3xl flex items-center justify-center w-14 rounded-md h-20 border border-gray-300">
+        <span data-punch-clock-target="digitbox" class="hidden">0</span>
+        </div>
+        <div data-punch-clock-target="key" data-action="click->punch-clock#digitboxTap" class="text-3xl flex items-center justify-center w-14 rounded-md h-20 border border-gray-300">
+        <span data-punch-clock-target="digitbox" class="hidden">0</span>
+        </div>
+      </div>
+    </div>
+  </fieldset>
+  <fieldset>
+    <div class="mt-1 -space-y-px grid justify-items-center d bg-white ">
+      <div class="grid grid-cols-3 shadow-lg rounded-md justify-items-stretch text-gray-400">
+        <div data-punch-clock-target="digit" data-action="click->punch-clock#digitTap" class="px-8 py-4 cursor-pointer text-center border-r">7</div>
+        <div data-punch-clock-target="digit" data-action="click->punch-clock#digitTap" class="px-8 py-4 cursor-pointer text-center border-r">8</div>
+        <div data-punch-clock-target="digit" data-action="click->punch-clock#digitTap" class="px-8 py-4 cursor-pointer text-center">9</div>
+        <div data-punch-clock-target="digit" data-action="click->punch-clock#digitTap" class="px-8 py-4 cursor-pointer text-center border-r border-t">4</div>
+        <div data-punch-clock-target="digit" data-action="click->punch-clock#digitTap" class="px-8 py-4 cursor-pointer text-center border-r border-t">5</div>
+        <div data-punch-clock-target="digit" data-action="click->punch-clock#digitTap" class="px-8 py-4 cursor-pointer text-center border-t">6</div>
+        <div data-punch-clock-target="digit" data-action="click->punch-clock#digitTap" class="px-8 py-4 cursor-pointer text-center border-r border-t ">1</div>
+        <div data-punch-clock-target="digit" data-action="click->punch-clock#digitTap" class="px-8 py-4 cursor-pointer text-center border-r border-t">2</div>
+        <div data-punch-clock-target="digit" data-action="click->punch-clock#digitTap" class="px-8 py-4 cursor-pointer text-center border-t">3</div>
+        <div data-punch-clock-target="digit" data-action="click->punch-clock#digitTap" class="px-8 py-4 cursor-pointer text-center border-r border-t ">0</div>
+        <div data-punch-clock-target="backspace" data-action="click->punch-clock#backspaceTap" class="py-4 flex justify-center border-r border-t">
+          <svg fill="currentColor" stroke-width="1.5" stroke="currentColor" class="text-gray-400 " xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
+            <path d="M360-200q-20 0-37.5-9T294-234L120-480l174-246q11-16 28.5-25t37.5-9h400q33 0 56.5 23.5T840-680v400q0 33-23.5 56.5T760-200H360Zm400-80v-400 400Zm-400 0h400v-400H360L218-480l142 200Zm96-40 104-104 104 104 56-56-104-104 104-104-56-56-104 104-104-104-56 56 104 104-104 104 56 56Z"/>
+          </svg>
+        </div>
+        <div class="py-4 text-center border-t w-full">&nbsp;</div>
+      </div>
+    </div>
+  </fieldset>
+  <%= form_for :punch_clock, 
+      class: 'hidden',
+      method: :get,
+      data: { punch_clock_target: 'form'},
+      url: pos_punch_clock_edit_url do |f| %>
+    <input type="hidden" name="api_key" value="<%= @resource.access_token %>" />
+    <input data-punch-clock-target="search" name="q" />
+  <% end %>
+</div>
