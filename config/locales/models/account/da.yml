@@ -35,6 +35,10 @@ da:
       title: Konto
       back: Tilbage
       
+    errors:
+      messages:
+        name_exist: "Kontoen findes allerede"
+        
     account_mailer:
         datalon_email:
           subject: Datafil til Datalon vedhæftet

@@ -7,9 +7,9 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable,
          :omniauthable, :confirmable, :trackable, :timeoutable
 
-  enum :role, { user: 0, admin: 1, superadmin: 2 } 
+  enum :role, { user: 0, admin: 1, superadmin: 2 }
 
-  scope :by_account, ->() { 
+  scope :by_account, ->() {
     if Current.user.present?
        case Current.user.role
        when "superadmin"
@@ -19,8 +19,8 @@ class User < ApplicationRecord
        when "user"
          where(account: Current.account, id: Current.user.id)
        end
-    else 
-      all 
+    else
+      all
     end
   }
 

@@ -2,13 +2,16 @@ module ErrorHandling
   extend ActiveSupport::Concern
 
   included do
+    add_flash_types :info, :success, :error, :warning
+
     #
     # You want to get exceptions in development, but not in production.
     unless Rails.application.config.consider_all_requests_local
       rescue_from ActionController::RoutingError, with: -> { render_404  }
       # rescue_from ActionController::UnknownController, with: -> { render_404  }
       rescue_from ActionController::UnknownFormat, with: -> { render_404  }
-      # rescue_from ActiveRecord::RecordNotFound,        with: -> { render_404  }
+      rescue_from ActiveRecord::RecordNotFound,        with: -> { render_404 }
+      rescue_from ActionController::UrlGenerationError, with: -> { render_404 }
     end
 
     # def blackholed
@@ -25,8 +28,8 @@ module ErrorHandling
     end
 
     def render_not_found
-      flash[:warning] = flash.now[:warning] = helpers.tl("page_not_found")
-      redirect_to root_path
+      # flash[:warning] = flash.now[:warning] = t("page_not_found")
+      redirect_to root_path, warning: t("page_not_found")
       # render turbo_stream: turbo_stream.replace( "flash", partial: 'shared/notifications' ), status: 404
     end
 

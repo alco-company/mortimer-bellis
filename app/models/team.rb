@@ -10,6 +10,8 @@ class Team < ApplicationRecord
   scope :by_locale, ->(locale) { where("locale LIKE ?", "%#{locale}%") if locale.present? }
   scope :by_time_zone, ->(time_zone) { where("time_zone LIKE ?", "%#{time_zone}%") if time_zone.present? }
 
+  validates :name, presence: true, uniqueness: { scope: :account_id, message: "already exists for this account" }
+
   def self.filtered(filter)
     flt = filter.filter
 

@@ -136,13 +136,3 @@ da:
       send_instructions: "Du vil modtage en email med instruktioner om hvordan du låser din konto op om et par minutter."
       send_paranoid_instructions: "Hvis din konto eksisterer, vil du modtage en email med instruktioner om hvordan du låser den op om et par minutter."
       unlocked: "Din konto er blevet låst op. Log venligst ind for at fortsætte."
-  errors:
-    messages:
-      already_confirmed: "er allerede bekræftet, prøv venligst at logge ind"
-      confirmation_period_expired: "skal bekræftes inden %{period}, forespørg venligst om en ny"
-      expired: "er udløbet, venligst anmod om en ny"
-      not_found: "blev ikke fundet"
-      not_locked: "blev ikke låst"
-      not_saved:
-        one: "1 fejl forhindrede at %{resource} kunne gemmes:"
-        other: "%{count} fejl forhindrede at %{resource} kunne gemmes:"

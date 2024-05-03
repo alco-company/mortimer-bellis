@@ -38,3 +38,7 @@ da:
     show:
       title: Arbejdssted
       back: Tilbage
+
+    errors:
+      messages:
+        name_exist: "Arbejdsstedet findes allerede"

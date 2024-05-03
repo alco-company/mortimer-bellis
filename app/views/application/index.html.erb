@@ -1,12 +1,6 @@
 <div class="w-full">
-  <% if notice.present? %>
-    <p data-controller="notice" class="fixed left-10 bottom-5 py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-lg inline-block" id="notice"><%= notice %></p>
-  <% end %>
-
   <%= render partial: "header" %>
-  <%# <div class="class font-mono text-sm"> %>
   <div class="class">
-
     <div class="min-w-full">
       <ul role="list" class="divide-y divide-gray-100">
         <li  class="flex items-center justify-between gap-x-6 py-5">
@@ -20,11 +14,9 @@
             <%= render partial: 'filters/form' %>
           <% end %>
         </filter-container>
-
         <%= render @records %>
       </ul>
     </div>
     <remote-modal-container></remote-modal-container>
-
   </div>
 </div>

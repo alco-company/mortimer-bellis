@@ -19,26 +19,33 @@ end
 
 %>
 <html lang="da" class=""h-full bg-white">
-<head>
-  <title><%= "M O R T I M E R #{ 'DEV' if Rails.env.local?}" %></title>
-  <%= csrf_meta_tags %>
-  <%= csp_meta_tag %>
+  <head>
+    <title><%= "M O R T I M E R #{ 'DEV' if Rails.env.local?}" %></title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
 
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <link rel="preconnect" href="https://rsms.me/">
-  <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+    <link rel="preconnect" href="https://rsms.me/">
+    <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
 
-  <%= stylesheet_link_tag "tailwind", "inter-font", data_turbo_track: "reload" %>      
-  <%= stylesheet_link_tag "application", data_turbo_track: "reload" %>      
-  <%= javascript_importmap_tags %>      
+    <%= stylesheet_link_tag "tailwind", "inter-font", data_turbo_track: "reload" %>      
+    <%= stylesheet_link_tag "application", data_turbo_track: "reload" %>      
+    <%= javascript_importmap_tags %>      
 
-</head>
-<body class="h-full">
-  <%= render NavigationComponent.new items: items if user_signed_in? %>
-  <main class="m-4">
-    <%= yield %>
-  </main>
-</body>
+  </head>
+  <body class="h-full">
+
+    <%= render NavigationComponent.new items: items if user_signed_in? %>
+    <main class="m-4">
+      <%= yield %>
+    </main>
+    <%# in honor of Tailwind "mort-flash-info mort-flash-error mort-flash-success mort-flash-warning mort-flash-notice" %>
+    <% flash.each do |type, msg| %>
+      <div>
+        <p data-controller="notice" class="mort-flash-<%=type%>" id="notice"><%= msg %></p>
+      </div>
+    <% end %>
+  </body>
 </html>
