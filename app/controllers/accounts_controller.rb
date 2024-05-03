@@ -1,7 +1,6 @@
 class AccountsController < MortimerController
-
   before_action :authorize
-  
+
   private
 
     # Only allow a list of trusted parameters through.
@@ -10,6 +9,6 @@ class AccountsController < MortimerController
     end
 
     def authorize
-      redirect_to root_path, alert: 'fejl' unless current_user.superadmin?
+      redirect_to root_path, alert: "fejl" unless current_user.superadmin?
     end
 end

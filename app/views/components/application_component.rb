@@ -11,11 +11,9 @@ class ApplicationComponent < Phlex::HTML
   end
 
 
-  def say msg, level = :info
-    Rails.logger.send( level, '-----------------')
-    Rails.logger.send( level, msg)
-    Rails.logger.send( level, '-----------------')
+  def say(msg, level = :info)
+    Rails.logger.send(level, "-----------------")
+    Rails.logger.send(level, msg)
+    Rails.logger.send(level, "-----------------")
   end
-
-  
 end

@@ -114,12 +114,12 @@ class ApplicationForm < Superform::Rails::Form
       @editable ?
         render(component) :
         div(class: "mr-5") do
-          plain(fformat(model,component.field.key))
+          plain(fformat(model, component.field.key))
         end
     end
   end
 
-  def fformat(model,key)
+  def fformat(model, key)
     case model.field_formats(key)
     when :date; model.send(key).strftime("%d-%m-%Y") rescue nil
     when :time; model.send(key).strftime("%H:%M") rescue nil
@@ -135,7 +135,7 @@ class ApplicationForm < Superform::Rails::Form
     end
   end
 
-  def submit_string 
+  def submit_string
     model.new_record? ? I18n.t(:create) : I18n.t(:update)
   end
 

@@ -19,6 +19,6 @@ class AddFieldsToEmployeesAndTeams < ActiveRecord::Migration[7.2]
     add_column :teams, :eu_state, :string
     add_column :teams, :blocked, :boolean
     add_column :teams, :allowed_ot_minutes, :integer
-    add_column :employees, :allowed_ot_minutes, :integer    
+    add_column :employees, :allowed_ot_minutes, :integer
   end
 end

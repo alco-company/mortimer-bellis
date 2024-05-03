@@ -5,7 +5,6 @@ module ExportCsv
   extend ActiveSupport::Concern
 
   included do
-
     #
     # csv_headers and csv_row are used by ExportCsv
     # describing the csv file to be generated
@@ -26,21 +25,19 @@ module ExportCsv
     #   return fields unless fields.nil?
     #   attributes.values
     # end
-
   end
 
   class_methods do
-
-    def csv_header header=nil
+    def csv_header(header = nil)
       return header unless new.respond_to? :csv_header
       new.csv_header header
     rescue => exception
-      [:id,:error_getting_csv_header]
+      [ :id, :error_getting_csv_header ]
     end
 
-    def to_csv resources, header=nil
-      require 'csv'
-      options = { col_sep: ';', encoding: 'utf-8' }
+    def to_csv(resources, header = nil)
+      require "csv"
+      options = { col_sep: ";", encoding: "utf-8" }
       headers = (csv_header header) || column_names
 
       CSV.generate(headers: true, **options) do |csv|
@@ -51,7 +48,5 @@ module ExportCsv
         end
       end
     end
-
   end
-
 end

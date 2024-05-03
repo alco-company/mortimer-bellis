@@ -1,8 +1,7 @@
 class MortimerFooter < ApplicationComponent
-
   attr_reader :request, :platform
 
-  def initialize( request:, platform: 'desktop', &block)
+  def initialize(request:, platform: "desktop", &block)
     @request = request
     @platform = platform
   end
@@ -41,7 +40,5 @@ class MortimerFooter < ApplicationComponent
         end
       end
     end
-
   end
-
 end

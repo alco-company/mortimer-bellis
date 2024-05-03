@@ -2,7 +2,7 @@
 
 class NavigationComponent < ApplicationComponent
   include Phlex::Rails::Helpers::LinkTo
-  
+
   attr_accessor :items
 
   def initialize(items: [])
@@ -167,9 +167,9 @@ class NavigationComponent < ApplicationComponent
       div do
         button(
           type: "button",
-          data: { 
+          data: {
             navigation_target: "profileMenuButton",
-            action: "touchstart->navigation#tapDrop click->navigation#tapDrop click@window->navigation#hideDrop" 
+            action: "touchstart->navigation#tapDrop click->navigation#tapDrop click@window->navigation#hideDrop"
           },
           class:
             "relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800",
@@ -200,12 +200,12 @@ class NavigationComponent < ApplicationComponent
         tabindex: "-1"
       ) do
         comment { %(Active: "bg-gray-100", Not Active: "") }
-        p( class: "text-sm font-medium px-4 py-2") { Current.user.name }
+        p(class: "text-sm font-medium px-4 py-2") { Current.user.name }
         hr
-        link_to( "Your Profile", edit_user_registration_path, class: "block px-4 py-2 text-sm text-gray-700", role: "menuitem", tabindex: "-1", id: "user-menu-item-0")
-        link_to( "Invite New User", new_user_invitation_path, class: "block px-4 py-2 text-sm text-gray-700", role: "menuitem", tabindex: "-1", id: "user-menu-item-0") unless Current.user.user?
+        link_to("Your Profile", edit_user_registration_path, class: "block px-4 py-2 text-sm text-gray-700", role: "menuitem", tabindex: "-1", id: "user-menu-item-0")
+        link_to("Invite New User", new_user_invitation_path, class: "block px-4 py-2 text-sm text-gray-700", role: "menuitem", tabindex: "-1", id: "user-menu-item-0") unless Current.user.user?
         # link_to( "Settings", "#", class: "block px-4 py-2 text-sm text-gray-700", role: "menuitem", tabindex: "-1", id: "user-menu-item-1")
-        link_to( "Sign out", destroy_user_session_path(), class: "block px-4 py-2 text-sm text-gray-700", method: :delete, data: { turbo_method: :delete }, role: "menuitem", tabindex: "-1", id: "user-menu-item-2")
+        link_to("Sign out", destroy_user_session_path(), class: "block px-4 py-2 text-sm text-gray-700", method: :delete, data: { turbo_method: :delete }, role: "menuitem", tabindex: "-1", id: "user-menu-item-2")
       end
     end
   end

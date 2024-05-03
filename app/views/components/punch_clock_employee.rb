@@ -6,28 +6,28 @@ class PunchClockEmployee < ApplicationComponent
 
   attr_accessor :resource, :employee, :pane
 
-  def initialize( resource:, employee: nil, tab: 'today')
+  def initialize(resource:, employee: nil, tab: "today")
     @resource = resource
     @employee = employee || false
     @pane = tab
   end
 
   def view_template
-    div( class: "h-full w-full") do
-      div( class: "sm:p-4 ") do
+    div(class: "h-full w-full") do
+      div(class: "sm:p-4 ") do
         punch_buttons
         todays_minutes
 
-        h4( class: "m-4 text-gray-700 text-xl") { helpers.t('.todays_punches') }
-        ul( class: "m-4") do
+        h4(class: "m-4 text-gray-700 text-xl") { helpers.t(".todays_punches") }
+        ul(class: "m-4") do
           employee.todays_punches.each do |punch|
             li(
-              id: ( helpers.dom_id punch),
+              id: (helpers.dom_id punch),
               class: "flex items-center justify-between gap-x-6 py-5"
             ) do
               div(class: "min-w-0 w-full columns-2") do
-                span { helpers.render_datetime_column( field: punch.punched_at, css: "") }
-                span { helpers.render_text_column( field: punch.state, css: "text-right") }
+                span { helpers.render_datetime_column(field: punch.punched_at, css: "") }
+                span { helpers.render_text_column(field: punch.state, css: "text-right") }
               end
               div(class: "flex flex-none items-center gap-x-4") do
                 helpers.render_contextmenu resource: punch, turbo_frame: helpers.dom_id(punch), alter: false
@@ -48,25 +48,25 @@ class PunchClockEmployee < ApplicationComponent
   end
 
   def punch_buttons
-    div( class: "flex items-center justify-center w-full p-5 font-medium rtl:text-right text-gray-500 gap-3") do
-      punch_in 
+    div(class: "flex items-center justify-center w-full p-5 font-medium rtl:text-right text-gray-500 gap-3") do
+      punch_in
       punch_break
       punch_out
     end
   end
 
   def todays_minutes
-    div( class: "flex items-center justify-center w-full p-5 font-medium rtl:text-right text-gray-500 gap-3") do
+    div(class: "flex items-center justify-center w-full p-5 font-medium rtl:text-right text-gray-500 gap-3") do
       counters = employee.minutes_today_up_to_now
       say "counters: #{counters}"
-      render Stats.new title: "Arbejdstid, mm", stats: [ 
+      render Stats.new title: "Arbejdstid, mm", stats: [
         { title: "Arbejdstid", value: helpers.display_hours_minutes(counters[:work]) },
         { title: "Pauser", value: helpers.display_hours_minutes(counters[:break]) }
     ]
     end if employee
   end
 
-  def punch_in 
+  def punch_in
     return if employee.state == "IN"
     button_tag helpers.t(".in"), type: "submit", form: "inform", class: "bg-green-500 text-white block rounded-md px-3 py-2 text-xl font-medium"
     form_with url: pos_punch_clock_url, id: "inform", method: :post do
@@ -96,31 +96,31 @@ class PunchClockEmployee < ApplicationComponent
     end
   end
 
-  def active_tab t
+  def active_tab(t)
     t == pane ? "bg-gray-700" : "bg-gray-300"
   end
 
   def show_profile
-    div( class: "w-full") do
-      h2( class: "text-gray-700 text-xl") { helpers.t(".profile") }
-      div( class: "text-gray-700 text-xl") { 'coming soon - this will be for the employee to add an avatar/photo and their name/moniker' }
+    div(class: "w-full") do
+      h2(class: "text-gray-700 text-xl") { helpers.t(".profile") }
+      div(class: "text-gray-700 text-xl") { "coming soon - this will be for the employee to add an avatar/photo and their name/moniker" }
     end
   end
 
   def show_today_old
-    div( class: "w-full") do
-      h2( class: "text-gray-700 text-xl") { helpers.t(".todays_punches") }
+    div(class: "w-full") do
+      h2(class: "text-gray-700 text-xl") { helpers.t(".todays_punches") }
       # div( class: "mb-4 text-gray-700 text-xl") { helpers.t(".for_employee", name: employee.name) }
-      div( class: "font-mono") do
+      div(class: "font-mono") do
         ul do
           employee.todays_punches.each do |punch|
             li(
-              id: ( helpers.dom_id punch),
+              id: (helpers.dom_id punch),
               class: "flex items-center justify-between gap-x-6 py-5"
             ) do
               div(class: "min-w-0 w-full columns-2 text-gray-700 text-xl") do
-                span { helpers.render_datetime_column( field: punch.punched_at, css: "") }
-                span { helpers.render_text_column( field: punch.state, css: "text-right") }
+                span { helpers.render_datetime_column(field: punch.punched_at, css: "") }
+                span { helpers.render_text_column(field: punch.state, css: "text-right") }
               end
               div(class: "flex flex-none items-center gap-x-4") do
                 helpers.render_contextmenu resource: punch

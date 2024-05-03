@@ -29,20 +29,20 @@ module SumPunches
       return if across_midnight
 
       return PunchCard.recalculate(employee, true) unless punches.first.state == "IN"
-      # this is the only punch of the day, so we'll calculate the time from the punch to now - 
+      # this is the only punch of the day, so we'll calculate the time from the punch to now -
       # and come back and do it again when the employee punches out
       pc.update work_minutes: (DateTime.current.to_i - punches.first..punched_at.to_i) / 60
     end
 
-    def two_punches pc, punches
+    def two_punches(pc, punches)
       return unless punches.second.state == "IN" && punches.first.state == "OUT"
       pc.update work_minutes: (punches.first.punched_at - punches.second.punched_at) / 60
     end
 
-    def more_punches pc, punches, employee
+    def more_punches(pc, punches, employee)
       counters = { work: [], break: [] }
       stop = punches.first.punched_at
-      punches.each_with_index do |punch,i|
+      punches.each_with_index do |punch, i|
         next if i == 0
 
         case punch.state

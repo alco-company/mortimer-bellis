@@ -37,9 +37,8 @@ class CreateEmployees < ActiveRecord::Migration[7.2]
     end
 
     add_column :teams, :punches_settled_at, :datetime
-    
+
     add_foreign_key "employees", "accounts", on_delete: :cascade
     add_foreign_key "employees", "teams", on_delete: :cascade
-
   end
 end
