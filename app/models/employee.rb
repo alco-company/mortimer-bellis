@@ -23,6 +23,7 @@ class Employee < ApplicationRecord
     flt = filter.filter
 
     all
+      .by_account()
       .by_name(flt["name"])
       .by_team(flt["team"])
       .by_locale(flt["locale"])

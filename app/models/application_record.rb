@@ -3,7 +3,7 @@ class ApplicationRecord < ActiveRecord::Base
 
   include ExportCsv
 
-  # 
+  #
   # extend this method on the model to define the field formats
   # its a callback from the superform when rendering the form
   # (in non-editable mode, the form will render the field value using this method)
@@ -18,17 +18,16 @@ class ApplicationRecord < ActiveRecord::Base
   end
 
 
-  def say msg, level = :info
-    Rails.logger.send( level, '-----------------')
-    Rails.logger.send( level, msg)
-    Rails.logger.send( level, '-----------------')
+  def say(msg, level = :info)
+    Rails.logger.send(level, "-----------------")
+    Rails.logger.send(level, msg)
+    Rails.logger.send(level, "-----------------")
   end
 
 
-  def self.say msg, level = :info
-    Rails.logger.send( level, '-----------------')
-    Rails.logger.send( level, msg)
-    Rails.logger.send( level, '-----------------')
+  def self.say(msg, level = :info)
+    Rails.logger.send(level, "-----------------")
+    Rails.logger.send(level, msg)
+    Rails.logger.send(level, "-----------------")
   end
-
 end

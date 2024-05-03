@@ -7,6 +7,7 @@ class Filter < ApplicationRecord
     flt = filter.filter
 
     all
+      # .by_account()
       .by_view(flt["view"])
   rescue
     filter.destroy if filter

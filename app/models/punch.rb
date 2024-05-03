@@ -12,6 +12,7 @@ class Punch < ApplicationRecord
   def self.filtered(filter)
     flt = filter.filter
     all
+      .by_account()
       .by_name(flt["name"])
       .by_punch_clock(flt["punch_clock"])
       .by_punched_at(flt["punched_at"])
@@ -25,7 +26,4 @@ class Punch < ApplicationRecord
   def self.form(resource, editable = true)
     Punches::Form.new resource, editable: editable
   end
-
-
-
 end

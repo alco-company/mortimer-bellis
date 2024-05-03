@@ -13,6 +13,7 @@
 * add mail report
 * add EU state report
 * add pos/employee
+* fix format (rubocop)
 
 ## CHANGELOG
 
@@ -35,6 +36,7 @@
 * missed a single payroll_employee_ident - in filter
 * missed mort-flash-notice
 * missed mort-flash-alert
+* missing by_account on filters
 
 ### 2/5/2024
 

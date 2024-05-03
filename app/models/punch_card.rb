@@ -18,6 +18,7 @@ class PunchCard < ApplicationRecord
   def self.filtered(filter)
     flt = filter.filter
     all
+      .by_account()
       .by_name(flt["name"])
       .by_work_date(flt["work_date"])
       .by_work_minutes(flt["work_minutes"])

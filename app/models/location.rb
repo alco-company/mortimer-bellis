@@ -11,6 +11,7 @@ class Location < ApplicationRecord
     flt = filter.filter
 
     all
+      .by_account()
       .by_name(flt["name"])
       .by_location_color(flt["location_color"])
   rescue
