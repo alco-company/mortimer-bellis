@@ -3,8 +3,8 @@ module DefaultActions
 
   included do
     before_action :set_resource, only: %i[ new show edit update destroy ]
-    before_action :set_filter, only: %i[ index ]
-    before_action :set_resources, only: %i[ index ]
+    before_action :set_filter, only: %i[ index destroy ]
+    before_action :set_resources, only: %i[ index destroy ]
 
     # GET /employees or /employees.json
     def index
@@ -62,7 +62,11 @@ module DefaultActions
 
     # DELETE /employees/1 or /employees/1.json
     def destroy
-      @resource.destroy!
+      if params[:all]
+        @resources.destroy_all
+      else
+        @resource.destroy!
+      end
 
       respond_to do |format|
         format.html { redirect_to resources_url, status: 303, notice: t(".post") }

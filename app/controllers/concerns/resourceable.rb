@@ -8,7 +8,7 @@ module Resourceable
 
     # Use callbacks to share common setup or constraints between actions.
     def set_resource
-      @resource = params_id ? resource_class.find(params_id) : resource_class.new
+      @resource = params_id ? (resource_class.find(params_id) rescue resource_class.new) : resource_class.new
       # if %w[employee punch].include? resource_class.to_s.downcase
       #   @resource.state = "OUT" if @resource.state.nil?
       # end
@@ -48,6 +48,10 @@ module Resourceable
 
     def filtering_url
       new_filter_url(url: resources_url, filter_form: params[:controller].split("/").last)
+    end
+
+    def delete_all_url
+      url_for(controller: params[:controller], id: 1, action: :show, all: true)
     end
 
     def any_filters?

@@ -71,10 +71,22 @@ class Contextmenu < Phlex::HTML
         class: "block px-3 py-1 text-sm leading-6 text-gray-900",
         role: "menuitem",
         tabindex: "-1" do
-        plain "Filter"
+        plain I18n.t(".filter")
         span(class: "sr-only") do
           plain ", "
           plain "filter"
+        end
+      end
+      whitespace
+      link_to helpers.delete_all_url(),
+        data: { turbo_method: :delete, turbo_confirm: "Are you sure?", turbo_stream: true, action: "click->contextmenu#hide" },
+        class: "block px-3 py-1 text-sm leading-6 text-gray-900",
+        role: "menuitem",
+        tabindex: "-1" do
+        plain I18n.t(".delete_all")
+        span(class: "sr-only") do
+          plain ", "
+          plain "delete all"
         end
       end
       whitespace
@@ -83,7 +95,7 @@ class Contextmenu < Phlex::HTML
         class: "block px-3 py-1 text-sm leading-6 text-gray-900", 
         data: { turbo_stream: true }
         ) do 
-        plain "Importér"
+        plain I18n.t(".import")
         span(class: "sr-only") do
           plain ", "
           plain "import"
@@ -96,7 +108,7 @@ class Contextmenu < Phlex::HTML
         role: "menuitem",
         tabindex: "-1",
         data: { turbo_frame: @turbo_frame }) do
-        plain "Eksportér"
+        plain I18n.t(".export")
         span(class: "sr-only") do
           plain ", "
           plain "export"
@@ -127,7 +139,7 @@ class Contextmenu < Phlex::HTML
         role: "menuitem",
         data: { turbo_action: "advance", turbo_frame: @turbo_frame },
         tabindex: "-1") do
-        plain "Ret"
+        plain I18n.t(".edit")
         span(class: "sr-only") do
           plain ", "
           plain resource.name rescue ""
@@ -138,8 +150,8 @@ class Contextmenu < Phlex::HTML
         class: "block px-3 py-1 text-sm leading-6 text-gray-900",
         role: "menuitem",
         tabindex: "-1",
-        data: { turbo_method: :delete, turbo_confirm: "Ar you sure?" }) do
-        plain "Slet"
+        data: { turbo_method: :delete, turbo_confirm: "Are you sure?" }) do
+        plain I18n.t(".delete")
         span(class: "sr-only") do
           plain ", "
           plain resource.name rescue ""

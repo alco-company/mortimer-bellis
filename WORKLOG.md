@@ -18,6 +18,7 @@
 
 * refactor inheritance to base_controller
 * refactor punch code
+* delete_all item on contextmenu for lists
 
 ### 2/5/2024
 
@@ -28,7 +29,6 @@
 * add name, more to user + edit profile
 * remove skip_before... on modal_controller
 * eager_load on production
-* delete_all item on contextmenu for lists
 * account not being set on models
 
 ### 1/5/2024

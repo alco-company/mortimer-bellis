@@ -16,4 +16,19 @@ class ApplicationRecord < ActiveRecord::Base
     else; nil
     end
   end
+
+
+  def say msg, level = :info
+    Rails.logger.send( level, '-----------------')
+    Rails.logger.send( level, msg)
+    Rails.logger.send( level, '-----------------')
+  end
+
+
+  def self.say msg, level = :info
+    Rails.logger.send( level, '-----------------')
+    Rails.logger.send( level, msg)
+    Rails.logger.send( level, '-----------------')
+  end
+
 end
