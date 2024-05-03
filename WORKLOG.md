@@ -22,7 +22,7 @@
 * refactor punch_card recalculate
 * fix import employee regression
 * add pos/punch_clock
-* 
+* missing filter on employees
 
 ### 2/5/2024
 
