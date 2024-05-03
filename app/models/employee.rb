@@ -1,13 +1,16 @@
 class Employee < ApplicationRecord
   include Accountable
   include TimeZoned
+  include Punchable
 
   belongs_to :team
+  has_many :punch_cards, dependent: :destroy
+  has_many :punches, dependent: :destroy
 
   has_secure_token :access_token
 
   scope :by_name, ->(name) { where("name LIKE ? or pincode LIKE ? or employee_ident LIKE ? or job_title LIKE ? or cell_phone LIKE ? or email LIKE ?", "%#{name}%", "%#{name}%", "%#{name}%", "%#{name}%", "%#{name}%", "%#{name}%") if name.present? }
-  scope :by_team, ->(team) { where("team LIKE ?", "%#{team}%") if team.present? }
+  scope :by_team, ->(team) { joins(:team).where("teams.name LIKE ?", "%#{team}%") if team.present? }
   scope :by_locale, ->(locale) { where("locale LIKE ?", "%#{locale}%") if locale.present? }
   scope :by_time_zone, ->(time_zone) { where("time_zone LIKE ?", "%#{time_zone}%") if time_zone.present? }
   scope :by_pincode, ->(pincode) { where("pincode LIKE ?", "%#{pincode}%").order(pincode: :asc) if pincode.present? }
