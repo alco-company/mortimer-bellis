@@ -10,9 +10,13 @@
 * add blackhole
 * add Stripe payments - https://gorails.com/episodes/one-time-payments-with-pay-and-stripe
 * add web push notifications
-* add login
+* add pos/punch_clock
 
 ## CHANGELOG
+
+### 3/5/2024
+
+* refactor inheritance to base_controller
 
 ### 2/5/2024
 
