@@ -20,6 +20,7 @@ da:
       post: Medarbejderen blev slettet
 
     list:
+      employee_status: Medarbejder status
       title: Medarbejdere
       new: Ny medarbejder
       edit: Rediger
@@ -36,6 +37,11 @@ da:
       new: Ny medarbejder
       edit: Rediger medarbejder
 
+    errors:
+      messages:
+        name_exist_for_team: "En medarbejder med dette navn findes allerede på dette hold"
+        pincode_exist_for_account: "En medarbejder med denne pinkode findes allerede i systemet"
+        payroll_employee_ident_exist_for_account: "En medarbejder med dette løn nummer findes allerede i systemet"
     new:
       title: Ny medarbejder
       create: Opret

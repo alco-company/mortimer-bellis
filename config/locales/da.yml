@@ -5,8 +5,8 @@ da:
   import_employee: Videre
   import_employees: Indlæs medarbejder stamdata
   form_errors_prohibited: "%{errors} fejl forhindrede denne post i at blive gemt"
-  yes: Ja
-  no: Nej
+  "yes": Ja
+  "no": Nej
   edit: Redigér
   update: Opdatér
   save: Gem
@@ -88,7 +88,7 @@ da:
         layout: Skabelon
         body: Indhold
       employee:
-        team_id:
+        team_id: "Hold/arbejdsgruppe"
         name: Navn
         pincode: Pinkode
         access_token: API nøgle
@@ -119,7 +119,6 @@ da:
         locale: sprog
         time_zone: tidszone
         allowed_ot_minutes: Tilladt overtid
-        team_id: Hold/arbejdsgruppe
 
       event:
         minutes: Minutter
@@ -398,13 +397,6 @@ da:
         other: brugere
       
 
-    errors:
-      messages:
-        record_invalid: 'Godkendelse gik galt: %{errors}'
-        restrict_dependent_destroy:
-          has_one: Kunne ikke slette posten fordi en afhængig %{record} findes
-          has_many: Kunne ikke slette posten fordi afhængige %{record} findes
-
   date:
     single_day_names:
     - M
@@ -519,9 +511,15 @@ da:
       day: Dag
       month: Måned
       year: År
+
   errors:
     format: "%{attribute} %{message}"
     messages:
+      already_confirmed: "er allerede bekræftet, prøv venligst at logge ind"
+      confirmation_period_expired: "skal bekræftes inden %{period}, forespørg venligst om en ny"
+      expired: "er udløbet, venligst anmod om en ny"
+      not_found: "blev ikke fundet"
+      not_locked: "blev ikke låst"
       accepted: skal accepteres
       blank: skal udfyldes
       confirmation: stemmer ikke overens med %{attribute}
@@ -543,6 +541,9 @@ da:
       present: skal være tom
       required: skal udfyldes
       taken: er allerede brugt
+      not_saved: 
+        one: "1 fejl forhindrede at %{resource} kunne gemmes:"
+        other: "%{count} fejl forhindrede at %{resource} kunne gemmes:"
       too_long:
         one: er for lang (højst 1 tegn)
         other: er for lang (højst %{count} tegn)
@@ -557,6 +558,7 @@ da:
       header:
         one: En fejl forhindrede %{model} i at blive gemt
         other: "%{count} fejl forhindrede %{model} i at blive gemt"
+
   helpers:
     select:
       prompt: Vælg...
@@ -644,4 +646,3 @@ da:
       week_number: "%W"
       short_week_number: "%w"
     pm: ''
-

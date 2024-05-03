@@ -10,6 +10,7 @@ da:
       post: Holdet blev slettet
         
     list:
+      employee_status: Medarbejder status
       title: Hold/grupper
       new: Nyt hold
       edit: Rediger
@@ -25,6 +26,8 @@ da:
       state: Status
       updated_at: Opdateret den
 
+    show:
+      employee_status: Medarbejder status
     form:
       new: Nyt hold
       edit: Rediger hold

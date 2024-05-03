@@ -13,9 +13,12 @@ class Account < ApplicationRecord
 
   scope :by_account, ->() { all }
 
-  scope :by_name, ->(name) { where("name LIKE ?", "%#{name}%") if name.present? }
+  scope :by_name, ->(name) { where("name LIKE ? or email LIKE ?", "%#{name}%", "%#{name}%") if name.present? }
   scope :by_locale, ->(locale) { where("locale LIKE ?", "%#{locale}%") if locale.present? }
   scope :by_time_zone, ->(time_zone) { where("time_zone LIKE ?", "%#{time_zone}%") if time_zone.present? }
+
+  validates :name, presence: true, uniqueness: { message: I18n.t("accounts.errors.messages.name_exist") }
+  validates :email, presence: true
 
   def self.filtered(filter)
     flt = filter.filter

@@ -15,7 +15,9 @@ class Employee < ApplicationRecord
   scope :by_time_zone, ->(time_zone) { where("time_zone LIKE ?", "%#{time_zone}%") if time_zone.present? }
   scope :by_pincode, ->(pincode) { where("pincode LIKE ?", "%#{pincode}%").order(pincode: :asc) if pincode.present? }
 
-  validates :name, presence: true
+  validates :name, presence: true, uniqueness: { scope: [ :account_id, :team_id ], message: I18n.t("employees.errors.messages.name_exist_for_team") }
+  validates :pincode, presence: true, uniqueness: { scope: :account_id, message: I18n.t("employees.errors.messages.pincode_exist_for_account") }
+  validates :payroll_employee_ident, presence: true, uniqueness: { scope: :account_id, message: I18n.t("employees.errors.messages.payroll_employee_ident_exist_for_account") }
 
   def self.filtered(filter)
     flt = filter.filter

@@ -19,7 +19,7 @@ module.exports = {
     "./app/javascript/**/*.js",
     "./app/views/**/*.{erb,haml,html,slim}",
     "./public/*.html",
-    "./config/locales/*.yml",
+    "./config/locales/**/*.yml",
   ],
   theme: {
     extend: {

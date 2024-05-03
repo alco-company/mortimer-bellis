@@ -1,22 +1,28 @@
-<h2><%= t "devise.invitations.edit.header" %></h2>
-
-<%= form_for(resource, as: resource_name, url: invitation_path(resource_name), html: { method: :put }) do |f| %>
-  <%= render "users/shared/error_messages", resource: resource %>
-  <%= f.hidden_field :invitation_token, readonly: true %>
-
-  <% if f.object.class.require_password_on_accepting %>
-    <div class="field">
-      <%= f.label :password %><br />
-      <%= f.password_field :password %>
-    </div>
-
-    <div class="field">
-      <%= f.label :password_confirmation %><br />
-      <%= f.password_field :password_confirmation %>
-    </div>
-  <% end %>
-
-  <div class="actions">
-    <%= f.submit t("devise.invitations.edit.submit_button") %>
+<div class="my-6 mx-auto w-96">
+  <div class="flex flex-shrink-0 items-center">
+  <%= render_logo %>
   </div>
-<% end %>
+  <h1 class="font-bold text-4xl"> <%= t("devise.invitations.edit.header") %> </h1>
+  <div class="text-gray-600 text-sm"><%== t("devise.invitations.edit.description") %></div>
+    <%= form_for(resource, as: resource_name, url: invitation_path(resource_name), html: { method: :put }) do |f| %>
+      <%= render "users/shared/error_messages", resource: resource %>
+      <%= f.hidden_field :invitation_token, readonly: true %>
+
+      <% if f.object.class.require_password_on_accepting %>
+        <div class="mort-field">
+          <%= f.label :password %><br />
+          <%= f.password_field :password, class: "mort-form-text" %>
+        </div>
+
+        <div class="mort-field">
+          <%= f.label :password_confirmation %><br />
+          <%= f.password_field :password_confirmation, class: "mort-form-text" %>
+        </div>
+      <% end %>
+
+      <div class="actions mort-field">
+        <%= f.submit t("devise.invitations.edit.submit_button"), class: "mort-btn-primary" %>
+      </div>
+      <div class="text-gray-400 text-xs"><%== t("devise.invitations.edit.branding_info", inviter_name: resource.invited_by.name) %></div>
+    <% end %>
+</div>

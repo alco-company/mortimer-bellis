@@ -141,8 +141,8 @@ class ApplicationForm < Superform::Rails::Form
 
   def error_messages
     if model.errors.any?
-      div(style: "color: red;") do
-        h2 { I18n.t(:form_errors_prohibited, errors: model.errors.count) }
+      div(id: "error_explanation", class: "mt-4") do
+        h2(class: "mort-err-resume") { I18n.t(:form_errors_prohibited, errors: model.errors.count) }
         ul do
           model.errors.each do |error|
             li { error.full_message }
