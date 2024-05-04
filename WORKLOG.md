@@ -21,6 +21,8 @@
 
 * mark m pink if superadmin
 * add deleting all in background job
+* allow superadmin to 'change' account
+* allow superadmin to do global queries
 
 ### 3/5/2024
 

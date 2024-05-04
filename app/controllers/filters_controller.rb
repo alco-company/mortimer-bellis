@@ -3,13 +3,13 @@ class FiltersController < BaseController
 
   def new
     @filter_form = params[:filter_form]
-    @filter = Filter.by_account.where(view: params[:filter_form]).take || Filter.new
+    @filter = Filter.by_account().where(view: params[:filter_form]).take || Filter.new
     @url = params[:url]
     @filter.filter ||= {}
   end
 
   def index
-    @pagy, @records = pagy(Filter.by_account)
+    @pagy, @records = pagy(Filter.by_account())
   end
 
   # Parameters: {"authenticity_token"=>"[FILTERED]",
@@ -23,7 +23,7 @@ class FiltersController < BaseController
 
   def update
     json_filters = params[:filter].except(:filter_form, :url, :account_id, :submit)
-    filter = Filter.by_account.where(view: filter_params[:filter_form]).take
+    filter = Filter.by_account().where(view: filter_params[:filter_form]).take
 
     filter.update(account: Current.account, view: filter_params[:filter_form], filter: json_filters)
     redirect_to redirect_url

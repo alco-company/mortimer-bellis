@@ -14,7 +14,7 @@ module Accountable
       if Current.user.present?
         case Current.user.role
         when "superadmin"
-          all
+          Current.user.global_queries? ? all : where(account: Current.account)
         when "admin", "user"
           where(account: Current.account)
         end

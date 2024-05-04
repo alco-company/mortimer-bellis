@@ -13,7 +13,7 @@ class User < ApplicationRecord
     if Current.user.present?
        case Current.user.role
        when "superadmin"
-         all
+         Current.user.global_queries? ? all : where(account: Current.account)
        when "admin"
          where(account: Current.account)
        when "user"
@@ -33,7 +33,7 @@ class User < ApplicationRecord
     flt = filter.filter
 
     all
-      .by_account
+      .by_account()
       .by_email(flt["email"])
       .by_role(flt["role"])
       .by_locale(flt["locale"])
