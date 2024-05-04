@@ -30,6 +30,7 @@
 * object count on accounts
 * fix importing employees
 * fix Teams being listed on other accounts
+* fix Employees punching on other accounts
 
 ### 3/5/2024
 

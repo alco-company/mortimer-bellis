@@ -19,7 +19,11 @@ module Accountable
           where(account: Current.account)
         end
       else
-        all
+        if Current.account.present?
+          where(account: Current.account)
+        else
+          all
+        end
       end
     }
   end
