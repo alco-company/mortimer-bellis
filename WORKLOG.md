@@ -14,13 +14,13 @@
 * add EU state report
 * add pos/employee
 * fix importing employees
-* add deleting all in background job
 
 ## CHANGELOG
 
 ### 4/5/2024
 
 * mark m pink if superadmin
+* add deleting all in background job
 
 ### 3/5/2024
 

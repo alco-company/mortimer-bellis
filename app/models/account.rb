@@ -9,6 +9,9 @@ class Account < ApplicationRecord
   has_many :filters, dependent: :destroy
   has_many :locations, dependent: :destroy
   has_many :punch_clocks, dependent: :destroy
+  has_many :punch_cards, dependent: :destroy
+  has_many :punches, dependent: :destroy
+  has_many :employees, dependent: :destroy
   has_many :teams, dependent: :destroy
 
   scope :by_account, ->() { all }
