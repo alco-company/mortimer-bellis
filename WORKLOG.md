@@ -29,6 +29,7 @@
 * some fancy listing of users + yields on text, date columns
 * object count on accounts
 * fix importing employees
+* fix Teams being listed on other accounts
 
 ### 3/5/2024
 
