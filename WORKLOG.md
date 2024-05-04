@@ -2,6 +2,8 @@
 
 ## ROADMAP
 
+* some day - down the road we will need measured - https://github.com/Shopify/measured
+* make the move to XRB - https://socketry.github.io/xrb-rails/guides/getting-started/index
 * endless scroll - https://www.stefanwienert.de/blog/2021/04/17/endless-scroll-with-turbo-streams/
 * add litestream - https://fractaledmind.github.io/2024/04/15/sqlite-on-rails-the-how-and-why-of-optimal-performance/
 * add handling of constants - https://dev.to/vladhilko/say-goodbye-to-messy-constants-a-new-approach-to-moving-constants-away-from-your-model-58i1
@@ -13,7 +15,6 @@
 * add mail report
 * add EU state report
 * add pos/employee
-* fix importing employees
 
 ## CHANGELOG
 
@@ -25,6 +26,11 @@
 * allow superadmin to do global queries
 * accounts cannot be queried on account_id
 * user cannot become admin, admin cannot become superadmin
+* some fancy listing of users + yields on text, date columns
+* object count on accounts
+* fix importing employees
+* fix Teams being listed on other accounts
+* fix Employees punching on other accounts
 
 ### 3/5/2024
 

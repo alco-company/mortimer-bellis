@@ -3,14 +3,17 @@ class TextColumn < Phlex::HTML
 
   attr_accessor :field
 
-  def initialize(field:, css: nil)
+  def initialize(field:, css: nil, &block)
     @field = field
     @class = css || "truncate"
   end
 
-  def view_template
+  def view_template(&)
     field.blank? ?
       div { "&nbsp;".html_safe } :
-      div(class: @class) { field }
+      div(class: @class) do
+         plain field
+         yield if block_given?
+      end
   end
 end

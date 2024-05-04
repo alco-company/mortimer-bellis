@@ -1,0 +1,1 @@
+bin/rails server -u puma -b 'ssl://0.0.0.0:3000?key=config/box.mortimer_3-key.pem&cert=config/box.mortimer_3.pem&verify_mode=peer&ca=config/box.mortimer_3.pem'

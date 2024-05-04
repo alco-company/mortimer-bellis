@@ -1,3 +1,4 @@
+require "csv"
 class ImportEmployeesJob < ApplicationJob
   queue_as :default
 
@@ -30,8 +31,9 @@ class ImportEmployeesJob < ApplicationJob
   #
   #
   def field(record, emp, field)
-    if field == "pincode"
-      record[field] = Employee.next_pincode(emp[field])
+    case field
+    when "pincode"; record[field] = Employee.next_pincode(emp[field])
+    when "payroll_employee_ident"; record[field] = Employee.next_payroll_employee_ident(emp[field])
     else
       record[field] = emp[field].present? ? emp[field] : nil
     end
