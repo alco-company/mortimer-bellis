@@ -48,8 +48,9 @@ class User < ApplicationRecord
   end
 
   def add_role
+    r = 0
     r = 1 if self.account.users.count == 1
     r = 2 if Account.unscoped.count == 1
-    self.update(role: r || 0)
+    self.update(role: r)
   end
 end

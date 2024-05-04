@@ -14,7 +14,6 @@
 * add EU state report
 * add pos/employee
 * fix importing employees
-* user cannot become admin, admin cannot become superadmin
 
 ## CHANGELOG
 
@@ -25,6 +24,7 @@
 * allow superadmin to 'change' account
 * allow superadmin to do global queries
 * accounts cannot be queried on account_id
+* user cannot become admin, admin cannot become superadmin
 
 ### 3/5/2024
 

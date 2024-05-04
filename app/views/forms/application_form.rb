@@ -23,6 +23,15 @@ class ApplicationForm < Superform::Rails::Form
     end
   end
 
+  class EnumSelectField < Superform::Rails::Components::SelectField
+    def options(*collection)
+      collection.flatten!
+      map_options(collection).each do |key, value|
+        option(selected: field.value.include?(key), value: key) { value }
+      end
+    end
+  end
+
   class MultipleSelectField < Superform::Rails::Components::SelectField
     def options(*collection)
       map_options(collection).each do |key, value|
@@ -64,6 +73,9 @@ class ApplicationForm < Superform::Rails::Form
   class Field < Field
     def multiple_select(*collection, **attributes, &)
       MultipleSelectField.new(self, attributes: attributes, collection: collection, &)
+    end
+    def enum_select(*collection, **attributes, &)
+      EnumSelectField.new(self, attributes: attributes, collection: collection, &)
     end
     def week(**attributes)
       WeekField.new(self, attributes: attributes)
