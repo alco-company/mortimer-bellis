@@ -28,6 +28,7 @@
 * accounts cannot be queried on account_id
 * user cannot become admin, admin cannot become superadmin
 * some fancy listing of users + yields on text, date columns
+* object count on accounts
 
 ### 3/5/2024
 
