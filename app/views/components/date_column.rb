@@ -3,15 +3,18 @@ class DateColumn < Phlex::HTML
 
   attr_accessor :field
 
-  def initialize(field:, css: nil)
+  def initialize(field:, css: nil, &block)
     @field = field
     @class = css || "truncate"
   end
 
-  def view_template
+  def view_template(&)
     field.blank? ?
       div { "&nbsp;".html_safe } :
-      div(class: @class) { format_date field }
+      div(class: @class) do
+         plain format_date(field)
+         yield if block_given?
+      end
   end
 
   def format_date(date)
