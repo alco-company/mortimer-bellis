@@ -15,7 +15,6 @@
 * add mail report
 * add EU state report
 * add pos/employee
-* fix importing employees
 
 ## CHANGELOG
 
@@ -29,6 +28,7 @@
 * user cannot become admin, admin cannot become superadmin
 * some fancy listing of users + yields on text, date columns
 * object count on accounts
+* fix importing employees
 
 ### 3/5/2024
 

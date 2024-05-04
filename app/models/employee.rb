@@ -49,6 +49,18 @@ class Employee < ApplicationRecord
     pin.to_s
   end
 
+  def self.next_payroll_employee_ident(pin)
+    pins = Employee.pluck(:payroll_employee_ident).compact.sort
+    pin = "0001" if pin.blank?
+    return pin if pins.empty?
+    pin = pins.last.to_i + 1 if pin.to_i < pins.last.to_i
+    return pin unless pins.include? pin
+    while pins.include? pin
+      pin = pin.to_i + 1
+    end
+    pin.to_s
+  end
+
   def get_team_color
     team.team_color.blank? ? "border-gray-50" : team.team_color
   rescue
