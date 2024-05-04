@@ -27,6 +27,7 @@ module.exports = {
         sans: ["Inter var", ...defaultTheme.fontFamily.sans],
       },
       colors: {
+        mortimer: '#1f9cd8',
         neutral: colors.slate,
         positive: colors.green,
         urge: colors.violet,
