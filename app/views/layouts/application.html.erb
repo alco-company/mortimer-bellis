@@ -41,7 +41,7 @@ end
     <main class="m-4">
       <%= yield %>
     </main>
-    <%# in honor of Tailwind "mort-flash-info mort-flash-error mort-flash-success mort-flash-warning mort-flash-notice" %>
+    <%# in honor of Tailwind "mort-flash-info mort-flash-error mort-flash-success mort-flash-warning mort-flash-notice mort-flash-timedout mort-flash-alert" %>
     <% flash.each do |type, msg| %>
       <div>
         <p data-controller="notice" class="mort-flash-<%=type%>" id="notice"><%= msg %></p>

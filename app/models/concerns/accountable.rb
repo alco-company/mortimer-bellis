@@ -10,22 +10,20 @@ module Accountable
     belongs_to :account
     # default_scope { where(account: Current.account_or_raise!) }
 
-    scope :by_account, ->() { 
+    scope :by_account, ->() {
       if Current.user.present?
         case Current.user.role
         when "superadmin"
-          all
-        when "admin","user"
+          Current.user.global_queries? ? all : where(account: Current.account)
+        when "admin", "user"
           where(account: Current.account)
         end
-      else 
-        all 
+      else
+        all
       end
     }
-
   end
 
   class_methods do
-
   end
 end

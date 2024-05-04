@@ -13,8 +13,16 @@
 * add mail report
 * add EU state report
 * add pos/employee
+* fix importing employees
 
 ## CHANGELOG
+
+### 4/5/2024
+
+* mark m pink if superadmin
+* add deleting all in background job
+* allow superadmin to 'change' account
+* allow superadmin to do global queries
 
 ### 3/5/2024
 
@@ -31,6 +39,12 @@
 * add links to employee status view on teams, employees
 * refine translations for invitations, more
 * translations and validations
+* remove reader_schema.rb - not using AON
+* missed a single payroll_employee_ident - in filter
+* missed mort-flash-notice
+* missed mort-flash-alert
+* missing by_account on filters
+* fix format (rubocop)
 
 ### 2/5/2024
 

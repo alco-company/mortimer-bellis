@@ -1,10 +1,10 @@
 class Employees::Form < ApplicationForm
   def view_template(&)
     view_only field(:access_token).input(class: "mort-form-text")
-    row field(:team_id).select(Team.order(name: :asc).select(:id,:name), prompt: I18n.t(".select_team"), class: "mort-form-text").focus
+    row field(:team_id).select(Team.order(name: :asc).select(:id, :name), prompt: I18n.t(".select_team"), class: "mort-form-text").focus
     row field(:name).input(class: "mort-form-text")
-    row field(:pincode).input(class: "mort-form-text") 
-    row field(:last_punched_at).input(class: "mort-form-text") 
+    row field(:pincode).input(class: "mort-form-text")
+    row field(:last_punched_at).input(class: "mort-form-text")
     row field(:state).input(class: "mort-form-text")
     row field(:payroll_employee_ident).input(class: "mort-form-text")
     view_only field(:punches_settled_at).date(class: "mort-form-text")

@@ -9,9 +9,12 @@ class Account < ApplicationRecord
   has_many :filters, dependent: :destroy
   has_many :locations, dependent: :destroy
   has_many :punch_clocks, dependent: :destroy
+  has_many :punch_cards, dependent: :destroy
+  has_many :punches, dependent: :destroy
+  has_many :employees, dependent: :destroy
   has_many :teams, dependent: :destroy
 
-  scope :by_account, ->() { all }
+  scope :by_account, ->() { Current.user.global_queries? ? all : where(account: Current.account) }
 
   scope :by_name, ->(name) { where("name LIKE ? or email LIKE ?", "%#{name}%", "%#{name}%") if name.present? }
   scope :by_locale, ->(locale) { where("locale LIKE ?", "%#{locale}%") if locale.present? }

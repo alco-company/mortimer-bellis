@@ -3,9 +3,9 @@
 class Users::RegistrationsController < Devise::RegistrationsController
   include Authentication
   # before_action :configure_sign_up_params, only: [:create]
-  before_action :configure_account_update_params, only: [:update]  
-  skip_before_action :authenticate_user!, only: [:new, :create]
-  skip_before_action :ensure_accounted_user, only: [:new, :create]
+  before_action :configure_account_update_params, only: [ :update ]
+  skip_before_action :authenticate_user!, only: [ :new, :create ]
+  skip_before_action :ensure_accounted_user, only: [ :new, :create ]
 
   # GET /resource/sign_up
   # def new
@@ -50,10 +50,10 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   # If you have extra params to permit, append them to the sanitizer.
   def configure_sign_up_params
-    devise_parameter_sanitizer.permit(:sign_up, keys: [:account_id,:role])
+    devise_parameter_sanitizer.permit(:sign_up, keys: [ :account_id, :role ])
   end
 
-  def account_name 
+  def account_name
     sign_up_params[:email].split("@")[1].split(".")[..-2].join(" ").capitalize
   rescue
     "Unknown Account Name"
@@ -61,7 +61,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   # If you have extra params to permit, append them to the sanitizer.
   def configure_account_update_params
-    devise_parameter_sanitizer.permit(:account_update, keys: [:name, :locale, :time_zone])
+    devise_parameter_sanitizer.permit(:account_update, keys: [ :account_id, :global_queries, :name, :locale, :time_zone ])
   end
 
   # The path used after sign up.

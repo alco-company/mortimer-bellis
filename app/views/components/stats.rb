@@ -1,14 +1,13 @@
 class Stats < ApplicationComponent
-
   attr_accessor :stats
 
-  def initialize title:, stats: nil 
+  def initialize(title:, stats: nil)
     @title = title
     @stats = stats
   end
 
   def view_template
-    div( class: "flex flex-col") do
+    div(class: "flex flex-col") do
       h3(class: "text-center text-base font-semibold w-full text-gray-900") do
         @title
       end

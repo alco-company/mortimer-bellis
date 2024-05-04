@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# module Datalon - used by ExportCsv to pull data from models 
+# module Datalon - used by ExportCsv to pull data from models
 # required to build paycheck export for Dataløn
 #
 # FORMATERING af løndata til Dataløn
@@ -11,12 +11,12 @@
 # Kolonne E: Lønfeltet
 # Kolonne F: Sats/beløb
 #
-# Vi har en arbejdsgiver med virksomhedsnummer 100111001. 
-# Arbejdsgiveren har en medarbejder i termin 51. 
-# Medarbejderen har lønnummer 0027. 
-# Medarbejderen er indplaceret i gruppen kontoret. 
-# Igen en måneds arbejde defineret ved 160,33 arbejdstimer. 
-# Medarbejderen skal have kr. 25.000,00 i ferieberettiget løn. 
+# Vi har en arbejdsgiver med virksomhedsnummer 100111001.
+# Arbejdsgiveren har en medarbejder i termin 51.
+# Medarbejderen har lønnummer 0027.
+# Medarbejderen er indplaceret i gruppen kontoret.
+# Igen en måneds arbejde defineret ved 160,33 arbejdstimer.
+# Medarbejderen skal have kr. 25.000,00 i ferieberettiget løn.
 # Medarbejderen skal også beskattes af fri telefon på kr. 216.66.
 #
 # OUTPUT
@@ -71,7 +71,7 @@ module Datalon
     # if speed becomes an issue look here: https://pganalyze.com/blog/materialized-views-ruby-rails
     #
     def payroll_view(name, fd, td, ids = nil)
-      where_ids = (ids.nil? or ids.empty?) ? " " : " AND employees.id IN (#{[ids].flatten.join(',')}) "
+      where_ids = (ids.nil? or ids.empty?) ? " " : " AND employees.id IN (#{[ ids ].flatten.join(',')}) "
       PunchCard.find_by_sql <<-SQL
         SELECT
         SUM("payroll"."work_minutes") AS work_minutes,
@@ -86,14 +86,14 @@ module Datalon
         WHERE "payroll"."account_id" = #{Current.account.id} AND
         payroll.punches_settled_at IS NULL AND
         payroll.work_date >= '#{fd}' AND
-        payroll.work_date <= '#{td}' #{ where_ids } 
+        payroll.work_date <= '#{td}' #{ where_ids }#{' '}
   			GROUP BY "group_name", "employees"."payroll_employee_ident", "employees"."name", "employees"."id"
         ORDER BY "employees"."payroll_employee_ident"
       SQL
     end
 
     def punch_card_view(fd, td, ids = nil)
-      where_ids = (ids.nil? or ids.empty?) ? " " : " AND employees.id IN (#{[ids].flatten.join(',')}) "
+      where_ids = (ids.nil? or ids.empty?) ? " " : " AND employees.id IN (#{[ ids ].flatten.join(',')}) "
       PunchCard.find_by_sql <<-SQL
         SELECT
         "punch_cards"."id"

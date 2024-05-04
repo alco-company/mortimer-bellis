@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_05_02_152636) do
+ActiveRecord::Schema[7.2].define(version: 2024_05_04_075549) do
   create_table "accounts", force: :cascade do |t|
     t.string "name"
     t.string "email"
@@ -312,6 +312,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_05_02_152636) do
     t.integer "invited_by_id"
     t.integer "invitations_count", default: 0
     t.string "name"
+    t.boolean "global_queries", default: false
     t.index ["account_id"], name: "index_users_on_account_id"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["invitation_token"], name: "index_users_on_invitation_token", unique: true
@@ -329,6 +330,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_05_02_152636) do
   add_foreign_key "filters", "accounts"
   add_foreign_key "filters", "accounts"
   add_foreign_key "filters", "accounts"
+  add_foreign_key "filters", "accounts", on_delete: :cascade
   add_foreign_key "locations", "accounts", on_delete: :cascade
   add_foreign_key "punch_cards", "accounts"
   add_foreign_key "punch_cards", "accounts", on_delete: :cascade

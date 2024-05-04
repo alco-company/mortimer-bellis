@@ -91,16 +91,16 @@ class Contextmenu < Phlex::HTML
       end
       whitespace
       link_to(
-        helpers.modal_new_url(modal_form: "import", resource_class: resource_class.to_s.underscore, modal_next_step: "preview"), 
-        class: "block px-3 py-1 text-sm leading-6 text-gray-900", 
+        helpers.modal_new_url(modal_form: "import", resource_class: resource_class.to_s.underscore, modal_next_step: "preview"),
+        class: "block px-3 py-1 text-sm leading-6 text-gray-900",
         data: { turbo_stream: true }
-        ) do 
+        ) do
         plain I18n.t(".import")
         span(class: "sr-only") do
           plain ", "
           plain "import"
         end
-      end if resource_class.to_s == 'Employee'
+      end if resource_class.to_s == "Employee"
       whitespace
       link_to(
         helpers.resources_url() + ".csv",

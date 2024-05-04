@@ -5,7 +5,7 @@ class Pos::EmployeeController < Pos::PosController
 
 
   def index
-    @employees = Employee.by_account
+    @employees = Employee.by_account()
   end
 
   # #

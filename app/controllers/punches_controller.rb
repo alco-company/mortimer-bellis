@@ -66,10 +66,10 @@ class PunchesController < MortimerController
 
     #
     # implement on the controller inheriting this concern
-    def create_callback res
+    def create_callback(res)
       PunchCard.recalculate res.employee, false, res.punched_at
     end
-    def update_callback res 
+    def update_callback(res)
       PunchCard.recalculate res.employee, false, res.punched_at
     end
 end

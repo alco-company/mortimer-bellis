@@ -139,29 +139,6 @@
       "note": ""
     },
     {
-      "warning_type": "SQL Injection",
-      "warning_code": 0,
-      "fingerprint": "8562d44fc4c2358ff644ac9c30ff114a389db6fb3e2c20c3a34530fff12ec3e4",
-      "check_name": "SQL",
-      "message": "Possible SQL injection",
-      "file": "app/models/concerns/datalon.rb",
-      "line": 80,
-      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
-      "code": "PunchCard.find_by_sql(\"        SELECT\\n        SUM(\\\"payroll\\\".\\\"work_minutes\\\") AS work_minutes,\\n        SUM(\\\"payroll\\\".\\\"ot1_minutes\\\") AS ot1_minutes,\\n        SUM(\\\"payroll\\\".\\\"ot2_minutes\\\") AS ot2_minutes,\\n        '#{name}' AS group_name,\\n        \\\"employees\\\".\\\"payroll_employee_ident\\\" AS emp_number,\\n        \\\"employees\\\".\\\"id\\\" AS emp_id,\\n        \\\"employees\\\".\\\"name\\\" AS emp_name\\n        FROM \\\"punch_cards\\\" AS \\\"payroll\\\"\\n        INNER JOIN \\\"employees\\\" ON \\\"payroll\\\".\\\"employee_id\\\" = \\\"employees\\\".\\\"id\\\"\\n        WHERE \\\"payroll\\\".\\\"account_id\\\" = #{Current.account.id} AND\\n        payroll.punches_settled_at IS NULL AND\\n        payroll.work_date >= '#{fd}' AND\\n        payroll.work_date <= '#{td}' #{(\" \" or \" AND employees.id IN (#{[ids].flatten.join(\",\")}) \")} \\n  \\t\\t\\tGROUP BY \\\"group_name\\\", \\\"employees\\\".\\\"payroll_employee_ident\\\", \\\"employees\\\".\\\"name\\\", \\\"employees\\\".\\\"id\\\"\\n        ORDER BY \\\"employees\\\".\\\"payroll_employee_ident\\\"\\n\")",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "Datalon",
-        "method": "payroll_view"
-      },
-      "user_input": "name",
-      "confidence": "Medium",
-      "cwe_id": [
-        89
-      ],
-      "note": ""
-    },
-    {
       "warning_type": "Mass Assignment",
       "warning_code": 105,
       "fingerprint": "8c787b46305e7f058b1f9a2a8a577b8b67e339626d0a09805203dad7e165cc55",
@@ -277,6 +254,29 @@
       "note": ""
     },
     {
+      "warning_type": "SQL Injection",
+      "warning_code": 0,
+      "fingerprint": "dcd729bac068e0b81cceee558a0ad17af38bd77493b75f4bfa24284107b9a160",
+      "check_name": "SQL",
+      "message": "Possible SQL injection",
+      "file": "app/models/concerns/datalon.rb",
+      "line": 80,
+      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
+      "code": "PunchCard.find_by_sql(\"        SELECT\\n        SUM(\\\"payroll\\\".\\\"work_minutes\\\") AS work_minutes,\\n        SUM(\\\"payroll\\\".\\\"ot1_minutes\\\") AS ot1_minutes,\\n        SUM(\\\"payroll\\\".\\\"ot2_minutes\\\") AS ot2_minutes,\\n        '#{name}' AS group_name,\\n        \\\"employees\\\".\\\"payroll_employee_ident\\\" AS emp_number,\\n        \\\"employees\\\".\\\"id\\\" AS emp_id,\\n        \\\"employees\\\".\\\"name\\\" AS emp_name\\n        FROM \\\"punch_cards\\\" AS \\\"payroll\\\"\\n        INNER JOIN \\\"employees\\\" ON \\\"payroll\\\".\\\"employee_id\\\" = \\\"employees\\\".\\\"id\\\"\\n        WHERE \\\"payroll\\\".\\\"account_id\\\" = #{Current.account.id} AND\\n        payroll.punches_settled_at IS NULL AND\\n        payroll.work_date >= '#{fd}' AND\\n        payroll.work_date <= '#{td}' #{(\" \" or \" AND employees.id IN (#{[ids].flatten.join(\",\")}) \")} \\n  \\t\\t\\tGROUP BY \\\"group_name\\\", \\\"employees\\\".\\\"payroll_employee_ident\\\", \\\"employees\\\".\\\"name\\\", \\\"employees\\\".\\\"id\\\"\\n        ORDER BY \\\"employees\\\".\\\"payroll_employee_ident\\\"\\n\")",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Datalon",
+        "method": "payroll_view"
+      },
+      "user_input": "name",
+      "confidence": "Medium",
+      "cwe_id": [
+        89
+      ],
+      "note": ""
+    },
+    {
       "warning_type": "Mass Assignment",
       "warning_code": 105,
       "fingerprint": "fb222178f5d03b8ecaf3d2d9ca0010e8a8e54f2635196abf6371a8af6e8770b4",
@@ -298,8 +298,53 @@
         915
       ],
       "note": ""
+    },
+    {
+      "warning_type": "Denial of Service",
+      "warning_code": 76,
+      "fingerprint": "fe260ed1c21867d988aed9317f12aa068839cb08596beba91f8870a0013be1e8",
+      "check_name": "RegexDoS",
+      "message": "Parameter value used in regular expression",
+      "file": "app/views/pos/employee/_team_list.html.erb",
+      "line": 3,
+      "link": "https://brakemanscanner.org/docs/warning_types/denial_of_service/",
+      "code": "/#{params[:t]}/",
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "Pos::EmployeeController",
+          "method": "index",
+          "line": 9,
+          "file": "app/controllers/pos/employee_controller.rb",
+          "rendered": {
+            "name": "pos/employee/index",
+            "file": "app/views/pos/employee/index.html.erb"
+          }
+        },
+        {
+          "type": "template",
+          "name": "pos/employee/index",
+          "line": 15,
+          "file": "app/views/pos/employee/index.html.erb",
+          "rendered": {
+            "name": "pos/employee/_team_list",
+            "file": "app/views/pos/employee/_team_list.html.erb"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "pos/employee/_team_list"
+      },
+      "user_input": "params[:t]",
+      "confidence": "High",
+      "cwe_id": [
+        20,
+        185
+      ],
+      "note": ""
     }
   ],
-  "updated": "2024-05-02 07:15:20 +0200",
+  "updated": "2024-05-04 10:20:41 +0200",
   "brakeman_version": "6.1.2"
 }

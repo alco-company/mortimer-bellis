@@ -14,6 +14,7 @@ class PunchClock < ApplicationRecord
     flt = filter.filter
 
     all
+      .by_account()
       .by_name(flt["name"])
       .by_location(flt["location"])
       .by_ip_addr(flt["ip_addr"])

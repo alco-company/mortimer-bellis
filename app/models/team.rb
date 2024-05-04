@@ -16,6 +16,7 @@ class Team < ApplicationRecord
     flt = filter.filter
 
     all
+      .by_account()
       .by_name(flt["name"])
       .by_team_color(flt["team_color"])
       .by_locale(flt["locale"])
