@@ -32,6 +32,7 @@
 
 * add pages - current roadmap
 * add Redcarpet for Markdown
+* allow admin of pages
 
 ### 4/5/2024
 

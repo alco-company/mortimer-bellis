@@ -1,13 +1,13 @@
 <div class="w-full">
   <div class="flex justify-between items-center">
     <div>
-      <h1 class="font-bold text-4xl"> <%= @page.title %> </h1>
+      <h1 class="font-bold text-4xl"> <%= @resource.title %> </h1>
     </div>
     <div class="grid gap-2 grid-cols-1 lg:grid-cols-2 items-center">
-      <%= link_to( t("pages.edit"), edit_page_url(@page), class: "mort-btn-primary" ) if user_signed_in? %>
+      <%= link_to( t("pages.edit"), edit_page_url(@resource), class: "mort-btn-primary" ) if user_signed_in? %>
     </div>
   </div>
   <div class="">
-    <%= markdown @page.content %>
+    <%= markdown @resource.content %>
   </div>
 </div>
