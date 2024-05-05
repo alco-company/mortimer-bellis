@@ -20,6 +20,7 @@ da:
   delete_all_later: Alle poster slettes - i baggrunden, vent venligst...
   
   menu:
+    login: Log ind
     home: Hjem
     accounts: Konti
     users: Brugere

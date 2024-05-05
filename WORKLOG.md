@@ -2,6 +2,7 @@
 
 ## ROADMAP
 
+* when we need a blogging engine - https://github.com/kuyio/bloak
 * some day - down the road we will need measured - https://github.com/Shopify/measured
 * make the move to XRB - https://socketry.github.io/xrb-rails/guides/getting-started/index
 * endless scroll - https://www.stefanwienert.de/blog/2021/04/17/endless-scroll-with-turbo-streams/
@@ -9,14 +10,28 @@
 * add handling of constants - https://dev.to/vladhilko/say-goodbye-to-messy-constants-a-new-approach-to-moving-constants-away-from-your-model-58i1
 * add Traefik dashboard to traefik.mortimer.pro - https://www.luizkowalski.net/traefik-with-kamal-tips-and-tricks/
 * add exporting ICS files - https://www.driftingruby.com/episodes/exporting-ics-files
+* add employee calendar - duty, free, holiday
+* add employee SMS service - welcome, EU state report
 * add blackhole
 * add Stripe payments - https://gorails.com/episodes/one-time-payments-with-pay-and-stripe
+* add employee email - welcome, EU state report
 * add web push notifications
+* release RC1
+* big test
+* add company logo
+* add prettier mail layouts
 * add mail report
-* add EU state report
-* add pos/employee
+* add state and EU state report
+* add pos/employee - add free (hrs) & sick (days)
+* add employee mugshot
+* add pos/employee - edit punches
 
 ## CHANGELOG
+
+### 5/5/2024
+
+* add pages - current roadmap
+* add Redcarpet for Markdown
 
 ### 4/5/2024
 
