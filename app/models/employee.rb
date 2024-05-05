@@ -2,6 +2,7 @@ class Employee < ApplicationRecord
   include Accountable
   include TimeZoned
   include Punchable
+  include Stateable
 
   belongs_to :team
   has_many :punch_cards, dependent: :destroy

@@ -34,6 +34,7 @@
 * add Redcarpet for Markdown
 * allow admin of pages
 * a few extensions to Redcarpet
+* fix imported employees to have access_token and default state
 
 ### 4/5/2024
 

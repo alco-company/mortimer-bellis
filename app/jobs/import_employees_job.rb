@@ -9,10 +9,10 @@ class ImportEmployeesJob < ApplicationJob
     super(**args)
     switch_locale do
       importable_employees = CSV.parse(File.read(args[:import_file]), headers: true, col_sep: ";")
-      attributes = Employee.new.attributes.keys.reject { |key| key == "id" }
+      attributes = Employee.new.attributes.keys.reject { |key| %( id, access_token, state ).include? key }
       importable_employees.each do |employee|
         begin
-          record = Employee.new
+          record = Employee.new state: :out
           attributes.each do |key|
             record = field(record, employee, key)
           end
@@ -20,7 +20,7 @@ class ImportEmployeesJob < ApplicationJob
           record = set_team(record, employee)
           record.save
         rescue => exception
-          say "ImportEmployeesJob reached and error on: #{exception.message}"
+          say "ImportEmployeesJob reached an error on: #{exception.message}"
           say "employee: #{employee}"
         end
       end
