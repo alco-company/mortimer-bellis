@@ -35,6 +35,7 @@
 * allow admin of pages
 * a few extensions to Redcarpet
 * fix imported employees to have access_token and default state
+* comment team state on form - for now
 
 ### 4/5/2024
 
