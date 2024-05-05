@@ -1,0 +1,20 @@
+<div class="w-full">
+  <div class="flex justify-between items-center">
+    <div>
+      <h1 class="font-bold text-4xl"> <%= @resource.name %> </h1>
+      <%= link_to t(".pos_employee"), pos_employee_url(api_key: @resource.access_token), class: "inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10", target: "_blank", data: { turbo_frame: '_top', turbo_stream: true } %>
+    </div>
+    <div class="grid gap-2 grid-cols-1 lg:grid-cols-2 items-center">
+      <%= svg_qr_code_link(pos_employee_url(api_key: @resource.access_token))  %>
+      <%= link_to t("#{ resource_class.table_name}.form.edit"), edit_resource_url, class: "mort-btn-primary" %>
+    </div>
+  </div>
+  <div class="">
+    <%= render resource_class.form @resource, false %>
+  </div>
+  <hr>
+  <div class="mt-3">
+    <%#= render partial: 'punch_clocks/list' %>
+    <%#= render @resource.punch_clocks %>
+  </div>
+</div>

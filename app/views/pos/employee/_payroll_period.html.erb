@@ -1,0 +1,11 @@
+<div class="grid grid-cols-1 w-full">
+  <div>FREE</div>
+  <div>SICK</div>
+  <hr class="my-3">
+  <% @resource.punches.by_payroll_period(@resource.punches_settled_at).each do |punch| %>
+    <div class="px-4 py-2 space-y-2 grid grid-cols-1 w-full">
+      <div><%= punch.punched_at %></div>
+      <div><%= punch.state %></div>
+    </div>
+  <% end %>
+</div>
