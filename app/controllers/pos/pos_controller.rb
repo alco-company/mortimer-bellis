@@ -1,3 +1,8 @@
 class Pos::PosController < ApplicationController
-  before_action :verify_token
+  #
+  #
+  layout -> { PosPunchClockLayout }
+
+  def show
+  end
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_05_05_071542) do
+ActiveRecord::Schema[7.2].define(version: 2024_05_05_150735) do
   create_table "accounts", force: :cascade do |t|
     t.string "name"
     t.string "email"
@@ -58,7 +58,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_05_05_071542) do
     t.string "access_token"
     t.datetime "last_punched_at"
     t.datetime "punches_settled_at"
-    t.string "state"
+    t.integer "state", default: 0
     t.string "job_title"
     t.datetime "birthday"
     t.datetime "hired_at"
@@ -149,7 +149,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_05_05_071542) do
     t.integer "employee_id", null: false
     t.bigint "punch_clock_id"
     t.datetime "punched_at"
-    t.string "state"
+    t.integer "state", default: 0
     t.string "remote_ip"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -270,7 +270,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_05_05_071542) do
     t.datetime "updated_at", null: false
     t.datetime "punches_settled_at"
     t.string "payroll_team_ident"
-    t.string "state"
+    t.integer "state", default: 0
     t.text "description"
     t.string "email"
     t.string "cell_phone"

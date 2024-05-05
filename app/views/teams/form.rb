@@ -6,7 +6,7 @@ class Teams::Form < ApplicationForm
     row field(:locale).input(class: "mort-form-text")
     row field(:time_zone).input(class: "mort-form-text")
     row field(:payroll_team_ident).input(class: "mort-form-text")
-    row field(:state).input(class: "mort-form-text")
+    # row field(:state).input(class: "mort-form-text")
     row field(:description).textarea(class: "mort-form-text")
     row field(:email).input(class: "mort-form-text")
     row field(:cell_phone).input(class: "mort-form-text")

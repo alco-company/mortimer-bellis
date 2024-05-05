@@ -1,8 +1,7 @@
 class Pos::EmployeeController < Pos::PosController
-  # before_action :verify_employee, except: :show
+  before_action :verify_employee, only: :show
 
-  layout -> { PosEmployeeLayout }
-
+  # layout -> { PosEmployeeLayout }
 
   def index
     @employees = Employee.by_account()
@@ -21,10 +20,13 @@ class Pos::EmployeeController < Pos::PosController
   # end
 
   private
-    def verify_token
-      # api_key = case true
-      # when params[:api_key].present?; params.delete(:api_key)
-      # when params[:punch_card].present?; params[:punch_card].delete(:api_key)
-      # end
+    def verify_employee
+      @resource = case true
+      when params[:api_key].present?; Employee.by_account.find_by(access_token: params[:api_key])
+      # when params[:employee].present?; Employee.by_account.find(params[:employee][:id])
+      # when params[:q].present?; Employee.by_account.find_by(pincode: params[:q])
+      else nil
+      end
+      redirect_to root_path and return unless @resource
     end
 end

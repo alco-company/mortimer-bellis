@@ -24,7 +24,6 @@
 * add state and EU state report
 * add pos/employee - add free (hrs) & sick (days)
 * add employee mugshot
-* add pos/employee - edit punches
 
 ## CHANGELOG
 
@@ -33,6 +32,10 @@
 * add pages - current roadmap
 * add Redcarpet for Markdown
 * allow admin of pages
+* a few extensions to Redcarpet
+* fix imported employees to have access_token and default state
+* comment team state on form - for now
+* add pos/employee - wip 1
 
 ### 4/5/2024
 
