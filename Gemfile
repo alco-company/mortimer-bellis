@@ -88,3 +88,5 @@ gem "devise", "~> 4.9"
 gem "omniauth", "~> 2.1"
 
 gem "devise_invitable", "~> 2.0"
+
+gem "redcarpet", "~> 3.6"

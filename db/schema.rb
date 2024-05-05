@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_05_04_075549) do
+ActiveRecord::Schema[7.2].define(version: 2024_05_05_071542) do
   create_table "accounts", force: :cascade do |t|
     t.string "name"
     t.string "email"
@@ -104,6 +104,14 @@ ActiveRecord::Schema[7.2].define(version: 2024_05_04_075549) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["account_id"], name: "index_locations_on_account_id"
+  end
+
+  create_table "pages", force: :cascade do |t|
+    t.string "slug"
+    t.string "title"
+    t.text "content"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "punch_cards", force: :cascade do |t|
