@@ -9,8 +9,12 @@ module PagesHelper
     }
 
     extensions = {
+      fenced_code_blocks: true,
+      tables:             true,
       autolink:           true,
+      highlight:          true,
       superscript:        true,
+      strikethrough:      true,
       disable_indented_code_blocks: true
     }
 

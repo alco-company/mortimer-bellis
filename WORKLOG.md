@@ -33,6 +33,7 @@
 * add pages - current roadmap
 * add Redcarpet for Markdown
 * allow admin of pages
+* a few extensions to Redcarpet
 
 ### 4/5/2024
 
