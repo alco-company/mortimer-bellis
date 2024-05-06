@@ -77,7 +77,7 @@ gem "pagy", "~> 8.2"
 
 gem "rqrcode", "~> 2.2"
 
-gem "activerecord-enhancedsqlite3-adapter", "~> 0.7.0"
+gem "activerecord-enhancedsqlite3-adapter", "~> 0.8.0"
 
 gem "solid_queue", "~> 0.3.0"
 
