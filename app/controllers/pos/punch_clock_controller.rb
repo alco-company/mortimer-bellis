@@ -2,8 +2,6 @@ class Pos::PunchClockController < Pos::PosController
   before_action :verify_token
   before_action :verify_employee, except: :show
 
-  layout -> { PosPunchClockLayout }
-
   def show
   end
 

@@ -27,6 +27,10 @@
 
 ## CHANGELOG
 
+### 6/5/2024
+
+* add pos/employee - wip 2
+
 ### 5/5/2024
 
 * add pages - current roadmap

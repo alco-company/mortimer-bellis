@@ -10,8 +10,8 @@ module Punchable
       stop = DateTime.current
       todays_punches.pluck(:state, :punched_at).each_with_index do |punch, i|
         case punch[0]
-        when "BREAK"; counters[:break] << ((stop.to_i - punch[1].to_i) / 60)
-        when "IN"; counters[:work] << ((stop.to_i - punch[1].to_i) / 60)
+        when :break; counters[:break] << ((stop.to_i - punch[1].to_i) / 60)
+        when :in; counters[:work] << ((stop.to_i - punch[1].to_i) / 60)
         end
         stop = punch[1]
       end
@@ -60,31 +60,13 @@ module Punchable
     end
 
     def self.at_work
-      Employee.where(state: [ "IN", "BREAK" ]).count
+      Employee.where(state: [ :in, :break ]).count
     end
 
     def this_payroll_punch_cards
       punch_cards.where("work_date > ?", punches_settled_at.to_date).order(work_date: :desc)
     rescue
       punch_cards.order(work_date: :desc)
-    end
-
-    def todays_punches
-      punches.where("punched_at >= ?", Date.current.beginning_of_day).order(punched_at: :desc)
-    end
-
-    def minutes_today_up_to_now
-      counters = { work: [], break: [] }
-      stop = DateTime.current
-      todays_punches.pluck(:state, :punched_at).each_with_index do |punch, i|
-        case punch[0]
-        when "BREAK"; counters[:break] << ((stop.to_i - punch[1].to_i) / 60)
-        when "IN"; counters[:work] << ((stop.to_i - punch[1].to_i) / 60)
-        end
-        stop = punch[1]
-      end
-      counters[:work] = counters[:work].sum; counters[:break] = counters[:break].sum
-      counters
     end
 
     def this_payroll_punches

@@ -7,7 +7,8 @@
 
   items = [
     { title: t('.today'), url: pos_employee_url(api_key: @resource.access_token), target: "_blank", data: { turbo_frame: '_top', turbo_stream: true }, class: "mort-link-primary" },
-    { title: t(".payroll_period"), url: pos_employee_url(api_key: @resource.access_token, payroll_period: true), class: "mort-link-primary" }
+    { title: t(".payroll_period"), url: pos_employee_url(api_key: @resource.access_token, tab: "payroll"), class: "mort-link-primary" },
+    { title: t(".profile"), url: pos_employee_url(api_key: @resource.access_token, tab: "profile"), class: "mort-link-primary" }
   ]
 
 %>
@@ -15,10 +16,6 @@
 <% content_for :nav do 
     render NavigationComponent.new( items: items)
   end %>
-
-<% if params[:payroll_period] == "true" %>
-<%= render partial: 'payroll_period' %>
-<% else %>
-<%= @resource.name %>
-<% end %>
+<%= render_punch_clock_header(resource: @resource, employee: nil) %>
+<%= render PunchClockEmployee.new employee: @resource, tab: params[:tab] %>
 <%= render_mortimer_footer(request: request)  %>

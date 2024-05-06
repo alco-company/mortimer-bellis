@@ -25,7 +25,6 @@ class PosEmployeeLayout < ApplicationView
         main(class: "") do
           yield
         end
-        # yield :motd
       end
     end
   end
