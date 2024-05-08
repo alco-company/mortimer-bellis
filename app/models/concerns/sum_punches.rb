@@ -4,7 +4,7 @@ module SumPunches
   class_methods do
     def recalculate(employee:, across_midnight: false, date: Date.current, from_at: nil, to_at: nil, **args)
       if from_at && to_at
-        (from_at..to_at).each do |d|
+        (from_at.to_date..to_at.to_date).each do |d|
           recalculate employee: employee, across_midnight: across_midnight, date: d
         end
       else
@@ -43,8 +43,8 @@ module SumPunches
     end
 
     def two_punches(pc, punches)
-      return unless punches.second.in? && punches.first.out?
       punches.update_all punch_card_id: pc.id
+      return unless punches.second.in? && punches.first.out?
       pc.update work_minutes: (punches.first.punched_at - punches.second.punched_at) / 60
     end
 

@@ -32,7 +32,7 @@ module Punchable
     def get_contract_hours_per_day
       get_contract_minutes_per_day divmod 60
     end
-      
+
     def get_contract_minutes_per_day
       dpp = contract_days_per_payroll > 0 ? contract_days_per_payroll : (team.contract_days_per_payroll || 0)
       if dpp == 0 # monthly

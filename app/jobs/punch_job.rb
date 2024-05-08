@@ -15,7 +15,7 @@ class PunchJob < ApplicationJob
           punch_set(employee, reason, ip, from_at.to_datetime, to_at.to_datetime)
           PunchCardJob.new.perform(account: employee.account, employee: employee, date: from_at)
         else
-          (from_at.to_date..to_at.to_date).each do |date| 
+          (from_at.to_date..to_at.to_date).each do |date|
             f_at, t_at = setTimeSlot(employee, reason, from_at.to_datetime, to_at.to_datetime, date.to_datetime)
             punch_set(employee, reason, ip, f_at, t_at)
           end
@@ -36,7 +36,7 @@ class PunchJob < ApplicationJob
 
   def setTimeSlot(employee, reason, from_at, to_at, date)
     if reason =~ /sick/
-      [ from_at.beginning_of_day + 7.hours, to_at.beginning_of_day + 7.hours + employee.get_contract_minutes_per_day.minutes ]
+      [ (date.beginning_of_day + 7.hours), date.beginning_of_day + 7.hours + employee.get_contract_minutes_per_day.minutes ]
     else
       hour = from_at.hour
       minute = from_at.min

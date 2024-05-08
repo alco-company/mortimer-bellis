@@ -19,11 +19,11 @@
 * release RC1
 * big test
 * add company logo
+* add employee mugshot
 * add prettier mail layouts
 * add mail report
 * add state and EU state report
-* add pos/employee - add free (hrs) & sick (days)
-* add employee mugshot
+* fix employee's timezone on punches
 
 ## CHANGELOG
 
@@ -34,6 +34,7 @@
 * add pos/employee - wip 3
 * add pos/employee - delete one/all on the day
 * add pos/employee - edit punches one by one
+* add pos/employee - add free (hrs) & sick (days)
 
 ### 6/5/2024
 
