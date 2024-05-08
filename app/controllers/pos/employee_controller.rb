@@ -42,10 +42,16 @@ class Pos::EmployeeController < Pos::PosController
   # or update a punch
   #
   def update
-    if @resource.update(employee_params)
-      redirect_to pos_employee_url(api_key: @resource.access_token, tab: "profile"), success: I18n.t("employee.update.success")
+    if params[:punch].present?
+      @punch = Punch.find(params[:id])
+      @punch.update(punch_params)
+      render turbo_stream: turbo_stream.replace("punch_#{@punch.id}", partial: "pos/employee/punch", locals: { punch: @punch })
     else
-      redirect_to pos_employee_url(api_key: @resource.access_token, tab: "profile"), alert: I18n.t("employee.update.failed")
+      if @resource.update(employee_params)
+        redirect_to pos_employee_url(api_key: @resource.access_token, tab: "profile"), success: I18n.t("employee.update.success")
+      else
+        redirect_to pos_employee_url(api_key: @resource.access_token, tab: "profile"), alert: I18n.t("employee.update.failed")
+      end
     end
   end
 
@@ -65,7 +71,7 @@ class Pos::EmployeeController < Pos::PosController
     end
 
     def punch_params
-      params.require(:punch).permit(:reason, :from_at, :to_at)
+      params.require(:punch).permit(:reason, :from_at, :to_at, :punched_at)
     end
 
     def verify_employee
