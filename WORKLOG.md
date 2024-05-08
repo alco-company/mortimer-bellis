@@ -27,6 +27,10 @@
 
 ## CHANGELOG
 
+### 8/5/2024
+
+* add pos/employee - wip 3
+
 ### 6/5/2024
 
 * add pos/employee - wip 2

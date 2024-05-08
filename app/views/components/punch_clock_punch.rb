@@ -67,31 +67,31 @@ class PunchClockPunch < ApplicationComponent
   end
 
   def punch_in
-    return if employee.state == "IN"
+    return if employee.in?
     button_tag helpers.t(".in"), type: "submit", form: "inform", class: "bg-green-500 text-white block rounded-md px-3 py-2 text-xl font-medium"
     form_with url: pos_punch_clock_url, id: "inform", method: :post do
       hidden_field :punch_clock, :api_key, value: resource.access_token
-      hidden_field :employee, :state, value: "IN"
+      hidden_field :employee, :state, value: :in
       hidden_field :employee, :id, value: employee.id
     end
   end
 
   def punch_break
-    return unless employee.state == "IN"
+    return unless employee.in?
     button_tag helpers.t(".break"), type: "submit", form: "breakform", class: "bg-yellow-500 text-white block rounded-md px-3 py-2 text-xl font-medium"
     form_with url: pos_punch_clock_url, id: "breakform", method: :post do
       hidden_field :punch_clock, :api_key, value: resource.access_token
-      hidden_field :employee, :state, value: "BREAK"
+      hidden_field :employee, :state, value: :break
       hidden_field :employee, :id, value: employee.id
     end
   end
 
   def punch_out
-    return unless employee.state == "IN"
+    return unless employee.in?
     button_tag helpers.t(".out"), type: "submit", form: "outform", class: "bg-red-500 text-white block rounded-md px-3 py-2 text-xl font-medium"
     form_with url: pos_punch_clock_url, id: "outform", method: :post do
       hidden_field :punch_clock, :api_key, value: resource.access_token
-      hidden_field :employee, :state, value: "OUT"
+      hidden_field :employee, :state, value: :out
       hidden_field :employee, :id, value: employee.id
     end
   end

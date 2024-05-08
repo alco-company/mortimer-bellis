@@ -9,7 +9,7 @@ class MortimerFooter < ApplicationComponent
   def view_template(&block)
     footer(
       class:
-        %(w-full fixed bottom-[0px] z-40 bg-slate-100 opaque-5 #{"lg:pl-64" unless request.path =~ /login/})
+        %(w-full fixed bottom-[0px] z-40 bg-slate-100 opaque-5)
     ) do
       div(
         class:

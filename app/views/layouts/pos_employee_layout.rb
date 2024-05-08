@@ -25,6 +25,7 @@ class PosEmployeeLayout < ApplicationView
         main(class: "") do
           yield
         end
+        yield :flash
       end
     end
   end

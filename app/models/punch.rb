@@ -4,6 +4,7 @@ class Punch < ApplicationRecord
 
   belongs_to :employee
   belongs_to :punch_clock, optional: true
+  belongs_to :punch_card, optional: true
 
   scope :by_name, ->(name) { joins(:employee).where("employees.name LIKE ? or employees.pincode LIKE ? or employees.payroll_employee_ident LIKE ? or employees.job_title LIKE ? or employees.cell_phone LIKE ? or employees.email LIKE ?", "%#{name}%", "%#{name}%", "%#{name}%", "%#{name}%", "%#{name}%", "%#{name}%") if name.present? }
   scope :by_punch_clock, ->(punch_clock) { joins(:punch_clock).where("punch_clocks.name LIKE ?", "%#{punch_clock}%") if punch_clock.present? }

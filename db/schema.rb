@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_05_05_150735) do
+ActiveRecord::Schema[7.2].define(version: 2024_05_07_142157) do
   create_table "accounts", force: :cascade do |t|
     t.string "name"
     t.string "email"
@@ -153,6 +153,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_05_05_150735) do
     t.string "remote_ip"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "punch_card_id"
     t.index ["account_id"], name: "index_punches_on_account_id"
     t.index ["employee_id"], name: "index_punches_on_employee_id"
   end
@@ -350,6 +351,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_05_05_150735) do
   add_foreign_key "punches", "accounts", on_delete: :cascade
   add_foreign_key "punches", "employees"
   add_foreign_key "punches", "employees", on_delete: :cascade
+  add_foreign_key "punches", "punch_cards", on_delete: :cascade
   add_foreign_key "solid_queue_blocked_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
   add_foreign_key "solid_queue_claimed_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
   add_foreign_key "solid_queue_failed_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade

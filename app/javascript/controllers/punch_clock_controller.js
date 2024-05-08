@@ -198,7 +198,7 @@ export default class PunchClockController extends Controller {
     let data = {
       asset_work_transaction: {
         punched_at: new Date().toISOString(),
-        state: "IN",
+        state: 'in',
         employee_id: e.currentTarget.dataset.employeeId,
       },
     };
@@ -212,7 +212,7 @@ export default class PunchClockController extends Controller {
     let data = {
       asset_work_transaction: {
         punched_at: new Date().toISOString(),
-        state: "BREAK",
+        state: 'break',
         employee_id: e.currentTarget.dataset.employeeId,
       },
     };
@@ -226,7 +226,7 @@ export default class PunchClockController extends Controller {
     let data = {
       asset_work_transaction: {
         punched_at: new Date().toISOString(),
-        state: "OUT",
+        state: 'out',
         employee_id: e.currentTarget.dataset.employeeId,
       },
     };

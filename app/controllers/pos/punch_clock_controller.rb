@@ -14,6 +14,8 @@ class Pos::PunchClockController < Pos::PosController
   # Parameters: {"authenticity_token"=>"[FILTERED]", "punch_clock"=>{"api_key"=>"[FILTERED]"}, "employee"=>{"state"=>"IN", "id"=>"1"}, "button"=>"", "id"=>"1"}
   def create
     @employee.punch @resource, params[:employee][:state], request.remote_ip
+    @employee.update state: params[:employee][:state]
+
     redirect_to pos_punch_clock_url(api_key: @resource.access_token)
   end
 

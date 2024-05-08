@@ -5,8 +5,8 @@ module Pos::EmployeeHelper
 
   def set_bg_color_on_state(state)
     case state
-    when "IN"; "bg-green-200"
-    when "BREAK"; "bg-yellow-200"
+    when :in; "bg-green-200"
+    when :break; "bg-yellow-200"
     end
   end
 

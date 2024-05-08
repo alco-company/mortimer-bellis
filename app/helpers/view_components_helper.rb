@@ -45,4 +45,7 @@ module ViewComponentsHelper
   def render_datetime_column **attribs, &block
     render DateTimeColumn.new(**attribs), &block
   end
+  def render_time_column **attribs, &block
+    render TimeColumn.new(**attribs), &block
+  end
 end

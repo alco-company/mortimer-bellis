@@ -19,7 +19,7 @@ class LogoComponent < ApplicationComponent
     unless @logo
       div { }
     else
-      div(class: "absolute left-0 flex-shrink-0 py-5 lg:static") do
+      div(class: "relative left-0 flex-shrink-0 py-5 lg:static") do
         a(href: helpers.root_path) do
           span(class: "sr-only") { "Mortimer Employee App" }
           if @logo == "mortimer"

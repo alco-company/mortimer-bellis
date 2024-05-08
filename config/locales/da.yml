@@ -9,6 +9,7 @@ da:
   "no": Nej
   edit: Redigér
   update: Opdatér
+  cancel: Fortryd
   save: Gem
   create: Opret 
   filter: Filtrér
@@ -44,9 +45,16 @@ da:
         in: Ind
         out: Ud
         break: Pause
+        todays_punches: Dagens stemplinger
+        manuel_entry: Manuel indtastning
+        manuel_entry_description: Opret en manuel stempel registrering - for arbejde, sygdom, ferie, orlov og mere
         stats_title: Statistik
         worktime: Arbejdstid
         breaks: Pauser
+        work: Arbejde
+        type_of_registration: Registreringstype
+        free_reason: Årsag til fravær
+        sick_reason: Sygdomsårsag
         free: Fri
         rr_free: Ferie
         senior_free: Senior

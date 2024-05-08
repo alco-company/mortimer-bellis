@@ -14,12 +14,40 @@ class Pos::EmployeeController < Pos::PosController
 
   # #
   # # Parameters: {"authenticity_token"=>"[FILTERED]", "punch_clock"=>{"api_key"=>"[FILTERED]"}, "employee"=>{"state"=>"IN", "id"=>"1"}, "button"=>"", "id"=>"1"}
+  # Manuel entry of work:
+  # "punch"=>{"from_at"=>"2024-05-06T07:20", "to_at"=>"2024-05-06T15:20"}, "api_key"=>"YqymK1swsjkqSSeG3DFVjq1d", "controller"=>"pos/employee", "action"=>"create"} permitted: false>
+  #
+  # Manuel entry of sick/free
+  #  "punch"=>{"from_at"=>"2024-05-06", "to_at"=>"2024-05-06", "reason"=>"nursing_sick"}, "api_key"=>"YqymK1swsjkqSSeG3DFVjq1d", "controller"=>"pos/employee", "action"=>"create"} permitted: false>
   def create
-    @resource.punch nil, params[:employee][:state], request.remote_ip
-    redirect_to pos_employee_url(api_key: @resource.access_token)
+    if params[:employee].present?
+      @resource.punch nil, employee_params[:state], request.remote_ip
+      @resource.update state: employee_params[:state]
+      redirect_to pos_employee_url(api_key: @resource.access_token) and return
+    else
+      @resource.punch_range punch_params[:reason], request.remote_ip, punch_params[:from_at], punch_params[:to_at]
+      redirect_to pos_employee_url(api_key: @resource.access_token, tab: "payroll") and return
+    end
+  rescue ActionController::InvalidAuthenticityToken => e
+    redirect_to pos_employee_url(api_key: @resource.access_token), alert: t("invalid_authenticity_token") and return
+  end
+
+  #
+  # update could update the employee profile
+  # or update a punch 
+  #
+  def update
   end
 
   private
+    def employee_params
+      params.require(:employee).permit(:state)
+    end
+
+    def punch_params
+      params.require(:punch).permit(:reason, :from_at, :to_at)
+    end
+
     def verify_employee
       @resource = case true
       when params[:api_key].present?; Employee.by_account.find_by(access_token: params[:api_key])

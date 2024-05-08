@@ -25,6 +25,23 @@ module Punchable
       [ team.contract_minutes, contract_minutes, 0 ].max
     end
 
+    def get_contract_days_per_week
+      contract_days_per_week > 0 ? contract_days_per_week : team.contract_days_per_week
+    end
+
+    def get_contract_hours_per_day
+      get_contract_minutes_per_day divmod 60
+    end
+      
+    def get_contract_minutes_per_day
+      dpp = contract_days_per_payroll > 0 ? contract_days_per_payroll : (team.contract_days_per_payroll || 0)
+      if dpp == 0 # monthly
+        get_contract_minutes * 12 / 52 / get_contract_days_per_week
+      else
+        get_contract_minutes / dpp / get_contract_days_per_week
+      end
+    end
+
     def get_allowed_ot_minutes
       return team.get_allowed_ot_minutes if allowed_ot_minutes.nil?
       return 24*60 if allowed_ot_minutes == 0
@@ -75,16 +92,20 @@ module Punchable
       punches.order(punched_at: :desc)
     end
 
-    def punch(punch_clock, state, ip)
+    def punch(punch_clock, state, ip, punched_at = DateTime.current)
       begin
-        Punch.create! account: self.account, employee: self, punch_clock: punch_clock, punched_at: DateTime.current, state: state, remote_ip: ip
-        update state: state
+        Punch.create! account: self.account, employee: self, punch_clock: punch_clock, punched_at: punched_at, state: state, remote_ip: ip
       rescue => e
         say "Punch failed: #{e.message}"
       end
-      PunchCardJob.perform_later account: self.account, employee: self
+      PunchCardJob.new.perform account: self.account, employee: self
+      # PunchCardJob.perform_later account: self.account, employee: self
     rescue => e
       false
+    end
+
+    def punch_range(reason, ip, from_at, to_at)
+      PunchJob.new.perform account: self.account, reason: reason, ip: ip, employee: self, from_at: from_at, to_at: to_at
     end
   end
 end
