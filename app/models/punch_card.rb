@@ -4,6 +4,7 @@ class PunchCard < ApplicationRecord
   include Datalon
 
   belongs_to :employee
+  has_many :punches, dependent: :destroy
 
   # scope :values_sum, ->(*keys) {
   #   summands = keys.collect { |k| arel_table[k].sum.as(k.to_s) }

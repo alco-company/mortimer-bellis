@@ -4,107 +4,88 @@ class PunchClockEmployee < ApplicationComponent
   include Phlex::Rails::Helpers::HiddenField
   include Phlex::Rails::Helpers::ButtonTag
 
-  attr_accessor :resource, :employee, :pane
+  attr_accessor :employee, :tab
 
-  def initialize(resource:, employee: nil, tab: "today")
-    @resource = resource
+  def initialize(employee: nil, tab: "today", edit: false)
     @employee = employee || false
-    @pane = tab
+    @tab = tab
+    @edit = edit
   end
 
   def view_template
     div(class: "h-full w-full") do
-      div(class: "sm:p-4 ") do
-        punch_buttons
-        todays_minutes
+      div(class: "sm:p-4 pb-18") do
+        case tab
+        when "payroll"; show_payroll
+        when "profile"; show_profile
+        else; show_today
+        end
+      end
+      render PunchClockButtons.new employee: employee, tab: tab
+    end
+  end
 
-        h4(class: "m-4 text-gray-700 text-xl") { helpers.t(".todays_punches") }
-        ul(class: "m-4") do
-          employee.todays_punches.each do |punch|
-            li(
-              id: (helpers.dom_id punch),
-              class: "flex items-center justify-between gap-x-6 py-5"
-            ) do
-              div(class: "min-w-0 w-full columns-2") do
-                span { helpers.render_datetime_column(field: punch.punched_at, css: "") }
-                span { helpers.render_text_column(field: punch.state, css: "text-right") }
-              end
-              div(class: "flex flex-none items-center gap-x-4") do
-                helpers.render_contextmenu resource: punch, turbo_frame: helpers.dom_id(punch), alter: false
-              end
+  def show_today
+    # today_punch_buttons
+    todays_minutes
+    list_punches ".todays_punches", employee.todays_punches
+    div(class: "mb-32") { " " }
+  end
+
+  def show_payroll
+    div(class: "p-4") do
+      render PunchClockManual.new(employee: employee) if @edit
+      list_punches ".payroll_punches", employee.punches.by_payroll_period(employee.punches_settled_at).order(punched_at: :desc), true
+    end
+    div(class: "mb-32") { " " }
+  end
+
+  def list_punches(title, punches = [], edit = false)
+    h4(class: "m-4 text-gray-700 text-xl") { helpers.t(title) }
+    ul(class: "m-4 divide-y divide-gray-100") do
+      current_date = nil
+      punches.each do |punch|
+        if punch.punched_at.to_date != current_date
+          current_date = punch.punched_at&.to_date
+          li(class: "flex items-center justify-between gap-x-6 py-5") do
+            div(class: "min-w-0 w-full columns-2") do
+              span { helpers.render_date_column(field: punch.punched_at, css: "font-medium") }
+            end
+            div(class: "flex flex-none items-center gap-x-4") do
+              render PosContextmenu.new resource: punch, list: true, turbo_frame: helpers.dom_id(punch), alter: edit
             end
           end
         end
-
-        # div( class: "flex items-center justify-between w-full p-5 font-medium rtl:text-right text-gray-500 border border-gray-200 sm:rounded-b-xl focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 gap-3") do
-        #   case pane
-        #     when 'profile'; show_profile
-        #     when 'today'; show_today
-        #     when 'payroll'; show_payroll
-        #   end
-        # end
+        li(
+          id: (helpers.dom_id punch),
+          class: "flex items-center justify-between gap-x-6 py-5"
+        ) do
+          div(class: "min-w-0 w-full columns-2") do
+            span { helpers.render_text_column(field: helpers.tell_state(punch), css: "text-right") }
+            span { helpers.render_time_column(field: punch.punched_at, css: "") }
+          end
+          div(class: "flex flex-none items-center gap-x-4") do
+            render PosContextmenu.new resource: punch, turbo_frame: helpers.dom_id(punch), alter: edit, links: [ pos_employee_edit_url(api_key: employee.access_token, id: punch.id), pos_employee_delete_url(api_key: employee.access_token, id: punch.id)]
+          end
+        end
       end
     end
   end
 
-  def punch_buttons
-    div(class: "flex items-center justify-center w-full p-5 font-medium rtl:text-right text-gray-500 gap-3") do
-      punch_in
-      punch_break
-      punch_out
-    end
-  end
-
   def todays_minutes
-    div(class: "flex items-center justify-center w-full p-5 font-medium rtl:text-right text-gray-500 gap-3") do
+    div(class: "flex w-full p-5 font-medium rtl:text-right text-gray-500 gap-3") do
       counters = employee.minutes_today_up_to_now
       say "counters: #{counters}"
-      render Stats.new title: "Arbejdstid, mm", stats: [
-        { title: "Arbejdstid", value: helpers.display_hours_minutes(counters[:work]) },
-        { title: "Pauser", value: helpers.display_hours_minutes(counters[:break]) }
+      render Stats.new title: helpers.t(".stats_title"), stats: [
+        { title: helpers.t(".worktime"), value: helpers.display_hours_minutes(counters[:work]) },
+        { title: helpers.t(".breaks"), value: helpers.display_hours_minutes(counters[:break]) }
     ]
     end if employee
   end
 
-  def punch_in
-    return if employee.state == "IN"
-    button_tag helpers.t(".in"), type: "submit", form: "inform", class: "bg-green-500 text-white block rounded-md px-3 py-2 text-xl font-medium"
-    form_with url: pos_punch_clock_url, id: "inform", method: :post do
-      hidden_field :punch_clock, :api_key, value: resource.access_token
-      hidden_field :employee, :state, value: "IN"
-      hidden_field :employee, :id
-    end
-  end
-
-  def punch_break
-    return unless employee.state == "IN"
-    button_tag helpers.t(".break"), type: "submit", form: "breakform", class: "bg-yellow-500 text-white block rounded-md px-3 py-2 text-xl font-medium"
-    form_with url: pos_punch_clock_url, id: "breakform", method: :post do
-      hidden_field :punch_clock, :api_key, value: resource.access_token
-      hidden_field :employee, :state, value: "BREAK"
-      hidden_field :employee, :id
-    end
-  end
-
-  def punch_out
-    return unless employee.state == "IN"
-    button_tag helpers.t(".out"), type: "submit", form: "outform", class: "bg-red-500 text-white block rounded-md px-3 py-2 text-xl font-medium"
-    form_with url: pos_punch_clock_url, id: "outform", method: :post do
-      hidden_field :punch_clock, :api_key, value: resource.access_token
-      hidden_field :employee, :state, value: "OUT"
-      hidden_field :employee, :id
-    end
-  end
-
-  def active_tab(t)
-    t == pane ? "bg-gray-700" : "bg-gray-300"
-  end
-
   def show_profile
-    div(class: "w-full") do
-      h2(class: "text-gray-700 text-xl") { helpers.t(".profile") }
-      div(class: "text-gray-700 text-xl") { "coming soon - this will be for the employee to add an avatar/photo and their name/moniker" }
-    end
+    render PunchClockProfile.new employee: employee
+    div(class: "mb-32") { " " }
   end
 
   def show_today_old
@@ -130,9 +111,5 @@ class PunchClockEmployee < ApplicationComponent
         end
       end
     end
-  end
-
-  def show_today
-    helpers.render_today_header
   end
 end

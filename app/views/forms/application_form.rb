@@ -63,10 +63,12 @@ class ApplicationForm < Superform::Rails::Form
       input(**attributes, value: field.value&.strftime("%Y-%m-%d"))
     end
   end
-
   class DateTimeField < Superform::Rails::Components::InputComponent
     def field_attributes
       super.merge(type: "datetime-local")
+    end
+    def template(&)
+      input(**attributes, value: field.value&.strftime("%Y-%m-%dT%H:%M"))
     end
   end
 

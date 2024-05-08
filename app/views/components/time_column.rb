@@ -1,11 +1,10 @@
-class DateTimeColumn < Phlex::HTML
+class TimeColumn < Phlex::HTML
   include Phlex::Rails::Helpers::Routes
 
   attr_accessor :field
 
-  def initialize(field:, seconds: false, css: nil)
+  def initialize(field:, css: nil)
     @field = field
-    @seconds = seconds
     @class = css || "truncate"
   end
 
@@ -16,8 +15,6 @@ class DateTimeColumn < Phlex::HTML
   end
 
   def format_datetime(datetime)
-    @seconds ?
-      datetime.strftime("%d/%m/%Y %H:%M:%S") :
-      datetime.strftime("%d/%m/%Y %H:%M")
+    datetime.strftime("%H:%M")
   end
 end

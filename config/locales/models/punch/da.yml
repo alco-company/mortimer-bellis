@@ -1,5 +1,22 @@
 da:
  
+  punch:
+    in: Ind
+    out: Ud
+    break: Pause
+    sick: Syg
+    iam_sick: Jeg er syg
+    child_sick: Barn syg
+    nursing_sick: Omsorgsdag
+    lost_work_sick: Tabt arbejdsfortjeneste
+    p56_sick: Pgf 56
+    free: Fri
+    rr_free: Ferie
+    senior_free: Senior
+    unpaid_free: Ulønnet
+    maternity_free: Barsel
+    leave_free: Orlov
+
   punches:
     create:
       post: Stemplingen blev oprettet

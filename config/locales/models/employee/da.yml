@@ -1,6 +1,8 @@
 da:
 
   employee:
+    update:
+      success: Dine oplysninger blev opdateret
     modal:
       import:
         title: Indlæs fil med medarbejder stamdata

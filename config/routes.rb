@@ -33,6 +33,8 @@ Rails.application.routes.draw do
     get "employees" => "pos/employee#index", as: :pos_employees
     get "employee/edit" => "pos/employee#edit", as: :pos_employee_edit
     post "employee" => "pos/employee#create", as: :pos_employee_create
+    put "employee" => "pos/employee#update", as: :pos_employee_update
+    delete "employee" => "pos/employee#destroy", as: :pos_employee_delete
   end
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
