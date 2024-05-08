@@ -1,10 +1,15 @@
 class Pos::EmployeeController < Pos::PosController
-  before_action :verify_employee, only: [ :show, :create ]
+  before_action :verify_employee, only: [ :show, :edit, :create, :update, :destroy ]
 
   layout -> { PosEmployeeLayout }
 
   def index
     @employees = Employee.by_account()
+  end
+
+  def edit
+    @punch = Punch.find(params[:id])
+    render turbo_stream: turbo_stream.replace("punch_#{@punch.id}", partial: "pos/employee/edit", locals: { punch: @punch })
   end
 
   # #
@@ -34,14 +39,29 @@ class Pos::EmployeeController < Pos::PosController
 
   #
   # update could update the employee profile
-  # or update a punch 
+  # or update a punch
   #
   def update
+    if @resource.update(employee_params)
+      redirect_to pos_employee_url(api_key: @resource.access_token, tab: "profile"), success: I18n.t("employee.update.success")
+    else
+      redirect_to pos_employee_url(api_key: @resource.access_token, tab: "profile"), alert: I18n.t("employee.update.failed")
+    end
+  end
+
+  def destroy
+    if params[:all].present?
+      @resource.punch_cards.where(work_date: params[:date]).destroy_all
+      redirect_to pos_employee_url(api_key: @resource.access_token, tab: "payroll") and return
+    else
+      Punch.find(params[:id]).delete
+      redirect_to pos_employee_url(api_key: @resource.access_token, tab: "payroll") and return
+    end
   end
 
   private
     def employee_params
-      params.require(:employee).permit(:state)
+      params.require(:employee).permit(:state, :name, :description, :email, :cell_phone)
     end
 
     def punch_params

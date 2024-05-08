@@ -30,6 +30,7 @@
 ### 8/5/2024
 
 * add pos/employee - wip 3
+* add pos/employee - delete one/all on the day
 
 ### 6/5/2024
 

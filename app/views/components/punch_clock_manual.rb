@@ -10,7 +10,7 @@ class PunchClockManual < ApplicationComponent
   end
 
   def view_template(&block)
-    form_with url: helpers.pos_employee_url(api_key: employee.access_token), method: :post do
+    form_with data: { pos_employee_target: "manualForm" }, url: helpers.pos_employee_url(api_key: employee.access_token), method: :post do
       div(class: "mx-4 my-2 space-y-12 sm:space-y-16") do
         div do
           h2(class: "text-base font-semibold leading-7 text-gray-900") do
@@ -274,11 +274,12 @@ class PunchClockManual < ApplicationComponent
   end
 
   def action_buttons
-    div(class: "mt-6 mb-24 sm:mb-12 flex items-center justify-start gap-x-2") do
+    div(class: "px-4 mt-6 mb-24 sm:mb-12 flex items-center justify-start gap-x-2") do
       whitespace
       button(
         type: "button",
-        class: "text-sm font-semibold leading-6 text-gray-900"
+        data: { action: "click->pos-employee#clearForm" },
+        class: "mort-btn-cancel"
       ) { helpers.t("cancel") }
       whitespace
       button(

@@ -54,6 +54,10 @@ module Resourceable
       url_for(controller: params[:controller], id: 1, action: :show, all: true)
     end
 
+    def pos_delete_all_url(date: nil)
+      url_for(controller: params[:controller], id: 1, action: :show, all: true, date: date, api_key: @resource.access_token)
+    end
+
     def any_filters?
       return false if @filter.nil? or params[:controller].split("/").last == "filters"
       !@filter.id.nil?

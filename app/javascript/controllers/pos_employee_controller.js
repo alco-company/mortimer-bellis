@@ -3,6 +3,7 @@ import { Controller } from "@hotwired/stimulus"
 // Connects to data-controller="pos-employee"
 export default class extends Controller {
   static targets = [ 
+    "manualForm",
     "workButton",
     "freeButton",
     "sickButton",
@@ -18,6 +19,10 @@ export default class extends Controller {
 
   connect() {
     console.log("ding");
+  }
+
+  clearForm() {
+    this.manualFormTarget.remove();
   }
 
   toggleWork(e) {

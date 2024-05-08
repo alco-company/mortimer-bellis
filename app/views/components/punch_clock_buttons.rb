@@ -14,7 +14,7 @@ class PunchClockButtons < ApplicationComponent
   def view_template(&block)
     div(
       class:
-        %(w-full fixed bottom-[40px] z-40 bg-slate-100 opaque-5)
+        %(w-full sticky bottom-[39px] z-40 bg-slate-100 opaque-5)
     ) do
       div(
         class:
@@ -29,7 +29,7 @@ class PunchClockButtons < ApplicationComponent
           punch_out
           punch_add if tab == "payroll"
         end
-      end
+      end unless tab == "profile"
     end
   end
 

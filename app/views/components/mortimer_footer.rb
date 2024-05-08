@@ -17,18 +17,18 @@ class MortimerFooter < ApplicationComponent
       ) do
         div(
           class:
-            "border-gray-200 py-2 text-xs text-gray-400 text-center sm:text-left"
+            "border-gray-200 py-2 text-xs text-gray-400 text-center sm:text-left text-nowrap"
         ) do
           whitespace
-          span(class: "sm:inline") do
+          span(class: "inline text-nowrap") do
             plain "© 2018-#{DateTime.current.year} &nbsp;&nbsp;M O R T I M E R&nbsp;&nbsp;".html_safe
           end
           whitespace
-          span(class: "sm:inline") { helpers.t(:all_rights_reserved) }
+          span(class: "text-nowrap inline") { helpers.t(:all_rights_reserved) }
           whitespace
           if Rails.env.local?
             whitespace
-            span(class: "sm:inline text-green-900") do
+            span(class: "inline text-green-900") do
               begin
                 platform
               rescue StandardError
