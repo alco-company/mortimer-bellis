@@ -1,5 +1,6 @@
 class Pos::EmployeeController < Pos::PosController
   before_action :verify_employee, only: [ :show, :edit, :create, :update, :destroy ]
+  before_action :employee_time_zone, only: [ :edit ]
 
   layout -> { PosEmployeeLayout }
 
@@ -82,5 +83,12 @@ class Pos::EmployeeController < Pos::PosController
       else nil
       end
       redirect_to root_path and return unless @resource
+    end
+
+    def employee_time_zone(&block)
+      timezone = @resource.time_zone rescue nil
+      timezone.blank? ?
+        Time.use_zone("UTC", &block) :
+        Time.use_zone(timezone, &block)
     end
 end

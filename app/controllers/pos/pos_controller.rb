@@ -5,4 +5,5 @@ class Pos::PosController < ApplicationController
 
   def show
   end
+
 end

@@ -27,7 +27,9 @@
 
 ## CHANGELOG
 
+### 10/5/2024
 
+* set time_zone right on POS controllers
 
 ### 8/5/2024
 

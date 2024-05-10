@@ -2,6 +2,8 @@ class Pos::PunchClockController < Pos::PosController
   before_action :verify_token
   before_action :verify_employee, except: :show
 
+  around_action :punch_clock_time_zone, only: [ :edit, :show ]
+
   def show
   end
 
@@ -15,7 +17,6 @@ class Pos::PunchClockController < Pos::PosController
   def create
     @employee.punch @resource, params[:employee][:state], request.remote_ip
     @employee.update state: params[:employee][:state]
-
     redirect_to pos_punch_clock_url(api_key: @resource.access_token)
   end
 
@@ -43,4 +44,12 @@ class Pos::PunchClockController < Pos::PosController
       Current.account = @resource.account
       # @resource.regenerate_access_token
     end
+
+    def punch_clock_time_zone(&block)
+      timezone = @resource.time_zone rescue nil
+      timezone.blank? ?
+        Time.use_zone("UTC", &block) :
+        Time.use_zone(timezone, &block)
+    end
+
 end
