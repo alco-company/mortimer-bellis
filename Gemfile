@@ -90,3 +90,5 @@ gem "omniauth", "~> 2.1"
 gem "devise_invitable", "~> 2.0"
 
 gem "redcarpet", "~> 3.6"
+
+gem "httparty", "~> 0.22.0"

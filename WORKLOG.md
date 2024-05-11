@@ -11,6 +11,7 @@
 * add Traefik dashboard to traefik.mortimer.pro - https://www.luizkowalski.net/traefik-with-kamal-tips-and-tricks/
 * add exporting ICS files - https://www.driftingruby.com/episodes/exporting-ics-files
 * add employee calendar - duty, free, holiday
+* add Thruster - https://nts.strzibny.name/running-thruster-rails-kamal/
 * add employee SMS service - welcome, EU state report
 * add blackhole
 * add Stripe payments - https://gorails.com/episodes/one-time-payments-with-pay-and-stripe
@@ -23,12 +24,16 @@
 * add prettier mail layouts
 * add mail report
 * add state and EU state report
-* fix employee's timezone on punches
 
 ## CHANGELOG
 
+### 11/5/2024
+
+* setup container w/weasyprint and use httparty to consume 'PDF webservice'
+
 ### 10/5/2024
 
+* fix employee's timezone on punches
 * set time_zone right on POS controllers
 
 ### 8/5/2024
