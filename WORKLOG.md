@@ -27,6 +27,10 @@
 
 ## CHANGELOG
 
+### 13/5/2024
+
+* add employee_state_job
+
 ### 11/5/2024
 
 * setup container w/weasyprint and use httparty to consume 'PDF webservice'
