@@ -31,6 +31,7 @@
 
 * add employee_state_job
 * add employee_eu_state_job
+* add build_pdf_job
 
 ### 11/5/2024
 

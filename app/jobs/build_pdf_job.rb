@@ -16,6 +16,9 @@ class BuildPdfJob < ApplicationJob
       }
     }
     response = HTTParty.post(url, options)
+    File.open("test.pdf", "wb") do |f|
+      f.write response.parsed_response
+    end
   end
 end
 
