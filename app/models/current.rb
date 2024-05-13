@@ -13,8 +13,8 @@ class Current < ActiveSupport::CurrentAttributes
 
   def user=(user)
     super
-    self.account      = user.account
-    self.locale       = user.locale
-    Time.zone         = user.time_zone
+    self.account      = user&.account
+    self.locale       = user&.locale
+    Time.zone         = user&.time_zone
   end
 end

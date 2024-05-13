@@ -30,6 +30,7 @@
 ### 13/5/2024
 
 * add employee_state_job
+* add employee_eu_state_job
 
 ### 11/5/2024
 

@@ -38,4 +38,20 @@ class PunchCard < ApplicationRecord
   def ot_minutes
     (ot1_minutes || 0) + (ot2_minutes || 0)
   end
+
+  def breaks
+    break_minutes || 0
+  end
+
+  def works
+    work_minutes || 0
+  end
+
+  def first_punch
+    punches.order(punched_at: :asc).first.punched_at
+  end
+
+  def last_punch
+    punches.order(punched_at: :desc).first.punched_at
+  end
 end

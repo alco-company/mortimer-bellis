@@ -3,6 +3,7 @@ class Employee < ApplicationRecord
   include TimeZoned
   include Punchable
   include Stateable
+  include EUCompliance
 
   belongs_to :team
   has_many :punch_cards, dependent: :destroy
