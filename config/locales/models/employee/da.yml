@@ -1,6 +1,8 @@
 da:
 
   employee:
+    me: "Mig"
+    
     update:
       success: Dine oplysninger blev opdateret
     modal:
@@ -14,6 +16,7 @@ da:
           description: Du har godkendt importen - som nu gennemføres i en baggrundsproces. Når processen er færdig, vil du kunne se resultatet i oversigten over medarbejdere (klik på menupunktet medarbejdere).
 
   employees:
+    advanced_configuration: Vis flere indstillingsmuligheder
     create:
       post: Medarbejderen blev oprettet
     update:

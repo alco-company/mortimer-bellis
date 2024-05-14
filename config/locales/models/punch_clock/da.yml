@@ -1,6 +1,8 @@
 da:
 
   punch_clocks:
+    default_punch_clock: Ur
+    
     create:
       post: Stempeluret blev oprettet
     update:
