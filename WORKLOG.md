@@ -32,6 +32,7 @@
 
 * make teams and locations optional (add defaults when signing up)
 * show only required fields on employee for a start
+* move locale/time_zone to logo
 
 ### 13/5/2024
 
