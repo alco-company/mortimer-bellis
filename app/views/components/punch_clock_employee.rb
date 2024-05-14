@@ -65,7 +65,7 @@ class PunchClockEmployee < ApplicationComponent
             span { helpers.render_time_column(field: punch.punched_at, css: "") }
           end
           div(class: "flex flex-none items-center gap-x-4") do
-            render PosContextmenu.new resource: punch, turbo_frame: helpers.dom_id(punch), alter: edit, links: [ pos_employee_edit_url(api_key: employee.access_token, id: punch.id), pos_employee_delete_url(api_key: employee.access_token, id: punch.id)]
+            render PosContextmenu.new resource: punch, turbo_frame: helpers.dom_id(punch), alter: edit, links: [ pos_employee_edit_url(api_key: employee.access_token, id: punch.id), pos_employee_delete_url(api_key: employee.access_token, id: punch.id) ]
           end
         end
       end

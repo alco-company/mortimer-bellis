@@ -41,7 +41,7 @@ class PunchClockManual < ApplicationComponent
                   div() { helpers.t(".free") }
                   button(
                       type: "button",
-                      data: { 
+                      data: {
                         action: "click->pos-employee#toggleWork",
                         pos_employee_target: "workButton"
                       },
@@ -55,7 +55,7 @@ class PunchClockManual < ApplicationComponent
                       comment { %(Enabled: "translate-x-5", Not Enabled: "translate-x-0") }
                       whitespace
                       span(
-                        data: { 
+                        data: {
                           pos_employee_target: "workSpan"
                         },
                         aria_hidden: "true",
@@ -64,13 +64,13 @@ class PunchClockManual < ApplicationComponent
                       )
                     end
                   input(
-                    id: 'in',
+                    id: "in",
                     name: "punch[reason]",
                     type: "radio",
-                    data: { 
+                    data: {
                       pos_employee_target: "workReason"
                     },
-                    value: 'in',
+                    value: "in",
                     checked: "checked",
                     class:
                       "hidden"
@@ -78,7 +78,7 @@ class PunchClockManual < ApplicationComponent
 
                   button(
                       type: "button",
-                      data: { 
+                      data: {
                         action: "click->pos-employee#toggleSick",
                         pos_employee_target: "sickButton"
                       },
@@ -92,7 +92,7 @@ class PunchClockManual < ApplicationComponent
                       comment { %(Enabled: "translate-x-5", Not Enabled: "translate-x-0") }
                       whitespace
                       span(
-                        data: { 
+                        data: {
                           pos_employee_target: "sickSpan"
                         },
                         aria_hidden: "true",
@@ -103,7 +103,7 @@ class PunchClockManual < ApplicationComponent
 
                   button(
                       type: "button",
-                      data: { 
+                      data: {
                         action: "click->pos-employee#toggleFree",
                         pos_employee_target: "freeButton"
                       },

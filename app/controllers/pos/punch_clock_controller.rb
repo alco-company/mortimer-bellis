@@ -51,5 +51,4 @@ class Pos::PunchClockController < Pos::PosController
         Time.use_zone("UTC", &block) :
         Time.use_zone(timezone, &block)
     end
-
 end

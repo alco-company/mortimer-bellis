@@ -2,7 +2,6 @@ module EUCompliance
   extend ActiveSupport::Concern
 
   included do
-
     # a limit to weekly working hours
     #   - the average working time for each seven day period must not exceed 48 hours, including overtime
     #   - depending on national legislation and/or collective agreements, the 48 hour average is calculated over a reference period of up to 4, 6 or 12 months
@@ -38,7 +37,7 @@ module EUCompliance
     # extra protection in case of night work
     # average working hours must not exceed 8 hours per 24-hour period,
     def max_8_hrs_night
-      last_2_days.count < 2 or (last_2_days.last.first_punch.hour < 22) or ((last_2_days.first.first_punch.to_i - last_2_days.last.last_punch.to_i) < (8 * 60 +1) )
+      last_2_days.count < 2 or (last_2_days.last.first_punch.hour < 22) or ((last_2_days.first.first_punch.to_i - last_2_days.last.last_punch.to_i) < (8 * 60 +1))
     end
 
     def work_yesterday
