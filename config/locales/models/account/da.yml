@@ -40,12 +40,21 @@ da:
         name_exist: "Kontoen findes allerede"
         
     account_mailer:
-        datalon_email:
-          subject: Datafil til Datalon vedhæftet
-          body: |
-            Hej,
+      report_state:
+        subject: Medarbejdernes indstemplinger det sidste døgn
+        body: |
+          Hej,
 
-            Her er den datafil, du har bedt om.
+          Den vedhæftede PDF viser en oversigt over medarbejdernes indstemplinger det sidste døgn, opsummeret på arbejdstid, pauser, overarbejde, mm.
 
-            Med venlig hilsen,
-            M O R T I M E R
+          Med venlig hilsen,
+          M O R T I M E R
+      datalon_email:
+        subject: Datafil til Datalon vedhæftet
+        body: |
+          Hej,
+
+          Her er den datafil, du har bedt om.
+
+          Med venlig hilsen,
+          M O R T I M E R

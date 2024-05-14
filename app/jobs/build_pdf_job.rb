@@ -5,20 +5,26 @@ class BuildPdfJob < ApplicationJob
   # html:
   # css:
   # attachments: []
-  def perform(*args)
+  # pdf:
+  #
+  def perform(**args)
+    super(**args)
     url = "http://localhost:8080"
     options = {
       headers: {
         "ContentType" => "multipart/form-data"
       },
       body: {
-        html: File.open( "test.html")
+        html: File.open(args[:html])
       }
     }
     response = HTTParty.post(url, options)
-    File.open("test.pdf", "wb") do |f|
+    File.open(args[:pdf], "wb") do |f|
       f.write response.parsed_response
     end
+    true
+  rescue StandardError => e
+    false
   end
 end
 

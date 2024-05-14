@@ -8,14 +8,12 @@ class EmployeeMailer < ApplicationMailer
   def report_state
     @account = params[:account]
     @employees = @account.employees
-    @user = params[:user]
     mail to: @account.email, subject: "employee state this morning"
   end
 
   def report_eu_state
     @account = params[:account]
     @employees = @account.employees
-    @user = params[:user]
     mail to: @account.email, subject: "employee EU Work Time Directive state this morning"
   end
 end

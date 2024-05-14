@@ -23,7 +23,6 @@
 * add company logo
 * add employee mugshot
 * add prettier mail layouts
-* add mail report
 * add state and EU state reporting - when?
 
 ## CHANGELOG
@@ -36,6 +35,8 @@
 * format on sign_in, more
 * format header for indexes
 * fix datalon export
+* prepare for accounts persisting time to send reports
+* try sending PDF report
 
 ### 13/5/2024
 

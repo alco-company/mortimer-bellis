@@ -1,35 +1,30 @@
-<h1>Employee#report_state</h1>
-
+<h1><%= I18n.t("employees.reports.eu_state.title") %></h1>
 <p>
-  In the past 24 hours this is the rolling EU state that has been registered:
+  <%== I18n.t("employees.reports.eu_state.introduction") %>
 </p>
 
 <table>
   <thead>
-    <th>name</th>
-    <th class="">48 hrs</th>
-    <th class="">>6hrs</th>
-    <th class="">11 hrs</th>
-    <th class="">24 hrs</th>
-    <th class="">8 hrs</th>
+    <th><%= I18n.t("employees.reports.eu_state.name") %></th>
+    <th><%= I18n.t("employees.reports.eu_state.6hrs") %></th>
+    <th><%= I18n.t("employees.reports.eu_state.8hrs") %></th>
+    <th><%= I18n.t("employees.reports.eu_state.11hrs") %></th>
+    <th><%= I18n.t("employees.reports.eu_state.24hrs") %></th>
+    <th><%= I18n.t("employees.reports.eu_state.48hrs") %></th>
+
   </thead>
   <tbody>
     <% @employees.each do |employee| %>
       <tr>
         <td><%= employee.name %></td>
-        <%== positive_column(employee.max_48_hrs_per_7_days) %>
         <%== positive_column(employee.min_6_hrs_rest_break) %>
+        <%== positive_column(employee.max_8_hrs_night) %>
         <%== positive_column(employee.min_11_hrs_rest) %>
         <%== positive_column(employee.min_24_hrs_rest_weekly) %>
-        <%== positive_column(employee.max_8_hrs_night) %>
+        <%== positive_column(employee.max_48_hrs_per_7_days) %>
       </tr>
     <% end %>
   </tbody>
 </table>
 
-<p>Be advised that we do not persist data to monitor the following issues pertaining to the EU Work Time Directive</p>
-<ul>
-  <li> paid annual leave of at least 4 weeks per year </li>
-  <li> night workers must not perform heavy or dangerous work for longer than 8 hours in any 24-hour period, </li>
-  <li> night workers have the right to free health assessments and, under certain circumstances, to transfer to day work. </li>
-</ul>
+<%== I18n.t("employees.reports.eu_state.notice_missing_data") %>
