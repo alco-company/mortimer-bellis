@@ -17,15 +17,21 @@
 * add Stripe payments - https://gorails.com/episodes/one-time-payments-with-pay-and-stripe
 * add employee email - welcome, EU state report
 * add web push notifications
+* gem "mission_control-jobs"
 * release RC1
 * big test
 * add company logo
 * add employee mugshot
 * add prettier mail layouts
 * add mail report
-* add state and EU state report
+* add state and EU state reporting - when?
 
 ## CHANGELOG
+
+### 14/5/2024
+
+* make teams and locations optional (add defaults when signing up)
+* show only required fields on employee for a start
 
 ### 13/5/2024
 
