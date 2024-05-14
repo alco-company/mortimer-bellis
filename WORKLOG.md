@@ -35,6 +35,7 @@
 * move locale/time_zone to logo
 * format on sign_in, more
 * format header for indexes
+* fix datalon export
 
 ### 13/5/2024
 

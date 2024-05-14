@@ -111,7 +111,7 @@ module Datalon
       CSV.generate(col_sep: ";", encoding: "utf-8") do |csv|
         csv << lon_csv_header
         resources.each do |row|
-          lon_csv_row row, csv, organisation: Current.account.lon_identification, termin: termin.strftime("%y%m"), group: row.group_name
+          lon_csv_row row, csv, organisation: Current.account.pp_identification, termin: termin.strftime("%y%m"), group: row.group_name
         end
       end
     end
