@@ -34,6 +34,7 @@
 * show only required fields on employee for a start
 * move locale/time_zone to logo
 * format on sign_in, more
+* format header for indexes
 
 ### 13/5/2024
 
