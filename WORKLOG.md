@@ -30,6 +30,7 @@
 ### 15/5/2024
 
 * add accounts.pdf
+* add teams.pdf
 
 ### 14/5/2024
 
