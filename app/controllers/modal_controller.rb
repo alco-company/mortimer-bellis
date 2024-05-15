@@ -88,18 +88,15 @@ class ModalController < BaseController
         params[:update_payroll] = params[:update_payroll] == "on" ? true : false
         DatalonPreparationJob.perform_later account: Current.account, last_payroll_at: Date.parse(params[:last_payroll_at]), update_payroll: params[:update_payroll]
       when "state"
-        # params[:send_state_at]
-        # params[:send_eu_state_at]
-        html = render_to_string "employee_mailer/report_state", layout: "pdf"
-        html_filename = Rails.root.join("tmp", "report_state.html")
-        pdf_filename = Rails.root.join("tmp", "#{Current.user.id}_report_state.pdf")
-        File.open(html_filename, "w") { |f| f.write(html) }
-        if BuildPdfJob.new.perform(html: html_filename, pdf: pdf_filename)
-          AccountMailer.with(account: Current.account, tmpfiles: [ pdf_filename.to_s ]).report_state.deliver_later
-        end
-        # EmployeeEuStateJob.perform_later account: Current.account
+        Current.account.update send_state_rrule: params[:send_state_at], send_eu_state_rrule: params[:send_eu_state_at]
+        send_file(PunchCard.pdf_file(html_content), filename: "employees_state-#{Date.yesterday}.pdf")
       end
     end
+
+    def html_content
+      render_to_string "employees/report_state", layout: "pdf", formats: :pdf
+    end
+
 end
 
 
@@ -108,3 +105,11 @@ end
 #   params[:update_payroll] = params[:update_payroll] == "on" ? true : false
 #    DatalonPreparationJob.perform_later account: Current.account, last_payroll_at: Date.parse(params[:last_payroll_at]), update_payroll: params[:update_payroll]
 # end
+
+# html_filename = Rails.root.join("tmp", "report_state.html")
+# pdf_filename = Rails.root.join("tmp", "#{Current.user.id}_report_state.pdf")
+# File.open(html_filename, "w") { |f| f.write(html) }
+# if BuildPdfJob.new.perform(html: html_filename, pdf: pdf_filename)
+#   AccountMailer.with(account: Current.account, tmpfiles: [ pdf_filename.to_s ]).report_state.deliver_later
+# end
+# EmployeeEuStateJob.perform_later account: Current.account
