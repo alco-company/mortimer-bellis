@@ -30,6 +30,13 @@
 ### 15/5/2024
 
 * add accounts.pdf
+* add teams.pdf
+* add users.pdf
+* add locations.pdf
+* add punch_clocks.pdf
+* add employees.pdf
+* add punch_cards.pdf
+* add punches.pdf
 
 ### 14/5/2024
 

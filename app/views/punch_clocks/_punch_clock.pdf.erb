@@ -1,0 +1,8 @@
+<tr class="flex gap-x-6 py-5">
+  <%= render_text_column field: link_to(punch_clock.name, punch_clock_url(punch_clock)), table: :head, css: "truncate mort-link-primary" %>
+  <%= render_text_column field: link_to(punch_clock.location.name, location_url(punch_clock.location)), table: :head, css: "truncate  mort-link-primary" %>
+  <%= render_text_column field: punch_clock.ip_addr, table: :head, css: " text-right" %>
+  <%= render_text_column field: punch_clock.locale, table: :head, css: " truncate" %>
+  <%= render_text_column field: punch_clock.time_zone, table: :head, css: " truncate" %>
+  <%= render_date_column field: punch_clock.updated_at, table: :head, css: "" %>
+</tr>

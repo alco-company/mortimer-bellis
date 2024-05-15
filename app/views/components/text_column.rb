@@ -9,22 +9,22 @@ class TextColumn < Phlex::HTML
     @class = css || "truncate"
   end
 
-  def view_template(&)
-    @table ? table_field : div_field
+  def view_template(&block)
+    @table ? table_field(&block) : div_field(&block)
   end
 
-  def table_field
-    @table == :head ? th_field : td_field
+  def table_field(&block)
+    @table == :head ? th_field(&block) : td_field(&block)
   end
 
-  def th_field
+  def th_field(&block)
     th(class: @class) do
       plain field
       yield if block_given?
     end
   end
 
-  def td_field
+  def td_field(&block)
     td(class: @class) do
       plain field
       yield if block_given?
