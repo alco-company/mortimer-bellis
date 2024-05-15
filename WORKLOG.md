@@ -37,6 +37,7 @@
 * add employees.pdf
 * add punch_cards.pdf
 * add punches.pdf
+* add split of SQLite into writer/reader
 
 ### 14/5/2024
 

@@ -6,6 +6,10 @@ Rails.application.configure do
   # Code is not reloaded between requests.
   config.enable_reloading = false
 
+  #
+  # testing SQLite3 enhancements
+  config.enhanced_sqlite3.isolate_connection_pools = true
+
   # Eager load code on boot. This eager loads most of Rails and
   # your application in memory, allowing both threaded web servers
   # and those relying on copy on write to perform better.
