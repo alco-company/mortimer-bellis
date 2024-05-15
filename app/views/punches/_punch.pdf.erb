@@ -1,0 +1,7 @@
+<tr class="gap-x-6 py-5">
+  <%= render_text_column field: link_to(punch.employee.name, punch_url(punch)), table: :row, css: "truncate mort-link-primary" %>
+  <%= render_datetime_column field: punch.punched_at, table: :row, css: "text-right" %>
+  <%= render_text_column field: punch.state, table: :row, css: "truncate" %>
+  <%= render_text_column field: show_link_to_punch_clock(punch.punch_clock), table: :row, css: "hidden md:block truncate" %>
+  <%= render_date_column field: punch.updated_at, table: :row, css: "hidden lg:block" %>
+</tr>
