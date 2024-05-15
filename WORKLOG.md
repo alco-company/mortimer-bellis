@@ -35,6 +35,7 @@
 * add locations.pdf
 * add punch_clocks.pdf
 * add employees.pdf
+* add punch_cards.pdf
 
 ### 14/5/2024
 
