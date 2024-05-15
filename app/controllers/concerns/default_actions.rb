@@ -13,9 +13,13 @@ module DefaultActions
 
       respond_to do |format|
         format.html { }
-        format.pdf { send_data resource_class.to_pdf(render_to_string layout: "pdf"), filename: "#{resource_class.name.pluralize.downcase}-#{Date.today}.pdf" }
+        format.pdf { send_data resource_class.to_pdf(html_content), filename: "#{resource_class.name.pluralize.downcase}-#{Date.today}.pdf" }
         format.csv { send_data resource_class.to_csv(@resources), filename: "#{resource_class.name.pluralize.downcase}-#{Date.today}.csv" }
       end
+    end
+
+    def html_content
+      render_to_string layout: "pdf", formats: :pdf
     end
 
     # GET /employees/1 or /employees/1.json

@@ -1,0 +1,9 @@
+<tr id="<%= dom_id user %>" class="flex items-center border-bottom border-gray-400">
+  <%= render_text_column field: link_to(user.email, user), table: :row, css: "truncate" do %>
+    <p class="text-xs"><%=  link_to user.account.name, user.account %> </p>
+  <% end %>
+  <%= render_text_column field: user.role, table: :row, css: "truncate" do %> <p>&nbsp;</p> <% end %>
+  <%= render_text_column field: user.locale, table: :row, css: " truncate" do %> <p>&nbsp;</p> <% end %>
+  <%= render_text_column field: user.time_zone, table: :row, css: " truncate" do %> <p>&nbsp;</p> <% end %>
+  <%= render_date_column field: user.updated_at, table: :row, css: "" do %> <p>&nbsp;</p> <% end %>
+</tr>

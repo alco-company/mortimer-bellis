@@ -13,7 +13,7 @@ module ExportPdf
       pdf_filename = Rails.root.join("tmp", "#{Current.user.id}_output.pdf")
       File.open(html_filename, "wb") { |f| f.write(html) }
       if BuildPdfJob.new.perform(html: html_filename, pdf: pdf_filename)
-        File.delete(html_filename)
+        # File.delete(html_filename)
         File.read pdf_filename
       else
         File.delete(html_filename)
