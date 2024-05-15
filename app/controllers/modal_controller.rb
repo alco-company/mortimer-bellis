@@ -90,10 +90,10 @@ class ModalController < BaseController
       when "state"
         # params[:send_state_at]
         # params[:send_eu_state_at]
-        html = render_to_string "employee_mailer/report_state"
+        html = render_to_string "employee_mailer/report_state", layout: "pdf"
         html_filename = Rails.root.join("tmp", "report_state.html")
         pdf_filename = Rails.root.join("tmp", "#{Current.user.id}_report_state.pdf")
-        File.open(html_filename, "wb") { |f| f.write(html) }
+        File.open(html_filename, "w") { |f| f.write(html) }
         if BuildPdfJob.new.perform(html: html_filename, pdf: pdf_filename)
           AccountMailer.with(account: Current.account, tmpfiles: [ pdf_filename.to_s ]).report_state.deliver_later
         end

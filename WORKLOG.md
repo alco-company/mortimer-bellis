@@ -27,6 +27,10 @@
 
 ## CHANGELOG
 
+### 15/5/2024
+
+* add accounts.pdf
+
 ### 14/5/2024
 
 * make teams and locations optional (add defaults when signing up)

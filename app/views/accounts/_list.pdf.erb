@@ -1,0 +1,6 @@
+<tr class="min-w-0 w-full columns-2 md:columns-3 lg:columns-4">
+  <%= render_text_column    field: t('.name'), table: :head, css: "font-bold truncate" %>
+  <%= render_number_column  field: t(".locale"), table: :head, css: "font-bold text-right" %>
+  <%= render_text_column    field: t(".time_zone"), table: :head, css: "font-bold " %>
+  <%= render_text_column    field: t(".updated_at"), table: :head, css: "font-bold " %>
+</tr>
