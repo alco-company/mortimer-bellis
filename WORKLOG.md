@@ -33,6 +33,7 @@
 * add teams.pdf
 * add users.pdf
 * add locations.pdf
+* add punch_clocks.pdf
 
 ### 14/5/2024
 
