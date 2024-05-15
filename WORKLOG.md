@@ -34,6 +34,7 @@
 * add users.pdf
 * add locations.pdf
 * add punch_clocks.pdf
+* add employees.pdf
 
 ### 14/5/2024
 
