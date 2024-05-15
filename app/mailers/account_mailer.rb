@@ -14,4 +14,17 @@ class AccountMailer < ApplicationMailer
 
     mail to: rcpt, subject: I18n.t("account_mailer.datalon_email.subject")
   end
+
+  def report_state
+    Current.account = params[:account]
+    rcpt =  email_address_with_name Current.account.email, Current.account.name
+    params[:tmpfiles].each_with_index do |tmpfile, i|
+      attachments["report_state_#{i}.pdf"] = File.read(tmpfile)
+
+      # it's a tempfile, so we need to delete it because we reset the finalizer in the ReportingJob
+      File.delete tmpfile
+    end
+
+    mail to: rcpt, subject: I18n.t("account_mailer.report_state.subject")
+  end
 end

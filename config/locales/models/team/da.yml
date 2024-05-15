@@ -1,7 +1,8 @@
 da:
 
   teams:
-
+    default_team: Hold
+    
     create:
       post: Holdet blev oprettet
     update:

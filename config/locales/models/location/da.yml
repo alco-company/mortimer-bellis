@@ -1,6 +1,8 @@
 da:
 
   locations:
+    default_location: Arbejdssted
+
     create:
       post: Arbejdsstedet blev oprettet
     update:

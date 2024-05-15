@@ -11,23 +11,51 @@
 * add Traefik dashboard to traefik.mortimer.pro - https://www.luizkowalski.net/traefik-with-kamal-tips-and-tricks/
 * add exporting ICS files - https://www.driftingruby.com/episodes/exporting-ics-files
 * add employee calendar - duty, free, holiday
+* add Thruster - https://nts.strzibny.name/running-thruster-rails-kamal/
 * add employee SMS service - welcome, EU state report
 * add blackhole
 * add Stripe payments - https://gorails.com/episodes/one-time-payments-with-pay-and-stripe
 * add employee email - welcome, EU state report
 * add web push notifications
+* gem "mission_control-jobs"
 * release RC1
 * big test
 * add company logo
 * add employee mugshot
 * add prettier mail layouts
-* add mail report
-* add state and EU state report
-* fix employee's timezone on punches
+* add state and EU state reporting - when?
 
 ## CHANGELOG
 
+### 15/5/2024
 
+* add accounts.pdf
+
+### 14/5/2024
+
+* make teams and locations optional (add defaults when signing up)
+* show only required fields on employee for a start
+* move locale/time_zone to logo
+* format on sign_in, more
+* format header for indexes
+* fix datalon export
+* prepare for accounts persisting time to send reports
+* try sending PDF report
+
+### 13/5/2024
+
+* add employee_state_job
+* add employee_eu_state_job
+* add build_pdf_job
+
+### 11/5/2024
+
+* setup container w/weasyprint and use httparty to consume 'PDF webservice'
+
+### 10/5/2024
+
+* fix employee's timezone on punches
+* set time_zone right on POS controllers
 
 ### 8/5/2024
 

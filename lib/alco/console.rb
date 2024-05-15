@@ -11,7 +11,7 @@ module Mortimer
     # thx to https://twitter.com/aviflombaum/status/1785424025105133806
     #
     class ::ApplicationRecord
-      class << self 
+      class << self
         alias_method :/, :find
       end
     end

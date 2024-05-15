@@ -13,6 +13,7 @@ class LogoComponent < ApplicationComponent
 
   def view_template
     logo_image
+    show_version
   end
 
   def logo_image
@@ -23,7 +24,7 @@ class LogoComponent < ApplicationComponent
         a(href: helpers.root_path) do
           span(class: "sr-only") { "Mortimer Employee App" }
           if @logo == "mortimer"
-            mortimer_svg superadmin
+            mortimer_svg
           else
             image_tag @logo, class: "h-8 w-auto"
           end
@@ -32,11 +33,12 @@ class LogoComponent < ApplicationComponent
     end
   end
 
-  def superadmin
-    Current.user&.superadmin?
+  def show_version
+    mc = superadmin ? "text-pink-400" : "text-mortimer"
+    div(class: "absolute top-[5px] #{mc} text-xs font-thin") { ENV["MORTIMER_VERSION"] }
   end
 
-  def mortimer_svg(superadmin)
+  def mortimer_svg
     mc = superadmin ? "text-pink-400" : "text-mortimer"
     svg(
       class: "h-8 w-auto #{mc}",

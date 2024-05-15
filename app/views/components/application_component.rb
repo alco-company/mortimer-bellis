@@ -10,6 +10,9 @@ class ApplicationComponent < Phlex::HTML
     end
   end
 
+  def superadmin
+    Current.user&.superadmin?
+  end
 
   def say(msg, level = :info)
     Rails.logger.send(level, "-----------------")

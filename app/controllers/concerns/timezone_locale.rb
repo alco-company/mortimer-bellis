@@ -42,7 +42,7 @@ module TimezoneLocale
     end
 
     def get_locale_from_user_or_account
-      locale = Current.user&.locale || Current.account&.locale
+      Current.user&.locale || Current.account&.locale
     end
 
     #

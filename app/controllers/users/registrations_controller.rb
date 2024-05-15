@@ -29,7 +29,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   # PUT /resource
   def update
-    if params[:user][:role].present? && 
+    if params[:user][:role].present? &&
       !Current.user.superadmin? &&
       [ 0, "0", "superadmin", "Superadmin", "SUPERADMIN" ].include?(params[:user][:role])
       redirect_to edit_user_registration_path, alert: "You are not authorized to change the role to superadmin." and return

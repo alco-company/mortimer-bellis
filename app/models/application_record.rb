@@ -2,6 +2,7 @@ class ApplicationRecord < ActiveRecord::Base
   primary_abstract_class
 
   include ExportCsv
+  include ExportPdf
 
   #
   # extend this method on the model to define the field formats

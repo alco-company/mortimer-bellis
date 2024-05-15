@@ -114,6 +114,19 @@ class Contextmenu < Phlex::HTML
           plain "export"
         end
       end
+      whitespace
+      link_to(
+        helpers.resources_url() + ".pdf",
+        class: "block px-3 py-1 text-sm leading-6 text-gray-900",
+        role: "menuitem",
+        tabindex: "-1",
+        data: { turbo_frame: @turbo_frame }) do
+        plain I18n.t(".pdf")
+        span(class: "sr-only") do
+          plain ", "
+          plain "pdf"
+        end
+      end
     end
   end
 

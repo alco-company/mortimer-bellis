@@ -1,6 +1,8 @@
 da:
 
   employee:
+    me: "Mig"
+    
     update:
       success: Dine oplysninger blev opdateret
     modal:
@@ -14,6 +16,7 @@ da:
           description: Du har godkendt importen - som nu gennemføres i en baggrundsproces. Når processen er færdig, vil du kunne se resultatet i oversigten over medarbejdere (klik på menupunktet medarbejdere).
 
   employees:
+    advanced_configuration: Vis flere indstillingsmuligheder
     create:
       post: Medarbejderen blev oprettet
     update:
@@ -35,6 +38,31 @@ da:
       state: Status
       updated_at: Opdateret den
 
+    reports:
+      state:
+        title: Medarbejdernes indstemplinger det sidste døgn
+        introduction: Denne liste viser en oversigt over medarbejdernes indstemplinger det sidste døgn, opsummeret på arbejdstid, pauser, overarbejde, mm.
+        name: Medarbejder navn
+        work_minutes: Arbejdstid
+        break_minutes: Pause
+      eu_state:
+        title: Medarbejdernes EU Work Time Directive compliance status
+        introduction: Denne liste viser en oversigt over medarbejdernes overholdelse af EU Arbejdstidsdirektivet. Se <a href="https://ec.europa.eu/social/main.jsp?catId=706&langId=en" target="_blank">EU Arbejdstidsdirektivet</a> for yderligere information.
+        name: Medarbejder navn
+        6hrs: 6 timer
+        8hrs: 8 timer
+        11hrs: 11 timer
+        24hrs: 24 timer
+        48hrs: 48 timer
+        notice_missing_data: <<EOF
+          <p>Vi gør opmærksom på, at vi ikke persisterer data til at overvåge følgende forhold vedrørende EU Arbejdstidsdirektivet</p>
+          <ul>
+            <li> betalt årlig ferie på mindst 4 uger om året </li>
+            <li> nattearbejdere må ikke udføre tungt eller farligt arbejde i mere end 8 timer i en 24-timers periode, </li>
+            <li> nattearbejdere har ret til gratis helbredsundersøgelser og under visse omstændigheder til at skifte til dagarbejde. </li>
+          </ul>
+          EOF
+        
     form:
       new: Ny medarbejder
       edit: Rediger medarbejder

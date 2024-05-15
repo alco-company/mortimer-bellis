@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_05_07_142157) do
+ActiveRecord::Schema[7.2].define(version: 2024_05_14_133353) do
   create_table "accounts", force: :cascade do |t|
     t.string "name"
     t.string "email"
@@ -19,6 +19,8 @@ ActiveRecord::Schema[7.2].define(version: 2024_05_07_142157) do
     t.string "time_zone"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "send_state_rrule"
+    t.string "send_eu_state_rrule"
   end
 
   create_table "active_storage_attachments", force: :cascade do |t|

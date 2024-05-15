@@ -23,6 +23,10 @@ module.exports = {
   ],
   theme: {
     extend: {
+      screens: {
+        'xs': '360px',
+        // => @media (min-width: 992px) { ... }
+      },
       fontFamily: {
         sans: ["Inter var", ...defaultTheme.fontFamily.sans],
       },
