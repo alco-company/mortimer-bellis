@@ -10,22 +10,28 @@
 * add handling of constants - https://dev.to/vladhilko/say-goodbye-to-messy-constants-a-new-approach-to-moving-constants-away-from-your-model-58i1
 * add Traefik dashboard to traefik.mortimer.pro - https://www.luizkowalski.net/traefik-with-kamal-tips-and-tricks/
 * add exporting ICS files - https://www.driftingruby.com/episodes/exporting-ics-files
-* add employee calendar - duty, free, holiday
-* add Thruster - https://nts.strzibny.name/running-thruster-rails-kamal/
 * add employee SMS service - welcome, EU state report
 * add blackhole
 * add Stripe payments - https://gorails.com/episodes/one-time-payments-with-pay-and-stripe
 * add employee email - welcome, EU state report
-* add web push notifications
 * gem "mission_control-jobs"
+* add employee calendar - duty, free, holiday
+* add web push notifications
+* add Thruster - https://nts.strzibny.name/running-thruster-rails-kamal/
 * release RC1
 * big test
 * add company logo
 * add employee mugshot
 * add prettier mail layouts
 * add state and EU state reporting - when?
+* add punch only on "no-shows"
+* fix employees punching same state on multiple devices
 
 ## CHANGELOG
+
+### 16/5/2024
+
+* adjust screen on employee app
 
 ### 15/5/2024
 

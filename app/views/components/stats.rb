@@ -1,9 +1,10 @@
 class Stats < ApplicationComponent
   attr_accessor :stats
 
-  def initialize(title:, stats: nil)
+  def initialize(title:, stats: nil, css: nil)
     @title = title
     @stats = stats
+    @css = css || "mt-5 grid grid-cols-2 gap-5"
   end
 
   def view_template
@@ -11,16 +12,16 @@ class Stats < ApplicationComponent
       h3(class: "text-center text-base font-semibold w-full text-gray-900") do
         @title
       end
-      div(class: "mt-5 grid grid-cols-2 gap-5 sm:grid-cols-2") do
+      div(class: @css) do
         stats.each do |stat|
           div(
-            class: "overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6"
+            class: "grid overflow-hidden items-center justify-center rounded-lg bg-white px-4 py-5 shadow sm:p-6"
           ) do
-            div(class: "truncate text-sm font-medium text-gray-500") do
+            div(class: "place-self-center truncate text-sm font-medium text-gray-500") do
               stat[:title]
             end
             div(
-              class: "mt-1 text-3xl font-semibold tracking-tight text-gray-900"
+              class: "place-self-center mt-1 text-3xl font-semibold tracking-tight text-gray-900"
             ) { stat[:value] }
           end
         end
