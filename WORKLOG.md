@@ -27,13 +27,13 @@
 * add state and EU state reporting - when?
 * add punch only on "no-shows"
 * fix employees punching same state on multiple devices
-* list payroll_period punches on punch_clocks
 
 ## CHANGELOG
 
 ### 17/5/2024
 
 * add background job mgmt - wip
+* list payroll_period punches on punch_clocks
 
 ### 16/5/2024
 
