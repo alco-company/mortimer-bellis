@@ -40,6 +40,7 @@
 * setup solid_queue for offloading background jobs
 * fix writer/reader issue with delete vs destroy
 * add model.method association to form's
+* add folded to contextmenu
 
 ### 16/5/2024
 
