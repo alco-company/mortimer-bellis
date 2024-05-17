@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_05_14_133353) do
+ActiveRecord::Schema[7.2].define(version: 2024_05_16_134014) do
   create_table "accounts", force: :cascade do |t|
     t.string "name"
     t.string "email"
@@ -49,6 +49,21 @@ ActiveRecord::Schema[7.2].define(version: 2024_05_14_133353) do
     t.bigint "blob_id", null: false
     t.string "variation_digest", null: false
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
+  end
+
+  create_table "background_jobs", force: :cascade do |t|
+    t.integer "account_id", null: false
+    t.integer "user_id"
+    t.integer "state", default: 0
+    t.string "job_klass"
+    t.text "params"
+    t.text "schedule"
+    t.datetime "next_run_at"
+    t.string "job_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_background_jobs_on_account_id"
+    t.index ["user_id"], name: "index_background_jobs_on_user_id"
   end
 
   create_table "employees", force: :cascade do |t|
@@ -334,6 +349,8 @@ ActiveRecord::Schema[7.2].define(version: 2024_05_14_133353) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "background_jobs", "accounts"
+  add_foreign_key "background_jobs", "accounts", on_delete: :cascade
   add_foreign_key "employees", "accounts"
   add_foreign_key "employees", "accounts", on_delete: :cascade
   add_foreign_key "employees", "teams"

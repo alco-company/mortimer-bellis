@@ -18,6 +18,7 @@
 * add employee calendar - duty, free, holiday
 * add web push notifications
 * add Thruster - https://nts.strzibny.name/running-thruster-rails-kamal/
+* gem fugit - more prominent substitute for CronTask
 * release RC1
 * big test
 * add company logo
@@ -26,8 +27,13 @@
 * add state and EU state reporting - when?
 * add punch only on "no-shows"
 * fix employees punching same state on multiple devices
+* list payroll_period punches on punch_clocks
 
 ## CHANGELOG
+
+### 17/5/2024
+
+* add background job mgmt - wip
 
 ### 16/5/2024
 

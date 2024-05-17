@@ -9,6 +9,7 @@ Rails.application.routes.draw do
     omniauth_callbacks: "users/omniauth_callbacks"
   }
 
+  resources :background_jobs
   resources :pages
   resources :users
   resources :punches
