@@ -131,10 +131,11 @@ da:
         team_id: "Hold/arbejdsgruppe"
         name: Navn
         pincode: Pinkode
+        payroll_employee_ident: Løn nummer
+        punching_absence: Stempler kun fravær
         access_token: API nøgle
         last_punched_at: sidst stemplet
         state: status
-        payroll_employee_ident: Løn nummer
         punches_settled_at: sidst afstemt
         job_title: job titel
         birthday: fødselsdag
@@ -321,6 +322,7 @@ da:
       user:
         name: Navn
         account:
+          one: Konto
           name: Konto
         invited_by: 
           name: Blev inviteret af

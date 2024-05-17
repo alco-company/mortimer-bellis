@@ -16,6 +16,7 @@ class Employee < ApplicationRecord
   scope :by_locale, ->(locale) { where("locale LIKE ?", "%#{locale}%") if locale.present? }
   scope :by_time_zone, ->(time_zone) { where("time_zone LIKE ?", "%#{time_zone}%") if time_zone.present? }
   scope :by_pincode, ->(pincode) { where("pincode LIKE ?", "%#{pincode}%").order(pincode: :asc) if pincode.present? }
+  scope :punching_absence, -> { where(punching_absence: true) }
 
   validates :name, presence: true, uniqueness: { scope: [ :account_id, :team_id ], message: I18n.t("employees.errors.messages.name_exist_for_team") }
   validates :pincode, presence: true, uniqueness: { scope: :account_id, message: I18n.t("employees.errors.messages.pincode_exist_for_account") }

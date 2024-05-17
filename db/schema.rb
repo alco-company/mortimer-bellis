@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_05_16_134014) do
+ActiveRecord::Schema[7.2].define(version: 2024_05_17_122053) do
   create_table "accounts", force: :cascade do |t|
     t.string "name"
     t.string "email"
@@ -101,6 +101,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_05_16_134014) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "allowed_ot_minutes"
+    t.boolean "punching_absence"
     t.index ["account_id"], name: "index_employees_on_account_id"
     t.index ["team_id"], name: "index_employees_on_team_id"
   end

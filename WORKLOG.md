@@ -25,7 +25,6 @@
 * add employee mugshot
 * add prettier mail layouts
 * add state and EU state reporting - when?
-* add punch only on "no-shows"
 * fix employees punching same state on multiple devices
 
 ## CHANGELOG
@@ -41,6 +40,8 @@
 * fix writer/reader issue with delete vs destroy
 * add model.method association to form's
 * add folded to contextmenu
+* add error_report to user_mailer
+* add punching_absence
 
 ### 16/5/2024
 
