@@ -46,6 +46,57 @@ class ApplicationForm < Superform::Rails::Form
     end
   end
 
+  class BooleanField < Superform::Rails::Components::CheckboxComponent
+    def field_attributes
+      super.merge(type: "boolean")
+    end
+    def template(&)
+      div(class: attributes[:class], data: { controller: "boolean"}) do
+        input(name: dom.name, data: { boolean_target: "input" }, type: :hidden, value: field.value ? "1" : "0")
+        button(
+          type: "button",
+          data: { action: "click->boolean#toggle", boolean_target: "button" },
+          class:
+            "group relative inline-flex h-5 w-10 flex-shrink-0 cursor-pointer items-center justify-center rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2",
+          role: "switch",
+          aria_checked: "false"
+        ) do
+          whitespace
+          span(class: "sr-only") { "Use setting" }
+          whitespace
+          span(
+            aria_hidden: "true",
+            class: "pointer-events-none absolute h-full w-full rounded-md bg-white"
+          )
+          whitespace
+          comment { %(Enabled: "bg-indigo-600", Not Enabled: "bg-gray-200") }
+          whitespace
+          span(
+            aria_hidden: "true",
+            data: { boolean_target: "indicator" },
+            class:
+              "#{setIndicator} pointer-events-none absolute mx-auto h-4 w-9 rounded-full transition-colors duration-200 ease-in-out"
+          )
+          whitespace
+          comment { %(Enabled: "translate-x-5", Not Enabled: "translate-x-0") }
+          whitespace
+          span(
+            aria_hidden: "true",
+            data: { boolean_target: "handle" },
+            class:
+              "#{setHandle} pointer-events-none absolute left-0 inline-block h-5 w-5 transform rounded-full border border-gray-200 bg-white shadow ring-0 transition-transform duration-200 ease-in-out"
+          )
+        end
+      end
+    end
+    def setIndicator
+      field.value ? "bg-sky-600" : "bg-gray-200"
+    end
+    def setHandle
+      field.value ? "translate-x-5" : "translate-x-0"
+    end
+  end
+
   class TimeField < Superform::Rails::Components::InputComponent
     def field_attributes
       super.merge(type: "time")
@@ -78,6 +129,9 @@ class ApplicationForm < Superform::Rails::Form
     end
     def enum_select(*collection, **attributes, &)
       EnumSelectField.new(self, attributes: attributes, collection: collection, &)
+    end
+    def boolean(**attributes)
+      BooleanField.new(self, attributes: attributes)
     end
     def week(**attributes)
       WeekField.new(self, attributes: attributes)
@@ -137,6 +191,7 @@ class ApplicationForm < Superform::Rails::Form
     case model.field_formats(key)
     when :date; model.send(key).strftime("%d-%m-%Y") rescue nil
     when :time; model.send(key).strftime("%H:%M") rescue nil
+    when :boolean; model.send(key) ? I18n.t(:yes) : I18n.t(:no)
     when :association; eval("model.#{key}")
     else; model.send key
     end

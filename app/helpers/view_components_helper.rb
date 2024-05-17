@@ -31,6 +31,10 @@ module ViewComponentsHelper
     render Contextmenu.new(**attribs), &block
   end
 
+  def render_boolean_column **attribs, &block
+    render BooleanColumn.new(**attribs), &block
+  end
+
   def render_text_column **attribs, &block
     render TextColumn.new(**attribs), &block
   end

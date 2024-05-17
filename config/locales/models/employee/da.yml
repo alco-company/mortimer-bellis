@@ -35,6 +35,7 @@ da:
       email: Email
       phone: Telefon
       pincode: Pinkode
+      punching_absence: Kun fravær
       state: Status
       updated_at: Opdateret den
 

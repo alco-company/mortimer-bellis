@@ -5,7 +5,7 @@ class Employees::Form < ApplicationForm
       row field(:name).input(class: "mort-form-text")
       row field(:pincode).input(class: "mort-form-text")
       row field(:payroll_employee_ident).input(class: "mort-form-text")
-      row field(:punching_absence).input(class: "mort-form-text")
+      row field(:punching_absence).boolean(class: "mort-form-bool")
       div do
         div(class: "mort-btn-secondary", data: { action: "click->employee#toggleAdvanced" }) { I18n.t("employees.advanced_configuration") }
       end if @editable

@@ -42,6 +42,7 @@
 * add error_report to user_mailer
 * add punching_absence
 * fix employees punching same state on multiple devices
+* add boolean field format, forms and lists
 
 ### 16/5/2024
 

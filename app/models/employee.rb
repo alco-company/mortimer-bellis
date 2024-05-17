@@ -40,6 +40,19 @@ class Employee < ApplicationRecord
     Employees::Form.new resource, editable: editable
   end
 
+  #
+  # extend this method on the model to define the field formats
+  # its a callback from the superform when rendering the form
+  # (in non-editable mode, the form will render the field value using this method)
+  # see app/views/forms/application_form.rb#row
+  #
+  def field_formats(key)
+    case key
+    when :punching_absence;           :boolean
+    else; super(key)
+    end
+  end
+
   def self.next_pincode(pin)
     pins = Employee.pluck(:pincode).compact.sort
     pin = "0001" if pin.blank?
