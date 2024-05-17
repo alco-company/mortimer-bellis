@@ -113,7 +113,7 @@ class ApplicationForm < Superform::Rails::Form
         end
       end
       div(class: "mort-field") do
-        plain(component.field.value)
+        plain(fformat(model, component.field.key))
       end
     end
   end
@@ -137,6 +137,7 @@ class ApplicationForm < Superform::Rails::Form
     case model.field_formats(key)
     when :date; model.send(key).strftime("%d-%m-%Y") rescue nil
     when :time; model.send(key).strftime("%H:%M") rescue nil
+    when :association; eval("model.#{key}")
     else; model.send key
     end
   end

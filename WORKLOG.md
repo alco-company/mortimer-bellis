@@ -39,6 +39,7 @@
 * add queueable for background jobs
 * setup solid_queue for offloading background jobs
 * fix writer/reader issue with delete vs destroy
+* add model.method association to form's
 
 ### 16/5/2024
 

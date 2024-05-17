@@ -14,6 +14,7 @@ class ApplicationRecord < ActiveRecord::Base
     case key
     when :updated_at, :created_at, :punched_at, :last_punched_at;   :datetime
     when :birthday, :hired_at, :punches_settled_at;                 :date
+    when /\./;                                                      :association
     else; nil
     end
   end
