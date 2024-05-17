@@ -34,6 +34,7 @@
 
 * add background job mgmt - wip
 * list payroll_period punches on punch_clocks
+* split of SQLite into writer/reader
 
 ### 16/5/2024
 
