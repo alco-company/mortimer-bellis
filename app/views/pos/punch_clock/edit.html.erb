@@ -7,7 +7,20 @@
       # { title: I18n.t('menu.pos.profile'), url: pos_punch_cards_url( api_key: @resource.access_token, employee: {id: @employee.id} ) },
       # { title: I18n.t('menu.pos.payroll_period'), url: pos_punch_cards_url( api_key: @resource.access_token, employee: {id: @employee.id} ) }
     ])
-  end %>
+  end 
+
+  content_for :footer do 
+    render_mortimer_footer(request: request)
+  end
+  
+%>
+<% content_for :flash do %>
+  <% flash.each do |type, msg| %>
+    <div>
+      <p data-controller="notice" class="mort-flash-<%=type%>" id="notice"><%= msg %></p>
+    </div>
+  <% end %>
+<% end %>
 
 <div
   data-controller="punch-clock"
@@ -19,4 +32,3 @@
   <%= render_punch_clock_header(resource: @resource, employee: @employee) %>
   <%= render PunchClockPunch.new resource: @resource, employee: @employee, tab: params[:tab] %>
 </div>
-<%= render_mortimer_footer(request: request)  %>

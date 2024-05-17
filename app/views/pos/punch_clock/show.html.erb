@@ -4,7 +4,21 @@
 <% end %>
 <% content_for :nav do 
     render NavigationComponent.new( items: [])
-  end %>
+  end 
+
+  content_for :footer do 
+    render_mortimer_footer(request: request)
+  end
+  
+%>
+<% content_for :flash do %>
+  <% flash.each do |type, msg| %>
+    <div>
+      <p data-controller="notice" class="mort-flash-<%=type%>" id="notice"><%= msg %></p>
+    </div>
+  <% end %>
+<% end %>
+
 
 <div
   data-controller="punch-clock"
@@ -17,4 +31,3 @@
   <%= render partial: 'register' %>
 
 </div>
-<%= render_mortimer_footer(request: request)  %>

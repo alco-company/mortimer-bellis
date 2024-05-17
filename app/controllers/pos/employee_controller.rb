@@ -18,8 +18,7 @@ class Pos::EmployeeController < Pos::PosController
   # def edit
   # end
 
-  # #
-  # # Parameters: {"authenticity_token"=>"[FILTERED]", "punch_clock"=>{"api_key"=>"[FILTERED]"}, "employee"=>{"state"=>"IN", "id"=>"1"}, "button"=>"", "id"=>"1"}
+  # # Parameters: {"authenticity_token"=>"[FILTERED]", "employee"=>{"api_key"=>"[FILTERED]", "state"=>"in", "id"=>"122"}, "button"=>"", "api_key"=>"[FILTERED]"}
   # Manuel entry of work:
   # "punch"=>{"from_at"=>"2024-05-06T07:20", "to_at"=>"2024-05-06T15:20"}, "api_key"=>"YqymK1swsjkqSSeG3DFVjq1d", "controller"=>"pos/employee", "action"=>"create"} permitted: false>
   #
@@ -27,10 +26,16 @@ class Pos::EmployeeController < Pos::PosController
   #  "punch"=>{"from_at"=>"2024-05-06", "to_at"=>"2024-05-06", "reason"=>"nursing_sick"}, "api_key"=>"YqymK1swsjkqSSeG3DFVjq1d", "controller"=>"pos/employee", "action"=>"create"} permitted: false>
   def create
     if params[:employee].present?
+      if params[:employee][:state] == @resource.state
+        redirect_to pos_employee_url(api_key: @resource.access_token), warning: t("state_eq_current_state") and return
+      end
       @resource.punch nil, employee_params[:state], request.remote_ip
       @resource.update state: employee_params[:state]
       redirect_to pos_employee_url(api_key: @resource.access_token) and return
     else
+      unless @resource.out?
+        redirect_to pos_employee_url(api_key: @resource.access_token), warning: t("employee_working_punch_out_first") and return
+      end
       @resource.punch_range punch_params[:reason], request.remote_ip, punch_params[:from_at], punch_params[:to_at]
       redirect_to pos_employee_url(api_key: @resource.access_token, tab: "payroll") and return
     end

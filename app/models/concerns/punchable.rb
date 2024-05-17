@@ -2,7 +2,7 @@ module Punchable
   extend ActiveSupport::Concern
   included do
     def todays_punches
-      punches.where("punched_at >= ?", Date.current.beginning_of_day).order(punched_at: :desc)
+      punches.where(punched_at: Date.current.beginning_of_day..Date.current.end_of_day).order(punched_at: :desc)
     end
 
     def minutes_today_up_to_now

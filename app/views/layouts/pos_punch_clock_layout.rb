@@ -25,6 +25,8 @@ class PosPunchClockLayout < ApplicationView
         main(class: "") do
           yield
         end
+        yield :flash
+        yield :footer
         # yield :motd
       end
     end

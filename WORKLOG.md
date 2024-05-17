@@ -25,7 +25,6 @@
 * add employee mugshot
 * add prettier mail layouts
 * add state and EU state reporting - when?
-* fix employees punching same state on multiple devices
 
 ## CHANGELOG
 
@@ -42,6 +41,7 @@
 * add folded to contextmenu
 * add error_report to user_mailer
 * add punching_absence
+* fix employees punching same state on multiple devices
 
 ### 16/5/2024
 
