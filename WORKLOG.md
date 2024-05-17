@@ -21,6 +21,8 @@
 * gem fugit - more prominent substitute for CronTask
 * release RC1
 * big test
+* make locale and time_zone selectable on sign_up
+* make locale and time_zone select's
 * add company logo
 * add employee mugshot
 * add prettier mail layouts
@@ -28,6 +30,11 @@
 
 ## CHANGELOG
 
+### 18/5/2024
+
+* add boolean field format, forms and lists
+* make payroll_employee_ident semi-optional - auto-generate if not set
+  
 ### 17/5/2024
 
 * add background job mgmt - wip
@@ -42,7 +49,6 @@
 * add error_report to user_mailer
 * add punching_absence
 * fix employees punching same state on multiple devices
-* add boolean field format, forms and lists
 
 ### 16/5/2024
 

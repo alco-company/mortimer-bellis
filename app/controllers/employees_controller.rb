@@ -3,6 +3,7 @@ class EmployeesController < MortimerController
 
     # Only allow a list of trusted parameters through.
     def resource_params
+      params[:employee][:payroll_employee_ident] = Employee.next_payroll_employee_ident(params[:employee][:payroll_employee_ident])
       params.require(:employee).permit(
         :account_id,
         :team_id,

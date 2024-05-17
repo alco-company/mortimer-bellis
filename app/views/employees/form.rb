@@ -4,12 +4,12 @@ class Employees::Form < ApplicationForm
       row field(:team_id).select(Team.by_account.order(name: :asc).select(:id, :name), prompt: I18n.t(".select_team"), class: "mort-form-text").focus
       row field(:name).input(class: "mort-form-text")
       row field(:pincode).input(class: "mort-form-text")
-      row field(:payroll_employee_ident).input(class: "mort-form-text")
       row field(:punching_absence).boolean(class: "mort-form-bool")
       div do
         div(class: "mort-btn-secondary", data: { action: "click->employee#toggleAdvanced" }) { I18n.t("employees.advanced_configuration") }
       end if @editable
       div(data: { employee_target: "advanced" }, class: "hidden") do
+        row field(:payroll_employee_ident).input(class: "mort-form-text")
         view_only field(:access_token).input(class: "mort-form-text")
         row field(:description).input(class: "mort-form-text")
         row field(:email).input(class: "mort-form-text")
