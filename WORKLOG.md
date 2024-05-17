@@ -38,6 +38,7 @@
 * add CronTask for background jobs, more
 * add queueable for background jobs
 * setup solid_queue for offloading background jobs
+* fix writer/reader issue with delete vs destroy
 
 ### 16/5/2024
 

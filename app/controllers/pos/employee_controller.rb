@@ -61,7 +61,7 @@ class Pos::EmployeeController < Pos::PosController
       @resource.punch_cards.where(work_date: params[:date]).destroy_all
       redirect_to pos_employee_url(api_key: @resource.access_token, tab: "payroll") and return
     else
-      Punch.find(params[:id]).delete
+      Punch.find(params[:id]).destroy!
       redirect_to pos_employee_url(api_key: @resource.access_token, tab: "payroll") and return
     end
   end
