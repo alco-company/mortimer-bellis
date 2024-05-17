@@ -68,6 +68,7 @@ Rails.application.configure do
 
   # Use a real queuing backend for Active Job (and separate queues per environment).
   config.active_job.queue_adapter = :solid_queue
+  config.solid_queue.connects_to = { database: { writing: :writer, reading: :reader } }
   config.active_job.enqueue_after_transaction_commit = :always
   # config.active_job.queue_name_prefix = "mortimer_production"
 

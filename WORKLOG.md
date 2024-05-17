@@ -37,6 +37,7 @@
 * split of SQLite into writer/reader
 * add CronTask for background jobs, more
 * add queueable for background jobs
+* setup solid_queue for offloading background jobs
 
 ### 16/5/2024
 

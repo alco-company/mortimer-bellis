@@ -114,9 +114,14 @@ da:
         comment: Beskrivelse - især ved overarbejde, vikariat, evt sygdom og mere
         reason: Årsag - '15MIN', og 'XTRA' ved aftalte særlige indstemplinger
       background_job:
-        klass: Klasse 
+        account: Konto
+        user: Bruger
+        state: Status
+        job_klass: Klasse/Model
+        job_id: Active Job / Solid Queue Job ID
         active: Aktiv 
         schedule: Plan 
+        next_run_at: Næste kørsel
         params: Argumenter
       dashboard:
         name: Navn
@@ -214,6 +219,8 @@ da:
         state: Status
         
       punch_card:
+        employee:
+          name: Medarbejder
         punched_at: "stemplet kl:"
         employee_id: Medarbejder
         location_id: Arbejdssted
@@ -223,6 +230,8 @@ da:
         work_date: Arbejdsdato
         work_minutes: Arbejdstid (minutter)
         break_minutes: Pauser (minutter)
+        ot1_minutes: Overtid 1 (minutter)
+        ot2_minutes: Overtid 2 (minutter)
         reason: Årsag
         state: Status
       punch_clock:
@@ -311,7 +320,10 @@ da:
         sub_scheme: Under skema
       user:
         name: Navn
-        account_id: Konto
+        account:
+          name: Konto
+        invited_by: 
+          name: Blev inviteret af
         email: Email adresse
         role: Rolle
         user_name: Brugernavn
