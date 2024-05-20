@@ -30,6 +30,10 @@
 
 ## CHANGELOG
 
+### 20/5/2024
+
+* make employees delete all punches today if they like
+
 ### 18/5/2024
 
 * add boolean field format, forms and lists

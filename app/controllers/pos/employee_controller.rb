@@ -27,13 +27,14 @@ class Pos::EmployeeController < Pos::PosController
   def create
     if params[:employee].present?
       if params[:employee][:state] == @resource.state
-        redirect_to pos_employee_url(api_key: @resource.access_token), warning: t("state_eq_current_state") and return
+        redirect_to pos_employee_url(api_key: @resource.access_token), warning: t("state_eq_current_state", state: @resource.state) and return
       end
       @resource.punch nil, employee_params[:state], request.remote_ip
       @resource.update state: employee_params[:state]
       redirect_to pos_employee_url(api_key: @resource.access_token) and return
     else
-      unless @resource.out?
+      if (Date.today == Date.parse(punch_params[:from_at]) || 
+        Date.today == Date.parse(punch_params[:to_at])) && !@resource.out?
         redirect_to pos_employee_url(api_key: @resource.access_token), warning: t("employee_working_punch_out_first") and return
       end
       @resource.punch_range punch_params[:reason], request.remote_ip, punch_params[:from_at], punch_params[:to_at]
@@ -64,9 +65,15 @@ class Pos::EmployeeController < Pos::PosController
   def destroy
     if params[:all].present?
       @resource.punch_cards.where(work_date: params[:date]).destroy_all
+      @resource.todays_punches(date: Date.parse(params[:date])).destroy_all
       redirect_to pos_employee_url(api_key: @resource.access_token, tab: "payroll") and return
     else
-      Punch.find(params[:id]).destroy!
+      punch = Punch.find(params[:id])
+      if punch.punch_card && punch.punch_card.punches.size == 1
+        punch.punch_card.destroy 
+      else
+        punch.destroy
+      end
       redirect_to pos_employee_url(api_key: @resource.access_token, tab: "payroll") and return
     end
   end
