@@ -16,7 +16,7 @@
     <div class="hidden md:block">
       <%== pagy_nav(@pagy) if @pagy.pages > 1 %>
     </div>
-    <div class="flex gap-2">
+    <div class="flex gap-2 justify-end">
       <%= link_to t("#{ resource_class.table_name}.list.new"), new_resource_url, class: "mort-btn-primary" %>
     </div>
   </div>

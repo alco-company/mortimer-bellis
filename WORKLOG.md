@@ -33,6 +33,8 @@
 ### 20/5/2024
 
 * make employees delete all punches today if they like
+* show flashes with a component - proper styling
+* place header button right
 
 ### 18/5/2024
 
