@@ -16,7 +16,7 @@ module SumPunches
             punches = employee.punches.where(punched_at: date.beginning_of_day..date.end_of_day).order(punched_at: :desc)
             case punches.size
             when 0; strange_no_punches
-            when 1; one_punch pc, punches, employee, across_midnight
+            when 1; one_punch pc, punches, employee, across_midnight, date
             when 2; two_punches pc, punches
             else; more_punches pc, punches, employee
             end if punches.any?
@@ -31,11 +31,11 @@ module SumPunches
       say "No punches found for #{employee.name} on #{date} - which is weird (considering where we're at right now!"
     end
 
-    def one_punch(pc, punches, employee, across_midnight)
+    def one_punch(pc, punches, employee, across_midnight, date)
       # we can't do anything with a single punch if we're across midnight
       return if across_midnight
 
-      return PunchCard.recalculate(employee: employee, across_midnight: true) unless punches.first.in?
+      return PunchCard.recalculate(employee: employee, across_midnight: true, date: date) unless punches.first.in?
       # this is the only punch of the day, so we'll calculate the time from the punch to now -
       # and come back and do it again when the employee punches out'
       punches.update_all punch_card_id: pc.id

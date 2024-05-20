@@ -67,9 +67,9 @@ class PunchesController < MortimerController
     #
     # implement on the controller inheriting this concern
     def create_callback(res)
-      PunchCard.recalculate res.employee, false, res.punched_at
+      PunchCard.recalculate employee: res.employee, across_midnight: false, date: res.punched_at.to_date
     end
     def update_callback(res)
-      PunchCard.recalculate res.employee, false, res.punched_at
+      PunchCard.recalculate employee: res.employee, across_midnight: false, date: res.punched_at.to_date
     end
 end
