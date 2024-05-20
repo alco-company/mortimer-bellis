@@ -1,5 +1,6 @@
 da:
-
+  employee_working_punch_out_first: "Du skal stemple ud først!"
+  state_eq_current_state: "Medarbejderen er allerede stemplet %{state}"
   employee:
     me: "Mig"
     
