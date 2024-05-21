@@ -25,16 +25,36 @@ class ApplicationForm < Superform::Rails::Form
 
   class OptionMapper < Superform::Rails::OptionMapper
     def each(&options)
-      @collection.flatten.each do |item|
+      @collection.each do |item|
         case item
-          in {id:, value:}
-            options.call id, value
           in ActiveRecord::Relation => relation
             active_record_relation_options_enumerable(relation).each(&options)
+          in Array => colr
+            colors_enumerable(colr).each(&options)
+            # options.call id, value
           in id, value
             options.call id, value
           in value
             options.call value, value.to_s
+        end
+      end
+    end
+
+    def colors_enumerable(colr)
+      Enumerator.new do |collection|
+        colr.each do |color|
+          collection << [ color.id, color.value ]
+        end
+      end
+    end
+
+    def active_record_relation_options_enumerable(relation)
+      Enumerator.new do |collection|
+        relation.each do |object|
+          attributes = object.attributes
+          id = attributes.delete(relation.primary_key)
+          value = attributes.values.join(" ")
+          collection << [ id, value ]
         end
       end
     end

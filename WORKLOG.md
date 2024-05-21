@@ -39,6 +39,7 @@
 * set location color as select
 * set team color as select
 * set account color as select
+* error on color generation
 
 ### 20/5/2024
 

@@ -1,4 +1,11 @@
-COLORS = %w[gray red fuchsia blue green yellow indigo orange lime cyan pink amber stone].collect { |color| { value: I18n.t("colors.#{color}"), id: "border-#{color}-500" } }.freeze
+class Colr
+  attr_accessor :value, :id
+  def initialize(color)
+    @value = I18n.t("colors.#{color}")
+    @id = "border-#{color}-500"
+  end
+end
+COLORS = %w[gray red fuchsia blue green yellow indigo orange lime cyan pink amber stone].collect { |color| Colr.new(color) }.freeze
 # tailwindcss colors
 #
 # border-gray-500
@@ -52,10 +59,10 @@ class ApplicationRecord < ActiveRecord::Base
   end
 
 
-  def self.colors(key = nil)
-    return COLORS if key.nil?
-    COLORS.filter { |k| k[:id] == key }[0][:value]
+  def self.colors(key = 1)
+    return COLORS if key == 1
+    COLORS.filter { |k| k if k.id == key }[0].value
   rescue
-    key
+    ""
   end
 end
