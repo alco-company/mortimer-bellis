@@ -10,6 +10,10 @@ class Employee < ApplicationRecord
   has_many :punches, dependent: :destroy
 
   has_secure_token :access_token
+  has_one_attached :mugshot do |attachable|
+    attachable.variant :thumb, resize: "40x40"
+    attachable.variant :small, resize: "100x100"
+  end
 
   scope :by_name, ->(name) { where("name LIKE ? or pincode LIKE ? or payroll_employee_ident LIKE ? or job_title LIKE ? or cell_phone LIKE ? or email LIKE ?", "%#{name}%", "%#{name}%", "%#{name}%", "%#{name}%", "%#{name}%", "%#{name}%") if name.present? }
   scope :by_team, ->(team) { joins(:team).where("teams.name LIKE ?", "%#{team}%") if team.present? }
@@ -37,7 +41,7 @@ class Employee < ApplicationRecord
   end
 
   def self.form(resource, editable = true)
-    Employees::Form.new resource, editable: editable
+    Employees::Form.new resource, editable: editable, enctype: "multipart/form-data"
   end
 
   #
@@ -49,6 +53,7 @@ class Employee < ApplicationRecord
   def field_formats(key)
     case key
     when :punching_absence;           :boolean
+    when :mugshot;                    :file
     else; super(key)
     end
   end

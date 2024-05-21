@@ -24,7 +24,6 @@
 * make locale and time_zone selectable on sign_up
 * make locale and time_zone select's
 * add company logo
-* add employee mugshot
 * add prettier mail layouts
 * add state and EU state reporting - when?
 
@@ -33,6 +32,7 @@
 ### 21/5/2024
 
 * users/new - missing name
+* add employee mugshot
 
 ### 20/5/2024
 

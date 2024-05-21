@@ -46,6 +46,22 @@ class ApplicationForm < Superform::Rails::Form
     end
   end
 
+  class FileField < Superform::Rails::Components::InputComponent
+    def field_attributes
+      super.merge(type: "file", accept: "image/*")
+    end
+    def template(&)
+      div(class: "mort-field") do
+        input(**attributes)
+        if field.value.attached?
+          div(class: "mort-field") do
+            img(src: url_for(field.value), class: "mort-img")
+          end
+        end
+      end
+    end
+  end
+
   class BooleanField < Superform::Rails::Components::CheckboxComponent
     def field_attributes
       super.merge(type: "boolean")
@@ -130,6 +146,9 @@ class ApplicationForm < Superform::Rails::Form
     def enum_select(*collection, **attributes, &)
       EnumSelectField.new(self, attributes: attributes, collection: collection, &)
     end
+    def file(**attributes)
+      FileField.new(self, attributes: attributes)
+    end
     def boolean(**attributes)
       BooleanField.new(self, attributes: attributes)
     end
@@ -182,8 +201,18 @@ class ApplicationForm < Superform::Rails::Form
       @editable ?
         render(component) :
         div(class: "mr-5") do
+          model.field_formats(component.field.key) == :file ?
+          display_image(component.field) :
           plain(fformat(model, component.field.key))
         end
+    end
+  end
+
+  def display_image(field)
+    if model.send(field.key).attached?
+      div(class: "mort-field") do
+        img(src: url_for(model.send(field.key)), class: "mort-img")
+      end
     end
   end
 

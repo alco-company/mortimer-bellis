@@ -8,6 +8,7 @@ class EmployeesController < MortimerController
         :account_id,
         :team_id,
         :name,
+        :mugshot,
         :pincode,
         :payroll_employee_ident,
         :punching_absence,

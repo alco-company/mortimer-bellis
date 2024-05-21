@@ -130,6 +130,7 @@ da:
       employee:
         team_id: "Hold/arbejdsgruppe"
         name: Navn
+        mugshot: Profil billede
         pincode: Pinkode
         payroll_employee_ident: Løn nummer
         punching_absence: Stempler kun fravær
