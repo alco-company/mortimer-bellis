@@ -30,6 +30,10 @@
 
 ## CHANGELOG
 
+### 21/5/2024
+
+* users/new - missing name
+
 ### 20/5/2024
 
 * make employees delete all punches today if they like

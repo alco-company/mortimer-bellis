@@ -192,7 +192,7 @@ class ApplicationForm < Superform::Rails::Form
     when :date; model.send(key).strftime("%d-%m-%Y") rescue nil
     when :time; model.send(key).strftime("%H:%M") rescue nil
     when :boolean; model.send(key) ? I18n.t(:yes) : I18n.t(:no)
-    when :association; eval("model.#{key}")
+    when :association; eval("model.#{key}") rescue 'n/a'
     else; model.send key
     end
   end

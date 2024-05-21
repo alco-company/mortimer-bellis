@@ -33,6 +33,6 @@ class Users::Form < ApplicationForm
     view_only field(:invitation_sent_at).datetime(class: "mort-form-text")
     view_only field(:invitation_accepted_at).datetime(class: "mort-form-text")
     # view_only field(:global_queries).boolean(class: "mort-form-text")
-    view_only field("invited_by.name").input(class: "mort-form-text", value: (model.invited_by.send :email) ) if model.invited_by
+    view_only field("invited_by.name").input(class: "mort-form-text", value: (model.invited_by.send :email)) if model.invited_by
   end
 end
