@@ -37,6 +37,7 @@
 * fix user_mugshot on regular/admin users
 * allow admin to change account settings
 * set location color as select
+* set team color as select
 
 ### 20/5/2024
 

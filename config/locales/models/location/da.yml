@@ -11,19 +11,6 @@ da:
       post: Arbejdsstedet blev slettet
 
     punch_clocks: Stempelure
-    
-    colors:
-      red: Rød
-      green: Grøn
-      blue: Blå
-      yellow: Gul
-      orange: Orange
-      purple: Lilla
-      pink: Pink
-      brown: Brun
-      gray: Grå
-      black: Sort
-      white: Hvid
 
     list:
       title: Arbejdssteder

@@ -1,3 +1,20 @@
+COLORS = %w[gray red fuchsia blue green yellow indigo orange lime cyan pink amber stone].collect { |color| { value: I18n.t("colors.#{color}"), id: "border-#{color}-500" } }.freeze
+# tailwindcss colors
+#
+# border-gray-500
+# border-red-500
+# border-fuchsia-500
+# border-blue-500
+# border-green-500
+# border-yellow-500
+# border-indigo-500
+# border-orange-500
+# border-lime-500
+# border-cyan-500
+# border-pink-500
+# border-amber-500
+# border-stone-500
+
 class ApplicationRecord < ActiveRecord::Base
   primary_abstract_class
 
@@ -32,5 +49,13 @@ class ApplicationRecord < ActiveRecord::Base
     Rails.logger.send(level, "-----------------")
     Rails.logger.send(level, msg)
     Rails.logger.send(level, "-----------------")
+  end
+
+
+  def self.colors(key = nil)
+    return COLORS if key.nil?
+    COLORS.filter { |k| k[:id] == key }[0][:value]
+  rescue
+    key
   end
 end

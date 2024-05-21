@@ -40,6 +40,26 @@ da:
       profile: Profil
       today: I dag
       payroll_period: Lønperiode
+    
+  colors:
+    red: Rød
+    fuchsia: Fuchsia
+    lime: Lime
+    cyan: Cyan
+    green: Grøn
+    blue: Blå
+    yellow: Gul
+    orange: Orange
+    purple: Lilla
+    pink: Pink
+    amber: Brun
+    indigo: Indigo
+    rose: Rose
+    slate: Skifer
+    gray: Grå
+    stone: Granit
+    black: Sort
+    white: Hvid
 
   pos:
     employee:
@@ -92,6 +112,7 @@ da:
         time_zone: Tidszone
         locale: Sprog
         logo: Logo (80 x 40)
+        account_color: Farve
       asset:
         name: 'Navn'
         asset_teams: 'Hold/grupper'
