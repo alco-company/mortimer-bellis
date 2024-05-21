@@ -171,15 +171,19 @@ class NavigationComponent < ApplicationComponent
             action: "touchstart->navigation#tapDrop click->navigation#tapDrop click@window->navigation#hideDrop"
           },
           class:
-            "relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800",
+            "relative flex rounded-full bg-sky-200 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800",
           id: "user-menu-button",
           aria_expanded: "false",
           aria_haspopup: "true"
         ) do
           span(class: "absolute -inset-1.5")
           span(class: "sr-only") { "Open user menu" }
-          if Current.user && Current.user.mugshot.attached?
-            image_tag( Current.user.mugshot, class: "h-8 w-8 rounded-full")
+          if Current.user 
+            if Current.user.mugshot.attached?
+              image_tag( Current.user.mugshot, class: "h-8 w-8 rounded-full")
+            else
+              image_tag( "icons8-customer-64.png", class: "h-8 w-8 rounded-full")
+            end
           end
           # helpers.user_mugshot(Current.user.mugshot, css: "h-8 w-8 rounded-full")
           # img(

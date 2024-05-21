@@ -12,9 +12,9 @@ module EmployeesHelper
     else
       # size.gsub!("x", "/") if size =~ /x/
       # size.gsub!("!", "") if size =~ /!/
-      image_tag "icons8-customer-64.png"
+      image_tag "icons8-customer-64.png", class: css
     end
   rescue
-    image_tag "icons8-customer-64.png"
+    image_tag "icons8-customer-64.png", class: css
   end
 end

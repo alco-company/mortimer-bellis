@@ -35,6 +35,7 @@
 * add employee mugshot
 * add user mugshot
 * update employee.last_punched_at
+* fix user_mugshot on regular/admin users
 
 ### 20/5/2024
 
