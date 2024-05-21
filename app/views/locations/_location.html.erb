@@ -1,7 +1,7 @@
 <li id="<%= dom_id location %>" class="flex items-center justify-between gap-x-6 py-5">
   <div class="min-w-0 w-full columns-2 md:columns-3">
     <%= render_text_column field: link_to(location.name, location_url(location)), css: "truncate mort-link-primary" %>
-    <%= render_text_column field: location.location_color, css: "truncate" %>
+    <%= render_text_column field: Location.colors( location.location_color), css: "truncate" %>
     <%= render_date_column field: location.updated_at, css: "hidden md:block" %>
   </div>
   <div class="flex flex-none items-center gap-x-4 ">

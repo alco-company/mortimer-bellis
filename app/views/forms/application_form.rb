@@ -23,6 +23,30 @@ class ApplicationForm < Superform::Rails::Form
     end
   end
 
+  class OptionMapper < Superform::Rails::OptionMapper
+    def each(&options)
+      @collection.flatten.each do |item|
+        case item
+          in {id:, value:}
+            options.call id, value
+          in ActiveRecord::Relation => relation
+            active_record_relation_options_enumerable(relation).each(&options)
+          in id, value
+            options.call id, value
+          in value
+            options.call value, value.to_s
+        end
+      end
+    end
+  end
+
+  class SelectField < Superform::Rails::Components::SelectField
+    protected
+      def map_options(collection)
+        OptionMapper.new(collection)
+      end
+  end
+
   class EnumSelectField < Superform::Rails::Components::SelectField
     def options(*collection)
       collection.flatten!
@@ -140,6 +164,9 @@ class ApplicationForm < Superform::Rails::Form
   end
 
   class Field < Field
+    def select(*collection, **attributes, &)
+      SelectField.new(self, attributes: attributes, collection: collection, &)
+    end
     def multiple_select(*collection, **attributes, &)
       MultipleSelectField.new(self, attributes: attributes, collection: collection, &)
     end

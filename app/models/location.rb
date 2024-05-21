@@ -1,4 +1,7 @@
 class Location < ApplicationRecord
+  LOCATION_COLORS = %w[red blue green yellow purple orange pink brown gray].collect { |color| { value: I18n.t("locations.colors.#{color}"), id: "border-#{color}-700" } }.freeze
+  # LOCATION_COLORS = "red blue green yellow purple orange pink brown black"
+
   include Accountable
   has_many :punch_clocks, dependent: :destroy
 
@@ -17,6 +20,13 @@ class Location < ApplicationRecord
   rescue
     filter.destroy if filter
     all
+  end
+
+  def self.colors key = nil
+    return LOCATION_COLORS if key.nil?
+    LOCATION_COLORS.filter { |k| k[:id] == key }[0][:value]
+  rescue
+    key
   end
 
   def self.form(resource, editable = true)

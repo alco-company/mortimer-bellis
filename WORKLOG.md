@@ -19,11 +19,10 @@
 * add web push notifications
 * add Thruster - https://nts.strzibny.name/running-thruster-rails-kamal/
 * gem fugit - more prominent substitute for CronTask
+* make locale and time_zone selectable on sign_up
 * release RC1
 * big test
-* make locale and time_zone selectable on sign_up
 * make locale and time_zone select's
-* add company logo
 * add prettier mail layouts
 * add state and EU state reporting - when?
 
@@ -37,6 +36,7 @@
 * update employee.last_punched_at
 * fix user_mugshot on regular/admin users
 * allow admin to change account settings
+* set location color as select
 
 ### 20/5/2024
 
