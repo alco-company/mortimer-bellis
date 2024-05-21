@@ -33,6 +33,7 @@
 
 * users/new - missing name
 * add employee mugshot
+* add user mugshot
 
 ### 20/5/2024
 

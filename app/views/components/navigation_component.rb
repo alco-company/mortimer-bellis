@@ -2,6 +2,7 @@
 
 class NavigationComponent < ApplicationComponent
   include Phlex::Rails::Helpers::LinkTo
+  include Phlex::Rails::Helpers::ImageTag
 
   attr_accessor :items
 
@@ -177,12 +178,16 @@ class NavigationComponent < ApplicationComponent
         ) do
           span(class: "absolute -inset-1.5")
           span(class: "sr-only") { "Open user menu" }
-          img(
-            class: "h-8 w-8 rounded-full",
-            src:
-              "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-            alt: ""
-          )
+          if Current.user && Current.user.mugshot.attached?
+            image_tag( Current.user.mugshot, class: "h-8 w-8 rounded-full")
+          end
+          # helpers.user_mugshot(Current.user.mugshot, css: "h-8 w-8 rounded-full")
+          # img(
+          #   class: "h-8 w-8 rounded-full",
+          #   src:
+          #     "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
+          #   alt: ""
+          # )
         end
       end
       comment do

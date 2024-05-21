@@ -4,6 +4,7 @@ class Users::Form < ApplicationForm
     if Current.user.superadmin? or !model.superadmin?
       row field(:name).input(class: "mort-form-text")
       row field(:email).input(class: "mort-form-text")
+      row field(:mugshot).file(class: "mort-form-text")
       if Current.user.superadmin?
         row field(:role).enum_select(User.roles.keys, class: "mort-form-text")
       else

@@ -328,6 +328,7 @@ da:
         invited_by: 
           name: Blev inviteret af
         email: Email adresse
+        mugshot: Profil billede
         role: Rolle
         user_name: Brugernavn
         password: Adgangskode

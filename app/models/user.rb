@@ -8,6 +8,7 @@ class User < ApplicationRecord
          :omniauthable, :confirmable, :trackable, :timeoutable
 
   enum :role, { user: 0, admin: 1, superadmin: 2 }
+  has_one_attached :mugshot
 
   scope :by_account, ->() {
     if Current.user.present?
@@ -44,7 +45,7 @@ class User < ApplicationRecord
   end
 
   def self.form(resource, editable = true)
-    Users::Form.new resource, editable: editable
+    Users::Form.new resource, editable: editable, enctype: "multipart/form-data"
   end
 
   def add_role

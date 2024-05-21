@@ -21,6 +21,16 @@
     </div>
 
     <div class="mort-field">
+      <%= f.label :mugshot %><br />
+      <%= f.file_field :mugshot, class: "mort-form-text" %>
+      <% if resource.mugshot.attached? %>
+        <div class="mt-4 ">
+          <%= image_tag resource.mugshot %>          
+        </div>
+      <% end %>
+    </div>
+
+    <div class="mort-field">
       <%= f.label :email %><br />
       <%= f.email_field :email, autocomplete: "email", class: "mort-form-text" %>
     </div>

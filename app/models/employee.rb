@@ -53,7 +53,6 @@ class Employee < ApplicationRecord
   def field_formats(key)
     case key
     when :punching_absence;           :boolean
-    when :mugshot;                    :file
     else; super(key)
     end
   end
