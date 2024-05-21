@@ -15,6 +15,8 @@ class Account < ApplicationRecord
   has_many :teams, dependent: :destroy
   has_many :users, dependent: :destroy
 
+  has_one_attached :logo
+
   scope :by_account, ->() { Current.user.global_queries? ? all : where(id: Current.account.id) }
 
   scope :by_name, ->(name) { where("name LIKE ? or email LIKE ?", "%#{name}%", "%#{name}%") if name.present? }
@@ -38,6 +40,6 @@ class Account < ApplicationRecord
   end
 
   def self.form(resource, editable = true)
-    Accounts::Form.new resource, editable: editable
+    Accounts::Form.new resource, editable: editable, enctype: "multipart/form-data"
   end
 end

@@ -19,8 +19,8 @@ module ViewComponentsHelper
     render PunchClockHeader.new **attribs, &block
   end
 
-  def render_logo
-    render LogoComponent.new
+  def render_logo(**attribs, &block)
+    render LogoComponent.new **attribs, &block
   end
 
   def render_scan_icon

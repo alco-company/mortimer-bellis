@@ -22,7 +22,11 @@ class NavigationComponent < ApplicationComponent
               "flex flex-1 items-center justify-center sm:items-stretch sm:justify-start"
           ) do
             div(class: "flex flex-shrink-0 items-center hidden lg:block") do
-              helpers.render_logo
+              if Current.account && Current.account.logo.attached?
+                helpers.render_logo logo: Current.account.logo
+              else
+                helpers.render_logo
+              end
             end
             div(class: "sm:ml-6 hidden lg:block") do
               desktop_menu

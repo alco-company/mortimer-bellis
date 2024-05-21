@@ -36,6 +36,7 @@
 * add user mugshot
 * update employee.last_punched_at
 * fix user_mugshot on regular/admin users
+* allow admin to change account settings
 
 ### 20/5/2024
 
