@@ -34,6 +34,7 @@
 * users/new - missing name
 * add employee mugshot
 * add user mugshot
+* update employee.last_punched_at
 
 ### 20/5/2024
 

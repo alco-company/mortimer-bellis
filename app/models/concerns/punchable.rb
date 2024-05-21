@@ -98,6 +98,7 @@ module Punchable
       rescue => e
         say "Punch failed: #{e.message}"
       end
+      update last_punched_at: punched_at
       PunchCardJob.perform_later account: self.account, employee: self
     rescue => e
       false
