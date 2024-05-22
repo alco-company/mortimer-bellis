@@ -82,7 +82,7 @@ class Employee < ApplicationRecord
   end
 
   def get_team_color
-    team.team_color.blank? ? "border-gray-50" : team.team_color
+    team.team_color.blank? ? "border-white" : team.team_color
   rescue
     "border-white"
   end

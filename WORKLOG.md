@@ -32,6 +32,7 @@
 
 * link to employee on punch_card list
 * avoid to downgrade role on superuser
+* make colors a concern
 
 ### 21/5/2024
 

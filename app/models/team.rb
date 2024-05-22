@@ -1,5 +1,6 @@
 class Team < ApplicationRecord
   include Accountable
+  include Colorable
   include Stateable
 
   has_many :employees, dependent: :destroy

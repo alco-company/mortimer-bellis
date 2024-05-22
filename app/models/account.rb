@@ -4,6 +4,7 @@ class Account < ApplicationRecord
   # some process executes
   #
   include TimeZoned
+  include Colorable
 
   has_many :background_jobs, dependent: :destroy
   has_many :employees, dependent: :destroy
