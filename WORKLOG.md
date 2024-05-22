@@ -28,6 +28,10 @@
 
 ## CHANGELOG
 
+### 22/5/2024
+
+* link to employee on punch_card list
+
 ### 21/5/2024
 
 * users/new - missing name
