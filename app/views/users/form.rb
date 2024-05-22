@@ -11,7 +11,7 @@ class Users::Form < ApplicationForm
       row field(:name).input(class: "mort-form-text")
       row field(:email).input(class: "mort-form-text")
       row field(:mugshot).file(class: "mort-form-text")
-      row field(:locale).input(class: "mort-form-text")
+      row field(:locale).select(User.locales, prompt: I18n.t(".select_user_locale"), class: "mort-form-text")
       row field(:time_zone).input(class: "mort-form-text")
     end
     role_select

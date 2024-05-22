@@ -1,4 +1,6 @@
 class User < ApplicationRecord
+  include Localeable
+
   belongs_to :account
 
   # Include default devise modules. Others available are:

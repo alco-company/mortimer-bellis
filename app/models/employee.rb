@@ -2,6 +2,7 @@ class Employee < ApplicationRecord
   include Accountable
   include TimeZoned
   include Punchable
+  include Localeable
   include Stateable
   include EUCompliance
 

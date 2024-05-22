@@ -33,7 +33,7 @@ class Employees::Form < ApplicationForm
         row field(:ot2_add_hour_pay).input(class: "mort-form-text")
         row field(:eu_state).input(class: "mort-form-text")
         row field(:blocked).input(class: "mort-form-text")
-        row field(:locale).input(class: "mort-form-text")
+        row field(:locale).select(Employee.locales, prompt: I18n.t(".select_employee_locale"), class: "mort-form-text")
         row field(:time_zone).input(class: "mort-form-text")
       end
     end

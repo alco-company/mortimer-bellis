@@ -41,6 +41,10 @@ da:
       today: I dag
       payroll_period: Lønperiode
     
+  locale:
+    da: Dansk
+    en: Engelsk
+    de: Tysk
   colors:
     red: Rød
     fuchsia: Fuchsia

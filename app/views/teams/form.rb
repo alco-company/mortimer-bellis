@@ -3,7 +3,7 @@ class Teams::Form < ApplicationForm
     row field(:name).input(class: "mort-form-text").focus
     row field(:team_color).select(Team.colors, prompt: I18n.t(".select_team_color"), class: "mort-form-text")
     view_only field(:punches_settled_at).date(class: "mort-form-text")
-    row field(:locale).input(class: "mort-form-text")
+    row field(:locale).select(Team.locales, prompt: I18n.t(".select_team_locale"), class: "mort-form-text")
     row field(:time_zone).input(class: "mort-form-text")
     row field(:payroll_team_ident).input(class: "mort-form-text")
     # row field(:state).input(class: "mort-form-text")

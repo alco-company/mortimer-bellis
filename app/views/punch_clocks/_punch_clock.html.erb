@@ -3,7 +3,7 @@
     <%= render_text_column value: link_to(punch_clock.name, punch_clock_url(punch_clock)), css: "truncate mort-link-primary" %>
     <%= render_text_column value: link_to(punch_clock.location.name, location_url(punch_clock.location)), css: "truncate  mort-link-primary" %>
     <%= render_text_column value: punch_clock.ip_addr, css: "hidden md:block text-right" %>
-    <%= render_text_column value: punch_clock.locale, css: "hidden md:block truncate" %>
+    <%= render_text_column value: PunchClock.locales(punch_clock.locale), css: "hidden md:block truncate" %>
     <%= render_text_column value: punch_clock.time_zone, css: "hidden lg:block truncate" %>
     <%= render_date_column value: punch_clock.updated_at, css: "hidden lg:block" %>
   </div>

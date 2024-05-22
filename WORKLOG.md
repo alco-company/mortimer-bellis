@@ -22,11 +22,17 @@
 * make locale and time_zone selectable on sign_up
 * release RC1
 * big test
-* make locale and time_zone select's
 * add prettier mail layouts
-* add state and EU state reporting - when?
+* add state and EU state reporting timeable
+* make time_zone select's
+* show work_time / break_time stats
+* show todays punches on pos/employee
+* show payroll_period punches on pos/employee
 
 ## CHANGELOG
+
+### 23/5/2024
+
 
 ### 22/5/2024
 
@@ -36,6 +42,7 @@
 * fix missing complete url for punch_clocks used for QR code
 * fix it for real
 * make lists sortable - ?s=column_name&d=asc
+* make locale and time_zone select's
 
 ### 21/5/2024
 
