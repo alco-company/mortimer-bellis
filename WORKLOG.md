@@ -34,6 +34,7 @@
 * avoid to downgrade role on superuser
 * make colors a concern
 * fix missing complete url for punch_clocks used for QR code
+* fix it for real
 
 ### 21/5/2024
 

@@ -30,7 +30,6 @@ module Resourceable
     end
 
     def resource_url(**options)
-      return Rails.application.routes.url_helpers.url_for(controller: params[:controller], action: :show, id: @resource.id, **options) unless Rails.env.local?
       url_for(controller: params[:controller], action: :show, id: @resource.id, **options)
     end
 
