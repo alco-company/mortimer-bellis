@@ -33,6 +33,7 @@
 * link to employee on punch_card list
 * avoid to downgrade role on superuser
 * make colors a concern
+* fix missing complete url for punch_clocks used for QR code
 
 ### 21/5/2024
 
