@@ -40,6 +40,10 @@ class Employee < ApplicationRecord
     all
   end
 
+  def self.ordered(resources, field, direction = :desc)
+    resources.joins(:team).order(field => direction)
+  end
+
   def self.form(resource, editable = true)
     Employees::Form.new resource, editable: editable, enctype: "multipart/form-data"
   end

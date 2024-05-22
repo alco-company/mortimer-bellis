@@ -1,5 +1,5 @@
 <tr class="flex gap-x-6 py-5">
-  <%= render_text_column field: link_to(location.name, location_url(location)), table: :row, css: "truncate mort-link-primary" %>
-  <%= render_text_column field: location.location_color, table: :row, css: "truncate" %>
-  <%= render_date_column field: location.updated_at, table: :row, css: "" %>
+  <%= render_text_column value: link_to(location.name, location_url(location)), table: :row, css: "truncate mort-link-primary" %>
+  <%= render_text_column value: location.location_color, table: :row, css: "truncate" %>
+  <%= render_date_column value: location.updated_at, table: :row, css: "" %>
 </tr>

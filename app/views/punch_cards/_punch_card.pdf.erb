@@ -1,8 +1,8 @@
 <tr class="flex gap-x-6 py-5">
-    <%= render_text_column field: link_to(punch_card.employee.name, punch_card_url(punch_card)), table: :row, css: "truncate mort-link-primary" %>
-    <%= render_text_column field: link_to(punch_card.work_date, punch_card_url(punch_card)), table: :row, css: "truncate  mort-link-primary" %>
-    <%= render_text_column field: punch_card.work_minutes, table: :row, css: "hidden md:block text-right" %>
-    <%= render_text_column field: punch_card.break_minutes, table: :row, css: "hidden md:block truncate" %>
-    <%= render_text_column field: punch_card.ot_minutes, table: :row, css: "hidden lg:block truncate" %>
-    <%= render_date_column field: punch_card.updated_at, table: :row, css: "hidden lg:block" %>
+    <%= render_text_column value: link_to(punch_card.employee.name, punch_card_url(punch_card)), table: :row, css: "truncate mort-link-primary" %>
+    <%= render_text_column value: link_to(punch_card.work_date, punch_card_url(punch_card)), table: :row, css: "truncate  mort-link-primary" %>
+    <%= render_text_column value: punch_card.work_minutes, table: :row, css: "hidden md:block text-right" %>
+    <%= render_text_column value: punch_card.break_minutes, table: :row, css: "hidden md:block truncate" %>
+    <%= render_text_column value: punch_card.ot_minutes, table: :row, css: "hidden lg:block truncate" %>
+    <%= render_date_column value: punch_card.updated_at, table: :row, css: "hidden lg:block" %>
 </tr>

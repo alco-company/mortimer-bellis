@@ -27,6 +27,10 @@ class PunchClock < ApplicationRecord
     all
   end
 
+  def self.ordered(resources, field, direction = :desc)
+    resources.joins(:location).order(field => direction)
+  end
+
   def self.form(resource, editable = true)
     PunchClocks::Form.new resource, editable: editable
   end

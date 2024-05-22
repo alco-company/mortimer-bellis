@@ -1,42 +1,9 @@
-class NumberColumn < Phlex::HTML
-  include Phlex::Rails::Helpers::Routes
-
-  attr_accessor :field
-
-  def initialize(field:, css: nil, table: false, &block)
-    @field = field
+class NumberColumn < Column
+  def initialize(value: false, table: false, field: false, sort: false, css: nil, &block)
+    @value = value
     @table = table
+    @sort = sort        # params, like { controller: "employees", s: "name", d: "asc" }
+    @field = field
     @class = css || "text-right"
-  end
-
-  def view_template(&)
-    @table ? table_field : div_field
-  end
-
-  def table_field
-    @table == :head ? th_field : td_field
-  end
-
-  def th_field
-    th(class: @class) do
-      plain field
-      yield if block_given?
-    end
-  end
-
-  def td_field
-    td(class: @class) do
-      plain field
-      yield if block_given?
-    end
-  end
-
-  def div_field
-    field.blank? ?
-      div { "&nbsp;".html_safe } :
-      div(class: @class) do
-         plain field
-         yield if block_given?
-      end
   end
 end

@@ -20,6 +20,10 @@ class ApplicationRecord < ActiveRecord::Base
     end
   end
 
+  def self.ordered(resources, field, direction = :desc)
+    resources.order(field => direction)
+  end
+
 
   def say(msg, level = :info)
     Rails.logger.send(level, "-----------------")

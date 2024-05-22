@@ -1,12 +1,13 @@
 <li id="<%= dom_id user %>" class="flex items-center justify-between gap-x-6 py-5">
   <div class="min-w-0 w-full columns-2 md:columns-3 lg:columns-5">
-    <%= render_text_column field: link_to(user.email, user), css: "truncate mort-link-primary grid grid-cols-1" do %>
+    <%= render_text_column value: link_to(user.email, user), css: "truncate mort-link-primary grid grid-cols-1" do |value| %>
+      <%= value %>
       <p class="text-xs"><%=  link_to user.account.name, user.account %> </p>
     <% end %>
-    <%= render_text_column field: user.role, css: "truncate" do %> <p>&nbsp;</p> <% end %>
-    <%= render_text_column field: user.locale, css: "hidden md:block truncate" do %> <p>&nbsp;</p> <% end %>
-    <%= render_text_column field: user.time_zone, css: "hidden lg:block truncate" do %> <p>&nbsp;</p> <% end %>
-    <%= render_date_column field: user.updated_at, css: "hidden lg:block" do %> <p>&nbsp;</p> <% end %>
+    <%= render_text_column value: user.role, css: "truncate" do |value| %> <%= value %><p>&nbsp;</p> <% end %>
+    <%= render_text_column value: user.locale, css: "hidden md:block truncate" do |value|  %> <%= value %><p>&nbsp;</p> <% end %>
+    <%= render_text_column value: user.time_zone, css: "hidden lg:block truncate" do |value|  %> <%= value %><p>&nbsp;</p> <% end %>
+    <%= render_date_column value: user.updated_at, css: "hidden lg:block" do |value| %> <%= value %><p>&nbsp;</p> <% end %>
   </div>
   <div class="flex flex-none items-center gap-x-4 ">
 <!--    <a href="<%#= product_stock_items_url(product) %>" class=" rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:block">Lokationer<span class="sr-only">, GraphQL API</span></a>-->

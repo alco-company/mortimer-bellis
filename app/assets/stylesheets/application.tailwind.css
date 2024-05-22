@@ -45,6 +45,14 @@
     @apply my-5;
   }
 
+  .mort-active-arrow {
+    @apply text-gray-500 text-xs;
+  }
+
+  .mort-passive-arrow {
+    @apply text-gray-300 text-xs;
+  }
+
   #error_explanation {
     @apply text-red-600 text-sm my-4;
   }

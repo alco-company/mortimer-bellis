@@ -35,6 +35,7 @@
 * make colors a concern
 * fix missing complete url for punch_clocks used for QR code
 * fix it for real
+* make lists sortable - ?s=column_name&d=asc
 
 ### 21/5/2024
 

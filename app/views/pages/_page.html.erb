@@ -1,8 +1,8 @@
 <li id="<%= dom_id page %>" class="flex items-center justify-between gap-x-6 py-5">
   <div class="min-w-0 w-full columns-2 lg:columns-3">
-    <%= render_text_column field: link_to(page.slug, page_url(page)), css: "truncate mort-link-primary" %>
-    <%= render_text_column field: page.title, css: "truncate" %>
-    <%= render_date_column field: page.updated_at, css: "hidden lg:block" %>
+    <%= render_text_column value: link_to(page.slug, page_url(page)), css: "truncate mort-link-primary" %>
+    <%= render_text_column value: page.title, css: "truncate" %>
+    <%= render_date_column value: page.updated_at, css: "hidden lg:block" %>
   </div>
   <div class="flex flex-none items-center gap-x-4 ">
 <!--    <a href="<%#= product_stock_items_url(product) %>" class=" rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:block">Lokationer<span class="sr-only">, GraphQL API</span></a>-->
