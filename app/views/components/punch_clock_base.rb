@@ -45,20 +45,20 @@ class PunchClockBase < ApplicationComponent
     div(class: "p-4") do
       render PunchClockManual.new(employee: employee) if @edit
       list_punches ".payroll_punches", employee.punches.by_payroll_period(employee.punches_settled_at).order(punched_at: :desc), true
+      div(class: "mb-32") { "&nbsp;".html_safe }
     end
-    div(class: "mb-32") { " " }
   end
 
-  def list_punches(title, punches = [], edit = false, folded = false)
+  def list_punches(title, punches = [], edit = false, folded = false, tab = "today")
     h4(class: "m-4 text-gray-700 text-xl") { helpers.t(title) }
     ul(class: "m-4 mb-32 divide-y divide-gray-100") do
       current_date = nil
       punches.each do |punch|
         if punch.punched_at.to_date != current_date
           current_date = punch.punched_at&.to_date
-          li(class: "flex items-center justify-between gap-x-6 py-5") do
+          li(id: "#{tab}_#{(helpers.dom_id punch)}", class: "flex items-center justify-between gap-x-6 py-5") do
             div(class: "min-w-0 w-full columns-2") do
-              span { helpers.render_datetime_column(value: punch.punched_at, css: "font-medium") }
+              span { helpers.render_date_column(value: punch.punched_at, css: "font-medium") }
             end
             div(class: "flex flex-none items-center gap-x-4") do
               folded ?

@@ -22,17 +22,9 @@ class PosContextmenu < Phlex::HTML
   def folded
     div(data_controller: "contextmenu", class: "relative flex-none") do
       whitespace
-      button(
-        type: "button",
-        data_contextmenu_target: "button",
-        data_action: "touchstart->contextmenu#tap click->contextmenu#tap click@window->contextmenu#hide",
-        class: "-m-2.5 block p-2.5 text-gray-500 hover:text-gray-900",
-        id: "options-menu-0-button",
-        aria_expanded: "false",
-        aria_haspopup: "true"
-      ) do
+      link_to(helpers.pos_employee_punches_url(id: resource.id), data: { turbo_stream: "" }) do
         whitespace
-        span(class: "sr-only") { "Open options" }
+        span(class: "sr-only") { "Get todays punches" }
         whitespace
         svg(
           class: "h-5 w-5",

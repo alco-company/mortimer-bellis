@@ -8,6 +8,19 @@ class Pos::EmployeeController < Pos::PosController
     @employees = Employee.by_account()
   end
 
+  def punches
+    first_punch = Punch.find(params[:id])
+    @resource = first_punch.employee
+    if first_punch
+      employee = first_punch.employee
+      date_range = first_punch.punched_at.beginning_of_day..first_punch.punched_at.end_of_day
+      @punches = Punch.where(employee: employee, punched_at: date_range)
+      render turbo_stream: turbo_stream.replace("payroll_#{helpers.dom_id(first_punch)}", partial: "pos/punches/index")
+    else
+      head :not_found
+    end
+  end
+
   def edit
     @punch = Punch.find(params[:id])
     render turbo_stream: turbo_stream.replace("punch_#{@punch.id}", partial: "pos/employee/edit", locals: { punch: @punch })

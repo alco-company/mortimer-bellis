@@ -16,8 +16,8 @@ class PunchClockPunch < PunchClockBase
           div() do
             list_punches ".todays_punches", employee.todays_punches
           end
-          div() do
-            list_punches ".payroll_punches", employee.punches.by_payroll_period(employee.punches_settled_at).order(punched_at: :desc), false, true
+          div(class: "h-full ") do
+            list_punches ".payroll_punches", employee.punches.by_payroll_period(employee.punches_settled_at).order(punched_at: :desc), false, true, "payroll"
           end
         end
       end

@@ -1,0 +1,2 @@
+module Pos::PunchesHelper
+end
