@@ -1,5 +1,5 @@
 class Pos::EmployeeController < Pos::PosController
-  before_action :verify_employee, only: [ :show, :edit, :create, :update, :destroy ]
+  before_action :verify_employee, only: [ :index, :show, :edit, :create, :update, :destroy ]
   before_action :employee_time_zone, only: [ :edit ]
 
   layout -> { PosEmployeeLayout }
@@ -95,6 +95,7 @@ class Pos::EmployeeController < Pos::PosController
       else nil
       end
       redirect_to root_path and return unless @resource
+      Current.account = @resource.account
     end
 
     def employee_time_zone(&block)

@@ -10,8 +10,8 @@ module Punchable
       stop = DateTime.current
       todays_punches.pluck(:state, :punched_at).each_with_index do |punch, i|
         case punch[0]
-        when :break; counters[:break] << ((stop.to_i - punch[1].to_i) / 60)
-        when :in; counters[:work] << ((stop.to_i - punch[1].to_i) / 60)
+        when "break"; counters[:break] << ((stop.to_i - punch[1].to_i) / 60)
+        when "in"; counters[:work] << ((stop.to_i - punch[1].to_i) / 60)
         end
         stop = punch[1]
       end

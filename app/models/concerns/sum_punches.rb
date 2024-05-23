@@ -55,8 +55,8 @@ module SumPunches
         next if i == 0
 
         case punch.state
-        when :break; counters[:break] << ((stop.to_i - punch.punched_at.to_i) / 60)
-        when :in; counters[:work] << ((stop.to_i - punch.punched_at.to_i) / 60)
+        when "break"; counters[:break] << ((stop.to_i - punch.punched_at.to_i) / 60)
+        when "in"; counters[:work] << ((stop.to_i - punch.punched_at.to_i) / 60)
         end
         stop = punch.punched_at
       end

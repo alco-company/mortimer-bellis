@@ -34,11 +34,10 @@ class PunchClockBase < ApplicationComponent
   def todays_minutes
     div(class: "flex w-full p-5 font-medium text-gray-500 gap-3") do
       counters = employee.minutes_today_up_to_now
-      say "counters: #{counters}"
       render Stats.new title: helpers.t(".stats_title"), stats: [
         { title: helpers.t(".worktime"), value: helpers.display_hours_minutes(counters[:work]) },
         { title: helpers.t(".breaks"), value: helpers.display_hours_minutes(counters[:break]) }
-    ]
+      ]
     end if employee
   end
 

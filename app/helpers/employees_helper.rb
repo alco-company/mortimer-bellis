@@ -17,4 +17,8 @@ module EmployeesHelper
   rescue
     image_tag "icons8-customer-64.png", class: css
   end
+
+  def first_employee_token 
+    Employee.by_account().first.access_token
+  end
 end
