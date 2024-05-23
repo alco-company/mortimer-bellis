@@ -33,6 +33,7 @@
 * show work_time / break_time stats
 * show todays punches on pos/employee
 * show payroll_period punches on pos/employee
+* fix edit punches on pos/employee
 
 ### 22/5/2024
 
