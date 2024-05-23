@@ -58,7 +58,7 @@ class PunchClockBase < ApplicationComponent
           current_date = punch.punched_at&.to_date
           li(class: "flex items-center justify-between gap-x-6 py-5") do
             div(class: "min-w-0 w-full columns-2") do
-              span { helpers.render_date_column(field: punch.punched_at, css: "font-medium") }
+              span { helpers.render_datetime_column(value: punch.punched_at, css: "font-medium") }
             end
             div(class: "flex flex-none items-center gap-x-4") do
               folded ?
@@ -72,8 +72,8 @@ class PunchClockBase < ApplicationComponent
           class: "flex items-center justify-between gap-x-6 py-5"
         ) do
           div(class: "min-w-0 w-full columns-2") do
-            span { helpers.render_text_column(field: helpers.tell_state(punch), css: "text-right") }
-            span { helpers.render_time_column(field: punch.punched_at, css: "") }
+            span { helpers.render_text_column(value: helpers.tell_state(punch), css: "text-right") }
+            span { helpers.render_time_column(value: punch.punched_at, css: "") }
           end
           div(class: "flex flex-none items-center gap-x-4") do
             render PosContextmenu.new resource: punch, turbo_frame: helpers.dom_id(punch), alter: edit, links: [ pos_employee_edit_url(api_key: employee.access_token, id: punch.id), pos_employee_delete_url(api_key: employee.access_token, id: punch.id) ]

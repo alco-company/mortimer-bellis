@@ -18,14 +18,14 @@ class DateColumn < Column
       div { "&nbsp;".html_safe } :
       div(class: @class) do
         if block_given?
-          yield format_date(value)
+          yield format_datetime(value)
         else
-          @sort ? build_link(value) : plain(format_date(value))
+          @sort ? build_link(value) : plain(format_datetime(value))
         end
       end
   end
 
-  def format_date(date)
+  def format_datetime(date)
     date.strftime("%d/%m/%Y")
   end
 end
