@@ -34,7 +34,7 @@ class Employees::Form < ApplicationForm
         row field(:eu_state).input(class: "mort-form-text")
         row field(:blocked).input(class: "mort-form-text")
         row field(:locale).select(Employee.locales, prompt: I18n.t(".select_employee_locale"), class: "mort-form-text")
-        row field(:time_zone).input(class: "mort-form-text")
+        row field(:time_zone).select(ActiveSupport::TimeZone.all.collect { |tz| [ "(GMT#{ActiveSupport::TimeZone.seconds_to_utc_offset(tz.utc_offset)}) #{tz.name}", tz.tzinfo.name ] }, class: "mort-form-text")
       end
     end
   end

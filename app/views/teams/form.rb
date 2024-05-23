@@ -4,7 +4,7 @@ class Teams::Form < ApplicationForm
     row field(:team_color).select(Team.colors, prompt: I18n.t(".select_team_color"), class: "mort-form-text")
     view_only field(:punches_settled_at).date(class: "mort-form-text")
     row field(:locale).select(Team.locales, prompt: I18n.t(".select_team_locale"), class: "mort-form-text")
-    row field(:time_zone).input(class: "mort-form-text")
+    row field(:time_zone).select(ActiveSupport::TimeZone.all.collect { |tz| [ "(GMT#{ActiveSupport::TimeZone.seconds_to_utc_offset(tz.utc_offset)}) #{tz.name}", tz.tzinfo.name ] }, class: "mort-form-text")
     row field(:payroll_team_ident).input(class: "mort-form-text")
     # row field(:state).input(class: "mort-form-text")
     row field(:description).textarea(class: "mort-form-text")

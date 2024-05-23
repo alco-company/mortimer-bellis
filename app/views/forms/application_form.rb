@@ -29,9 +29,12 @@ class ApplicationForm < Superform::Rails::Form
         case item
           in ActiveRecord::Relation => relation
             active_record_relation_options_enumerable(relation).each(&options)
-          in Array => colr
-            colors_enumerable(colr).each(&options)
-            # options.call id, value
+          in [Colorable::Color, *] => colr
+            enumerable_list(colr).each(&options)
+          in [Localeable::Locale, *] => locl
+            enumerable_list(locl).each(&options)
+          in [[ /GMT/, String ], *] => arr
+            timezone_list(arr).each(&options)
           in id, value
             options.call id, value
           in value
@@ -40,10 +43,18 @@ class ApplicationForm < Superform::Rails::Form
       end
     end
 
-    def colors_enumerable(colr)
+    def enumerable_list(colr)
       Enumerator.new do |collection|
         colr.each do |color|
           collection << [ color.id, color.value ]
+        end
+      end
+    end
+
+    def timezone_list(tz)
+      Enumerator.new do |collection|
+        tz.each do |k, v|
+          collection << [ v, "%s - %s" % [ v, k ] ]
         end
       end
     end

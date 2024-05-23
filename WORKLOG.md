@@ -24,7 +24,6 @@
 * big test
 * add prettier mail layouts
 * add state and EU state reporting timeable
-* make time_zone select's
 * show work_time / break_time stats
 * show todays punches on pos/employee
 * show payroll_period punches on pos/employee
@@ -33,6 +32,7 @@
 
 ### 23/5/2024
 
+* make time_zone select's
 
 ### 22/5/2024
 
