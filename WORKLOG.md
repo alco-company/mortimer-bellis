@@ -10,22 +10,84 @@
 * add handling of constants - https://dev.to/vladhilko/say-goodbye-to-messy-constants-a-new-approach-to-moving-constants-away-from-your-model-58i1
 * add Traefik dashboard to traefik.mortimer.pro - https://www.luizkowalski.net/traefik-with-kamal-tips-and-tricks/
 * add exporting ICS files - https://www.driftingruby.com/episodes/exporting-ics-files
-* add employee calendar - duty, free, holiday
-* add Thruster - https://nts.strzibny.name/running-thruster-rails-kamal/
 * add employee SMS service - welcome, EU state report
 * add blackhole
 * add Stripe payments - https://gorails.com/episodes/one-time-payments-with-pay-and-stripe
 * add employee email - welcome, EU state report
-* add web push notifications
 * gem "mission_control-jobs"
+* add employee calendar - duty, free, holiday
+* add web push notifications
+* add Thruster - https://nts.strzibny.name/running-thruster-rails-kamal/
+* gem fugit - more prominent substitute for CronTask
+* make locale and time_zone selectable on sign_up
 * release RC1
 * big test
-* add company logo
-* add employee mugshot
 * add prettier mail layouts
-* add state and EU state reporting - when?
+* add state and EU state reporting timeable
 
 ## CHANGELOG
+
+### 23/5/2024
+
+* make time_zone select's
+* show work_time / break_time stats
+* show todays punches on pos/employee
+* show payroll_period punches on pos/employee
+* fix edit punches on pos/employee
+
+### 22/5/2024
+
+* link to employee on punch_card list
+* avoid to downgrade role on superuser
+* make colors a concern
+* fix missing complete url for punch_clocks used for QR code
+* fix it for real
+* make lists sortable - ?s=column_name&d=asc
+* make locale and time_zone select's
+
+### 21/5/2024
+
+* users/new - missing name
+* add employee mugshot
+* add user mugshot
+* update employee.last_punched_at
+* fix user_mugshot on regular/admin users
+* allow admin to change account settings
+* set location color as select
+* set team color as select
+* set account color as select
+* error on color generation
+
+### 20/5/2024
+
+* make employees delete all punches today if they like
+* show flashes with a component - proper styling
+* place header button right
+* do callbacks on punches
+
+### 18/5/2024
+
+* add boolean field format, forms and lists
+* make payroll_employee_ident semi-optional - auto-generate if not set
+  
+### 17/5/2024
+
+* add background job mgmt - wip
+* list payroll_period punches on punch_clocks
+* split of SQLite into writer/reader
+* add CronTask for background jobs, more
+* add queueable for background jobs
+* setup solid_queue for offloading background jobs
+* fix writer/reader issue with delete vs destroy
+* add model.method association to form's
+* add folded to contextmenu
+* add error_report to user_mailer
+* add punching_absence
+* fix employees punching same state on multiple devices
+
+### 16/5/2024
+
+* adjust screen on employee app
 
 ### 15/5/2024
 
@@ -37,6 +99,8 @@
 * add employees.pdf
 * add punch_cards.pdf
 * add punches.pdf
+* add split of SQLite into writer/reader
+* send_file on PDFs from modal_controller
 
 ### 14/5/2024
 

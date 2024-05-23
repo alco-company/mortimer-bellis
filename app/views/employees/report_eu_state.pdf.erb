@@ -1,0 +1,30 @@
+<h1><%= I18n.t("employees.reports.eu_state.title") %></h1>
+<p>
+  <%== I18n.t("employees.reports.eu_state.introduction") %>
+</p>
+
+<table>
+  <thead>
+    <th><%= I18n.t("employees.reports.eu_state.name") %></th>
+    <th><%= I18n.t("employees.reports.eu_state.6hrs") %></th>
+    <th><%= I18n.t("employees.reports.eu_state.8hrs") %></th>
+    <th><%= I18n.t("employees.reports.eu_state.11hrs") %></th>
+    <th><%= I18n.t("employees.reports.eu_state.24hrs") %></th>
+    <th><%= I18n.t("employees.reports.eu_state.48hrs") %></th>
+
+  </thead>
+  <tbody>
+    <% @employees.each do |employee| %>
+      <tr>
+        <td><%= employee.name %></td>
+        <%== positive_column(employee.min_6_hrs_rest_break) %>
+        <%== positive_column(employee.max_8_hrs_night) %>
+        <%== positive_column(employee.min_11_hrs_rest) %>
+        <%== positive_column(employee.min_24_hrs_rest_weekly) %>
+        <%== positive_column(employee.max_48_hrs_per_7_days) %>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%== I18n.t("employees.reports.eu_state.notice_missing_data") %>

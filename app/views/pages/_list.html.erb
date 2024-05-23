@@ -1,5 +1,5 @@
 <div class="min-w-0 w-full columns-2 lg:columns-3">
-  <%= render_text_column field: t('.slug'), css: "font-bold truncate" %>
-  <%= render_text_column field: t(".title"), css: "font-bold truncate" %>
-  <%= render_text_column field: t(".updated_at"), css: "hidden lg:block font-bold " %>
+  <%= render_text_column value: t('.slug'), sort: params, field: :slug, css: "font-bold truncate" %>
+  <%= render_text_column value: t(".title"), sort: params, field: :title, css: "font-bold truncate" %>
+  <%= render_text_column value: t(".updated_at"), css: "hidden lg:block font-bold " %>
 </div>

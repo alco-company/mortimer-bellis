@@ -12,10 +12,16 @@ class ApplicationRecord < ActiveRecord::Base
   #
   def field_formats(key)
     case key
+    when :mugshot, :logo;                                           :file
     when :updated_at, :created_at, :punched_at, :last_punched_at;   :datetime
     when :birthday, :hired_at, :punches_settled_at;                 :date
+    when /\./;                                                      :association
     else; nil
     end
+  end
+
+  def self.ordered(resources, field, direction = :desc)
+    resources.order(field => direction)
   end
 
 

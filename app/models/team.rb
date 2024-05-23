@@ -1,8 +1,8 @@
 class Team < ApplicationRecord
   include Accountable
+  include Colorable
+  include Localeable
   include Stateable
-
-  TEAM_COLORS = %w[border-red-700 border-blue-700 border-green-700 border-yellow-700 border-purple-700 border-orange-700 border-pink-700 border-brown-700 border-black-700]
 
   has_many :employees, dependent: :destroy
   # has_and_belongs_to_many :employees
@@ -32,18 +32,10 @@ class Team < ApplicationRecord
     Teams::Form.new resource, editable: editable
   end
 
-  def self.colors
-    TEAM_COLORS
-  end
-
   def get_allowed_ot_minutes
     return 24*60 if allowed_ot_minutes.nil?
     return 24*60 if allowed_ot_minutes == 0
     return -1 if allowed_ot_minutes < 0
     allowed_ot_minutes
   end
-
-  # def color
-  #   self.class.colors[id % self.class.colors.size]
-  # end
 end

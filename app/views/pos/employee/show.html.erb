@@ -2,13 +2,6 @@
     <%= render partial: 'layouts/mobile_header' %>
     <meta name="screen-orientation"  content="landscape">
 <% end %>
-<% content_for :flash do %>
-  <% flash.each do |type, msg| %>
-    <div>
-      <p data-controller="notice" class="mort-flash-<%=type%>" id="notice"><%= msg %></p>
-    </div>
-  <% end %>
-<% end %>
 
 <% 
 
@@ -18,13 +11,19 @@
     { title: t(".profile"), url: pos_employee_url(api_key: @resource.access_token, tab: "profile"), class: "mort-link-primary" }
   ]
 
+  content_for :nav do 
+    render NavigationComponent.new( items: items)
+  end
+
+  content_for :footer do
+    render_mortimer_footer(request: request)
+  end
+
+  content_for :flash do
+    render FlashComponent.new flash: flash
+  end
+
 %>
 
-<% content_for :nav do 
-    render NavigationComponent.new( items: items)
-  end %>
-<div data-controller="pos-employee">
-  <%= render_punch_clock_header(resource: @resource, employee: nil) %>
-  <%= render PunchClockEmployee.new employee: @resource, tab: params[:tab], edit: params[:edit] %>
-  <%= render_mortimer_footer(request: request)  %>
-</div>
+<%= render_punch_clock_header(resource: @resource, employee: nil) %>
+<%= render PunchClockEmployee.new employee: @resource, tab: params[:tab], edit: params[:edit] %>

@@ -5,16 +5,47 @@ class PosContextmenu < Phlex::HTML
 
   attr_accessor :resource, :resource_class, :list
 
-  def initialize(resource: nil, list: nil, resource_class: nil, turbo_frame: "_top", alter: true, links: [])
+  def initialize(resource: nil, list: nil, resource_class: nil, turbo_frame: "_top", alter: true, folded: false, links: [])
     @resource = resource
     @resource_class = resource_class
     @list = list
     @turbo_frame = turbo_frame
     @alter = alter
+    @folded = folded
     @links = links
   end
 
   def view_template
+    @folded ? folded : unfolded
+  end
+
+  def folded
+    div(data_controller: "contextmenu", class: "relative flex-none") do
+      whitespace
+      link_to(helpers.pos_employee_punches_url(id: resource.id), data: { turbo_stream: "" }) do
+        whitespace
+        span(class: "sr-only") { "Get todays punches" }
+        whitespace
+        svg(
+          class: "h-5 w-5",
+          fill: "currentColor",
+          aria_hidden: "true",
+          xmlns: "http://www.w3.org/2000/svg",
+          height: "24px",
+          viewbox: "0 -960 960 960",
+          width: "24px"
+        ) do |s|
+          s.path(
+            d:
+              "M480-120 300-300l58-58 122 122 122-122 58 58-180 180ZM358-598l-58-58 180-180 180 180-58 58-122-122-122 122Z"
+          )
+        end
+        whitespace
+      end
+    end
+  end
+
+  def unfolded
     div(data_controller: "contextmenu", class: "relative flex-none") do
       whitespace
       button(

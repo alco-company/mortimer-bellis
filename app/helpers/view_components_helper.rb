@@ -19,8 +19,8 @@ module ViewComponentsHelper
     render PunchClockHeader.new **attribs, &block
   end
 
-  def render_logo
-    render LogoComponent.new
+  def render_logo(**attribs, &block)
+    render LogoComponent.new **attribs, &block
   end
 
   def render_scan_icon
@@ -29,6 +29,10 @@ module ViewComponentsHelper
 
   def render_contextmenu **attribs, &block
     render Contextmenu.new(**attribs), &block
+  end
+
+  def render_boolean_column **attribs, &block
+    render BooleanColumn.new(**attribs), &block
   end
 
   def render_text_column **attribs, &block

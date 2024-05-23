@@ -22,10 +22,11 @@ class PosEmployeeLayout < ApplicationView
 
       body(class: "h-full") do
         yield :nav
-        main(class: "") do
+        main(class: "h-full",  data: { controller: "pos-employee" }) do
           yield
         end
         yield :flash
+        yield :footer
       end
     end
   end

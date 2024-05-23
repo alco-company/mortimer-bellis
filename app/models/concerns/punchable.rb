@@ -1,8 +1,8 @@
 module Punchable
   extend ActiveSupport::Concern
   included do
-    def todays_punches
-      punches.where("punched_at >= ?", Date.current.beginning_of_day).order(punched_at: :desc)
+    def todays_punches(date: Date.current)
+      punches.where(punched_at: date.beginning_of_day..date.end_of_day).order(punched_at: :desc)
     end
 
     def minutes_today_up_to_now
@@ -10,8 +10,8 @@ module Punchable
       stop = DateTime.current
       todays_punches.pluck(:state, :punched_at).each_with_index do |punch, i|
         case punch[0]
-        when :break; counters[:break] << ((stop.to_i - punch[1].to_i) / 60)
-        when :in; counters[:work] << ((stop.to_i - punch[1].to_i) / 60)
+        when "break"; counters[:break] << ((stop.to_i - punch[1].to_i) / 60)
+        when "in"; counters[:work] << ((stop.to_i - punch[1].to_i) / 60)
         end
         stop = punch[1]
       end
@@ -98,14 +98,14 @@ module Punchable
       rescue => e
         say "Punch failed: #{e.message}"
       end
-      PunchCardJob.new.perform account: self.account, employee: self
-      # PunchCardJob.perform_later account: self.account, employee: self
+      update last_punched_at: punched_at
+      PunchCardJob.perform_later account: self.account, employee: self
     rescue => e
       false
     end
 
     def punch_range(reason, ip, from_at, to_at)
-      PunchJob.new.perform account: self.account, reason: reason, ip: ip, employee: self, from_at: from_at, to_at: to_at
+      PunchJob.perform_later account: self.account, reason: reason, ip: ip, employee: self, from_at: from_at, to_at: to_at
     end
   end
 end

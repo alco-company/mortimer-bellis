@@ -1,44 +1,15 @@
-class DateTimeColumn < Phlex::HTML
+class DateTimeColumn < DateColumn
   include Phlex::Rails::Helpers::Routes
 
   attr_accessor :field
 
-  def initialize(field:, seconds: false, css: nil, table: false, &block)
-    @field = field
-    @seconds = seconds
+  def initialize(value: false, table: false, field: false, seconds: false, sort: false, css: nil, &block)
+    @value = value
     @table = table
+    @sort = sort        # params, like { controller: "employees", s: "name", d: "asc" }
+    @seconds = seconds
+    @field = field
     @class = css || "truncate"
-  end
-
-  def view_template(&)
-    @table ? table_field : div_field
-  end
-
-  def table_field
-    @table == :head ? th_field : td_field
-  end
-
-  def th_field
-    th(class: @class) do
-      plain format_datetime(field)
-      yield if block_given?
-    end
-  end
-
-  def td_field
-    td(class: @class) do
-      plain format_datetime(field)
-      yield if block_given?
-    end
-  end
-
-  def div_field
-    field.blank? ?
-      div { "&nbsp;".html_safe } :
-      div(class: @class) do
-         plain format_datetime(field)
-         yield if block_given?
-      end
   end
 
   def format_datetime(datetime)

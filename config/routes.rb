@@ -9,6 +9,7 @@ Rails.application.routes.draw do
     omniauth_callbacks: "users/omniauth_callbacks"
   }
 
+  resources :background_jobs
   resources :pages
   resources :users
   resources :punches
@@ -31,6 +32,7 @@ Rails.application.routes.draw do
 
     get "employee" => "pos/employee#show", as: :pos_employee
     get "employees" => "pos/employee#index", as: :pos_employees
+    get "employee/punches" => "pos/employee#punches", as: :pos_employee_punches
     get "employee/edit" => "pos/employee#edit", as: :pos_employee_edit
     post "employee" => "pos/employee#create", as: :pos_employee_create
     put "employee" => "pos/employee#update", as: :pos_employee_update

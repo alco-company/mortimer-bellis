@@ -31,6 +31,10 @@ class PunchCard < ApplicationRecord
     all
   end
 
+  def self.ordered(resources, field, direction = :desc)
+    resources.joins(:employee).order(field => direction)
+  end
+
   def self.form(resource, editable = true)
     PunchCards::Form.new resource, editable: editable
   end

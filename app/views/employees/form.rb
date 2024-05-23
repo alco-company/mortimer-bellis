@@ -3,12 +3,14 @@ class Employees::Form < ApplicationForm
     div(data: { controller: "employee" }) do
       row field(:team_id).select(Team.by_account.order(name: :asc).select(:id, :name), prompt: I18n.t(".select_team"), class: "mort-form-text").focus
       row field(:name).input(class: "mort-form-text")
+      row field(:mugshot).file(class: "mort-form-text")
       row field(:pincode).input(class: "mort-form-text")
-      row field(:payroll_employee_ident).input(class: "mort-form-text")
+      row field(:punching_absence).boolean(class: "mort-form-bool")
       div do
         div(class: "mort-btn-secondary", data: { action: "click->employee#toggleAdvanced" }) { I18n.t("employees.advanced_configuration") }
       end if @editable
-      div(data: { employee_target: "advanced" }, class: "hidden") do
+      div(data: { employee_target: "advanced" }, class: "#{"hidden" if @editable}") do
+        row field(:payroll_employee_ident).input(class: "mort-form-text")
         view_only field(:access_token).input(class: "mort-form-text")
         row field(:description).input(class: "mort-form-text")
         row field(:email).input(class: "mort-form-text")
@@ -31,8 +33,8 @@ class Employees::Form < ApplicationForm
         row field(:ot2_add_hour_pay).input(class: "mort-form-text")
         row field(:eu_state).input(class: "mort-form-text")
         row field(:blocked).input(class: "mort-form-text")
-        row field(:locale).input(class: "mort-form-text")
-        row field(:time_zone).input(class: "mort-form-text")
+        row field(:locale).select(Employee.locales, prompt: I18n.t(".select_employee_locale"), class: "mort-form-text")
+        row field(:time_zone).select(ActiveSupport::TimeZone.all.collect { |tz| [ "(GMT#{ActiveSupport::TimeZone.seconds_to_utc_offset(tz.utc_offset)}) #{tz.name}", tz.tzinfo.name ] }, class: "mort-form-text")
       end
     end
   end

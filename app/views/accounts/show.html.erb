@@ -7,6 +7,20 @@
       <%= link_to t("#{ resource_class.table_name}.form.edit"), edit_resource_url, class: "mort-btn-primary" %>
     </div>
   </div>
+  <div>
+    <ul>
+      <li class="even:bg-gray-50 grid grid-cols-3">
+        <div class="justify-start"><%= link_to t(".new_job"), new_background_job_url() %></div>
+        <div class="text-right justify-end"></div>
+      </li>
+      <% @resource.background_jobs.each do |background_job| %>
+        <li class="even:bg-gray-50 grid grid-cols-3">
+          <div class="justify-start"><%= link_to background_job.job_klass, edit_background_job_url(background_job) %></div>
+          <div class="text-right justify-end"><%= background_job.state %></div>
+        </li>
+      <% end %>
+    </ul>
+  </div>
   <div class="">
     <%= render resource_class.form @resource, false %>
   </div>

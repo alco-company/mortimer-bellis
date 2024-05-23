@@ -4,15 +4,20 @@ class Account < ApplicationRecord
   # some process executes
   #
   include TimeZoned
+  include Localeable
+  include Colorable
 
-  has_many :users, dependent: :destroy
+  has_many :background_jobs, dependent: :destroy
+  has_many :employees, dependent: :destroy
   has_many :filters, dependent: :destroy
   has_many :locations, dependent: :destroy
-  has_many :punch_clocks, dependent: :destroy
   has_many :punch_cards, dependent: :destroy
+  has_many :punch_clocks, dependent: :destroy
   has_many :punches, dependent: :destroy
-  has_many :employees, dependent: :destroy
   has_many :teams, dependent: :destroy
+  has_many :users, dependent: :destroy
+
+  has_one_attached :logo
 
   scope :by_account, ->() { Current.user.global_queries? ? all : where(id: Current.account.id) }
 
@@ -37,6 +42,6 @@ class Account < ApplicationRecord
   end
 
   def self.form(resource, editable = true)
-    Accounts::Form.new resource, editable: editable
+    Accounts::Form.new resource, editable: editable, enctype: "multipart/form-data"
   end
 end

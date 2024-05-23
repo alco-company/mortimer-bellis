@@ -16,6 +16,7 @@ module Resourceable
 
     def set_resources
       @resources = any_filters? ? resource_class.filtered(@filter) : resource_class.by_account()
+      @resources = any_sorts? ? resource_class.ordered(@resources, params[:s], params[:d]) : @resources.order(created_at: :desc)
     end
 
     def set_filter
@@ -61,6 +62,10 @@ module Resourceable
     def any_filters?
       return false if @filter.nil? or params[:controller].split("/").last == "filters"
       !@filter.id.nil?
+    end
+
+    def any_sorts?
+      params[:s].present?
     end
   end
 

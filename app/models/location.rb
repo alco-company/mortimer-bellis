@@ -1,5 +1,7 @@
 class Location < ApplicationRecord
   include Accountable
+  include Colorable
+
   has_many :punch_clocks, dependent: :destroy
 
   scope :by_name, ->(name) { where("name LIKE ?", "%#{name}%") if name.present? }

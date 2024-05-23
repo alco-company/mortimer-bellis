@@ -1,11 +1,17 @@
 import { Controller } from "@hotwired/stimulus"
+import { get } from "@rails/request.js";
 
 // Connects to data-controller="contextmenu"
 export default class extends Controller {
   static targets = [ "button", "popup" ]
   connect() {
-    // console.log(this.buttonTarget)
-    // console.log(this.popupTarget)
+  }
+
+  unfold(event) {
+    event.preventDefault();
+    if (this.buttonTarget.getAttribute('aria-expanded')=='false') {
+      get(this.buttonTarget.getAttribute("href"));
+    }
   }
 
   tap(event) {

@@ -23,6 +23,61 @@ class ApplicationForm < Superform::Rails::Form
     end
   end
 
+  class OptionMapper < Superform::Rails::OptionMapper
+    def each(&options)
+      @collection.each do |item|
+        case item
+          in ActiveRecord::Relation => relation
+            active_record_relation_options_enumerable(relation).each(&options)
+          in [Colorable::Color, *] => colr
+            enumerable_list(colr).each(&options)
+          in [Localeable::Locale, *] => locl
+            enumerable_list(locl).each(&options)
+          in [[ /GMT/, String ], *] => arr
+            timezone_list(arr).each(&options)
+          in id, value
+            options.call id, value
+          in value
+            options.call value, value.to_s
+        end
+      end
+    end
+
+    def enumerable_list(colr)
+      Enumerator.new do |collection|
+        colr.each do |color|
+          collection << [ color.id, color.value ]
+        end
+      end
+    end
+
+    def timezone_list(tz)
+      Enumerator.new do |collection|
+        tz.each do |k, v|
+          collection << [ v, "%s - %s" % [ v, k ] ]
+        end
+      end
+    end
+
+    def active_record_relation_options_enumerable(relation)
+      Enumerator.new do |collection|
+        relation.each do |object|
+          attributes = object.attributes
+          id = attributes.delete(relation.primary_key)
+          value = attributes.values.join(" ")
+          collection << [ id, value ]
+        end
+      end
+    end
+  end
+
+  class SelectField < Superform::Rails::Components::SelectField
+    protected
+      def map_options(collection)
+        OptionMapper.new(collection)
+      end
+  end
+
   class EnumSelectField < Superform::Rails::Components::SelectField
     def options(*collection)
       collection.flatten!
@@ -43,6 +98,73 @@ class ApplicationForm < Superform::Rails::Form
   class WeekField < Superform::Rails::Components::InputComponent
     def field_attributes
       super.merge(type: "week")
+    end
+  end
+
+  class FileField < Superform::Rails::Components::InputComponent
+    def field_attributes
+      super.merge(type: "file", accept: "image/*")
+    end
+    def template(&)
+      div(class: "mort-field") do
+        input(**attributes)
+        if field.value.attached?
+          div(class: "mort-field") do
+            img(src: url_for(field.value), class: "mort-img")
+          end
+        end
+      end
+    end
+  end
+
+  class BooleanField < Superform::Rails::Components::CheckboxComponent
+    def field_attributes
+      super.merge(type: "boolean")
+    end
+    def template(&)
+      div(class: attributes[:class], data: { controller: "boolean"}) do
+        input(name: dom.name, data: { boolean_target: "input" }, type: :hidden, value: field.value ? "1" : "0")
+        button(
+          type: "button",
+          data: { action: "click->boolean#toggle", boolean_target: "button" },
+          class:
+            "group relative inline-flex h-5 w-10 flex-shrink-0 cursor-pointer items-center justify-center rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2",
+          role: "switch",
+          aria_checked: "false"
+        ) do
+          whitespace
+          span(class: "sr-only") { "Use setting" }
+          whitespace
+          span(
+            aria_hidden: "true",
+            class: "pointer-events-none absolute h-full w-full rounded-md bg-white"
+          )
+          whitespace
+          comment { %(Enabled: "bg-indigo-600", Not Enabled: "bg-gray-200") }
+          whitespace
+          span(
+            aria_hidden: "true",
+            data: { boolean_target: "indicator" },
+            class:
+              "#{setIndicator} pointer-events-none absolute mx-auto h-4 w-9 rounded-full transition-colors duration-200 ease-in-out"
+          )
+          whitespace
+          comment { %(Enabled: "translate-x-5", Not Enabled: "translate-x-0") }
+          whitespace
+          span(
+            aria_hidden: "true",
+            data: { boolean_target: "handle" },
+            class:
+              "#{setHandle} pointer-events-none absolute left-0 inline-block h-5 w-5 transform rounded-full border border-gray-200 bg-white shadow ring-0 transition-transform duration-200 ease-in-out"
+          )
+        end
+      end
+    end
+    def setIndicator
+      field.value ? "bg-sky-600" : "bg-gray-200"
+    end
+    def setHandle
+      field.value ? "translate-x-5" : "translate-x-0"
     end
   end
 
@@ -73,11 +195,20 @@ class ApplicationForm < Superform::Rails::Form
   end
 
   class Field < Field
+    def select(*collection, **attributes, &)
+      SelectField.new(self, attributes: attributes, collection: collection, &)
+    end
     def multiple_select(*collection, **attributes, &)
       MultipleSelectField.new(self, attributes: attributes, collection: collection, &)
     end
     def enum_select(*collection, **attributes, &)
       EnumSelectField.new(self, attributes: attributes, collection: collection, &)
+    end
+    def file(**attributes)
+      FileField.new(self, attributes: attributes)
+    end
+    def boolean(**attributes)
+      BooleanField.new(self, attributes: attributes)
     end
     def week(**attributes)
       WeekField.new(self, attributes: attributes)
@@ -113,7 +244,7 @@ class ApplicationForm < Superform::Rails::Form
         end
       end
       div(class: "mort-field") do
-        plain(component.field.value)
+        plain(fformat(model, component.field.key))
       end
     end
   end
@@ -128,8 +259,18 @@ class ApplicationForm < Superform::Rails::Form
       @editable ?
         render(component) :
         div(class: "mr-5") do
+          model.field_formats(component.field.key) == :file ?
+          display_image(component.field) :
           plain(fformat(model, component.field.key))
         end
+    end
+  end
+
+  def display_image(field)
+    if model.send(field.key).attached?
+      div(class: "mort-field") do
+        img(src: url_for(model.send(field.key)), class: "mort-img")
+      end
     end
   end
 
@@ -137,6 +278,8 @@ class ApplicationForm < Superform::Rails::Form
     case model.field_formats(key)
     when :date; model.send(key).strftime("%d-%m-%Y") rescue nil
     when :time; model.send(key).strftime("%H:%M") rescue nil
+    when :boolean; (model.send(key) ? I18n.t(:yes) : I18n.t(:no))
+    when :association; eval("model.#{key}") rescue "n/a"
     else; model.send key
     end
   end

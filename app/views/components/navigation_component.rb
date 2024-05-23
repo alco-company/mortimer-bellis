@@ -2,6 +2,7 @@
 
 class NavigationComponent < ApplicationComponent
   include Phlex::Rails::Helpers::LinkTo
+  include Phlex::Rails::Helpers::ImageTag
 
   attr_accessor :items
 
@@ -21,7 +22,11 @@ class NavigationComponent < ApplicationComponent
               "flex flex-1 items-center justify-center sm:items-stretch sm:justify-start"
           ) do
             div(class: "flex flex-shrink-0 items-center hidden lg:block") do
-              helpers.render_logo
+              if Current.account && Current.account.logo.attached?
+                helpers.render_logo logo: Current.account.logo
+              else
+                helpers.render_logo
+              end
             end
             div(class: "sm:ml-6 hidden lg:block") do
               desktop_menu
@@ -170,19 +175,27 @@ class NavigationComponent < ApplicationComponent
             action: "touchstart->navigation#tapDrop click->navigation#tapDrop click@window->navigation#hideDrop"
           },
           class:
-            "relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800",
+            "relative flex rounded-full bg-sky-200 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800",
           id: "user-menu-button",
           aria_expanded: "false",
           aria_haspopup: "true"
         ) do
           span(class: "absolute -inset-1.5")
           span(class: "sr-only") { "Open user menu" }
-          img(
-            class: "h-8 w-8 rounded-full",
-            src:
-              "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-            alt: ""
-          )
+          if Current.user 
+            if Current.user.mugshot.attached?
+              image_tag( Current.user.mugshot, class: "h-8 w-8 rounded-full")
+            else
+              image_tag( "icons8-customer-64.png", class: "h-8 w-8 rounded-full")
+            end
+          end
+          # helpers.user_mugshot(Current.user.mugshot, css: "h-8 w-8 rounded-full")
+          # img(
+          #   class: "h-8 w-8 rounded-full",
+          #   src:
+          #     "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
+          #   alt: ""
+          # )
         end
       end
       comment do

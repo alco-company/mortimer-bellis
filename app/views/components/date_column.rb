@@ -1,46 +1,31 @@
-class DateColumn < Phlex::HTML
-  include Phlex::Rails::Helpers::Routes
-
-  attr_accessor :field
-
-  def initialize(field:, css: nil, table: false, &block)
-    @field = field
-    @table = table
-    @class = css || "truncate"
-  end
-
-  def view_template(&)
-    @table ? table_field : div_field
-  end
-
-  def table_field
-    @table == :head ? th_field : td_field
-  end
-
-  def th_field
+class DateColumn < Column
+  def th_value(&block)
     th(class: @class) do
-      plain format_date(field)
+      plain format_date(value)
       yield if block_given?
     end
   end
 
-  def td_field
+  def td_value(&block)
     td(class: @class) do
-      plain format_date(field)
+      plain format_date(value)
       yield if block_given?
     end
   end
 
-  def div_field
-    field.blank? ?
+  def div_value(&block)
+    value.blank? ?
       div { "&nbsp;".html_safe } :
       div(class: @class) do
-         plain format_date(field)
-         yield if block_given?
+        if block_given?
+          yield format_datetime(value)
+        else
+          @sort ? build_link(value) : plain(format_datetime(value))
+        end
       end
   end
 
-  def format_date(date)
+  def format_datetime(date)
     date.strftime("%d/%m/%Y")
   end
 end

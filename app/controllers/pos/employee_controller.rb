@@ -1,11 +1,24 @@
 class Pos::EmployeeController < Pos::PosController
-  before_action :verify_employee, only: [ :show, :edit, :create, :update, :destroy ]
-  before_action :employee_time_zone, only: [ :edit ]
+  before_action :verify_employee, only: [ :index, :show, :edit, :create, :update, :destroy ]
+  around_action :employee_time_zone, only: [ :edit ]
 
   layout -> { PosEmployeeLayout }
 
   def index
     @employees = Employee.by_account()
+  end
+
+  def punches
+    first_punch = Punch.find(params[:id])
+    @resource = first_punch.employee
+    if first_punch
+      employee = first_punch.employee
+      date_range = first_punch.punched_at.beginning_of_day..first_punch.punched_at.end_of_day
+      @punches = Punch.where(employee: employee, punched_at: date_range)
+      render turbo_stream: turbo_stream.replace("payroll_#{helpers.dom_id(first_punch)}", partial: "pos/punches/index")
+    else
+      head :not_found
+    end
   end
 
   def edit
@@ -18,8 +31,7 @@ class Pos::EmployeeController < Pos::PosController
   # def edit
   # end
 
-  # #
-  # # Parameters: {"authenticity_token"=>"[FILTERED]", "punch_clock"=>{"api_key"=>"[FILTERED]"}, "employee"=>{"state"=>"IN", "id"=>"1"}, "button"=>"", "id"=>"1"}
+  # # Parameters: {"authenticity_token"=>"[FILTERED]", "employee"=>{"api_key"=>"[FILTERED]", "state"=>"in", "id"=>"122"}, "button"=>"", "api_key"=>"[FILTERED]"}
   # Manuel entry of work:
   # "punch"=>{"from_at"=>"2024-05-06T07:20", "to_at"=>"2024-05-06T15:20"}, "api_key"=>"YqymK1swsjkqSSeG3DFVjq1d", "controller"=>"pos/employee", "action"=>"create"} permitted: false>
   #
@@ -27,10 +39,17 @@ class Pos::EmployeeController < Pos::PosController
   #  "punch"=>{"from_at"=>"2024-05-06", "to_at"=>"2024-05-06", "reason"=>"nursing_sick"}, "api_key"=>"YqymK1swsjkqSSeG3DFVjq1d", "controller"=>"pos/employee", "action"=>"create"} permitted: false>
   def create
     if params[:employee].present?
+      if params[:employee][:state] == @resource.state
+        redirect_to pos_employee_url(api_key: @resource.access_token), warning: t("state_eq_current_state", state: @resource.state) and return
+      end
       @resource.punch nil, employee_params[:state], request.remote_ip
       @resource.update state: employee_params[:state]
       redirect_to pos_employee_url(api_key: @resource.access_token) and return
     else
+      if (Date.today == Date.parse(punch_params[:from_at]) || 
+        Date.today == Date.parse(punch_params[:to_at])) && !@resource.out?
+        redirect_to pos_employee_url(api_key: @resource.access_token), warning: t("employee_working_punch_out_first") and return
+      end
       @resource.punch_range punch_params[:reason], request.remote_ip, punch_params[:from_at], punch_params[:to_at]
       redirect_to pos_employee_url(api_key: @resource.access_token, tab: "payroll") and return
     end
@@ -59,9 +78,15 @@ class Pos::EmployeeController < Pos::PosController
   def destroy
     if params[:all].present?
       @resource.punch_cards.where(work_date: params[:date]).destroy_all
+      @resource.todays_punches(date: Date.parse(params[:date])).destroy_all
       redirect_to pos_employee_url(api_key: @resource.access_token, tab: "payroll") and return
     else
-      Punch.find(params[:id]).delete
+      punch = Punch.find(params[:id])
+      if punch.punch_card && punch.punch_card.punches.size == 1
+        punch.punch_card.destroy 
+      else
+        punch.destroy
+      end
       redirect_to pos_employee_url(api_key: @resource.access_token, tab: "payroll") and return
     end
   end
@@ -83,9 +108,11 @@ class Pos::EmployeeController < Pos::PosController
       else nil
       end
       redirect_to root_path and return unless @resource
+      Current.account = @resource.account
     end
 
     def employee_time_zone(&block)
+      return unless block_given?
       timezone = @resource.time_zone rescue nil
       timezone.blank? ?
         Time.use_zone("UTC", &block) :

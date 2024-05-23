@@ -25,6 +25,7 @@ da:
     login: Log ind
     home: Hjem
     pages: Sider
+    account: Konto
     accounts: Konti
     users: Brugere
     teams: Hold
@@ -39,6 +40,30 @@ da:
       profile: Profil
       today: I dag
       payroll_period: Lønperiode
+    
+  locale:
+    da: Dansk
+    en: Engelsk
+    de: Tysk
+  colors:
+    red: Rød
+    fuchsia: Fuchsia
+    lime: Lime
+    cyan: Cyan
+    green: Grøn
+    blue: Blå
+    yellow: Gul
+    orange: Orange
+    purple: Lilla
+    pink: Pink
+    amber: Brun
+    indigo: Indigo
+    rose: Rose
+    slate: Skifer
+    gray: Grå
+    stone: Granit
+    black: Sort
+    white: Hvid
 
   pos:
     employee:
@@ -91,6 +116,7 @@ da:
         time_zone: Tidszone
         locale: Sprog
         logo: Logo (80 x 40)
+        account_color: Farve
       asset:
         name: 'Navn'
         asset_teams: 'Hold/grupper'
@@ -114,9 +140,14 @@ da:
         comment: Beskrivelse - især ved overarbejde, vikariat, evt sygdom og mere
         reason: Årsag - '15MIN', og 'XTRA' ved aftalte særlige indstemplinger
       background_job:
-        klass: Klasse 
+        account: Konto
+        user: Bruger
+        state: Status
+        job_klass: Klasse/Model
+        job_id: Active Job / Solid Queue Job ID
         active: Aktiv 
         schedule: Plan 
+        next_run_at: Næste kørsel
         params: Argumenter
       dashboard:
         name: Navn
@@ -125,11 +156,13 @@ da:
       employee:
         team_id: "Hold/arbejdsgruppe"
         name: Navn
+        mugshot: Profil billede
         pincode: Pinkode
+        payroll_employee_ident: Løn nummer
+        punching_absence: Stempler kun fravær
         access_token: API nøgle
         last_punched_at: sidst stemplet
         state: status
-        payroll_employee_ident: Løn nummer
         punches_settled_at: sidst afstemt
         job_title: job titel
         birthday: fødselsdag
@@ -214,6 +247,8 @@ da:
         state: Status
         
       punch_card:
+        employee:
+          name: Medarbejder
         punched_at: "stemplet kl:"
         employee_id: Medarbejder
         location_id: Arbejdssted
@@ -223,6 +258,8 @@ da:
         work_date: Arbejdsdato
         work_minutes: Arbejdstid (minutter)
         break_minutes: Pauser (minutter)
+        ot1_minutes: Overtid 1 (minutter)
+        ot2_minutes: Overtid 2 (minutter)
         reason: Årsag
         state: Status
       punch_clock:
@@ -311,8 +348,13 @@ da:
         sub_scheme: Under skema
       user:
         name: Navn
-        account_id: Konto
+        account:
+          one: Konto
+          name: Konto
+        invited_by: 
+          name: Blev inviteret af
         email: Email adresse
+        mugshot: Profil billede
         role: Rolle
         user_name: Brugernavn
         password: Adgangskode

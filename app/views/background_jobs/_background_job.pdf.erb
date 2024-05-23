@@ -1,0 +1,6 @@
+<tr class="gap-x-6 py-5">
+  <%= render_text_column    field: link_to(account.name, account_url(account)), table: :row, css: "truncate mort-link-primary" %>
+  <%= render_number_column  field: account.locale, table: :row, css: "text-right" %>
+  <%= render_text_column    field: account.time_zone, table: :row, css: "" %>
+  <%= render_date_column    field: account.updated_at, table: :row, css: "" %>
+</tr>

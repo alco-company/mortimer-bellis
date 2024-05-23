@@ -37,5 +37,8 @@
 /app/assets/builds/*
 !/app/assets/builds/.keep
 
+# ignore reader_schema.rb
+/db/reader_schema.rb
+
 /TODO.md
 .DS_Store

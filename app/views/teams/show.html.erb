@@ -2,7 +2,7 @@
   <div class="flex justify-between items-center">
     <div>
       <h1 class="font-bold text-4xl"> <%= @resource.name %> </h1>
-      <%= link_to t(".employee_status"), pos_employees_url(t: @resource.name, api_key: "123"), class: "inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10", target: "_blank", data: { turbo_frame: '_top', turbo_stream: true } %>
+      <%= link_to t(".employee_status"), pos_employees_url(t: @resource.name, api_key: first_employee_token), class: "inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10", target: "_blank", data: { turbo_frame: '_top', turbo_stream: true } %>
 
     </div>
     <div class="grid gap-2 grid-cols-1 lg:grid-cols-2 items-center">

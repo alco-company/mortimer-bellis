@@ -1,7 +1,14 @@
   # default: &default
-#   dispatchers:
-#     - polling_interval: 1
-#       batch_size: 500
+dispatchers:
+  - polling_interval: 1
+    batch_size: 500
+    recurring_tasks:
+      background_job_scheduler:
+        interval: 60
+        class: BackgroundManagerJob
+        queue: default
+        schedule: every minute
+        enabled: true
 #   workers:
 #     - queues: "*"
 #       threads: 5

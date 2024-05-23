@@ -11,6 +11,11 @@ def items
         { title: I18n.t('menu.pages'), url: pages_url }
       ] 
     end
+    if current_user.admin?
+      items += [
+        { title: I18n.t('menu.account'), url: account_url(Current.account) }
+      ] 
+    end
     items + [
       { title: I18n.t('menu.teams'), url: teams_url },
       { title: I18n.t('menu.users'), url: users_url },
@@ -49,11 +54,6 @@ end
     <main class="m-4">
       <%= yield %>
     </main>
-    <%# in honor of Tailwind "mort-flash-info mort-flash-error mort-flash-success mort-flash-warning mort-flash-notice mort-flash-timedout mort-flash-alert" %>
-    <% flash.each do |type, msg| %>
-      <div>
-        <p data-controller="notice" class="mort-flash-<%=type%>" id="notice"><%= msg %></p>
-      </div>
-    <% end %>
+    <%= render FlashComponent.new flash: flash %>
   </body>
 </html>

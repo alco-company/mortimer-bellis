@@ -1,4 +1,4 @@
-<%= form_with(url: modal_create_url) do |form| %>
+<%= form_with(url: modal_create_url, data: { turbo: false }) do |form| %>
   <div class="sm:flex sm:items-start">
     <div class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
       <svg class="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
@@ -6,15 +6,18 @@
       </svg>
     </div>
     <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
+      <%= form.hidden_field :modal_form, value: 'state' %>
+      <%= form.hidden_field :resource_class, value: 'punch_card' %>
       <h3 class="text-base font-semibold leading-6 text-gray-900" id="modal_title"> <%= t('punch_cards.modal.state_title') %></h3>
       <div class="mt-2">
         <p class="text-sm text-gray-500"> <%= t('punch_cards.modal.state_instruction') %></p>
-
-        <%= form.hidden_field :modal_form, value: 'state' %>
-        <%= form.hidden_field :resource_class, value: 'punch_card' %>
         <%= form.label :send_state_at, t('modal.state.send_state_at') %>
         <%= form.time_field :send_state_at, autofocus: true, required: true, class: "mort-form-text" %>
-
+      </div>
+      <div class="mt-2">
+        <p class="text-sm text-gray-500"> <%= t('punch_cards.modal.eu_state_instruction') %></p>
+        <%= form.label :send_eu_state_at, t('modal.state.send_eu_state_at') %>
+        <%= form.time_field :send_eu_state_at, autofocus: true, required: true, class: "mort-form-text" %>
       </div>
     </div>
   </div>
