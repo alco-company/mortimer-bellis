@@ -244,7 +244,11 @@ class ApplicationForm < Superform::Rails::Form
         end
       end
       div(class: "mort-field") do
-        plain(fformat(model, component.field.key))
+        case component.field.key
+        when /account_id/; plain(model&.account.name)
+        when /user_id/; plain(model&.user.name)
+        else; plain(fformat(model, component.field.key))
+        end
       end
     end
   end

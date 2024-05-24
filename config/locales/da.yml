@@ -140,8 +140,8 @@ da:
         comment: Beskrivelse - især ved overarbejde, vikariat, evt sygdom og mere
         reason: Årsag - '15MIN', og 'XTRA' ved aftalte særlige indstemplinger
       background_job:
-        account: Konto
-        user: Bruger
+        account_id: Konto
+        user_id: Bruger
         state: Status
         job_klass: Klasse/Model
         job_id: Active Job / Solid Queue Job ID

@@ -24,8 +24,13 @@
 * big test
 * add prettier mail layouts
 * add state and EU state reporting timeable
+* add /background_jobs
 
 ## CHANGELOG
+
+### 24/5/2024
+
+* handle view_only for account_id and user_id
 
 ### 23/5/2024
 

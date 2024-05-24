@@ -1,11 +1,6 @@
 class BackgroundJobsController < MortimerController
   before_action :authorize
 
-  def new
-    @resource.account = Current.account
-    @resource.user = Current.user
-  end
-
   private
 
     # Only allow a list of trusted parameters through.
