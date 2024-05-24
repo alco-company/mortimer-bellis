@@ -2,7 +2,7 @@
   <div class="min-w-0 w-full columns-3 md:columns-4 lg:columns-5">
     <%= render_text_column value: link_to(punch.employee.name, employee_url(punch.employee)), css: "truncate mort-link-primary" %>
     <%= render_text_column value: link_to(punch.punched_at.strftime("%d/%m/%y %H:%M"), punch_url(punch)), css: "mort-link-primary text-right" %>
-    <%= render_text_column value: punch.state, css: "truncate" %>
+    <%= render_text_column value: I18n.t("punch.#{punch.state}"), css: "truncate" %>
     <%= render_text_column value: show_link_to_punch_clock(punch.punch_clock), css: "hidden md:block truncate" %>
     <%= render_date_column value: punch.updated_at, css: "hidden lg:block" %>
   </div>

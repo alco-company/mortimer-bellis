@@ -29,7 +29,6 @@
 * fix home = today
 * fix listing punches in pos/employee in correct timezone
 
-
 ## CHANGELOG
 
 ### 24/5/2024
@@ -38,6 +37,7 @@
 * add /background_jobs listing
 * enable rails live reload
 * fix bad URL to employee on /punches
+* fix punch form - make state selectable
 
 ### 23/5/2024
 
