@@ -37,6 +37,7 @@
 
 * handle view_only for account_id and user_id
 * add /background_jobs listing
+* enable rails live reload
 
 ### 23/5/2024
 
