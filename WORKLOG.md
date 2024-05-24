@@ -24,7 +24,6 @@
 * big test
 * add prettier mail layouts
 * add state and EU state reporting timeable
-* fix bad URL to employee on /punches
 * time_zone = same as creator
 * locale = same as creator
 * fix home = today
@@ -38,6 +37,7 @@
 * handle view_only for account_id and user_id
 * add /background_jobs listing
 * enable rails live reload
+* fix bad URL to employee on /punches
 
 ### 23/5/2024
 

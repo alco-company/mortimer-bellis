@@ -254,11 +254,7 @@ class ApplicationForm < Superform::Rails::Form
         end
       end
       div(class: "mort-field") do
-        case component.field.key
-        when /account_id/; plain(model&.account.name)
-        when /user_id/; plain(model&.user.name)
-        else; plain(fformat(model, component.field.key))
-        end
+        display_field(component.field)
       end
     end
   end
@@ -275,8 +271,18 @@ class ApplicationForm < Superform::Rails::Form
         div(class: "mr-5") do
           model.field_formats(component.field.key) == :file ?
           display_image(component.field) :
-          plain(fformat(model, component.field.key))
+          display_field(component.field)
         end
+    end
+  end
+
+  def display_field(field)
+    case field.key
+    when /account_id/; plain(model&.account.name)
+    when /user_id/; plain(model&.user.name)
+    when /employee_id/; plain(model&.employee.name)
+    when /punch_clock_id/; plain(model&.punch_clock.name)
+    else; plain(fformat(model, field.key))
     end
   end
 
@@ -291,7 +297,9 @@ class ApplicationForm < Superform::Rails::Form
   def fformat(model, key)
     case model.field_formats(key)
     when :date; model.send(key).strftime("%d-%m-%Y") rescue nil
+    when :datetime; model.send(key).strftime("%d-%m-%Y %H:%M") rescue nil
     when :time; model.send(key).strftime("%H:%M") rescue nil
+    when :enum; I18n.t("#{model.class.to_s.underscore}.#{model.send(key)}")
     when :boolean; (model.send(key) ? I18n.t(:yes) : I18n.t(:no))
     when :association; eval("model.#{key}") rescue "n/a"
     else; model.send key

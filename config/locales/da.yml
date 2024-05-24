@@ -8,8 +8,8 @@ da:
   "yes": Ja
   "no": Nej
   edit: Redigér
-  update: Opdatér
   cancel: Fortryd
+  update: Opdatér
   save: Gem
   create: Opret 
   filter: Filtrér
@@ -245,6 +245,7 @@ da:
         punched_at: "stemplet kl:"
         employee_id: Medarbejder
         state: Status
+        punch_clock_id: Stempelur
         
       punch_card:
         employee:
