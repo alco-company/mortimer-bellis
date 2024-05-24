@@ -27,18 +27,20 @@ class ApplicationForm < Superform::Rails::Form
     def each(&options)
       @collection.each do |item|
         case item
-          in ActiveRecord::Relation => relation
-            active_record_relation_options_enumerable(relation).each(&options)
-          in [Colorable::Color, *] => colr
-            enumerable_list(colr).each(&options)
-          in [Localeable::Locale, *] => locl
-            enumerable_list(locl).each(&options)
-          in [[ /GMT/, String ], *] => arr
-            timezone_list(arr).each(&options)
-          in id, value
-            options.call id, value
-          in value
-            options.call value, value.to_s
+        in ActiveRecord::Relation => relation
+          active_record_relation_options_enumerable(relation).each(&options)
+        in [Colorable::Color, *] => colr
+          enumerable_list(colr).each(&options)
+        in [Localeable::Locale, *] => locl
+          enumerable_list(locl).each(&options)
+        in [[ /GMT/, String ], *] => arr
+          timezone_list(arr).each(&options)
+        in [[ String, String ], *] => arr
+          id_value_list(arr).each(&options)
+        in id, value
+          options.call id, value
+        in value
+          options.call value, value.to_s
         end
       end
     end
@@ -55,6 +57,14 @@ class ApplicationForm < Superform::Rails::Form
       Enumerator.new do |collection|
         tz.each do |k, v|
           collection << [ v, "%s - %s" % [ v, k ] ]
+        end
+      end
+    end
+
+    def id_value_list(arr)
+      Enumerator.new do |collection|
+        arr.each do |k, v|
+          collection << [ k, v ]
         end
       end
     end

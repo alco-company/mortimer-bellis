@@ -24,13 +24,19 @@
 * big test
 * add prettier mail layouts
 * add state and EU state reporting timeable
-* add /background_jobs
+* fix bad URL to employee on /punches
+* time_zone = same as creator
+* locale = same as creator
+* fix home = today
+* fix listing punches in pos/employee in correct timezone
+
 
 ## CHANGELOG
 
 ### 24/5/2024
 
 * handle view_only for account_id and user_id
+* add /background_jobs listing
 
 ### 23/5/2024
 

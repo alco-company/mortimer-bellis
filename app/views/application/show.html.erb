@@ -4,7 +4,7 @@
       <h1 class="font-bold text-4xl"> <%= @resource.name %> </h1>
     </div>
     <div class="grid gap-2 grid-cols-1 lg:grid-cols-2 items-center">
-      <%= svg_qr_code_link(resource_url)  %>
+      <%= svg_qr_code_link(resource_url) unless @resource_class == BackgroundJob  %>
       <%= link_to t("#{ resource_class.table_name}.form.edit"), edit_resource_url, class: "mort-btn-primary" %>
     </div>
   </div>
