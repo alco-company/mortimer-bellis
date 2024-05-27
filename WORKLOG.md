@@ -24,15 +24,15 @@
 * big test
 * add prettier mail layouts
 * add state and EU state reporting timeable
-* time_zone = same as creator
-* locale = same as creator
+* time_zone = same as creator on create employee
+* locale = same as creator on create employee
 * fix home = today
-* fix listing punches in pos/employee in correct timezone
 
 ## CHANGELOG
 
 ### 27/5/2024
 
+* fix listing punches in pos/employee in correct timezone
 * prettier file input
   
 ### 24/5/2024

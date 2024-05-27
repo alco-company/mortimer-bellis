@@ -71,14 +71,6 @@ class ApplicationForm < Superform::Rails::Form
       end
     end
 
-    def id_enum_list(arr)
-      Enumerator.new do |collection|
-        arr.each do |k, v|
-          collection << [ k, I18n.t("#{model}.#{v}") ]
-        end
-      end
-    end
-
     def active_record_relation_options_enumerable(relation)
       Enumerator.new do |collection|
         relation.each do |object|
@@ -288,10 +280,10 @@ class ApplicationForm < Superform::Rails::Form
 
   def display_field(field)
     case field.key
-    when /account_id/; plain(model&.account.name)
-    when /user_id/; plain(model&.user.name)
-    when /employee_id/; plain(model&.employee.name)
-    when /punch_clock_id/; plain(model&.punch_clock.name)
+    when /account_id$/; plain(model&.account.name)
+    when /user_id$/; plain(model&.user.name)
+    when /employee_id$/; plain(model&.employee.name)
+    when /punch_clock_id$/; plain(model&.punch_clock.name)
     else; plain(fformat(model, field.key))
     end
   end

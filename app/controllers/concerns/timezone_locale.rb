@@ -11,7 +11,7 @@ module TimezoneLocale
     # about handling date and timezone
     # https://nandovieira.com/working-with-dates-on-ruby-on-rails
     #
-    around_action :user_time_zone
+    around_action :user_time_zone if Current.user || Current.account
   end
 
 
@@ -42,7 +42,8 @@ module TimezoneLocale
     end
 
     def get_locale_from_user_or_account
-      Current.user&.locale || Current.account&.locale
+      Current.user&.locale ||
+      Current.account&.locale
     end
 
     #

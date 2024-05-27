@@ -1,6 +1,6 @@
 class Pos::EmployeeController < Pos::PosController
   before_action :verify_employee, only: [ :index, :show, :edit, :create, :update, :destroy ]
-  around_action :employee_time_zone, only: [ :edit ]
+  around_action :employee_time_zone, only: [ :show, :edit, :create, :update, :destroy ]
 
   layout -> { PosEmployeeLayout }
 
