@@ -9,13 +9,19 @@ class Pos::EmployeeController < Pos::PosController
   end
 
   def punches
-    first_punch = Punch.find(params[:id])
-    @resource = first_punch.employee
-    if first_punch
-      employee = first_punch.employee
-      date_range = first_punch.punched_at.beginning_of_day..first_punch.punched_at.end_of_day
-      @punches = Punch.where(employee: employee, punched_at: date_range)
-      render turbo_stream: turbo_stream.replace("payroll_#{helpers.dom_id(first_punch)}", partial: "pos/punches/index")
+    @first_punch = Punch.find(params[:id])
+    @punch_clock = PunchClock.find(params[:punch_clock_id])
+    @resource = @employee = @first_punch.employee
+    if @first_punch
+      if @punch_clock 
+        punch_clock_time_zone do
+          render_punches
+        end
+      else
+        employee_time_zone do
+          render_punches
+        end
+      end
     else
       head :not_found
     end
@@ -111,9 +117,23 @@ class Pos::EmployeeController < Pos::PosController
       Current.account = @resource.account
     end
 
+    def render_punches
+      date_range = @first_punch.punched_at.beginning_of_day..@first_punch.punched_at.end_of_day
+      @punches = Punch.where(employee: @employee, punched_at: date_range).order(punched_at: :desc)
+      render turbo_stream: turbo_stream.replace("payroll_#{helpers.dom_id(@first_punch)}", partial: "pos/punches/index")
+    end
+
     def employee_time_zone(&block)
       return unless block_given?
       timezone = @resource.time_zone rescue nil
+      timezone.blank? ?
+        Time.use_zone("UTC", &block) :
+        Time.use_zone(timezone, &block)
+    end
+
+    def punch_clock_time_zone(&block)
+      return unless block_given?
+      timezone = @punch_clock.time_zone rescue nil
       timezone.blank? ?
         Time.use_zone("UTC", &block) :
         Time.use_zone(timezone, &block)

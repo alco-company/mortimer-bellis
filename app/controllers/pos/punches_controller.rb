@@ -1,4 +1,5 @@
 class Pos::PunchesController < Pos::PosController
+  around_action :punch_clock_time_zone
   # before_action :verify_employee, only: :index
   layout false
 
@@ -24,5 +25,12 @@ class Pos::PunchesController < Pos::PosController
       else nil
       end
       redirect_to pos_punch_clock_path(api_key: @resource.access_token) and return unless @employee
+    end
+
+    def punch_clock_time_zone(&block)
+      timezone = @resource.time_zone rescue nil
+      timezone.blank? ?
+        Time.use_zone("UTC", &block) :
+        Time.use_zone(timezone, &block)
     end
 end

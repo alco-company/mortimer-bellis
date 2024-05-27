@@ -6,9 +6,11 @@ class NavigationComponent < ApplicationComponent
 
   attr_accessor :items
 
-  def initialize(items: [], root: nil)
+  def initialize(items: [], root: nil, locale: nil, time_zone: nil)
     @items = items
     @root = root
+    @locale = locale
+    @time_zone = time_zone
   end
 
   def view_template
@@ -34,6 +36,7 @@ class NavigationComponent < ApplicationComponent
             end
           end
           div(class: " absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0") do
+            show_locale_time_zone "text-sky-200"
             # view_notifications
             profile_dropdown if Current.user.present?
           end
@@ -183,11 +186,11 @@ class NavigationComponent < ApplicationComponent
         ) do
           span(class: "absolute -inset-1.5")
           span(class: "sr-only") { "Open user menu" }
-          if Current.user 
+          if Current.user
             if Current.user.mugshot.attached?
-              image_tag( Current.user.mugshot, class: "h-8 w-8 rounded-full")
+              image_tag(Current.user.mugshot, class: "h-8 w-8 rounded-full")
             else
-              image_tag( "icons8-customer-64.png", class: "h-8 w-8 rounded-full")
+              image_tag("icons8-customer-64.png", class: "h-8 w-8 rounded-full")
             end
           end
           # helpers.user_mugshot(Current.user.mugshot, css: "h-8 w-8 rounded-full")
@@ -223,8 +226,11 @@ class NavigationComponent < ApplicationComponent
     end
   end
 
-  def show_locale_time_zone
-    mc = superadmin ? "text-pink-400" : "text-mortimer"
-    p(class: "#{mc} text-xs font-thin px-4 pb-2") { " #{Current.locale}/#{Current.user.time_zone rescue ""}" }
+  def show_locale_time_zone color="text-mortimer"
+    mc = superadmin ? "text-pink-400" : color
+    str_lt = Current.user ?
+      "#{Current.locale}/#{Current.user.time_zone rescue ""}" :
+      "#{@locale}/#{@time_zone}"
+    p(class: "#{mc} text-xs font-thin px-4 pb-2") { str_lt }
   end
 end

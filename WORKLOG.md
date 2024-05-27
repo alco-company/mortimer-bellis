@@ -26,15 +26,14 @@
 * add state and EU state reporting timeable
 * time_zone = same as creator on create employee
 * locale = same as creator on create employee
-* fix home = today
 
 ## CHANGELOG
 
 ### 27/5/2024
 
 * prettier file input
+* add dashboard - fix home = today
 * fix listing punches in pos/employee in correct timezone
-* add dashboard
   
 ### 24/5/2024
 

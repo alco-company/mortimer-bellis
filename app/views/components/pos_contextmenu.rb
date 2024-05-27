@@ -3,11 +3,13 @@ class PosContextmenu < Phlex::HTML
   include Phlex::Rails::Helpers::LinkTo
   include Rails.application.routes.url_helpers
 
-  attr_accessor :resource, :resource_class, :list
+  attr_accessor :resource, :resource_class, :list, :employee, :punch_clock
 
-  def initialize(resource: nil, list: nil, resource_class: nil, turbo_frame: "_top", alter: true, folded: false, links: [])
+  def initialize(resource: nil, employee: nil, punch_clock: nil, list: nil, resource_class: nil, turbo_frame: "_top", alter: true, folded: false, links: [])
     @resource = resource
     @resource_class = resource_class
+    @punch_clock = punch_clock
+    @employee = employee
     @list = list
     @turbo_frame = turbo_frame
     @alter = alter
@@ -22,7 +24,7 @@ class PosContextmenu < Phlex::HTML
   def folded
     div(data_controller: "contextmenu", class: "relative flex-none") do
       whitespace
-      link_to(helpers.pos_employee_punches_url(id: resource.id), data: { turbo_stream: "" }) do
+      link_to(helpers.pos_employee_punches_url(id: resource.id, employee_id: employee&.id, punch_clock_id: punch_clock&.id), data: { turbo_stream: "" }) do
         whitespace
         span(class: "sr-only") { "Get todays punches" }
         whitespace

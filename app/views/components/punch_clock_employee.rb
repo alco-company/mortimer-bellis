@@ -1,8 +1,9 @@
 class PunchClockEmployee < PunchClockBase
-  attr_accessor :employee, :tab
+  attr_accessor :employee, :tab, :punch_clock
 
   def initialize(employee: nil, tab: "today", edit: false)
     @employee = employee || false
+    @punch_clock = nil
     @tab = tab
     @edit = edit
   end
