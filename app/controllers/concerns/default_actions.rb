@@ -28,6 +28,8 @@ module DefaultActions
 
     # GET /employees/new
     def new
+      @resource.account_id = Current.account.id if resource_class.has_attribute? :account_id
+      @resource.user_id = Current.user.id if resource_class.has_attribute? :user_id
     end
 
     # GET /employees/1/edit
@@ -38,6 +40,7 @@ module DefaultActions
     def create
       @resource = resource_class.new(resource_params)
       @resource.account_id = Current.account.id if resource_class.has_attribute? :account_id
+      @resource.user_id = Current.user.id if resource_class.has_attribute? :user_id
 
       respond_to do |format|
         if @resource.save

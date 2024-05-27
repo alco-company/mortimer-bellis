@@ -24,8 +24,24 @@
 * big test
 * add prettier mail layouts
 * add state and EU state reporting timeable
+* time_zone = same as creator on create employee
+* locale = same as creator on create employee
 
 ## CHANGELOG
+
+### 27/5/2024
+
+* prettier file input
+* add dashboard - fix home = today
+* fix listing punches in pos/employee in correct timezone
+  
+### 24/5/2024
+
+* handle view_only for account_id and user_id
+* add /background_jobs listing
+* enable rails live reload
+* fix bad URL to employee on /punches
+* fix punch form - make state selectable
 
 ### 23/5/2024
 

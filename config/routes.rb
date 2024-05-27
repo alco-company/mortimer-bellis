@@ -8,7 +8,8 @@ Rails.application.routes.draw do
     unlocks: "users/unlocks",
     omniauth_callbacks: "users/omniauth_callbacks"
   }
-
+  
+  resources :dashboards
   resources :background_jobs
   resources :pages
   resources :users
@@ -54,5 +55,5 @@ Rails.application.routes.draw do
   get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
 
   # Defines the root path route ("/")
-  root "employees#index"
+  root "dashboards#show"
 end

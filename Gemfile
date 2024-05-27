@@ -92,3 +92,5 @@ gem "devise_invitable", "~> 2.0"
 gem "redcarpet", "~> 3.6"
 
 gem "httparty", "~> 0.22.0"
+
+gem "rss", "~> 0.3.0"

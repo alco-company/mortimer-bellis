@@ -15,6 +15,7 @@ class ApplicationRecord < ActiveRecord::Base
     when :mugshot, :logo;                                           :file
     when :updated_at, :created_at, :punched_at, :last_punched_at;   :datetime
     when :birthday, :hired_at, :punches_settled_at;                 :date
+    when :state;                                                    :enum
     when /\./;                                                      :association
     else; nil
     end

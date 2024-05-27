@@ -1,8 +1,8 @@
 class PunchClockPunch < PunchClockBase
-  attr_accessor :resource, :employee, :pane, :tab
+  attr_accessor :resource, :employee, :pane, :tab, :punch_clock
 
   def initialize(resource:, employee: nil, tab: "today")
-    @resource = resource
+    @resource = @punch_clock = resource
     @employee = employee || false
     @tab = tab
   end

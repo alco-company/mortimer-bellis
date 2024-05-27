@@ -8,7 +8,7 @@
     render NavigationComponent.new( items: [
       # { title: I18n.t('menu.pos.profile'), url: pos_punch_cards_url( api_key: @resource.access_token, employee: {id: @employee.id} ) },
       # { title: I18n.t('menu.pos.payroll_period'), url: pos_punch_cards_url( api_key: @resource.access_token, employee: {id: @employee.id} ) }
-    ])
+    ], locale: @resource.locale, time_zone: @resource.time_zone)
   end 
 
   content_for :footer do 

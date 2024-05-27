@@ -62,8 +62,8 @@ class PunchClockBase < ApplicationComponent
             end
             div(class: "flex flex-none items-center gap-x-4") do
               folded ?
-                render(PosContextmenu.new(resource: punch, list: true, turbo_frame: helpers.dom_id(punch), alter: edit, folded: true)) :
-                render(PosContextmenu.new(resource: punch, list: true, turbo_frame: helpers.dom_id(punch), alter: edit))
+                render(PosContextmenu.new(resource: punch, punch_clock: punch_clock, employee: employee, list: true, turbo_frame: helpers.dom_id(punch), alter: edit, folded: true)) :
+                render(PosContextmenu.new(resource: punch, punch_clock: punch_clock, employee: employee, list: true, turbo_frame: helpers.dom_id(punch), alter: edit))
             end
           end
         end
