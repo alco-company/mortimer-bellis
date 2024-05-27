@@ -31,6 +31,10 @@
 
 ## CHANGELOG
 
+### 27/5/2024
+
+* prettier file input
+  
 ### 24/5/2024
 
 * handle view_only for account_id and user_id

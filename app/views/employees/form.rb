@@ -3,7 +3,7 @@ class Employees::Form < ApplicationForm
     div(data: { controller: "employee" }) do
       row field(:team_id).select(Team.by_account.order(name: :asc).select(:id, :name), prompt: I18n.t(".select_team"), class: "mort-form-text").focus
       row field(:name).input(class: "mort-form-text")
-      row field(:mugshot).file(class: "mort-form-text")
+      row field(:mugshot).file(class: "mort-form-file")
       row field(:pincode).input(class: "mort-form-text")
       row field(:punching_absence).boolean(class: "mort-form-bool")
       div do
@@ -16,7 +16,7 @@ class Employees::Form < ApplicationForm
         row field(:email).input(class: "mort-form-text")
         row field(:cell_phone).input(class: "mort-form-text")
         view_only field(:last_punched_at).input(class: "mort-form-text")
-        row field(:state).input(class: "mort-form-text")
+        row field(:state).select(WORK_STATES, class: "mort-form-text")
         view_only field(:punches_settled_at).date(class: "mort-form-text")
         row field(:job_title).input(class: "mort-form-text")
         row field(:birthday).date(class: "mort-form-text")
