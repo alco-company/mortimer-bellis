@@ -32,8 +32,9 @@
 
 ### 27/5/2024
 
-* fix listing punches in pos/employee in correct timezone
 * prettier file input
+* fix listing punches in pos/employee in correct timezone
+* add dashboard
   
 ### 24/5/2024
 

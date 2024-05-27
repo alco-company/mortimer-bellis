@@ -12,7 +12,7 @@
   ]
 
   content_for :nav do 
-    render NavigationComponent.new( items: items)
+    render NavigationComponent.new( items: items, root: pos_employee_url(api_key: @resource.access_token))
   end
 
   content_for :footer do

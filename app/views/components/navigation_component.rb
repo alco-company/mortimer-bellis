@@ -6,8 +6,9 @@ class NavigationComponent < ApplicationComponent
 
   attr_accessor :items
 
-  def initialize(items: [])
+  def initialize(items: [], root: nil)
     @items = items
+    @root = root
   end
 
   def view_template
@@ -23,9 +24,9 @@ class NavigationComponent < ApplicationComponent
           ) do
             div(class: "flex flex-shrink-0 items-center hidden lg:block") do
               if Current.account && Current.account.logo.attached?
-                helpers.render_logo logo: Current.account.logo
+                helpers.render_logo logo: Current.account.logo, root: @root
               else
-                helpers.render_logo
+                helpers.render_logo root: @root
               end
             end
             div(class: "sm:ml-6 hidden lg:block") do
@@ -120,7 +121,7 @@ class NavigationComponent < ApplicationComponent
     div(data: { navigation_target: "mobileMenu" }, class: "hidden lg:hidden", id: "mobile-menu") do
       div(class: "space-y-1 px-2 pb-3 pt-2") do
         a(
-          href: helpers.root_path,
+          href: @root || helpers.root_path,
           class:
             "mort-nav-link",
           aria_current: "page"
