@@ -24,10 +24,14 @@
 * big test
 * add prettier mail layouts
 * add state and EU state reporting timeable
-* time_zone = same as creator on create employee
-* locale = same as creator on create employee
+* punches on tablets - payroll_period - cannot list all
 
 ## CHANGELOG
+
+### 28/5/2024
+
+* locale, time_zone = same as creator on create employee
+* locale, time_zone = same as creator on create user
 
 ### 27/5/2024
 
