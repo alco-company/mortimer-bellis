@@ -4,6 +4,8 @@
   <%= form_for(resource, as: resource_name, url: invitation_path(resource_name), html: { method: :post }) do |f| %>
     <%= render "users/shared/error_messages", resource: resource %>
     <%= f.hidden_field :account_id, value: Current.account.id %>
+    <%= f.hidden_field :locale, value: Current.user.locale %>
+    <%= f.hidden_field :time_zone, value: Current.user.time_zone %>
     <% resource.class.invite_key_fields.each do |field| -%>
       <div class="mort-field">
         <%= f.label field %><br />

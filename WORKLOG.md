@@ -22,8 +22,8 @@
 * make locale and time_zone selectable on sign_up
 * release RC1
 * big test
-* add prettier mail layouts
 * add state and EU state reporting timeable
+* add prettier mail layouts
 * punches on tablets - payroll_period - cannot list all
 
 ## CHANGELOG

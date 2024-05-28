@@ -35,14 +35,17 @@
       <%= f.email_field :email, autocomplete: "email", class: "mort-form-text" %>
     </div>
 
+    <%# = row field(:locale).select(Employee.locales, prompt: I18n.t(".select_employee_locale"), class: "mort-form-text") %>
+    <%#= row field(:time_zone).select(ActiveSupport::TimeZone.all.collect { |tz| [ "(GMT#{ActiveSupport::TimeZone.seconds_to_utc_offset(tz.utc_offset)}) #{tz.name}", tz.tzinfo.name ] }, class: "mort-form-text") %>
+        
     <div class="mort-field">
       <%= f.label :locale %><br />
-      <%= f.text_field :locale, class: "mort-form-text" %>
+      <%= f.select :locale, Employee.locales.collect { |loc| [loc.value, loc.id] }, class: "mort-form-text" %>
     </div>
 
     <div class="mort-field">
       <%= f.label :time_zone %><br />
-      <%= f.text_field :time_zone, class: "mort-form-text" %>
+      <%= f.select :time_zone, ActiveSupport::TimeZone.all.collect { |tz| [ "(GMT#{ActiveSupport::TimeZone.seconds_to_utc_offset(tz.utc_offset)}) #{tz.name}", tz.tzinfo.name ] }, class: "mort-form-text" %>
     </div>
 
     <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
