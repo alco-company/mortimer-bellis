@@ -16,6 +16,8 @@ module DefaultActions
         format.pdf { send_file resource_class.pdf_file(html_content), filename: "#{resource_class.name.pluralize.downcase}-#{Date.today}.pdf" }
         format.csv { send_data resource_class.to_csv(@resources), filename: "#{resource_class.name.pluralize.downcase}-#{Date.today}.csv" }
       end
+    rescue => error
+      redirect_to root_path, warning: error.message
     end
 
     def html_content

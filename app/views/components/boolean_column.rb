@@ -1,4 +1,18 @@
 class BooleanColumn < Column
+  def th_value(&block)
+    th(class: @class) do
+      plain value
+      yield if block_given?
+    end
+  end
+
+  def td_value(&block)
+    td(class: @class) do
+      plain true_false(value)
+      yield if block_given?
+    end
+  end
+
   def div_value(&block)
     value.blank? ?
       div { "&nbsp;".html_safe } :
