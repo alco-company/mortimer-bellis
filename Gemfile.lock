@@ -97,7 +97,7 @@ GIT
 GEM
   remote: https://rubygems.org/
   specs:
-    activerecord-enhancedsqlite3-adapter (0.7.0)
+    activerecord-enhancedsqlite3-adapter (0.8.0)
       activerecord (>= 7.1)
       sqlite3 (>= 1.6)
     addressable (2.8.6)
@@ -393,7 +393,7 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
-  activerecord-enhancedsqlite3-adapter (~> 0.7.0)
+  activerecord-enhancedsqlite3-adapter (~> 0.8.0)
   amazing_print
   bootsnap
   brakeman
