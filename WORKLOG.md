@@ -32,6 +32,7 @@
 * locale, time_zone = same as creator on create employee
 * locale, time_zone = same as creator on create user
 * punches on tablets - payroll_period - cannot list all
+* add staging server - anemone.mortimer.pro - and scripts stage and prod
 
 ### 27/5/2024
 

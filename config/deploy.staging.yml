@@ -1,8 +1,8 @@
 # Name of your application. Used to uniquely configure containers.
-service: mortimer-bellis
+service: mortimer-anemone
 
 # Name of the container image.
-image: wdiechmann/mortimer-bellis
+image: wdiechmann/mortimer-anemone
 
 builder:
   remote:
@@ -13,17 +13,17 @@ builder:
 servers:
   web:
     hosts:
-      - 65.108.89.110
+      - 135.181.202.106
     options:
       # "add-host": host.docker.internal:host-gateway
       # network: "mortimer"    
     labels:
       traefik.enable: true
       traefik.http.routers.mortimer.entrypoints: websecure
-      traefik.http.routers.mortimer.rule: Host(`bellis.mortimer.pro`)
+      traefik.http.routers.mortimer.rule: Host(`anemone.mortimer.pro`)
       traefik.http.routers.mortimer.tls.certresolver: letsencrypt
-      traefik.http.routers.mortimer.tls.domains[0].main: bellis.mortimer.pro
-      traefik.http.routers.mortimer.tls.domains[0].sans: bellis.mortimer.pro
+      traefik.http.routers.mortimer.tls.domains[0].main: anemone.mortimer.pro
+      traefik.http.routers.mortimer.tls.domains[0].sans: anemone.mortimer.pro
 
 traefik:
   options:
@@ -56,12 +56,12 @@ traefik:
 
   labels:
     traefik.enable: true
-    traefik.http.routers.dashboard.rule: Host(`traefik.mortimer.pro`)
-    traefik.http.routers.dashboard.service: api@internal
-    traefik.http.routers.dashboard.middlewares: redirect-to-https, auth
-    traefik.http.routers.dashboard.tls: true
-    traefik.http.middlewares.redirect-to-https.redirectscheme.scheme: https
-    traefik.http.middlewares.auth.basicauth.users: test:what_a_password
+    # traefik.http.routers.dashboard.rule: Host(`traefik.mortimer.pro`)
+    # traefik.http.routers.dashboard.service: api@internal
+    # traefik.http.routers.dashboard.middlewares: redirect-to-https, auth
+    # traefik.http.routers.dashboard.tls: true
+    # traefik.http.middlewares.redirect-to-https.redirectscheme.scheme: https
+    # traefik.http.middlewares.auth.basicauth.users: test:what_a_password
 
 
 volumes:
@@ -81,15 +81,15 @@ registry:
 # Remember to run `kamal env push` after making changes!
 env:
   clear:
-    DB_HOST: 65.108.89.110
+    DB_HOST: 135.181.202.106
     SMTP_USER_NAME: 'info@mortimer.pro'
     SMTP_DOMAIN: 'mortimer.pro'
     SMTP_HOST: 'hosting.alco.company'
     SMTP_PORT: '587'
     SMTP_AUTHENTICATION: 'plain'
     SMTP_ENABLE_STARTTLS_AUTO: 'false'
-    SSL_DOMAIN: 'bellis.mortimer.pro'
-    WEB_HOST: 'bellis.mortimer.pro'
+    SSL_DOMAIN: 'anemone.mortimer.pro'
+    WEB_HOST: 'anemone.mortimer.pro'
     MORTIMER_VERSION: '0.7.1'
   secret:
     - RAILS_MASTER_KEY
@@ -113,7 +113,7 @@ ssh:
 accessories:
   pdf:
     image: 4teamwork/weasyprint
-    host: 65.108.89.110
+    host: 135.181.202.106
     port: 8080
 # Use accessory services (secrets come from .env).
 # accessories:
