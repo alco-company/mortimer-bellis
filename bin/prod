@@ -1,0 +1,4 @@
+git checkout main
+git pull
+kamal env push 
+kamal deploy 

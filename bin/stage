@@ -1,0 +1,2 @@
+kamal env push --destination=staging
+kamal deploy --destination=staging
