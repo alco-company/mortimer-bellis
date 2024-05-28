@@ -30,7 +30,7 @@ class MortimerFooter < ApplicationComponent
             whitespace
             span(class: "inline text-green-900") do
               begin
-                platform
+                plain platform
               rescue StandardError
                 "N/A"
               end

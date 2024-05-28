@@ -26,7 +26,7 @@ class PosEmployeeLayout < ApplicationView
           yield
         end
         yield :flash
-        yield :footer
+        yield :footer, 'mobile'
       end
     end
   end

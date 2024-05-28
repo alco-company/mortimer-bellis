@@ -32,7 +32,7 @@ class PunchClockBase < ApplicationComponent
   end
 
   def todays_minutes
-    div(class: "flex w-full p-5 font-medium text-gray-500 gap-3") do
+    div(class: "flex grow-0 w-full p-5 font-medium text-gray-500 gap-3") do
       counters = employee.minutes_today_up_to_now
       render Stats.new title: helpers.t(".stats_title"), stats: [
         { title: helpers.t(".worktime"), value: helpers.display_hours_minutes(counters[:work]) },
@@ -51,34 +51,36 @@ class PunchClockBase < ApplicationComponent
 
   def list_punches(title, punches = [], edit = false, folded = false, tab = "today")
     h4(class: "m-4 text-gray-700 text-xl") { helpers.t(title) }
-    ul(class: "m-4 mb-32 divide-y divide-gray-100") do
-      current_date = nil
-      punches.each do |punch|
-        if punch.punched_at.to_date != current_date
-          current_date = punch.punched_at&.to_date
-          li(id: "#{tab}_#{(helpers.dom_id punch)}", class: "flex items-center justify-between gap-x-6 py-5") do
+    div(style: "height: calc(100vh - 400px);", class: "pb-20 flex-none min-w-full px-4 sm:px-6 md:px-0 overflow-hidden lg:overflow-auto scrollbar:!w-1.5 scrollbar:!h-1.5 scrollbar:bg-transparent scrollbar-track:!bg-slate-100 scrollbar-thumb:!rounded scrollbar-thumb:!bg-slate-300 scrollbar-track:!rounded dark:scrollbar-track:!bg-slate-500/[0.16] dark:scrollbar-thumb:!bg-slate-500/50 lg:supports-scrollbars:pr-2") do
+      ul(class: "m-4 divide-y divide-gray-100") do
+        current_date = nil
+        punches.each do |punch|
+          if punch.punched_at.to_date != current_date
+            current_date = punch.punched_at&.to_date
+            li(id: "#{tab}_#{(helpers.dom_id punch)}", class: "flex items-center justify-between gap-x-6 py-5") do
+              div(class: "min-w-0 w-full columns-2") do
+                span { helpers.render_date_column(value: punch.punched_at, css: "font-medium") }
+              end
+              div(class: "flex flex-none items-center gap-x-4") do
+                folded ?
+                  render(PosContextmenu.new(resource: punch, punch_clock: punch_clock, employee: employee, list: true, turbo_frame: helpers.dom_id(punch), alter: edit, folded: true)) :
+                  render(PosContextmenu.new(resource: punch, punch_clock: punch_clock, employee: employee, list: true, turbo_frame: helpers.dom_id(punch), alter: edit))
+              end
+            end
+          end
+          li(
+            id: (helpers.dom_id punch),
+            class: "flex items-center justify-between gap-x-6 py-5"
+          ) do
             div(class: "min-w-0 w-full columns-2") do
-              span { helpers.render_date_column(value: punch.punched_at, css: "font-medium") }
+              span { helpers.render_text_column(value: helpers.tell_state(punch), css: "text-right") }
+              span { helpers.render_time_column(value: punch.punched_at, css: "") }
             end
             div(class: "flex flex-none items-center gap-x-4") do
-              folded ?
-                render(PosContextmenu.new(resource: punch, punch_clock: punch_clock, employee: employee, list: true, turbo_frame: helpers.dom_id(punch), alter: edit, folded: true)) :
-                render(PosContextmenu.new(resource: punch, punch_clock: punch_clock, employee: employee, list: true, turbo_frame: helpers.dom_id(punch), alter: edit))
+              render PosContextmenu.new resource: punch, turbo_frame: helpers.dom_id(punch), alter: edit, links: [ pos_employee_edit_url(api_key: employee.access_token, id: punch.id), pos_employee_delete_url(api_key: employee.access_token, id: punch.id) ]
             end
-          end
+          end unless folded
         end
-        li(
-          id: (helpers.dom_id punch),
-          class: "flex items-center justify-between gap-x-6 py-5"
-        ) do
-          div(class: "min-w-0 w-full columns-2") do
-            span { helpers.render_text_column(value: helpers.tell_state(punch), css: "text-right") }
-            span { helpers.render_time_column(value: punch.punched_at, css: "") }
-          end
-          div(class: "flex flex-none items-center gap-x-4") do
-            render PosContextmenu.new resource: punch, turbo_frame: helpers.dom_id(punch), alter: edit, links: [ pos_employee_edit_url(api_key: employee.access_token, id: punch.id), pos_employee_delete_url(api_key: employee.access_token, id: punch.id) ]
-          end
-        end unless folded
       end
     end
   end

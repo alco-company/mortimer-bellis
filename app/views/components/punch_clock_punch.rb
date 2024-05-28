@@ -9,7 +9,7 @@ class PunchClockPunch < PunchClockBase
 
   def view_template
     div(class: "h-full w-full") do
-      div(class: "sm:p-4 ") do
+      div(class: "sm:p-4 flex flex-col") do
         punch_buttons
         todays_minutes
         div(class: "grid grid-cols-2 gap-5") do
@@ -25,7 +25,7 @@ class PunchClockPunch < PunchClockBase
   end
 
   def punch_buttons
-    div(class: "flex items-center justify-center w-full p-5 font-medium rtl:text-right text-gray-500 gap-3") do
+    div(class: "flex grow-0 items-center justify-center w-full p-5 font-medium rtl:text-right text-gray-500 gap-3") do
       render PunchClockButtons.new(punch_clock: resource, employee: employee, tab: tab, url:  pos_punch_clock_url)
     end
   end
