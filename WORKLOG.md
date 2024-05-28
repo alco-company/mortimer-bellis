@@ -24,7 +24,6 @@
 * big test
 * add state and EU state reporting timeable
 * add prettier mail layouts
-* punches on tablets - payroll_period - cannot list all
 
 ## CHANGELOG
 
@@ -32,6 +31,7 @@
 
 * locale, time_zone = same as creator on create employee
 * locale, time_zone = same as creator on create user
+* punches on tablets - payroll_period - cannot list all
 
 ### 27/5/2024
 
