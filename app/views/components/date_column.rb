@@ -1,14 +1,14 @@
 class DateColumn < Column
   def th_value(&block)
     th(class: @class) do
-      plain format_date(value)
+      plain format_datetime(value)
       yield if block_given?
     end
   end
 
   def td_value(&block)
     td(class: @class) do
-      plain format_date(value)
+      plain format_datetime(value)
       yield if block_given?
     end
   end
