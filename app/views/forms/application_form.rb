@@ -283,7 +283,7 @@ class ApplicationForm < Superform::Rails::Form
     when /account_id$/; plain(model&.account.name)
     when /user_id$/; plain(model&.user.name)
     when /employee_id$/; plain(model&.employee.name)
-    when /punch_clock_id$/; plain(model&.punch_clock.name)
+    when /punch_clock_id$/; plain(model&.punch_clock.name) rescue I18n.t("punches.form.punched_on_app")
     else; plain(fformat(model, field.key))
     end
   end

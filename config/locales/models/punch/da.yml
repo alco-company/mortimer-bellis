@@ -28,6 +28,7 @@ da:
     form:
       new: Ny stempling
       edit: Redigér stempling
+      punched_on_app: Stemplet på app'en
 
     list:
       new: Ny stempling
