@@ -5,7 +5,7 @@
     <%= render_text_column value: punch_card.work_minutes, css: "hidden md:block text-right" %>
     <%= render_text_column value: punch_card.break_minutes, css: "hidden md:block truncate" %>
     <%= render_text_column value: punch_card.ot_minutes, css: "hidden lg:block truncate" %>
-    <%= render_date_column value: punch_card.updated_at, css: "hidden lg:block" %>
+    <%= render_datetime_column value: punch_card.updated_at, css: "hidden lg:block" %>
   </div>
   <div class="flex flex-none items-center gap-x-4 ">
 <!--    <a href="<%#= product_stock_items_url(product) %>" class=" rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:block">Lokationer<span class="sr-only">, GraphQL API</span></a>-->

@@ -3,5 +3,5 @@
   <%= render_datetime_column value: punch.punched_at, table: :row, css: "text-right" %>
   <%= render_text_column value: punch.state, table: :row, css: "truncate" %>
   <%= render_text_column value: show_link_to_punch_clock(punch.punch_clock), table: :row, css: "hidden md:block truncate" %>
-  <%= render_date_column value: punch.updated_at, table: :row, css: "hidden lg:block" %>
+  <%= render_datetime_column value: punch.updated_at, table: :row, css: "hidden lg:block" %>
 </tr>

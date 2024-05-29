@@ -5,5 +5,5 @@
   <%= render_text_column value: user.role, table: :row, css: "truncate" do %> <p>&nbsp;</p> <% end %>
   <%= render_text_column value: user.locale, table: :row, css: " truncate" do %> <p>&nbsp;</p> <% end %>
   <%= render_text_column value: user.time_zone, table: :row, css: " truncate" do %> <p>&nbsp;</p> <% end %>
-  <%= render_date_column value: user.updated_at, table: :row, css: "" do %> <p>&nbsp;</p> <% end %>
+  <%= render_datetime_column value: user.updated_at, table: :row, css: "" do %> <p>&nbsp;</p> <% end %>
 </tr>
