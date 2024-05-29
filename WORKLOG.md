@@ -27,12 +27,20 @@
 
 ## CHANGELOG
 
+### 29/5/2024
+
+* passed an object to plain that is not handled by format_object
+* change use of console enhancements to use IRB::Command API
+* point to proper PDF service host
+* only run console extension in development
+
 ### 28/5/2024
 
 * locale, time_zone = same as creator on create employee
 * locale, time_zone = same as creator on create user
 * punches on tablets - payroll_period - cannot list all
 * add staging server - anemone.mortimer.pro - and scripts stage and prod
+* undefined method `format_date' for #<DateColumn
 
 ### 27/5/2024
 
