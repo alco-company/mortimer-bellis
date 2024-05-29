@@ -1,12 +1,14 @@
 class EmployeesController < MortimerController
+  def new
+    @resource.locale = Current.user.locale
+    @resource.time_zone = Current.user.time_zone
+    super
+  end
+
   private
 
     # Only allow a list of trusted parameters through.
     def resource_params
-      if params[:action] == "create"
-        params[:employee][:locale] = Current.user.locale unless params[:employee][:locale].present?
-        params[:employee][:time_zone] = Current.user.time_zone unless params[:employee][:time_zone].present?
-      end
       params[:employee][:payroll_employee_ident] = Employee.next_payroll_employee_ident(params[:employee][:payroll_employee_ident])
       params.require(:employee).permit(
         :account_id,
