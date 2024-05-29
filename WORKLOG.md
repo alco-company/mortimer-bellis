@@ -43,6 +43,7 @@
 * set time_zone = creators on create employee
 * show h:m on updated_at on punch
 * 'ret' = 'gem' when saving edit on punch
+* fix <ActiveRecord::ReadOnlyError: Write query attempted while in readonly mode: UPDATE..> - perhaps use: https://blog.saeloun.com/2023/12/06/rails-dual-database-setup/
 
 ### 28/5/2024
 

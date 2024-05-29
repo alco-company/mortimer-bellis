@@ -10,7 +10,7 @@ class PunchCardJob < ApplicationJob
   def perform(**args)
     super(**args)
     switch_locale do
-      PunchCard.recalculate **args
+      PunchCard.recalculate(**args)
     end
   end
 end

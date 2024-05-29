@@ -59,7 +59,7 @@ class Pos::EmployeeController < Pos::PosController
       @resource.punch_range punch_params[:reason], request.remote_ip, punch_params[:from_at], punch_params[:to_at]
       redirect_to pos_employee_url(api_key: @resource.access_token, tab: "payroll") and return
     end
-  rescue ActionController::InvalidAuthenticityToken => e
+  rescue ActionController::InvalidAuthenticityToken
     redirect_to pos_employee_url(api_key: @resource.access_token), alert: t("invalid_authenticity_token") and return
   end
 
@@ -71,6 +71,7 @@ class Pos::EmployeeController < Pos::PosController
     if params[:punch].present?
       @punch = Punch.find(params[:id])
       @punch.update(punch_params)
+      PunchCard.recalculate(employee: @punch.employee, date: @punch.punched_at.to_date)
       render turbo_stream: turbo_stream.replace("punch_#{@punch.id}", partial: "pos/employee/punch", locals: { punch: @punch })
     else
       if @resource.update(employee_params)
@@ -93,6 +94,7 @@ class Pos::EmployeeController < Pos::PosController
       else
         punch.destroy
       end
+      PunchCard.recalculate(employee: punch.employee, date: punch.punched_at.to_date)
       redirect_to pos_employee_url(api_key: @resource.access_token, tab: "payroll") and return
     end
   end
