@@ -2,7 +2,7 @@
     <div class="min-w-0 w-full">
       <form action="<%= pos_employee_update_url(api_key: punch.employee.access_token, id: punch.id) %>" method="PUT" class="flex items-center py-2">    
         <input class="w-1/2 mort-form-text m-1" type="datetime-local" id="punch_punched_at" name="punch[punched_at]" value="<%= punch.punched_at.strftime("%Y-%m-%dT%H:%M") %>" />
-        <button type="submit" class="mort-btn-primary ml-2">Ret</button>
+        <button type="submit" class="mort-btn-primary ml-2"><%= I18n.t(".save") %></button>
       </form>
     </div>
     <div class="flex flex-none items-center gap-x-4 justify-end">

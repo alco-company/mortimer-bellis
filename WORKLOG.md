@@ -24,7 +24,6 @@
 * add prettier mail layouts
 * release RC1
 * Skipped recurring task – already dispatched (7.7ms)  task: :background_job_scheduler, at: 2024-05-28 16:36:00 UTC 18:36:00 web.1  | SolidQueue-0.3.1 Error in thread (0.0ms)  error: "ActiveRecord::RecordInvalid Translation missing: da.activerecord.errors.messages.record_invalid"
-* 'ret' = 'gem' when saving edit on punch
 * link on punch err's
 * show 'badge' on punch_cards where "cannot compute"
 * show confetti on sign up complete
@@ -43,6 +42,7 @@
 * drop console extension 
 * set time_zone = creators on create employee
 * show h:m on updated_at on punch
+* 'ret' = 'gem' when saving edit on punch
 
 ### 28/5/2024
 
