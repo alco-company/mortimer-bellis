@@ -1,7 +1,7 @@
 class BooleanColumn < Column
   def th_value(&block)
     th(class: @class) do
-      plain value
+      plain true_false(value)
       yield if block_given?
     end
   end
