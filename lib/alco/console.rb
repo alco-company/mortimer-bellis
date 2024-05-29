@@ -24,5 +24,6 @@ end
 #     alias_method :/, :find
 #   end
 # end
-
-IRB::Command.register :t, AccountSetter
+if Rails.env.local?
+  IRB::Command.register :t, AccountSetter
+end
