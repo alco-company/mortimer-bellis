@@ -35,6 +35,7 @@
 * punches on tablets - payroll_period - cannot list all
 * add staging server - anemone.mortimer.pro - and scripts stage and prod
 * undefined method `format_date' for #<DateColumn
+* passed an object to plain that is not handled by format_object
 
 ### 27/5/2024
 
