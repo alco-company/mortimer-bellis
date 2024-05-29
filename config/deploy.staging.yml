@@ -81,6 +81,7 @@ registry:
 # Remember to run `kamal env push` after making changes!
 env:
   clear:
+    PDF_HOST: 135.181.202.106 
     DB_HOST: 135.181.202.106
     SMTP_USER_NAME: 'info@mortimer.pro'
     SMTP_DOMAIN: 'mortimer.pro'

@@ -20,12 +20,28 @@
 * add Thruster - https://nts.strzibny.name/running-thruster-rails-kamal/
 * gem fugit - more prominent substitute for CronTask
 * make locale and time_zone selectable on sign_up
-* release RC1
-* big test
 * add state and EU state reporting timeable
 * add prettier mail layouts
+* release RC1
+* set time_zone = creators on create employee
+* 'ret' = 'gem' when saving edit on punch
+* link on punch err's
+* show h:m on updated_at on punch
+* show 'badge' on punch_cards where "cannot compute"
+* show confetti on sign up complete
+* add comments on manual punches (and on edit)
+* Skipped recurring task – already dispatched (7.7ms)  task: :background_job_scheduler, at: 2024-05-28 16:36:00 UTC 18:36:00 web.1  | SolidQueue-0.3.1 Error in thread (0.0ms)  error: "ActiveRecord::RecordInvalid Translation missing: da.activerecord.errors.messages.record_invalid"
+
 
 ## CHANGELOG
+
+### 29/5/2024
+
+* passed an object to plain that is not handled by format_object
+* change use of console enhancements to use IRB::Command API
+* point to proper PDF service host
+* only run console extension in development
+* drop console extension 
 
 ### 28/5/2024
 
@@ -33,6 +49,7 @@
 * locale, time_zone = same as creator on create user
 * punches on tablets - payroll_period - cannot list all
 * add staging server - anemone.mortimer.pro - and scripts stage and prod
+* undefined method `format_date' for #<DateColumn
 
 ### 27/5/2024
 
