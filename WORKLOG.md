@@ -34,6 +34,7 @@
 ### 31/5/2024
 
 * add delete modal
+* fix timezone issue when incorrect zone
 
 ### 29/5/2024
 

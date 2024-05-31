@@ -128,16 +128,24 @@ class Pos::EmployeeController < Pos::PosController
     def employee_time_zone(&block)
       return unless block_given?
       timezone = @resource.time_zone rescue nil
-      timezone.blank? ?
-        Time.use_zone("UTC", &block) :
-        Time.use_zone(timezone, &block)
+      begin
+        timezone.blank? ?
+          Time.use_zone("UTC", &block) :
+          Time.use_zone(timezone, &block)
+      rescue => e
+        Time.use_zone("UTC", &block)
+      end
     end
 
     def punch_clock_time_zone(&block)
       return unless block_given?
       timezone = @punch_clock.time_zone rescue nil
-      timezone.blank? ?
-        Time.use_zone("UTC", &block) :
-        Time.use_zone(timezone, &block)
+      begin
+        timezone.blank? ?
+          Time.use_zone("UTC", &block) :
+          Time.use_zone(timezone, &block)
+      rescue
+        Time.use_zone("UTC", &block)
+      end
     end
 end
