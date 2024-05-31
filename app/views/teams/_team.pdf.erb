@@ -3,5 +3,5 @@
   <%= render_text_column value: team.team_color, table: :row, css: "truncate" %>
   <%= render_text_column value: team.locale, table: :row, css: "truncate" %>
   <%= render_text_column value: team.time_zone, table: :row, css: "truncate" %>
-  <%= render_date_column value: team.updated_at, table: :row, css: "" %>
+  <%= render_datetime_column value: team.updated_at, table: :row, css: "" %>
 </tr>

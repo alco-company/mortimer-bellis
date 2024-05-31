@@ -16,6 +16,11 @@ class PunchCard < ApplicationRecord
   scope :by_break_minutes, ->(break_minutes) { where(break_minutes: break_minutes..) if break_minutes.present? }
   scope :by_ot_minutes, ->(ot_minutes) { where("(ot1_minutes + ot2_minutes) >= #{ot_minutes}") if ot_minutes.present? }
 
+  # used by eg delete
+  def name
+    "#{employee.name} #{work_date}"
+  end
+
   def self.filtered(filter)
     flt = filter.filter
 

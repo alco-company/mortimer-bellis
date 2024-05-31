@@ -1,4 +1,13 @@
 da:
+  punch_clock:
+    modal:
+      delete_all: 
+        title: Slet alle stempelure
+        instruction: Er du sikker på, at du vil slette alle stempelure?
+      delete:
+        title: Slet dette stempelur
+        instruction: Er du sikker på, at du vil slette stempeluret %{name}?
+        button: Slet
 
   punch_clocks:
     default_punch_clock: Ur

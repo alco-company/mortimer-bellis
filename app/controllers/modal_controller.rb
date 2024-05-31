@@ -1,16 +1,17 @@
 class ModalController < BaseController
-  before_action :set_vars, only: [ :new, :show, :create ]
+  before_action :set_vars, only: [ :new, :show, :create, :destroy ]
 
   def new
-    case @resource_class
+    resource
+    case resource_class.to_s.underscore
     when "employee"; process_employee_new
     when "punch_card"; process_punch_card_new
-    else; head :not_found and return
+    else; process_other_new
     end
   end
 
   def show
-    case @resource_class
+    case resource_class.to_s.underscore
     when "employee"; process_employee_show
     else; head :not_found and return
     end
@@ -18,9 +19,32 @@ class ModalController < BaseController
 
   # Parameters: {"authenticity_token"=>"[FILTERED]", "modal_form"=>"payroll", "last_payroll_at"=>"2024-04-16", "update_payroll"=>"on", "button"=>""}
   def create
-    case @resource_class
+    case resource_class.to_s.underscore
     when "employee"; process_employee_create
     when "punch_card"; process_punch_card_create
+    else; process_other_create
+    end
+  end
+
+  # 
+  def destroy
+    set_filter
+    set_resources
+    if params[:all] == "true"
+      DeleteAllJob.perform_later account: Current.account, resource_class: resource_class.to_s, sql_resources: @resources.to_sql
+      respond_to do |format|
+        format.html { redirect_to resources_url, status: 303, success: t("delete_all_later") }
+        format.json { head :no_content }
+      end
+    else
+      if resource.destroy!
+        respond_to do |format|
+          format.html { redirect_to resources_url, status: 303, success: t(".post") }
+          format.json { head :no_content }
+        end
+      else
+        head :no_content
+      end
     end
   end
 
@@ -28,24 +52,40 @@ class ModalController < BaseController
 
     def set_vars
       @modal_form = params[:modal_form]
-      @resource_class = params[:resource_class]
+      resource
       @step = params[:step]
+    end
+
+    def resource
+      if params[:id].present?
+        @resource = resource_class.find(params[:id])
+      else
+        false
+      end
+    end
+
+    def resource_class
+      @resource_class ||= params[:resource_class].classify.constantize
     end
 
     #
     # --------------------------- NEW --------------------------------
     def process_employee_new
       case @modal_form
-      when "import"
-        @step = "preview"
+      when "import"; @step = "preview"
+      else; @step = "accept"
       end
     end
 
     def process_punch_card_new
       case @modal_form
-      when "payroll"
-        @step = "preview"
+      when "payroll"; @step = "preview"
+      else; @step = "accept"
       end
+    end
+
+    def process_other_new
+      @step = "accept"
     end
 
     #
@@ -93,10 +133,38 @@ class ModalController < BaseController
       end
     end
 
+    def process_other_create
+
+    end
+
     def html_content
       render_to_string "employees/report_state", layout: "pdf", formats: :pdf
     end
 
+    def resources_url(**options)
+      @resources_url ||= url_for(controller: resource_class.to_s.underscore.pluralize, action: :index, **options)
+    end
+
+    def set_resources
+      @resources = any_filters? ? resource_class.filtered(@filter) : resource_class.by_account()
+      @resources = any_sorts? ? resource_class.ordered(@resources, params[:s], params[:d]) : @resources.order(created_at: :desc)
+    end
+
+    def set_filter
+      @filter_form = resource_class.to_s.underscore.pluralize
+      @filter = Filter.where(account: Current.account).where(view: params[:controller].split("/").last).take || Filter.new
+      @filter.filter ||= {}
+    end
+
+
+    def any_filters?
+      return false if @filter.nil? or params[:controller].split("/").last == "filters"
+      !@filter.id.nil?
+    end
+
+    def any_sorts?
+      params[:s].present?
+    end
 end
 
 

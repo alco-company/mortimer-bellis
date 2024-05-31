@@ -48,6 +48,7 @@ Rails.application.routes.draw do
 
   get "modal/new"
   get "modal/show"
+  post "modal/destroy"
   post "modal/create"
 
   # Render dynamic PWA files from app/views/pwa/*

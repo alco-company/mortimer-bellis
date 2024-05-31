@@ -1,4 +1,13 @@
 da:
+  team:
+    modal:
+      delete_all: 
+        title: Slet alle hold
+        instruction: Er du sikker på, at du vil slette alle hold?
+      delete:
+        title: Slet dette hold
+        instruction: Er du sikker på, at du vil slette holdet %{name}?
+        button: Slet
 
   teams:
     default_team: Hold

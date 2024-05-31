@@ -1,4 +1,13 @@
 da:
+  punch_card:
+    modal:
+      delete_all: 
+        title: Slet alle stempelkort
+        instruction: Er du sikker på, at du vil slette alle stempelkort?
+      delete:
+        title: Slet dette stempelkort
+        instruction: Er du sikker på, at du vil slette stempelkortet for %{name}?
+        button: Slet
 
   punch_cards:
     create:

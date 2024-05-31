@@ -7,6 +7,13 @@ da:
     update:
       success: Dine oplysninger blev opdateret
     modal:
+      delete_all: 
+        title: Slet alle medarbejdere
+        instruction: Er du sikker på, at du vil slette alle medarbejdere?
+      delete:
+        title: Slet denne medarbejdere
+        instruction: Er du sikker på, at du vil slette medarbejderen %{name}?
+        button: Slet
       import:
         title: Indlæs fil med medarbejder stamdata
         instruction: Tryk på <a href="/modal/show?resource_class=employee&step=template" class="mort-link-primary" target="_top">dette link</a> - for at se en skabelon, som du kan bruge til at oprette en fil med medarbejder stamdata

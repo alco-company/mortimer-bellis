@@ -23,17 +23,18 @@
 * add state and EU state reporting timeable
 * add prettier mail layouts
 * release RC1
-* set time_zone = creators on create employee
-* 'ret' = 'gem' when saving edit on punch
-* link on punch err's
-* show h:m on updated_at on punch
+* Skipped recurring task – already dispatched (7.7ms)  task: :background_job_scheduler, at: 2024-05-28 16:36:00 UTC 18:36:00 web.1  | SolidQueue-0.3.1 Error in thread (0.0ms)  error: "ActiveRecord::RecordInvalid Translation missing: da.activerecord.errors.messages.record_invalid"
 * show 'badge' on punch_cards where "cannot compute"
 * show confetti on sign up complete
 * add comments on manual punches (and on edit)
-* Skipped recurring task – already dispatched (7.7ms)  task: :background_job_scheduler, at: 2024-05-28 16:36:00 UTC 18:36:00 web.1  | SolidQueue-0.3.1 Error in thread (0.0ms)  error: "ActiveRecord::RecordInvalid Translation missing: da.activerecord.errors.messages.record_invalid"
 
 
 ## CHANGELOG
+
+### 31/5/2024
+
+* add delete modal
+* fix timezone issue when incorrect zone
 
 ### 29/5/2024
 
@@ -41,7 +42,12 @@
 * change use of console enhancements to use IRB::Command API
 * point to proper PDF service host
 * only run console extension in development
-* drop console extension 
+* drop console extension
+* set time_zone = creators on create employee
+* show h:m on updated_at on punch
+* 'ret' = 'gem' when saving edit on punch
+* fix <ActiveRecord::ReadOnlyError: Write query attempted while in readonly mode: UPDATE..> - perhaps use: https://blog.saeloun.com/2023/12/06/rails-dual-database-setup/
+* link on punch err's
 
 ### 28/5/2024
 

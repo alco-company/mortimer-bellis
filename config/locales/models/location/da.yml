@@ -1,4 +1,13 @@
 da:
+  location:
+    modal:
+      delete_all: 
+        title: Slet alle lokationer
+        instruction: Er du sikker på, at du vil slette alle lokationer?
+      delete:
+        title: Slet denne lokation
+        instruction: Er du sikker på, at du vil slette lokationen %{name}?
+        button: Slet
 
   locations:
     default_location: Arbejdssted

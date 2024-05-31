@@ -1,4 +1,13 @@
 da:
+  user:
+    modal:
+      delete_all: 
+        title: Slet alle brugere
+        instruction: Er du sikker på, at du vil slette alle brugere?
+      delete:
+        title: Slet denne bruger
+        instruction: Er du sikker på, at du vil slette brugeren %{name}?
+        button: Slet
 
   users:
 

@@ -4,5 +4,5 @@
   <%= render_text_column value: punch_clock.ip_addr, table: :head, css: " text-right" %>
   <%= render_text_column value: punch_clock.locale, table: :head, css: " truncate" %>
   <%= render_text_column value: punch_clock.time_zone, table: :head, css: " truncate" %>
-  <%= render_date_column value: punch_clock.updated_at, table: :head, css: "" %>
+  <%= render_datetime_column value: punch_clock.updated_at, table: :head, css: "" %>
 </tr>

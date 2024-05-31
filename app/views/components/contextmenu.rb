@@ -7,7 +7,7 @@ class Contextmenu < Phlex::HTML
 
   def initialize(resource: nil, list: nil, resource_class: nil, turbo_frame: "_top", alter: true, links: [])
     @resource = resource
-    @resource_class = resource_class
+    @resource_class = resource_class || resource.class
     @list = list
     @turbo_frame = turbo_frame
     @alter = alter
@@ -78,11 +78,14 @@ class Contextmenu < Phlex::HTML
         end
       end
       whitespace
-      link_to helpers.delete_all_url(),
-        data: { turbo_method: :delete, turbo_confirm: "Are you sure?", turbo_stream: true, action: "click->contextmenu#hide" },
+      link_to(
+        helpers.modal_new_url(modal_form: "delete", resource_class: resource_class.to_s.underscore, modal_next_step: "accept"),
+        data: { turbo_stream: true },
+      # link_to helpers.delete_all_url(),
+        # data: { turbo_method: :delete, turbo_confirm: "Are you sure?", turbo_stream: true, action: "click->contextmenu#hide" },
         class: "block px-3 py-1 text-sm leading-6 text-gray-900",
         role: "menuitem",
-        tabindex: "-1" do
+        tabindex: "-1") do
         plain I18n.t(".delete_all")
         span(class: "sr-only") do
           plain ", "
@@ -159,11 +162,14 @@ class Contextmenu < Phlex::HTML
         end
       end
       whitespace
-      link_to((@links[1] || resource),
+      link_to(
+        helpers.modal_new_url(modal_form: "delete", id: resource.id, resource_class: resource_class.to_s.underscore, modal_next_step: "accept"),
+        data: { turbo_stream: true },
+        # link_to((@links[1] || resource),
         class: "block px-3 py-1 text-sm leading-6 text-gray-900",
         role: "menuitem",
-        tabindex: "-1",
-        data: { turbo_method: :delete, turbo_confirm: "Are you sure?" }) do
+        tabindex: "-1") do
+        # data: { turbo_method: :delete, turbo_confirm: "Are you sure?" }) do
         plain I18n.t(".delete")
         span(class: "sr-only") do
           plain ", "
