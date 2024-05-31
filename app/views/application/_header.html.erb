@@ -6,9 +6,9 @@
       <%= link_to t(:payroll_order), modal_new_url(modal_form: 'payroll', resource_class: 'punch_card'), class: "inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10", data: { turbo_stream: true } %>
       <%= link_to t(:state_order), modal_new_url(modal_form: 'state', resource_class: 'punch_card'), class: "inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10", data: { turbo_stream: true } %>
     <% when 'employees' %>
-      <%= link_to t("employees.list.employee_status"), pos_employees_url(api_key: first_employee_token), class: "inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10", target: "_blank", data: { turbo_frame: '_top', turbo_stream: true } %>
+      <%= link_to_employee_status %>
     <% when 'teams' %>
-      <%= link_to t("teams.list.employee_status"), pos_employees_url(t: "all", api_key: first_employee_token), class: "inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10", target: "_blank", data: { turbo_frame: '_top', turbo_stream: true } %>
+      <%= link_to_team_employees_status('all') %>
     <% end %>
   </div>
   <div class="grid gap-2 grid-cols-1 lg:grid-cols-2 items-center">

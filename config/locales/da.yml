@@ -21,6 +21,10 @@ da:
   records: poster
   delete_all_later: Alle poster slettes - i baggrunden, vent venligst...
   
+  modal:
+    destroy:
+      post: Posten blev slettet korrekt.
+
   menu:
     login: Log ind
     home: Hjem

@@ -27,10 +27,13 @@
 * show 'badge' on punch_cards where "cannot compute"
 * show confetti on sign up complete
 * add comments on manual punches (and on edit)
-* add delete modal
 
 
 ## CHANGELOG
+
+### 31/5/2024
+
+* add delete modal
 
 ### 29/5/2024
 
