@@ -84,6 +84,9 @@ da:
         breaks: Pauser
         work: Arbejde
         type_of_registration: Registreringstype
+        from_at: Fra
+        to_at: Til
+        comment: Beskrivelse/Bemærkning
         free_reason: Årsag til fravær
         sick_reason: Sygdomsårsag
         free: Fri
@@ -250,6 +253,7 @@ da:
         employee_id: Medarbejder
         state: Status
         punch_clock_id: Stempelur
+        comment: Beskrivelse/bemærkning
         
       punch_card:
         employee:

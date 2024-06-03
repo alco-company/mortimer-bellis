@@ -39,10 +39,10 @@ class Pos::EmployeeController < Pos::PosController
 
   # # Parameters: {"authenticity_token"=>"[FILTERED]", "employee"=>{"api_key"=>"[FILTERED]", "state"=>"in", "id"=>"122"}, "button"=>"", "api_key"=>"[FILTERED]"}
   # Manuel entry of work:
-  # "punch"=>{"from_at"=>"2024-05-06T07:20", "to_at"=>"2024-05-06T15:20"}, "api_key"=>"YqymK1swsjkqSSeG3DFVjq1d", "controller"=>"pos/employee", "action"=>"create"} permitted: false>
+  # "punch"=>{"from_at"=>"2024-05-06T07:20", "to_at"=>"2024-05-06T15:20"}, "comment" => "en ting", "api_key"=>"YqymK1swsjkqSSeG3DFVjq1d", "controller"=>"pos/employee", "action"=>"create"} permitted: false>
   #
   # Manuel entry of sick/free
-  #  "punch"=>{"from_at"=>"2024-05-06", "to_at"=>"2024-05-06", "reason"=>"nursing_sick"}, "api_key"=>"YqymK1swsjkqSSeG3DFVjq1d", "controller"=>"pos/employee", "action"=>"create"} permitted: false>
+  #  "punch"=>{"from_at"=>"2024-05-06", "to_at"=>"2024-05-06", "comment" => "en ting", "reason"=>"nursing_sick"}, "api_key"=>"YqymK1swsjkqSSeG3DFVjq1d", "controller"=>"pos/employee", "action"=>"create"} permitted: false>
   def create
     if params[:employee].present?
       if params[:employee][:state] == @resource.state
@@ -105,7 +105,7 @@ class Pos::EmployeeController < Pos::PosController
     end
 
     def punch_params
-      params.require(:punch).permit(:reason, :from_at, :to_at, :punched_at)
+      params.require(:punch).permit(:reason, :from_at, :to_at, :punched_at, :comment)
     end
 
     def verify_employee

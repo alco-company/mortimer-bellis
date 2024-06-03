@@ -8,16 +8,17 @@ class PunchJob < ApplicationJob
       from_at = args[:from_at]
       to_at = args[:to_at]
       reason = args[:reason]
+      comment = args[:comment]
       ip = args[:ip]
       begin
         if from_at.to_date == to_at.to_date
           from_at, to_at = setTimeSlot(employee, reason, from_at.to_datetime, to_at.to_datetime, from_at.to_datetime)
-          punch_set(employee, reason, ip, from_at.to_datetime, to_at.to_datetime)
+          punch_set(employee, reason, ip, from_at.to_datetime, to_at.to_datetime, comment)
           PunchCardJob.new.perform(account: employee.account, employee: employee, date: from_at)
         else
           (from_at.to_date..to_at.to_date).each do |date|
             f_at, t_at = setTimeSlot(employee, reason, from_at.to_datetime, to_at.to_datetime, date.to_datetime)
-            punch_set(employee, reason, ip, f_at, t_at)
+            punch_set(employee, reason, ip, f_at, t_at, comment)
           end
           PunchCardJob.new.perform(account: employee.account, employee: employee, from_at: from_at.to_date, to_at: to_at.to_date)
         end
@@ -29,9 +30,9 @@ class PunchJob < ApplicationJob
     end
   end
 
-  def punch_set(employee, reason, ip, from_at, to_at)
-    Punch.create! account: employee.account, employee: employee, punch_clock: nil, punched_at: from_at, state: reason, remote_ip: ip
-    Punch.create! account: employee.account, employee: employee, punch_clock: nil, punched_at: to_at, state: :out, remote_ip: ip
+  def punch_set(employee, reason, ip, from_at, to_at, comment = nil)
+    Punch.create! account: employee.account, employee: employee, punch_clock: nil, punched_at: from_at, state: reason, remote_ip: ip, comment: comment
+    Punch.create! account: employee.account, employee: employee, punch_clock: nil, punched_at: to_at, state: :out, remote_ip: ip, comment: comment
   end
 
   def setTimeSlot(employee, reason, from_at, to_at, date)
