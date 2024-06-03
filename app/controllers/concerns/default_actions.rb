@@ -79,7 +79,8 @@ module DefaultActions
           format.json { head :no_content }
         end
       else
-        @resource.destroy!
+        cb = destroy_callback @resource
+        eval(cb) if @resource.destroy!
         respond_to do |format|
           format.html { redirect_to resources_url, status: 303, success: t(".post") }
           format.json { head :no_content }
@@ -99,6 +100,16 @@ module DefaultActions
     # in order to not having to extend the update method on this concern
     #
     def update_callback(obj)
+    end
+
+    #
+    # implement on the controller inheriting this concern
+    # in order to not having to extend the update method on this concern
+    #
+    # this has to return a method that will be called after the destroy!!
+    # ie - it cannot call methods on the object istself!
+    #
+    def destroy_callback(obj)
     end
   end
 end

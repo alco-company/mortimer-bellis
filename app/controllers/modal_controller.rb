@@ -26,7 +26,7 @@ class ModalController < BaseController
     end
   end
 
-  # 
+  #
   def destroy
     set_filter
     set_resources
@@ -37,7 +37,9 @@ class ModalController < BaseController
         format.json { head :no_content }
       end
     else
+      cb = process_destroy(resource)
       if resource.destroy!
+        eval(cb) if cb
         respond_to do |format|
           format.html { redirect_to resources_url, status: 303, success: t(".post") }
           format.json { head :no_content }
@@ -134,7 +136,17 @@ class ModalController < BaseController
     end
 
     def process_other_create
+    end
 
+    #
+    # --------------------------- DESTROY --------------------------------
+    def process_destroy(resource)
+      case params[:resource_class]
+      when "Punch"
+        "PunchCard.recalculate employee: Employee.find(#{resource.employee.id}), across_midnight: false, date: '#{resource.punched_at}'"
+      else
+        nil
+      end
     end
 
     def html_content

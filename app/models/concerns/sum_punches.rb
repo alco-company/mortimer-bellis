@@ -9,19 +9,25 @@ module SumPunches
         end
       else
         begin
+          date = date.to_date
           ActiveRecord::Base.connected_to(role: :writing) do
             # Code in this block will be connected to the reading role
             date = date.yesterday if across_midnight
             say "Recalculating #{employee.name} on #{date}"
             pc = PunchCard.where(account: employee.account, employee: employee, work_date: date).first_or_create
             unless pc.nil?
-              punches = employee.punches.where(punched_at: date.beginning_of_day..date.end_of_day).order(punched_at: :desc)
-              case punches.size
-              when 0; strange_no_punches
-              when 1; one_punch pc, punches, employee, across_midnight, date
-              when 2; two_punches pc, punches
-              else; more_punches pc, punches, employee
-              end if punches.any?
+              begin
+                punches = employee.punches.where(punched_at: date.beginning_of_day..date.end_of_day).order(punched_at: :desc)
+                case punches.size
+                when 0; strange_no_punches
+                when 1; one_punch pc, punches, employee, across_midnight, date
+                when 2; two_punches pc, punches
+                else; more_punches pc, punches, employee
+                end if punches.any?
+              rescue => e
+                say e
+                pc.update work_minutes: -1 if pc
+              end
             end
           end
         rescue => e
@@ -42,7 +48,7 @@ module SumPunches
       # this is the only punch of the day, so we'll calculate the time from the punch to now -
       # and come back and do it again when the employee punches out'
       punches.update_all punch_card_id: pc.id
-      pc.update work_minutes: (DateTime.current.to_i - punches.first..punched_at.to_i) / 60
+      pc.update work_minutes: (DateTime.current.to_i - punches.first.punched_at.to_i) / 60
     end
 
     def two_punches(pc, punches)

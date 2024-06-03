@@ -72,4 +72,7 @@ class PunchesController < MortimerController
     def update_callback(res)
       PunchCard.recalculate employee: res.employee, across_midnight: false, date: res.punched_at.to_date
     end
+    def destroy_callback(res)
+      "PunchCard.recalculate( employee: Employee.find(#{res.employee.id}), across_midnight: false, date: '#{res.punched_at.to_date}')"
+    end
 end

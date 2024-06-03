@@ -25,6 +25,8 @@ da:
       edit: Rediger stempelkort
 
     list:
+      punch_card_does_not_exist: Stempelkortet findes ikke
+      err_calculating_work_minutes: Fejl ved beregning af arbejdstid
       title: Stempelkort
       new: Nyt stempelkort
       name: Medarbejder
