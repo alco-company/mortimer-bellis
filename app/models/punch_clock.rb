@@ -2,6 +2,7 @@ class PunchClock < ApplicationRecord
   include Accountable
   include Localeable
   belongs_to :location
+  has_many :punches, dependent: :destroy
 
   has_secure_token :access_token
 

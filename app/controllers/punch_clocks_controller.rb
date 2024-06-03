@@ -1,4 +1,9 @@
 class PunchClocksController < MortimerController
+  def show
+    @punch_pagy, @punch_records = pagy(@resource.punches)
+    super
+  end
+
   private
 
     # Only allow a list of trusted parameters through.

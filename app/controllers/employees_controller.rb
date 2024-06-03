@@ -5,6 +5,11 @@ class EmployeesController < MortimerController
     super
   end
 
+  def show
+    @punch_card_pagy, @punch_card_records = pagy(@resource.punch_cards)
+    super
+  end
+
   private
 
     # Only allow a list of trusted parameters through.

@@ -52,7 +52,7 @@ class Pos::EmployeeController < Pos::PosController
       @resource.update state: employee_params[:state]
       redirect_to pos_employee_url(api_key: @resource.access_token) and return
     else
-      if (Date.today == Date.parse(punch_params[:from_at]) || 
+      if (Date.today == Date.parse(punch_params[:from_at]) ||
         Date.today == Date.parse(punch_params[:to_at])) && !@resource.out?
         redirect_to pos_employee_url(api_key: @resource.access_token), warning: t("employee_working_punch_out_first") and return
       end
