@@ -36,6 +36,7 @@
 * add comments on manual punches (and on edit)
 * fix missing entries in payroll_punches (missing on smartphone only)
 * add context items to show on accounts, teams, locations, employees, punch_clocks, punch_cards
+* move <remote-modal-container> to layout
 
 ### 31/5/2024
 
