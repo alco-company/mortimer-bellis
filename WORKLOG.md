@@ -31,7 +31,6 @@
 * allow delete logo
 * check for password on file upload
 * allow admin to invite employee
-* show only select elements current to account
 
 ## CHANGELOG
 
@@ -42,6 +41,7 @@
 * add context items to show on accounts, teams, locations, employees, punch_clocks, punch_cards
 * move <remote-modal-container> to layout
 * show 'badge' on punch_cards where "cannot compute"
+* show only select elements current to account
 
 ### 31/5/2024
 
