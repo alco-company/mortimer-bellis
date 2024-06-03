@@ -51,7 +51,7 @@ class PunchClockBase < ApplicationComponent
 
   def list_punches(title, punches = [], edit = false, folded = false, tab = "today")
     h4(class: "m-4 text-gray-700 text-xl") { helpers.t(title) }
-    div(style: "height: calc(100vh - 400px);", class: "pb-20 flex-none min-w-full px-4 sm:px-6 md:px-0 overflow-hidden lg:overflow-auto scrollbar:!w-1.5 scrollbar:!h-1.5 scrollbar:bg-transparent scrollbar-track:!bg-slate-100 scrollbar-thumb:!rounded scrollbar-thumb:!bg-slate-300 scrollbar-track:!rounded dark:scrollbar-track:!bg-slate-500/[0.16] dark:scrollbar-thumb:!bg-slate-500/50 lg:supports-scrollbars:pr-2") do
+    div(class: "pb-20 flex-none min-w-full px-4 sm:px-6 md:px-0 scrollbar:!w-1.5 scrollbar:!h-1.5 scrollbar:bg-transparent scrollbar-track:!bg-slate-100 scrollbar-thumb:!rounded scrollbar-thumb:!bg-slate-300 scrollbar-track:!rounded dark:scrollbar-track:!bg-slate-500/[0.16] dark:scrollbar-thumb:!bg-slate-500/50 lg:supports-scrollbars:pr-2") do
       ul(class: "m-4 divide-y divide-gray-100") do
         current_date = nil
         punches.each do |punch|
