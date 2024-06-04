@@ -114,6 +114,8 @@ class ApplicationForm < Superform::Rails::Form
   end
 
   class FileField < Superform::Rails::Components::InputComponent
+    include Phlex::Rails::Helpers::LinkTo
+
     def field_attributes
       super.merge(type: "file", accept: "image/*")
     end
@@ -121,8 +123,21 @@ class ApplicationForm < Superform::Rails::Form
       div(class: "mort-field") do
         input(**attributes)
         if field.value.attached?
-          div(class: "mort-field") do
-            img(src: url_for(field.value), class: "mort-img")
+          div(class: "w-auto max-w-32 relative border rounded-md shadow px-3 mt-3") do
+            img(src: url_for(field.value), class: "mort-img m-2")
+            link_to(
+              helpers.modal_new_url(modal_form: "delete", id: field.parent.object.id, attachment: field.value.name, resource_class: field.parent.object.class.to_s.underscore, modal_next_step: "accept"),
+              data: { turbo_stream: true },
+              # link_to((@links[1] || resource),
+              class: "absolute top-0 right-0 ",
+              role: "menuitem",
+              tabindex: "-1") do
+                div(class: "text-red-500") do
+                  svg(xmlns: "http://www.w3.org/2000/svg", height: "24px", viewBox: "0 -960 960 960", width: "24px", fill: "currentColor", stroke: "currentColor", class: "") do |s|
+                    s.path(d: "m376-300 104-104 104 104 56-56-104-104 104-104-56-56-104 104-104-104-56 56 104 104-104 104 56 56Zm-96 180q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520Zm-400 0v520-520Z")
+                  end
+                end
+            end
           end
         end
       end

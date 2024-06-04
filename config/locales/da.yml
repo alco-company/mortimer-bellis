@@ -23,7 +23,14 @@ da:
   
   modal:
     destroy:
+      attachment_deleted: Den vedhæftede fil blev slettet
       post: Posten blev slettet korrekt.
+      logo:
+        title: Slet logo
+        instruction: Er du sikker på at du vil slette logoet?
+      mugshot:
+        title: Slet profilbilledet
+        instruction: Er du sikker på at du vil slette profilbilledet?
 
   menu:
     login: Log ind

@@ -27,12 +27,14 @@
 * release RC1
 * Skipped recurring task – already dispatched (7.7ms)  task: :background_job_scheduler, at: 2024-05-28 16:36:00 UTC 18:36:00 web.1  | SolidQueue-0.3.1 Error in thread (0.0ms)  error: "ActiveRecord::RecordInvalid Translation missing: da.activerecord.errors.messages.record_invalid"
 * show confetti on sign up complete
-* allow delete photo 
-* allow delete logo
 * check for password on file upload
 * allow admin to invite employee
 
 ## CHANGELOG
+
+### 4/6/2024
+
+* allow delete photo - account, user, employee
 
 ### 3/6/2024
 
@@ -42,6 +44,7 @@
 * move <remote-modal-container> to layout
 * show 'badge' on punch_cards where "cannot compute"
 * show only select elements current to account
+* allow delete logo
 
 ### 31/5/2024
 

@@ -37,15 +37,23 @@ class ModalController < BaseController
         format.json { head :no_content }
       end
     else
-      cb = process_destroy(resource)
-      if resource.destroy!
-        eval(cb) if cb
-        respond_to do |format|
-          format.html { redirect_to resources_url, status: 303, success: t(".post") }
-          format.json { head :no_content }
+      if params[:attachment]
+        case params[:attachment]
+        when "logo"; @resource.logo.purge
+        when "mugshot"; @resource.mugshot.purge
         end
+        redirect_back fallback_location: root_path, success: t(".attachment_deleted")
       else
-        head :no_content
+        cb = process_destroy(resource)
+        if resource.destroy!
+          eval(cb) if cb
+          respond_to do |format|
+            format.html { redirect_to resources_url, status: 303, success: t(".post") }
+            format.json { head :no_content }
+          end
+        else
+          head :no_content
+        end
       end
     end
   end
@@ -54,6 +62,7 @@ class ModalController < BaseController
 
     def set_vars
       @modal_form = params[:modal_form]
+      @attachment = params[:attachment]
       resource
       @step = params[:step]
     end
