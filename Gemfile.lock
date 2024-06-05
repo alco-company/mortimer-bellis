@@ -230,7 +230,7 @@ GEM
     parser (3.3.1.0)
       ast (~> 2.4.1)
       racc
-    phlex (1.10.2)
+    phlex (1.10.3)
     phlex-rails (1.2.1)
       phlex (~> 1.10.0)
       railties (>= 6.1, < 8)
@@ -278,7 +278,7 @@ GEM
       psych (>= 4.0.0)
     redcarpet (3.6.0)
     regexp_parser (2.9.0)
-    reline (0.5.7)
+    reline (0.5.8)
       io-console (~> 0.5)
     responders (3.1.1)
       actionpack (>= 5.2)
@@ -345,7 +345,7 @@ GEM
       railties (>= 6.0.0)
     stringio (3.1.0)
     strscan (3.1.0)
-    superform (0.4.6)
+    superform (0.4.9)
       phlex-rails (~> 1.0)
       zeitwerk (~> 2.6)
     tailwindcss-rails (2.6.0)
@@ -424,7 +424,7 @@ DEPENDENCIES
   solid_queue (~> 0.3.1)
   sqlite3 (>= 1.4)
   stimulus-rails
-  superform (~> 0.4.6)
+  superform (~> 0.4.9)
   tailwindcss-rails
   turbo-rails
   tzinfo-data
