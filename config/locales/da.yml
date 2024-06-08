@@ -202,6 +202,11 @@ da:
         time_zone: tidszone
         allowed_ot_minutes: Tilladt overtid
 
+      employee_invitation:
+        user_id: Inviteret af
+        team_id: Hold
+        address: Email adresse | Tlfnr (SMS)
+        state: Status på invitationen
       event:
         minutes: Minutter
         employee_id: Medarbejder

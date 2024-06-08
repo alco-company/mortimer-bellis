@@ -1,4 +1,6 @@
 class EmployeesController < MortimerController
+  skip_before_action :authenticate_user!, only: [ :signup ]
+
   def new
     @resource.locale = Current.user.locale
     @resource.time_zone = Current.user.time_zone
@@ -8,6 +10,27 @@ class EmployeesController < MortimerController
   def show
     @punch_card_pagy, @punch_card_records = pagy(@resource.punch_cards)
     super
+  end
+
+  def signup
+    if params[:employee][:api_key].present?
+      api_key = params[:employee].delete :api_key
+      @invite = EmployeeInvitation.find_by(access_token: api_key)
+      if @invite.present?
+        @resource = Employee.new(resource_params)
+        @resource.pincode = Employee.next_pincode()
+        @invite.update state: :completed, completed_at: DateTime.current
+        if @resource.save
+          redirect_to pos_employee_url(@resource, api_key: @resource.access_token), success: t(".post")
+        else
+          @employee = @resource
+          @employee.access_token = api_key
+          render "employee_invitations/employee_sign_up", status: :unprocessable_entity, warning: t(".warning")
+        end
+      else
+        redirect_back(fallback_location: root_path, warning: t(".warning"))
+      end
+    end
   end
 
   private

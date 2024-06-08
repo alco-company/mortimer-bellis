@@ -49,6 +49,10 @@ class Employee < ApplicationRecord
     Employees::Form.new resource, editable: editable, enctype: "multipart/form-data"
   end
 
+  def self.signup(resource, url, editable = true)
+    Employees::Signup.new resource, action: url, editable: editable, enctype: "multipart/form-data"
+  end
+
   #
   # extend this method on the model to define the field formats
   # its a callback from the superform when rendering the form
@@ -62,7 +66,7 @@ class Employee < ApplicationRecord
     end
   end
 
-  def self.next_pincode(pin)
+  def self.next_pincode(pin = "")
     pins = Employee.pluck(:pincode).compact.sort
     pin = "0001" if pin.blank?
     return pin if pins.empty?

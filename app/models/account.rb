@@ -9,6 +9,7 @@ class Account < ApplicationRecord
 
   has_many :background_jobs, dependent: :destroy
   has_many :employees, dependent: :destroy
+  has_many :employee_invitations, dependent: :destroy
   has_many :filters, dependent: :destroy
   has_many :locations, dependent: :destroy
   has_many :punch_cards, dependent: :destroy

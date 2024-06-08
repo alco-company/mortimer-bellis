@@ -23,6 +23,44 @@ da:
           title: Import af medarbejdere
           description: Du har godkendt importen - som nu gennemføres i en baggrundsproces. Når processen er færdig, vil du kunne se resultatet i oversigten over medarbejdere (klik på menupunktet medarbejdere).
 
+  employee_invitation:
+    address_placeholder: "Angiv emailadresser eller tlfnr, adskilt af komma, semi-kolon eller mellemrum"
+  
+    draft: "Udkast"
+    sent: "Sendt"
+    opened: "Åbnet"
+    completed: "Fuldført"
+    error: "Fejl"
+
+    modal:
+      delete:
+        title: Slet invitation
+        instruction: Er du sikker på, at du vil slette invitationen til %{name}?
+        button: Slet
+      delete_all: 
+        title: Slet alle medarbejder invitationer
+        instruction: Er du sikker på, at du vil slette alle medarbejder invitationer?
+
+  employee_invitations:
+    link: "Medarbejder invitationer"
+    create:
+      post: Invitationen til medarbejdere blev oprettet
+    update:
+      post: Invitationen til medarbejdere blev opdateret
+    destroy:
+      post: Invitationen til medarbejdere blev slettet
+
+  employee_signup:
+    introduction: "Du er blevet inviteret til at oprette en medarbejder profil. Udfyld felterne og klik på knappen for at komme i gang."
+
+  employee_mailer:
+    invite:
+      title: "Invitation til at oprette en medarbejder profil"
+      introduction: "Du er blevet inviteret til at oprette en medarbejder profil. Klik på linket for at komme i gang."
+      subject: "Invitation til at oprette en medarbejder profil"
+      action: "Du er blevet inviteret til at oprette en medarbejder profil. Klik på linket for at komme i gang: %{url}"
+      regards: "Med venlig hilsen"
+
   employees:
     advanced_configuration: Vis flere indstillingsmuligheder
     create:

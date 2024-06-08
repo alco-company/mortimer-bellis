@@ -8,7 +8,7 @@ Rails.application.routes.draw do
     unlocks: "users/unlocks",
     omniauth_callbacks: "users/omniauth_callbacks"
   }
-  
+
   resources :dashboards
   resources :background_jobs
   resources :pages
@@ -17,7 +17,12 @@ Rails.application.routes.draw do
   resources :punch_cards do
     # resources :punches
   end
-  resources :employees
+  resources :employees do
+    collection do
+      post :signup
+    end
+  end
+  resources :employee_invitations
   resources :teams
   resources :punch_clocks
   resources :locations do

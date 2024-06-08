@@ -26,11 +26,17 @@
 * refine localizations
 * release RC1
 * Skipped recurring task – already dispatched (7.7ms)  task: :background_job_scheduler, at: 2024-05-28 16:36:00 UTC 18:36:00 web.1  | SolidQueue-0.3.1 Error in thread (0.0ms)  error: "ActiveRecord::RecordInvalid Translation missing: da.activerecord.errors.messages.record_invalid"
-* show confetti on sign up complete
+* show confetti on employee sign up complete
+* show confetti on user sign up complete
 * check for password on file upload
-* allow admin to invite employee
 
 ## CHANGELOG
+
+### 8/7/2024
+
+* allow admin to invite employee
+
+### 7/6/2024
 
 ### 4/6/2024
 

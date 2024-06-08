@@ -37,7 +37,7 @@ class ModalController < BaseController
         format.json { head :no_content }
       end
     else
-      if params[:attachment]
+      if !params[:attachment].blank?
         case params[:attachment]
         when "logo"; @resource.logo.purge
         when "mugshot"; @resource.mugshot.purge

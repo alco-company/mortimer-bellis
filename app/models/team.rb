@@ -5,6 +5,7 @@ class Team < ApplicationRecord
   include Stateable
 
   has_many :employees, dependent: :destroy
+  has_many :employee_invitations, dependent: :destroy
   # has_and_belongs_to_many :employees
 
   scope :by_name, ->(name) { where("name LIKE ?", "%#{name}%") if name.present? }
