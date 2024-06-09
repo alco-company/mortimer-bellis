@@ -28,6 +28,8 @@
 * Skipped recurring task – already dispatched (7.7ms)  task: :background_job_scheduler, at: 2024-05-28 16:36:00 UTC 18:36:00 web.1  | SolidQueue-0.3.1 Error in thread (0.0ms)  error: "ActiveRecord::RecordInvalid Translation missing: da.activerecord.errors.messages.record_invalid"
 * show confetti on employee sign up complete
 * show confetti on user sign up complete
+* report on employee spent time
+* employee - show spent time on payroll_period
 * check for password on file upload
 
 ## CHANGELOG
@@ -36,6 +38,7 @@
 
 * solve error on punching with no contract_minutes set
 * make first punch_clock the employee's own device
+* handle error on deleting (account)
 
 ### 8/6/2024
 

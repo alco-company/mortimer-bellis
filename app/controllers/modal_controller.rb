@@ -28,33 +28,38 @@ class ModalController < BaseController
 
   #
   def destroy
-    set_filter
-    set_resources
-    if params[:all] == "true"
-      DeleteAllJob.perform_later account: Current.account, resource_class: resource_class.to_s, sql_resources: @resources.to_sql
-      respond_to do |format|
-        format.html { redirect_to resources_url, status: 303, success: t("delete_all_later") }
-        format.json { head :no_content }
-      end
-    else
-      if !params[:attachment].blank?
-        case params[:attachment]
-        when "logo"; @resource.logo.purge
-        when "mugshot"; @resource.mugshot.purge
+    begin
+      set_filter
+      set_resources
+      if params[:all] == "true"
+        DeleteAllJob.perform_later account: Current.account, resource_class: resource_class.to_s, sql_resources: @resources.to_sql
+        respond_to do |format|
+          format.html { redirect_to resources_url, status: 303, success: t("delete_all_later") }
+          format.json { head :no_content }
         end
-        redirect_back fallback_location: root_path, success: t(".attachment_deleted")
       else
-        cb = process_destroy(resource)
-        if resource.destroy!
-          eval(cb) if cb
-          respond_to do |format|
-            format.html { redirect_to resources_url, status: 303, success: t(".post") }
-            format.json { head :no_content }
+        if !params[:attachment].blank?
+          case params[:attachment]
+          when "logo"; @resource.logo.purge
+          when "mugshot"; @resource.mugshot.purge
           end
+          redirect_back fallback_location: root_path, success: t(".attachment_deleted")
         else
-          head :no_content
+          cb = process_destroy(resource)
+          if resource.destroy!
+            eval(cb) unless cb.nil?
+            respond_to do |format|
+              format.html { redirect_to resources_url, status: 303, success: t(".post") }
+              format.json { head :no_content }
+            end
+          else
+            head :no_content
+          end
         end
       end
+    rescue => e
+      say "ERROR on destroy: #{e.message}"
+      redirect_to resources_url, status: 303, error: t("something_went_wrong")
     end
   end
 
