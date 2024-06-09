@@ -15,7 +15,7 @@ Rails.application.routes.draw do
   resources :users
   resources :punches
   resources :punch_cards do
-    # resources :punches
+    resources :punches
   end
   resources :employees do
     collection do

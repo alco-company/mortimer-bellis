@@ -31,8 +31,9 @@ class PunchJob < ApplicationJob
   end
 
   def punch_set(employee, reason, ip, from_at, to_at, comment = nil)
-    Punch.create! account: employee.account, employee: employee, punch_clock: nil, punched_at: from_at, state: reason, remote_ip: ip, comment: comment
-    Punch.create! account: employee.account, employee: employee, punch_clock: nil, punched_at: to_at, state: :out, remote_ip: ip, comment: comment
+    punch_clock = PunchClock.where(account: employee.account).first
+    Punch.create! account: employee.account, employee: employee, punch_clock: punch_clock, punched_at: from_at, state: reason, remote_ip: ip, comment: comment
+    Punch.create! account: employee.account, employee: employee, punch_clock: punch_clock, punched_at: to_at, state: :out, remote_ip: ip, comment: comment
   end
 
   def setTimeSlot(employee, reason, from_at, to_at, date)
