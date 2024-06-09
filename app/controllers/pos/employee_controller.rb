@@ -44,21 +44,7 @@ class Pos::EmployeeController < Pos::PosController
   # Manuel entry of sick/free
   #  "punch"=>{"from_at"=>"2024-05-06", "to_at"=>"2024-05-06", "comment" => "en ting", "reason"=>"nursing_sick"}, "api_key"=>"YqymK1swsjkqSSeG3DFVjq1d", "controller"=>"pos/employee", "action"=>"create"} permitted: false>
   def create
-    if params[:employee].present?
-      if params[:employee][:state] == @resource.state
-        redirect_to pos_employee_url(api_key: @resource.access_token), warning: t("state_eq_current_state", state: @resource.state) and return
-      end
-      @resource.punch nil, employee_params[:state], request.remote_ip
-      @resource.update state: employee_params[:state]
-      redirect_to pos_employee_url(api_key: @resource.access_token) and return
-    else
-      if (Date.today == Date.parse(punch_params[:from_at]) ||
-        Date.today == Date.parse(punch_params[:to_at])) && !@resource.out?
-        redirect_to pos_employee_url(api_key: @resource.access_token), warning: t("employee_working_punch_out_first") and return
-      end
-      @resource.punch_range punch_params[:reason], request.remote_ip, punch_params[:from_at], punch_params[:to_at]
-      redirect_to pos_employee_url(api_key: @resource.access_token, tab: "payroll") and return
-    end
+    params[:employee].present? ? now_punch : range_punch
   rescue ActionController::InvalidAuthenticityToken
     redirect_to pos_employee_url(api_key: @resource.access_token), alert: t("invalid_authenticity_token") and return
   end
@@ -90,7 +76,7 @@ class Pos::EmployeeController < Pos::PosController
     else
       punch = Punch.find(params[:id])
       if punch.punch_card && punch.punch_card.punches.size == 1
-        punch.punch_card.destroy 
+        punch.punch_card.destroy
       else
         punch.destroy
       end
@@ -117,6 +103,26 @@ class Pos::EmployeeController < Pos::PosController
       end
       redirect_to root_path and return unless @resource
       Current.account = @resource.account
+    end
+
+    def now_punch
+      if params[:employee][:state] == @resource.state
+        redirect_to pos_employee_url(api_key: @resource.access_token), warning: t("state_eq_current_state", state: @resource.state) and return
+      else
+        punch_clock = PunchClock.where(account: @resource.account).first
+        @resource.punch punch_clock, employee_params[:state], request.remote_ip
+        @resource.update state: employee_params[:state]
+        redirect_to pos_employee_url(api_key: @resource.access_token) and return
+      end
+    end
+
+    def range_punch
+      if (Date.today == Date.parse(punch_params[:from_at]) ||
+        Date.today == Date.parse(punch_params[:to_at])) && !@resource.out?
+        redirect_to pos_employee_url(api_key: @resource.access_token), warning: t("employee_working_punch_out_first") and return
+      end
+      @resource.punch_range punch_params[:reason], request.remote_ip, punch_params[:from_at], punch_params[:to_at], punch_params[:comment]
+      redirect_to pos_employee_url(api_key: @resource.access_token, tab: "payroll") and return
     end
 
     def render_punches

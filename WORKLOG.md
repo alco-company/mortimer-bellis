@@ -29,10 +29,15 @@
 * show confetti on employee sign up complete
 * show confetti on user sign up complete
 * check for password on file upload
+* make first punch_clock the employee's own device
 
 ## CHANGELOG
 
-### 8/7/2024
+### 9/6/2024
+
+* solve error on punching with no contract_minutes set
+
+### 8/6/2024
 
 * allow admin to invite employee
 

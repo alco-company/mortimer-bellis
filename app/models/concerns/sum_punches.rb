@@ -3,41 +3,47 @@ module SumPunches
 
   class_methods do
     def recalculate(employee:, across_midnight: false, date: Date.current, from_at: nil, to_at: nil, **args)
-      if from_at && to_at
-        (from_at.to_date..to_at.to_date).each do |d|
-          recalculate employee: employee, across_midnight: across_midnight, date: d
-        end
-      else
-        begin
-          date = date.to_date
-          ActiveRecord::Base.connected_to(role: :writing) do
-            # Code in this block will be connected to the reading role
-            date = date.yesterday if across_midnight
-            say "Recalculating #{employee.name} on #{date}"
-            pc = PunchCard.where(account: employee.account, employee: employee, work_date: date).first_or_create
-            unless pc.nil?
-              begin
-                punches = employee.punches.where(punched_at: date.beginning_of_day..date.end_of_day).order(punched_at: :desc)
-                case punches.size
-                when 0; strange_no_punches
-                when 1; one_punch pc, punches, employee, across_midnight, date
-                when 2; two_punches pc, punches
-                else; more_punches pc, punches, employee
-                end if punches.any?
-              rescue => e
-                say e
-                pc.update work_minutes: -1 if pc
-              end
+      (from_at && to_at) ?
+        calc_range(employee, across_midnight, date, from_at, to_at) :
+        calc_date(employee, across_midnight, date)
+    end
+
+    def calc_range(employee, across_midnight, date, from_at, to_at)
+      (from_at.to_date..to_at.to_date).each do |d|
+        calc_date employee, across_midnight, d
+      end
+    end
+
+    def calc_date(employee, across_midnight, date)
+      begin
+        date = date.to_date
+        ActiveRecord::Base.connected_to(role: :writing) do
+          # Code in this block will be connected to the writing role
+          date = date.yesterday if across_midnight
+          say "Recalculating #{employee.name} on #{date}"
+          pc = PunchCard.where(account: employee.account, employee: employee, work_date: date).first_or_create
+          unless pc.nil?
+            begin
+              punches = employee.punches.where(punched_at: date.beginning_of_day..date.end_of_day).order(punched_at: :desc)
+              case punches.size
+              when 0; strange_no_punches
+              when 1; one_punch pc, punches, employee, across_midnight, date
+              when 2; two_punches pc, punches
+              else; more_punches pc, punches, employee
+              end if punches.any?
+            rescue => e
+              say e
+              pc.update work_minutes: -1 if pc
             end
           end
-        rescue => e
-          say e
         end
+      rescue => e
+        say e
       end
     end
 
     def strange_no_punches
-      say "No punches found for #{employee.name} on #{date} - which is weird (considering where we're at right now!"
+      say "No punches found for #{employee.name} on #{date} - which is weird (considering where we're at, right now!)"
     end
 
     def one_punch(pc, punches, employee, across_midnight, date)
@@ -58,20 +64,24 @@ module SumPunches
     end
 
     def more_punches(pc, punches, employee)
-      counters = { work: [], break: [] }
-      stop = punches.first.punched_at
-      punches.each_with_index do |punch, i|
-        next if i == 0
+      begin
+        punches.update_all punch_card_id: pc.id
+        counters = { work: [], break: [] }
+        stop = punches.first.punched_at
+        punches.each_with_index do |punch, i|
+          next if i == 0
 
-        case punch.state
-        when "break"; counters[:break] << ((stop.to_i - punch.punched_at.to_i) / 60)
-        when "in"; counters[:work] << ((stop.to_i - punch.punched_at.to_i) / 60)
+          case punch.state
+          when "break"; counters[:break] << ((stop.to_i - punch.punched_at.to_i) / 60)
+          when "in"; counters[:work] << ((stop.to_i - punch.punched_at.to_i) / 60)
+          end
+          stop = punch.punched_at
         end
-        stop = punch.punched_at
+        work, ot1, ot2 = employee.divide_minutes counters[:work].sum
+        pc.update work_minutes: work, ot1_minutes: ot1, ot2_minutes: ot2, break_minutes: counters[:break].sum
+      rescue => e
+        debugger
       end
-      work, ot1, ot2 = employee.divide_minutes counters[:work].sum
-      punches.update_all punch_card_id: pc.id
-      pc.update work_minutes: work, ot1_minutes: ot1, ot2_minutes: ot2, break_minutes: counters[:break].sum
     end
   end
 

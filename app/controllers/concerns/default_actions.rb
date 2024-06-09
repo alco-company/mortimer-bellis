@@ -87,7 +87,11 @@ module DefaultActions
           redirect_back fallback_location: root_path, success: t(".attachment_deleted")
         else
           cb = destroy_callback @resource
-          eval(cb) if @resource.destroy!
+          begin
+            eval(cb) if @resource.destroy!
+          rescue => error
+            say error
+          end
           respond_to do |format|
             format.html { redirect_to resources_url, status: 303, success: t(".post") }
             format.json { head :no_content }
