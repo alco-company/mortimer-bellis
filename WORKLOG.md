@@ -34,6 +34,10 @@
 
 ## CHANGELOG
 
+### 10/6/2024
+
+* add dashboards to accounts destroy action
+  
 ### 9/6/2024
 
 * solve error on punching with no contract_minutes set

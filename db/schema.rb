@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_06_04_152836) do
+ActiveRecord::Schema[8.0].define(version: 2024_06_10_075319) do
   create_table "accounts", force: :cascade do |t|
     t.string "name"
     t.string "email"
@@ -382,6 +382,7 @@ ActiveRecord::Schema[8.0].define(version: 2024_06_04_152836) do
   add_foreign_key "background_jobs", "accounts"
   add_foreign_key "background_jobs", "accounts", on_delete: :cascade
   add_foreign_key "dashboards", "accounts"
+  add_foreign_key "dashboards", "accounts", on_delete: :cascade
   add_foreign_key "employee_invitations", "accounts"
   add_foreign_key "employee_invitations", "accounts", on_delete: :cascade
   add_foreign_key "employee_invitations", "teams"
