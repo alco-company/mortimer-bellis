@@ -29,9 +29,9 @@ class ModalController < BaseController
   #
   def destroy
     begin
-      set_filter
-      set_resources
       if params[:all] == "true"
+        set_filter resource_class.to_s.underscore.pluralize
+        set_resources
         DeleteAllJob.perform_later account: Current.account, resource_class: resource_class.to_s, sql_resources: @resources.to_sql
         respond_to do |format|
           format.html { redirect_to resources_url, status: 303, success: t("delete_all_later") }
@@ -176,12 +176,11 @@ class ModalController < BaseController
       @resources = any_sorts? ? resource_class.ordered(@resources, params[:s], params[:d]) : @resources.order(created_at: :desc)
     end
 
-    def set_filter
+    def set_filter(view = params[:controller].split("/").last)
       @filter_form = resource_class.to_s.underscore.pluralize
-      @filter = Filter.where(account: Current.account).where(view: params[:controller].split("/").last).take || Filter.new
+      @filter = Filter.where(account: Current.account).where(view: view).take || Filter.new
       @filter.filter ||= {}
     end
-
 
     def any_filters?
       return false if @filter.nil? or params[:controller].split("/").last == "filters"
