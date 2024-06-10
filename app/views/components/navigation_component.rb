@@ -14,7 +14,7 @@ class NavigationComponent < ApplicationComponent
   end
 
   def view_template
-    nav(class: "sticky top-0 z-40 bg-gradient-to-r from-cyan-200 to-sky-600", data: { controller: "navigation" }) do
+    nav(class: "w-full fixed top-0 z-40 bg-gradient-to-r from-cyan-200 to-sky-600", data: { controller: "navigation" }) do
       div(class: "mx-auto  px-2 sm:px-6 lg:px-8") do
         div(class: "relative flex h-16 items-center justify-between") do
           div(class: "absolute inset-y-0 left-0 flex items-center lg:hidden") do

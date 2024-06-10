@@ -42,6 +42,7 @@
 * fix missing filters when deleting :all
 * allow for argument to by_account()
 * allow employee to set locale and time_zone on profile
+* make header fixed - not sticky
   
 ### 9/6/2024
 

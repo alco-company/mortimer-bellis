@@ -8,7 +8,7 @@ class PunchClockHeader < ApplicationComponent
   end
 
   def view_template
-    div(class: "bg-gray-50 px-4 py-2 sm:px-8 w-full flex flex-row-reverse items-center", data: { punch_clock_target: "offlineWarningHeader" }) do
+    div(class: "relative top-16 mb-12 bg-gray-50 px-4 py-2 sm:px-8 w-full flex flex-row-reverse items-center", data: { punch_clock_target: "offlineWarningHeader" }) do
       div do
         button(data: { action: "click->punch-clock#deleteTap" }, type: "button", class: " inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10") do
           svg(

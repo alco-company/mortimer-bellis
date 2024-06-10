@@ -326,9 +326,21 @@ class ApplicationForm < Superform::Rails::Form
 
   def around_template(&)
     super do
-      error_messages
-      yield
-      submit(submit_string, class: "mort-btn-primary mt-5") if @editable
+      div(class: "", data: { controller: "form" }) do
+        error_messages
+        yield
+        div(class: "flex flex-row flex-row-reverse m-5 gap-4") do
+          submit(submit_string, tabindex: "0", class: "mort-btn-primary") if @editable
+          input(
+            type: "reset",
+            tabindex: "0",
+            class: "mort-btn-cancel"
+          ) { helpers.t("cancel") }
+        end
+        div(class: "h-10") do
+          plain "&nbsp;".html_safe
+        end
+      end
     end
   end
 
@@ -338,7 +350,7 @@ class ApplicationForm < Superform::Rails::Form
 
   def error_messages
     if model.errors.any?
-      div(id: "error_explanation", class: "mt-4") do
+      div(id: "error_explanation", class: "mt-4 p-4 sm: p-1") do
         h2(class: "mort-err-resume") { I18n.t(:form_errors_prohibited, errors: model.errors.count) }
         ul do
           model.errors.each do |error|
