@@ -4,6 +4,9 @@ class Pos::EmployeeController < Pos::PosController
 
   layout -> { PosEmployeeLayout }
 
+  def signup_success
+  end
+
   def index
     @employees = Employee.by_account()
   end

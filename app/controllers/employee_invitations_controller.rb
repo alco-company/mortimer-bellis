@@ -57,6 +57,6 @@ class EmployeeInvitationsController < MortimerController
 
         end
       end
-      obj.update state: :completed
+      obj.destroy
     end
 end

@@ -32,6 +32,8 @@ da:
     completed: "Fuldført"
     error: "Fejl"
 
+    your_private_punch_clock: "Dit personlige stempelur"
+
     modal:
       delete:
         title: Slet invitation
