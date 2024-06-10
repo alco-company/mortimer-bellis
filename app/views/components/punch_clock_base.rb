@@ -87,7 +87,6 @@ class PunchClockBase < ApplicationComponent
 
   def show_profile
     render PunchClockProfile.new employee: employee
-    div(class: "mb-32") { " " }
   end
 
   def show_today_old

@@ -66,7 +66,7 @@ class Pos::EmployeeController < Pos::PosController
       if @resource.update(employee_params)
         redirect_to pos_employee_url(api_key: @resource.access_token, tab: "profile"), success: I18n.t("employee.update.success")
       else
-        redirect_to pos_employee_url(api_key: @resource.access_token, tab: "profile"), alert: I18n.t("employee.update.failed")
+        render turbo_stream: turbo_stream.replace("mortimer_form", partial: "pos/employee/profile", locals: { employee: @resource }, alert: I18n.t("employee.update.failed"))
       end
     end
   end
@@ -90,7 +90,7 @@ class Pos::EmployeeController < Pos::PosController
 
   private
     def employee_params
-      params.require(:employee).permit(:state, :name, :description, :email, :cell_phone)
+      params.require(:employee).permit(:state, :name, :description, :email, :cell_phone, :locale, :time_zone, :birthday, :mugshot)
     end
 
     def punch_params

@@ -41,6 +41,7 @@
 * fix missing punch_cards on employee's list of punches
 * fix missing filters when deleting :all
 * allow for argument to by_account()
+* allow employee to set locale and time_zone on profile
   
 ### 9/6/2024
 

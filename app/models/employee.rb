@@ -50,6 +50,10 @@ class Employee < ApplicationRecord
     Employees::Form.new resource, editable: editable, enctype: "multipart/form-data"
   end
 
+  def self.profile(resource, url, editable = true)
+    Employees::Profile.new resource, action: url, method: :put, editable: editable, enctype: "multipart/form-data"
+  end
+
   def self.signup(resource, url, editable = true)
     Employees::Signup.new resource, action: url, editable: editable, enctype: "multipart/form-data"
   end

@@ -42,7 +42,8 @@ Rails.application.routes.draw do
     get "employee/edit" => "pos/employee#edit", as: :pos_employee_edit
     get "employee/signup_success" => "pos/employee#signup_success", as: :pos_employee_signup_success
     post "employee" => "pos/employee#create", as: :pos_employee_create
-    put "employee" => "pos/employee#update", as: :pos_employee_update
+    # put "employee" => "pos/employee#update", as: :pos_employee_update
+    patch "employee" => "pos/employee#update", as: :pos_employee_update
     delete "employee" => "pos/employee#destroy", as: :pos_employee_delete
   end
 
