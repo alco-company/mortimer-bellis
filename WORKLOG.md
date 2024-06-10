@@ -38,6 +38,7 @@
 
 * add dashboards to accounts destroy action
 * show confetti on employee sign up complete
+* fix missing punch_cards on employee's list of punches
   
 ### 9/6/2024
 
