@@ -40,6 +40,7 @@
 * show confetti on employee sign up complete
 * fix missing punch_cards on employee's list of punches
 * fix missing filters when deleting :all
+* allow for argument to by_account()
   
 ### 9/6/2024
 

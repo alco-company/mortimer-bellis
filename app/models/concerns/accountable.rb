@@ -10,7 +10,8 @@ module Accountable
     belongs_to :account
     # default_scope { where(account: Current.account_or_raise!) }
 
-    scope :by_account, ->() {
+    scope :by_account, ->(acc = nil) {
+      return where(account: acc) unless acc.nil?
       if Current.user.present?
         case Current.user.role
         when "superadmin"

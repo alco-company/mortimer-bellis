@@ -31,7 +31,7 @@ class PunchJob < ApplicationJob
   end
 
   def punch_set(employee, reason, ip, from_at, to_at, comment = nil)
-    punch_clock = PunchClock.where(account: employee.account).first
+    punch_clock = PunchClock.by_account(employee.account).first
     Punch.create! account: employee.account, employee: employee, punch_clock: punch_clock, punched_at: from_at, state: reason, remote_ip: ip, comment: comment
     Punch.create! account: employee.account, employee: employee, punch_clock: punch_clock, punched_at: to_at, state: :out, remote_ip: ip, comment: comment
   end
