@@ -28,7 +28,6 @@
 * release RC1
 * Skipped recurring task – already dispatched (7.7ms)  task: :background_job_scheduler, at: 2024-05-28 16:36:00 UTC 18:36:00 web.1  | SolidQueue-0.3.1 Error in thread (0.0ms)  error: "ActiveRecord::RecordInvalid Translation missing: da.activerecord.errors.messages.record_invalid"
 * report on employee spent time
-* send first punch success email - w/links to attach app to home screen (iPhone & Android)
 
 ## CHANGELOG
 
@@ -39,6 +38,7 @@
 * show confetti on user sign up complete
 * fix error on saving changes to punch by employee
 * employee - show spent time on payroll_period
+* send first punch success email - w/links to attach app to home screen (iPhone & Android)
 
 ### 10/6/2024
 

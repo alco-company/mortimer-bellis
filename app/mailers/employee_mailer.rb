@@ -24,4 +24,11 @@ class EmployeeMailer < ApplicationMailer
     @sender = "John Doe"
     mail to: @invitation.address, subject: I18n.t("employee_mailer.invite.subject")
   end
+
+  def confetti_first_punch
+    @employee = params[:employee]
+    @company = "M O R T I M E R"
+    @sender = "John Doe"
+    mail to: @employee.email, subject: I18n.t("employee_mailer.confetti_first_punch.subject")
+  end
 end

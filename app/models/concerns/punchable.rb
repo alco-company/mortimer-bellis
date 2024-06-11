@@ -103,6 +103,7 @@ module Punchable
 
     def punch(punch_clock, state, ip, punched_at = DateTime.current)
       begin
+        EmployeeMailer.with(employee: self).confetti_first_punch.deliver_later if punches.count == 0
         Punch.create! account: self.account, employee: self, punch_clock: punch_clock, punched_at: punched_at, state: state, remote_ip: ip
       rescue => e
         say "Punch failed: #{e.message}"
