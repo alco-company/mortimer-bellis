@@ -1,7 +1,8 @@
 <li class="flex items-center justify-between gap-x-6 py-5" id="<%= dom_id(punch) %>">
-    <div class="min-w-0 w-full columns-2">
-      <span><%= render_text_column(value: tell_state(punch), css: "text-right") %> 
-      <span><%= render_time_column(value: punch.punched_at, css: "") %>
+    <div class="min-w-0 w-full columns-3">
+      <span><%= render_text_column(value: tell_state(punch), css: "truncate") %> 
+      <span><%= render_time_column(value: punch.punched_at, css: "text-right") %>
+      <span><%= render_text_column(value: punch.comment, css: "truncate") %>
     </div>
     <div class="flex flex-none items-center gap-x-4">
       <%= render PosContextmenu.new resource: punch, turbo_frame: dom_id(punch), alter: true, links: [ pos_employee_edit_url(api_key: punch.employee.access_token, id: punch.id), pos_employee_delete_url(api_key: punch.employee.access_token, id: punch.id)] %>

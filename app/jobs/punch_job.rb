@@ -3,29 +3,32 @@ class PunchJob < ApplicationJob
 
   def perform(**args)
     super(**args)
-    switch_locale do
-      employee = args[:employee]
-      from_at = args[:from_at]
-      to_at = args[:to_at]
-      reason = args[:reason]
-      comment = args[:comment]
-      ip = args[:ip]
-      begin
-        if from_at.to_date == to_at.to_date
-          from_at, to_at = setTimeSlot(employee, reason, from_at.to_datetime, to_at.to_datetime, from_at.to_datetime)
-          punch_set(employee, reason, ip, from_at.to_datetime, to_at.to_datetime, comment)
-          PunchCardJob.new.perform(account: employee.account, employee: employee, date: from_at)
-        else
-          (from_at.to_date..to_at.to_date).each do |date|
-            f_at, t_at = setTimeSlot(employee, reason, from_at.to_datetime, to_at.to_datetime, date.to_datetime)
-            punch_set(employee, reason, ip, f_at, t_at, comment)
+    employee = args[:employee]
+    switch_locale(employee.locale) do
+      user_time_zone(employee.time_zone) do
+        from_at = Time.parse args[:from_at]
+        to_at = Time.parse args[:to_at]
+        reason = args[:reason]
+        comment = args[:comment]
+        ip = args[:ip]
+        begin
+          if from_at.to_date == to_at.to_date
+            from_at, to_at = setTimeSlot(employee, reason, from_at.to_datetime, to_at.to_datetime, from_at.to_datetime)
+            punch_set(employee, reason, ip, from_at.to_datetime, to_at.to_datetime, comment)
+            PunchCardJob.new.perform(account: employee.account, employee: employee, date: from_at)
+          else
+            (from_at.to_date..to_at.to_date).each do |date|
+              f_at, t_at = setTimeSlot(employee, reason, from_at.to_datetime, to_at.to_datetime, date.to_datetime)
+              punch_set(employee, reason, ip, f_at, t_at, comment)
+            end
+            PunchCardJob.new.perform(account: employee.account, employee: employee, from_at: from_at.to_date, to_at: to_at.to_date)
           end
-          PunchCardJob.new.perform(account: employee.account, employee: employee, from_at: from_at.to_date, to_at: to_at.to_date)
+        rescue => e
+          say "PunchJob failed: #{e.message}"
         end
-      rescue => e
-        say "PunchRange failed: #{e.message}"
       end
     rescue => e
+      say "(switch_locale) PunchJob failed: #{e.message}"
       false
     end
   end

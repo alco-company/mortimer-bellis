@@ -108,13 +108,13 @@ module Punchable
         say "Punch failed: #{e.message}"
       end
       update last_punched_at: punched_at
-      PunchCardJob.perform_now account: self.account, employee: self
+      PunchCardJob.perform_later account: self.account, employee: self
     rescue => e
       false
     end
 
     def punch_range(reason, ip, from_at, to_at, comment = nil)
-      PunchJob.perform_now account: self.account, reason: reason, ip: ip, employee: self, from_at: from_at, to_at: to_at, comment: comment
+      PunchJob.perform_later account: self.account, reason: reason, ip: ip, employee: self, from_at: from_at, to_at: to_at, comment: comment
     end
   end
 end

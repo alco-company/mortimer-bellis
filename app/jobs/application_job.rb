@@ -26,11 +26,19 @@ class ApplicationJob < ActiveJob::Base
     Rails.logger.info "----------------------------------------------------------------------"
   end
 
-  def switch_locale(&action)
+  def switch_locale(locale = nil, &action)
     # locale = Current.user.profile.locale rescue set_user_locale
     locale ||= (locale || I18n.default_locale)
     I18n.with_locale(locale, &action)
   end
+
+  def user_time_zone(tz = nil, &block)
+    timezone = tz || Current.user.time_zone || Current.account.time_zone rescue nil
+    timezone.blank? ?
+      Time.use_zone("Europe/Copenhagen", &block) :
+      Time.use_zone(timezone, &block)
+  end
+  
 
   private
 end

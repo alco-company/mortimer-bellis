@@ -1,9 +1,12 @@
 <li class="flex items-center justify-between gap-x-6 py-5" id="<%= dom_id(punch) %>">
     <div class="min-w-0 w-full">
-      <form action="<%= pos_employee_update_url(api_key: punch.employee.access_token, id: punch.id) %>" method="PUT" class="flex items-center py-2">    
-        <input class="w-1/2 mort-form-text m-1" type="datetime-local" id="punch_punched_at" name="punch[punched_at]" value="<%= punch.punched_at.strftime("%Y-%m-%dT%H:%M") %>" />
-        <input class="w-1/2 mort-form-text m-1" type="text" id="punch_comment" name="punch[comment]" value="<%= punch.comment %>" placeholder="<%= I18n.t(".comment")%>" />
-        <button type="submit" class="mort-btn-primary ml-2"><%= I18n.t(".save") %></button>
+      <form action="<%= pos_employee_update_url(api_key: punch.employee.access_token, id: punch.id) %>" method="POST" class="flex items-center py-2">  
+        <div class="w-full flex flex-col md:flex-row">
+          <input type="hidden" name="_method" value="PATCH"/>
+          <input class="mort-form-text m-1" type="datetime-local" id="punch_punched_at" name="punch[punched_at]" value="<%= punch.punched_at.strftime("%Y-%m-%dT%H:%M") %>" />
+          <input class="mort-form-text m-1" type="text" id="punch_comment" name="punch[comment]" value="<%= punch.comment %>" placeholder="<%= I18n.t("punch.comment")%>" />
+          <button type="submit" class="mort-btn-primary ml-2"><%= I18n.t(".save") %></button>
+        </div>  
       </form>
     </div>
     <div class="flex flex-none items-center gap-x-4 justify-end">

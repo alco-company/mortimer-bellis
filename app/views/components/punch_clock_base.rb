@@ -60,6 +60,7 @@ class PunchClockBase < ApplicationComponent
             li(id: "#{tab}_#{(helpers.dom_id punch)}", class: "flex items-center justify-between gap-x-6 py-5") do
               div(class: "min-w-0 w-full columns-2") do
                 span { helpers.render_date_column(value: punch.punched_at, css: "font-medium") }
+                span { helpers.render_text_column(value: display_work(punch.punch_card), css: "text-right") }
               end
               div(class: "flex flex-none items-center gap-x-4") do
                 folded ?
@@ -72,9 +73,10 @@ class PunchClockBase < ApplicationComponent
             id: (helpers.dom_id punch),
             class: "flex items-center justify-between gap-x-6 py-5"
           ) do
-            div(class: "min-w-0 w-full columns-2") do
-              span { helpers.render_text_column(value: helpers.tell_state(punch), css: "text-right") }
-              span { helpers.render_time_column(value: punch.punched_at, css: "") }
+            div(class: "min-w-0 w-full columns-3 items-center") do
+              span { helpers.render_text_column(value: helpers.tell_state(punch), css: "truncate") }
+              span { helpers.render_time_column(value: punch.punched_at, css: "text-right") }
+              span { helpers.render_text_column(value: punch.comment, css: "truncate") }
             end
             div(class: "flex flex-none items-center gap-x-4") do
               render PosContextmenu.new resource: punch, turbo_frame: helpers.dom_id(punch), alter: edit, links: [ pos_employee_edit_url(api_key: employee.access_token, id: punch.id), pos_employee_delete_url(api_key: employee.access_token, id: punch.id) ]
@@ -83,6 +85,12 @@ class PunchClockBase < ApplicationComponent
         end
       end
     end
+  end
+
+  def display_work(punch_card)
+    work_time = punch_card&.work_minutes || 0
+    break_time = punch_card&.break_minutes || 0
+    "(%s) %s" % [ helpers.display_hours_minutes(break_time), helpers.display_hours_minutes(work_time) ]
   end
 
   def show_profile
