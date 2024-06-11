@@ -12,7 +12,11 @@ Rails.application.routes.draw do
   resources :dashboards
   resources :background_jobs
   resources :pages
-  resources :users
+  resources :users do
+    collection do
+      get "sign_in_success"
+    end
+  end
   resources :punches
   resources :punch_cards do
     resources :punches

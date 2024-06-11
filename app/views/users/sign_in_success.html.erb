@@ -1,1 +1,17 @@
-SUCCESS!!
+
+<div class="mx-auto w-72 sm:w-96 min-h-full">
+  <div class="justify-center px-4 py:8 sm:py-12 lg:flex-none ">
+    <div class="mx-auto max-w-sm lg:w-96">
+      <div class="">
+        <%= render_logo %>
+        <h2 class="mt-8 text-2xl font-bold leading-9 tracking-tight text-gray-900"> <%= I18n.t("users.thank_you_for_signing_up") %></h2>
+        <p class="mort-form-txt mt-6"><%= I18n.t("users.action") %></p>
+        <p class="mort-form-txt mt-6"><%= I18n.t("users.next_step") %></p>
+        <p class="mt-4 text-sm leading-6">
+          <a href="#" class="mort-btn-primary"><%= I18n.t("users.resend_invitation") %></a>
+        </p>
+        <p class="mort-form-txt text-xs text-gray-400 mt-1"><%= I18n.t("users.email_missing") %></p>
+      </div>
+    </div>
+  </div>
+</div>

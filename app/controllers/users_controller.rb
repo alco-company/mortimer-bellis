@@ -1,5 +1,11 @@
 class UsersController < MortimerController
   before_action :authorize
+  skip_before_action :authenticate_user!, only: [ :sign_in_success ]
+  skip_before_action :ensure_accounted_user, only: [ :sign_in_success ]
+  skip_before_action :authorize, only: [ :sign_in_success ]
+
+  def sign_in_success
+  end
 
   def update
     if params[:user][:role].present? &&

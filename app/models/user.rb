@@ -10,6 +10,8 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable,
          :omniauthable, :confirmable, :trackable, :timeoutable
 
+  has_many :user_invitations, class_name: "User", as: :invited_by
+
   enum :role, { user: 0, admin: 1, superadmin: 2 }
   has_one_attached :mugshot
 
