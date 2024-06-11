@@ -31,8 +31,11 @@
 * employee - show spent time on payroll_period
 * check for password on file upload
 
-
 ## CHANGELOG
+
+### 11/6/2024
+
+* allow employees to delete their mugshots
 
 ### 10/6/2024
 
