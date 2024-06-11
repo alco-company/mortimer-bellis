@@ -21,6 +21,7 @@
 * add Thruster - https://nts.strzibny.name/running-thruster-rails-kamal/
 * gem fugit - more prominent substitute for CronTask
 * make locale and time_zone selectable on sign_up
+* check for password on file upload
 * add state and EU state reporting timeable
 * add prettier mail layouts
 * refine localizations
@@ -28,14 +29,16 @@
 * Skipped recurring task – already dispatched (7.7ms)  task: :background_job_scheduler, at: 2024-05-28 16:36:00 UTC 18:36:00 web.1  | SolidQueue-0.3.1 Error in thread (0.0ms)  error: "ActiveRecord::RecordInvalid Translation missing: da.activerecord.errors.messages.record_invalid"
 * show confetti on user sign up complete
 * report on employee spent time
+* send first punch success email - w/links to attach app to home screen (iPhone & Android)
 * employee - show spent time on payroll_period
-* check for password on file upload
+* fix error on saving changes to punch by employee
 
 ## CHANGELOG
 
 ### 11/6/2024
 
 * allow employees to delete their mugshots
+* fixing wrong loading of config/locales
 
 ### 10/6/2024
 

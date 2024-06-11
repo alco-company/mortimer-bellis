@@ -3,6 +3,12 @@ da:
   state_eq_current_state: "Medarbejderen er allerede stemplet %{state}"
   employee:
     me: "Mig"
+
+    in: "Arbejder"
+    out: "Ikke på arbejde"
+    break: "Holder pause"
+    sick: "Er syg"
+    free: "Har ferie"
     
     update:
       success: Dine oplysninger blev opdateret
