@@ -51,7 +51,7 @@ class Employee < ApplicationRecord
   end
 
   def self.profile(resource, url, editable = true)
-    Employees::Profile.new resource, action: url, method: :put, api_key: resource.access_token, editable: editable, enctype: "multipart/form-data"
+    Employees::Profile.new resource, action: url, api_key: resource.access_token, editable: editable, enctype: "multipart/form-data"
   end
 
   def self.signup(resource, url, editable = true)

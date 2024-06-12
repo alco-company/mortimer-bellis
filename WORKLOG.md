@@ -31,6 +31,10 @@
 
 ## CHANGELOG
 
+### 12/6/2024
+
+* fix "(No route matches [PUT] "/pos/employee")"
+
 ### 11/6/2024
 
 * allow employees to delete their mugshots
