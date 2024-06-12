@@ -14,7 +14,8 @@
   </div>
   <hr>
   <div class="mt-3">
-    <%#= render partial: 'punch_clocks/list' %>
-    <%#= render @resource.punch_clocks %>
+    <%== pagy_nav(@punch_card_pagy) if @punch_card_pagy.pages > 1 %>
+    <%= render partial: 'punch_cards/list' %>
+    <%= render @punch_card_records %>
   </div>
 </div>

@@ -23,6 +23,9 @@ module Punchable
       return contract_minutes if contract_minutes && contract_minutes > 0
       return team.contract_minutes if contract_minutes.nil?
       [ team.contract_minutes, contract_minutes, 0 ].max
+    rescue
+      say "No contract minutes found for #{name}"
+      0
     end
 
     def get_contract_days_per_week
@@ -40,6 +43,9 @@ module Punchable
       else
         get_contract_minutes / dpp / get_contract_days_per_week
       end
+    rescue
+      say "No contract minutes per day found for #{name}"
+      0
     end
 
     def get_allowed_ot_minutes
@@ -47,6 +53,9 @@ module Punchable
       return 24*60 if allowed_ot_minutes == 0
       return -1 if allowed_ot_minutes < 0
       [ team.get_allowed_ot_minutes, allowed_ot_minutes ].min
+    rescue
+      say "No allowed OT minutes found for #{name}"
+      24*60
     end
 
     def get_hour_rate_cent
@@ -68,9 +77,9 @@ module Punchable
     end
 
     def divide_minutes(minutes)
-      work =    [ minutes, get_contract_minutes ].min
+      work =    [ minutes, (get_contract_minutes || 0) ].min
       return [ work, 0, 0 ] if get_allowed_ot_minutes < 0
-      max_ot = [ get_allowed_ot_minutes, 180 ].min
+      max_ot = [ (get_allowed_ot_minutes || 0), 180 ].min
       ot1 =     [ [ (minutes - work), 0 ].max, max_ot ].min
       ot2 =     [ [ (minutes - work - ot1), 0 ].max, (max_ot - ot1) ].min
       [ work, ot1, ot2 ]
@@ -94,6 +103,7 @@ module Punchable
 
     def punch(punch_clock, state, ip, punched_at = DateTime.current)
       begin
+        EmployeeMailer.with(employee: self).confetti_first_punch.deliver_later if punches.count == 0
         Punch.create! account: self.account, employee: self, punch_clock: punch_clock, punched_at: punched_at, state: state, remote_ip: ip
       rescue => e
         say "Punch failed: #{e.message}"
@@ -104,8 +114,8 @@ module Punchable
       false
     end
 
-    def punch_range(reason, ip, from_at, to_at)
-      PunchJob.perform_later account: self.account, reason: reason, ip: ip, employee: self, from_at: from_at, to_at: to_at
+    def punch_range(reason, ip, from_at, to_at, comment = nil)
+      PunchJob.perform_later account: self.account, reason: reason, ip: ip, employee: self, from_at: from_at, to_at: to_at, comment: comment
     end
   end
 end

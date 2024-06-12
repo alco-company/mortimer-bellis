@@ -1,0 +1,5 @@
+<h1><%= @employee.account.name %></h1>
+<div id="employee_signup">
+  <p><%= I18n.t("employee_signup.introduction") %></p>
+  <%= render Employee.signup(@employee, signup_employees_url) %>
+</div>

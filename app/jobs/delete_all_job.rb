@@ -11,7 +11,7 @@ class DeleteAllJob < ApplicationJob
       ids = resources.collect { |r| r["id"] }.compact
       if ids.any?
         ar = rc.where(id: ids)
-        ar.delete_all
+        ar.destroy_all
       end
     end
   end

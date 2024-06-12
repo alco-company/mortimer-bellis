@@ -15,21 +15,70 @@
 * add Stripe payments - https://gorails.com/episodes/one-time-payments-with-pay-and-stripe
 * add employee email - welcome, EU state report
 * gem "mission_control-jobs"
+* install and configure Harbor - open source Registry - https://goharbor.io/
 * add employee calendar - duty, free, holiday
 * add web push notifications
 * add Thruster - https://nts.strzibny.name/running-thruster-rails-kamal/
 * gem fugit - more prominent substitute for CronTask
 * make locale and time_zone selectable on sign_up
+* check for password on file upload
 * add state and EU state reporting timeable
 * add prettier mail layouts
+* refine localizations
 * release RC1
 * Skipped recurring task – already dispatched (7.7ms)  task: :background_job_scheduler, at: 2024-05-28 16:36:00 UTC 18:36:00 web.1  | SolidQueue-0.3.1 Error in thread (0.0ms)  error: "ActiveRecord::RecordInvalid Translation missing: da.activerecord.errors.messages.record_invalid"
-* show 'badge' on punch_cards where "cannot compute"
-* show confetti on sign up complete
-* add comments on manual punches (and on edit)
-
+* report on employee spent time
 
 ## CHANGELOG
+
+### 12/6/2024
+
+* fix "(No route matches [PUT] "/pos/employee")"
+
+### 11/6/2024
+
+* allow employees to delete their mugshots
+* fixing wrong loading of config/locales
+* show confetti on user sign up complete
+* fix error on saving changes to punch by employee
+* employee - show spent time on payroll_period
+* send first punch success email - w/links to attach app to home screen (iPhone & Android)
+
+### 10/6/2024
+
+* add dashboards to accounts destroy action
+* show confetti on employee sign up complete
+* fix missing punch_cards on employee's list of punches
+* fix missing filters when deleting :all
+* allow for argument to by_account()
+* allow employee to set locale and time_zone on profile
+* make header fixed - not sticky
+  
+### 9/6/2024
+
+* solve error on punching with no contract_minutes set
+* make first punch_clock the employee's own device
+* handle error on deleting (account)
+
+### 8/6/2024
+
+* allow admin to invite employee
+
+### 7/6/2024
+
+### 4/6/2024
+
+* allow delete photo - account, user, employee
+
+### 3/6/2024
+
+* add comments on manual punches (and on edit)
+* fix missing entries in payroll_punches (missing on smartphone only)
+* add context items to show on accounts, teams, locations, employees, punch_clocks, punch_cards
+* move <remote-modal-container> to layout
+* show 'badge' on punch_cards where "cannot compute"
+* show only select elements current to account
+* allow delete logo
 
 ### 31/5/2024
 

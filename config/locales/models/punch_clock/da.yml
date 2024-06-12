@@ -10,6 +10,7 @@ da:
         button: Slet
 
   punch_clocks:
+    employee_device_punch_clock: Medarbejder stempelur
     default_punch_clock: Ur
     
     create:

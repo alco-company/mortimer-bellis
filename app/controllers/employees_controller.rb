@@ -1,15 +1,33 @@
 class EmployeesController < MortimerController
+  skip_before_action :authenticate_user!, only: [ :signup ]
+
   def new
     @resource.locale = Current.user.locale
     @resource.time_zone = Current.user.time_zone
     super
   end
 
+  def show
+    @punch_card_pagy, @punch_card_records = pagy(@resource.punch_cards)
+    super
+  end
+
+  def signup
+    if params[:employee][:api_key].present?
+      api_key = params[:employee].delete :api_key
+      @invite = EmployeeInvitation.find_by(access_token: api_key)
+      process_signup if @invite.present?
+    else
+      redirect_back(fallback_location: root_path, warning: t("employee_invitation.wrong_invitation"))
+    end
+  end
+
   private
 
     # Only allow a list of trusted parameters through.
     def resource_params
-      params[:employee][:payroll_employee_ident] = Employee.next_payroll_employee_ident(params[:employee][:payroll_employee_ident])
+      params[:employee][:pincode] = Employee.next_pincode(params[:employee][:pincode]) if params[:employee][:pincode].blank?
+      params[:employee][:payroll_employee_ident] = Employee.next_payroll_employee_ident(params[:employee][:payroll_employee_ident]) if params[:employee][:payroll_employee_ident].blank?
       params.require(:employee).permit(
         :account_id,
         :team_id,
@@ -45,5 +63,23 @@ class EmployeesController < MortimerController
         :locale,
         :time_zone
       )
+    end
+
+    def process_signup
+      @resource = Employee.new(resource_params)
+      @resource.pincode = Employee.next_pincode()
+      if @invite.completed?
+        redirect_back(fallback_location: root_path, warning: t("employee_invitation.already_completed"))
+      else
+        if @resource.save
+          @invite.update state: :completed, completed_at: DateTime.current
+          render turbo_stream: turbo_stream.replace("employee_signup", partial: "/pos/employee/signup_success")
+        else
+          @invite.update state: :error
+          @employee = @resource
+          @employee.access_token = @invite.access_token
+          render "employee_invitations/employee_sign_up", status: :unprocessable_entity, warning: t("employee_invitation.could_not_create_employee")
+        end
+      end
     end
 end

@@ -8,16 +8,25 @@ Rails.application.routes.draw do
     unlocks: "users/unlocks",
     omniauth_callbacks: "users/omniauth_callbacks"
   }
-  
+
   resources :dashboards
   resources :background_jobs
   resources :pages
-  resources :users
+  resources :users do
+    collection do
+      get "sign_in_success"
+    end
+  end
   resources :punches
   resources :punch_cards do
-    # resources :punches
+    resources :punches
   end
-  resources :employees
+  resources :employees do
+    collection do
+      post :signup
+    end
+  end
+  resources :employee_invitations
   resources :teams
   resources :punch_clocks
   resources :locations do
@@ -35,8 +44,10 @@ Rails.application.routes.draw do
     get "employees" => "pos/employee#index", as: :pos_employees
     get "employee/punches" => "pos/employee#punches", as: :pos_employee_punches
     get "employee/edit" => "pos/employee#edit", as: :pos_employee_edit
+    get "employee/signup_success" => "pos/employee#signup_success", as: :pos_employee_signup_success
     post "employee" => "pos/employee#create", as: :pos_employee_create
-    put "employee" => "pos/employee#update", as: :pos_employee_update
+    # put "employee" => "pos/employee#update", as: :pos_employee_update
+    patch "employee" => "pos/employee#update", as: :pos_employee_update
     delete "employee" => "pos/employee#destroy", as: :pos_employee_delete
   end
 

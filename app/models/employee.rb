@@ -22,6 +22,7 @@ class Employee < ApplicationRecord
   scope :by_time_zone, ->(time_zone) { where("time_zone LIKE ?", "%#{time_zone}%") if time_zone.present? }
   scope :by_pincode, ->(pincode) { where("pincode LIKE ?", "%#{pincode}%").order(pincode: :asc) if pincode.present? }
   scope :punching_absence, -> { where(punching_absence: true) }
+  scope :order_by_number, ->(field) { order("length(#{field}) DESC, #{field} DESC") }
 
   validates :name, presence: true, uniqueness: { scope: [ :account_id, :team_id ], message: I18n.t("employees.errors.messages.name_exist_for_team") }
   validates :pincode, presence: true, uniqueness: { scope: :account_id, message: I18n.t("employees.errors.messages.pincode_exist_for_account") }
@@ -49,6 +50,14 @@ class Employee < ApplicationRecord
     Employees::Form.new resource, editable: editable, enctype: "multipart/form-data"
   end
 
+  def self.profile(resource, url, editable = true)
+    Employees::Profile.new resource, action: url, api_key: resource.access_token, editable: editable, enctype: "multipart/form-data"
+  end
+
+  def self.signup(resource, url, editable = true)
+    Employees::Signup.new resource, action: url, editable: editable, enctype: "multipart/form-data"
+  end
+
   #
   # extend this method on the model to define the field formats
   # its a callback from the superform when rendering the form
@@ -62,23 +71,23 @@ class Employee < ApplicationRecord
     end
   end
 
-  def self.next_pincode(pin)
-    pins = Employee.pluck(:pincode).compact.sort
-    pin = "0001" if pin.blank?
+  def self.next_pincode(pin = "")
+    pins = Employee.by_account.order_by_number("pincode").pluck(:pincode)
+    pin = "1000" if pin.blank?
     return pin if pins.empty?
-    pin = pins.last.to_i + 1 if pin.to_i < pins.last.to_i
-    return pin unless pins.include? pin
-    while pins.include? pin
+    pin = pins.first.to_i + 1 if pin.to_i < pins.first.to_i
+    return pin unless (pins.include? pin) || (pin.to_i < 1000)
+    while (pins.include? pin) || (pin.to_i < 1000)
       pin = pin.to_i + 1
     end
     pin.to_s
   end
 
   def self.next_payroll_employee_ident(pin)
-    pins = Employee.pluck(:payroll_employee_ident).compact.sort
-    pin = "0001" if pin.blank?
+    pins = Employee.by_account.order_by_number("payroll_employee_ident").pluck(:payroll_employee_ident)
+    pin = "1" if pin.blank?
     return pin if pins.empty?
-    pin = pins.last.to_i + 1 if pin.to_i < pins.last.to_i
+    pin = pins.first.to_i + 1 if pin.to_i < pins.first.to_i
     return pin unless pins.include? pin
     while pins.include? pin
       pin = pin.to_i + 1

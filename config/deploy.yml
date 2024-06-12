@@ -91,7 +91,7 @@ env:
     SMTP_ENABLE_STARTTLS_AUTO: 'false'
     SSL_DOMAIN: 'bellis.mortimer.pro'
     WEB_HOST: 'bellis.mortimer.pro'
-    MORTIMER_VERSION: '0.7.1'
+    MORTIMER_VERSION: '0.8.1'
   secret:
     - RAILS_MASTER_KEY
     - SMTP_PASSWORD

@@ -14,6 +14,7 @@
         <%= form.hidden_field :resource_class, value: @resource_class %>
         <%= form.hidden_field :step, value: @step %>
         <%= form.hidden_field :all, value: !@resource.present? %>
+        <%= form.hidden_field :attachment, value: @attachment %>
         <%= form.hidden_field :id, value: @resource&.id %>
         <!-- <div class="relative flex items-start mt-3">
           <div class="ml-3 text-sm leading-6">

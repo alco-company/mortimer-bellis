@@ -2,12 +2,15 @@ class User < ApplicationRecord
   include Localeable
 
   belongs_to :account
+  has_many :employee_invitations, dependent: :destroy
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :invitable, :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable,
          :omniauthable, :confirmable, :trackable, :timeoutable
+
+  has_many :user_invitations, class_name: "User", as: :invited_by
 
   enum :role, { user: 0, admin: 1, superadmin: 2 }
   has_one_attached :mugshot

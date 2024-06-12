@@ -3,15 +3,15 @@ module Resourceable
 
   included do
     def resource_class
-      @resource_class ||= rc_params.split("/").last.classify.constantize
+      @resource_class ||= case rc_params.split("/").last
+      when "invitations"; EmployeeInvitation
+      else; rc_params.split("/").last.classify.constantize
+      end
     end
 
     # Use callbacks to share common setup or constraints between actions.
     def set_resource
       @resource = params_id ? (resource_class.find(params_id) rescue resource_class.new) : resource_class.new
-      # if %w[employee punch].include? resource_class.to_s.downcase
-      #   @resource.state = "OUT" if @resource.state.nil?
-      # end
     end
 
     def set_resources

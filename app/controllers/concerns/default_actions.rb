@@ -72,17 +72,30 @@ module DefaultActions
 
     # DELETE /employees/1 or /employees/1.json
     def destroy
-      if params[:all]
+      if params[:all].present? && params[:all] == "true"
         DeleteAllJob.perform_later account: Current.account, resource_class: resource_class.to_s, sql_resources: @resources.to_sql
         respond_to do |format|
           format.html { redirect_to root_path, status: 303, success: t("delete_all_later") }
           format.json { head :no_content }
         end
       else
-        @resource.destroy!
-        respond_to do |format|
-          format.html { redirect_to resources_url, status: 303, success: t(".post") }
-          format.json { head :no_content }
+        if params[:attachment]
+          case params[:attachment]
+          when "logo"; @resource.logo.purge
+          when "mugshot"; @resource.mugshot.purge
+          end
+          redirect_back fallback_location: root_path, success: t(".attachment_deleted")
+        else
+          cb = destroy_callback @resource
+          begin
+            eval(cb) if @resource.destroy!
+          rescue => error
+            say error
+          end
+          respond_to do |format|
+            format.html { redirect_to resources_url, status: 303, success: t(".post") }
+            format.json { head :no_content }
+          end
         end
       end
     end
@@ -99,6 +112,16 @@ module DefaultActions
     # in order to not having to extend the update method on this concern
     #
     def update_callback(obj)
+    end
+
+    #
+    # implement on the controller inheriting this concern
+    # in order to not having to extend the update method on this concern
+    #
+    # this has to return a method that will be called after the destroy!!
+    # ie - it cannot call methods on the object istself!
+    #
+    def destroy_callback(obj)
     end
   end
 end

@@ -9,8 +9,8 @@ class PunchClockEmployee < PunchClockBase
   end
 
   def view_template
-    div(class: "h-full w-full") do
-      div(class: "sm:p-4 pb-18 h-full") do
+    div(class: "sm:h-full w-full") do
+      div(class: "mb-20 sm:mb-2 sm:p-4 pb-18 h-full") do
         case tab
         when "payroll"; show_payroll
         when "profile"; show_profile
@@ -22,8 +22,8 @@ class PunchClockEmployee < PunchClockBase
           div(class: "border-gray-200 py-2 text-gray-400 justify-items-stretch flex flex-row-reverse gap-2") do
             render PunchClockButtons.new employee: employee, tab: tab, url: helpers.pos_employee_url(api_key: employee.access_token)
           end
-        end unless tab == "profile"
-      end
+        end
+      end unless tab == "profile"
     end
   end
 end

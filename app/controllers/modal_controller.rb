@@ -1,5 +1,7 @@
 class ModalController < BaseController
   before_action :set_vars, only: [ :new, :show, :create, :destroy ]
+  skip_before_action :authenticate_user!, only: [ :destroy ]
+  skip_before_action :ensure_accounted_user, only: [ :destroy ]
 
   def new
     resource
@@ -26,32 +28,17 @@ class ModalController < BaseController
     end
   end
 
-  # 
+  #
   def destroy
-    set_filter
-    set_resources
-    if params[:all] == "true"
-      DeleteAllJob.perform_later account: Current.account, resource_class: resource_class.to_s, sql_resources: @resources.to_sql
-      respond_to do |format|
-        format.html { redirect_to resources_url, status: 303, success: t("delete_all_later") }
-        format.json { head :no_content }
-      end
-    else
-      if resource.destroy!
-        respond_to do |format|
-          format.html { redirect_to resources_url, status: 303, success: t(".post") }
-          format.json { head :no_content }
-        end
-      else
-        head :no_content
-      end
-    end
+    (authenticate_user! && ensure_accounted_user) || verify_api_key
+    params[:all] == "true" ? process_destroy_all : process_destroy
   end
 
   private
 
     def set_vars
       @modal_form = params[:modal_form]
+      @attachment = params[:attachment]
       resource
       @step = params[:step]
     end
@@ -134,7 +121,59 @@ class ModalController < BaseController
     end
 
     def process_other_create
+    end
 
+    #
+    # --------------------------- DESTROY --------------------------------
+
+    def process_destroy_all
+      begin
+        set_filter resource_class.to_s.underscore.pluralize
+        set_resources
+        DeleteAllJob.perform_later account: Current.account, resource_class: resource_class.to_s, sql_resources: @resources.to_sql
+        respond_to do |format|
+          format.html { redirect_to resources_url, status: 303, success: t("delete_all_later") }
+          format.json { head :no_content }
+        end
+      rescue => e
+        say "ERROR on destroy: #{e.message}"
+        redirect_to resources_url, status: 303, error: t("something_went_wrong")
+      end
+    end
+
+    def process_destroy
+      begin
+        if !params[:attachment].blank?
+          case params[:attachment]
+          when "logo"; @resource.logo.purge
+          when "mugshot"; @resource.mugshot.purge
+          end
+          redirect_back fallback_location: root_path, success: t(".attachment_deleted")
+        else
+          cb = get_cb_eval_after_destroy(resource)
+          if resource.destroy!
+            eval(cb) unless cb.nil?
+            respond_to do |format|
+              format.html { redirect_to resources_url, status: 303, success: t(".post") }
+              format.json { head :no_content }
+            end
+          else
+            head :no_content
+          end
+        end
+      rescue => e
+        say "ERROR on destroy: #{e.message}"
+        redirect_to resources_url, status: 303, error: t("something_went_wrong")
+      end
+    end
+
+    def get_cb_eval_after_destroy(resource)
+      case params[:resource_class]
+      when "Punch"
+        "PunchCard.recalculate employee: Employee.find(#{resource.employee.id}), across_midnight: false, date: '#{resource.punched_at}'"
+      else
+        nil
+      end
     end
 
     def html_content
@@ -150,12 +189,15 @@ class ModalController < BaseController
       @resources = any_sorts? ? resource_class.ordered(@resources, params[:s], params[:d]) : @resources.order(created_at: :desc)
     end
 
-    def set_filter
+    def set_filter(view = params[:controller].split("/").last)
       @filter_form = resource_class.to_s.underscore.pluralize
-      @filter = Filter.where(account: Current.account).where(view: params[:controller].split("/").last).take || Filter.new
+      @filter = Filter.where(account: Current.account).where(view: view).take || Filter.new
       @filter.filter ||= {}
     end
 
+    def verify_api_key
+      @resource.access_token == params[:api_key] || redirect_to(new_user_session_path)
+    end
 
     def any_filters?
       return false if @filter.nil? or params[:controller].split("/").last == "filters"

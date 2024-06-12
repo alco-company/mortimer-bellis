@@ -1,9 +1,12 @@
 class ApplicationForm < Superform::Rails::Form
   include Phlex::Rails::Helpers::Pluralize
 
+  attr_accessor :editable, :api_key
+
   def initialize(model, **options)
     super(model, **options)
     @editable = options[:editable]
+    @api_key = options[:api_key] || ""
   end
 
   class Phlex::SGML
@@ -114,6 +117,8 @@ class ApplicationForm < Superform::Rails::Form
   end
 
   class FileField < Superform::Rails::Components::InputComponent
+    include Phlex::Rails::Helpers::LinkTo
+
     def field_attributes
       super.merge(type: "file", accept: "image/*")
     end
@@ -121,8 +126,23 @@ class ApplicationForm < Superform::Rails::Form
       div(class: "mort-field") do
         input(**attributes)
         if field.value.attached?
-          div(class: "mort-field") do
-            img(src: url_for(field.value), class: "mort-img")
+          div(class: "w-auto max-w-32 relative border rounded-md shadow px-3 mt-3") do
+            img(src: url_for(field.value), class: "mort-img m-2")
+            div(class: "absolute top-0 right-0 w-8 h-8 rounded-lg bg-white/75") do
+              link_to(
+                helpers.modal_new_url(modal_form: "delete", id: field.parent.object.id, attachment: field.value.name, api_key: @_parent.api_key, resource_class: field.parent.object.class.to_s.underscore, modal_next_step: "accept"),
+                data: { turbo_stream: true },
+                # link_to((@links[1] || resource),
+                class: "absolute top-1 right-1",
+                role: "menuitem",
+                tabindex: "-1") do
+                  div(class: "text-red-500") do
+                    svg(xmlns: "http://www.w3.org/2000/svg", height: "24px", viewBox: "0 -960 960 960", width: "24px", fill: "currentColor", stroke: "currentColor", class: "") do |s|
+                      s.path(d: "m376-300 104-104 104 104 56-56-104-104 104-104-56-56-104 104-104-104-56 56 104 104-104 104 56 56Zm-96 180q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520Zm-400 0v520-520Z")
+                    end
+                  end
+              end
+            end
           end
         end
       end
@@ -281,6 +301,7 @@ class ApplicationForm < Superform::Rails::Form
   def display_field(field)
     case field.key
     when /account_id$/; plain(model&.account.name)
+    when /team_id$/; plain(model&.team.name)
     when /user_id$/; plain(model&.user.name)
     when /employee_id$/; plain(model&.employee.name)
     when /punch_clock_id$/; plain(model&.punch_clock.name) rescue I18n.t("punches.form.punched_on_app")
@@ -310,9 +331,21 @@ class ApplicationForm < Superform::Rails::Form
 
   def around_template(&)
     super do
-      error_messages
-      yield
-      submit(submit_string, class: "mort-btn-primary mt-5") if @editable
+      div(class: "", data: { controller: "form" }) do
+        error_messages
+        yield
+        div(class: "flex flex-row flex-row-reverse m-5 gap-4") do
+          submit(submit_string, tabindex: "0", class: "mort-btn-primary") if @editable
+          input(
+            type: "reset",
+            tabindex: "0",
+            class: "mort-btn-cancel"
+          ) { helpers.t("cancel") }
+        end
+        div(class: "h-10") do
+          plain "&nbsp;".html_safe
+        end
+      end
     end
   end
 
@@ -322,7 +355,7 @@ class ApplicationForm < Superform::Rails::Form
 
   def error_messages
     if model.errors.any?
-      div(id: "error_explanation", class: "mt-4") do
+      div(id: "error_explanation", class: "mt-4 p-4 sm: p-1") do
         h2(class: "mort-err-resume") { I18n.t(:form_errors_prohibited, errors: model.errors.count) }
         ul do
           model.errors.each do |error|

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_05_27_070912) do
+ActiveRecord::Schema[8.0].define(version: 2024_06_10_075319) do
   create_table "accounts", force: :cascade do |t|
     t.string "name"
     t.string "email"
@@ -75,6 +75,23 @@ ActiveRecord::Schema[7.2].define(version: 2024_05_27_070912) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["account_id"], name: "index_dashboards_on_account_id"
+  end
+
+  create_table "employee_invitations", force: :cascade do |t|
+    t.integer "account_id", null: false
+    t.integer "user_id", null: false
+    t.integer "team_id", null: false
+    t.string "address"
+    t.string "access_token"
+    t.integer "state"
+    t.datetime "invited_at"
+    t.datetime "seen_at"
+    t.datetime "completed_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_employee_invitations_on_account_id"
+    t.index ["team_id"], name: "index_employee_invitations_on_team_id"
+    t.index ["user_id"], name: "index_employee_invitations_on_user_id"
   end
 
   create_table "employees", force: :cascade do |t|
@@ -183,6 +200,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_05_27_070912) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "punch_card_id"
+    t.string "comment"
     t.index ["account_id"], name: "index_punches_on_account_id"
     t.index ["employee_id"], name: "index_punches_on_employee_id"
   end
@@ -364,6 +382,13 @@ ActiveRecord::Schema[7.2].define(version: 2024_05_27_070912) do
   add_foreign_key "background_jobs", "accounts"
   add_foreign_key "background_jobs", "accounts", on_delete: :cascade
   add_foreign_key "dashboards", "accounts"
+  add_foreign_key "dashboards", "accounts", on_delete: :cascade
+  add_foreign_key "employee_invitations", "accounts"
+  add_foreign_key "employee_invitations", "accounts", on_delete: :cascade
+  add_foreign_key "employee_invitations", "teams"
+  add_foreign_key "employee_invitations", "teams", on_delete: :cascade
+  add_foreign_key "employee_invitations", "users"
+  add_foreign_key "employee_invitations", "users", on_delete: :cascade
   add_foreign_key "employees", "accounts"
   add_foreign_key "employees", "accounts", on_delete: :cascade
   add_foreign_key "employees", "teams"

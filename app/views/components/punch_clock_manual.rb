@@ -129,52 +129,15 @@ class PunchClockManual < ApplicationComponent
               end
             end
           end
+
           # set the time slot from_at
-          div(
-            class: "my-2 sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6"
-          ) do
-            whitespace
-            label(
-              for: "from_at",
-              class:
-                "block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5"
-            ) { helpers.t("from_at") }
-            div(class: "mt-2 sm:col-span-2 sm:mt-0") do
-              whitespace
-              input(
-                name: "punch[from_at]",
-                id: "from_at",
-                type: "datetime-local",
-                data: { pos_employee_target: "fromAt" },
-                autofocus: true,
-                class:
-                  "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
-              )
-            end
-          end
+          from_at
 
           # set the time slot to_at
-          div(
-            class: "my-2 sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6"
-          ) do
-            whitespace
-            label(
-              for: "to_at",
-              class:
-                "block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5"
-            ) { helpers.t("to_at") }
-            div(class: "mt-2 sm:col-span-2 sm:mt-0") do
-              whitespace
-              input(
-                name: "punch[to_at]",
-                id: "from_at",
-                type: "datetime-local",
-                data: { pos_employee_target: "toAt" },
-                class:
-                  "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
-              )
-            end
-          end
+          to_at
+
+          # set the comment
+          set_comment
 
           # set the free Options
           div(class: "hidden", data: { pos_employee_target: "freeOptions" }) do
@@ -298,6 +261,79 @@ class PunchClockManual < ApplicationComponent
         hidden_field :employee, :api_key, value: employee.access_token
         hidden_field :employee, :state, value: :in
         hidden_field :employee, :id, value: employee.id
+      end
+    end
+  end
+
+  def from_at
+    div(
+      class: "my-2 sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6"
+    ) do
+      whitespace
+      label(
+        for: "from_at",
+        class:
+          "block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5"
+      ) { helpers.t(".from_at") }
+      div(class: "mt-2 sm:col-span-2 sm:mt-0") do
+        whitespace
+        input(
+          name: "punch[from_at]",
+          id: "from_at",
+          type: "datetime-local",
+          data: { pos_employee_target: "fromAt" },
+          autofocus: true,
+          class:
+            "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
+        )
+      end
+    end
+  end
+
+  def to_at
+    div(
+      class: "my-2 sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6"
+    ) do
+      whitespace
+      label(
+        for: "to_at",
+        class:
+          "block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5"
+      ) { helpers.t(".to_at") }
+      div(class: "mt-2 sm:col-span-2 sm:mt-0") do
+        whitespace
+        input(
+          name: "punch[to_at]",
+          id: "from_at",
+          type: "datetime-local",
+          data: { pos_employee_target: "toAt" },
+          class:
+            "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
+        )
+      end
+    end
+  end
+
+  def set_comment
+    div(
+      class: "my-2 sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6"
+    ) do
+      whitespace
+      label(
+        for: "comment",
+        class:
+          "block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5"
+      ) { helpers.t(".comment") }
+      div(class: "mt-2 sm:col-span-2 sm:mt-0") do
+        whitespace
+        input(
+          name: "punch[comment]",
+          id: "punch_comment",
+          type: "text",
+          data: { pos_employee_target: "comment" },
+          class:
+            "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
+        )
       end
     end
   end

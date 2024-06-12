@@ -7,4 +7,10 @@ module PunchesHelper
   rescue
     ""
   end
+  def show_link_to_punch_card punch
+    lbl = punch.punched_at.strftime("%d/%m/%y %H:%M")
+    link_to(lbl, punch_card_url(punch.punch_card))
+  rescue
+    lbl
+  end
 end

@@ -1,0 +1,7 @@
+<tr class="gap-x-6 py-5">
+  <%= render_text_column value: link_to(employee_invitation.address, employee_invitation_url(employee_invitation)), table: :row, css: "truncate mort-link-primary" %>
+  <%= render_boolean_column value: employee_invitation.state, table: :row, css: "text-right" %>
+  <%= render_text_column value:display_employee_invition_state_date(employee_invitation), table: :row, css: " truncate" %>
+  <%= render_text_column value: link_to(employee_invitation.user.name, user_url(employee_invitation.user)), table: :row, css: "truncate mort-link-primary" %>
+  <%= render_datetime_column value: employee_invitation.updated_at, table: :row, css: "" %>
+</tr>
