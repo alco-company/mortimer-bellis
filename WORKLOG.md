@@ -34,6 +34,7 @@
 ### 12/6/2024
 
 * fix "(No route matches [PUT] "/pos/employee")"
+* fix discrepancy in Time.parse - use Time.zone.parse
 
 ### 11/6/2024
 

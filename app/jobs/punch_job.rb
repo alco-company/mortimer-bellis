@@ -6,8 +6,8 @@ class PunchJob < ApplicationJob
     employee = args[:employee]
     switch_locale(employee.locale) do
       user_time_zone(employee.time_zone) do
-        from_at = Time.parse args[:from_at]
-        to_at = Time.parse args[:to_at]
+        from_at = Time.zone.parse args[:from_at]
+        to_at = Time.zone.parse args[:to_at]
         reason = args[:reason]
         comment = args[:comment]
         ip = args[:ip]
