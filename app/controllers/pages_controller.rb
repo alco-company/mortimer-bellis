@@ -1,4 +1,5 @@
 class PagesController < MortimerController
+  before_action :authorize, except: :show
   skip_before_action :authenticate_user!, only: :show
   skip_before_action :ensure_accounted_user, only: :show
 
@@ -13,5 +14,9 @@ class PagesController < MortimerController
     # Only allow a list of trusted parameters through.
     def resource_params
       params.require(:page).permit(:slug, :title, :content)
+    end
+
+    def authorize
+      redirect_to root_path, alert: t(:unauthorized) unless current_user.superadmin?
     end
 end

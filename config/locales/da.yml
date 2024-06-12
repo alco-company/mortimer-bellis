@@ -20,7 +20,9 @@ da:
   pdf: Hent PDF
   records: poster
   delete_all_later: Alle poster slettes - i baggrunden, vent venligst...
-  
+  unauthorized: Du har ikke rettigheder til at gennemføre denne handling
+  cannot_change_role: Du kan ikke ændre din egen rolle til super_user!
+
   modal:
     destroy:
       attachment_deleted: Den vedhæftede fil blev slettet
