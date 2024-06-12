@@ -23,6 +23,8 @@ da:
   unauthorized: Du har ikke rettigheder til at gennemføre denne handling
   cannot_change_role: Du kan ikke ændre din egen rolle til super_user!
 
+  expected_time_zone: "Vi tror at den tidszone, der passer dig bedst er:"
+
   modal:
     destroy:
       attachment_deleted: Den vedhæftede fil blev slettet

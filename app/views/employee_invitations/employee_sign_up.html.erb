@@ -1,5 +1,18 @@
-<h1><%= @employee.account.name %></h1>
+<% content_for :head do %>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jstimezonedetect/1.0.7/jstz.min.js" integrity="sha512-pZ0i46J1zsMwPd2NQZ4IaL427jXE2RVHMk3uv/wPTNlBVp9AbB1L65/4YdrXRPLEmyZCkY9qYOOsQp44V4orHg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<% end %>
+<h1 class="text-xl"><%= I18n.t( "employee_signup.title", account: @employee.account.name) %></h1>
 <div id="employee_signup">
-  <p><%= I18n.t("employee_signup.introduction") %></p>
+  <p class="mt-2 mb-4"><%= I18n.t("employee_signup.introduction", inviter: @inviter, account: @employee.account.name) %></p>
   <%= render Employee.signup(@employee, signup_employees_url) %>
+
+  <div class="mort-field">
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+        var timezone = jstz.determine();
+        document.getElementById("user_time_zone").innerHTML = `<%= I18n.t(:expected_time_zone)%> ${timezone.name()}`;
+      });
+    </script>
+  </div>
+
 </div>
