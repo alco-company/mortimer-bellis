@@ -25,6 +25,7 @@ module SumPunches
           unless pc.nil?
             begin
               punches = employee.punches.where(punched_at: date.beginning_of_day..date.end_of_day).order(punched_at: :desc)
+              say "Found #{punches.size} punches for #{employee.name} on #{date}"
               case punches.size
               when 0; strange_no_punches
               when 1; one_punch pc, punches, employee, across_midnight, date
@@ -55,12 +56,14 @@ module SumPunches
       # and come back and do it again when the employee punches out'
       punches.update_all punch_card_id: pc.id
       pc.update work_minutes: (DateTime.current.to_i - punches.first.punched_at.to_i) / 60
+      say "Only one punch for #{employee.name} on #{date} - work_minutes set to #{pc.work_minutes}"
     end
 
     def two_punches(pc, punches)
       punches.update_all punch_card_id: pc.id
-      return unless punches.second.in? && punches.first.out?
+      return unless punches.first.in?
       pc.update work_minutes: (punches.first.punched_at - punches.second.punched_at) / 60
+      say "Two punches for #{employee.name} on #{date} - work_minutes set to #{pc.work_minutes}"
     end
 
     def more_punches(pc, punches, employee)

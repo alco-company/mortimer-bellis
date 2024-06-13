@@ -37,6 +37,7 @@
 
 * add stats on payroll_period (like today)
 * add work_minutes today on payroll_period
+* perfect the UI on pos/employee (some)
 
 ### 12/6/2024
 
