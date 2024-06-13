@@ -58,6 +58,21 @@ class Employee < ApplicationRecord
     Employees::Signup.new resource, action: url, editable: editable, enctype: "multipart/form-data"
   end
 
+  def minutes_this_payroll_period
+    sql = <<-SQL
+      select
+        sum(work_minutes) as work_minutes,
+        sum(break_minutes) as break_minutes 
+      from
+        punch_cards
+      where
+        account_id = #{account.id} and
+        employee_id = #{id} and
+        punches_settled_at is null
+    SQL
+    Employee.connection.select_all(sql).to_a[0]
+  end
+
   #
   # extend this method on the model to define the field formats
   # its a callback from the superform when rendering the form
