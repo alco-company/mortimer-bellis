@@ -26,10 +26,11 @@ module SumPunches
             begin
               punches = employee.punches.where(punched_at: date.beginning_of_day..date.end_of_day).order(punched_at: :desc)
               say "Found #{punches.size} punches for #{employee.name} on #{date}"
+              pc.update work_minutes: -1
               case punches.size
               when 0; strange_no_punches
               when 1; one_punch pc, punches, employee, across_midnight, date
-              when 2; two_punches pc, punches
+              when 2; two_punches pc, punches, employee
               else; more_punches pc, punches, employee
               end if punches.any?
             rescue => e
@@ -55,30 +56,35 @@ module SumPunches
       # this is the only punch of the day, so we'll calculate the time from the punch to now -
       # and come back and do it again when the employee punches out'
       punches.update_all punch_card_id: pc.id
-      pc.update work_minutes: (DateTime.current.to_i - punches.first.punched_at.to_i) / 60
+      work, ot1, ot2 = employee.divide_minutes((DateTime.current.to_i - punches.first.punched_at.to_i) / 60)
+      pc.update work_minutes: work, ot1_minutes: ot1, ot2_minutes: ot2, break_minutes: 0
       say "Only one punch for #{employee.name} on #{date} - work_minutes set to #{pc.work_minutes}"
     end
 
-    def two_punches(pc, punches)
+    def two_punches(pc, punches, employee)
       punches.update_all punch_card_id: pc.id
-      return unless punches.first.in?
-      pc.update work_minutes: (punches.first.punched_at - punches.second.punched_at) / 60
-      say "Two punches for #{employee.name} on #{date} - work_minutes set to #{pc.work_minutes}"
+      return unless punches.second.in?
+      work, ot1, ot2 = employee.divide_minutes((punches.first.punched_at - punches.second.punched_at) / 60)
+      pc.update work_minutes: work, ot1_minutes: ot1, ot2_minutes: ot2, break_minutes: 0
+      say "Two punches for #{employee.name} on #{pc.work_date} - work_minutes set to #{pc.work_minutes}"
     end
 
     def more_punches(pc, punches, employee)
       begin
         punches.update_all punch_card_id: pc.id
         counters = { work: [], break: [] }
-        stop = punches.first.punched_at
+        stop = (pc.work_date == Date.current) ? DateTime.current.to_i : punches.first.punched_at.to_i
         punches.each_with_index do |punch, i|
-          next if i == 0
+          stint = ((stop - punch.punched_at.to_i)  / 60)
+          if i == 0
+            next if punch.out?
+          end
 
           case punch.state
-          when "break"; counters[:break] << ((stop.to_i - punch.punched_at.to_i) / 60)
-          when "in"; counters[:work] << ((stop.to_i - punch.punched_at.to_i) / 60)
+          when "break"; counters[:break] << stint
+          when "in"; counters[:work] << stint
           end
-          stop = punch.punched_at
+          stop = punch.punched_at.to_i
         end
         work, ot1, ot2 = employee.divide_minutes counters[:work].sum
         pc.update work_minutes: work, ot1_minutes: ot1, ot2_minutes: ot2, break_minutes: counters[:break].sum

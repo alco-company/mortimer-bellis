@@ -18,7 +18,7 @@ class PosContextmenu < Phlex::HTML
   end
 
   def view_template
-    @folded ? folded : unfolded
+    unfolded
   end
 
   def folded
