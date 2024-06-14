@@ -19,6 +19,21 @@ module Punchable
       counters
     end
 
+    def minutes_this_payroll_period
+      sql = <<-SQL
+        select
+          sum(work_minutes) as work_minutes,
+          sum(break_minutes) as break_minutes
+        from
+          punch_cards
+        where
+          account_id = #{account.id} and
+          employee_id = #{id} and
+          punches_settled_at is null
+      SQL
+      Employee.connection.select_all(sql).to_a[0]
+    end
+
     def get_contract_minutes
       return contract_minutes if contract_minutes && contract_minutes > 0
       return team.contract_minutes if contract_minutes.nil?

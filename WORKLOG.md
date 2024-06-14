@@ -30,8 +30,13 @@
 * report on employee spent time
 * test edit profile  - name is an issue
 * translate menu on pos/employee
+* allow employee to close day listing (payroll_period)
 
 ## CHANGELOG
+
+### 14/6/2024
+
+* (undefined method `[]' for nil:NilClass) - punch_clock_base:50
 
 ### 13/6/2024
 

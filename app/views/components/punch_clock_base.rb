@@ -43,13 +43,17 @@ class PunchClockBase < ApplicationComponent
 
   def show_payroll
     div(class: "p-4") do
-      @edit ?
-        render(PunchClockManual.new(employee: employee)) :
-        counters = employee.minutes_this_payroll_period
+      if @edit
+        render(PunchClockManual.new(employee: employee))
+      else
+        counters = employee.minutes_this_payroll_period rescue []
+        counters["work_minutes"] ||= 0
+        counters["break_minutes"] ||= 0
         render Stats.new title: helpers.t(".stats_title"), stats: [
           { title: helpers.t(".worktime"), value: helpers.display_hours_minutes(counters["work_minutes"]) },
           { title: helpers.t(".breaks"), value: helpers.display_hours_minutes(counters["break_minutes"]) }
-        ]
+        ] if counters.any?
+      end
 
       list_punches ".payroll_punches", employee.punches.by_payroll_period(employee.punches_settled_at).order(punched_at: :desc), true, true, "payroll"
       div(class: "mb-32") { "&nbsp;".html_safe }
