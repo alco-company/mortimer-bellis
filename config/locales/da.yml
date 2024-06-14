@@ -83,6 +83,9 @@ da:
   pos:
     employee:
       show:
+        today: I dag
+        payroll_period: Lønperiode
+        profile: Profil
         in: Ind
         out: Ud
         break: Pause

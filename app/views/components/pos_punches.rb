@@ -89,6 +89,7 @@ class PosPunches < ApplicationComponent
   end
 
   def display_work(punch_card)
+    return "" if punch_card.nil?
     counters = {}
     if punch_card.work_date == Date.current
       counters = punch_card.employee.minutes_today_up_to_now
