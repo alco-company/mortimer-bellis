@@ -33,6 +33,10 @@
 
 ## CHANGELOG
 
+### 16/6/2024
+
+* fix error on sum_punches - when across midnight
+  
 ### 14/6/2024
 
 * (undefined method `[]' for nil:NilClass) - punch_clock_base:50

@@ -12,7 +12,7 @@ class Punch < ApplicationRecord
   scope :by_payroll_period, ->(payroll_period) { where(punch: payroll_period..) if payroll_period.present? }
   # scope :by_state, ->(state) { where(state: state) if state.present? }
 
-  # used by eg delete 
+  # used by eg delete
   def name
     "#{employee.name} #{punched_at}"
   end
