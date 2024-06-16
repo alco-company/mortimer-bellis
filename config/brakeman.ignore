@@ -7,7 +7,7 @@
       "check_name": "PermitAttributes",
       "message": "Potentially dangerous key allowed for mass assignment",
       "file": "app/controllers/punch_clocks_controller.rb",
-      "line": 6,
+      "line": 11,
       "link": "https://brakemanscanner.org/docs/warning_types/mass_assignment/",
       "code": "params.require(:punch_clock).permit(:account_id, :location_id, :name, :ip_addr, :last_punched_at, :access_token, :locale, :time_zone)",
       "render_path": null,
@@ -70,20 +70,43 @@
       "note": ""
     },
     {
-      "warning_type": "Mass Assignment",
-      "warning_code": 105,
-      "fingerprint": "365c345fbadf9e472207d79ea964cf944524893e89cb1dffc0540e951dff4ccd",
-      "check_name": "PermitAttributes",
-      "message": "Potentially dangerous key allowed for mass assignment",
-      "file": "app/controllers/users_controller.rb",
-      "line": 8,
-      "link": "https://brakemanscanner.org/docs/warning_types/mass_assignment/",
-      "code": "params.require(:user).permit(:account_id, :email, :role, :locale, :time_zone)",
+      "warning_type": "File Access",
+      "warning_code": 16,
+      "fingerprint": "2a7eef38507252116ed3ad8ccd4d9d8422d5fa6a362f11aa307e5794a60169b4",
+      "check_name": "FileAccess",
+      "message": "Model attribute used in file name",
+      "file": "app/models/concerns/export_pdf.rb",
+      "line": 18,
+      "link": "https://brakemanscanner.org/docs/warning_types/file_access/",
+      "code": "File.delete(Rails.root.join(\"tmp\", \"#{Current.user.id}_pdf_input.html\"))",
       "render_path": null,
       "location": {
         "type": "method",
-        "class": "UsersController",
-        "method": "resource_params"
+        "class": "ExportPdf",
+        "method": "pdf_file"
+      },
+      "user_input": "Current.user",
+      "confidence": "Weak",
+      "cwe_id": [
+        22
+      ],
+      "note": ""
+    },
+    {
+      "warning_type": "Mass Assignment",
+      "warning_code": 105,
+      "fingerprint": "40af1f23ecabe17e06ec464c14ec4c86b788c858fcca0463bf1e655933e5283c",
+      "check_name": "PermitAttributes",
+      "message": "Potentially dangerous key allowed for mass assignment",
+      "file": "app/controllers/dashboards_controller.rb",
+      "line": 73,
+      "link": "https://brakemanscanner.org/docs/warning_types/mass_assignment/",
+      "code": "params.require(:dashboard).permit(:account_id, :feed)",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "DashboardsController",
+        "method": "dashboard_params"
       },
       "user_input": ":account_id",
       "confidence": "High",
@@ -93,25 +116,48 @@
       "note": ""
     },
     {
-      "warning_type": "Mass Assignment",
-      "warning_code": 105,
-      "fingerprint": "6855783ec19f00da2a0c5fdee2eb9774aeedd1531181562943a45ab5934d17f4",
-      "check_name": "PermitAttributes",
-      "message": "Potentially dangerous key allowed for mass assignment",
-      "file": "app/controllers/punches_controller.rb",
-      "line": 64,
-      "link": "https://brakemanscanner.org/docs/warning_types/mass_assignment/",
-      "code": "params.require(:punch).permit(:account_id, :employee_id, :punch_clock_id, :punched_at, :state, :remote_ip)",
+      "warning_type": "File Access",
+      "warning_code": 16,
+      "fingerprint": "4a7741c011e68812906b537be26eb64e0322c462fd2c9c97a1560eef21cd60c1",
+      "check_name": "FileAccess",
+      "message": "Model attribute used in file name",
+      "file": "app/models/concerns/export_pdf.rb",
+      "line": 14,
+      "link": "https://brakemanscanner.org/docs/warning_types/file_access/",
+      "code": "File.open(Rails.root.join(\"tmp\", \"#{Current.user.id}_pdf_input.html\"), \"wb\")",
       "render_path": null,
       "location": {
         "type": "method",
-        "class": "PunchesController",
-        "method": "resource_params"
+        "class": "ExportPdf",
+        "method": "pdf_file"
       },
-      "user_input": ":account_id",
-      "confidence": "High",
+      "user_input": "Current.user",
+      "confidence": "Weak",
       "cwe_id": [
-        915
+        22
+      ],
+      "note": ""
+    },
+    {
+      "warning_type": "SQL Injection",
+      "warning_code": 0,
+      "fingerprint": "658042b7d1172faf12bdcdea5a4605a3d26b20a907658e11fa07150eb1ce162c",
+      "check_name": "SQL",
+      "message": "Possible SQL injection",
+      "file": "app/models/employee.rb",
+      "line": 25,
+      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
+      "code": "order(\"length(#{field}) DESC, #{field} DESC\")",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Employee",
+        "method": "order_by_number"
+      },
+      "user_input": "field",
+      "confidence": "Medium",
+      "cwe_id": [
+        89
       ],
       "note": ""
     },
@@ -122,7 +168,7 @@
       "check_name": "SQL",
       "message": "Possible SQL injection",
       "file": "app/models/punch_card.rb",
-      "line": 16,
+      "line": 17,
       "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
       "code": "where(\"(ot1_minutes + ot2_minutes) >= #{ot_minutes}\")",
       "render_path": null,
@@ -187,29 +233,6 @@
     {
       "warning_type": "Mass Assignment",
       "warning_code": 105,
-      "fingerprint": "9636e19d021f0f1177ae641fa0c3d58b5e7895639363d8b32d0edda2eb60c6f0",
-      "check_name": "PermitAttributes",
-      "message": "Potentially dangerous key allowed for mass assignment",
-      "file": "app/controllers/users_controller.rb",
-      "line": 8,
-      "link": "https://brakemanscanner.org/docs/warning_types/mass_assignment/",
-      "code": "params.require(:user).permit(:account_id, :email, :role, :locale, :time_zone)",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "UsersController",
-        "method": "resource_params"
-      },
-      "user_input": ":role",
-      "confidence": "Medium",
-      "cwe_id": [
-        915
-      ],
-      "note": ""
-    },
-    {
-      "warning_type": "Mass Assignment",
-      "warning_code": 105,
       "fingerprint": "9de2e82f9ed231bf5fc83c22c7af00c6f680cbf4f83900d3c7c1306626f63570",
       "check_name": "PermitAttributes",
       "message": "Potentially dangerous key allowed for mass assignment",
@@ -254,6 +277,29 @@
       "note": ""
     },
     {
+      "warning_type": "File Access",
+      "warning_code": 16,
+      "fingerprint": "d935c00599f0b8cd47fae5b211592de83f1f429133ba2b0f74243fa88805f08e",
+      "check_name": "SendFile",
+      "message": "Model attribute used in file name",
+      "file": "app/controllers/modal_controller.rb",
+      "line": 119,
+      "link": "https://brakemanscanner.org/docs/warning_types/file_access/",
+      "code": "send_file(PunchCard.pdf_file(html_content), :filename => (\"employees_state-#{Date.yesterday}.pdf\"))",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "ModalController",
+        "method": "process_punch_card_create"
+      },
+      "user_input": "PunchCard.pdf_file(html_content)",
+      "confidence": "Medium",
+      "cwe_id": [
+        22
+      ],
+      "note": ""
+    },
+    {
       "warning_type": "SQL Injection",
       "warning_code": 0,
       "fingerprint": "dcd729bac068e0b81cceee558a0ad17af38bd77493b75f4bfa24284107b9a160",
@@ -277,29 +323,6 @@
       "note": ""
     },
     {
-      "warning_type": "Mass Assignment",
-      "warning_code": 105,
-      "fingerprint": "fb222178f5d03b8ecaf3d2d9ca0010e8a8e54f2635196abf6371a8af6e8770b4",
-      "check_name": "PermitAttributes",
-      "message": "Potentially dangerous key allowed for mass assignment",
-      "file": "app/controllers/employees_controller.rb",
-      "line": 7,
-      "link": "https://brakemanscanner.org/docs/warning_types/mass_assignment/",
-      "code": "params.require(:employee).permit(:account_id, :team_id, :name, :pincode, :access_token, :last_punched_at, :state, :payroll_employee_ident, :punches_settled_at, :job_title, :birthday, :hired_at, :description, :email, :cell_phone, :pbx_extension, :contract_minutes, :contract_days_per_payroll, :contract_days_per_week, :flex_balance_minutes, :hour_pay, :ot1_add_hour_pay, :ot2_add_hour_pay, :hour_rate_cent, :ot1_hour_add_cent, :ot2_hour_add_cent, :tmp_overtime_allowed, :eu_state, :blocked, :locale, :time_zone)",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "EmployeesController",
-        "method": "resource_params"
-      },
-      "user_input": ":account_id",
-      "confidence": "High",
-      "cwe_id": [
-        915
-      ],
-      "note": ""
-    },
-    {
       "warning_type": "Denial of Service",
       "warning_code": 76,
       "fingerprint": "fe260ed1c21867d988aed9317f12aa068839cb08596beba91f8870a0013be1e8",
@@ -314,7 +337,7 @@
           "type": "controller",
           "class": "Pos::EmployeeController",
           "method": "index",
-          "line": 9,
+          "line": 12,
           "file": "app/controllers/pos/employee_controller.rb",
           "rendered": {
             "name": "pos/employee/index",
@@ -345,6 +368,6 @@
       "note": ""
     }
   ],
-  "updated": "2024-05-04 10:20:41 +0200",
+  "updated": "2024-06-16 15:51:41 +0200",
   "brakeman_version": "6.1.2"
 }

@@ -36,6 +36,7 @@
 ### 16/6/2024
 
 * fix error on sum_punches - when across midnight
+* brakeman - ignore false positives
   
 ### 14/6/2024
 
