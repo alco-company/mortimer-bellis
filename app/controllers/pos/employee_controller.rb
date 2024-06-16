@@ -12,11 +12,11 @@ class Pos::EmployeeController < Pos::PosController
   end
 
   def punches
-    @first_punch = Punch.find(params[:id])
-    @punch_clock = PunchClock.find(params[:punch_clock_id])
+    @first_punch = Punch.find(params[:id]) rescue false
+    @punch_clock = (PunchClock.find(params[:punch_clock_id]) rescue false) if params[:punch_clock_id].present?
     @resource = @employee = @first_punch.employee
     if @first_punch
-      if @punch_clock 
+      if @punch_clock
         punch_clock_time_zone do
           render_punches
         end

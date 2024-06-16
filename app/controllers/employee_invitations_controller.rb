@@ -9,6 +9,7 @@ class EmployeeInvitationsController < MortimerController
   def show
     if params[:api_key].present? && params[:api_key] == @resource.access_token
       @resource.update state: :opened, seen_at: DateTime.current
+      @inviter = @resource.user.name rescue "not disclosed"
       @employee = Employee.new account: @resource.account, email: @resource.address, locale: @resource.user.locale, time_zone: @resource.user.time_zone, team: @resource.team, access_token: @resource.access_token
       render "employee_sign_up"
     else
@@ -49,7 +50,7 @@ class EmployeeInvitationsController < MortimerController
         )
         if resource
           case resource.address
-          in /^([^@]+)@(.+)$/; EmployeeMailer.with(invitation: resource).invite.deliver_later
+          in /^([^@]+)@(.+)$/; EmployeeMailer.with(invitation: resource, sender: current_user.name).invite.deliver_later
           in /^[0-9]{8}$/; EmployeeSms.new(invitation: resource).invite
           end
 

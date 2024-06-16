@@ -2,13 +2,12 @@
 
 module CronTask
   class Presenter
-
     def initialize(field_values)
       @field_values = field_values
     end
 
     def to_s
-      rows.collect{|r| r.join "
+      rows.collect { |r| r.join "
         "}.to_s
       # Terminal::Table.new do |t|
       #   t.rows = rows
@@ -20,17 +19,17 @@ module CronTask
 
     def rows
       # field_names.zip(@field_values.map{ |value| value.join(' ') })
-      field_names.zip(@field_values.map{ |value| value.join(' ') })
+      field_names.zip(@field_values.map { |value| value.join(" ") })
     end
 
     def field_names
       [
-        'minute',
-        'hour',
-        'day of month',
-        'month',
-        'day of week',
-        'command'
+        "minute",
+        "hour",
+        "day of month",
+        "month",
+        "day of week",
+        "command"
       ]
     end
   end

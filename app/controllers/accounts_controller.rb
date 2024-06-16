@@ -10,8 +10,8 @@ class AccountsController < MortimerController
 
     def authorize
       return if current_user.superadmin?
-      redirect_to root_path, alert: "fejl" if current_user.user?
-      redirect_to root_path, alert: "fejl" if params["action"] == "index"
-      redirect_to root_path, alert: "fejl" if params["id"] != Current.account.id.to_s
+      redirect_to root_path, alert: t(:unauthorized) and return if current_user.user?
+      redirect_to root_path, alert: t(:unauthorized) and return if params["action"] == "index"
+      redirect_to root_path, alert: t(:unauthorized) and return unless params["id"] == Current.account.id.to_s
     end
 end

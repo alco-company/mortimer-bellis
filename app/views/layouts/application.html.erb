@@ -8,17 +8,18 @@ def items
     if current_user.superadmin?
       items += [
         { title: I18n.t('menu.accounts'), url: accounts_url },
-        { title: I18n.t('menu.pages'), url: pages_url }
+        { title: I18n.t('menu.pages'), url: pages_url },
+        { title: I18n.t('menu.users'), url: users_url },
       ] 
     end
     if current_user.admin?
       items += [
-        { title: I18n.t('menu.account'), url: account_url(Current.account) }
+        { title: I18n.t('menu.account'), url: account_url(Current.account) },
+        { title: I18n.t('menu.users'), url: users_url },
       ] 
     end
     items + [
       { title: I18n.t('menu.teams'), url: teams_url },
-      { title: I18n.t('menu.users'), url: users_url },
       { title: I18n.t('menu.locations'), url: locations_url },
       { title: I18n.t('menu.punch_clocks'), url: punch_clocks_url },
       { title: I18n.t('menu.employees'), url: employees_url },
@@ -47,13 +48,16 @@ end
     <%= stylesheet_link_tag "tailwind", "inter-font", data_turbo_track: "reload" %>      
     <%= stylesheet_link_tag "application", data_turbo_track: "reload" %>      
     <%= javascript_importmap_tags %>      
-
+    <%= yield :head %>
   </head>
   <body class="h-full w-full">
     <%= render NavigationComponent.new items: items  %>
     <main class="m-4 mt-20">
       <%= yield %>
     </main>
+    <%# 
+    in honor of Tailwind not being able to know 'tags' in advance
+    span(class: "hidden mort-flash-info mort-flash-error mort-flash-success mort-flash-warning mort-flash-notice mort-flash-timedout mort-flash-alert") %>
     <%= render FlashComponent.new flash: flash %>
     <remote-modal-container></remote-modal-container>
   </body>

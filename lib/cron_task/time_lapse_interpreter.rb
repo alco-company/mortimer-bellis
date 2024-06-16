@@ -17,11 +17,11 @@ module CronTask
     attr_reader :interval, :field
 
     def expanded_set
-      if field == '*'
+      if field == "*"
         every_unit_field
-      elsif field.include?('/')
+      elsif field.include?("/")
         step_field
-      elsif field.include?('-')
+      elsif field.include?("-")
         range_field
       else
         single_unit_field
@@ -29,12 +29,12 @@ module CronTask
     end
 
     def step_field
-      time_units, step = field.split('/')
+      time_units, step = field.split("/")
 
-      if time_units == '*'
+      if time_units == "*"
         step_values(step)
       else
-        min, max = time_units.split('-').map(&:to_i)
+        min, max = time_units.split("-").map(&:to_i)
         step_values(step).select { |unit| unit >= min && unit <= max }
       end
     end
@@ -44,12 +44,12 @@ module CronTask
     end
 
     def range_field
-      min, max = field.split('-').map(&:to_i)
+      min, max = field.split("-").map(&:to_i)
       every_unit_field.select { |unit| unit >= min && unit <= max }
     end
 
     def single_unit_field
-      field.split(',').
+      field.split(",").
         select { |unit| unit unless unit.to_i > every_unit_field.sort.last }.
         tap { |units| units << 0 if units.empty? }
     end

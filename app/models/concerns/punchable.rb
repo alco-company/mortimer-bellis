@@ -19,6 +19,21 @@ module Punchable
       counters
     end
 
+    def minutes_this_payroll_period
+      sql = <<-SQL
+        select
+          sum(work_minutes) as work,
+          sum(break_minutes) as break
+        from
+          punch_cards
+        where
+          account_id = #{account.id} and
+          employee_id = #{id} and
+          punches_settled_at is null
+      SQL
+      Employee.connection.select_all(sql).to_a[0]
+    end
+
     def get_contract_minutes
       return contract_minutes if contract_minutes && contract_minutes > 0
       return team.contract_minutes if contract_minutes.nil?
@@ -78,8 +93,10 @@ module Punchable
 
     def divide_minutes(minutes)
       work =    [ minutes, (get_contract_minutes || 0) ].min
-      return [ work, 0, 0 ] if get_allowed_ot_minutes < 0
-      max_ot = [ (get_allowed_ot_minutes || 0), 180 ].min
+      work = minutes if work == 0 && minutes > 0
+      gaom =   get_allowed_ot_minutes
+      return [ minutes, 0, 0 ] if gaom < 0
+      max_ot = [ (gaom || 0), 180 ].min
       ot1 =     [ [ (minutes - work), 0 ].max, max_ot ].min
       ot2 =     [ [ (minutes - work - ot1), 0 ].max, (max_ot - ot1) ].min
       [ work, ot1, ot2 ]

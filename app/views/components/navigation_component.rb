@@ -226,7 +226,7 @@ class NavigationComponent < ApplicationComponent
     end
   end
 
-  def show_locale_time_zone color="text-mortimer"
+  def show_locale_time_zone(color = "text-mortimer")
     mc = superadmin ? "text-pink-400" : color
     str_lt = Current.user ?
       "#{Current.locale}/#{Current.user.time_zone rescue ""}" :

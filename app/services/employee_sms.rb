@@ -13,7 +13,5 @@ class EmployeeSms
     # I18n.t("employee_mailer.invite.regards")
     # @company
     # @sender
-
-
   end
 end

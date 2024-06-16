@@ -59,14 +59,15 @@ da:
       post: Invitationen til medarbejdere blev slettet
 
   employee_signup:
-    introduction: "Du er blevet inviteret til at oprette en medarbejder profil. Udfyld felterne og klik på knappen for at komme i gang."
+    title: Tidsregistrering hos %{account}
+    introduction: "Du er blevet inviteret af %{inviter} hos %{account} til at oprette en medarbejder profil. Udfyld felterne og klik på knappen for at komme i gang."
 
   employee_mailer:
     invite:
-      title: "Invitation til at oprette en medarbejder profil"
-      introduction: "Du er blevet inviteret til at oprette en medarbejder profil. Klik på linket for at komme i gang."
+      title: Tidsregistrering hos %{account}
+      introduction: "Du er blevet inviteret af %{inviter} hos %{account} til at oprette en medarbejder profil."
       subject: "Invitation til at oprette en medarbejder profil"
-      action: "Du er blevet inviteret til at oprette en medarbejder profil. Klik på linket for at komme i gang: %{url}"
+      action: "Klik på linket for at komme i gang: %{url}"
       regards: "Med venlig hilsen"
 
   employees:

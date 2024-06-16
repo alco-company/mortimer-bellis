@@ -32,7 +32,7 @@ class PunchClockHeader < ApplicationComponent
         h2(class: "uppercase text-xl text-nowrap text-gray-300") { @resource.name rescue "" }
       end
       div(class: "pr-2 flex items-center w-full") do
-        if @employee.mugshot.attached? 
+        if @employee.mugshot.attached?
           image_tag(@employee.mugshot, class: "h-8 w-8 rounded-full mr-4")
         end
         span(class: "text-gray-700 text-nowrap text-xl") { @employee&.name }

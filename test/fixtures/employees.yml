@@ -6,9 +6,10 @@ one:
   name: MyString
   pincode: MyString
   payroll_employee_ident: MyString
-  access_token: MyString
+  access_token: 123
   last_punched_at: 2024-04-25 12:49:56
-  state: OUT
+  state: out
+  time_zone: Copenhagen
 
 two:
   account: two
@@ -16,6 +17,7 @@ two:
   name: MyString
   pincode: MyString
   payroll_employee_ident: MyString
-  access_token: MyString
+  access_token: abc
   last_punched_at: 2024-04-25 12:49:56
-  state: OUT
+  state: out
+  time_zone: London

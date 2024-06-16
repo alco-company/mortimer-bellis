@@ -154,7 +154,7 @@ class ApplicationForm < Superform::Rails::Form
       super.merge(type: "boolean")
     end
     def template(&)
-      div(class: attributes[:class], data: { controller: "boolean"}) do
+      div(class: attributes[:class], data: { controller: "boolean" }) do
         input(name: dom.name, data: { boolean_target: "input" }, type: :hidden, value: field.value ? "1" : "0")
         button(
           type: "button",

@@ -1,6 +1,6 @@
-<h1><%= I18n.t("employee_mailer.invite.title") %></h1>
+<h1><%= I18n.t("employee_mailer.invite.title", account: @company) %></h1>
 <p>
-  <%= I18n.t("employee_mailer.invite.introduction") %>
+  <%= I18n.t("employee_mailer.invite.introduction", inviter: @sender, account: @company) %>
 </p>
 <p>
   <%= I18n.t("employee_mailer.invite.action", url: @url) %>

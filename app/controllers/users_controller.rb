@@ -11,7 +11,7 @@ class UsersController < MortimerController
     if params[:user][:role].present? &&
       !Current.user.superadmin? &&
       [ 0, "0", "superadmin", "Superadmin", "SUPERADMIN" ].include?(params[:user][:role])
-      redirect_to edit_resource_url, error: "You are not authorized to change the role to superadmin." and return
+      redirect_to edit_resource_url, error: t(:cannot_change_role) and return
     end
     super
   end
@@ -23,6 +23,6 @@ class UsersController < MortimerController
     end
 
     def authorize
-      redirect_to root_path, alert: "fejl" if current_user.user?
+      redirect_to root_path, alert: t(:unauthorized) if current_user.user?
     end
 end

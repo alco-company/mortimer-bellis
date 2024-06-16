@@ -3,6 +3,7 @@
 one:
   account: one
   user: one
+  team: one
   address: MyString
   state: 1
   invited_at: 2024-06-04 17:28:36
@@ -12,6 +13,7 @@ one:
 two:
   account: two
   user: two
+  team: two
   address: MyString
   state: 1
   invited_at: 2024-06-04 17:28:36

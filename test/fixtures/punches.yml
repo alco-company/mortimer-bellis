@@ -1,17 +1,17 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  account: one
-  employee: one
-  punch_clock: MyString
-  punched_at: 2024-04-29 22:03:40
-  state: MyString
-  remote_ip: MyString
+# one:
+#   account: one
+#   employee: one
+#   punch_clock: MyString
+#   punched_at: 2024-04-29 22:03:40
+#   state: MyString
+#   remote_ip: MyString
 
-two:
-  account: two
-  employee: two
-  punch_clock: MyString
-  punched_at: 2024-04-29 22:03:40
-  state: MyString
-  remote_ip: MyString
+# two:
+#   account: two
+#   employee: two
+#   punch_clock: MyString
+#   punched_at: 2024-04-29 22:03:40
+#   state: MyString
+#   remote_ip: MyString

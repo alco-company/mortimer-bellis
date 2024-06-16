@@ -6,20 +6,20 @@ class PunchJob < ApplicationJob
     employee = args[:employee]
     switch_locale(employee.locale) do
       user_time_zone(employee.time_zone) do
-        from_at = Time.parse args[:from_at]
-        to_at = Time.parse args[:to_at]
+        from_at = Time.zone.parse args[:from_at]
+        to_at = Time.zone.parse args[:to_at]
         reason = args[:reason]
         comment = args[:comment]
         ip = args[:ip]
         begin
-          if from_at.to_date == to_at.to_date
+          if (from_at.to_date == to_at.to_date) || (to_at.hour < from_at.hour)
             from_at, to_at = setTimeSlot(employee, reason, from_at.to_datetime, to_at.to_datetime, from_at.to_datetime)
-            punch_set(employee, reason, ip, from_at.to_datetime, to_at.to_datetime, comment)
+            punch_it!(employee, reason, ip, from_at.to_datetime, to_at.to_datetime, comment)
             PunchCardJob.new.perform(account: employee.account, employee: employee, date: from_at)
           else
             (from_at.to_date..to_at.to_date).each do |date|
               f_at, t_at = setTimeSlot(employee, reason, from_at.to_datetime, to_at.to_datetime, date.to_datetime)
-              punch_set(employee, reason, ip, f_at, t_at, comment)
+              punch_it!(employee, reason, ip, f_at, t_at, comment)
             end
             PunchCardJob.new.perform(account: employee.account, employee: employee, from_at: from_at.to_date, to_at: to_at.to_date)
           end
@@ -33,7 +33,7 @@ class PunchJob < ApplicationJob
     end
   end
 
-  def punch_set(employee, reason, ip, from_at, to_at, comment = nil)
+  def punch_it!(employee, reason, ip, from_at, to_at, comment = nil)
     punch_clock = PunchClock.by_account(employee.account).first
     Punch.create! account: employee.account, employee: employee, punch_clock: punch_clock, punched_at: from_at, state: reason, remote_ip: ip, comment: comment
     Punch.create! account: employee.account, employee: employee, punch_clock: punch_clock, punched_at: to_at, state: :out, remote_ip: ip, comment: comment
@@ -43,13 +43,14 @@ class PunchJob < ApplicationJob
     if reason =~ /sick/
       [ (date.beginning_of_day + 7.hours), date.beginning_of_day + 7.hours + employee.get_contract_minutes_per_day.minutes ]
     else
-      hour = from_at.hour
+      fhour = from_at.hour
       minute = from_at.min
-      from_at = date.beginning_of_day + hour.hours + minute.minutes
+      from_at = date.beginning_of_day + fhour.hours + minute.minutes
 
-      hour = to_at.hour
+      thour = to_at.hour
       minute = to_at.min
-      to_at = date.beginning_of_day + hour.hours + minute.minutes
+      date = to_at.to_date if thour < fhour
+      to_at = date.beginning_of_day + thour.hours + minute.minutes
       [ from_at, to_at ]
     end
   rescue

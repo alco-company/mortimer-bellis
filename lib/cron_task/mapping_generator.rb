@@ -1,4 +1,4 @@
-require 'cron_task/time_lapse_interpreter'
+require "cron_task/time_lapse_interpreter"
 
 module CronTask
   class MappingGenerator
@@ -33,7 +33,7 @@ module CronTask
     end
 
     def unix_command
-      [units[5..-1].join(' ')]
+      [ units[5..-1].join(" ") ]
     end
 
     def time_fields

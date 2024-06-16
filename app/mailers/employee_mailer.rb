@@ -21,7 +21,7 @@ class EmployeeMailer < ApplicationMailer
     @invitation = params[:invitation]
     @url = employee_invitation_url(@invitation, api_key: @invitation.access_token)
     @company = "M O R T I M E R"
-    @sender = "John Doe"
+    @sender = params[:sender]
     mail to: @invitation.address, subject: I18n.t("employee_mailer.invite.subject")
   end
 

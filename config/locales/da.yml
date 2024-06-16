@@ -20,7 +20,11 @@ da:
   pdf: Hent PDF
   records: poster
   delete_all_later: Alle poster slettes - i baggrunden, vent venligst...
-  
+  unauthorized: Du har ikke rettigheder til at gennemføre denne handling
+  cannot_change_role: Du kan ikke ændre din egen rolle til super_user!
+
+  expected_time_zone: "Vi tror at den tidszone, der passer dig bedst er:"
+
   modal:
     destroy:
       attachment_deleted: Den vedhæftede fil blev slettet
@@ -79,6 +83,9 @@ da:
   pos:
     employee:
       show:
+        today: I dag
+        payroll_period: Lønperiode
+        profile: Profil
         in: Ind
         out: Ud
         break: Pause

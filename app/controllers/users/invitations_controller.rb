@@ -8,7 +8,7 @@ class Users::InvitationsController < Devise::InvitationsController
   private
 
     def configure_permitted_parameters
-      devise_parameter_sanitizer.permit(:invite, keys: [ :account_id, :locale, :time_zone])
+      devise_parameter_sanitizer.permit(:invite, keys: [ :account_id, :locale, :time_zone ])
     end
 
     def after_invite_path_for(inviter, invitee = nil)

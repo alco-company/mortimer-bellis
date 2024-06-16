@@ -1,6 +1,6 @@
 <%= t("devise.mailer.invitation_instructions.hello", email: @resource.email) %>
 
-<%= t("devise.mailer.invitation_instructions.someone_invited_you", url: root_url) %>
+<%= t("devise.mailer.invitation_instructions.someone_invited_you", url: root_url, sender: @resource.invited_by.name, account: @resource.account.name) %>
 
 <%= accept_invitation_url(@resource, invitation_token: @token) %>
 
@@ -9,3 +9,8 @@
 <% end %>
 
 <%= t("devise.mailer.invitation_instructions.ignore") %>
+
+
+<%= t("devise.mailer.invitation_instructions.regards") %>
+<%= @resource.account.name %>
+<%= @resource.invited_by.name %>

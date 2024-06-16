@@ -1,21 +1,21 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  account: one
-  employee: one
-  work_date: 2024-04-29
-  work_minutes: 1
-  ot1_minutes: 1
-  ot2_minutes: 1
-  break_minutes: 1
-  punches_settled_at: 2024-04-29 13:37:00
+# one:
+#   account: one
+#   employee: one
+#   work_date: 2024-04-29
+#   work_minutes: 1
+#   ot1_minutes: 1
+#   ot2_minutes: 1
+#   break_minutes: 1
+#   punches_settled_at: 2024-04-29 13:37:00
 
-two:
-  account: two
-  employee: two
-  work_date: 2024-04-29
-  work_minutes: 1
-  ot1_minutes: 1
-  ot2_minutes: 1
-  break_minutes: 1
-  punches_settled_at: 2024-04-29 13:37:00
+# two:
+#   account: two
+#   employee: two
+#   work_date: 2024-04-29
+#   work_minutes: 1
+#   ot1_minutes: 1
+#   ot2_minutes: 1
+#   break_minutes: 1
+#   punches_settled_at: 2024-04-29 13:37:00
