@@ -44,7 +44,7 @@ class PosPunches < ApplicationComponent
   def display_date(punch, employee, punch_clock)
     div(class: "flex") do
       span(class: "mr-4") { punch.punched_at.to_date.to_s }
-      folded ? 
+      folded ?
         link_to(helpers.pos_employee_punches_url(id: punch.id, employee_id: employee&.id, punch_clock_id: punch_clock&.id), data: { turbo_stream: "" }) do
           whitespace
           span(class: "sr-only") { "Get todays punches" }

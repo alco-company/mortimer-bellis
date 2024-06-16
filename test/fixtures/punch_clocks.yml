@@ -3,10 +3,10 @@
 one:
   account: one
   location: one
-  name: MyString
+  name: Employee Own PunchClock
   ip_addr: 1.2.3.4
   last_punched_at: 2024-04-24 19:58:47
-  access_token: MyString
+  access_token: 123
   locale: da
   time_zone: Copenhagen
 

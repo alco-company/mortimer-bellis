@@ -38,7 +38,7 @@ class ApplicationJob < ActiveJob::Base
       Time.use_zone("Europe/Copenhagen", &block) :
       Time.use_zone(timezone, &block)
   end
-  
+
 
   private
 end

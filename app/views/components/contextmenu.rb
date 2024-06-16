@@ -81,7 +81,7 @@ class Contextmenu < Phlex::HTML
       link_to(
         helpers.modal_new_url(modal_form: "delete", resource_class: resource_class.to_s.underscore, modal_next_step: "accept"),
         data: { turbo_stream: true },
-      # link_to helpers.delete_all_url(),
+        # link_to helpers.delete_all_url(),
         # data: { turbo_method: :delete, turbo_confirm: "Are you sure?", turbo_stream: true, action: "click->contextmenu#hide" },
         class: "block px-3 py-1 text-sm leading-6 text-gray-900",
         role: "menuitem",

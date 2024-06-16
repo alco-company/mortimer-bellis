@@ -119,7 +119,7 @@ module Queueable
 
     #
     # if rrule contains /^RRULE*/ dechiffre the rrule
-    # otherwise consider it a cron schedule - https://en.wikipedia.org/wiki/Cron#Overview 
+    # otherwise consider it a cron schedule - https://en.wikipedia.org/wiki/Cron#Overview
     #
     #
     def next_run(schedule, first = true)

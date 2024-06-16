@@ -37,6 +37,7 @@
 
 * fix error on sum_punches - when across midnight
 * brakeman - ignore false positives
+* format code - rubocop -a
   
 ### 14/6/2024
 
