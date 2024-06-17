@@ -1,6 +1,7 @@
 <!-- generic_header.html -------------------------------------------------------------->
 <title>M O R T I M E R <%= " - D E V " if Rails.env.local? %></title>
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
 <%= csrf_meta_tags %>
@@ -12,13 +13,13 @@
 <link rel="icon" type="image/png" sizes="16x16" href="<%= asset_path('favicon-16x16.png') %>">
 <link rel="mask-icon" href="<%= asset_path('safari-pinned-tab.svg') %>" color="#5bbad5">
 <meta name="application-name" content="Mortimer">
-<meta name="theme-color" content="#ffffff">
+<meta name="theme-color" content="#0284c7">
 
-<%# <link rel="manifest" crossorigin="use-credentials" href="/manifest.json?start_url=<%= request.url %>"> %>
-<%#= tag :meta, name: :vapid_public_key, content: Rails.application.credentials.vapid.public_key %>
+<link rel="preconnect" href="https://rsms.me/">
+<link rel="stylesheet" href="https://rsms.me/inter/inter.css">
 
-<%= stylesheet_link_tag "tailwind", data_turbo_track: "reload" %>
-<%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+<%= stylesheet_link_tag "tailwind", "inter-font", data_turbo_track: "reload" %>
+<%= stylesheet_link_tag "application", data_turbo_track: "reload" %>
 <%= javascript_importmap_tags %>
 
 <%= yield :head %>

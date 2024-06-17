@@ -5,20 +5,20 @@
 * when we need a blogging engine - https://github.com/kuyio/bloak
 * some day - down the road we will need measured - https://github.com/Shopify/measured
 * make the move to XRB - https://socketry.github.io/xrb-rails/guides/getting-started/index
-* endless scroll - https://www.stefanwienert.de/blog/2021/04/17/endless-scroll-with-turbo-streams/
 * add litestream - https://fractaledmind.github.io/2024/04/15/sqlite-on-rails-the-how-and-why-of-optimal-performance/
 * add handling of constants - https://dev.to/vladhilko/say-goodbye-to-messy-constants-a-new-approach-to-moving-constants-away-from-your-model-58i1
 * add Traefik dashboard to traefik.mortimer.pro - https://www.luizkowalski.net/traefik-with-kamal-tips-and-tricks/
+* add Thruster - https://nts.strzibny.name/running-thruster-rails-kamal/
+* install and configure Harbor - open source Registry - https://goharbor.io/
 * add exporting ICS files - https://www.driftingruby.com/episodes/exporting-ics-files
 * add employee SMS service - welcome, EU state report
 * add blackhole
+* endless scroll - https://www.stefanwienert.de/blog/2021/04/17/endless-scroll-with-turbo-streams/
 * add Stripe payments - https://gorails.com/episodes/one-time-payments-with-pay-and-stripe
 * add employee email - welcome, EU state report
 * gem "mission_control-jobs"
-* install and configure Harbor - open source Registry - https://goharbor.io/
 * add employee calendar - duty, free, holiday
 * add web push notifications
-* add Thruster - https://nts.strzibny.name/running-thruster-rails-kamal/
 * gem fugit - more prominent substitute for CronTask
 * make locale and time_zone selectable on sign_up
 * check for password on file upload
@@ -31,6 +31,7 @@
 * test edit profile  - name is an issue
 * handle payroll_period => for payroll_processing and not
 * stack flash messages
+* yellow "tag" showing comment on punch
 
 ## CHANGELOG
 
@@ -39,6 +40,7 @@
 * make 'traefik' answer to ur.alco.company
 * make 'traefik' not answer to ur.alco.company - but app.mortimer.pro
 * make the app list as 'app.mortimer.pro'
+* proper favicon - wip
 
 ### 16/6/2024
 
