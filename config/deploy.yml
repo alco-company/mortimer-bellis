@@ -20,7 +20,7 @@ servers:
     labels:
       traefik.enable: true
       traefik.http.routers.mortimer.entrypoints: websecure
-      traefik.http.routers.mortimer.rule: Host(`bellis.mortimer.pro`)
+      traefik.http.routers.mortimer.rule: Host(`bellis.mortimer.pro`) || Host(`ur.alco.company`)
       traefik.http.routers.mortimer.tls.certresolver: letsencrypt
       traefik.http.routers.mortimer.tls.domains[0].main: bellis.mortimer.pro
       traefik.http.routers.mortimer.tls.domains[0].sans: bellis.mortimer.pro
