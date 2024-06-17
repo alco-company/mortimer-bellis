@@ -80,6 +80,13 @@ da:
     black: Sort
     white: Hvid
 
+  pages:
+    list:
+      slug: URL
+      title: Titel
+      body: Indhold
+      updated_at: Opdateret den
+      created_at: Oprettet den
   pos:
     employee:
       show:

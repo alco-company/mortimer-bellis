@@ -41,6 +41,7 @@
 * make 'traefik' not answer to ur.alco.company - but app.mortimer.pro
 * make the app list as 'app.mortimer.pro'
 * proper favicon - wip
+* work on translations
 
 ### 16/6/2024
 

@@ -91,6 +91,8 @@ da:
       phone: Telefon
       pincode: Pinkode
       punching_absence: Kun fravær
+      locale: Sprog
+      time_zone: Tidszone
       state: Status
       updated_at: Opdateret den
 

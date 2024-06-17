@@ -44,6 +44,7 @@ da:
       new: Ny stempling
       title: Stemplinger
       name: Medarbejder 
+      punch_clock: Stempelur
       punched_at: Stemplet den 
       state: Status
       updated_at: Opdateret den

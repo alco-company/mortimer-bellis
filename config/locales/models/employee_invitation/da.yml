@@ -1,0 +1,10 @@
+da:
+  employee_invitations:
+    list:
+      title: Medarbejder invitationer
+      new: Ny medarbejder invitation
+      address: Emailadresse
+      state: Status
+      state_date: Status dato
+      invited_by: Inviteret af
+      updated_at: Opdateret den
