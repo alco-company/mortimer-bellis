@@ -30,8 +30,14 @@
 * report on employee spent time
 * test edit profile  - name is an issue
 * handle payroll_period => for payroll_processing and not
+* stack flash messages
 
 ## CHANGELOG
+
+### 17/6/2024
+
+* make 'traefik' answer to ur.alco.company
+* make 'traefik' not answer to ur.alco.company - but app.mortimer.pro
 
 ### 16/6/2024
 
