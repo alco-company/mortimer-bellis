@@ -38,6 +38,7 @@
 
 * make 'traefik' answer to ur.alco.company
 * make 'traefik' not answer to ur.alco.company - but app.mortimer.pro
+* make the app list as 'app.mortimer.pro'
 
 ### 16/6/2024
 
