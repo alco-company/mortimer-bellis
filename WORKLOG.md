@@ -42,6 +42,7 @@
 * make the app list as 'app.mortimer.pro'
 * proper favicon - wip
 * work on translations
+* fix favicon
 
 ### 16/6/2024
 
