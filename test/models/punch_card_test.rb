@@ -106,6 +106,22 @@ class PunchCardTest < ActiveSupport::TestCase
     assert_equal PunchCard.last.work_minutes, 195
   end
 
+  test "test two punches - in, out - across midnight" do
+    p_at = nil
+    assert @employee.out?
+    [ [ "2024-06-15T21:55:14", "in" ], [ "2024-06-16T06:55:14", "out" ] ].each do |punched_at, state|
+      punch_params = { "employee"=> { "api_key"=>"123", "state"=> state, "id"=>"93", "punched_at"=> punched_at } }
+      Time.use_zone(@employee.time_zone) { @employee.punch @punch_clock, punch_params["employee"]["state"], "1.2.3.4", punch_params["employee"]["punched_at"] }
+      p_at = punched_at
+    end
+    assert Punch.count == 2
+    assert @employee.punches.last.out?
+    assert Time.use_zone(@employee.time_zone) { Time.zone.parse(p_at) == Punch.last.punched_at.to_datetime }
+    PunchCard.recalculate(employee: @employee, date: Punch.last.punched_at.to_date)
+    assert PunchCard.count == 1
+    assert PunchCard.last.work_minutes == 540
+  end
+
   test "test four punches - in, break, in, out - across midnight" do
     p_at = nil
     assert @employee.out?
