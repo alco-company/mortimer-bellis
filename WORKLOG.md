@@ -37,6 +37,7 @@
 ### 17/6/2024
 
 * make 'traefik' answer to ur.alco.company
+* make 'traefik' not answer to ur.alco.company - but app.mortimer.pro
 
 ### 16/6/2024
 
