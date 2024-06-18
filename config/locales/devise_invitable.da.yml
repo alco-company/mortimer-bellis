@@ -20,10 +20,13 @@ da:
         submit_button: "Indstil adgangskoden"
     mailer:
       invitation_instructions:
+        page_title: "Invitation til at oprette en brugerprofil på Mortimer"
         subject: "Invitation til at oprette en brugerprofil på  M O R T I M E R"
-        hello: "Hej %{email},"
-        someone_invited_you: "%{sender} hos %{account} har inviteret dig til at færdiggøre oprettelsen af en brugerprofil på %{url}. Du kan acceptere invitationen ved at bruge link'et her nedenfor."
-        accept: "Acceptér invitationen"
+        hi: "Hej"
+        title: "Er %{email} din email adresse?"
+        introduction: "%{sender} hos %{account} har inviteret dig til at færdiggøre oprettelsen af en brugerprofil på %{url}. Du kan acceptere invitationen ved at trykke på knappen her nedenfor."
+        accept: "Ja det er min email adresse"
+        action: "Jeg accepterer invitationen"
         accept_until: "Invitationen er gyldig indtil %{due_date}."
         ignore: "Ønsker du ikke at acceptere invitationen, behøver du intet at gøre (måske bortset fra evt at smide email'en bort). Din bruger konto bliver først oprettet i det øjeblik, du klikker på link'et her ovenfor, og derefter angiver din adgangskode."
         regards: "Med venlig hilsen"

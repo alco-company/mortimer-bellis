@@ -1,13 +1,27 @@
 <!DOCTYPE html>
-<html>
+<html lang="da" xmlns:v="urn:schemas-microsoft-com:vml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta charset="utf-8">
+    <meta name="x-apple-disable-message-reformatting">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="format-detection" content="telephone=no, date=no, address=no, email=no, url=no">
+    <meta name="color-scheme" content="light dark">
+    <meta name="supported-color-schemes" content="light dark">
+    <!--[if mso]>
+    <noscript>
+      <xml>
+        <o:OfficeDocumentSettings xmlns:o="urn:schemas-microsoft-com:office:office">
+          <o:PixelsPerInch>96</o:PixelsPerInch>
+        </o:OfficeDocumentSettings>
+      </xml>
+    </noscript>
     <style>
-      /* Email styles need to be inline */
+      td,th,div,p,a,h1,h2,h3,h4,h5,h6 {font-family: "Segoe UI", sans-serif; mso-line-height-rule: exactly;}
     </style>
+    <![endif]-->
+    <%= yield :head %>    
   </head>
-
-  <body>
+  <body class="m-0 p-0 w-full [word-break:break-word] [-webkit-font-smoothing:antialiased] bg-slate-50">
     <%= yield %>
   </body>
 </html>

@@ -20,15 +20,17 @@ class EmployeeMailer < ApplicationMailer
   def invite
     @invitation = params[:invitation]
     @url = employee_invitation_url(@invitation, api_key: @invitation.access_token)
-    @company = "M O R T I M E R"
-    @sender = params[:sender]
-    mail to: @invitation.address, subject: I18n.t("employee_mailer.invite.subject")
+    @company = @invitation.account.name
+    @email = @invitation.address
+    @sender = @inviter = params[:sender]
+    mail to: @email, subject: I18n.t("employee_mailer.invite.subject")
   end
 
   def confetti_first_punch
     @employee = params[:employee]
-    @company = "M O R T I M E R"
-    @sender = "John Doe"
-    mail to: @employee.email, subject: I18n.t("employee_mailer.confetti_first_punch.subject")
+    @name = @employee.name
+    @company = @employee.account.name
+    @sender = "info@mortimer.pro"
+    mail to: @employee.email, subject: I18n.t("employee_mailer.confetti.subject")
   end
 end

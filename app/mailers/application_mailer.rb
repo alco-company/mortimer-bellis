@@ -1,5 +1,5 @@
 class ApplicationMailer < ActionMailer::Base
-  default from: -> { build_default_from_address }
+  default from: ->(address = nil) { build_default_from_address }
   layout "mailer"
 
   def switch_locale(&action)
@@ -9,7 +9,8 @@ class ApplicationMailer < ActionMailer::Base
   end
 
   private
-    def build_default_from_address
-      email_address_with_name ENV["SMTP_USER_NAME"], "Mortimer Pro"
+    def build_default_from_address(address = nil)
+      address ||= ENV["SMTP_USER_NAME"]
+      email_address_with_name address, "Mortimer Pro"
     end
 end
