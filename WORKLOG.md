@@ -13,6 +13,7 @@
 * show ID on accounts, and add tax_number
 * css error 700-400
 * fix mail formats - prettier mails and views for Devise
+* add lockable w/5 attempts to Devise
 
 ### 18/6/2024
 

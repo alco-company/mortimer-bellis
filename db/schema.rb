@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_06_19_115038) do
+ActiveRecord::Schema[8.0].define(version: 2024_06_19_184030) do
   create_table "accounts", force: :cascade do |t|
     t.string "name"
     t.string "email"
@@ -370,12 +370,16 @@ ActiveRecord::Schema[8.0].define(version: 2024_06_19_115038) do
     t.integer "invitations_count", default: 0
     t.string "name"
     t.boolean "global_queries", default: false
+    t.datetime "locked_at"
+    t.integer "failed_attempts", default: 0, null: false
+    t.string "unlock_token"
     t.index ["account_id"], name: "index_users_on_account_id"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["invitation_token"], name: "index_users_on_invitation_token", unique: true
     t.index ["invited_by_id"], name: "index_users_on_invited_by_id"
     t.index ["invited_by_type", "invited_by_id"], name: "index_users_on_invited_by"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+    t.index ["unlock_token"], name: "index_users_on_unlock_token", unique: true
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"

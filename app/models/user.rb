@@ -8,7 +8,7 @@ class User < ApplicationRecord
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :invitable, :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable,
-         :omniauthable, :confirmable, :trackable, :timeoutable
+         :omniauthable, :confirmable, :trackable, :timeoutable, :lockable
 
   has_many :user_invitations, class_name: "User", as: :invited_by
 
