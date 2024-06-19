@@ -9,9 +9,11 @@ class Users::SessionsController < Devise::SessionsController
   # end
 
   # POST /resource/sign_in
-  # def create
-  #   super
-  # end
+  def create
+    ActiveRecord::Base.connected_to(role: :writing) do
+      super
+    end
+  end
 
   # DELETE /resource/sign_out
   # def destroy

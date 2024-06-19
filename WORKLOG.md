@@ -14,6 +14,7 @@
 * css error 700-400
 * fix mail formats - prettier mails and views for Devise
 * add lockable w/5 attempts to Devise
+* place sign_in in :writer ActiveRecord connection
 
 ### 18/6/2024
 
