@@ -2,7 +2,7 @@
 
 ## ROADMAP
 
-* Net::SMTPServerBusy (450 4.1.2 <waboo@wabidu.dk>: Recipient address rejected: Domain not found
+* 
   
 ## CHANGELOG
 
@@ -15,6 +15,7 @@
 * fix mail formats - prettier mails and views for Devise
 * add lockable w/5 attempts to Devise
 * place sign_in in :writer ActiveRecord connection
+* trying to avoid: Net::SMTPServerBusy (450 4.1.2 <waboo@wabidu.dk>: Recipient address rejected: Domain not found
 
 ### 18/6/2024
 

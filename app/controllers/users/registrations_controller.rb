@@ -14,11 +14,18 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   # POST /resource
   def create
-    params[:user][:account_id] = Account.find_or_create_by(name: account_name, email: sign_up_params[:email]).id
-    configure_sign_up_params
-    super do |resource|
-      resource.add_role
-      UserRegistrationService.call(resource)
+    begin
+      usr = nil
+      params[:user][:account_id] = Account.find_or_create_by(name: account_name, email: sign_up_params[:email]).id
+      configure_sign_up_params
+      super do |resource|
+        resource.add_role
+        usr = resource
+        UserRegistrationService.call(resource)
+      end
+    rescue => e
+      usr.destroy unless usr.nil?
+      redirect_to root_path, alert: I18n.t("errors.messages.user_registration_failed", error: e.message)
     end
   end
 

@@ -628,6 +628,7 @@ da:
   errors:
     format: "%{attribute} %{message}"
     messages:
+      user_registration_failed: "Bruger registreringen mislykkedes - fejl: %{error}"
       already_confirmed: "er allerede bekræftet, prøv venligst at logge ind"
       confirmation_period_expired: "skal bekræftes inden %{period}, forespørg venligst om en ny"
       expired: "er udløbet, venligst anmod om en ny"
