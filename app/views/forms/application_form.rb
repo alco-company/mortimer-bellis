@@ -160,7 +160,7 @@ class ApplicationForm < Superform::Rails::Form
           type: "button",
           data: { action: "click->boolean#toggle", boolean_target: "button" },
           class:
-            "group relative inline-flex h-5 w-10 flex-shrink-0 cursor-pointer items-center justify-center rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2",
+            "group relative inline-flex h-5 w-10 flex-shrink-0 cursor-pointer items-center justify-center rounded-full focus:outline-none focus:ring-2 focus:ring-sky-600 focus:ring-offset-2",
           role: "switch",
           aria_checked: "false"
         ) do
@@ -172,7 +172,7 @@ class ApplicationForm < Superform::Rails::Form
             class: "pointer-events-none absolute h-full w-full rounded-md bg-white"
           )
           whitespace
-          comment { %(Enabled: "bg-indigo-600", Not Enabled: "bg-gray-200") }
+          comment { %(Enabled: "bg-sky-600", Not Enabled: "bg-gray-200") }
           whitespace
           span(
             aria_hidden: "true",

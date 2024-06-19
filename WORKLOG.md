@@ -20,21 +20,25 @@
 * add employee calendar - duty, free, holiday
 * add web push notifications
 * gem fugit - more prominent substitute for CronTask
-* make locale and time_zone selectable on sign_up
 * check for password on file upload
 * add state and EU state reporting timeable
-* refine localizations
 * release RC1
 * Skipped recurring task – already dispatched (7.7ms)  task: :background_job_scheduler, at: 2024-05-28 16:36:00 UTC 18:36:00 web.1  | SolidQueue-0.3.1 Error in thread (0.0ms)  error: "ActiveRecord::RecordInvalid Translation missing: da.activerecord.errors.messages.record_invalid"
 * report on employee spent time
 * test edit profile  - name is an issue
 * handle payroll_period => for payroll_processing and not
-* stack flash messages
+* stack flash messages for better readability
+* refine localizations
 * yellow "tag" showing comment on punch
 * allow employees to setup their own work schedule
+* make locale and time_zone selectable on sign_up
 * archive employees once they off-board (or only work as temps)
 
 ## CHANGELOG
+
+### 19/6/2024
+
+* change ringcolor to ring-sky-600 on input fields
 
 ### 18/6/2024
 
