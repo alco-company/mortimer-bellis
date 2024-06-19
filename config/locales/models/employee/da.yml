@@ -64,6 +64,7 @@ da:
 
   employee_mailer:
     invite:
+      title: "Invitation"
       preheader: "Du er blevet inviteret til at færdiggøre en medarbejder profil"
       subject: "Invitation til at færdiggøre en medarbejder profil"
       hi: Hej,
@@ -73,6 +74,7 @@ da:
       not_interested: "Hvis du ikke er interesseret, eller hvis det er den forkerte email adresse, der er blevet benyttet, så beklager holdet bag  M O R T I M E R  ulejligheden, og beder dig ignorere denne email."
       salutations: "Med venlig hilsen"
     confetti:
+      title: "Succes!"
       preheader: "Fejring af din første stempling"
       subject: "Fejring af din første stempling"
       hi: Hej,

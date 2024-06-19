@@ -12,6 +12,7 @@
 * trying to signup with user@existing.domain does not work - if no users exist!
 * show ID on accounts, and add tax_number
 * css error 700-400
+* fix mail formats - prettier mails and views for Devise
 
 ### 18/6/2024
 
