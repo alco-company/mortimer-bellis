@@ -74,7 +74,7 @@
   }
 
   .mort-flash-info, .mort-flash-timedout {
-    @apply fixed z-40 left-12 bottom-10 mb-5 py-2 px-3 font-medium rounded-sm inline-block bg-indigo-100 border border-sky-700-400 text-sky-700;
+    @apply fixed z-40 left-12 bottom-10 mb-5 py-2 px-3 font-medium rounded-sm inline-block bg-sky-100 border border-sky-400 text-sky-700;
   }
 
   .mort-flash-notice {
