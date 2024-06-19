@@ -58,8 +58,12 @@ class Users::RegistrationsController < Devise::RegistrationsController
     devise_parameter_sanitizer.permit(:sign_up, keys: [ :account_id, :role ])
   end
 
+  #
+  # a_waffle_23_company_com - random company name generator by AHD 19/6/2024
+  #
   def account_name
-    sign_up_params[:email].split("@")[1].split(".")[..-2].join(" ").capitalize
+    sign_up_params[:email]
+    # sign_up_params[:email].split("@")[1].split(".")[..-2].join(" ").capitalize
   rescue
     "Unknown Account Name"
   end
