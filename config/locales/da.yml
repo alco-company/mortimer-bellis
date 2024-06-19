@@ -141,6 +141,7 @@ da:
         email: Email adresse - konto ansvarlig
         pp_identification: Lønbureau ID
         eu_work_directive: EU regulativ (2003/88/EC)
+        tax_number: CVR nummer
         time_zone: Tidszone
         locale: Sprog
         logo: Logo (80 x 40)

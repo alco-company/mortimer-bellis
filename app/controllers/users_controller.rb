@@ -23,6 +23,6 @@ class UsersController < MortimerController
     end
 
     def authorize
-      redirect_to root_path, alert: t(:unauthorized) if current_user.user?
+      redirect_to(root_path, alert: t(:unauthorized)) if current_user.user?
     end
 end

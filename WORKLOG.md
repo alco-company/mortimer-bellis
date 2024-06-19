@@ -10,6 +10,7 @@
 
 * change ringcolor to ring-sky-600 on input fields
 * trying to signup with user@existing.domain does not work - if no users exist!
+* show ID on accounts, and add tax_number
 
 ### 18/6/2024
 
