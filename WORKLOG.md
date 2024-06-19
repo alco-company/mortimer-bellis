@@ -2,43 +2,14 @@
 
 ## ROADMAP
 
-* when we need a blogging engine - https://github.com/kuyio/bloak
-* some day - down the road we will need measured - https://github.com/Shopify/measured
-* make the move to XRB - https://socketry.github.io/xrb-rails/guides/getting-started/index
-* add litestream - https://fractaledmind.github.io/2024/04/15/sqlite-on-rails-the-how-and-why-of-optimal-performance/
-* add handling of constants - https://dev.to/vladhilko/say-goodbye-to-messy-constants-a-new-approach-to-moving-constants-away-from-your-model-58i1
-* add Traefik dashboard to traefik.mortimer.pro - https://www.luizkowalski.net/traefik-with-kamal-tips-and-tricks/
-* add Thruster - https://nts.strzibny.name/running-thruster-rails-kamal/
-* install and configure Harbor - open source Registry - https://goharbor.io/
-* add exporting ICS files - https://www.driftingruby.com/episodes/exporting-ics-files
-* add employee SMS service - welcome, EU state report
-* add blackhole
-* endless scroll - https://www.stefanwienert.de/blog/2021/04/17/endless-scroll-with-turbo-streams/
-* add Stripe payments - https://gorails.com/episodes/one-time-payments-with-pay-and-stripe
-* add employee email - welcome, EU state report
-* gem "mission_control-jobs"
-* add employee calendar - duty, free, holiday
-* add web push notifications
-* gem fugit - more prominent substitute for CronTask
-* check for password on file upload
-* add state and EU state reporting timeable
-* release RC1
-* Skipped recurring task – already dispatched (7.7ms)  task: :background_job_scheduler, at: 2024-05-28 16:36:00 UTC 18:36:00 web.1  | SolidQueue-0.3.1 Error in thread (0.0ms)  error: "ActiveRecord::RecordInvalid Translation missing: da.activerecord.errors.messages.record_invalid"
-* report on employee spent time
-* test edit profile  - name is an issue
-* handle payroll_period => for payroll_processing and not
-* stack flash messages for better readability
-* refine localizations
-* yellow "tag" showing comment on punch
-* allow employees to setup their own work schedule
-* make locale and time_zone selectable on sign_up
-* archive employees once they off-board (or only work as temps)
-
+* Net::SMTPServerBusy (450 4.1.2 <waboo@wabidu.dk>: Recipient address rejected: Domain not found
+  
 ## CHANGELOG
 
 ### 19/6/2024
 
 * change ringcolor to ring-sky-600 on input fields
+* trying to signup with user@existing.domain does not work - if no users exist!
 
 ### 18/6/2024
 
