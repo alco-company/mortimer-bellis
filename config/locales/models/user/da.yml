@@ -152,9 +152,23 @@ da:
         regards: "Med venlig hilsen"
 
       email_changed:
-        subject: "Din email adressen er blevet ændret"
+        title: "Vigtig information"
+        preheader: "Din email adresse er blevet ændret"
+        subject: "Din email adresse er blevet ændret"
+        hello: "Hej %{email},"
+        introduction: "nogen har ændret email adressen til din profil til %{email}! Det vigtigste at bemærke her, er at du derfor, fremover, skal bruge dén email adresse til at logge ind med."
+        ignore: "Har du selv gjort det, er alt i orden, men hvis det ikke er dig selv, bør du som minimum kontakte den ansvarlige for jeres brug af  M O R T I M E R."
+        regards: "Med venlig hilsen"
+
       password_change:
+        title: "Vigtig information"
+        preheader: "Din adgangskode er blevet ændret"
         subject: "Din adgangskode er blevet ændret"
+        hello: "Hej %{email},"
+        introduction: "nogen har ændret adgangskoden til din profil!"
+        ignore: "Har du selv gjort det, er alt i orden, men hvis det ikke er dig selv, bør du som minimum kontakte den ansvarlige for jeres brug af  M O R T I M E R."
+        regards: "Med venlig hilsen"
+
     omniauth_callbacks:
       failure: "Kunne ikke godkende dig fra %{kind} fordi \"%{reason}\"."
       success: "Godkendte dig fra %{kind} kontoen."

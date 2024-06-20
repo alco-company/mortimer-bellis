@@ -509,6 +509,9 @@ da:
         one: bruger
         other: brugere
       
+    errors:
+      messages:
+        record_invalid: "Posten findes ikke"
 
   date:
     single_day_names:
@@ -624,6 +627,7 @@ da:
       day: Dag
       month: Måned
       year: År
+
 
   errors:
     format: "%{attribute} %{message}"

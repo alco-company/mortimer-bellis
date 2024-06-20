@@ -6,6 +6,10 @@
   
 ## CHANGELOG
 
+### 20/6/2024
+
+* mail format on password_change & email_changed touch up
+
 ### 19/6/2024
 
 * change ringcolor to ring-sky-600 on input fields
