@@ -89,14 +89,12 @@ da:
 
   user_mailer:
     welcome:
-      subject: Velkommen til vores service
-      body: |
-        Hej %{name},
-        Velkommen til vores service.
-
-
-        Med venlig hilsen
-        M O R T I M E R
+      title: "ding ding!"
+      preheader: "Nyt lead!"
+      subject: "ding ding!"
+      hello: "Hej,"
+      introduction: "nu krøb der en rotte mere i fælden! Registranten er %{email} - "
+      regards: "Med venlig hilsen"
 
   devise:
     login: "Log ind"

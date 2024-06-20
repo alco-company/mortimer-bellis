@@ -20,6 +20,6 @@ class UserMailer < ApplicationMailer
   def error_report(error, klass_method)
     @error = error
     @klass_method = klass_method
-    mail to: "info@mortimer.pro", subject: "Error Report"
+    mail to: "walther@alco.dk", subject: "Error Report"
   end
 end

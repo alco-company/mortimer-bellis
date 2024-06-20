@@ -9,6 +9,7 @@
 ### 20/6/2024
 
 * mail format on password_change & email_changed touch up
+* advice on new 'lead' on accounts to walther@alco.dk
 
 ### 19/6/2024
 
