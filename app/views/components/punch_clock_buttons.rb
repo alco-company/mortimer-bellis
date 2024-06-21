@@ -14,10 +14,14 @@ class PunchClockButtons < ApplicationComponent
   end
 
   def view_template(&block)
-    punch_in
-    punch_break
-    punch_out
-    punch_add if tab == "payroll"
+    if employee.archived?
+      I18n.t("employee.archived")
+    else
+      punch_in
+      punch_break
+      punch_out
+      punch_add if tab == "payroll"
+    end
   end
 
   def punch_in

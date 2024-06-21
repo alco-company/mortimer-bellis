@@ -3,6 +3,7 @@ da:
   state_eq_current_state: "Medarbejderen er allerede stemplet %{state}"
   employee:
     me: "Mig"
+    archived: "Du kan ikke stemple - kontakt venligst din leder"
 
     in: "Arbejder"
     out: "Ikke på arbejde"
@@ -84,6 +85,9 @@ da:
       salutations: "Med venlig hilsen"
 
   employees:
+    not_found: "Ingen medarbejder fundet med dette ID"
+    archived: "Medarbejderen blev arkiveret"
+    unarchived: "Medarbejderen blev aktiveret (igen)"
     advanced_configuration: Vis flere indstillingsmuligheder
     create:
       post: Medarbejderen blev oprettet

@@ -13,7 +13,8 @@ WORK_STATES = [
   [ "senior_free", I18n.t("punch.senior_free") ],
   [ "unpaid_free", I18n.t("punch.unpaid_free") ],
   [ "maternity_free", I18n.t("punch.maternity_free") ],
-  [ "leave_free", I18n.t("punch.leave_free") ]
+  [ "leave_free", I18n.t("punch.leave_free") ],
+  [ "archived", I18n.t("punch.archived") ]
 ]
 module Stateable
   extend ActiveSupport::Concern
@@ -34,10 +35,12 @@ module Stateable
       senior_free:        11,
       unpaid_free:        12,
       maternity_free:     13,
-      leave_free:         14
+      leave_free:         14,
+      archived:           99
       # "ABSENT" => 3, "SICK" => 4, "VACATION" => 5, "HOLIDAY" => 6, "WORKING" => 7, "BUSY" => 8, "FREE" => 9, "UNAVAILABLE" => 10, "AVAILABLE" => 11, "ONLINE" => 12, "OFFLINE" => 13, "AWAY" => 14, "DND" => 15, "CALL" => 16, "MEETING" => 17, "LUNCH" => 18, "BREAK" => 19, "CUSTOM" => 20
     }
     scope :by_state, ->(state) { where("state = ?", state) if state.present? }
+    scope :archived, ->() { where(state: 99) }
   end
 
   class_methods do

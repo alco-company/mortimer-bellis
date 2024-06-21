@@ -7,6 +7,8 @@ da:
   form_errors_prohibited: "%{errors} fejl forhindrede denne post i at blive gemt"
   "yes": Ja
   "no": Nej
+  archive: Arkivér
+  unarchive: Aktivér
   edit: Redigér
   cancel: Fortryd
   update: Opdatér
@@ -122,6 +124,7 @@ da:
         nursing_sick: Omsorgsdage
         lost_work_sick: Tabt arbejdsfortjeneste
         p56_sick: Pgf 56 sygdom
+        archived: Arkiveret
 
     punch_clocks:
       edit:

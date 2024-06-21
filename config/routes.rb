@@ -22,6 +22,9 @@ Rails.application.routes.draw do
     resources :punches
   end
   resources :employees do
+    member do
+      post :archive
+    end
     collection do
       post :signup
     end

@@ -2,9 +2,11 @@
 
 ## ROADMAP
 
-* 
-  
 ## CHANGELOG
+
+### 21/6/2024
+
+* archive employees once they off-board (or only work as temps)
 
 ### 20/6/2024
 
