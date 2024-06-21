@@ -24,6 +24,7 @@ da:
   delete_all_later: Alle poster slettes - i baggrunden, vent venligst...
   unauthorized: Du har ikke rettigheder til at gennemføre denne handling
   cannot_change_role: Du kan ikke ændre din egen rolle til super_user!
+  form_not_processable: Formularen kunne ikke behandles - prøv igen
 
   expected_time_zone: "Vi tror at den tidszone, der passer dig bedst er:"
 
@@ -95,6 +96,7 @@ da:
         today: I dag
         payroll_period: Lønperiode
         profile: Profil
+        add: Tilføj
         in: Ind
         out: Ud
         break: Pause

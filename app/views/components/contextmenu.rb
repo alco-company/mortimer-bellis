@@ -162,7 +162,7 @@ class Contextmenu < Phlex::HTML
       # archive employee
       if resource_class.to_s == "Employee"
         button_to(( helpers.archive_employee_url(resource)),
-          class: "block px-3 py-1 text-sm leading-6 text-gray-900",
+          class: "block px-3 py-1 h-4 text-sm leading-6 text-gray-900",
           role: "menuitem",
           data: { turbo_action: "advance", turbo_frame: @turbo_frame },
           tabindex: "-1") do
@@ -177,7 +177,7 @@ class Contextmenu < Phlex::HTML
       end
       # edit resource
       link_to((@links[0] || helpers.edit_resource_url(id: resource.id)),
-        class: "block px-3 py-1 text-sm leading-6 text-gray-900",
+        class: "block px-3 py-1 h-4 text-sm leading-6 text-gray-900",
         role: "menuitem",
         data: { turbo_action: "advance", turbo_frame: @turbo_frame },
         tabindex: "-1") do
@@ -192,7 +192,7 @@ class Contextmenu < Phlex::HTML
         helpers.modal_new_url(modal_form: "delete", id: resource.id, resource_class: resource_class.to_s.underscore, modal_next_step: "accept"),
         data: { turbo_stream: true },
         # link_to((@links[1] || resource),
-        class: "block px-3 py-1 text-sm leading-6 text-gray-900",
+        class: "block px-3 py-1 h-4 text-sm leading-6 text-gray-900",
         role: "menuitem",
         tabindex: "-1") do
         # data: { turbo_method: :delete, turbo_confirm: "Are you sure?" }) do

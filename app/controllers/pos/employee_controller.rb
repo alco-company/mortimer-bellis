@@ -123,12 +123,16 @@ class Pos::EmployeeController < Pos::PosController
     end
 
     def range_punch
-      if (Date.today == Date.parse(punch_params[:from_at]) ||
-        Date.today == Date.parse(punch_params[:to_at])) && !@resource.out?
-        redirect_to pos_employee_url(api_key: @resource.access_token), warning: t("employee_working_punch_out_first") and return
+      begin
+        if (Date.today == Date.parse(punch_params[:from_at]) ||
+          Date.today == Date.parse(punch_params[:to_at])) && !@resource.out?
+          redirect_to pos_employee_url(api_key: @resource.access_token), warning: t("employee_working_punch_out_first") and return
+        end
+        @resource.punch_range punch_params[:reason], request.remote_ip, punch_params[:from_at], punch_params[:to_at], punch_params[:comment]
+        redirect_to pos_employee_url(api_key: @resource.access_token, tab: "payroll") and return
+      rescue => e
+        redirect_to pos_employee_url(api_key: @resource.access_token, edit: true, tab: "payroll"), warning: t("form_not_processable") and return
       end
-      @resource.punch_range punch_params[:reason], request.remote_ip, punch_params[:from_at], punch_params[:to_at], punch_params[:comment]
-      redirect_to pos_employee_url(api_key: @resource.access_token, tab: "payroll") and return
     end
 
     def render_punches

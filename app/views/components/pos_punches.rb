@@ -30,9 +30,11 @@ class PosPunches < ApplicationComponent
         end
         li(id: (helpers.dom_id punch), class: "flex items-center justify-between gap-x-6 py-5") do
           div(class: "min-w-0 w-full grid grid-cols-5 items-center") do
-            helpers.render_text_column(value: helpers.tell_state(punch), css: "truncate") +
-            helpers.render_text_column(value: punch.comment, css: "hidden md:block col-span-3 truncate") +
-            helpers.render_time_column(value: punch.punched_at, css: "text-right")
+            div do helpers.render_text_column(value: helpers.tell_state(punch), css: "truncate") end
+            div(class: "col-span-3") do
+               helpers.render_text_column(value: punch.comment, css: "hidden md:block truncate")
+            end
+            div do helpers.render_time_column(value: punch.punched_at, css: "text-right") end
           end
           div(class: "flex flex-none items-center gap-x-4") do
             render PosContextmenu.new resource: punch, turbo_frame: helpers.dom_id(punch), alter: edit, links: [ pos_employee_edit_url(api_key: employee.access_token, id: punch.id), pos_employee_delete_url(api_key: employee.access_token, id: punch.id) ]
