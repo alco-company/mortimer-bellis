@@ -11,6 +11,7 @@
 * archive employees once they off-board (or only work as temps)
 * bug in test for archived? if no punches
 * use ADD button as SAVE too on pos/employee
+* show comment icon on punches where applicable
 
 ### 20/6/2024
 
