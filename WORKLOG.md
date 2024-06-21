@@ -2,11 +2,14 @@
 
 ## ROADMAP
 
+* fix wrong link on pos/punch_clock payroll_period list close elements
+
 ## CHANGELOG
 
 ### 21/6/2024
 
 * archive employees once they off-board (or only work as temps)
+* bug in test for archived? if no punches
 
 ### 20/6/2024
 

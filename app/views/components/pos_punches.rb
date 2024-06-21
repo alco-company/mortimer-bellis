@@ -6,7 +6,7 @@ class PosPunches < ApplicationComponent
     @punches = punches
     @employee = punches.first.employee rescue false
     @folded = folded
-    @edit = edit && !@employee.archived?
+    @edit = edit && !@employee&.archived? rescue false
     @tab = tab
   end
 
