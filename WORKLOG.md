@@ -6,6 +6,11 @@
 
 ## CHANGELOG
 
+### 23/6/2024
+
+* prepare for hotwired flash messages (and later notifications)
+
+
 ### 21/6/2024
 
 * archive employees once they off-board (or only work as temps)
