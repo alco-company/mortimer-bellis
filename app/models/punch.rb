@@ -33,7 +33,7 @@ class Punch < ApplicationRecord
   end
 
   def self.ordered(resources, field, direction = :desc)
-    resources.joins(:employee).order(field => direction)
+    resources.joins(:employee).joins(:punch_clock).order(field => direction)
   end
 
   def self.form(resource, editable = true)

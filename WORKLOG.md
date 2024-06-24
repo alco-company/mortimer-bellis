@@ -6,6 +6,10 @@
 
 ## CHANGELOG
 
+### 24/6/2024
+
+* fix missing sort by punch_clock on punches
+
 ### 23/6/2024
 
 * prepare for hotwired flash messages (and later notifications)
