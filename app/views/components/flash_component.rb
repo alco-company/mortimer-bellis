@@ -22,7 +22,7 @@ class FlashComponent < ApplicationComponent
     ) do
       div(class: "flex w-full flex-col items-center space-y-4 sm:items-end") do
         @flash.each do |type, msg|
-          flash_message(type, msg)
+          flash_message(type, msg) if msg.class == String
           # p(data_controller: "notice", class: "mort-flash-#{type}", id: "flash_#{type}") { msg }
         end
       end

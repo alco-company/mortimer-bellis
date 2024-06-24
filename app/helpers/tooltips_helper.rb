@@ -1,0 +1,2 @@
+module TooltipsHelper
+end

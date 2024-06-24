@@ -9,6 +9,7 @@
 ### 23/6/2024
 
 * prepare for hotwired flash messages (and later notifications)
+* prepare for tooltips - wip: turbo_frame not loading!
 
 
 ### 21/6/2024
