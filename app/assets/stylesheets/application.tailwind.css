@@ -20,7 +20,7 @@
   }
 
   .mort-form-text {
-    @apply block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full;
+    @apply block shadow rounded-md border border-gray-200 focus:outline-none px-3 py-2 mt-2 w-full focus-visible:border-sky-600;
   }
 
   .mort-form-file {

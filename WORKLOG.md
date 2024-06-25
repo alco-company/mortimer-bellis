@@ -10,6 +10,7 @@
 * tooltip on punch#comment
 * hide empty flash messages "{}"
 * fix wrong link on pos/punch_clock payroll_period list close elements
+* remove indigo-500 from input fields
   
 ### 24/6/2024
 
