@@ -1,10 +1,9 @@
-<turbo-frame id="<%= params.fetch :turbo_frame, dom_id(@punch) %>" target="_top">
-  <div class="relative">
-    <div class="flex gap-2 items-center p-1 bg-black rounded-md text-white">
+<turbo-frame id="tooltip">
+  <div id="tooltip_container" class="relative max-w-80 z-40">
+    <div class="p-2 bg-black rounded-md text-white">
       <%#= render partial: "users/user", object: @punch, formats: :svg %>
-      <strong><%= I18n.t("punch.tooltips.comment.label") %></strong>
-      <%= @punch.comment %>
+      <strong><%= I18n.t("punch.tooltips.comment.label") %>:</strong>
+      <p><%= @punch.comment %></p>
     </div>
-    <div class="h-2 w-2 bg-black rotate-45 -top-1 -left-2 ml-[50%] relative"></div>
   </div>
 </turbo-frame>

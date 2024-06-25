@@ -11,6 +11,8 @@
     <%= render NavigationComponent.new items: menu_items %>
     <main class="m-4 mt-20">
       <%= yield %>
+      <%= turbo_frame_tag "tooltip", class: "absolute", target: "_top" %>
+
     </main>
     <%# 
     in honor of Tailwind not being able to know 'tags' in advance

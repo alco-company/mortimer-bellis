@@ -18,6 +18,10 @@ da:
     leave_free: Orlov
     archived: Arkiveret
 
+    tooltips:
+      comment:
+        label: Kommentar
+
     comment: Kommentar/Bemærkninger
     modal:
       delete_all: 

@@ -6,6 +6,10 @@
 
 ## CHANGELOG
 
+### 25/6/2024
+
+* tooltip on punch#comment
+  
 ### 24/6/2024
 
 * fix missing sort by punch_clock on punches
