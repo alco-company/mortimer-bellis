@@ -4,20 +4,29 @@ class PunchClockButtons < ApplicationComponent
   include Phlex::Rails::Helpers::FormWith
   include Phlex::Rails::Helpers::HiddenField
 
-  attr_accessor :employee, :tab
+  attr_accessor :employee, :tab, :edit
 
-  def initialize(punch_clock: nil, employee: nil, url: nil, tab: nil)
+  # PunchClockButtons.new employee: employee, tab: tab, url: helpers.pos_employee_url(api_key: employee.access_token)
+  def initialize(punch_clock: nil, employee: nil, url: nil, tab: nil, edit: false)
     @punch_clock = punch_clock
     @employee = employee || false
     @url = url
     @tab = tab || false
+    @edit = edit
   end
 
   def view_template(&block)
-    punch_in
-    punch_break
-    punch_out
-    punch_add if tab == "payroll"
+    if employee.archived?
+      I18n.t("employee.archived")
+    else
+      if tab == "payroll"
+        punch_add
+      else
+        punch_in
+        punch_break
+        punch_out
+      end
+    end
   end
 
   def punch_in
@@ -64,7 +73,9 @@ class PunchClockButtons < ApplicationComponent
 
   def punch_add
     div(class: "justify-self-end") do
-      link_to helpers.t(".add"), helpers.pos_employee_url(api_key: employee.access_token, tab: "payroll", edit: true), class: "bg-sky-500 text-white block mx-2 rounded-md px-3 py-2 text-xl font-medium"
+      edit ?
+        button_tag(helpers.t(".save"), type: "submit", form: "manualpunch", class: "bg-green-500 text-white block rounded-md px-3 py-2 text-xl font-medium") :
+        link_to(helpers.t(".add"), helpers.pos_employee_url(api_key: employee.access_token, tab: "payroll", edit: true), class: "bg-sky-500 text-white block mx-2 rounded-md px-3 py-2 text-xl font-medium")
     end
   end
 end

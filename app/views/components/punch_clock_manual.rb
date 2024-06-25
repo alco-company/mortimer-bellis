@@ -10,7 +10,7 @@ class PunchClockManual < ApplicationComponent
   end
 
   def view_template(&block)
-    form_with data: { pos_employee_target: "manualForm" }, url: helpers.pos_employee_url(api_key: employee.access_token), method: :post do
+    form_with id: "manualpunch", data: { pos_employee_target: "manualForm" }, url: helpers.pos_employee_url(api_key: employee.access_token, tab: "payroll"), method: :post do
       div(class: "mx-4 my-2 space-y-12 sm:space-y-16") do
         div do
           h2(class: "text-base font-semibold leading-7 text-gray-900") do
@@ -45,7 +45,7 @@ class PunchClockManual < ApplicationComponent
                         action: "click->pos-employee#toggleWork",
                         pos_employee_target: "workButton"
                       },
-                      class: "bg-gray-200 aria-checked:bg-sky-600 relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2",
+                      class: "bg-gray-200 aria-checked:bg-sky-600 relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-sky-600 focus:ring-offset-2",
                       role: "switch",
                       aria_checked: "true"
                     ) do
@@ -82,7 +82,7 @@ class PunchClockManual < ApplicationComponent
                         action: "click->pos-employee#toggleSick",
                         pos_employee_target: "sickButton"
                       },
-                      class: "bg-gray-200 aria-checked:bg-sky-600 relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2",
+                      class: "bg-gray-200 aria-checked:bg-sky-600 relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-sky-600 focus:ring-offset-2",
                       role: "switch",
                       aria_checked: "false"
                     ) do
@@ -107,7 +107,7 @@ class PunchClockManual < ApplicationComponent
                         action: "click->pos-employee#toggleFree",
                         pos_employee_target: "freeButton"
                       },
-                      class: "bg-gray-200 aria-checked:bg-sky-600 relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2",
+                      class: "bg-gray-200 aria-checked:bg-sky-600 relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-sky-600 focus:ring-offset-2",
                       role: "switch",
                       aria_checked: "false"
                     ) do
@@ -169,7 +169,7 @@ class PunchClockManual < ApplicationComponent
                             value: reason,
                             # checked: "checked" if punch.state == reason,
                             class:
-                              "h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                              "h-4 w-4 border-gray-300 text-sky-600 focus:ring-sky-600"
                           )
                           whitespace
                           label(
@@ -215,7 +215,7 @@ class PunchClockManual < ApplicationComponent
                             value: reason,
                             # checked: "checked" if punch.state == reason,
                             class:
-                              "h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                              "h-4 w-4 border-gray-300 text-sky-600 focus:ring-sky-600"
                           )
                           whitespace
                           label(
@@ -232,26 +232,26 @@ class PunchClockManual < ApplicationComponent
           end
         end
       end
-      action_buttons
+      # action_buttons
     end
   end
 
-  def action_buttons
-    div(class: "px-4 mt-6 mb-24 sm:mb-12 flex items-center justify-start gap-x-2") do
-      whitespace
-      button(
-        type: "button",
-        data: { action: "click->pos-employee#clearForm" },
-        class: "mort-btn-cancel"
-      ) { helpers.t("cancel") }
-      whitespace
-      button(
-        type: "submit",
-        class:
-          "mort-btn-primary"
-      ) { helpers.t("save") }
-    end
-  end
+  # def action_buttons
+  #   div(class: "px-4 mt-6 mb-24 sm:mb-12 flex items-center justify-start gap-x-2") do
+  #     whitespace
+  #     button(
+  #       type: "button",
+  #       data: { action: "click->pos-employee#clearForm" },
+  #       class: "mort-btn-cancel"
+  #     ) { helpers.t("cancel") }
+  #     whitespace
+  #     button(
+  #       type: "submit",
+  #       class:
+  #         "mort-btn-primary"
+  #     ) { helpers.t("save") }
+  #   end
+  # end
 
   def punch_in
     return if employee.in?
@@ -284,7 +284,7 @@ class PunchClockManual < ApplicationComponent
           data: { pos_employee_target: "fromAt" },
           autofocus: true,
           class:
-            "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
+            "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-600 sm:max-w-xs sm:text-sm sm:leading-6"
         )
       end
     end
@@ -308,7 +308,7 @@ class PunchClockManual < ApplicationComponent
           type: "datetime-local",
           data: { pos_employee_target: "toAt" },
           class:
-            "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
+            "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-600 sm:max-w-xs sm:text-sm sm:leading-6"
         )
       end
     end
@@ -332,7 +332,7 @@ class PunchClockManual < ApplicationComponent
           type: "text",
           data: { pos_employee_target: "comment" },
           class:
-            "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
+            "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-600 sm:max-w-xs sm:text-sm sm:leading-6"
         )
       end
     end

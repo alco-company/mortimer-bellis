@@ -17,7 +17,7 @@ module Colorable
   # border-blue-500
   # border-green-500
   # border-yellow-500
-  # border-indigo-500
+  # border-sky-500
   # border-orange-500
   # border-lime-500
   # border-cyan-500

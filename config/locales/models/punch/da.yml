@@ -16,6 +16,11 @@ da:
     unpaid_free: Ulønnet
     maternity_free: Barsel
     leave_free: Orlov
+    archived: Arkiveret
+
+    tooltips:
+      comment:
+        label: Kommentar
 
     comment: Kommentar/Bemærkninger
     modal:
@@ -44,6 +49,7 @@ da:
       new: Ny stempling
       title: Stemplinger
       name: Medarbejder 
+      punch_clock: Stempelur
       punched_at: Stemplet den 
       state: Status
       updated_at: Opdateret den

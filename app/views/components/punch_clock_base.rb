@@ -61,9 +61,9 @@ class PunchClockBase < ApplicationComponent
   end
 
   def list_punches(title, punches = [], edit = false, folded = false, tab = "today")
-    h4(class: "m-4 text-gray-700 text-xl") { helpers.t(title) }
-    div(class: "pb-20 flex-none min-w-full px-4 sm:px-6 md:px-0 scrollbar:!w-1.5 scrollbar:!h-1.5 scrollbar:bg-transparent scrollbar-track:!bg-slate-100 scrollbar-thumb:!rounded scrollbar-thumb:!bg-slate-300 scrollbar-track:!rounded dark:scrollbar-track:!bg-slate-500/[0.16] dark:scrollbar-thumb:!bg-slate-500/50 lg:supports-scrollbars:pr-2") do
-      ul(class: "m-4 divide-y divide-gray-100") do
+    h4(class: "m-0 md:m-4 mt-4 text-gray-700 text-xl") { helpers.t(title) }
+    div(class: "pb-20 flex-none min-w-full px-0 scrollbar:!w-1.5 scrollbar:!h-1.5 scrollbar:bg-transparent scrollbar-track:!bg-slate-100 scrollbar-thumb:!rounded scrollbar-thumb:!bg-slate-300 scrollbar-track:!rounded dark:scrollbar-track:!bg-slate-500/[0.16] dark:scrollbar-thumb:!bg-slate-500/50 lg:supports-scrollbars:pr-2") do
+      ul(class: "m-0 md:m-4 divide-y divide-gray-100") do
         render PosPunches.new punches: punches, folded: folded, edit: edit, tab: tab
       end
     end
@@ -71,30 +71,5 @@ class PunchClockBase < ApplicationComponent
 
   def show_profile
     render PunchClockProfile.new employee: employee
-  end
-
-  def show_today_old
-    div(class: "w-full") do
-      h2(class: "text-gray-700 text-xl") { helpers.t(".todays_punches") }
-      # div( class: "mb-4 text-gray-700 text-xl") { helpers.t(".for_employee", name: employee.name) }
-      div(class: "font-mono") do
-        ul do
-          employee.todays_punches.each do |punch|
-            li(
-              id: (helpers.dom_id punch),
-              class: "flex items-center justify-between gap-x-6 py-5"
-            ) do
-              div(class: "min-w-0 w-full columns-2 text-gray-700 text-xl") do
-                span { helpers.render_datetime_column(field: punch.punched_at, css: "") }
-                span { helpers.render_text_column(field: punch.state, css: "text-right") }
-              end
-              div(class: "flex flex-none items-center gap-x-4") do
-                helpers.render_contextmenu resource: punch
-              end
-            end
-          end
-        end
-      end
-    end
   end
 end

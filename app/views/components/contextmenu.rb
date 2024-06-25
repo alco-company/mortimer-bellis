@@ -1,6 +1,7 @@
 class Contextmenu < Phlex::HTML
   include Phlex::Rails::Helpers::Routes
   include Phlex::Rails::Helpers::LinkTo
+  include Phlex::Rails::Helpers::ButtonTo
   include Rails.application.routes.url_helpers
 
   attr_accessor :resource, :resource_class, :list
@@ -15,8 +16,7 @@ class Contextmenu < Phlex::HTML
   end
 
   def view_template
-    div(data_controller: "contextmenu", class: "relative flex-none") do
-      whitespace
+    div(data_controller: "contextmenu", class: "relative flex") do
       button(
         type: "button",
         data_contextmenu_target: "button",
@@ -26,21 +26,7 @@ class Contextmenu < Phlex::HTML
         aria_expanded: "false",
         aria_haspopup: "true"
       ) do
-        whitespace
-        span(class: "sr-only") { "Open options" }
-        whitespace
-        svg(
-          class: "h-5 w-5",
-          viewbox: "0 0 20 20",
-          fill: "currentColor",
-          aria_hidden: "true"
-        ) do |s|
-          s.path(
-            d:
-              "M10 3a1.5 1.5 0 110 3 1.5 1.5 0 010-3zM10 8.5a1.5 1.5 0 110 3 1.5 1.5 0 010-3zM11.5 15.5a1.5 1.5 0 10-3 0 1.5 1.5 0 003 0z"
-          )
-        end if @alter
-        whitespace
+        contextmenu_button
       end
       whitespace
       case true
@@ -48,6 +34,31 @@ class Contextmenu < Phlex::HTML
       when !list.nil?; list_dropdown
       end
     end
+  end
+
+  def contextmenu_button
+    resource.respond_to?(:archived?) && resource.archived? ? archived_button : more_button
+  end
+
+  def archived_button
+    svg(xmlns: "http://www.w3.org/2000/svg", height: "24px", viewBox: "0 -960 960 960", width: "24px", fill: "#5f6368") do |s|
+      s.path(d: "M200-80q-33 0-56.5-23.5T120-160v-451q-18-11-29-28.5T80-680v-120q0-33 23.5-56.5T160-880h640q33 0 56.5 23.5T880-800v120q0 23-11 40.5T840-611v451q0 33-23.5 56.5T760-80H200Zm0-520v440h560v-440H200Zm-40-80h640v-120H160v120Zm200 280h240v-80H360v80Zm120 20Z")
+    end
+  end
+
+  def more_button
+    span(class: "sr-only") { "Open options" }
+    svg(
+      class: "h-5 w-5",
+      viewbox: "0 0 20 20",
+      fill: "currentColor",
+      aria_hidden: "true"
+    ) do |s|
+      s.path(
+        d:
+          "M10 3a1.5 1.5 0 110 3 1.5 1.5 0 010-3zM10 8.5a1.5 1.5 0 110 3 1.5 1.5 0 010-3zM11.5 15.5a1.5 1.5 0 10-3 0 1.5 1.5 0 003 0z"
+      )
+    end if @alter
   end
 
   def list_dropdown
@@ -147,9 +158,24 @@ class Contextmenu < Phlex::HTML
       aria_labelledby: "options-menu-0-button",
       tabindex: "-1"
     ) do
-      whitespace
       comment { %(Active: "bg-gray-50", Not Active: "") }
-      whitespace
+      # archive employee
+      if resource_class.to_s == "Employee"
+        button_to(( helpers.archive_employee_url(resource)),
+          class: "block px-3 py-1 text-sm leading-6 text-gray-900",
+          role: "menuitem",
+          data: { turbo_action: "advance", turbo_frame: @turbo_frame },
+          tabindex: "-1") do
+          resource.archived? ?
+            plain(I18n.t(".unarchive")) :
+            plain(I18n.t(".archive"))
+          span(class: "sr-only") do
+            plain ", "
+            plain resource.name rescue ""
+          end
+        end
+      end
+      # edit resource
       link_to((@links[0] || helpers.edit_resource_url(id: resource.id)),
         class: "block px-3 py-1 text-sm leading-6 text-gray-900",
         role: "menuitem",
@@ -161,7 +187,7 @@ class Contextmenu < Phlex::HTML
           plain resource.name rescue ""
         end
       end
-      whitespace
+      # delete resource
       link_to(
         helpers.modal_new_url(modal_form: "delete", id: resource.id, resource_class: resource_class.to_s.underscore, modal_next_step: "accept"),
         data: { turbo_stream: true },

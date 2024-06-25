@@ -1,59 +1,18 @@
 <!DOCTYPE html>
-<% 
-
-
-def items 
-  items = []
-  if user_signed_in?
-    if current_user.superadmin?
-      items += [
-        { title: I18n.t('menu.accounts'), url: accounts_url },
-        { title: I18n.t('menu.pages'), url: pages_url },
-        { title: I18n.t('menu.users'), url: users_url },
-      ] 
-    end
-    if current_user.admin?
-      items += [
-        { title: I18n.t('menu.account'), url: account_url(Current.account) },
-        { title: I18n.t('menu.users'), url: users_url },
-      ] 
-    end
-    items + [
-      { title: I18n.t('menu.teams'), url: teams_url },
-      { title: I18n.t('menu.locations'), url: locations_url },
-      { title: I18n.t('menu.punch_clocks'), url: punch_clocks_url },
-      { title: I18n.t('menu.employees'), url: employees_url },
-      { title: I18n.t('menu.punch_cards'), url: punch_cards_url },
-      { title: I18n.t('menu.punches'), url: punches_url },
-      # { title: I18n.t('menu.motds'), url: motds_url },
-    ]
-  else
-    items << { title: I18n.t('menu.login'), url: new_user_session_url }
-  end
-end
-
-%>
-<html lang="da" class=""h-full bg-white">
+<html lang="da" class="h-full bg-white">
   <head>
-    <title><%= "M O R T I M E R #{ 'DEV' if Rails.env.local?}" %></title>
-    <%= csrf_meta_tags %>
-    <%= csp_meta_tag %>
+    <%= render partial: "layouts/generic_header" %>
 
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <%# <link rel="manifest" crossorigin="use-credentials" href="/manifest.json?start_url=<%= request.url %>
+    <%#= tag :meta, name: :vapid_public_key, content: Rails.application.credentials.vapid.public_key %>
 
-    <link rel="preconnect" href="https://rsms.me/">
-    <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
-
-    <%= stylesheet_link_tag "tailwind", "inter-font", data_turbo_track: "reload" %>      
-    <%= stylesheet_link_tag "application", data_turbo_track: "reload" %>      
-    <%= javascript_importmap_tags %>      
-    <%= yield :head %>
   </head>
   <body class="h-full w-full">
-    <%= render NavigationComponent.new items: items  %>
+    <%= render NavigationComponent.new items: menu_items %>
     <main class="m-4 mt-20">
       <%= yield %>
+      <%= turbo_frame_tag "tooltip", class: "absolute", target: "_top" %>
+
     </main>
     <%# 
     in honor of Tailwind not being able to know 'tags' in advance

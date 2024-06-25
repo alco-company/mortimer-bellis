@@ -1,11 +1,11 @@
 class AccountsController < MortimerController
-  before_action :authorize
+  before_action :authorize, only: [ :create, :update, :destroy ]
 
   private
 
     # Only allow a list of trusted parameters through.
     def resource_params
-      params.require(:account).permit(:id, :name, :account_color, :email, :logo, :pp_identification, :locale, :time_zone)
+      params.require(:account).permit(:id, :name, :account_color, :email, :tax_number, :logo, :pp_identification, :locale, :time_zone)
     end
 
     def authorize

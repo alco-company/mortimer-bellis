@@ -1,6 +1,7 @@
 class UserRegistrationService
   def self.call(user)
     if user.persisted?
+      user.update locale: "da", time_zone: "Europe/Copenhagen"
       UserMailer.with(user: user).welcome.deliver_now
       team = Team.create account: user.account, name: I18n.t("teams.default_team")
       location = Location.create account: user.account, name: I18n.t("locations.default_location")

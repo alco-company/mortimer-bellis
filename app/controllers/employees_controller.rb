@@ -12,6 +12,19 @@ class EmployeesController < MortimerController
     super
   end
 
+  # POST /employees/:id/archive
+  def archive
+    @resource = Employee.find(params[:id])
+    if @resource
+      @resource.archived? ?
+        (@resource.update(state: :out) && notice = t("employees.unarchived")) :
+        (@resource.archived! && notice = t("employees.archived"))
+      redirect_back(fallback_location: root_path, notice: notice)
+    else
+      redirect_back(fallback_location: root_path, warning: t("employees.not_found"))
+    end
+  end
+
   def signup
     if params[:employee][:api_key].present?
       api_key = params[:employee].delete :api_key

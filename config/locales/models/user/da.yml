@@ -89,16 +89,21 @@ da:
 
   user_mailer:
     welcome:
-      subject: Velkommen til vores service
-      body: |
-        Hej %{name},
-        Velkommen til vores service.
-
-
-        Med venlig hilsen
-        M O R T I M E R
+      title: "ding ding!"
+      preheader: "Nyt lead!"
+      subject: "ding ding!"
+      hello: "Hej,"
+      introduction: "nu krøb der en rotte mere i fælden! Registranten er %{email} - "
+      regards: "Med venlig hilsen"
 
   devise:
+    login: "Log ind"
+    sign_up: "Opret konto"
+    forgot_password: "Glemt adgangskode?"
+    remember_me: "Husk mig"
+    missing_confirmation_email: "Fik du ikke en email med bekræftelseslink?"
+    missing_unlock_email: "Fik du ikke en email med instruktioner om at låse din konto op?"
+    
     confirmations:
       confirmed: "Din email-adresse er blevet bekræftet. Tak!"
       send_instructions: "Du vil modtage en email med instruktioner om hvordan du bekræfter din email-adresse om et par minutter."
@@ -107,7 +112,7 @@ da:
       already_authenticated: "Du er allerede logget ind."
       inactive: "Din konto er endnu ikke aktiveret."
       invalid: "Invalid %{authentication_keys} or password."
-      locked: "Din konto er låst."
+      locked: "Din konto er låst. Vi har sendt dig en email med instruktioner om hvordan du låser den op."
       last_attempt: "Du har et forsøg tilbage før din konto låses."
       not_found_in_database: "Invalid %{authentication_keys} or password."
       timeout: "Din session er udløbet. Log venligst ind igen for at fortsætte."
@@ -115,15 +120,53 @@ da:
       unconfirmed: "Du skal bekræfte din email-adresse for at fortsætte."
     mailer:
       confirmation_instructions:
+        title: "Instruktion"
+        preheader: "Instruktioner til at bekræfte din email-adresse på Mortimer"
         subject: "Instruktioner til at bekræfte din email-adresse"
+        hello: "Hej %{email},"
+        introduction: "vi er vældigt glade for at se dig her! For at du ikke bliver overrasket, så er det sådan, at vi har brug for at bekræfte din email adresse. Det kan du gøre ved at klikke på knappen herunder."
+        action: "Jeg accepterer oprettelsen af min brugerprofil"
+        ignore: "Har du fortrudt, ønsker du ikke at oprette din profil alligevel, eller har du modtaget denne email ved en fejl, behøver du intet at gøre (måske bortset fra evt at smide email'en bort). Din bruger konto bliver først oprettet i det øjeblik, du klikker på knappen her ovenfor."
+        regards: "Med venlig hilsen"
+
       reset_password_instructions:
+        title: "Instruktion"
+        preheader: "Instruktioner til at nulstille din adgangskode"
         subject: "Instruktioner til at nulstille din adgangskode"
+        hello: "Hej %{email},"
+        introduction: "nogen har bedt om at få din adgangskode nulstillet. Det kan du gøre ved at klikke på knappen herunder."
+        action: "Nulstil min adgangskode"
+        ignore: "Har du fortrudt, ønsker du ikke at nulstille din adgangskode alligevel, eller har du modtaget denne email ved en fejl, behøver du intet at gøre (måske bortset fra evt at smide email'en bort). Din adgangskode bliver først nulstillet i det øjeblik, du klikker på knappen her ovenfor."
+        regards: "Med venlig hilsen"
+
       unlock_instructions:
+        title: "Instruktion"
+        preheader: "Instruktioner til at låse din konto op"
         subject: "Instruktioner til at låse din konto op"
+        hello: "Hej %{email},"
+        introduction: "nogen har forsøgt at logge ind på din profil, uden at kunne din adgangskode. Derfor er din konto blevet låst. Du kan låse den op ved at klikke på knappen herunder."
+        action: "Lås min konto op"
+        ignore: "Er du i tvivl om, hvordan du skal forholde dig, er det måske en god idé at kontakte den ansvarlige for jeres brug af  M O R T I M E R. Din konto bliver først låst op i det øjeblik, du klikker på knappen her ovenfor."
+        regards: "Med venlig hilsen"
+
       email_changed:
-        subject: "Din email adressen er blevet ændret"
+        title: "Vigtig information"
+        preheader: "Din email adresse er blevet ændret"
+        subject: "Din email adresse er blevet ændret"
+        hello: "Hej %{email},"
+        introduction: "nogen har ændret email adressen til din profil til %{email}! Det vigtigste at bemærke her, er at du derfor, fremover, skal bruge dén email adresse til at logge ind med."
+        ignore: "Har du selv gjort det, er alt i orden, men hvis det ikke er dig selv, bør du som minimum kontakte den ansvarlige for jeres brug af  M O R T I M E R."
+        regards: "Med venlig hilsen"
+
       password_change:
+        title: "Vigtig information"
+        preheader: "Din adgangskode er blevet ændret"
         subject: "Din adgangskode er blevet ændret"
+        hello: "Hej %{email},"
+        introduction: "nogen har ændret adgangskoden til din profil!"
+        ignore: "Har du selv gjort det, er alt i orden, men hvis det ikke er dig selv, bør du som minimum kontakte den ansvarlige for jeres brug af  M O R T I M E R."
+        regards: "Med venlig hilsen"
+
     omniauth_callbacks:
       failure: "Kunne ikke godkende dig fra %{kind} fordi \"%{reason}\"."
       success: "Godkendte dig fra %{kind} kontoen."
@@ -147,6 +190,11 @@ da:
       signed_out: "Du blev logget korrekt af."
       already_signed_out: "Du er allerede korrekt logget af."
     unlocks:
+      new:
+        resend_unlock:
+          title: Lås din konto op
+        send_instructions: "Indtast venligst din email adresse for at låse din konto op."
+        resend: "Send igen"
       send_instructions: "Du vil modtage en email med instruktioner om hvordan du låser din konto op om et par minutter."
       send_paranoid_instructions: "Hvis din konto eksisterer, vil du modtage en email med instruktioner om hvordan du låser den op om et par minutter."
       unlocked: "Din konto er blevet låst op. Log venligst ind for at fortsætte."

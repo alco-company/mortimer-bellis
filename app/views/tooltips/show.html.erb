@@ -1,0 +1,9 @@
+<turbo-frame id="tooltip">
+  <div id="tooltip_container" class="relative max-w-80 z-40">
+    <div class="p-2 bg-black rounded-md text-white">
+      <%#= render partial: "users/user", object: @punch, formats: :svg %>
+      <strong><%= I18n.t("punch.tooltips.comment.label") %>:</strong>
+      <p><%= @punch.comment %></p>
+    </div>
+  </div>
+</turbo-frame>

@@ -47,6 +47,8 @@ class Pos::EmployeeController < Pos::PosController
   # Manuel entry of sick/free
   #  "punch"=>{"from_at"=>"2024-05-06", "to_at"=>"2024-05-06", "comment" => "en ting", "reason"=>"nursing_sick"}, "api_key"=>"YqymK1swsjkqSSeG3DFVjq1d", "controller"=>"pos/employee", "action"=>"create"} permitted: false>
   def create
+    redirect_to(pos_employee_url(api_key: @resource.access_token), warning: t("employee.archived")) and return if @resource.archived?
+
     params[:employee].present? ? now_punch : range_punch
   rescue ActionController::InvalidAuthenticityToken
     redirect_to pos_employee_url(api_key: @resource.access_token), alert: t("invalid_authenticity_token") and return
@@ -105,6 +107,7 @@ class Pos::EmployeeController < Pos::PosController
       else nil
       end
       redirect_to root_path and return unless @resource
+
       Current.account = @resource.account
     end
 
@@ -120,12 +123,16 @@ class Pos::EmployeeController < Pos::PosController
     end
 
     def range_punch
-      if (Date.today == Date.parse(punch_params[:from_at]) ||
-        Date.today == Date.parse(punch_params[:to_at])) && !@resource.out?
-        redirect_to pos_employee_url(api_key: @resource.access_token), warning: t("employee_working_punch_out_first") and return
+      begin
+        if (Date.today == Date.parse(punch_params[:from_at]) ||
+          Date.today == Date.parse(punch_params[:to_at])) && !@resource.out?
+          redirect_to pos_employee_url(api_key: @resource.access_token), warning: t("employee_working_punch_out_first") and return
+        end
+        @resource.punch_range punch_params[:reason], request.remote_ip, punch_params[:from_at], punch_params[:to_at], punch_params[:comment]
+        redirect_to pos_employee_url(api_key: @resource.access_token, tab: "payroll") and return
+      rescue => e
+        redirect_to pos_employee_url(api_key: @resource.access_token, edit: true, tab: "payroll"), warning: t("form_not_processable") and return
       end
-      @resource.punch_range punch_params[:reason], request.remote_ip, punch_params[:from_at], punch_params[:to_at], punch_params[:comment]
-      redirect_to pos_employee_url(api_key: @resource.access_token, tab: "payroll") and return
     end
 
     def render_punches

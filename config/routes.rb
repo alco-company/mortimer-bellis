@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get "tooltips/show"
   devise_for :users, controllers: {
     invitations: "users/invitations",
     registrations: "users/registrations",
@@ -17,11 +18,16 @@ Rails.application.routes.draw do
       get "sign_in_success"
     end
   end
-  resources :punches
+  resources :punches do
+    resource :tooltip, only: :show
+  end
   resources :punch_cards do
     resources :punches
   end
   resources :employees do
+    member do
+      post :archive
+    end
     collection do
       post :signup
     end

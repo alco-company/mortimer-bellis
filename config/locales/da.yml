@@ -7,6 +7,8 @@ da:
   form_errors_prohibited: "%{errors} fejl forhindrede denne post i at blive gemt"
   "yes": Ja
   "no": Nej
+  archive: Arkivér
+  unarchive: Aktivér
   edit: Redigér
   cancel: Fortryd
   update: Opdatér
@@ -22,6 +24,7 @@ da:
   delete_all_later: Alle poster slettes - i baggrunden, vent venligst...
   unauthorized: Du har ikke rettigheder til at gennemføre denne handling
   cannot_change_role: Du kan ikke ændre din egen rolle til super_user!
+  form_not_processable: Formularen kunne ikke behandles - prøv igen
 
   expected_time_zone: "Vi tror at den tidszone, der passer dig bedst er:"
 
@@ -80,12 +83,21 @@ da:
     black: Sort
     white: Hvid
 
+  pages:
+    list:
+      slug: URL
+      title: Titel
+      body: Indhold
+      updated_at: Opdateret den
+      created_at: Oprettet den
   pos:
     employee:
       show:
         today: I dag
         payroll_period: Lønperiode
         profile: Profil
+        add: Tilføj
+        save: Gem
         in: Ind
         out: Ud
         break: Pause
@@ -115,6 +127,7 @@ da:
         nursing_sick: Omsorgsdage
         lost_work_sick: Tabt arbejdsfortjeneste
         p56_sick: Pgf 56 sygdom
+        archived: Arkiveret
 
     punch_clocks:
       edit:
@@ -134,6 +147,7 @@ da:
         email: Email adresse - konto ansvarlig
         pp_identification: Lønbureau ID
         eu_work_directive: EU regulativ (2003/88/EC)
+        tax_number: CVR nummer
         time_zone: Tidszone
         locale: Sprog
         logo: Logo (80 x 40)
@@ -501,6 +515,9 @@ da:
         one: bruger
         other: brugere
       
+    errors:
+      messages:
+        record_invalid: "Posten findes ikke"
 
   date:
     single_day_names:
@@ -617,9 +634,11 @@ da:
       month: Måned
       year: År
 
+
   errors:
     format: "%{attribute} %{message}"
     messages:
+      user_registration_failed: "Bruger registreringen mislykkedes - fejl: %{error}"
       already_confirmed: "er allerede bekræftet, prøv venligst at logge ind"
       confirmation_period_expired: "skal bekræftes inden %{period}, forespørg venligst om en ny"
       expired: "er udløbet, venligst anmod om en ny"

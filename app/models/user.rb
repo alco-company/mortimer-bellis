@@ -8,7 +8,7 @@ class User < ApplicationRecord
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :invitable, :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable,
-         :omniauthable, :confirmable, :trackable, :timeoutable
+         :omniauthable, :confirmable, :trackable, :timeoutable, :lockable
 
   has_many :user_invitations, class_name: "User", as: :invited_by
 
@@ -60,8 +60,12 @@ class User < ApplicationRecord
 
   def add_role
     r = 0
-    r = 1 if self.account.users.count == 1
-    r = 2 if Account.unscoped.count == 1
+    begin
+      r = 2 if Account.unscoped.count == 1
+      r = 1 if self.account.users.count == 1
+    rescue
+    end
+
     self.update(role: r)
   end
 end

@@ -28,6 +28,7 @@ da:
       name: Navn
       ip_addr: IP adresse
       locale: Sprog
+      location: Arbejdssted
       time_zone: Tidszone
       updated_at: Opdateret den
 

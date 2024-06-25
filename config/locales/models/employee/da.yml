@@ -3,6 +3,7 @@ da:
   state_eq_current_state: "Medarbejderen er allerede stemplet %{state}"
   employee:
     me: "Mig"
+    archived: "Du kan ikke stemple - kontakt venligst din leder"
 
     in: "Arbejder"
     out: "Ikke på arbejde"
@@ -64,13 +65,29 @@ da:
 
   employee_mailer:
     invite:
-      title: Tidsregistrering hos %{account}
-      introduction: "Du er blevet inviteret af %{inviter} hos %{account} til at oprette en medarbejder profil."
-      subject: "Invitation til at oprette en medarbejder profil"
-      action: "Klik på linket for at komme i gang: %{url}"
-      regards: "Med venlig hilsen"
+      title: "Invitation"
+      preheader: "Du er blevet inviteret til at færdiggøre en medarbejder profil"
+      subject: "Invitation til at færdiggøre en medarbejder profil"
+      hi: Hej,
+      you: er din email adresse %{email}?
+      introduction: "Hvis det er, har %{inviter} hos <strong>%{account}</strong> inviteret dig til at færdiggøre en medarbejder profil på  M O R T I M E R. Du kan modtage invitationen ved at trykke på knappen herunder."
+      action: "Ja, det er mig"
+      not_interested: "Hvis du ikke er interesseret, eller hvis det er den forkerte email adresse, der er blevet benyttet, så beklager holdet bag  M O R T I M E R  ulejligheden, og beder dig ignorere denne email."
+      salutations: "Med venlig hilsen"
+    confetti:
+      title: "Succes!"
+      preheader: "Fejring af din første stempling"
+      subject: "Fejring af din første stempling"
+      hi: Hej,
+      you: "%{name} - du har lige stemplet ind for første gang på  M O R T I M E R. Tillykke! Du er nu en del af holdet hos <strong>%{account}</strong>."
+      introduction: "Husk at tidsregistrering er i din egen interesse! Du kan bruge det i samtalen med din leder, din personlige udvikling, og hvis du har brug for at dokumentere din arbejdstid."
+      rights: "Du har ret til at se og rette dine egne data, og du kan slette din profil, hvis du ikke længere skal arbejde i virksomheden. Dine data skal virksomheden opbevare i 5 år. Hvis du har spørgsmål, så kontakt din leder."
+      salutations: "Med venlig hilsen"
 
   employees:
+    not_found: "Ingen medarbejder fundet med dette ID"
+    archived: "Medarbejderen blev arkiveret"
+    unarchived: "Medarbejderen blev aktiveret (igen)"
     advanced_configuration: Vis flere indstillingsmuligheder
     create:
       post: Medarbejderen blev oprettet
@@ -91,6 +108,8 @@ da:
       phone: Telefon
       pincode: Pinkode
       punching_absence: Kun fravær
+      locale: Sprog
+      time_zone: Tidszone
       state: Status
       updated_at: Opdateret den
 
