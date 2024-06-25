@@ -2,7 +2,6 @@
 
 ## ROADMAP
 
-* fix wrong link on pos/punch_clock payroll_period list close elements
 
 ## CHANGELOG
 
@@ -10,6 +9,7 @@
 
 * tooltip on punch#comment
 * hide empty flash messages "{}"
+* fix wrong link on pos/punch_clock payroll_period list close elements
   
 ### 24/6/2024
 

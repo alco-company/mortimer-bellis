@@ -2,6 +2,7 @@
 
 class PosEmployeeLayout < ApplicationView
   include Phlex::Rails::Layout
+  include Phlex::Rails::Helpers::TurboFrameTag
 
   def view_template(&block)
     doctype
@@ -24,6 +25,7 @@ class PosEmployeeLayout < ApplicationView
         yield :nav
         main(class: "h-full",  data: { controller: "pos-employee" }) do
           yield
+          turbo_frame_tag("tooltip", class: "absolute", target: "_top")
         end
         yield :flash
         yield :footer, "mobile"

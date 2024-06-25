@@ -97,6 +97,7 @@ da:
         payroll_period: Lønperiode
         profile: Profil
         add: Tilføj
+        save: Gem
         in: Ind
         out: Ud
         break: Pause
