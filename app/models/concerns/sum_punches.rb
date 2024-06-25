@@ -94,7 +94,7 @@ module SumPunches
         work, ot1, ot2 = employee.divide_minutes counters[:work].sum
         pc.update work_minutes: work, ot1_minutes: ot1, ot2_minutes: ot2, break_minutes: counters[:break].sum
       rescue => e
-        debugger
+        say "Error in more_punches: #{e}"
       end
     end
   end
