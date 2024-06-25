@@ -94,6 +94,10 @@ class Employee < ApplicationRecord
     end
     pin.to_s
   end
+  
+  def is_blocked?
+    team.blocked? || blocked?
+  end
 
   def get_team_color
     team.team_color.blank? ? "border-white" : team.team_color

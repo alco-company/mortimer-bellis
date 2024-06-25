@@ -12,6 +12,7 @@
 * fix wrong link on pos/punch_clock payroll_period list close elements
 * remove indigo-500 from input fields
 * move flash on mobile view up 10px
+* use BooleanField on team#blocked_from_punching and block punching on employee
   
 ### 24/6/2024
 

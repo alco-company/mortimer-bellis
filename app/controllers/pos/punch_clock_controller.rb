@@ -15,6 +15,9 @@ class Pos::PunchClockController < Pos::PosController
   #
   # Parameters: {"authenticity_token"=>"[FILTERED]", "punch_clock"=>{"api_key"=>"[FILTERED]"}, "employee"=>{"state"=>"IN", "id"=>"1"}, "button"=>"", "id"=>"1"}
   def create
+    redirect_to(pos_punch_clock_path(api_key: @resource.access_token, q: @employee.pincode), warning: t("employee.archived")) and return if @employee.archived?
+    redirect_to(pos_punch_clock_path(api_key: @resource.access_token, q: @employee.pincode), warning: t("employee.blocked")) and return if @employee.is_blocked?
+
     if params[:employee][:state] == @employee.state
       redirect_to pos_punch_clock_url(api_key: @resource.access_token, q: @employee.pincode), warning: t("state_eq_current_state") and return
     end

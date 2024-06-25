@@ -6,6 +6,9 @@ class Employees::Form < ApplicationForm
       row field(:mugshot).file(class: "mort-form-file")
       row field(:pincode).input(class: "mort-form-text")
       row field(:punching_absence).boolean(class: "mort-form-bool")
+      model.team.blocked? ?
+        (model.blocked = true; row(field(:blocked).boolean(class: "mort-form-bool", disabled: true))) :
+        row(field(:blocked).boolean(class: "mort-form-bool"))
       div do
         div(class: "mort-btn-secondary", data: { action: "click->employee#toggleAdvanced" }) { I18n.t("employees.advanced_configuration") }
       end if @editable
@@ -22,9 +25,10 @@ class Employees::Form < ApplicationForm
         row field(:birthday).date(class: "mort-form-text")
         row field(:hired_at).input(class: "mort-form-text")
         row field(:pbx_extension).input(class: "mort-form-text")
-        row field(:contract_minutes).input(class: "mort-form-text")
-        row field(:contract_days_per_payroll).input(class: "mort-form-text")
-        row field(:contract_days_per_week).input(class: "mort-form-text")
+        p(class: "text-lg font-medium border-b-2 border-gray-400") { I18n.t("employees.contract_template_details") }
+        row field(:contract_minutes).input(class: "mort-form-text", placeholder: "160:20")
+        row field(:contract_days_per_payroll).input(class: "mort-form-text", placeholder: "0")
+        row field(:contract_days_per_week).input(class: "mort-form-text", placeholder: "5")
         row field(:allowed_ot_minutes).input(class: "mort-form-text")
         row field(:tmp_overtime_allowed).datetime(class: "mort-form-text")
         row field(:flex_balance_minutes).input(class: "mort-form-text")
@@ -32,7 +36,6 @@ class Employees::Form < ApplicationForm
         row field(:ot1_add_hour_pay).input(class: "mort-form-text")
         row field(:ot2_add_hour_pay).input(class: "mort-form-text")
         row field(:eu_state).input(class: "mort-form-text")
-        row field(:blocked).input(class: "mort-form-text")
         row field(:locale).select(Employee.locales, prompt: I18n.t(".select_employee_locale"), class: "mort-form-text")
         row field(:time_zone).select(ActiveSupport::TimeZone.all.collect { |tz| [ "(GMT#{ActiveSupport::TimeZone.seconds_to_utc_offset(tz.utc_offset)}) #{tz.name}", tz.tzinfo.name ] }, class: "mort-form-text")
       end
