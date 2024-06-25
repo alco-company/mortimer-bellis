@@ -16,6 +16,7 @@
 * refine danish localisation for employee and team
 * fix params permissions
 * show account when global_queries
+* forgot to show navn in any case !!"#€!
   
 ### 24/6/2024
 

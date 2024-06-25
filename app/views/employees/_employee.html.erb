@@ -2,8 +2,10 @@
   <div class="min-w-0 w-full columns-3 md:columns-5 lg:columns-6">
     <%= render_text_column value: link_to(employee.name, employee_url(employee)), css: "truncate mort-link-primary "  do |value| %>
       <%= value %>
-      <p class="text-xs"><%=  link_to employee.account.name, employee.account %> </p>
-    <% end if current_user.global_queries? %>
+      <% if current_user.global_queries? %>
+        <p class="text-xs"><%=  link_to employee.account.name, employee.account %> </p>
+      <% end %>
+    <% end %>
     <%= render_text_column value: link_to(employee.team.name, team_url(employee.team)), css: "truncate mort-link-primary" %>
     <%= render_boolean_column value: employee.punching_absence, css: "text-right" %>
     <%= render_text_column value: Employee.locales(employee.locale), css: "hidden md:block truncate" %>

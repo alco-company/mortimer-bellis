@@ -2,8 +2,10 @@
   <div class="min-w-0 w-full columns-2 md:columns-4 lg:columns-5">
     <%= render_text_column value: link_to(team.name, team_url(team)), css: "truncate mort-link-primary" do |value| %>
       <%= value %>
-      <p class="text-xs"><%=  link_to team.account.name, team.account %> </p>
-    <% end if current_user.global_queries? %>
+      <% if current_user.global_queries? %>
+        <p class="text-xs"><%=  link_to team.account.name, team.account %> </p>
+      <% end %>
+    <% end %>
     <%= render_text_column value: Team.colors(team.team_color), css: "truncate" %>
     <%= render_text_column value: Team.locales(team.locale), css: "hidden md:block truncate" %>
     <%= render_text_column value: team.time_zone, css: "hidden lg:block truncate" %>
