@@ -11,6 +11,7 @@ da:
 
   teams:
     default_team: Hold
+    contract_template_details: Kontrakt skabelon detaljer (overstyres af detaljer for den enkelte medarbejder)
     
     create:
       post: Holdet blev oprettet

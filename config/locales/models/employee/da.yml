@@ -4,6 +4,7 @@ da:
   employee:
     me: "Mig"
     archived: "Du kan ikke stemple - kontakt venligst din leder"
+    blocked: "Du kan ikke stemple - kontakt venligst din leder"
 
     in: "Arbejder"
     out: "Ikke på arbejde"
@@ -95,6 +96,9 @@ da:
       post: Medarbejderen blev opdateret
     destroy:
       post: Medarbejderen blev slettet
+
+    contract_template_details: Kontrakt skabelon detaljer (overstyrer detaljer angivet på det tildelte hold)
+
 
     list:
       employee_status: Medarbejder status

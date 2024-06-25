@@ -205,23 +205,23 @@ da:
         description: beskrivelse
         email: Email adresse
         cell_phone: Mobil
-        pbx_extension: omstillingsnr
-        contract_minutes: kontrakt timer/lønperiode
-        contract_days_per_payroll: kontrakt dage/lønperiode
-        contract_days_per_week: kontrakt dage/uge
+        pbx_extension: lokalnr (omstillingsanlæg)
+        contract_minutes: Aftalt arbejdstid i lønperioden
+        contract_days_per_payroll: Aftalt antal kalenderdage/lønperiode (0=måned)
+        contract_days_per_week: Aftalt antal arbejdsdage/uge
         flex_balance_minutes: flex minutter
         hour_pay: time(grund)løn
-        ot1_add_hour_pay: OT1 tillæg time løn
-        ot2_add_hour_pay: OT2 tillæg time løn
+        ot1_add_hour_pay: Overtid 1 tillæg (fx 15,25 eller 50%)
+        ot2_add_hour_pay: Overtid 2 tillæg (fx 30,50 eller 100%)
         hour_rate_cent: time(grund)løn i øre
         ot1_hour_add_cent: OT1 tillæg time løn i øre
         ot2_hour_add_cent: OT2 tillæg time løn i øre
-        tmp_overtime_allowed: Overtid tilladt
+        tmp_overtime_allowed: Overtid midlertidigt tilladt i 24t fra kl
         eu_state: EU regulativ (2003/88/EC)
         blocked: tidsregistrering spærret
         locale: sprog
         time_zone: tidszone
-        allowed_ot_minutes: Tilladt overtid
+        allowed_ot_minutes: Tilladt overtid i minutter (-1=ingen, 0=ubegrænset)
 
       employee_invitation:
         user_id: Inviteret af
@@ -363,18 +363,18 @@ da:
         state: status
         description: beskrivelse
         email: Email adresse
-        cell_phone: Mobil
-        pbx_extension: omstillingsnr
-        contract_minutes: Aftalt arbejdstid
-        contract_days_per_payroll: Aftalt dage/lønperiode
-        contract_days_per_week: Aftalt dage/uge
+        cell_phone: Mobil (holdets vagttelefon eller lign.)
+        pbx_extension: lokalnr (kø i omstillingsanlægget tildelt holdet)
+        contract_minutes: Aftalt arbejdstid i lønperioden
+        contract_days_per_payroll: Aftalt antal kalenderdage/lønperiode (0=måned)
+        contract_days_per_week: Aftalt antal arbejdsdage/uge
         hour_pay: Timeløn
-        ot1_add_hour_pay: Overtid 1 tillæg 
-        ot2_add_hour_pay: Overtid 2 tillæg
-        tmp_overtime_allowed: Overtid midlertidigt tilladt
+        ot1_add_hour_pay: Overtid 1 tillæg (fx 15,25 eller 50%)
+        ot2_add_hour_pay: Overtid 2 tillæg (fx 30,50 eller 100%)
+        tmp_overtime_allowed: Overtid midlertidigt tilladt i 24t fra kl
         eu_state: EU regulativ (2003/88/EC) status
         blocked: Blokeret for tidsregistrering
-        allowed_ot_minutes: Tilladt overtid
+        allowed_ot_minutes: Tilladt overtid i minutter (-1=ingen, 0=ubegrænset)
 
       uri_scheme: 
         scheme: skema

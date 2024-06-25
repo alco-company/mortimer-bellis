@@ -13,6 +13,7 @@
 * remove indigo-500 from input fields
 * move flash on mobile view up 10px
 * use BooleanField on team#blocked_from_punching and block punching on employee
+* refine danish localisation for employee and team
   
 ### 24/6/2024
 
