@@ -18,7 +18,7 @@ class FlashComponent < ApplicationComponent
     div(
       id: "flash_container",
       aria_live: "assertive",
-      class: "z-40 pointer-events-none fixed inset-0 flex items-end px-4 py-6 sm:items-start sm:p-6"
+      class: "z-40 pointer-events-none fixed inset-0 flex items-end mb-6 px-4 py-6 sm:items-start sm:p-6"
     ) do
       div(class: "flex w-full flex-col items-center space-y-4 sm:items-end") do
         @flash.each do |type, msg|
