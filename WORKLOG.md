@@ -15,6 +15,7 @@
 * use BooleanField on team#blocked_from_punching and block punching on employee
 * refine danish localisation for employee and team
 * fix params permissions
+* show account when global_queries
   
 ### 24/6/2024
 
