@@ -9,6 +9,7 @@
 ### 25/6/2024
 
 * tooltip on punch#comment
+* hide empty flash messages "{}"
   
 ### 24/6/2024
 

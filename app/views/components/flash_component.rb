@@ -10,7 +10,7 @@ class FlashComponent < ApplicationComponent
   def view_template
     # in honor of Tailwind not being able to know 'tags' in advance
     span(class: "hidden mort-flash-info mort-flash-error mort-flash-success mort-flash-warning mort-flash-notice mort-flash-timedout mort-flash-alert")
-    flash_container
+    flash_container if @flash.any?
   end
 
   def flash_container
