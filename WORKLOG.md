@@ -17,6 +17,7 @@
 * fix params permissions
 * show account when global_queries
 * forgot to show navn in any case !!"#€!
+* show version & locale and time_zone on profile only
   
 ### 24/6/2024
 

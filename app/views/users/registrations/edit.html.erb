@@ -1,5 +1,7 @@
 <div class="mx-auto w-72 sm:w-96">
   <h1 class="font-bold text-4xl"> <%= t("users.edit_profile.name") %> </h1>
+  <h3>Mortimer version:</h3>
+  <p class="text-xs font-thin"><%= ENV["MORTIMER_VERSION"] %></p>
 
   <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
     <%= render "devise/shared/error_messages", resource: resource %>
