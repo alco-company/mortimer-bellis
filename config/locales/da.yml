@@ -28,6 +28,15 @@ da:
 
   expected_time_zone: "Vi tror at den tidszone, der passer dig bedst er:"
 
+  weekdays: Ugedage
+  monday: Mandag
+  tuesday: Tirsdag
+  wednesday: Onsdag
+  thursday: Torsdag
+  friday: Fredag
+  saturday: Lørdag
+  sunday: Søndag
+
   modal:
     destroy:
       attachment_deleted: Den vedhæftede fil blev slettet
@@ -112,7 +121,7 @@ da:
         type_of_registration: Registreringstype
         from_at: Fra
         to_at: Til
-        comment: Beskrivelse/Bemærkning
+        comment: Bemærkning
         free_reason: Årsag til fravær
         sick_reason: Sygdomsårsag
         free: Fri
@@ -286,7 +295,7 @@ da:
         employee_id: Medarbejder
         state: Status
         punch_clock_id: Stempelur
-        comment: Beskrivelse/bemærkning
+        comment: Bemærkning
         
       punch_card:
         employee:

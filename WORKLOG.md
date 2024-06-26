@@ -5,6 +5,10 @@
 
 ## CHANGELOG
 
+### 26/6/2024
+
+* first stab at schedules: days
+
 ### 25/6/2024
 
 * tooltip on punch#comment

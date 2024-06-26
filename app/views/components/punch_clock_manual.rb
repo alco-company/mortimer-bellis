@@ -11,7 +11,7 @@ class PunchClockManual < ApplicationComponent
 
   def view_template(&block)
     form_with id: "manualpunch", data: { pos_employee_target: "manualForm" }, url: helpers.pos_employee_url(api_key: employee.access_token, tab: "payroll"), method: :post do
-      div(class: "mx-4 my-2 space-y-12 sm:space-y-16") do
+      div(class: "mx-4 my-2") do
         div do
           h2(class: "text-base font-semibold leading-7 text-gray-900") do
             helpers.t(".manuel_entry")
@@ -20,115 +20,7 @@ class PunchClockManual < ApplicationComponent
             helpers.t(".manuel_entry_description")
           end
           # set the type of registration
-          div(
-            class: "my-2 sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6"
-          ) do
-            whitespace
-            label(
-              for: "reason",
-              class:
-                "block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5"
-            ) { helpers.t(".type_of_registration") }
-            div(class: "mt-2 sm:col-span-2 sm:mt-0") do
-              div(
-                class:
-                  "flex sm:max-w-md"
-              ) do
-                whitespace
-                div(class: "grid grid-flow-row-dense grid-cols-3 grid-rows-2 gap-4") do
-                  div() { helpers.t(".work") }
-                  div() { helpers.t(".sick") }
-                  div() { helpers.t(".free") }
-                  button(
-                      type: "button",
-                      data: {
-                        action: "click->pos-employee#toggleWork",
-                        pos_employee_target: "workButton"
-                      },
-                      class: "bg-gray-200 aria-checked:bg-sky-600 relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-sky-600 focus:ring-offset-2",
-                      role: "switch",
-                      aria_checked: "true"
-                    ) do
-                      whitespace
-                      span(class: "sr-only") { "work" }
-                      whitespace
-                      comment { %(Enabled: "translate-x-5", Not Enabled: "translate-x-0") }
-                      whitespace
-                      span(
-                        data: {
-                          pos_employee_target: "workSpan"
-                        },
-                        aria_hidden: "true",
-                        class:
-                          "translate-x-5 pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
-                      )
-                    end
-                  input(
-                    id: "in",
-                    name: "punch[reason]",
-                    type: "radio",
-                    data: {
-                      pos_employee_target: "workReason"
-                    },
-                    value: "in",
-                    checked: "checked",
-                    class:
-                      "hidden"
-                  )
-
-                  button(
-                      type: "button",
-                      data: {
-                        action: "click->pos-employee#toggleSick",
-                        pos_employee_target: "sickButton"
-                      },
-                      class: "bg-gray-200 aria-checked:bg-sky-600 relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-sky-600 focus:ring-offset-2",
-                      role: "switch",
-                      aria_checked: "false"
-                    ) do
-                      whitespace
-                      span(class: "sr-only") { "sick" }
-                      whitespace
-                      comment { %(Enabled: "translate-x-5", Not Enabled: "translate-x-0") }
-                      whitespace
-                      span(
-                        data: {
-                          pos_employee_target: "sickSpan"
-                        },
-                        aria_hidden: "true",
-                        class:
-                          "translate-x-0 pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
-                      )
-                    end
-
-                  button(
-                      type: "button",
-                      data: {
-                        action: "click->pos-employee#toggleFree",
-                        pos_employee_target: "freeButton"
-                      },
-                      class: "bg-gray-200 aria-checked:bg-sky-600 relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-sky-600 focus:ring-offset-2",
-                      role: "switch",
-                      aria_checked: "false"
-                    ) do
-                      whitespace
-                      span(class: "sr-only") { "free" }
-                      whitespace
-                      comment { %(Enabled: "translate-x-5", Not Enabled: "translate-x-0") }
-                      whitespace
-                      span(
-                        data: {
-                          pos_employee_target: "freeSpan"
-                        },
-                        aria_hidden: "true",
-                        class:
-                          "translate-x-0 pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
-                      )
-                    end
-                end
-              end
-            end
-          end
+          set_registration
 
           # set the time slot from_at
           from_at
@@ -136,140 +28,63 @@ class PunchClockManual < ApplicationComponent
           # set the time slot to_at
           to_at
 
+          set_days
+
           # set the comment
           set_comment
 
           # set the free Options
-          div(class: "hidden", data: { pos_employee_target: "freeOptions" }) do
-            div(
-              class: "my-2 sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6 "
-            ) do
-              whitespace
-              label(
-                for: "reason",
-                class:
-                  "block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5"
-              ) { helpers.t(".free_reason") }
-              div(class: "mt-2 sm:col-span-2 sm:mt-0") do
-                div(
-                  class:
-                    "flex sm:max-w-md"
-                ) do
-                  whitespace
-                  fieldset(class: "mt-4") do
-                    legend(class: "sr-only") { "Free reasons" }
-                    div(class: "space-y-4") do
-                      %w[rr_free senior_free unpaid_free maternity_free leave_free].each do |reason|
-                        div(class: "flex items-center") do
-                          whitespace
-                          input(
-                            id: reason,
-                            name: "punch[reason]",
-                            type: "radio",
-                            value: reason,
-                            # checked: "checked" if punch.state == reason,
-                            class:
-                              "h-4 w-4 border-gray-300 text-sky-600 focus:ring-sky-600"
-                          )
-                          whitespace
-                          label(
-                            for: reason,
-                            class: "ml-3 block text-sm font-medium leading-6 text-gray-900"
-                          ) { helpers.t(".#{reason}") }
-                        end
-                      end
-                    end
-                  end
-                end
-              end
-            end
-          end
+          set_options(reason: "free", label: helpers.t(".free_reason"), reasons: %w[rr_free senior_free unpaid_free maternity_free leave_free])
 
           # set the sick Options
-          div(class: "hidden", data: { pos_employee_target: "sickOptions" }) do
-            div(
-              class: "sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6 "
-            ) do
-              whitespace
-              label(
-                for: "reason",
-                class:
-                  "block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5"
-              ) { helpers.t(".sick_reason") }
-              div(class: "mt-2 sm:col-span-2 sm:mt-0") do
-                div(
-                  class:
-                    "flex sm:max-w-md"
-                ) do
-                  whitespace
-                  fieldset(class: "mt-4") do
-                    legend(class: "sr-only") { "Sick reasons" }
-                    div(class: "space-y-4") do
-                      %w[iam_sick child_sick nursing_sick lost_work_sick p56_sick].each do |reason|
-                        div(class: "flex items-center") do
-                          whitespace
-                          input(
-                            id: reason,
-                            name: "punch[reason]",
-                            type: "radio",
-                            value: reason,
-                            # checked: "checked" if punch.state == reason,
-                            class:
-                              "h-4 w-4 border-gray-300 text-sky-600 focus:ring-sky-600"
-                          )
-                          whitespace
-                          label(
-                            for: reason,
-                            class: "ml-3 block text-sm font-medium leading-6 text-gray-900"
-                          ) { helpers.t(".#{reason}") }
-                        end
-                      end
-                    end
-                  end
-                end
-              end
-            end
-          end
+          set_options(reason: "sick", label: helpers.t(".sick_reason"), reasons: %w[iam_sick child_sick nursing_sick lost_work_sick p56_sick])
         end
       end
-      # action_buttons
     end
   end
 
-  # def action_buttons
-  #   div(class: "px-4 mt-6 mb-24 sm:mb-12 flex items-center justify-start gap-x-2") do
-  #     whitespace
-  #     button(
-  #       type: "button",
-  #       data: { action: "click->pos-employee#clearForm" },
-  #       class: "mort-btn-cancel"
-  #     ) { helpers.t("cancel") }
-  #     whitespace
-  #     button(
-  #       type: "submit",
-  #       class:
-  #         "mort-btn-primary"
-  #     ) { helpers.t("save") }
+  # def punch_in
+  #   return if employee.in?
+  #   div(class: "justify-self-end") do
+  #     button_tag helpers.t("+"), type: "submit", form: "inform", class: "bg-green-500 text-white block rounded-md px-3 py-2 text-xl font-medium"
+  #     form_with url: helpers.pos_employee_url(api_key: employee.access_token), id: "inform", method: :post do
+  #       hidden_field :employee, :api_key, value: employee.access_token
+  #       hidden_field :employee, :state, value: :in
+  #       hidden_field :employee, :id, value: employee.id
+  #     end
   #   end
   # end
 
-  def punch_in
-    return if employee.in?
-    div(class: "justify-self-end") do
-      button_tag helpers.t("+"), type: "submit", form: "inform", class: "bg-green-500 text-white block rounded-md px-3 py-2 text-xl font-medium"
-      form_with url: helpers.pos_employee_url(api_key: employee.access_token), id: "inform", method: :post do
-        hidden_field :employee, :api_key, value: employee.access_token
-        hidden_field :employee, :state, value: :in
-        hidden_field :employee, :id, value: employee.id
+  def set_registration
+    div(class: "mt-4 sm:grid sm:grid-cols-3 sm:items-start") do
+      label(for: "reason", class: "block text-sm font-medium leading-6 text-gray-900") { helpers.t(".type_of_registration") }
+      div(class: "mt-2 sm:col-span-2 sm:mt-0") do
+        div(class: "flex sm:max-w-md") do
+          div(class: "grid grid-flow-row-dense grid-cols-3 grid-rows-2 gap-x-4 gap-y1") do
+            div(class: "text-xs font-medium") { helpers.t(".work") }
+            div(class: "text-xs font-medium") { helpers.t(".sick") }
+            div(class: "text-xs font-medium") { helpers.t(".free") }
+            slider(action: "click->pos-employee#toggleWork", enabled: true, reason: "work")
+            slider(action: "click->pos-employee#toggleSick", enabled: false, reason: "sick")
+            slider(action: "click->pos-employee#toggleFree", enabled: false, reason: "free")
+            input(
+              id: "in",
+              name: "punch[reason]",
+              type: "radio",
+              data: { pos_employee_target: "workReason" },
+              value: "in",
+              checked: "checked",
+              class: "hidden"
+            )
+          end
+        end
       end
     end
   end
-
   def from_at
     div(
-      class: "my-2 sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6"
+      class: "my-4 sm:grid sm:grid-cols-3 sm:items-start"
     ) do
-      whitespace
       label(
         for: "from_at",
         class:
@@ -292,7 +107,7 @@ class PunchClockManual < ApplicationComponent
 
   def to_at
     div(
-      class: "my-2 sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6"
+      class: "my-4 sm:grid sm:grid-cols-3 sm:items-start"
     ) do
       whitespace
       label(
@@ -314,18 +129,47 @@ class PunchClockManual < ApplicationComponent
     end
   end
 
+  def set_days
+    fieldset(class: "w-full") do
+      div(class: "flex text-base font-semibold leading-6 text-gray-900") do
+        div(class: "w-1/2") { helpers.t("weekdays") }
+        div(class: "w-1/2 cursor-pointer ", data: { action: "click->pos-employee#toggleWeekDays" }) do
+          svg(class: "float-right", data: { pos_employee_target: "downArrow" }, xmlns: "http://www.w3.org/2000/svg", height: "24px", viewBox: "0 -960 960 960", width: "24px", fill: "currentColor") do |s|
+            s.path(d: "M480-344 240-584l56-56 184 184 184-184 56 56-240 240Z")
+          end
+          svg(class: "hidden float-right", data: { pos_employee_target: "upArrow" }, xmlns: "http://www.w3.org/2000/svg", height: "24px", viewBox: "0 -960 960 960", width: "24px", fill: "currentColor") do |s|
+            s.path(d: "M480-528 296-344l-56-56 240-240 240 240-56 56-184-184Z")
+          end
+        end
+      end
+      div(class: "hidden mt-4 divide-y divide-gray-200 border-b border-t border-gray-200", data: { pos_employee_target: "weekDays" }) do
+        %w[monday tuesday wednesday thursday friday saturday sunday].each do |day|
+          div(class: "relative flex items-start py-4") do
+            div(class: "min-w-0 flex-1 text-sm leading-6") do
+              label(
+                for: "#{day}_checkbox",
+                class: "select-none font-medium text-gray-900"
+              ) { helpers.t(day) }
+            end
+            div(class: "ml-3 flex h-6 items-center") do
+              input(id: "#{day}_checkbox", name: "punch[days][]", type: "checkbox", value: day, class: "h-4 w-4 rounded border-gray-300 text-sky-600 focus:ring-sky-600", checked: (day != "saturday" && day != "sunday"))
+            end
+          end
+        end
+      end
+    end
+  end
+
   def set_comment
     div(
-      class: "my-2 sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6"
+      class: "my-4 sm:grid sm:grid-cols-3 sm:items-start"
     ) do
-      whitespace
       label(
         for: "comment",
         class:
           "block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5"
       ) { helpers.t(".comment") }
       div(class: "mt-2 sm:col-span-2 sm:mt-0") do
-        whitespace
         input(
           name: "punch[comment]",
           id: "punch_comment",
@@ -334,6 +178,61 @@ class PunchClockManual < ApplicationComponent
           class:
             "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-600 sm:max-w-xs sm:text-sm sm:leading-6"
         )
+      end
+    end
+  end
+
+  def slider(action:, enabled:, reason:)
+    klass = enabled ? "translate-x-5" : "translate-x-0"
+    button(
+      type: "button",
+      data: {
+        action: action,
+        pos_employee_target: "#{reason}Button"
+      },
+      class: "bg-gray-200 aria-checked:bg-sky-600 relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-sky-600 focus:ring-offset-2",
+      role: "switch",
+      aria_checked: enabled ? "true" : "false"
+    ) do
+      span(class: "sr-only") { reason }
+      # Enabled: "translate-x-5", Not Enabled: "translate-x-0"
+      span(
+        data: {
+          pos_employee_target: "#{reason}Span"
+        },
+        aria_hidden: "true",
+        class:
+          "#{klass} pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+      )
+    end
+  end
+
+  def set_options(reason:, label:, reasons:)
+    div(class: "hidden", data: { pos_employee_target: "#{reason}Options" }) do
+      div(class: "my-4 sm:grid sm:grid-cols-3 sm:items-start") do
+        label(for: "punch_reason", class: "block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5") { label }
+        div(class: "mt-2 sm:col-span-2 sm:mt-0") do
+          div(class: "flex sm:max-w-md") do
+            fieldset(class: "mt-4") do
+              legend(class: "sr-only") { "#{reason} reasons" }
+              div(class: "space-y-2") do
+                reasons.each do |r|
+                  div(class: "flex items-center") do
+                    input(
+                      id: "#{reason}_punch_reason",
+                      name: "punch[reason]",
+                      type: "radio",
+                      value: r,
+                      # checked: "checked" if punch.state == r,
+                      class: "h-4 w-4 border-gray-300 text-sky-600 focus:ring-sky-600"
+                    )
+                    label(for: r, class: "ml-3 block text-sm font-medium leading-6 text-gray-900") { helpers.t(".#{r}") }
+                  end
+                end
+              end
+            end
+          end
+        end
       end
     end
   end

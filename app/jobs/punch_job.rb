@@ -11,6 +11,7 @@ class PunchJob < ApplicationJob
         reason = args[:reason]
         comment = args[:comment]
         ip = args[:ip]
+        days = args[:days]
         begin
           if (from_at.to_date == to_at.to_date) || (to_at.hour < from_at.hour)
             from_at, to_at = setTimeSlot(employee, reason, from_at.to_datetime, to_at.to_datetime, from_at.to_datetime)
@@ -18,6 +19,7 @@ class PunchJob < ApplicationJob
             PunchCardJob.new.perform(account: employee.account, employee: employee, date: from_at)
           else
             (from_at.to_date..to_at.to_date).each do |date|
+              next unless days.empty? || days.include?(date.strftime("%A").downcase)
               f_at, t_at = setTimeSlot(employee, reason, from_at.to_datetime, to_at.to_datetime, date.to_datetime)
               punch_it!(employee, reason, ip, f_at, t_at, comment)
             end

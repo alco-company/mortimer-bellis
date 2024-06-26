@@ -131,8 +131,8 @@ module Punchable
       false
     end
 
-    def punch_range(reason, ip, from_at, to_at, comment = nil)
-      PunchJob.perform_later account: self.account, reason: reason, ip: ip, employee: self, from_at: from_at, to_at: to_at, comment: comment
+    def punch_range(reason, ip, from_at, to_at, comment = nil, days = [])
+      PunchJob.perform_later account: self.account, reason: reason, ip: ip, employee: self, from_at: from_at, to_at: to_at, comment: comment, days: days
     end
   end
 end
