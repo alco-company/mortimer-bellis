@@ -1,4 +1,19 @@
 class AccountMailer < ApplicationMailer
+  #
+  #
+  def welcome
+    @rcpt =  email_address_with_name params[:account].email, params[:account].name
+    locale = params[:account].locale
+    @pw = params[:pw]
+    @account = params[:account]
+    @resource = @account.users.first
+    @url = new_user_session_url
+    I18n.with_locale(locale) do
+      mail to: @rcpt, subject: I18n.t("account_mailer.welcome.subject")
+    end
+  end
+
+
   # params:
   # :rcpt is the recipient (object) that has two methods: email, and :name
   # :tmpfiles is an array of (temporary) file(s) containing the lon data

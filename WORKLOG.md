@@ -1,13 +1,18 @@
 # WORKLOG
 
-## ROADMAP
+## BUGS
 
+* [ ] fix error on punch_card.recalculate when sick or free
+* [ ] model.team.blocked error on employees/new
+* [ ] confirmation email for new account first user
 
 ## CHANGELOG
 
 ### 26/6/2024
 
 * first stab at schedules: days
+* wrong toast on profile update - should be success
+* mail on new account added by us
 
 ### 25/6/2024
 

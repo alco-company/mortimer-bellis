@@ -14,4 +14,9 @@ class AccountsController < MortimerController
       redirect_to root_path, alert: t(:unauthorized) and return if params["action"] == "index"
       redirect_to root_path, alert: t(:unauthorized) and return unless params["id"] == Current.account.id.to_s
     end
+
+    def create_callback resource
+      AccountRegistrationService.call(resource)
+      # AccountUser.create(account_id: resource.id, user_id: Current.user.id, role: "superadmin")
+    end
 end

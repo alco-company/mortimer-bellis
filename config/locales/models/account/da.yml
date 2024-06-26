@@ -9,6 +9,14 @@ da:
         instruction: Er du sikker på, at du vil slette kontoen %{name}?
         button: Slet
 
+    mailer:
+      welcome:
+        hello: Velkommen %{name},
+        we_created_an_account: "Vi har oprettet en konto til jer på  M O R T I M E R.<br>For at logge på, skal du <a href='%{url}'>klikke her</a> og bruge de nedenstående oplysninger:"
+        confirmation_instruction: "Brugernavn: %{email}<br>Adgangskode: %{pw}"
+        ignore: "Hvis du ikke har bedt om en konto, kan du ignorere denne e-mail, og så beklager vi ulejligheden."
+        regards: Med venlig hilsen,
+
   accounts:
     create:
       post: Kontoen blev oprettet
