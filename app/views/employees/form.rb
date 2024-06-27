@@ -6,7 +6,9 @@ class Employees::Form < ApplicationForm
       row field(:mugshot).file(class: "mort-form-file")
       row field(:pincode).input(class: "mort-form-text")
       row field(:punching_absence).boolean(class: "mort-form-bool")
-      model.team.blocked? ?
+      row field(:email).input(class: "mort-form-text")
+      row field(:cell_phone).input(class: "mort-form-text")
+      model.team&.blocked? ?
         (model.blocked = true; row(field(:blocked).boolean(class: "mort-form-bool", disabled: true))) :
         row(field(:blocked).boolean(class: "mort-form-bool"))
       div do
@@ -16,8 +18,6 @@ class Employees::Form < ApplicationForm
         row field(:payroll_employee_ident).input(class: "mort-form-text")
         view_only field(:access_token).input(class: "mort-form-text")
         row field(:description).input(class: "mort-form-text")
-        row field(:email).input(class: "mort-form-text")
-        row field(:cell_phone).input(class: "mort-form-text")
         view_only field(:last_punched_at).input(class: "mort-form-text")
         row field(:state).select(WORK_STATES, class: "mort-form-text")
         view_only field(:punches_settled_at).date(class: "mort-form-text")
