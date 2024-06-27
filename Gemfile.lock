@@ -236,7 +236,7 @@ GEM
       rack (>= 2.2.3)
       rack-protection
     orm_adapter (0.5.0)
-    pagy (8.4.5)
+    pagy (8.6.0)
     parallel (1.25.1)
     parser (3.3.2.0)
       ast (~> 2.4.1)
@@ -434,7 +434,7 @@ DEPENDENCIES
   importmap-rails
   jbuilder
   omniauth (~> 2.1)
-  pagy (~> 8.4)
+  pagy (~> 8.6)
   phlex-rails
   propshaft
   puma (>= 5.0)
