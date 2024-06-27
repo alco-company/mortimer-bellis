@@ -14,6 +14,7 @@
 * send confirmed email users to the root_path
 * [ ] model.team.blocked error on employees/new
 * [ ] confirmation email for new account first user
+* [ ] welcome email to new employees - imported ones
 
 ### 26/6/2024
 

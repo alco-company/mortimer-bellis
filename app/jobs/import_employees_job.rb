@@ -19,6 +19,7 @@ class ImportEmployeesJob < ApplicationJob
           record.account_id = Current.account.id
           record = set_team(record, employee)
           record.save
+          EmployeeMailer.with(employee: record).welcome.deliver_later
         rescue => exception
           say "ImportEmployeesJob reached an error on: #{exception.message}"
           say "employee: #{employee}"
