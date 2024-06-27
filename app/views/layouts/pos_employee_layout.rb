@@ -7,7 +7,7 @@ class PosEmployeeLayout < ApplicationView
   def view_template(&block)
     doctype
 
-    html(class: "h-full bg-white") do
+    html(class: "h-full bg-white", lang: "da") do
       head do
         title { "M O R T I M E R #{ 'DEV' if Rails.env.local?}" }
         meta name: "viewport", content: "width=device-width,initial-scale=1"
