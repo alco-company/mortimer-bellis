@@ -6,7 +6,6 @@
 * [ ] check for team.blocked on punching
 * [ ] activate x on toasts
 * [ ] show only account teams on employee_invitations/new
-* [ ] confirmation email for new account first user
 
 ## CHANGELOG
 
@@ -14,6 +13,7 @@
 
 * send confirmed email users to the root_path
 * [ ] model.team.blocked error on employees/new
+* [ ] confirmation email for new account first user
 
 ### 26/6/2024
 

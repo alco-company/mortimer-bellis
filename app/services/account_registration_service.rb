@@ -4,6 +4,7 @@ class AccountRegistrationService
       pw= Devise.friendly_token[0, 20]
       user = User.create account_id: account.id, email: account.email, role: "admin", password: pw, locale: "da", time_zone: "Europe/Copenhagen", invited_by: Current.user
       if user.valid?
+        user.send_confirmation_instructions
         AccountMailer.with(account: account, pw: pw).welcome.deliver_later
         team = Team.create account: account, name: I18n.t("teams.default_team")
         location = Location.create account: account, name: I18n.t("locations.default_location")

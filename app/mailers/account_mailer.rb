@@ -9,7 +9,7 @@ class AccountMailer < ApplicationMailer
     @resource = @account.users.first
     @url = new_user_session_url
     I18n.with_locale(locale) do
-      mail to: @rcpt, subject: I18n.t("account_mailer.welcome.subject")
+      mail to: @rcpt, subject: I18n.t("account.mailer.welcome.subject")
     end
   end
 

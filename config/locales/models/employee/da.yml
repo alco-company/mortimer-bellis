@@ -65,6 +65,16 @@ da:
     introduction: "Du er blevet inviteret af %{inviter} hos %{account} til at oprette en medarbejder profil. Udfyld felterne og klik på knappen for at komme i gang."
 
   employee_mailer:
+    welcome:
+      title: "Velkommen til M O R T I M E R"
+      preheader: "Du er blevet inviteret til at tidsregistrere med  M O R T I M E R  - fra din smartphone, tablet eller computer"
+      subject: "Invitation til at tidsregistrere"
+      hi: Hej,
+      you: er din email adresse %{email}?
+      introduction: "Hvis det er, har <strong>%{account}</strong> inviteret dig til at tidsregistrere med   M O R T I M E R. Du kan starte ved at trykke på knappen herunder."
+      action: "Ja, det er mig"
+      not_interested: "Hvis du ikke er interesseret, eller hvis det er den forkerte email adresse, der er blevet benyttet, så beklager holdet bag  M O R T I M E R  ulejligheden, og beder dig ignorere denne email."
+      salutations: "Med venlig hilsen"
     invite:
       title: "Invitation"
       preheader: "Du er blevet inviteret til at færdiggøre en medarbejder profil"
