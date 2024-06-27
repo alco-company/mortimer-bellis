@@ -3,10 +3,17 @@
 ## BUGS
 
 * [ ] fix error on punch_card.recalculate when sick or free
+* [ ] check for team.blocked on punching
 * [ ] model.team.blocked error on employees/new
+* [ ] activate x on toasts
+* [ ] show only account teams on employee_invitations/new
 * [ ] confirmation email for new account first user
 
 ## CHANGELOG
+
+### 27/6/2024
+
+* send confirmed email users to the root_path
 
 ### 26/6/2024
 
