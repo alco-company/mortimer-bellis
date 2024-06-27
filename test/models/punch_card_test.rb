@@ -172,4 +172,17 @@ class PunchCardTest < ActiveSupport::TestCase
     PunchCard.recalculate(employee: @employee, date: Punch.last.punched_at.to_date)
     assert PunchCard.last.work_minutes == -1
   end
+
+  test "recalculating punch_card - 3 days straigth being sick" do
+    punch_params = { "punch"=>{ "reason"=>"sick", "from_at"=>"2024-06-16T10:00:00", "to_at"=>"2024-06-18T18:00:00", "comment"=>"bollocks" } }
+    PunchJob.perform_now(
+      account: @employee.account, reason: punch_params["punch"]["reason"],
+      ip: "1.2.3.4", employee: @employee,
+      from_at: punch_params["punch"]["from_at"],
+      to_at: punch_params["punch"]["to_at"], comment: "shit days")
+    assert Punch.count == 6
+    assert PunchCard.count == 3
+    assert PunchCard.last.punches.size == 2
+    assert_equal 0, PunchCard.last.work_minutes
+  end
 end

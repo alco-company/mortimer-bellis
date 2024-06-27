@@ -2,11 +2,9 @@
 
 ## BUGS
 
-* [ ] fix error on punch_card.recalculate when sick or free
-* [ ] check for team.blocked on punching
 * [ ] activate x on toasts
 * [ ] show weekday name on pos/employees#payroll_period
-* [ ] show only account teams on employee_invitations/new
+
 
 ## CHANGELOG
 
@@ -17,6 +15,7 @@
 * [ ] confirmation email for new account first user
 * [ ] welcome email to new employees - imported ones
 * [ ] try out lang=da on html tag
+* [ ] fix error on punch_card.recalculate when sick or free
 
 ### 26/6/2024
 

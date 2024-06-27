@@ -11,7 +11,7 @@ class PunchJob < ApplicationJob
         reason = args[:reason]
         comment = args[:comment]
         ip = args[:ip]
-        days = args[:days]
+        days = args[:days] || []
         begin
           if (from_at.to_date == to_at.to_date) || (to_at.hour < from_at.hour)
             from_at, to_at = setTimeSlot(employee, reason, from_at.to_datetime, to_at.to_datetime, from_at.to_datetime)
