@@ -103,7 +103,7 @@ class Pos::EmployeeController < Pos::PosController
     end
 
     def punch_params
-      params.require(:punch).permit(:reason, :from_at, :to_at, :punched_at, :comment, days: [])
+      params.require(:punch).permit(:reason, :from_at, :to_at, :punched_at, :comment, :excluded_days, days: [])
     end
 
     def verify_employee
@@ -135,7 +135,8 @@ class Pos::EmployeeController < Pos::PosController
           Date.today == Date.parse(punch_params[:to_at])) && !@resource.out?
           redirect_to pos_employee_url(api_key: @resource.access_token), warning: t("employee_working_punch_out_first") and return
         end
-        @resource.punch_range punch_params[:reason], request.remote_ip, punch_params[:from_at], punch_params[:to_at], punch_params[:comment], punch_params[:days]
+        # @resource.punch_range punch_params[:reason], request.remote_ip, punch_params[:from_at], punch_params[:to_at], punch_params[:comment], punch_params[:days]
+        @resource.punch_range punch_params, request.remote_ip
         redirect_to pos_employee_url(api_key: @resource.access_token, tab: "payroll") and return
       rescue => e
         redirect_to pos_employee_url(api_key: @resource.access_token, edit: true, tab: "payroll"), warning: t("form_not_processable") and return

@@ -185,4 +185,19 @@ class PunchCardTest < ActiveSupport::TestCase
     assert PunchCard.last.punches.size == 2
     assert_equal 0, PunchCard.last.work_minutes
   end
+
+  test "working a full weekend except 20/-21/6" do
+    punch_params = { "punch"=>{ "reason"=>"in",
+      "from_at"=>"2024-06-17T7:00:00",
+      "to_at"=>"2024-06-23T15:30:00",
+      "comment"=>"normal dag",
+      "days"=>[ "monday", "tuesday", "wednesday", "thursday", "friday" ],
+      "excluded_days"=>"20/6-21/6"
+    } }
+    @employee.punch_range punch_params["punch"], "1.2.3.4"
+    assert_equal Punch.count, 6
+    assert_equal PunchCard.count, 3
+    assert_equal PunchCard.last.punches.size, 2
+    assert_equal PunchCard.all.sum(:work_minutes), 1530
+  end
 end

@@ -131,8 +131,27 @@ module Punchable
       false
     end
 
-    def punch_range(reason, ip, from_at, to_at, comment = nil, days = [])
-      PunchJob.perform_later account: self.account, reason: reason, ip: ip, employee: self, from_at: from_at, to_at: to_at, comment: comment, days: days
+    # punch_params[:reason], request.remote_ip, punch_params[:from_at], punch_params[:to_at], punch_params[:comment], punch_params[:days]
+    def punch_range(params, ip)
+      Rails.env.local? ?
+        PunchJob.perform_now(account: self.account,
+          reason: params["reason"],
+          ip: ip,
+          employee: self,
+          from_at: params["from_at"],
+          to_at: params["to_at"],
+          comment: params["comment"],
+          days: params["days"],
+          excluded_days: params["excluded_days"]) :
+        PunchJob.perform_later(account: self.account,
+          reason: params["reason"],
+          ip: ip,
+          employee: self,
+          from_at: params["from_at"],
+          to_at: params["to_at"],
+          comment: params["comment"],
+          days: params["days"],
+          excluded_days: params["excluded_days"])
     end
   end
 end

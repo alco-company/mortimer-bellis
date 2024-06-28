@@ -29,6 +29,7 @@ class PunchClockManual < ApplicationComponent
           to_at
 
           set_days
+          set_excluded_days
 
           # set the comment
           set_comment
@@ -160,6 +161,28 @@ class PunchClockManual < ApplicationComponent
     end
   end
 
+  def set_excluded_days
+    div(
+      class: "my-4 sm:grid sm:grid-cols-3 sm:items-start"
+    ) do
+      label(
+        for: "excluded_days",
+        class:
+          "block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5"
+      ) { helpers.t(".excluded_days") }
+      div(class: "mt-2 sm:col-span-2 sm:mt-0") do
+        input(
+          name: "punch[excluded_days]",
+          id: "punch_excluded_days",
+          type: "text",
+          data: { pos_employee_target: "excluded_days" },
+          class:
+            "mort-form-text"
+        )
+      end
+    end
+  end
+
   def set_comment
     div(
       class: "my-4 sm:grid sm:grid-cols-3 sm:items-start"
@@ -176,7 +199,7 @@ class PunchClockManual < ApplicationComponent
           type: "text",
           data: { pos_employee_target: "comment" },
           class:
-            "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-600 sm:max-w-xs sm:text-sm sm:leading-6"
+            "mort-form-text"
         )
       end
     end

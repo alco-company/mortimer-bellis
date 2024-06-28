@@ -12,6 +12,7 @@ class PunchJob < ApplicationJob
         comment = args[:comment]
         ip = args[:ip]
         days = args[:days] || []
+        excluded_days = args[:excluded_days].split(/([\/\-\d]{2,11}|\d+\.\d+)[ ,;]?/).collect { |e| e if !e.blank? }.compact || []
         begin
           if (from_at.to_date == to_at.to_date) || (to_at.hour < from_at.hour)
             from_at, to_at = setTimeSlot(employee, reason, from_at.to_datetime, to_at.to_datetime, from_at.to_datetime)
@@ -20,6 +21,7 @@ class PunchJob < ApplicationJob
           else
             (from_at.to_date..to_at.to_date).each do |date|
               next unless days.empty? || days.include?(date.strftime("%A").downcase)
+              next if excluded_days_include date, excluded_days
               f_at, t_at = setTimeSlot(employee, reason, from_at.to_datetime, to_at.to_datetime, date.to_datetime)
               punch_it!(employee, reason, ip, f_at, t_at, comment)
             end
@@ -33,6 +35,31 @@ class PunchJob < ApplicationJob
       say "(switch_locale) PunchJob failed: #{e.message}"
       false
     end
+  end
+
+  def excluded_days_include(date, excluded_days)
+    return false if excluded_days.empty?
+    excluded_days.each do |ed|
+      # 14-21/5 or 1/6-31/8
+      eds = ed.split(/-/)
+      eds = eds + eds if eds.count == 1
+      eds.collect! { |d| build_date(d) }
+      return true if date.between? eds[0], eds[1]
+    end
+    false
+  end
+
+  #
+  # 14
+  # 14/4
+  # 14/4/24
+  # 14/4/2024
+  def build_date(d)
+    de = d.split(/[\.\/]/)
+    de += [ Date.today.month ] if de.count < 2
+    de += [ Date.today.year ] if de.count < 3
+    de[2] = de[2].to_i + 2000 if de[2].to_i < 100
+    Date.new de[2].to_i, de[1].to_i, de[0].to_i
   end
 
   def punch_it!(employee, reason, ip, from_at, to_at, comment = nil)

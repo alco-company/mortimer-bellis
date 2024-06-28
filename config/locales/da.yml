@@ -121,6 +121,7 @@ da:
         payroll_period: Lønperiode
         profile: Profil
         add: Tilføj
+        cancel: Fortryd
         save: Gem
         in: Ind
         out: Ud
@@ -136,6 +137,7 @@ da:
         type_of_registration: Registreringstype
         from_at: Fra
         to_at: Til
+        excluded_days: Undtagen disse dage
         comment: Bemærkning
         free_reason: Årsag til fravær
         sick_reason: Sygdomsårsag
@@ -310,6 +312,7 @@ da:
         employee_id: Medarbejder
         state: Status
         punch_clock_id: Stempelur
+        excluded_days: Undtagen disse dage
         comment: Bemærkning
         
       punch_card:
