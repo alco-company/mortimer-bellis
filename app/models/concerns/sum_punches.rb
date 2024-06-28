@@ -76,8 +76,8 @@ module SumPunches
     def two_punches(pc, punches, employee)
       punches.update_all punch_card_id: pc.id
 
-      is_sick = ->(x) { WORK_STATES[3..8].collect{ |k,v| k}.include? x }
-      is_free = ->(x) { WORK_STATES[9..14].collect{ |k,v| k}.include? x }
+      is_sick = ->(x) { WORK_STATES[3..8].collect { |k, v| k }.include? x }
+      is_free = ->(x) { WORK_STATES[9..14].collect { |k, v| k }.include? x }
 
       case punches.second.state
       when is_sick; work, ot1, ot2 = [ 0, 0, 0 ]

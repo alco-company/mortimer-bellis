@@ -94,7 +94,7 @@ class Employee < ApplicationRecord
     end
     pin.to_s
   end
-  
+
   def is_blocked?
     team.blocked? || blocked?
   end
