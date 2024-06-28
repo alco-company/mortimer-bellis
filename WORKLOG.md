@@ -6,13 +6,13 @@
 * [ ] add start_time and end_time and duration to payroll_period#manual_punch
 * [ ] add breaks and included_in_duration to payroll_period#manual_punch
 * [ ] redesign punch and add work_schedule to payroll_period#manual_punch
-* [ ] show weekday name on pos/employees#payroll_period
 
 ## CHANGELOG
 
 ### 28/6/2024
 
 * [ ] activate x on toasts
+* [ ] show weekday name on pos/employees#payroll_period
 
 ### 27/6/2024
 

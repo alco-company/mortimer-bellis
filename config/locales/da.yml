@@ -784,6 +784,7 @@ da:
       default: "%e. %B %Y, %H.%M"
       long: "%A d. %e. %B %Y, %H.%M"
       date_long: "%A d. %e. %B %Y"
+      weekday_date: "%A den %e. %B, %Y"
       ultra_short: "%H:%M"
       short: "%e. %b %Y, %H.%M"
       date_text: "%e. %B %Y"
