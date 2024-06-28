@@ -1,40 +1,54 @@
 class PunchJob < ApplicationJob
   queue_as :default
 
+  attr_accessor :employee, :from_at, :to_at, :from_date, :from_time, :to_date, :to_time, :reason, :comment, :ip, :days, :excluded_days
+
   def perform(**args)
     super(**args)
-    employee = args[:employee]
-    switch_locale(employee.locale) do
-      user_time_zone(employee.time_zone) do
-        from_at = Time.zone.parse args[:from_at]
-        to_at = Time.zone.parse args[:to_at]
-        reason = args[:reason]
-        comment = args[:comment]
-        ip = args[:ip]
-        days = args[:days] || []
-        excluded_days = args[:excluded_days].split(/([\/\-\d]{2,11}|\d+\.\d+)[ ,;]?/).collect { |e| e if !e.blank? }.compact || []
-        begin
-          if (from_at.to_date == to_at.to_date) || (to_at.hour < from_at.hour)
-            from_at, to_at = setTimeSlot(employee, reason, from_at.to_datetime, to_at.to_datetime, from_at.to_datetime)
-            punch_it!(employee, reason, ip, from_at.to_datetime, to_at.to_datetime, comment)
-            PunchCardJob.new.perform(account: employee.account, employee: employee, date: from_at)
-          else
-            (from_at.to_date..to_at.to_date).each do |date|
-              next unless days.empty? || days.include?(date.strftime("%A").downcase)
-              next if excluded_days_include date, excluded_days
-              f_at, t_at = setTimeSlot(employee, reason, from_at.to_datetime, to_at.to_datetime, date.to_datetime)
-              punch_it!(employee, reason, ip, f_at, t_at, comment)
-            end
-            PunchCardJob.new.perform(account: employee.account, employee: employee, from_at: from_at.to_date, to_at: to_at.to_date)
-          end
-        rescue => e
-          say "PunchJob failed: #{e.message}"
-        end
+    @employee = args[:employee]
+    switch_locale(@employee.locale) do
+      user_time_zone(@employee.time_zone) do
+        calc_vars(args)
+        its_today ? one_punch : range_punch
       end
     rescue => e
       say "(switch_locale) PunchJob failed: #{e.message}"
       false
     end
+  end
+
+  def calc_vars(args)
+    @from_at = Time.parse("%sT%s" % [ args[:from_date], args[:from_time] ])
+    @to_at = Time.parse("%sT%s" % [ args[:to_date], args[:to_time] ])
+    @reason = args[:reason]
+    @comment = args[:comment]
+    @ip = args[:ip]
+    @days = args[:days] || []
+    @excluded_days = args[:excluded_days].split(/([\/\-\d]{2,11}|\d+\.\d+)[ ,;]?/).collect { |e| e if !e.blank? }.compact rescue []
+  end
+
+  def its_today
+    (@from_at.to_date == @to_at.to_date) || (@to_at.hour < @from_at.hour)
+  end
+
+  def one_punch
+    @from_at, @to_at = setTimeSlot(@employee, @reason, @from_at.to_datetime, @to_at.to_datetime, @from_at.to_datetime)
+    punch_it!(@employee, @reason, @ip, @from_at.to_datetime, @to_at.to_datetime, @comment)
+    Rails.env.local? ?
+      PunchCardJob.perform_now(account: @employee.account, employee: @employee, date: @from_at) :
+      PunchCardJob.perform_later(account: @employee.account, employee: @employee, date: @from_at)
+  end
+
+  def range_punch
+    (@from_at.to_date..@to_at.to_date).each do |date|
+      next unless @days.empty? || @days.include?(date.strftime("%A").downcase)
+      next if excluded_days_include date, @excluded_days
+      f_at, t_at = setTimeSlot(@employee, @reason, @from_at.to_datetime, @to_at.to_datetime, date.to_datetime)
+      punch_it!(@employee, @reason, @ip, f_at, t_at, @comment)
+    end
+    Rails.env.local? ?
+      PunchCardJob.perform_now(account: @employee.account, employee: @employee, from_at: @from_at.to_date, to_at: @to_at.to_date) :
+      PunchCardJob.perform_later(account: @employee.account, employee: @employee, from_at: @from_at.to_date, to_at: @to_at.to_date)
   end
 
   def excluded_days_include(date, excluded_days)

@@ -2,7 +2,6 @@
 
 ## BUGS
 
-* [ ] add start_time and end_time and duration to payroll_period#manual_punch
 * [ ] add breaks and included_in_duration to payroll_period#manual_punch
 * [ ] redesign punch and add work_schedule to payroll_period#manual_punch
 
@@ -13,6 +12,7 @@
 * [ ] activate x on toasts
 * [ ] show weekday name on pos/employees#payroll_period
 * [ ] add excluded_days to payroll_period#manual_punch
+* [ ] add start_time and end_time and duration to payroll_period#manual_punch
 
 ### 27/6/2024
 

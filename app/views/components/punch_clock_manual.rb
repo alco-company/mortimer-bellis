@@ -91,16 +91,24 @@ class PunchClockManual < ApplicationComponent
         class:
           "block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5"
       ) { helpers.t(".from_at") }
-      div(class: "mt-2 sm:col-span-2 sm:mt-0") do
-        whitespace
+      div(class: "mt-2 flex sm:col-span-2 sm:mt-0") do
         input(
-          name: "punch[from_at]",
-          id: "from_at",
-          type: "datetime-local",
-          data: { pos_employee_target: "fromAt" },
+          name: "punch[from_date]",
+          id: "from_date",
+          type: "date",
+          data: { pos_employee_target: "fromDate" },
           autofocus: true,
           class:
-            "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-600 sm:max-w-xs sm:text-sm sm:leading-6"
+            "mort-form-text max-w-44 mr-2"
+        )
+        input(
+          name: "punch[from_time]",
+          id: "from_time",
+          type: "time",
+          data: { pos_employee_target: "fromTime" },
+          autofocus: true,
+          class:
+            "mort-form-text max-w-28"
         )
       end
     end
@@ -116,15 +124,24 @@ class PunchClockManual < ApplicationComponent
         class:
           "block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5"
       ) { helpers.t(".to_at") }
-      div(class: "mt-2 sm:col-span-2 sm:mt-0") do
-        whitespace
+      div(class: "mt-2 flex sm:col-span-2 sm:mt-0") do
         input(
-          name: "punch[to_at]",
-          id: "from_at",
-          type: "datetime-local",
-          data: { pos_employee_target: "toAt" },
+          name: "punch[to_date]",
+          id: "to_date",
+          type: "date",
+          data: { pos_employee_target: "toDate" },
+          autofocus: true,
           class:
-            "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-600 sm:max-w-xs sm:text-sm sm:leading-6"
+            "mort-form-text max-w-44 mr-2"
+        )
+        input(
+          name: "punch[to_time]",
+          id: "to_time",
+          type: "time",
+          data: { pos_employee_target: "toTime" },
+          autofocus: true,
+          class:
+            "mort-form-text max-w-28"
         )
       end
     end

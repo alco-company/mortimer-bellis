@@ -123,12 +123,12 @@ module Punchable
         EmployeeMailer.with(employee: self).confetti_first_punch.deliver_later if punches.count == 0
         Punch.create! account: self.account, employee: self, punch_clock: punch_clock, punched_at: punched_at, state: state, remote_ip: ip
       rescue => e
-        say "Punch failed: #{e.message}"
+        say "Punchable#punch failed: #{e.message}"
       end
       update last_punched_at: punched_at
       PunchCardJob.perform_later account: self.account, employee: self
     rescue => e
-      false
+      say "Punchable#punch (outer) failed: #{e.message}"
     end
 
     # punch_params[:reason], request.remote_ip, punch_params[:from_at], punch_params[:to_at], punch_params[:comment], punch_params[:days]
@@ -138,8 +138,10 @@ module Punchable
           reason: params["reason"],
           ip: ip,
           employee: self,
-          from_at: params["from_at"],
-          to_at: params["to_at"],
+          from_date: params["from_date"],
+          from_time: params["from_time"],
+          to_date: params["to_date"],
+          to_time: params["to_time"],
           comment: params["comment"],
           days: params["days"],
           excluded_days: params["excluded_days"]) :
@@ -147,11 +149,15 @@ module Punchable
           reason: params["reason"],
           ip: ip,
           employee: self,
-          from_at: params["from_at"],
-          to_at: params["to_at"],
+          from_date: params["from_date"],
+          from_time: params["from_time"],
+          to_date: params["to_date"],
+          to_time: params["to_time"],
           comment: params["comment"],
           days: params["days"],
           excluded_days: params["excluded_days"])
+    rescue => e
+      say "Punchable#punch_range (outer) failed: #{e.message}"
     end
   end
 end

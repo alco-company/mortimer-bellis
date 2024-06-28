@@ -83,6 +83,7 @@ module SumPunches
       when is_sick; work, ot1, ot2 = [ 0, 0, 0 ]
       when is_free; work, ot1, ot2 = [ 0, 0, 0 ]
       when "in"; work, ot1, ot2 = employee.divide_minutes((punches.first.punched_at - punches.second.punched_at) / 60)
+      else work, ot1, ot2 = [ -1, -1, -1 ]
       end
 
       pc.update work_minutes: work, ot1_minutes: ot1, ot2_minutes: ot2, break_minutes: 0
