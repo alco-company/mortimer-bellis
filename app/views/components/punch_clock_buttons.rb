@@ -72,10 +72,15 @@ class PunchClockButtons < ApplicationComponent
   end
 
   def punch_add
-    div(class: "justify-self-end") do
+    div(class: "flex justify-self-end") do
       edit ?
-        button_tag(helpers.t(".save"), type: "submit", form: "manualpunch", class: "bg-green-500 text-white block rounded-md px-3 py-2 text-xl font-medium") :
-        link_to(helpers.t(".add"), helpers.pos_employee_url(api_key: employee.access_token, tab: "payroll", edit: true), class: "bg-sky-500 text-white block mx-2 rounded-md px-3 py-2 text-xl font-medium")
+        cancel_and_save :
+        link_to(helpers.t(".add"), helpers.pos_employee_url(api_key: employee.access_token, tab: "payroll", edit: true), class: "mort-btn-primary")
     end
+  end
+
+  def cancel_and_save
+    link_to(helpers.t(".cancel"), helpers.pos_employee_url(api_key: employee.access_token, tab: "payroll"), class: "mort-btn-cancel mr-4")
+    button_tag(helpers.t(".save"), type: "submit", form: "manualpunch", class: "mort-btn-save")
   end
 end

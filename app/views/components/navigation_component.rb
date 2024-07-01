@@ -36,7 +36,6 @@ class NavigationComponent < ApplicationComponent
             end
           end
           div(class: " absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0") do
-            show_locale_time_zone "text-sky-200"
             # view_notifications
             profile_dropdown if Current.user.present?
           end
@@ -216,7 +215,6 @@ class NavigationComponent < ApplicationComponent
       ) do
         comment { %(Active: "bg-gray-100", Not Active: "") }
         p(class: "text-sm font-medium px-4 py-2") { Current.user.name }
-        show_locale_time_zone
         hr
         link_to("Your Profile", edit_user_registration_path, class: "block px-4 py-2 text-sm text-gray-700", role: "menuitem", tabindex: "-1", id: "user-menu-item-0")
         link_to("Invite New User", new_user_invitation_path, class: "block px-4 py-2 text-sm text-gray-700", role: "menuitem", tabindex: "-1", id: "user-menu-item-0") unless Current.user.user?
@@ -224,13 +222,5 @@ class NavigationComponent < ApplicationComponent
         link_to("Sign out", destroy_user_session_path(), class: "block px-4 py-2 text-sm text-gray-700", method: :delete, data: { turbo_method: :delete }, role: "menuitem", tabindex: "-1", id: "user-menu-item-2")
       end
     end
-  end
-
-  def show_locale_time_zone(color = "text-mortimer")
-    mc = superadmin ? "text-pink-400" : color
-    str_lt = Current.user ?
-      "#{Current.locale}/#{Current.user.time_zone rescue ""}" :
-      "#{@locale}/#{@time_zone}"
-    p(class: "#{mc} text-xs font-thin px-4 pb-2") { str_lt }
   end
 end

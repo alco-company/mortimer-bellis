@@ -71,7 +71,7 @@ module Resourceable
 
   private
     def rc_params
-      params.permit(:controller)[:controller]
+      params.permit(:id, :_method, :commit, :authenticity_token, :controller)[:controller]
     end
 
     def params_id

@@ -4,6 +4,7 @@ class EmployeesController < MortimerController
   def new
     @resource.locale = Current.user.locale
     @resource.time_zone = Current.user.time_zone
+    @resource.team = Team.by_account.first
     super
   end
 
@@ -94,5 +95,14 @@ class EmployeesController < MortimerController
           render "employee_invitations/employee_sign_up", status: :unprocessable_entity, warning: t("employee_invitation.could_not_create_employee")
         end
       end
+    end
+
+
+    #
+    # implement on the controller inheriting this concern
+    # in order to not having to extend the create method on this concern
+    #
+    def create_callback(obj)
+      EmployeeMailer.with(employee: obj, sender: current_user.name).welcome.deliver_later unless obj.email.blank?
     end
 end

@@ -2,7 +2,9 @@
   <div class="min-w-0 w-full columns-2 md:columns-3 lg:columns-5">
     <%= render_text_column value: link_to(user.email, user), css: "truncate mort-link-primary grid grid-cols-1" do |value| %>
       <%= value %>
-      <p class="text-xs"><%=  link_to user.account.name, user.account %> </p>
+      <% if current_user.global_queries? %>
+        <p class="text-xs"><%=  link_to user.account.name, user.account %> </p>
+      <% end %>
     <% end %>
     <%= render_text_column value: user.role, css: "truncate" do |value| %> <%= value %><p>&nbsp;</p> <% end %>
     <%= render_text_column value: User.locales(user.locale), css: "hidden md:block truncate" do |value|  %> <%= value %><p>&nbsp;</p> <% end %>

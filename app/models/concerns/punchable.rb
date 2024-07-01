@@ -123,16 +123,41 @@ module Punchable
         EmployeeMailer.with(employee: self).confetti_first_punch.deliver_later if punches.count == 0
         Punch.create! account: self.account, employee: self, punch_clock: punch_clock, punched_at: punched_at, state: state, remote_ip: ip
       rescue => e
-        say "Punch failed: #{e.message}"
+        say "Punchable#punch failed: #{e.message}"
       end
       update last_punched_at: punched_at
       PunchCardJob.perform_later account: self.account, employee: self
     rescue => e
-      false
+      say "Punchable#punch (outer) failed: #{e.message}"
     end
 
-    def punch_range(reason, ip, from_at, to_at, comment = nil)
-      PunchJob.perform_later account: self.account, reason: reason, ip: ip, employee: self, from_at: from_at, to_at: to_at, comment: comment
+    # punch_params[:reason], request.remote_ip, punch_params[:from_at], punch_params[:to_at], punch_params[:comment], punch_params[:days]
+    def punch_range(params, ip)
+      Rails.env.local? ?
+        PunchJob.perform_now(account: self.account,
+          reason: params["reason"],
+          ip: ip,
+          employee: self,
+          from_date: params["from_date"],
+          from_time: params["from_time"],
+          to_date: params["to_date"],
+          to_time: params["to_time"],
+          comment: params["comment"],
+          days: params["days"],
+          excluded_days: params["excluded_days"]) :
+        PunchJob.perform_later(account: self.account,
+          reason: params["reason"],
+          ip: ip,
+          employee: self,
+          from_date: params["from_date"],
+          from_time: params["from_time"],
+          to_date: params["to_date"],
+          to_time: params["to_time"],
+          comment: params["comment"],
+          days: params["days"],
+          excluded_days: params["excluded_days"])
+    rescue => e
+      say "Punchable#punch_range (outer) failed: #{e.message}"
     end
   end
 end

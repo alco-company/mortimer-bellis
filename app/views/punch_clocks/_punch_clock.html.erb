@@ -1,6 +1,11 @@
 <li id="<%= dom_id punch_clock %>" class="flex items-center justify-between gap-x-6 py-5">
   <div class="min-w-0 w-full columns-2 md:columns-4 lg:columns-6">
-    <%= render_text_column value: link_to(punch_clock.name, punch_clock_url(punch_clock)), css: "truncate mort-link-primary" %>
+    <%= render_text_column value: link_to(punch_clock.name, punch_clock_url(punch_clock)), css: "truncate mort-link-primary" do |value| %>
+      <%= value %>
+      <% if current_user.global_queries? %>
+        <p class="text-xs"><%=  link_to punch_clock.account.name, punch_clock.account %> </p>
+      <% end %>
+    <% end %>
     <%= render_text_column value: link_to(punch_clock.location.name, location_url(punch_clock.location)), css: "truncate  mort-link-primary" %>
     <%= render_text_column value: punch_clock.ip_addr, css: "hidden md:block text-right" %>
     <%= render_text_column value: PunchClock.locales(punch_clock.locale), css: "hidden md:block truncate" %>

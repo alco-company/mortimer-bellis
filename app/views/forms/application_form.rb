@@ -158,7 +158,7 @@ class ApplicationForm < Superform::Rails::Form
         input(name: dom.name, data: { boolean_target: "input" }, type: :hidden, value: field.value ? "1" : "0")
         button(
           type: "button",
-          data: { action: "click->boolean#toggle", boolean_target: "button" },
+          data: { action: (attributes[:disabled] ? "" : "click->boolean#toggle"), boolean_target: "button" },
           class:
             "group relative inline-flex h-5 w-10 flex-shrink-0 cursor-pointer items-center justify-center rounded-full focus:outline-none focus:ring-2 focus:ring-sky-600 focus:ring-offset-2",
           role: "switch",

@@ -1,2 +1,4 @@
+# prepare the SSH port
+ssh docker5 ls
 kamal env push --destination=staging
 kamal deploy --destination=staging

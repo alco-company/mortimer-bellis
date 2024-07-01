@@ -37,3 +37,4 @@ da:
         mailer:
           invitation_instructions:
             accept_until_format: "%B %d, %Y %I:%M %p"
+        

@@ -161,7 +161,7 @@ class Contextmenu < Phlex::HTML
       comment { %(Active: "bg-gray-50", Not Active: "") }
       # archive employee
       if resource_class.to_s == "Employee"
-        button_to(( helpers.archive_employee_url(resource)),
+        button_to((helpers.archive_employee_url(resource)),
           class: "block px-3 py-1 text-sm leading-6 text-gray-900",
           role: "menuitem",
           data: { turbo_action: "advance", turbo_frame: @turbo_frame },

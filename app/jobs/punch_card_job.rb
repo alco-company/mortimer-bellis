@@ -9,7 +9,8 @@ class PunchCardJob < ApplicationJob
   #
   def perform(**args)
     super(**args)
-    switch_locale do
+    employee = args[:employee]
+    user_time_zone(employee.time_zone) do
       PunchCard.recalculate(**args)
     end
   end

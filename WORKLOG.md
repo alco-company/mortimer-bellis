@@ -1,15 +1,47 @@
 # WORKLOG
 
-## ROADMAP
+## BUGS
 
+* [ ] add breaks and included_in_duration to payroll_period#manual_punch
+* [ ] redesign punch and add work_schedule to payroll_period#manual_punch
 
 ## CHANGELOG
+
+### 28/6/2024
+
+* [ ] activate x on toasts
+* [ ] show weekday name on pos/employees#payroll_period
+* [ ] add excluded_days to payroll_period#manual_punch
+* [ ] add start_time and end_time and duration to payroll_period#manual_punch
+
+### 27/6/2024
+
+* send confirmed email users to the root_path
+* [ ] model.team.blocked error on employees/new
+* [ ] confirmation email for new account first user
+* [ ] welcome email to new employees - imported ones
+* [ ] try out lang=da on html tag
+* [ ] fix error on punch_card.recalculate when sick or free
+
+### 26/6/2024
+
+* first stab at schedules: days
+* wrong toast on profile update - should be success
+* mail on new account added by us
 
 ### 25/6/2024
 
 * tooltip on punch#comment
 * hide empty flash messages "{}"
 * fix wrong link on pos/punch_clock payroll_period list close elements
+* remove indigo-500 from input fields
+* move flash on mobile view up 10px
+* use BooleanField on team#blocked_from_punching and block punching on employee
+* refine danish localisation for employee and team
+* fix params permissions
+* show account when global_queries
+* forgot to show navn in any case !!"#€!
+* show version & locale and time_zone on profile only
   
 ### 24/6/2024
 

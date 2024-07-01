@@ -126,7 +126,7 @@ da:
         hello: "Hej %{email},"
         introduction: "vi er vældigt glade for at se dig her! For at du ikke bliver overrasket, så er det sådan, at vi har brug for at bekræfte din email adresse. Det kan du gøre ved at klikke på knappen herunder."
         action: "Jeg accepterer oprettelsen af min brugerprofil"
-        ignore: "Har du fortrudt, ønsker du ikke at oprette din profil alligevel, eller har du modtaget denne email ved en fejl, behøver du intet at gøre (måske bortset fra evt at smide email'en bort). Din bruger konto bliver først oprettet i det øjeblik, du klikker på knappen her ovenfor."
+        ignore: "Har du fortrudt, ønsker du ikke at oprette din profil alligevel, eller har du modtaget denne email ved en fejl, behøver du intet at gøre (måske bortset fra evt at smide email'en bort). <br /><br />Din bruger konto bliver først oprettet i det øjeblik, du klikker på knappen her ovenfor."
         regards: "Med venlig hilsen"
 
       reset_password_instructions:

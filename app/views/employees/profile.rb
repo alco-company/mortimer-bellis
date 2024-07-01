@@ -1,6 +1,7 @@
 class Employees::Profile < ApplicationForm
   def view_template(&)
     div(class: "p-4 sm:p-1") do
+      mortimer_version_locale_time_zone
       h2(class: "text-base font-semibold leading-7 text-gray-900") do
         "Profile"
       end
@@ -32,5 +33,9 @@ class Employees::Profile < ApplicationForm
         row field(:time_zone).select(ActiveSupport::TimeZone.all.collect { |tz| [ "(GMT#{ActiveSupport::TimeZone.seconds_to_utc_offset(tz.utc_offset)}) #{tz.name}", tz.tzinfo.name ] }, class: "mort-form-text")
       end
     end
+  end
+
+  def mortimer_version_locale_time_zone
+    p(class: "text-xs font-thin pb-3") { "version: #{ENV["MORTIMER_VERSION"]} #{model.locale}/#{model.time_zone}" }
   end
 end

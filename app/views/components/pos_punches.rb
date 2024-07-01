@@ -46,7 +46,7 @@ class PosPunches < ApplicationComponent
 
   def display_date(punch, employee, punch_clock)
     div(class: "flex") do
-      span(class: "mr-4") { punch.punched_at.to_date.to_s }
+      span(class: "mr-4") { I18n.l(punch.punched_at, format: :weekday_date) }
       folded_icon(punch, employee, punch_clock, folded) if edit
     end
   end

@@ -14,7 +14,7 @@ class LogoComponent < ApplicationComponent
 
   def view_template
     logo_image
-    show_version
+    # show_version
   end
 
   def logo_image

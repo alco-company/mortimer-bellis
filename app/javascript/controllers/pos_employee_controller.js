@@ -14,7 +14,10 @@ export default class extends Controller {
     "toAt",
     "workReason",
     "sickOptions",
-    "freeOptions"
+    "freeOptions",
+    "weekDays",
+    "downArrow",
+    "upArrow",
   ]
 
   connect() {
@@ -51,6 +54,12 @@ export default class extends Controller {
     this.toAtTarget.setAttribute("type", "date");
     this.sickOptionsTarget.classList.remove("hidden")
     this.freeOptionsTarget.classList.add("hidden")
+  }
+
+  toggleWeekDays() {
+    this.weekDaysTarget.classList.toggle("hidden");
+    this.downArrowTarget.classList.toggle("hidden");
+    this.upArrowTarget.classList.toggle("hidden");
   }
 
   setButton(e) {

@@ -25,8 +25,15 @@ module SumPunches
           pc = PunchCard.where(account: employee.account, employee: employee, work_date: fdate).first_or_create
           unless pc.nil?
             begin
-              punches = employee.punches.where(punched_at: fdate.beginning_of_day..tdate.end_of_day).order(punched_at: :desc)
+              # obviously, we're only interested in punches for the day in question
+              # and even though we're looking for punches on the day in question, we'll order them in descending order
+              # by the ID - so that we can easily find the first and last punches of the day
+              # and using punched_at is not a good idea, as it's not guaranteed to be in order 'cause of the way
+              # the punches are created
+              punches = employee.punches.where(punched_at: fdate.beginning_of_day..tdate.end_of_day).order(id: :desc)
               say "Found #{punches.size} punches for #{employee.name} on #{fdate}-#{tdate}"
+
+              # in case we gotta bail out
               pc.update work_minutes: -1
               case punches.size
               when 0; strange_no_punches
@@ -68,8 +75,17 @@ module SumPunches
 
     def two_punches(pc, punches, employee)
       punches.update_all punch_card_id: pc.id
-      return unless punches.second.in?
-      work, ot1, ot2 = employee.divide_minutes((punches.first.punched_at - punches.second.punched_at) / 60)
+
+      is_sick = ->(x) { WORK_STATES[3..8].collect { |k, v| k }.include? x }
+      is_free = ->(x) { WORK_STATES[9..14].collect { |k, v| k }.include? x }
+
+      case punches.second.state
+      when is_sick; work, ot1, ot2 = [ 0, 0, 0 ]
+      when is_free; work, ot1, ot2 = [ 0, 0, 0 ]
+      when "in"; work, ot1, ot2 = employee.divide_minutes((punches.first.punched_at - punches.second.punched_at) / 60)
+      else work, ot1, ot2 = [ -1, -1, -1 ]
+      end
+
       pc.update work_minutes: work, ot1_minutes: ot1, ot2_minutes: ot2, break_minutes: 0
       say "Two punches for #{employee.name} on #{pc.work_date} - work_minutes set to #{pc.work_minutes}"
     end
@@ -94,7 +110,7 @@ module SumPunches
         work, ot1, ot2 = employee.divide_minutes counters[:work].sum
         pc.update work_minutes: work, ot1_minutes: ot1, ot2_minutes: ot2, break_minutes: counters[:break].sum
       rescue => e
-        debugger
+        say "Error in more_punches: #{e}"
       end
     end
   end

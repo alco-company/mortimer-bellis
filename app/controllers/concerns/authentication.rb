@@ -13,11 +13,5 @@ module Authentication
     Current.user = current_user
   rescue
     redirect_to new_user_session_path
-    # Current.account = Account.first
-    # if (user = User.find_by_valid_session(session))
-    #   Current.user = user
-    # else
-    #   redirect_to signin_path
-    # end
   end
 end
