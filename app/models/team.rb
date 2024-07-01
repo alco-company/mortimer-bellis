@@ -3,6 +3,7 @@ class Team < ApplicationRecord
   include Colorable
   include Localeable
   include Stateable
+  include Calendarable
 
   has_many :employees, dependent: :destroy
   has_many :employee_invitations, dependent: :destroy

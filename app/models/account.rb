@@ -6,6 +6,7 @@ class Account < ApplicationRecord
   include TimeZoned
   include Localeable
   include Colorable
+  include Calendarable
 
   has_many :dashboards, dependent: :destroy
   has_many :background_jobs, dependent: :destroy

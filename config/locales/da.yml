@@ -594,8 +594,13 @@ da:
       short_iso: "%Y-%m-%d"
       week_number: "%W"
       short_week_number: "%w"
+      short_week_year: "%w, %y"
+      week_year: "%W, %Y"
       week_string: "uge %W"
+      day_name: "%A"
       month_name: "%B"
+      month_name_year: "%B, %Y"
+      year: "%Y"
     month_names:
     - 
     - januar

@@ -7,6 +7,10 @@
 
 ## CHANGELOG
 
+### 1/7/2024
+
+* add a calendar table to account, team, and employee
+
 ### 28/6/2024
 
 * [ ] activate x on toasts

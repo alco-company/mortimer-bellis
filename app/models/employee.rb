@@ -5,6 +5,7 @@ class Employee < ApplicationRecord
   include Localeable
   include Stateable
   include EUCompliance
+  include Calendarable
 
   belongs_to :team
   has_many :punch_cards, dependent: :destroy

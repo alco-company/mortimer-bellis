@@ -335,12 +335,14 @@ class ApplicationForm < Superform::Rails::Form
         error_messages
         yield
         div(class: "flex flex-row flex-row-reverse m-5 gap-4") do
-          submit(submit_string, tabindex: "0", class: "mort-btn-primary") if @editable
-          input(
-            type: "reset",
-            tabindex: "0",
-            class: "mort-btn-cancel"
-          ) { helpers.t("cancel") }
+          if @editable
+            submit(submit_string, tabindex: "0", class: "mort-btn-primary")
+            input(
+              type: "reset",
+              tabindex: "0",
+              class: "mort-btn-cancel"
+            ) { helpers.t("cancel") }
+          end
         end
         div(class: "h-10") do
           plain "&nbsp;".html_safe

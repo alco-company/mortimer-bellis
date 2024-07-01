@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_06_19_184030) do
+ActiveRecord::Schema[8.0].define(version: 2024_07_01_075647) do
   create_table "accounts", force: :cascade do |t|
     t.string "name"
     t.string "email"
@@ -66,6 +66,17 @@ ActiveRecord::Schema[8.0].define(version: 2024_06_19_184030) do
     t.datetime "updated_at", null: false
     t.index ["account_id"], name: "index_background_jobs_on_account_id"
     t.index ["user_id"], name: "index_background_jobs_on_user_id"
+  end
+
+  create_table "calendars", force: :cascade do |t|
+    t.integer "account_id", null: false
+    t.string "calendarable_type", null: false
+    t.integer "calendarable_id", null: false
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_calendars_on_account_id"
+    t.index ["calendarable_type", "calendarable_id"], name: "index_calendars_on_calendarable"
   end
 
   create_table "dashboards", force: :cascade do |t|
@@ -386,6 +397,7 @@ ActiveRecord::Schema[8.0].define(version: 2024_06_19_184030) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "background_jobs", "accounts"
   add_foreign_key "background_jobs", "accounts", on_delete: :cascade
+  add_foreign_key "calendars", "accounts"
   add_foreign_key "dashboards", "accounts"
   add_foreign_key "dashboards", "accounts", on_delete: :cascade
   add_foreign_key "employee_invitations", "accounts"

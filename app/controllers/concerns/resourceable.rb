@@ -3,9 +3,9 @@ module Resourceable
 
   included do
     def resource_class
-      @resource_class ||= case rc_params.split("/").last
+      @resource_class ||= case params_ctrl.split("/").last
       when "invitations"; EmployeeInvitation
-      else; rc_params.split("/").last.classify.constantize
+      else; params_ctrl.split("/").last.classify.constantize
       end
     end
 
@@ -15,28 +15,56 @@ module Resourceable
     end
 
     def set_resources
-      @resources = any_filters? ? resource_class.filtered(@filter) : resource_class.by_account()
-      @resources = any_sorts? ? resource_class.ordered(@resources, params[:s], params[:d]) : @resources.order(created_at: :desc)
+      @resources = any_filters? ? resource_class.filtered(@filter) : parent_or_class
+      @resources = any_sorts? ? resource_class.ordered(@resources, params_s, params_d) : @resources.order(created_at: :desc)
+    end
+
+    def parent_or_class
+      parent? ? parent_resources : resource_class.by_account()
+    end
+
+    # "/teams/37/calendars"
+    # "/accounts/37/calendars"
+    # "/employees/37/calendars"
+    #
+    def parent?
+      request.path =~ /\/(team|employee|account)s\/\d+\/calendars/
+    end
+
+    def parent_resources
+      parent.send params_ctrl
+    end
+
+    def parent
+      @parent ||= parent_class.find(params_parent(:team_id) || params_parent(:employee_id) || params_parent(:account_id))
+    end
+
+    def parent_class
+      @parent_class ||= case request.path.split("/").second
+      when "teams"; Team
+      when "employees"; Employee
+      when "accounts"; Account
+      end
     end
 
     def set_filter
-      @filter_form = params[:controller].split("/").last
+      @filter_form = params_ctrl.split("/").last
       @url = resources_url
-      @filter = Filter.where(account: Current.account).where(view: params[:controller].split("/").last).take || Filter.new
+      @filter = Filter.where(account: Current.account).where(view: params_ctrl.split("/").last).take || Filter.new
       @filter.filter ||= {}
     end
 
     def new_resource_url
-      url_for(controller: params[:controller], action: :new)
+      url_for(controller: params_ctrl, action: :new)
     end
 
     def resource_url(**options)
-      url_for(controller: params[:controller], action: :show, id: @resource.id, **options)
+      url_for(controller: params_ctrl, action: :show, id: @resource.id, **options)
     end
 
     def edit_resource_url(**options)
       options[:id] = @resource.try(:id) || options.delete(:id)
-      url_for(controller: params[:controller], action: :edit, **options)
+      url_for(controller: params_ctrl, action: :edit, **options)
     end
 
     def delete_resource_url(resource)
@@ -44,23 +72,23 @@ module Resourceable
     end
 
     def resources_url(**options)
-      @resources_url ||= url_for(controller: params[:controller], action: :index, **options)
+      @resources_url ||= url_for(controller: params_ctrl, action: :index, **options)
     end
 
     def filtering_url
-      new_filter_url(url: resources_url, filter_form: params[:controller].split("/").last)
+      new_filter_url(url: resources_url, filter_form: params_ctrl.split("/").last)
     end
 
     def delete_all_url
-      url_for(controller: params[:controller], id: 1, action: :show, all: true)
+      url_for(controller: params_ctrl, id: 1, action: :show, all: true)
     end
 
     def pos_delete_all_url(date: nil)
-      url_for(controller: params[:controller], id: 1, action: :show, all: true, date: date, api_key: @resource.access_token)
+      url_for(controller: params_ctrl, id: 1, action: :show, all: true, date: date, api_key: @resource.access_token)
     end
 
     def any_filters?
-      return false if @filter.nil? or params[:controller].split("/").last == "filters"
+      return false if @filter.nil? or params_ctrl.split("/").last == "filters"
       !@filter.id.nil?
     end
 
@@ -72,6 +100,22 @@ module Resourceable
   private
     def rc_params
       params.permit(:id, :_method, :commit, :authenticity_token, :controller)[:controller]
+    end
+
+    def params_ctrl
+      params.permit(:controller)[:controller]
+    end
+
+    def params_s
+      params.permit(:s)[:s]
+    end
+
+    def params_d
+      params.permit(:d)[:d]
+    end
+
+    def params_parent(ref)
+      params.permit(:team_id, :employee_id, :account_id)[ref]
     end
 
     def params_id

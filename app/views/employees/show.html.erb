@@ -10,6 +10,9 @@
     </div>
   </div>
   <div class="">
+    <% @resource.create_calendar if @resource.calendars.count < 1 %>
+    <div class="ID mb-2"><strong>ID</strong><br/><%= @resource.id %></div>
+    <span class="calendar"><strong><%= t("calendars") %></strong><br/><%= link_to @resource.calendars.pluck(:name).join(", "), employee_calendars_url(@resource) %></span>
     <%= render resource_class.form @resource, false %>
   </div>
   <hr>

@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :calendars
   get "tooltips/show"
   devise_for :users, controllers: {
     invitations: "users/invitations",
@@ -25,6 +26,7 @@ Rails.application.routes.draw do
     resources :punches
   end
   resources :employees do
+    resources :calendars
     member do
       post :archive
     end
@@ -33,13 +35,17 @@ Rails.application.routes.draw do
     end
   end
   resources :employee_invitations
-  resources :teams
+  resources :teams do
+    resources :calendars
+  end
   resources :punch_clocks
   resources :locations do
     resources :punch_clocks
   end
   resources :filters
-  resources :accounts
+  resources :accounts do
+    resources :calendars
+  end
 
   scope "pos" do
     get "punch_clock" => "pos/punch_clock#show", as: :pos_punch_clock
