@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/rails/rails.git
-  revision: 6045f257fbbff039edb2542c9859488cec0dcaa9
+  revision: 738fde4782a1a457341aae54b80fa9844ba73904
   branch: main
   specs:
     actioncable (8.0.0.alpha)
@@ -205,7 +205,7 @@ GEM
     matrix (0.4.2)
     mini_magick (4.12.0)
     mini_mime (1.1.5)
-    minitest (5.24.0)
+    minitest (5.24.1)
     msgpack (1.7.2)
     multi_xml (0.7.1)
       bigdecimal (~> 3.1)
@@ -257,7 +257,7 @@ GEM
       nio4r (~> 2.0)
     raabro (1.4.0)
     racc (1.8.0)
-    rack (3.1.4)
+    rack (3.1.5)
     rack-protection (4.0.0)
       base64 (>= 0.1.0)
       rack (>= 3.0.0, < 4)
