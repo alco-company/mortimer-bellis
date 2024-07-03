@@ -601,6 +601,7 @@ da:
       month_name: "%B"
       month_name_year: "%B, %Y"
       year: "%Y"
+      day_summary: "%A d. %e. %B %Y"
     month_names:
     - 
     - januar

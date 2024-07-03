@@ -21,4 +21,6 @@ da:
     month_view: "Måned"
     year_view: "År"
     
+    modal:
+      day_summary: "Dagens aftaler"
     

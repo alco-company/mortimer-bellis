@@ -60,11 +60,28 @@ class YearComponent < CalendarComponent
           else; ""
           end
           cls += (dt.month == from_date.month) ? " bg-white text-gray-900" : " bg-gray-50 text-gray-400"
-          button(type: "button", class: "#{cls} bg-gray-50 py-1.5 text-gray-400 hover:bg-gray-100 focus:z-10") do
-            # Always include: "mx-auto flex h-7 w-7 items-center justify-center rounded-full"
-            # Is today, include: "bg-indigo-600 font-semibold text-white")
+          # button(type: "button",
+          #   data: { action: "click->calendar#showDaySummary", date: I18n.l(dt, format: :short_iso) },
+          #   class: "#{cls} bg-gray-50 py-1.5 text-gray-400 hover:bg-gray-100 focus:z-10") do
+          #   # Always include: "mx-auto flex h-7 w-7 items-center justify-center rounded-full"
+          #   # Is today, include: "bg-indigo-600 font-semibold text-white")
+          #   cls = (dt == Date.today && (dt.month == from_date.month)) ? "bg-sky-600 font-semibold text-white" : ""
+          #   time(datetime: I18n.l(dt, format: :short_iso), class: "#{cls} mx-auto flex h-7 w-7 items-center justify-center rounded-full") { dt.day }
+          # end
+          link_to(
+            helpers.modal_new_url(id: id, modal_form: "day_summary", resource_class: "calendar", modal_next_step: "accept", date: I18n.l(dt, format: :short_iso)),
+            data: { turbo_stream: true },
+            # link_to helpers.delete_all_url(),
+            # data: { turbo_method: :delete, turbo_confirm: "Are you sure?", turbo_stream: true, action: "click->contextmenu#hide" },
+            class: "#{cls} bg-gray-50 py-1.5 text-gray-400 hover:bg-gray-100 focus:z-10",
+            role: "menuitem",
+            tabindex: "-1") do
             cls = (dt == Date.today && (dt.month == from_date.month)) ? "bg-sky-600 font-semibold text-white" : ""
             time(datetime: I18n.l(dt, format: :short_iso), class: "#{cls} mx-auto flex h-7 w-7 items-center justify-center rounded-full") { dt.day }
+            span(class: "sr-only") do
+              plain "datetime: #{I18n.l(dt, format: :short_iso)} "
+              plain "day summary"
+            end
           end
         end
       end

@@ -1,11 +1,20 @@
 # WORKLOG
 
+# fonts to use: Inter, Helvetica, Futura, Garamond, Times New Roman, Bodoni, Baskerville, Century Expanded
+
+
 ## BUGS
 
 * [ ] add breaks and included_in_duration to payroll_period#manual_punch
 * [ ] redesign punch and add work_schedule to payroll_period#manual_punch
 
 ## CHANGELOG
+
+* build day summary
+
+### 2/7/2024
+
+* link to day view on year calendar
 
 ### 1/7/2024
 

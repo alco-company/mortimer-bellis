@@ -1,4 +1,9 @@
 class CalendarsController < MortimerController
+  #
+  def show
+    @date = params[:date] ? Date.parse(params[:date]) : Date.current
+    super
+  end
 
   private
     # Use callbacks to share common setup or constraints between actions.

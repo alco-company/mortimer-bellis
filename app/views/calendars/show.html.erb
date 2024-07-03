@@ -9,6 +9,6 @@
   </div>
   <div class="" data-controller="calendar">
     <div class="ID mb-2"><strong>ID</strong><br/><%= @resource.id %></div>
-    <%= render CalendarComponent.new(url: resource_url, date: Date.today, view: params[:view]) %> 
+    <%= render CalendarComponent.new(id: @resource.id, url: resource_url, date: @date, view: params[:view]) %> 
   </div>
 </div>

@@ -1,18 +1,21 @@
 class CalendarComponent < ApplicationComponent
-  attr_reader :url, :date, :view
+  include Phlex::Rails::Helpers::LinkTo
 
-  def initialize(url:, date:, view: nil, &block)
+  attr_reader :id, :url, :date, :view
+
+  def initialize(id:, url:, date:, view: nil, &block)
+    @id = id
     @url = url
-    @date = date
+    @date = date || Date.current
     @view = view || "month"
   end
 
   def view_template(&block)
     case view
-    when "day"; render DayComponent.new(url: url, date:, view: view, &block)
-    when "week"; render WeekComponent.new(url: url, date:, view: view, &block)
-    when "month"; render MonthComponent.new(url: url, date:, view: view, &block)
-    when "year"; render YearComponent.new(url: url, date:, view: view, &block)
+    when "day"; render DayComponent.new(id: id, url: url, date:, view: view, &block)
+    when "week"; render WeekComponent.new(id: id, url: url, date:, view: view, &block)
+    when "month"; render MonthComponent.new(id: id, url: url, date:, view: view, &block)
+    when "year"; render YearComponent.new(id: id, url: url, date:, view: view, &block)
     end
   end
 
