@@ -1,0 +1,7 @@
+<tr class="flex gap-x-6 py-5">
+  <%= render_text_column value: link_to(holiday.name, holiday_url(holiday)), table: :row, css: "truncate mort-link-primary" %>
+  <%= render_date_column value: holiday.from_date, table: :row, css: "" %>
+  <%= render_date_column value: holiday.to_date, table: :row, css: "" %>
+  <%= render_text_column value: holiday.countries, table: :row, css: "truncate" %>
+  <%= render_datetime_column value: holiday.updated_at, table: :row, css: "" %>
+</tr>

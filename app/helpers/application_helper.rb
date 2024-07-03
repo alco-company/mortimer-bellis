@@ -13,6 +13,7 @@ module ApplicationHelper
       if current_user.superadmin?
         items += [
           { title: I18n.t("menu.accounts"), url: accounts_url },
+          { title: I18n.t("menu.holidays"), url: holidays_url },
           { title: I18n.t("menu.pages"), url: pages_url },
           { title: I18n.t("menu.users"), url: users_url }
         ]

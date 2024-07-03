@@ -67,6 +67,7 @@ da:
     login: Log ind
     home: Hjem
     pages: Sider
+    holidays: Helligdage
     account: Konto
     accounts: Konti
     users: Brugere
@@ -176,6 +177,7 @@ da:
         tax_number: CVR nummer
         time_zone: Tidszone
         locale: Sprog
+        country: Land - for at få vist korrekte nationale helligdage
         logo: Logo (80 x 40)
         account_color: Farve
       asset:
@@ -218,6 +220,7 @@ da:
         team_id: "Hold/arbejdsgruppe"
         name: Navn
         mugshot: Profil billede
+        country: Land - for at få vist korrekte nationale helligdage - (overstyr hold land)
         pincode: Pinkode
         payroll_employee_ident: Løn nummer
         punching_absence: Stempler kun fravær
@@ -381,6 +384,7 @@ da:
         punches_settled_at: sidst afstemt
         time_zone: Tidszone
         team_color: Hold farve
+        country: Land - for at få vist korrekte nationale helligdage (overstyr konto land)
         locale: Sprog
         roll_days: antal dage i et rul
         week_workdays: arbejdsdage/uge

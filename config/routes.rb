@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :holidays
   resources :calendars
   get "tooltips/show"
   devise_for :users, controllers: {

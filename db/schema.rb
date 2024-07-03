@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_07_01_075647) do
+ActiveRecord::Schema[8.0].define(version: 2024_07_03_153314) do
   create_table "accounts", force: :cascade do |t|
     t.string "name"
     t.string "email"
@@ -23,6 +23,7 @@ ActiveRecord::Schema[8.0].define(version: 2024_07_01_075647) do
     t.string "send_eu_state_rrule"
     t.string "account_color"
     t.string "tax_number"
+    t.string "country"
   end
 
   create_table "active_storage_attachments", force: :cascade do |t|
@@ -142,6 +143,7 @@ ActiveRecord::Schema[8.0].define(version: 2024_07_01_075647) do
     t.datetime "updated_at", null: false
     t.integer "allowed_ot_minutes"
     t.boolean "punching_absence"
+    t.string "country"
     t.index ["account_id"], name: "index_employees_on_account_id"
     t.index ["team_id"], name: "index_employees_on_team_id"
   end
@@ -153,6 +155,16 @@ ActiveRecord::Schema[8.0].define(version: 2024_07_01_075647) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["account_id"], name: "index_filters_on_account_id"
+  end
+
+  create_table "holidays", force: :cascade do |t|
+    t.string "name"
+    t.string "countries"
+    t.date "from_date"
+    t.date "to_date"
+    t.integer "all_day"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "locations", force: :cascade do |t|
@@ -348,6 +360,7 @@ ActiveRecord::Schema[8.0].define(version: 2024_07_01_075647) do
     t.string "eu_state"
     t.boolean "blocked"
     t.integer "allowed_ot_minutes"
+    t.string "country"
     t.index ["account_id"], name: "index_teams_on_account_id"
   end
 
