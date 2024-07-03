@@ -20,7 +20,23 @@ da:
     week_view: "Uge"
     month_view: "Måned"
     year_view: "År"
+
+    week:
+      full: Uge
     
+    navigation:
+      previous_day: "Forrige dag"
+      next_day: "Næste dag"
+      previous_week: "Forrige uge"
+      next_week: "Næste uge"
+      previous_month: "Forrige måned"
+      next_month: "Næste måned"
+      previous_year: "Forrige år"
+      next_year: "Næste år"
+      day: "Dag"
+      week: "Uge"
+      month: "Måned"
+      year: "År"
     modal:
       day_summary: "Dagens aftaler"
     

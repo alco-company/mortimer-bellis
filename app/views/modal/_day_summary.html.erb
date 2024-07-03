@@ -19,192 +19,22 @@
         </div>
       </div>
     </div>
+
     <div class="mx-auto max-w-md">
       <div class="divide-y divide-gray-300/50">
         <div class="space-y-6 py-8 text-base leading-7 text-gray-600">
-          <ul class="space-y-4">
-
-            <!-- stemplinger -->
-            <li class="flex items-center p-1">
-              <div class="flex flex-col flex-grow truncate">
-                <div class="text-xs font-thin flex justify-start items-center">
-                  <svg class="pr-1 text-sky-600" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor">
-                    <path d="M200-80q-33 0-56.5-23.5T120-160v-480q0-33 23.5-56.5T200-720h40v-200h480v200h40q33 0 56.5 23.5T840-640v480q0 33-23.5 56.5T760-80H200Zm120-640h320v-120H320v120ZM200-160h560v-480H200v480Zm280-40q83 0 141.5-58.5T680-400q0-83-58.5-141.5T480-600q-83 0-141.5 58.5T280-400q0 83 58.5 141.5T480-200Zm0-60q-58 0-99-41t-41-99q0-58 41-99t99-41q58 0 99 41t41 99q0 58-41 99t-99 41Zm46-66 28-28-54-54v-92h-40v108l66 66Zm-46-74Z"/>
-                  </svg>                  
-                  <div class="pr-1 text-sky-600 font-mono">stemplinger</div>
-                  <div class="pr-1">torsdag</div>
-                  <div class="pr-1">uge 30</div>
-                  <div class="pr-1">20. september</div>
-                  <div class="pr-1">2024</div>
-                </div>
-                <ul class="text-xs space-y-1">
-                  <li class="grid grid-cols-6 gap-x-1">
-                    <div class="place-self-end font-mono">7:05</div>
-                    <div>arbejde</div>
-                    <div class="col-span-3 truncate">mødte tidligt - men glemte alt om julen</div>
-                  </li>
-                  <li class="grid grid-cols-6 gap-x-1">
-                    <div class="place-self-end font-mono">7:05</div>
-                    <div>pause</div>
-                    <div class="col-span-3 truncate">mødte tidligt</div>
-                  </li>
-                  <li class="grid grid-cols-6 gap-x-1">
-                    <div class="place-self-end font-mono">7:05</div>
-                    <div class="truncate">bediningun</div>
-                    <div class="col-span-3 truncate">mødte tidligt</div>
-                  </li>
-                </ul>
-              </div>
-              <div class="flex-grow-0">
-                <%= render_contextmenu resource: @event, resource_class: Calendar, alter: true, links: [ edit_calendar_url(@event), calendar_url(@event) ] %>
-              </div>
-            </li>
-
-            <!-- hele dagen -->
-            <li class="flex items-center p-1">
-              <div class="flex flex-col truncate">
-                <div class="text-xs font-thin">
-                  <span class="text-amber-500">hele dagen</span>
-                  <span>torsdag</span>
-                  <span>uge 30</span>
-                  <span>20. september asd asd </span>
-                  <span>2024</span>
-                </div>
-                <div class="grid grid-flow-col">
-                  <p class="truncate">Klippe hæk - men herefter kommer der en kæmpelang beskrivelse</p>
-                </div>
-              </div>
-              <div class="">
-                <svg class="text-gray-300" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor">
-                  <path d="M480-160q-33 0-56.5-23.5T400-240q0-33 23.5-56.5T480-320q33 0 56.5 23.5T560-240q0 33-23.5 56.5T480-160Zm0-240q-33 0-56.5-23.5T400-480q0-33 23.5-56.5T480-560q33 0 56.5 23.5T560-480q0 33-23.5 56.5T480-400Zm0-240q-33 0-56.5-23.5T400-720q0-33 23.5-56.5T480-800q33 0 56.5 23.5T560-720q0 33-23.5 56.5T480-640Z" />
-                </svg>
-              </div>
-            </li>
-
-            <!-- almindelig m/kort tekst -->
-            <li class="flex items-center bg-yellow-200 p-1">
-              <div class="flex flex-col flex-grow truncate">
-                <div class="text-xs font-thin">
-                  <span>08.00 - 14:45</span>
-                  <span>torsdag</span>
-                  <span>uge 30</span>
-                  <span>20. september</span>
-                  <span>2024</span>
-                </div>
-                <div class="grid grid-flow-col">
-                  <p class="truncate">Klippe hæk</p>
-                </div>
-              </div>
-              <div class="flex-grow-0">
-                <div>
-                  <svg class="text-gray-300" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor">
-                    <path d="M480-160q-33 0-56.5-23.5T400-240q0-33 23.5-56.5T480-320q33 0 56.5 23.5T560-240q0 33-23.5 56.5T480-160Zm0-240q-33 0-56.5-23.5T400-480q0-33 23.5-56.5T480-560q33 0 56.5 23.5T560-480q0 33-23.5 56.5T480-400Zm0-240q-33 0-56.5-23.5T400-720q0-33 23.5-56.5T480-800q33 0 56.5 23.5T560-720q0 33-23.5 56.5T480-640Z" />
-                  </svg>
-                </div>
-              </div>
-            </li>
-
-            <!-- lang tekst + attention på more -->
-            <li class="flex items-center p-1">
-              <div class="flex flex-col truncate">
-                <div class="text-xs font-thin">
-                  <span>08.00 - 14:45</span>
-                  <span>torsdag</span>
-                  <span>uge 30</span>
-                  <span>20. september</span>
-                  <span>2024</span>
-                </div>
-                <div class="grid grid-flow-col">
-                  <p class="truncate">Klippe hæk - men herefter kommer der en kæmpelang beskrivelse</p>
-                </div>
-              </div>
-              <div class="">
-                <svg class="text-pink-500" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor">
-                  <path d="M480-160q-33 0-56.5-23.5T400-240q0-33 23.5-56.5T480-320q33 0 56.5 23.5T560-240q0 33-23.5 56.5T480-160Zm0-240q-33 0-56.5-23.5T400-480q0-33 23.5-56.5T480-560q33 0 56.5 23.5T560-480q0 33-23.5 56.5T480-400Zm0-240q-33 0-56.5-23.5T400-720q0-33 23.5-56.5T480-800q33 0 56.5 23.5T560-720q0 33-23.5 56.5T480-640Z" />
-                </svg>
-              </div>
-            </li>
-
-            <!-- attention på hele opgaven -->
-            <li class="flex items-center border-l border-red-400  p-1 pl-3">
-              <div class="flex flex-col truncate">
-                <div class="text-xs font-thin">
-                  <span>08.00 - 14:45</span>
-                  <span>torsdag</span>
-                  <span>uge 30</span>
-                  <span>20. september</span>
-                  <span>2024</span>
-                </div>
-                <div class="grid grid-flow-col">
-                  <p class="truncate">Klippe hæk - men herefter kommer der en kæmpelang beskrivelse</p>
-                </div>
-              </div>
-              <div>
-                <svg class="text-gray-300" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor">
-                  <path d="M480-160q-33 0-56.5-23.5T400-240q0-33 23.5-56.5T480-320q33 0 56.5 23.5T560-240q0 33-23.5 56.5T480-160Zm0-240q-33 0-56.5-23.5T400-480q0-33 23.5-56.5T480-560q33 0 56.5 23.5T560-480q0 33-23.5 56.5T480-400Zm0-240q-33 0-56.5-23.5T400-720q0-33 23.5-56.5T480-800q33 0 56.5 23.5T560-720q0 33-23.5 56.5T480-640Z" />
-                </svg>
-              </div>
-            </li>
-
-            <!-- recurring event -->
-            <li class="flex items-center p-1">
-              <div class="flex flex-col truncate">
-                <div class="grid grid-flow-col items-center justify-start text-xs font-thin">
-                  <svg class="pr-1 text-sky-400" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor">
-                    <path d="M200-80q-33 0-56.5-23.5T120-160v-560q0-33 23.5-56.5T200-800h40v-80h80v80h320v-80h80v80h40q33 0 56.5 23.5T840-720v240h-80v-80H200v400h280v80H200ZM760 0q-73 0-127.5-45.5T564-160h62q13 44 49.5 72T760-60q58 0 99-41t41-99q0-58-41-99t-99-41q-29 0-54 10.5T662-300h58v60H560v-160h60v57q27-26 63-41.5t77-15.5q83 0 141.5 58.5T960-200q0 83-58.5 141.5T760 0ZM200-640h560v-80H200v80Zm0 0v-80 80Z" />
-                  </svg>
-                  <span class="pr-1">08.00 - 14:45</span>
-                  <span class="pr-1 text-sky-400 font-bold">torsdag</span>
-                  <span class="pr-1">uge 30</span>
-                  <span class="pr-1">20. september</span>
-                  <span class="pr-1">2024</span>
-                </div>
-                <div class="grid grid-flow-col">
-                  <p class="truncate">Klippe hæk - men herefter kommer der en kæmpelang beskrivelse</p>
-                </div>
-              </div>
-              <div>
-                <svg class="text-gray-300" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor">
-                  <path d="M480-160q-33 0-56.5-23.5T400-240q0-33 23.5-56.5T480-320q33 0 56.5 23.5T560-240q0 33-23.5 56.5T480-160Zm0-240q-33 0-56.5-23.5T400-480q0-33 23.5-56.5T480-560q33 0 56.5 23.5T560-480q0 33-23.5 56.5T480-400Zm0-240q-33 0-56.5-23.5T400-720q0-33 23.5-56.5T480-800q33 0 56.5 23.5T560-720q0 33-23.5 56.5T480-640Z" />
-                </svg>
-              </div>
-            </li>
-
-            <!-- comment/note -->
-            <li class="flex items-center p-1">
-              <div class="flex flex-col truncate">
-                <div class="text-xs font-thin">
-                  <span>08.00 - 14:45</span>
-                  <span>torsdag</span>
-                  <span>uge 30</span>
-                  <span>20. september</span>
-                  <span>2024</span>
-                </div>
-                <div class="grid grid-flow-col items-end">
-                  <svg class="mr-1 text-lime-400" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor">
-                    <path d="M320-520q17 0 28.5-11.5T360-560q0-17-11.5-28.5T320-600q-17 0-28.5 11.5T280-560q0 17 11.5 28.5T320-520Zm160 0q17 0 28.5-11.5T520-560q0-17-11.5-28.5T480-600q-17 0-28.5 11.5T440-560q0 17 11.5 28.5T480-520Zm160 0q17 0 28.5-11.5T680-560q0-17-11.5-28.5T640-600q-17 0-28.5 11.5T600-560q0 17 11.5 28.5T640-520ZM80-80v-720q0-33 23.5-56.5T160-880h640q33 0 56.5 23.5T880-800v480q0 33-23.5 56.5T800-240H240L80-80Zm126-240h594v-480H160v525l46-45Zm-46 0v-480 480Z" />
-                  </svg>
-                  <p class="truncate">Klippe hæk - men herefter kommer der en kæmpelang beskrivelse</p>
-                </div>
-              </div>
-              <div>
-                <svg class="text-gray-300" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor">
-                  <path d="M480-160q-33 0-56.5-23.5T400-240q0-33 23.5-56.5T480-320q33 0 56.5 23.5T560-240q0 33-23.5 56.5T480-160Zm0-240q-33 0-56.5-23.5T400-480q0-33 23.5-56.5T480-560q33 0 56.5 23.5T560-480q0 33-23.5 56.5T480-400Zm0-240q-33 0-56.5-23.5T400-720q0-33 23.5-56.5T480-800q33 0 56.5 23.5T560-720q0 33-23.5 56.5T480-640Z" />
-                </svg>
-              </div>
-            </li>
-
-          </ul>
+          <%= render EventsList.new %>
         </div>
       </div>
     </div>
-    
+
+
     <div class="flex">
       <div class="flex flex-grow space-x-2">
-        <%= link_to t("calendar.day_view"), calendar_url(@resource, date: params[:date] ,view: "day"), class: "mort-btn-primary" %>        
-        <%= link_to t("calendar.week_view"), calendar_url(@resource, date: params[:date] ,view: "week"), class: "mort-btn-primary" %>        
-        <%= link_to t("calendar.month_view"), calendar_url(@resource, date: params[:date] ,view: "month"), class: "mort-btn-primary" %>        
-        <%= link_to t("calendar.year_view"), calendar_url(@resource, date: params[:date] ,view: "year"), class: "mort-btn-primary" %>        
+        <%= link_to t("calendar.day_view"), calendar_url(@resource, date: params[:date] ,view: "day"), class: "mort-btn-secondary" %>        
+        <%= link_to t("calendar.week_view"), calendar_url(@resource, date: params[:date] ,view: "week"), class: "mort-btn-secondary" %>        
+        <%= link_to t("calendar.month_view"), calendar_url(@resource, date: params[:date] ,view: "month"), class: "mort-btn-secondary" %>        
+        <%= link_to t("calendar.year_view"), calendar_url(@resource, date: params[:date] ,view: "year"), class: "mort-btn-secondary" %>        
       </div>
       <div class="flex-grow-0">
         <%= link_to calendar_url(@resource, date: params[:date] ,view: "year"), class: "mort-btn-primary" do %>

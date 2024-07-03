@@ -10,6 +10,10 @@
 
 ## CHANGELOG
 
+### 4/7/2024
+
+* build on events_list component - wip
+
 ### 3/7/2024
 
 * build day summary

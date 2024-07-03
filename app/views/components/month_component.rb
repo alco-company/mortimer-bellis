@@ -661,13 +661,17 @@ class MonthComponent < CalendarComponent
 
       # todays list of events
       div(class: "px-4 py-10 sm:px-6 lg:hidden") do
-        ol(class: "divide-y divide-gray-100 overflow-hidden rounded-lg bg-white text-sm shadow ring-1 ring-black ring-opacity-5") do
-          # mobile_listed_events.each do |event|
-          [ "Maple syrup museum", "Hockey Game" ].each do |event|
-            listed_event(event)
-          end
+        div(class: "") do
+          render EventsList.new
         end
       end
+      #   ol(class: "divide-y divide-gray-100 overflow-hidden rounded-lg bg-white text-sm shadow ring-1 ring-black ring-opacity-5") do
+      #     # mobile_listed_events.each do |event|
+      #     [ "Maple syrup museum", "Hockey Game" ].each do |event|
+      #       listed_event(event)
+      #     end
+      #   end
+      # end
     end
   end
 

@@ -46,9 +46,11 @@ class CalendarComponent < ApplicationComponent
     when "week"
       div do
         h1(class: "text-base font-semibold leading-6 text-gray-900") do
-          time(datetime: I18n.l(date, format: :short_iso), class: "sm:hidden") { "#{I18n.t("calendar.week.abbr")}" + I18n.l(date, format: :short_week_year) }
+          time(datetime: I18n.l(date, format: :short_iso), class: "sm:hidden") do
+            plain I18n.t("calendar.week.abbr") + I18n.l(date, format: :short_week_year)
+          end
           time(datetime: I18n.l(date, format: :short_iso), class: "hidden sm:inline") do
-            plain "#{I18n.t("calendar.week.full")} " + I18n.l(date, format: :week_year)
+            plain I18n.t("calendar.week.full") + I18n.l(date, format: :week_year)
           end
         end
         # p(class: "mt-1 text-sm text-gray-500") { "Saturday" }
@@ -68,26 +70,26 @@ class CalendarComponent < ApplicationComponent
   end
 
   def period_navigator
-    pe, ne = case view
+    pe_url, pe, ne, ne_url = case view
     when "day"
-      [ "Previous day", "Next day" ]
+      [ "#{url}?view=#{view}&date=#{date - 1.day}", I18n.t("calendar.navigation.previous_day"), I18n.t("calendar.navigation.next_day"), "#{url}?view=#{view}&date=#{date + 1.day}" ]
     when "week"
-      [ "Previous week", "Next week" ]
+      [ "#{url}?view=#{view}&date=#{date - 7.days}", I18n.t("calendar.navigation.previous_week"), I18n.t("calendar.navigation.next_week"), "#{url}?view=#{view}&date=#{date + 7.days}" ]
     when "month"
-      [ "Previous month", "Next month" ]
+      [ "#{url}?view=#{view}&date=#{date - 1.month}", I18n.t("calendar.navigation.previous_month"), I18n.t("calendar.navigation.next_month"), "#{url}?view=#{view}&date=#{date + 1.month}" ]
     when "year"
-      [ "Previous year", "Next year" ]
+      [ "#{url}?view=#{view}&date=#{date - 1.year}", I18n.t("calendar.navigation.previous_year"), I18n.t("calendar.navigation.next_year"), "#{url}?view=#{view}&date=#{date + 1.year}" ]
     end
     div(class: "relative flex items-center rounded-md bg-white shadow-sm md:items-stretch") do
-      button(type: "button", class: "flex h-9 w-12 items-center justify-center rounded-l-md border-y border-l border-gray-300 pr-1 text-gray-400 hover:text-gray-500 focus:relative md:w-9 md:pr-0 md:hover:bg-gray-50") do
+      link_to(pe_url, class: "flex h-9 w-12 items-center justify-center rounded-l-md border-y border-l border-gray-300 pr-1 text-gray-400 hover:text-gray-500 focus:relative md:w-9 md:pr-0 md:hover:bg-gray-50") do
         span(class: "sr-only") { pe }
         svg(class: "h-5 w-5", viewbox: "0 0 20 20", fill: "currentColor", aria_hidden: "true") do |s|
           s.path(fill_rule: "evenodd", d: "M12.79 5.23a.75.75 0 01-.02 1.06L8.832 10l3.938 3.71a.75.75 0 11-1.04 1.08l-4.5-4.25a.75.75 0 010-1.08l4.5-4.25a.75.75 0 011.06.02z", clip_rule: "evenodd")
         end
       end
-      button(type: "button", class: "hidden border-y border-gray-300 px-3.5 text-sm font-semibold text-gray-900 hover:bg-gray-50 focus:relative md:block") {  I18n.t("calendar.go_today")  }
+      link_to("#{url}?view=#{view}&date=#{Date.today}", class: "hidden border-y border-gray-300 px-3.5 pt-1.5 text-sm font-semibold text-gray-900 hover:bg-gray-50 focus:relative md:block") {  I18n.t("calendar.go_today")  }
       span(class: "relative -mx-px h-5 w-px bg-gray-300 md:hidden")
-      button(type: "button", class: "flex h-9 w-12 items-center justify-center rounded-r-md border-y border-r border-gray-300 pl-1 text-gray-400 hover:text-gray-500 focus:relative md:w-9 md:pl-0 md:hover:bg-gray-50") do
+      link_to(ne_url, class: "flex h-9 w-12 items-center justify-center rounded-r-md border-y border-r border-gray-300 pl-1 text-gray-400 hover:text-gray-500 focus:relative md:w-9 md:pl-0 md:hover:bg-gray-50") do
         span(class: "sr-only") { ne }
         svg(class: "h-5 w-5", viewbox: "0 0 20 20", fill: "currentColor", aria_hidden: "true") do |s|
           s.path(fill_rule: "evenodd", d: "M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z", clip_rule: "evenodd")
@@ -142,15 +144,21 @@ class CalendarComponent < ApplicationComponent
 
   def mobile_view_picker
     div(class: "relative ml-6 md:hidden") do
-      button(type: "button", class: "-mx-2 flex items-center rounded-full border border-transparent p-2 text-gray-400 hover:text-gray-500", id: "menu-0-button", aria_expanded: "false", aria_haspopup: "true") do
+      button(type: "button",
+        data: { action: "touchstart->calendar#toggleMobileView click->calendar#toggleMobileView click@window->calendar#hideMobileView" },
+        class: "-mx-2 flex items-center rounded-full border border-transparent p-2 text-gray-400 hover:text-gray-500",
+        id: "menu-0-button",
+        aria_expanded: "false",
+        aria_haspopup: "true") do
         span(class: "sr-only") { "Open menu" }
         svg(class: "h-5 w-5", viewbox: "0 0 20 20", fill: "currentColor", aria_hidden: "true") do |s|
           s.path(d: "M3 10a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zM8.5 10a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zM15.5 8.5a1.5 1.5 0 100 3 1.5 1.5 0 000-3z")
         end
       end
       # %(Dropdown menu, show/hide based on menu state. Entering: "transition ease-out duration-100" From: "transform opacity-0 scale-95" To: "transform opacity-100 scale-100" Leaving: "transition ease-in duration-75" From: "transform opacity-100 scale-100" To: "transform opacity-0 scale-95")
-      div(class: "absolute right-0 z-10 mt-3 w-36 origin-top-right divide-y divide-gray-100 overflow-hidden rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none",
+      div(class: "hidden absolute right-0 z-10 mt-3 w-36 origin-top-right divide-y divide-gray-100 overflow-hidden rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none",
         role: "menu",
+        data: { calendar_target: "mobile_view_dropdown" },
         aria_orientation: "vertical",
         aria_labelledby: "menu-0-button",
         tabindex: "-1"
@@ -167,7 +175,7 @@ class CalendarComponent < ApplicationComponent
         end
         div(class: "py-1", role: "none") do
           a(
-            href: "#",
+            href: "#{url}?view=day&date=#{Date.today}",
             class: "block px-4 py-2 text-sm text-gray-700",
             role: "menuitem",
             tabindex: "-1",
@@ -183,28 +191,28 @@ class CalendarComponent < ApplicationComponent
     div(class: "py-1", role: "none") do
       # comment do %(Active: "bg-gray-100 text-gray-900", Not Active: "text-gray-700") end
       a(
-        href: "#{url}?view=day",
+        href: "#{url}?view=day&date=#{date}",
         class: "block px-4 py-2 text-sm text-gray-700",
         role: "menuitem",
         tabindex: "-1",
         id: "menu-0-item-2"
       ) { I18n.t("calendar.day_view") }
       a(
-        href: "#{url}?view=week",
+        href: "#{url}?view=week&date=#{date}",
         class: "block px-4 py-2 text-sm text-gray-700",
         role: "menuitem",
         tabindex: "-1",
         id: "menu-0-item-3"
       ) { I18n.t("calendar.week_view") }
       a(
-        href: "#{url}?view=month",
+        href: "#{url}?view=month&date=#{date}",
         class: "block px-4 py-2 text-sm text-gray-700",
         role: "menuitem",
         tabindex: "-1",
         id: "menu-0-item-4"
       ) { I18n.t("calendar.month_view") }
       a(
-        href: "#{url}?view=year",
+        href: "#{url}?view=year&date=#{date}",
         class: "block px-4 py-2 text-sm text-gray-700",
         role: "menuitem",
         tabindex: "-1",
