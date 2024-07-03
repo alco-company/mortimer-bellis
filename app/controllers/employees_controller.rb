@@ -40,13 +40,15 @@ class EmployeesController < MortimerController
 
     # Only allow a list of trusted parameters through.
     def resource_params
-      params[:employee][:pincode] = Employee.next_pincode(params[:employee][:pincode]) if params[:employee][:pincode].blank?
-      params[:employee][:payroll_employee_ident] = Employee.next_payroll_employee_ident(params[:employee][:payroll_employee_ident]) if params[:employee][:payroll_employee_ident].blank?
+      rp = params.require(:employee).permit(:pincode, :payroll_employee_ident)
+      params[:employee][:pincode] = Employee.next_pincode(rp[:pincode]) if rp[:pincode].blank?
+      params[:employee][:payroll_employee_ident] = Employee.next_payroll_employee_ident(rp[:payroll_employee_ident]) if rp[:payroll_employee_ident].blank?
       params.require(:employee).permit(
         :account_id,
         :team_id,
         :name,
         :mugshot,
+        :country,
         :pincode,
         :payroll_employee_ident,
         :punching_absence,

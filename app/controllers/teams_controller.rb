@@ -6,6 +6,7 @@ class TeamsController < MortimerController
       params.require(:team).permit(:account_id,
       :name,
       :team_color,
+      :country,
       :locale,
       :time_zone,
       :punches_settled_at,

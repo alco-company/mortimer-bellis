@@ -5,7 +5,7 @@ class AccountsController < MortimerController
 
     # Only allow a list of trusted parameters through.
     def resource_params
-      params.require(:account).permit(:id, :name, :account_color, :email, :tax_number, :logo, :pp_identification, :locale, :time_zone)
+      params.require(:account).permit(:id, :name, :country, :account_color, :email, :tax_number, :logo, :pp_identification, :locale, :time_zone)
     end
 
     def authorize

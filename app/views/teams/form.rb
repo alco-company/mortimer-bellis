@@ -11,6 +11,7 @@ class Teams::Form < ApplicationForm
         div(class: "mort-btn-secondary", data: { action: "click->employee#toggleAdvanced" }) { I18n.t("employees.advanced_configuration") }
       end if @editable
       div(data: { employee_target: "advanced" }, class: "#{"hidden" if @editable}") do
+        row field(:country).input(class: "mort-form-text")
         row field(:payroll_team_ident).input(class: "mort-form-text")
         # row field(:state).input(class: "mort-form-text")
         row field(:description).textarea(class: "mort-form-text")

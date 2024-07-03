@@ -9,12 +9,13 @@ class Employees::Form < ApplicationForm
       row field(:email).input(class: "mort-form-text")
       row field(:cell_phone).input(class: "mort-form-text")
       model.team&.blocked? ?
-        (model.blocked = true; row(field(:blocked).boolean(class: "mort-form-bool", disabled: true))) :
-        row(field(:blocked).boolean(class: "mort-form-bool"))
+      (model.blocked = true; row(field(:blocked).boolean(class: "mort-form-bool", disabled: true))) :
+      row(field(:blocked).boolean(class: "mort-form-bool"))
       div do
         div(class: "mort-btn-secondary", data: { action: "click->employee#toggleAdvanced" }) { I18n.t("employees.advanced_configuration") }
       end if @editable
       div(data: { employee_target: "advanced" }, class: "#{"hidden" if @editable}") do
+        row field(:country).input(class: "mort-form-text")
         row field(:payroll_employee_ident).input(class: "mort-form-text")
         view_only field(:access_token).input(class: "mort-form-text")
         row field(:description).input(class: "mort-form-text")

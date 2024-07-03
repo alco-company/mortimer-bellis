@@ -7,12 +7,14 @@
 
 * [ ] add breaks and included_in_duration to payroll_period#manual_punch
 * [ ] redesign punch and add work_schedule to payroll_period#manual_punch
-* [ ] add country to account, team, employee - to show proper holidays
 
 ## CHANGELOG
 
+### 3/7/2024
+
 * build day summary
 * add holiday scaffold
+* [ ] add country to account, team, employee - to show proper holidays
 
 ### 2/7/2024
 
