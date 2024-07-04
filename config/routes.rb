@@ -1,6 +1,10 @@
 Rails.application.routes.draw do
   resources :holidays
-  resources :calendars
+  resources :calendars do
+    member do
+      get :events
+    end
+  end
   get "tooltips/show"
   devise_for :users, controllers: {
     invitations: "users/invitations",

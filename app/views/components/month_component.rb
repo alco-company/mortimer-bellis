@@ -7,9 +7,9 @@ class MonthComponent < CalendarComponent
       month_view
 
       # todays list of events
-      div(class: "px-4 py-10 sm:px-6 lg:hidden") do
-        div(class: "") do
-          render EventsList.new
+      div(class: "px-4 py-10 sm:px-6 lg:mx-auto") do
+        div(id: "events_list", class: "") do
+          # render EventsList.new
         end
       end
     end
@@ -89,8 +89,9 @@ class MonthComponent < CalendarComponent
     cls = "relative py-2 px-3 grid grid-cols-2 min-h-20"
     cls += (dt.month == from_date.month) ? " bg-white" : " bg-gray-50 text-gray-500"
     link_to(
-      helpers.modal_new_url(id: id, modal_form: "day_summary", resource_class: "calendar", modal_next_step: "accept", date: I18n.l(dt, format: :short_iso)),
-      data: { turbo_stream: true },
+      # helpers.modal_new_url(id: id, modal_form: "day_summary", resource_class: "calendar", modal_next_step: "accept", date: I18n.l(dt, format: :short_iso)),
+      helpers.events_calendar_url(id: id, date: dt),
+      data: { turbo_frame: "events_list", turbo_stream: true },
       class: cls,
       role: "menuitem",
       tabindex: "-1") do
@@ -196,8 +197,11 @@ class MonthComponent < CalendarComponent
     cls += (dt.month == from_date.month) ? " bg-white" : " bg-gray-50"
     cls += (dt == Date.today && (dt.month == from_date.month)) ? " text-gray-900" : " text-gray-500"
     link_to(
-      helpers.modal_new_url(id: id, modal_form: "day_summary", resource_class: "calendar", modal_next_step: "accept", date: I18n.l(dt, format: :short_iso)),
-      data: { turbo_stream: true },
+      helpers.events_calendar_url(id: id, date: dt),
+      data: { turbo_frame: "events_list", turbo_stream: true },
+      # modal view alternative:
+      # helpers.modal_new_url(id: id, modal_form: "day_summary", resource_class: "calendar", modal_next_step: "accept", date: I18n.l(dt, format: :short_iso)),
+      # data: { turbo_stream: true },
       class: cls,
       role: "menuitem",
       tabindex: "-1") do

@@ -17,11 +17,7 @@ class EventsList < ApplicationComponent
   def holidays
     li(class: "flex items-center p-1") do
       div(class: "flex flex-col flex-grow truncate") do
-        div(
-          class:
-            "text-xs text-violet-600 font-thin flex justify-start items-center"
-        ) do
-          whitespace
+        div(class: "text-xs text-violet-600 font-thin flex justify-start items-center") do
           svg(
             class: "pr-1 text-violet-600",
             xmlns: "http://www.w3.org/2000/svg",
@@ -46,7 +42,6 @@ class EventsList < ApplicationComponent
         end
       end
       div(class: "flex-grow-0") do
-        whitespace
         svg(
           class: "text-gray-300",
           xmlns: "http://www.w3.org/2000/svg",
@@ -62,8 +57,6 @@ class EventsList < ApplicationComponent
         end
       end
     end
-    whitespace
-
   end
 
   #

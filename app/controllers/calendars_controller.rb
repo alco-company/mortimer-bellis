@@ -5,6 +5,12 @@ class CalendarsController < MortimerController
     super
   end
 
+  def events
+    @resource = Calendar.find(params[:id])
+    @date = params[:date] ? Date.parse(params[:date]) : Date.current
+    render turbo_stream: turbo_stream.replace("events_list", partial: "events")
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_calendar
