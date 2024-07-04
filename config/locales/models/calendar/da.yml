@@ -23,6 +23,36 @@ da:
 
     week:
       full: Uge
+
+    weekday:
+      sunday: 
+        full: Søndag
+        firstletter: S
+        second_thirdletter: øn
+      monday: 
+        full: Mandag
+        firstletter: M
+        second_thirdletter: an
+      tuesday: 
+        full: Tirsdag
+        firstletter: T
+        second_thirdletter: irs
+      wednesday: 
+        full: Onsdag
+        firstletter: O
+        second_thirdletter: ns
+      thursday: 
+        full: Torsdag
+        firstletter: T
+        second_thirdletter: ors
+      friday: 
+        full: Fredag
+        firstletter: F
+        second_thirdletter: re
+      saturday: 
+        full: Lørdag
+        firstletter: L
+        second_thirdletter: ør
     
     navigation:
       previous_day: "Forrige dag"

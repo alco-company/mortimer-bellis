@@ -13,6 +13,7 @@
 ### 4/7/2024
 
 * build on events_list component - wip
+* add month view on calendar
 
 ### 3/7/2024
 

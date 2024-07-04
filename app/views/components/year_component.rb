@@ -23,17 +23,7 @@ class YearComponent < CalendarComponent
     section(class: "text-center") do
       h2(class: "text-sm font-semibold text-gray-900") { I18n.l(from_date, format: :month_name) }
       dt = Date.new(date.year, month, 1).at_beginning_of_week
-      div(
-        class: "mt-6 grid grid-cols-7 text-xs leading-6 text-gray-500"
-      ) do
-        div { "M" }
-        div { "T" }
-        div { "W" }
-        div { "T" }
-        div { "F" }
-        div { "S" }
-        div { "S" }
-      end
+      weekday_header
       div(class: "isolate mt-2 grid grid-cols-7 gap-px rounded-lg bg-gray-200 text-sm shadow ring-1 ring-gray-200") do
         # Always include: "py-1.5 hover:bg-gray-100 focus:z-10" 
         # Is current month, include: "bg-white text-gray-900" 
@@ -85,6 +75,18 @@ class YearComponent < CalendarComponent
           end
         end
       end
+    end
+  end
+
+  def weekday_header
+    div(class: "mt-6 grid grid-cols-7 text-xs leading-6 text-gray-500") do
+      div { I18n.t("calendar.weekday.monday.firstletter") }
+      div { I18n.t("calendar.weekday.tuesday.firstletter") }
+      div { I18n.t("calendar.weekday.wednesday.firstletter") }
+      div { I18n.t("calendar.weekday.thursday.firstletter") }
+      div { I18n.t("calendar.weekday.friday.firstletter") }
+      div { I18n.t("calendar.weekday.saturday.firstletter") }
+      div { I18n.t("calendar.weekday.sunday.firstletter") }
     end
   end
 end
