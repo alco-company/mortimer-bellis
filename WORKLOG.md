@@ -15,6 +15,7 @@
 * build on events_list component - wip
 * add month view on calendar
 * show events on calendar - below month view
+* add recurring_events table - with recurrence text field only
 
 ### 3/7/2024
 

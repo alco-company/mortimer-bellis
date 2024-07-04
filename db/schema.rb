@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_07_03_153314) do
+ActiveRecord::Schema[8.0].define(version: 2024_07_04_132817) do
   create_table "accounts", force: :cascade do |t|
     t.string "name"
     t.string "email"
@@ -227,6 +227,12 @@ ActiveRecord::Schema[8.0].define(version: 2024_07_03_153314) do
     t.string "comment"
     t.index ["account_id"], name: "index_punches_on_account_id"
     t.index ["employee_id"], name: "index_punches_on_employee_id"
+  end
+
+  create_table "recurring_events", force: :cascade do |t|
+    t.text "recurrence"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "solid_queue_blocked_executions", force: :cascade do |t|
