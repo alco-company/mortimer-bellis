@@ -47,10 +47,10 @@ class CalendarComponent < ApplicationComponent
       div do
         h1(class: "text-base font-semibold leading-6 text-gray-900") do
           time(datetime: I18n.l(date, format: :short_iso), class: "sm:hidden") do
-            plain I18n.t("calendar.week.abbr") + I18n.l(date, format: :short_week_year)
+            plain "%s %s" % [ I18n.t("calendar.week_labels.abbr"), I18n.l(date, format: :week_year) ]
           end
           time(datetime: I18n.l(date, format: :short_iso), class: "hidden sm:inline") do
-            plain I18n.t("calendar.week.full") + I18n.l(date, format: :week_year)
+            plain "%s %s" % [ I18n.t("calendar.week_labels.full"), I18n.l(date, format: :week_year) ]
           end
         end
         # p(class: "mt-1 text-sm text-gray-500") { "Saturday" }
@@ -218,6 +218,44 @@ class CalendarComponent < ApplicationComponent
         tabindex: "-1",
         id: "menu-0-item-5"
       ) { I18n.t("calendar.year_view") }
+    end
+  end
+
+  def holiday?(dt)
+    dt.day == 25
+  end
+
+  def week_number(day, dt, cls = "")
+    case day
+    when 0;   div(class: "#{cls} text-gray-300") { I18n.l(dt, format: :week_number) }
+    when 7;   div(class: "#{cls} text-gray-300") { I18n.l(dt, format: :week_number) }
+    when 14;  div(class: "#{cls} text-gray-300") { I18n.l(dt, format: :week_number) }
+    when 21;  div(class: "#{cls} text-gray-300") { I18n.l(dt, format: :week_number) }
+    when 28;  div(class: "#{cls} text-gray-300") { I18n.l(dt, format: :week_number) }
+    when 35;  div(class: "#{cls} text-gray-300") { I18n.l(dt, format: :week_number) }
+    else;     div(class: "h-6") { " " }
+    end
+  end
+
+  def all_day_events(dt, cls = "")
+    dt.day == 8 ?
+      div(class: "text-amber-500 font-extrabold justify-self-end text-sm pr-1.5 #{cls}") { "!" } :
+      div(class: "pr-1.5 #{cls}") { " " }
+  end
+
+  def punches?(dt, cls = "")
+    dt.day == 8 ?
+      div(class: "text-sky-500 font-bold justify-self-start text-xl #{cls}") { "|" } :
+      div() { " " }
+  end
+
+  def events?(dt, cls = "")
+    case dt.day
+    when 11;   div(class: "font-extrabold justify-self-end text-2xl #{cls}") { "." }
+    when 15;   div(class: "font-extrabold justify-self-end text-2xl #{cls}") { ".." }
+    when 18;   div(class: "font-extrabold justify-self-end text-2xl #{cls}") { "..." }
+    when 8;    div(class: "font-extrabold justify-self-end text-2xl #{cls}") { "...." }
+    else;     div() { " " }
     end
   end
 end

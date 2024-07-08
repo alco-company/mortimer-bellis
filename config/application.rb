@@ -34,5 +34,18 @@ module Mortimer
     #   Rails::ConsoleMethods.send :include, Alco::Console
     #   TOPLEVEL_BINDING.eval("self").extend Alco::Console # PRY
     # end
+
+    # issues with YAML.load_file
+    # config.active_record.use_yaml_unsafe_load = true
+    # config.active_record.yaml_column_permitted_classes = [
+    #   Symbol,
+    #   Hash,
+    #   Array,
+    #   ActiveSupport::TimeWithZone,
+    #   ActiveSupport::TimeZone,
+    #   ActiveSupport::HashWithIndifferentAccess,
+    #   ActiveModel::Attribute.const_get(:FromDatabase),
+    #   Time
+    # ]
   end
 end

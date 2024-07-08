@@ -1,21 +1,30 @@
 # WORKLOG
 
 # fonts to use: Inter, Helvetica, Futura, Garamond, Times New Roman, Bodoni, Baskerville, Century Expanded
+# https://www.somanycode.com/awesome/awesome-ruby/ listing for many projects and gems
 
 
 ## BUGS
 
 * [ ] add breaks and included_in_duration to payroll_period#manual_punch
 * [ ] redesign punch and add work_schedule to payroll_period#manual_punch
+* add recurring_events table - with recurrence text field only
 
 ## CHANGELOG
 
+### 8/7/2024
+
+* work on week view on calendar - wip
+
+### 6/7/2024
+
+* show week view on calendar
+  
 ### 4/7/2024
 
 * build on events_list component - wip
 * add month view on calendar
 * show events on calendar - below month view
-* add recurring_events table - with recurrence text field only
 
 ### 3/7/2024
 

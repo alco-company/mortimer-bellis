@@ -86,7 +86,8 @@ class MonthComponent < CalendarComponent
   end
 
   def large_screen_link(day, dt, from_date)
-    cls = "relative py-2 px-3 grid grid-cols-2 min-h-20"
+    cls = "relative grid grid-cols-2 hover:bg-gray-100 min-h-20 border-t-2"
+    cls += holiday?(dt) ? " border-violet-600" : " border-white hover:border-gray-100"
     cls += (dt.month == from_date.month) ? " bg-white" : " bg-gray-50 text-gray-500"
     link_to(
       # helpers.modal_new_url(id: id, modal_form: "day_summary", resource_class: "calendar", modal_next_step: "accept", date: I18n.l(dt, format: :short_iso)),
@@ -95,19 +96,14 @@ class MonthComponent < CalendarComponent
       class: cls,
       role: "menuitem",
       tabindex: "-1") do
-      cls = (dt == Date.today && (dt.month == from_date.month)) ? "flex h-6 w-6 items-center justify-center justify-self-end rounded-full bg-sky-600 font-semibold text-white" : "justify-self-end"
+      week_number(day, dt, "pl-2 ")
+      all_day_events(dt, "min-h-10")
+      punches?(dt, "pl-1.5")
+      events?(dt, "pr-1.5")
 
-      case day
-      when 0; div(class: "text-gray-300") {  I18n.l(dt, format: :week_number) }
-      when 7; div(class: "text-gray-300") {  I18n.l(dt, format: :week_number) }
-      when 14; div(class: "text-gray-300") { I18n.l(dt, format: :week_number) }
-      when 21; div(class: "text-gray-300") { I18n.l(dt, format: :week_number) }
-      when 28; div(class: "text-gray-300") { I18n.l(dt, format: :week_number) }
-      when 35; div(class: "text-gray-300") { I18n.l(dt, format: :week_number) }
-      else; div { " " }
-      end
-
-      time(datetime: I18n.l(dt, format: :short_iso), class: cls) { dt.day }
+      cls = "absolute col-span-2 place-self-center "
+      cls += (dt == Date.today) ? " bg-sky-600 text-white rounded-full w-6 text-center" : "  "
+      time(datetime: I18n.l(dt, format: :short_iso), class: "#{cls}") { dt.day }
       span(class: "sr-only") do
         plain "datetime: #{I18n.l(dt, format: :short_iso)} "
         plain "day summary"
@@ -193,8 +189,9 @@ class MonthComponent < CalendarComponent
   end
 
   def small_screen_link(day, dt, from_date)
-    cls = "grid h-14 grid-cols-2 py-2 px-3 hover:bg-gray-100 focus:z-10"
+    cls = "relative grid h-14 grid-cols-2 hover:bg-gray-100 focus:z-10 border-t-2"
     cls += (dt.month == from_date.month) ? " bg-white" : " bg-gray-50"
+    cls += holiday?(dt) ? " border-violet-600" : " border-white"
     cls += (dt == Date.today && (dt.month == from_date.month)) ? " text-gray-900" : " text-gray-500"
     link_to(
       helpers.events_calendar_url(id: id, date: dt),
@@ -205,17 +202,14 @@ class MonthComponent < CalendarComponent
       class: cls,
       role: "menuitem",
       tabindex: "-1") do
-      case day
-      when 0; div(class:  "text-[8px] text-gray-300") {  I18n.l(dt, format: :week_number) }
-      when 7; div(class:  "text-[8px] text-gray-300") {  I18n.l(dt, format: :week_number) }
-      when 14; div(class: "text-[8px] text-gray-300") { I18n.l(dt, format: :week_number) }
-      when 21; div(class: "text-[8px] text-gray-300") { I18n.l(dt, format: :week_number) }
-      when 28; div(class: "text-[8px] text-gray-300") { I18n.l(dt, format: :week_number) }
-      when 35; div(class: "text-[8px] text-gray-300") { I18n.l(dt, format: :week_number) }
-      else; div { " " }
-      end
+      week_number(day, dt, "pl-1 h-6 text-[8px]")
+      all_day_events(dt)
+      punches?(dt, "pl-0.5")
+      events?(dt, "pr-0.5")
 
-      time(datetime: I18n.l(dt, format: :short_iso), class: "ml-auto") { dt.day }
+      cls = "absolute col-span-2 place-self-center "
+      cls += (dt == Date.today) ? " bg-sky-600 text-white rounded-full w-6 text-center" : "  "
+      time(datetime: I18n.l(dt, format: :short_iso), class: "#{cls}") { dt.day }
       span(class: "sr-only") do
         plain "0 events"
       end

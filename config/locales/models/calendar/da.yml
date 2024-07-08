@@ -21,36 +21,44 @@ da:
     month_view: "Måned"
     year_view: "År"
 
-    week:
+    week_labels:
+      abbr: Uge
       full: Uge
 
     weekday:
       sunday: 
         full: Søndag
+        short: Søn
         firstletter: S
         second_thirdletter: øn
       monday: 
         full: Mandag
+        short: Man
         firstletter: M
         second_thirdletter: an
       tuesday: 
         full: Tirsdag
+        short: Tir
         firstletter: T
         second_thirdletter: irs
       wednesday: 
         full: Onsdag
+        short: Ons
         firstletter: O
         second_thirdletter: ns
       thursday: 
         full: Torsdag
+        short: Tor
         firstletter: T
         second_thirdletter: ors
       friday: 
         full: Fredag
+        short: Fre
         firstletter: F
         second_thirdletter: re
       saturday: 
         full: Lørdag
+        short: Lør
         firstletter: L
         second_thirdletter: ør
     
