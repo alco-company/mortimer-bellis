@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_07_04_132817) do
+ActiveRecord::Schema[8.0].define(version: 2024_07_09_161220) do
   create_table "accounts", force: :cascade do |t|
     t.string "name"
     t.string "email"
@@ -233,6 +233,8 @@ ActiveRecord::Schema[8.0].define(version: 2024_07_04_132817) do
     t.text "recurrence"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "calendar_id", null: false
+    t.index ["calendar_id"], name: "index_recurring_events_on_calendar_id"
   end
 
   create_table "solid_queue_blocked_executions", force: :cascade do |t|
@@ -445,6 +447,8 @@ ActiveRecord::Schema[8.0].define(version: 2024_07_04_132817) do
   add_foreign_key "punches", "employees"
   add_foreign_key "punches", "employees", on_delete: :cascade
   add_foreign_key "punches", "punch_cards", on_delete: :cascade
+  add_foreign_key "recurring_events", "calendars"
+  add_foreign_key "recurring_events", "calendars", on_delete: :cascade
   add_foreign_key "solid_queue_blocked_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
   add_foreign_key "solid_queue_claimed_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
   add_foreign_key "solid_queue_failed_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade

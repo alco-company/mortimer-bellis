@@ -124,7 +124,6 @@ class EventsList < ApplicationComponent
         end
       end
     end
-
   end
 
   #

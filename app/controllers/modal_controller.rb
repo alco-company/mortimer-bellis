@@ -6,6 +6,7 @@ class ModalController < BaseController
   def new
     resource
     case resource_class.to_s.underscore
+    when "event"; process_event_new
     when "calendar"; process_calendar_new
     when "employee"; process_employee_new
     when "punch_card"; process_punch_card_new
@@ -58,6 +59,12 @@ class ModalController < BaseController
 
     #
     # --------------------------- NEW --------------------------------
+
+    def process_event_new
+      # @date = params[:date] ? Date.parse(params[:date]) : Date.current
+      @event = Calendar.first
+      @step = "accept"
+    end
 
     def process_calendar_new
       @date = params[:date] ? Date.parse(params[:date]) : Date.current

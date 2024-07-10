@@ -12,6 +12,10 @@
 
 ## CHANGELOG
 
+### 10/7/2024
+
+* add input form for events
+
 ### 8/7/2024
 
 * work on week view on calendar - wip

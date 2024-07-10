@@ -135,10 +135,27 @@ class CalendarComponent < ApplicationComponent
         end
       end
       div(class: "ml-6 h-6 w-px bg-gray-300")
-      button(
-        type: "button",
-        class: "mort-btn-primary"
-      ) { I18n.t("calendar.create_event") }
+      link_to(
+        helpers.modal_new_url(id: id, modal_form: "event", resource_class: "calendar", modal_next_step: "accept"),
+        data: { turbo_stream: true },
+        # link_to helpers.delete_all_url(),
+        # data: { turbo_method: :delete, turbo_confirm: "Are you sure?", turbo_stream: true, action: "click->contextmenu#hide" },
+        class: "mort-btn-primary",
+        role: "menuitem",
+        tabindex: "-1") do
+        plain I18n.t("calendar.create_event")
+      end
+      #   cls = (dt == Date.today && (dt.month == from_date.month)) ? "bg-sky-600 font-semibold text-white" : ""
+      #   time(datetime: I18n.l(dt, format: :short_iso), class: "#{cls} mx-auto flex h-7 w-7 items-center justify-center rounded-full") { dt.day }
+      #   span(class: "sr-only") do
+      #     plain "datetime: #{I18n.l(dt, format: :short_iso)} "
+      #     plain "day summary"
+      #   end
+      # end
+      # button(
+      #   type: "button",
+      #   class: "mort-btn-primary"
+      # ) { I18n.t("calendar.create_event") }
     end
   end
 
@@ -220,6 +237,280 @@ class CalendarComponent < ApplicationComponent
       ) { I18n.t("calendar.year_view") }
     end
   end
+
+  def show_weekday_headers(cls = "")
+    wd = %w[ monday tuesday wednesday thursday friday saturday sunday ]
+    div(class: "sticky top-0 z-30 flex-none bg-white shadow ring-1 ring-black ring-opacity-5 sm:pr-8 #{cls}") do
+      div(class: "grid grid-cols-7 text-sm leading-6 text-gray-500 sm:hidden") do
+        (0..6).each do |i|
+          dt = date.beginning_of_week
+          dt += i.days if i > 0
+          link_to(
+            helpers.modal_new_url(id: id, modal_form: "day_summary", resource_class: "calendar", modal_next_step: "accept", date: I18n.l(dt, format: :short_iso)),
+            data: { turbo_stream: true },
+            class: "flex flex-col items-center pb-3 pt-2",
+            role: "menuitem",
+            tabindex: "-1") do
+            plain I18n.t("calendar.weekday.#{wd[i]}.firstletter")
+            cls = (dt == Date.today) ? "bg-sky-500 text-white" : "text-gray-900"
+            span(class: "mt-1 flex h-8 w-8 items-center justify-center font-semibold rounded-full #{cls}") { dt.day }
+            span(class: "sr-only") do
+              plain "datetime: #{I18n.l(dt, format: :short_iso)} "
+              plain "day summary"
+            end
+          end
+        end
+      end
+      div(class: "-mr-px hidden grid-cols-7 divide-x divide-gray-100 border-r border-gray-100 text-sm leading-6 text-gray-500 sm:grid") do
+        div(class: "col-end-1 w-14")
+        (0..6).each do |i|
+          dt = date.beginning_of_week
+          dt += i.days if i > 0
+          link_to(
+            helpers.modal_new_url(id: id, modal_form: "day_summary", resource_class: "calendar", modal_next_step: "accept", date: I18n.l(dt, format: :short_iso)),
+            data: { turbo_stream: true },
+            class: "flex justify-center py-2",
+            role: "menuitem",
+            tabindex: "-1") do
+            cls = (dt == Date.today) ? "text-sky-500" : "text-gray-900"
+            div(class: "flex place-items-center #{cls}") do
+              plain "%s" % I18n.t("calendar.weekday.#{wd[i]}.short")
+              span(class: "pl-1 items-center justify-center font-semibold #{cls}") { dt.day }
+              span(class: "sr-only") do
+                plain "datetime: #{I18n.l(dt, format: :short_iso)} "
+                plain "day summary"
+              end
+            end
+          end
+        end
+      end
+    end
+  end
+
+  #
+  # lines every 30 minutes
+  #
+  def show_horizontal_lines(cls = "")
+    div(class: "col-start-1 col-end-2 row-start-1 grid divide-y divide-gray-100", style: "grid-template-rows:repeat(48, minmax(3.5rem, 1fr))") do
+      div(class: "row-end-1 h-7 ")
+      (0..23).each do |i|
+        tm = i < 10 ? "0%d:00" % i : "%d:00" % i
+        div do
+          div(class: "#{cls} sticky left-0 z-20 -ml-14 -mt-2.5 w-14 pr-2 text-right text-xs leading-5 text-gray-400") { tm }
+        end
+        div()
+      end
+    end
+  end
+
+  #
+  # events are display with a 5-minute resolution
+  #
+  def show_events(cls = "")
+    ol(class: "col-start-1 col-end-2 row-start-1 grid #{cls}", style: "grid-template-rows:1.75rem repeat(288, minmax(0, 1fr)) auto") do
+      #
+      # col-start-1 = monday
+      # grid-row:1 = 00:00
+      # /span 5 = 1 hour duration
+      # hover:col-start-(x-3) hover:col-span-4 sm:hover:col-span-1 sm:hover:col-start-(x)
+
+      # holiday marker
+      li(class: "relative col-start-4 col-end-5 flex border-violet-600 border-t-2", style: "grid-row:1 /span 1")
+
+      # all day event
+      li(class: "relative col-start-1 col-end-3 flex ", style: "grid-row:1 /span 1") do
+        a(href: "#", class: "group absolute inset-1 flex flex-col overflow-hidden rounded-md bg-amber-50 pl-2 text-amber-500 text-xs hover:bg-amber-100") { "juleaften" }
+      end
+
+
+      li(class: "relative col-start-6 flex", style: "grid-row:51 /span 112") do
+        a(href: "#", class: "group absolute inset-1 flex flex-col overflow-hidden rounded-md bg-pink-50 p-2 text-xs leading-5 hover:bg-pink-100")
+      end
+
+
+
+      li(class: "relative col-start-1 flex", style: "grid-row:2 /span 12") do
+        a(href: "#", class: "group absolute inset-1 flex flex-col overflow-hidden rounded-md bg-green-50 p-2 text-xs leading-5 hover:bg-blue-100")
+      end
+
+      li(class: "relative col-start-2 flex", style: "grid-row:14 /span 6") do
+        a(href: "#", class: "group absolute inset-1 flex flex-col overflow-hidden rounded-md bg-blue-50 p-2 text-xs leading-5 hover:bg-blue-100")
+      end
+
+      li(class: "relative col-start-3 flex", style: "grid-row:26 /span 6") do
+        a(href: "#", class: "group absolute inset-1 flex flex-col overflow-hidden rounded-md bg-blue-50 p-2 text-xs leading-5 hover:bg-blue-100")
+      end
+
+      li(
+        class: "relative col-start-4 flex hover:col-start-2 hover:col-span-4 sm:hover:col-span-1 sm:hover:col-start-2",
+        style: "grid-row:38 /span 16"
+      ) do
+        a(href: "#", class: "group absolute inset-1 flex flex-col overflow-hidden rounded-md bg-blue-50 p-2 text-xs leading-5 hover:bg-blue-100") do
+          p(class: "order-1 font-semibold text-blue-700 truncate") { "Breakfast" }
+          p(class: "text-blue-500 group-hover:text-blue-700") do
+            time(datetime: "2022-01-12T06:00") { "6:00 AM" }
+          end
+        end
+      end
+      li(
+        class: "relative mt-px flex sm:col-start-3",
+        style: "grid-row:92 /span 30"
+      ) do
+        whitespace
+        a(
+          href: "#",
+          class:
+            "group absolute inset-1 flex flex-col overflow-y-auto rounded-lg bg-pink-50 p-2 text-xs leading-5 hover:bg-pink-100"
+        ) do
+          p(class: "order-1 font-semibold text-pink-700") do
+            "Flight to Paris"
+          end
+          p(class: "text-pink-500 group-hover:text-pink-700") do
+            time(datetime: "2022-01-12T07:30") { "7:30 AM" }
+          end
+          whitespace
+        end
+      end
+      li(
+        class: "relative mt-px hidden sm:col-start-6 sm:flex",
+        style: "grid-row:122 /span 24"
+      ) do
+        whitespace
+        a(
+          href: "#",
+          class:
+            "group absolute inset-1 flex flex-col overflow-y-auto rounded-lg bg-gray-100 p-2 text-xs leading-5 hover:bg-gray-200"
+        ) do
+          p(class: "order-1 font-semibold text-gray-700") do
+            "Meeting with design team at Disney"
+          end
+          p(class: "text-gray-500 group-hover:text-gray-700") do
+            time(datetime: "2022-01-15T10:00") { "10:00 AM" }
+          end
+          whitespace
+        end
+      end
+
+      # punches
+      (1..5).each do |i|
+        list_punch_items(i)
+      end
+    end
+  end
+
+  def list_punch_items(i)
+    from_at = rand(1..288)
+    li(class: "relative col-start-#{i} flex", style: "grid-row:#{from_at} /span 2") do
+      div(href: "#", class: "absolute flex flex-col overflow-hidden text-sky-500 text-md ") do
+        svg(
+          class: "pr-1 text-sky-600 h-6 w-6",
+          xmlns: "http://www.w3.org/2000/svg",
+          height: "24px",
+          viewbox: "0 -960 960 960",
+          width: "24px",
+          fill: "currentColor"
+        ) do |s|
+          s.path(
+            d:
+              "M200-80q-33 0-56.5-23.5T120-160v-480q0-33 23.5-56.5T200-720h40v-200h480v200h40q33 0 56.5 23.5T840-640v480q0 33-23.5 56.5T760-80H200Zm120-640h320v-120H320v120ZM200-160h560v-480H200v480Zm280-40q83 0 141.5-58.5T680-400q0-83-58.5-141.5T480-600q-83 0-141.5 58.5T280-400q0 83 58.5 141.5T480-200Zm0-60q-58 0-99-41t-41-99q0-58 41-99t99-41q58 0 99 41t41 99q0 58-41 99t-99 41Zm46-66 28-28-54-54v-92h-40v108l66 66Zm-46-74Z"
+          )
+        end
+      end
+    end
+  end
+
+
+  def month_component(month, show_navigation = false)
+    from_date = Date.new(date.year, month, 1)
+    section(class: "text-center") do
+      if show_navigation
+        pl, pt, nt, nl = [ "#{url}?view=#{view}&date=#{date - 1.month}", I18n.t("calendar.navigation.previous_month"), I18n.t("calendar.navigation.next_month"), "#{url}?view=#{view}&date=#{date + 1.month}" ]
+        div(class: "flex items-center text-center text-gray-900") do
+          link_to(pl, class: "-m-1.5 flex flex-none items-center justify-center p-1.5 text-gray-400 hover:text-gray-500") do
+            span(class: "sr-only") { pt }
+            svg(class: "h-5 w-5", viewbox: "0 0 20 20", fill: "currentColor", aria_hidden: "true") do |s|
+              s.path(fill_rule: "evenodd", d: "M12.79 5.23a.75.75 0 01-.02 1.06L8.832 10l3.938 3.71a.75.75 0 11-1.04 1.08l-4.5-4.25a.75.75 0 010-1.08l4.5-4.25a.75.75 0 011.06.02z", clip_rule: "evenodd")
+            end
+          end
+          div(class: "flex-auto text-sm font-semibold") { I18n.l(from_date, format: :month_name_year) }
+          link_to(nl, class: "-m-1.5 flex flex-none items-center justify-center p-1.5 text-gray-400 hover:text-gray-500") do
+            span(class: "sr-only") { nt }
+            svg(class: "h-5 w-5", viewbox: "0 0 20 20", fill: "currentColor", aria_hidden: "true") do |s|
+              s.path(fill_rule: "evenodd", d: "M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z", clip_rule: "evenodd")
+            end
+          end
+        end
+      else
+        h2(class: "text-sm font-semibold text-gray-900") { I18n.l(from_date, format: :month_name) }
+      end
+      dt = Date.new(date.year, month, 1).at_beginning_of_week
+      weekday_header
+      div(class: "isolate mt-2 grid grid-cols-7 gap-px rounded-lg bg-gray-200 text-sm shadow ring-1 ring-gray-200") do
+        # Always include: "py-1.5 hover:bg-gray-100 focus:z-10"
+        # Is current month, include: "bg-white text-gray-900"
+        # Is not current month, include: "bg-gray-50 text-gray-400"
+        #
+        # Top left day, include: "rounded-tl-lg"
+        # Top right day, include: "rounded-tr-lg"
+        # Bottom left day, include: "rounded-bl-lg"
+        # Bottom right day, include: "rounded-br-lg")
+        #
+        #  1  2  3  4  5  6  7
+        #  8  9 10 11 12 13 14
+        # 15 16 17 18 19 20 21
+        # 22 23 24 25 26 27 28
+        # 29 30 31  1  2  3  4
+        #  5  6  7  8  9 10 11
+        (0..41).each do |day|
+          dt += 1.days if day > 0
+          cls = case day
+          when 0; "rounded-tl-lg"
+          when 6; "rounded-tr-lg"
+          when 35; "rounded-bl-lg"
+          when 41; "rounded-br-lg"
+          else; ""
+          end
+          cls += (dt.month == from_date.month) ? " bg-white text-gray-900" : " bg-gray-50 text-gray-400"
+          # button(type: "button",
+          #   data: { action: "click->calendar#showDaySummary", date: I18n.l(dt, format: :short_iso) },
+          #   class: "#{cls} bg-gray-50 py-1.5 text-gray-400 hover:bg-gray-100 focus:z-10") do
+          #   # Always include: "mx-auto flex h-7 w-7 items-center justify-center rounded-full"
+          #   # Is today, include: "bg-indigo-600 font-semibold text-white")
+          #   cls = (dt == Date.today && (dt.month == from_date.month)) ? "bg-sky-600 font-semibold text-white" : ""
+          #   time(datetime: I18n.l(dt, format: :short_iso), class: "#{cls} mx-auto flex h-7 w-7 items-center justify-center rounded-full") { dt.day }
+          # end
+          link_to(
+            helpers.modal_new_url(id: id, modal_form: "day_summary", resource_class: "calendar", modal_next_step: "accept", date: I18n.l(dt, format: :short_iso)),
+            data: { turbo_stream: true },
+            # link_to helpers.delete_all_url(),
+            # data: { turbo_method: :delete, turbo_confirm: "Are you sure?", turbo_stream: true, action: "click->contextmenu#hide" },
+            class: "#{cls} bg-gray-50 py-1.5 text-gray-400 hover:bg-gray-100 focus:z-10",
+            role: "menuitem",
+            tabindex: "-1") do
+            cls = (dt == Date.today && (dt.month == from_date.month)) ? "bg-sky-600 font-semibold text-white" : ""
+            time(datetime: I18n.l(dt, format: :short_iso), class: "#{cls} mx-auto flex h-7 w-7 items-center justify-center rounded-full") { dt.day }
+            span(class: "sr-only") do
+              plain "datetime: #{I18n.l(dt, format: :short_iso)} "
+              plain "day summary"
+            end
+          end
+        end
+      end
+    end
+  end
+
+  def weekday_header
+    div(class: "mt-6 grid grid-cols-7 text-xs leading-6 text-gray-500") do
+      div { I18n.t("calendar.weekday.monday.firstletter") }
+      div { I18n.t("calendar.weekday.tuesday.firstletter") }
+      div { I18n.t("calendar.weekday.wednesday.firstletter") }
+      div { I18n.t("calendar.weekday.thursday.firstletter") }
+      div { I18n.t("calendar.weekday.friday.firstletter") }
+      div { I18n.t("calendar.weekday.saturday.firstletter") }
+      div { I18n.t("calendar.weekday.sunday.firstletter") }
+    end
+  end
+
 
   def holiday?(dt)
     dt.day == 25

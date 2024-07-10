@@ -173,6 +173,7 @@ GEM
       multi_xml (>= 0.5.2)
     i18n (1.14.5)
       concurrent-ruby (~> 1.0)
+    ice_cube (0.16.4)
     image_processing (1.12.2)
       mini_magick (>= 4.9.5, < 5)
       ruby-vips (>= 2.0.17, < 3)
@@ -181,7 +182,7 @@ GEM
       activesupport (>= 6.0.0)
       railties (>= 6.0.0)
     io-console (0.7.2)
-    irb (1.13.2)
+    irb (1.14.0)
       rdoc (>= 4.0.0)
       reline (>= 0.4.2)
     jbuilder (2.12.0)
@@ -206,8 +207,6 @@ GEM
     mini_magick (4.12.0)
     mini_mime (1.1.5)
     minitest (5.24.0)
-    montrose (0.16.0)
-      activesupport (>= 5.2, < 8)
     msgpack (1.7.2)
     multi_xml (0.7.1)
       bigdecimal (~> 3.1)
@@ -287,8 +286,7 @@ GEM
     rb-fsevent (0.11.2)
     rb-inotify (0.11.1)
       ffi (~> 1.0)
-    rdoc (6.7.0)
-      psych (>= 4.0.0)
+    rdoc (6.3.4.1)
     redcarpet (3.6.0)
     regexp_parser (2.9.2)
     reline (0.5.9)
@@ -432,14 +430,15 @@ DEPENDENCIES
   dotenv-rails
   get_process_mem (~> 0.2.7)
   httparty (~> 0.22.0)
+  ice_cube (~> 0.16.4)
   image_processing (~> 1.2)
   importmap-rails
   jbuilder
-  montrose
   omniauth (~> 2.1)
   pagy (~> 8.6)
   phlex-rails
   propshaft
+  psych (~> 5.1.2)
   puma (>= 5.0)
   rails!
   rails_live_reload

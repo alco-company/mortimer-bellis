@@ -95,4 +95,6 @@ gem "httparty", "~> 0.22.0"
 
 gem "rss", "~> 0.3.0"
 
-gem "montrose"
+gem "psych", "~> 5.1.2"
+
+gem "ice_cube", "~> 0.16.4"
