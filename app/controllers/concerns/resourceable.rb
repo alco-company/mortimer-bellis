@@ -26,9 +26,10 @@ module Resourceable
     # "/teams/37/calendars"
     # "/accounts/37/calendars"
     # "/employees/37/calendars"
+    # "/calendars/6/events"
     #
     def parent?
-      request.path =~ /\/(team|employee|account)s\/\d+\/calendars/
+      (request.path =~ /\/(team|employee|account|calendar)s\/(\d+)\/(calendars|events)/).nil? ? false : true
     end
 
     def parent_resources
@@ -36,15 +37,19 @@ module Resourceable
     end
 
     def parent
-      @parent ||= parent_class.find(params_parent(:team_id) || params_parent(:employee_id) || params_parent(:account_id))
+      parent_class, parent_id, _ = request.path.scan(/\/(team|employee|account|calendar)s\/(\d+)\/(calendars|events)/).first
+      @parent ||= parent_class.classify.constantize.find(parent_id)
+      # @parent ||= parent_class.find(params_parent(:team_id) || params_parent(:employee_id) || params_parent(:account_id))
     end
 
     def parent_class
-      @parent_class ||= case request.path.split("/").second
-      when "teams"; Team
-      when "employees"; Employee
-      when "accounts"; Account
-      end
+      parent_class, _, _ = request.path.scan(/\/(team|employee|account|calendar)s\/(\d+)\/(calendars|events)/).first
+      @parent_class ||= parent_class.classify.constantize
+      # @parent_class ||= case request.path.split("/").second
+      # when "teams"; Team
+      # when "employees"; Employee
+      # when "accounts"; Account
+      # end
     end
 
     def set_filter

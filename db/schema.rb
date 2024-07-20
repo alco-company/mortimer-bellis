@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_07_09_161220) do
+ActiveRecord::Schema[8.0].define(version: 2024_07_15_081624) do
   create_table "accounts", force: :cascade do |t|
     t.string "name"
     t.string "email"
@@ -148,6 +148,38 @@ ActiveRecord::Schema[8.0].define(version: 2024_07_09_161220) do
     t.index ["team_id"], name: "index_employees_on_team_id"
   end
 
+  create_table "event_meta", force: :cascade do |t|
+    t.integer "event_id", null: false
+    t.string "days"
+    t.string "weeks"
+    t.string "weekdays"
+    t.string "months"
+    t.string "years"
+    t.text "rrule"
+    t.text "ice_cube"
+    t.text "ui_values"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["event_id"], name: "index_event_meta_on_event_id"
+  end
+
+  create_table "events", force: :cascade do |t|
+    t.integer "account_id", null: false
+    t.integer "calendar_id", null: false
+    t.string "name"
+    t.date "from_date"
+    t.datetime "from_time"
+    t.date "to_date"
+    t.datetime "to_datetime"
+    t.integer "duration"
+    t.boolean "all_day"
+    t.text "comment"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_events_on_account_id"
+    t.index ["calendar_id"], name: "index_events_on_calendar_id"
+  end
+
   create_table "filters", force: :cascade do |t|
     t.integer "account_id", null: false
     t.string "view"
@@ -227,14 +259,6 @@ ActiveRecord::Schema[8.0].define(version: 2024_07_09_161220) do
     t.string "comment"
     t.index ["account_id"], name: "index_punches_on_account_id"
     t.index ["employee_id"], name: "index_punches_on_employee_id"
-  end
-
-  create_table "recurring_events", force: :cascade do |t|
-    t.text "recurrence"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.integer "calendar_id", null: false
-    t.index ["calendar_id"], name: "index_recurring_events_on_calendar_id"
   end
 
   create_table "solid_queue_blocked_executions", force: :cascade do |t|
@@ -431,6 +455,9 @@ ActiveRecord::Schema[8.0].define(version: 2024_07_09_161220) do
   add_foreign_key "employees", "accounts", on_delete: :cascade
   add_foreign_key "employees", "teams"
   add_foreign_key "employees", "teams", on_delete: :cascade
+  add_foreign_key "event_meta", "events"
+  add_foreign_key "events", "accounts"
+  add_foreign_key "events", "calendars"
   add_foreign_key "filters", "accounts"
   add_foreign_key "filters", "accounts"
   add_foreign_key "filters", "accounts"
@@ -447,8 +474,6 @@ ActiveRecord::Schema[8.0].define(version: 2024_07_09_161220) do
   add_foreign_key "punches", "employees"
   add_foreign_key "punches", "employees", on_delete: :cascade
   add_foreign_key "punches", "punch_cards", on_delete: :cascade
-  add_foreign_key "recurring_events", "calendars"
-  add_foreign_key "recurring_events", "calendars", on_delete: :cascade
   add_foreign_key "solid_queue_blocked_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
   add_foreign_key "solid_queue_claimed_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
   add_foreign_key "solid_queue_failed_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade

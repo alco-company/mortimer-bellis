@@ -1,0 +1,28 @@
+<li id="<%= dom_id event %>" class="flex items-center justify-between gap-x-6 py-5 ">
+  <div class="min-w-0 w-full columns-3 md:columns-5 lg:columns-6">
+    <%= render_text_column value: link_to(event.name, event_url(event)), css: "truncate mort-link-primary "  do |value| %>
+      <%= value %>
+      <% if current_user.global_queries? %>
+        <p class="text-xs"><%=  link_to event.account.name, event.account %> </p>
+      <% end %>
+    <% end %>
+    <%= render_datetime_column value: event.updated_at, css: "hidden lg:block" %>
+  </div>
+  <div class="flex flex-none items-center gap-x-4 ">
+<!--    <a href="<%#= product_stock_items_url(product) %>" class=" rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:block">Lokationer<span class="sr-only">, GraphQL API</span></a>-->
+    <%= render_contextmenu resource: event, resource_class: event, alter: true, links: [ edit_event_url(event), event_url(event) ] %>
+  </div>
+</li>
+
+<!--
+event.account_id
+event.calendar_id
+event.name
+event.from_date
+event.from_time
+event.to_date
+event.to_datetime
+event.duration
+event.all_day
+event.comment
+-->

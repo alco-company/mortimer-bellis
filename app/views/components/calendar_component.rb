@@ -136,7 +136,7 @@ class CalendarComponent < ApplicationComponent
       end
       div(class: "ml-6 h-6 w-px bg-gray-300")
       link_to(
-        helpers.modal_new_url(id: id, modal_form: "event", resource_class: "calendar", modal_next_step: "accept"),
+        helpers.modal_new_url(id: id, modal_form: "event", resource_class: "event", modal_next_step: "accept"),
         data: { turbo_stream: true },
         # link_to helpers.delete_all_url(),
         # data: { turbo_method: :delete, turbo_confirm: "Are you sure?", turbo_stream: true, action: "click->contextmenu#hide" },
@@ -145,17 +145,6 @@ class CalendarComponent < ApplicationComponent
         tabindex: "-1") do
         plain I18n.t("calendar.create_event")
       end
-      #   cls = (dt == Date.today && (dt.month == from_date.month)) ? "bg-sky-600 font-semibold text-white" : ""
-      #   time(datetime: I18n.l(dt, format: :short_iso), class: "#{cls} mx-auto flex h-7 w-7 items-center justify-center rounded-full") { dt.day }
-      #   span(class: "sr-only") do
-      #     plain "datetime: #{I18n.l(dt, format: :short_iso)} "
-      #     plain "day summary"
-      #   end
-      # end
-      # button(
-      #   type: "button",
-      #   class: "mort-btn-primary"
-      # ) { I18n.t("calendar.create_event") }
     end
   end
 
@@ -181,18 +170,28 @@ class CalendarComponent < ApplicationComponent
         tabindex: "-1"
       ) do
         div(class: "py-1", role: "none") do
-          # %(Active: "bg-gray-100 text-gray-900", Not Active: "text-gray-700")
-          a(
-            href: "#",
+          link_to(
+            helpers.modal_new_url(id: id, modal_form: "event", resource_class: "event", modal_next_step: "accept"),
+            data: { turbo_stream: true },
+            # link_to helpers.delete_all_url(),
+            # data: { turbo_method: :delete, turbo_confirm: "Are you sure?", turbo_stream: true, action: "click->contextmenu#hide" },
             class: "block px-4 py-2 text-sm text-gray-700",
             role: "menuitem",
-            tabindex: "-1",
-            id: "menu-0-item-0"
-          ) { I18n.t("calendar.create_event") }
+            tabindex: "-1") do
+            plain I18n.t("calendar.create_event")
+          end
+          # %(Active: "bg-gray-100 text-gray-900", Not Active: "text-gray-700")
+          # a(
+          #   href: "#",
+          #   class: "block px-4 py-2 text-sm text-gray-700",
+          #   role: "menuitem",
+          #   tabindex: "-1",
+          #   id: "menu-0-item-0"
+          # ) { I18n.t("calendar.create_event") }
         end
         div(class: "py-1", role: "none") do
           a(
-            href: "#{url}?view=day&date=#{Date.today}",
+            href: "#{url}?view=day&date=#{date}",
             class: "block px-4 py-2 text-sm text-gray-700",
             role: "menuitem",
             tabindex: "-1",

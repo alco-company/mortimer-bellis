@@ -120,8 +120,9 @@ class ApplicationForm < Superform::Rails::Form
     include Phlex::Rails::Helpers::LinkTo
 
     def field_attributes
-      super.merge(type: "file", accept: "image/*")
+      @attributes.keys.include?(:multiple) ? super.merge(type: "file", accept: "image/*", multiple: true) : super.merge(type: "file", accept: "image/*")
     end
+
     def template(&)
       div(class: "mort-field") do
         input(**attributes)
@@ -164,25 +165,19 @@ class ApplicationForm < Superform::Rails::Form
           role: "switch",
           aria_checked: "false"
         ) do
-          whitespace
           span(class: "sr-only") { "Use setting" }
-          whitespace
           span(
             aria_hidden: "true",
             class: "pointer-events-none absolute h-full w-full rounded-md bg-white"
           )
-          whitespace
           comment { %(Enabled: "bg-sky-600", Not Enabled: "bg-gray-200") }
-          whitespace
           span(
             aria_hidden: "true",
             data: { boolean_target: "indicator" },
             class:
               "#{setIndicator} pointer-events-none absolute mx-auto h-4 w-9 rounded-full transition-colors duration-200 ease-in-out"
           )
-          whitespace
           comment { %(Enabled: "translate-x-5", Not Enabled: "translate-x-0") }
-          whitespace
           span(
             aria_hidden: "true",
             data: { boolean_target: "handle" },
@@ -197,6 +192,35 @@ class ApplicationForm < Superform::Rails::Form
     end
     def setHandle
       field.value ? "translate-x-5" : "translate-x-0"
+    end
+  end
+
+  #
+  # Work In Progress - 2024-07-16
+  #
+  # class PillField < BooleanField
+  #   include Phlex::Rails::Helpers::CollectionRadioButtons
+  #   include Phlex::Rails::Helpers::RadioButton
+
+  #   def template(&)
+  #     fieldset(class: "inline-block whitespace-nowrap p-px border-2 rounded-full focus-within:outline focus-within:outline-blue-400") do
+  #       # plain collection_radio_buttons(**attributes) do |builder|
+  #       plain collection_radio_buttons(:employee, :punching_absence, [ true, "Option 1", false, "option 2" ]) do |builder|
+  #         span(class: "relative inline-block") do
+  #           plain builder.radio_button class: "sr-only peer"
+  #           plain builder.label(class: "border-2 border-transparent rounded-full block py-1 px-2 peer-checked:bg-blue-500 peer-checked:text-white hover:bg-blue-200 hover:border-blue-500")
+  #         end
+  #       end
+  #     end
+  #   end
+  # end
+
+  class HiddenField < Superform::Rails::Components::InputComponent
+    def field_attributes
+      super.merge(type: "hidden")
+    end
+    def template(&)
+      input(**attributes, value: field.value)
     end
   end
 
@@ -242,6 +266,11 @@ class ApplicationForm < Superform::Rails::Form
     def boolean(**attributes)
       BooleanField.new(self, attributes: attributes)
     end
+    def hidden(**attributes)
+      HiddenField.new(self, attributes: attributes)
+    end
+    #   PillField.new(self, attributes: attributes)
+    # end
     def week(**attributes)
       WeekField.new(self, attributes: attributes)
     end
@@ -287,7 +316,7 @@ class ApplicationForm < Superform::Rails::Form
         span(class: "font-bold") do
           plain I18n.t("activerecord.attributes.#{component.field.parent.key}.#{component.field.key}")
         end
-      end
+      end unless component.class == ApplicationForm::HiddenField
       @editable ?
         render(component) :
         div(class: "mr-5") do

@@ -4,7 +4,7 @@ class ModalController < BaseController
   skip_before_action :ensure_accounted_user, only: [ :destroy ]
 
   def new
-    resource
+    # resource
     case resource_class.to_s.underscore
     when "event"; process_event_new
     when "calendar"; process_calendar_new
@@ -47,7 +47,8 @@ class ModalController < BaseController
 
     def resource
       if params[:id].present?
-        @resource = resource_class.find(params[:id])
+        rc = resource_class.to_s.underscore == "event" ? Calendar : resource_class
+        @resource = rc.find(params[:id])
       else
         false
       end

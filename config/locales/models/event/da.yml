@@ -1,0 +1,98 @@
+da:
+  events:
+    default_name: Aftale
+    
+  event:
+    work_type: Arbejdstype
+    duration: "Varighed"
+    schedule_name: Navn på skabelon/arbejdsplan
+    task_name: Navn på opgave
+    appointment_name: Navn på aftale
+    holiday_name: Navn på helligdag
+    all_day_event: Varer begivenheden hele dagen?
+    from_at: Fra
+    to_at: Til
+    comment: Kommentarer/Noter/Beskrivelse
+    bilag: Bilag
+
+    daily:
+      tab: Dagligt
+      label: Interval (dage)
+      explain: " mellem aftalens gentagelser"
+      count: Antal
+      counts_explain: " gentagelser"
+
+    weekly:
+      tab: Ugenligt
+      repeat: "Gentages hver"
+      day: uge
+      excluded_days: "Undtagen følgende datoer"
+      week_day: Ugedag
+      monday: Mandag
+      tuesday: Tirsdag
+      wednesday: Onsdag
+      thursday: Torsdag
+      friday: Fredag
+      saturday: Lørdag
+      sunday: Søndag
+      count:
+        for: ""
+        explain: " gange"
+    monthly:
+      tab: Månedligt
+      monday: Mandag
+      tuesday: Tirsdag
+      wednesday: Onsdag
+      thursday: Torsdag
+      friday: Fredag
+      saturday: Lørdag
+      sunday: Søndag
+
+      day: 
+        label: den
+      days:
+        label: Dag(e)
+        explain: " i måneden"
+      every_month:
+        label: for hver
+        explain: "måned(er)"
+        count: gange
+
+    yearly:
+      tab: Årligt
+      repeat: "Gentages hver"
+      year: "år"
+      on_date: den
+      on_weekday: på den
+      monday: Mandag
+      tuesday: Tirsdag
+      wednesday: Onsdag
+      thursday: Torsdag
+      friday: Fredag
+      saturday: Lørdag
+      sunday: Søndag
+
+      months: i månederne
+      month:
+        january: Januar
+        february: Februar
+        march: Marts
+        april: April
+        may: Maj
+        june: Juni
+        july: Juli
+        august: August
+        september: September
+        october: Oktober
+        november: November
+        december: December
+      next_years: 
+        label: de næste
+        explain: "år, startende i"
+
+    pickers:
+      daily: "Dagligt"
+      weekly: "Ugentligt"
+      monthly: "Månedligt"
+      yearly: "Årligt"
+      

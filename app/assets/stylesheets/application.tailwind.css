@@ -27,6 +27,10 @@
     @apply block shadow rounded-md border border-gray-200 focus:outline-none px-3 py-2 mt-2 w-full focus-visible:border-sky-600;
   }
 
+  .mort-form-select {
+    @apply block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-sky-600 sm:text-sm sm:leading-6;
+  }
+
   .mort-form-file {
     @apply block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-sky-50 file:text-sky-700 hover:file:bg-sky-100;
   }

@@ -1,7 +1,12 @@
-class Calendar < ApplicationRecord
+class Event < ApplicationRecord
   include Accountable
-  belongs_to :calendarable, polymorphic: true
-  has_many :events, dependent: :destroy
+  belongs_to :calendar
+
+  has_many_attached :files
+
+  def name
+    super || I18n.t("events.default_name")
+  end
 
   scope :by_name, ->(name) { where("name LIKE ?", "%#{name}%") if name.present? }
 
@@ -18,10 +23,6 @@ class Calendar < ApplicationRecord
   end
 
   def self.form(resource, editable = true)
-    Calendars::Form.new resource, editable: editable
-  end
-
-  def time_zone
-    calendarable.time_zone
+    Events::Form.new resource, editable: editable, enctype: "multipart/form-data"
   end
 end

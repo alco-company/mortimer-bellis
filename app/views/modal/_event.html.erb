@@ -1,9 +1,9 @@
-<div id="modal_container">
-  <%= form_with(url: modal_create_url, method: :post, multipart: true) do |form| %>
+<div id="modal_container" data-controller="event-form">
+  <%= form_with(id: "event_form", data: { event_form_target: "eventForm" }, url: modal_create_url, method: :post, multipart: true) do |form| %>
 
     <%= form.hidden_field :modal_form, value: @modal_form %>
     <%#= form.hidden_field :import_file, value: @import_file %>
-    <%= form.hidden_field :resource_class, value: "Calendar" %>
+    <%= form.hidden_field :resource_class, value: "Event" %>
     <%= form.hidden_field :step, value: @step %>
 
     <div class="sm:flex sm:items-start">
@@ -30,10 +30,10 @@
 
     <div class="flex">
       <div class="flex-grow-0">
-        <%= link_to calendar_url(@resource, date: params[:date] ,view: "year"), class: "mort-btn-primary" do %>
-        <%= content_tag :span, "+", class: "sm:hidden" %>
-        <%= content_tag :span, t("calendar.create_event"), class: "hidden sm:block" %>
-        <% end %>
+        <%= link_to calendar_url(@resource, date: params[:date] ,view: "year"), class: "mort-btn-primary" do 
+          content_tag :span, "+", class: "sm:hidden"
+          content_tag :span, t("calendar.create_event"), class: "hidden sm:block"
+        end %>
       </div>
     </div>
 

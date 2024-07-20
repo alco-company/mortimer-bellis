@@ -3,6 +3,13 @@
 # fonts to use: Inter, Helvetica, Futura, Garamond, Times New Roman, Bodoni, Baskerville, Century Expanded
 # https://www.somanycode.com/awesome/awesome-ruby/ listing for many projects and gems
 
+guide idea:
+
+1. build a list of necessary guide tips
+2. add tips_progress on the user
+3. allow user to skip further tips => set tips_progress to 1000
+4. on every 5th request, show a tip until user tips_progress is 10, then 10ths until 100, then 20ths until 200, then 50ths until 500, then 100ths until 1000
+
 
 ## BUGS
 
@@ -12,7 +19,11 @@
 
 ## CHANGELOG
 
-### 10/7/2024
+### 15-20/7/2024
+
+* add event model
+
+### 9-14/7/2024
 
 * add input form for events
 

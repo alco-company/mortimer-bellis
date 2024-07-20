@@ -66,8 +66,8 @@ class MonthComponent < CalendarComponent
     div(class: "hidden w-full lg:grid lg:grid-cols-7 lg:grid-rows-6 lg:gap-px") do
       dt = Date.new(date.year, date.month, 1).at_beginning_of_week
       #
-      # Always include: "relative py-2 px-3" 
-      # Is current month, include: "bg-white" 
+      # Always include: "relative py-2 px-3"
+      # Is current month, include: "bg-white"
       # Is not current month, include: "bg-gray-50 text-gray-500"
       #
       #
@@ -91,7 +91,7 @@ class MonthComponent < CalendarComponent
     cls += (dt.month == from_date.month) ? " bg-white" : " bg-gray-50 text-gray-500"
     link_to(
       # helpers.modal_new_url(id: id, modal_form: "day_summary", resource_class: "calendar", modal_next_step: "accept", date: I18n.l(dt, format: :short_iso)),
-      helpers.events_calendar_url(id: id, date: dt),
+      helpers.calendar_events_url(calendar_id: id, date: dt),
       data: { turbo_frame: "events_list", turbo_stream: true },
       class: cls,
       role: "menuitem",
@@ -150,7 +150,6 @@ class MonthComponent < CalendarComponent
     #       end
     #     end
     #   end
-
   end
 
   def small_screen_view
@@ -169,8 +168,8 @@ class MonthComponent < CalendarComponent
 
       dt = Date.new(date.year, date.month, 1).at_beginning_of_week
       #
-      # Always include: "relative py-2 px-3" 
-      # Is current month, include: "bg-white" 
+      # Always include: "relative py-2 px-3"
+      # Is current month, include: "bg-white"
       # Is not current month, include: "bg-gray-50 text-gray-500"
       #
       #

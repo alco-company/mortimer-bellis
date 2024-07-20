@@ -97,4 +97,4 @@ gem "rss", "~> 0.3.0"
 
 gem "psych", "~> 5.1.2"
 
-gem "ice_cube", "~> 0.16.4"
+gem "rrule", "~> 0.6.0"

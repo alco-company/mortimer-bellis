@@ -1,620 +1,426 @@
+#
+#
 class EventComponent < ApplicationComponent
+  attr_accessor :resource, :resource_class, :list
+
+  def initialize(resource: nil)
+    @resource = resource
+  end
+
   def view_template
-    div(class: "flex flex-col gap-y-2 divide-y-2 divide-gray-100") do
-      event_type_selecter
-      simple_punch
-      advanced_work_schedule
-      appointment
-      holiday_event
+    div(class: "flex flex-col", data: { controller: "tabs", tabs_index: "0" }) do
+      event_tab_selector
+      show_work_tab
+      show_task_tab
+      show_recurring_tab
+      show_notes_tab
     end
   end
 
-  def event_type_selecter
-    div(class: "mt-4 sm:grid sm:grid-cols-3 sm:justify-items-stretch") do
-      label(for: "location", class: "block text-sm font-medium leading-6 text-gray-900 sm:place-content-center") { "Aftale" }
-      div(class: "mt-2 sm:col-span-2 sm:mt-0") do
-        select(id: "location", name: "location", class: "block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6") do
-          option(selected: "selected") { "Arbejdstid - enkelt" }
-          option { "Arbejdstid - skabelon" }
-          option { "Opgave" }
-          option { "Møde" }
-          option { "Helligdag" }
+  def event_tab_selector
+    div do
+      div(class: "sm:hidden") do
+        label(for: "tabs", class: "sr-only") { "Select a tab" }
+        select(data: { action: "tabs#change" }, class: "block w-full rounded-md border-gray-300 focus:border-sky-500 focus:ring-sky-500") do
+          option(value: 0, selected: "selected") { "Work" }
+          option(value: 1) { "Task" }
+          option(value: 2) { "Recurring" }
+          option(value: 3) { "Notes" }
         end
       end
-    end
-  end
-
-  # simple punch
-  def simple_punch
-    div(id: "work_schedule_simple", class: "") do
-      # comment { "work type" }
-      div(class: "mt-4 sm:grid sm:grid-cols-3 sm:items-start") do
-        label(for: "reason", class: "block text-sm font-medium leading-6 text-gray-900") { "Arbejdstidstype" }
-        div(class: "mt-2 sm:col-span-2 sm:mt-0") do
-          div(class: "flex sm:max-w-md sm:place-content-end") do
-            div(class: "gap-y1 grid grid-flow-row-dense grid-cols-3 grid-rows-2 justify-items-center gap-x-4") do
-              div(class: "self-center text-xs font-medium") { "Arbejde" }
-              div(class: "self-center text-xs font-medium") { "Syg" }
-              div(class: "self-center text-xs font-medium") { "Fri" }
-              button(
-                type: "button",
-                data_action: " click->pos-employee#toggleWork",
-                data_pos_employee_target: "workButton",
-                class:
-                  "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent bg-gray-200 transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-sky-600 focus:ring-offset-2 aria-checked:bg-sky-600",
-                role: "switch",
-                aria_checked: "true"
-              ) do
-                span(class: "sr-only") { "work" }
-                span(data_pos_employee_target: "workSpan", aria_hidden: "true", class: "pointer-events-none inline-block h-5 w-5 translate-x-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out")
-              end
-              button(
-                type: "button",
-                data_action: " click->pos-employee#toggleSick",
-                data_pos_employee_target: "sickButton",
-                class:
-                  "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent bg-gray-200 transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-sky-600 focus:ring-offset-2 aria-checked:bg-sky-600",
-                role: "switch",
-                aria_checked: "false"
-              ) do
-                span(class: "sr-only") { "sick" }
-                span(data_pos_employee_target: "sickSpan", aria_hidden: "true", class: "pointer-events-none inline-block h-5 w-5 translate-x-0 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out")
-              end
-              button(
-                type: "button",
-                data_action: " click->pos-employee#toggleFree",
-                data_pos_employee_target: "freeButton",
-                class:
-                  "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent bg-gray-200 transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-sky-600 focus:ring-offset-2 aria-checked:bg-sky-600",
-                role: "switch",
-                aria_checked: "false"
-              ) do
-                span(class: "sr-only") { "free" }
-                span(data_pos_employee_target: "freeSpan", aria_hidden: "true", class: "pointer-events-none inline-block h-5 w-5 translate-x-0 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out")
-              end
-              input(id: "in", name: "punch[reason]", type: "radio", data_pos_employee_target: "workReason", value: "in", checked: "checked", class: "hidden")
-            end
+      div(class: "hidden sm:block") do
+        div(class: "border-b border-gray-200") do
+          nav(class: "-mb-px flex", aria_label: "Tabs") do
+            # comment do %(Current: "border-sky-500 text-sky-600", Default: "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700")
+            button(
+              type: "button",
+              data: { tabs_target: "tab", action: "tabs#change" },
+              value: 0,
+              class: "tab-header w-1/4 border-b-2 border-transparent px-1 py-4 text-center text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700",
+              role: "switch",
+              aria_checked: "false") { "Work" }
+            button(
+              type: "button",
+              data: { tabs_target: "tab", action: "tabs#change" },
+              value: 1,
+              class: "tab-header w-1/4 border-b-2 border-transparent px-1 py-4 text-center text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700",
+              role: "switch",
+              aria_checked: "false") { "Task" }
+            button(
+              type: "button",
+              data: { tabs_target: "tab", action: "tabs#change" },
+              value: 2,
+              class: "tab-header w-1/4 border-b-2 border-transparent px-1 py-4 text-center text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700",
+              role: "switch",
+              aria_checked: "false") { "Recurring" }
+            button(
+              type: "button",
+              data: { tabs_target: "tab", action: "tabs#change" },
+              value: 3,
+              class: "tab-header w-1/4 border-b-2 border-transparent px-1 py-4 text-center text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700",
+              role: "switch",
+              aria_checked: "false") { "Notes" }
           end
         end
       end
+    end
+  end
+
+  def show_work_tab
+    div(data: { tabs_target: "tabPanel" }) do
+      let_mortimer_punch
+      # comment { "work type" }
+      work_type_field
 
       start_date_time_field
-      end_date_time_field
-      # comment { %(start from_date only visible on single "punch") }
-      # div(class: "my-4 sm:grid sm:grid-cols-3 sm:items-start") do
-      #   label(for: "from_at", class: "block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5") { "Fra kl" }
-      #   div(class: "mt-2 flex sm:col-span-2 sm:mt-0 sm:place-content-end") do
-      #     input(name: "punch[from_date]", id: "from_date", type: "date", data_pos_employee_target: "fromDate", autofocus: "", class: "mort-form-text mr-2 max-w-44")
-      #     input(name: "punch[from_time]", id: "from_time", type: "time", data_pos_employee_target: "fromTime", autofocus: "", class: "mort-form-text max-w-28")
-      #   end
-      # end
-      # comment { %(stop end_date only visible on single "punch") }
-      # div(class: "my-4 sm:grid sm:grid-cols-3 sm:items-start") do
-      #   label(for: "end_at", class: "block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5") { "Til kl" }
-      #   div(class: "mt-2 flex sm:col-span-2 sm:mt-0 sm:place-content-end") do
-      #     input(name: "punch[end_date]", id: "end_date", type: "date", data_pos_employee_target: "endDate", autofocus: "", class: "mort-form-text mr-2 max-w-44", disabled: "disabled")
-      #     input(name: "punch[end_time]", id: "end_time", type: "time", data_pos_employee_target: "endTime", autofocus: "", class: "mort-form-text max-w-28")
-      #   end
-      # end
+      end_date_time_field()
+
       # comment { "duration" }
       duration_field
-      # div(class: "my-4 sm:grid sm:grid-cols-3 sm:items-start") do
-      #   label(for: "end_at", class: "block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5") { "Varighed" }
-      #   div(class: "mt-2 flex sm:col-span-2 sm:mt-0 sm:place-content-end") do
-      #     input(name: "punch[duration]", id: "punch_duration", type: "number", data_pos_employee_target: "duration", autofocus: "", class: "mort-form-text max-w-24")
-      #   end
-      # end
+
       # comment { "breaks" }
-      div(class: "my-4 sm:grid sm:grid-cols-3 sm:items-start") do
-        label(for: "end_at", class: "block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5") { "Pauser" }
-        div(class: "mt-2 flex sm:col-span-2 sm:mt-0 sm:place-content-end") do
-          input(name: "punch[breaks]", id: "punch_breaks", type: "number", data_pos_employee_target: "breaks", autofocus: "", class: "mort-form-text mr-4 max-w-24 sm:mr-0")
-        end
-        div(class: "mt-2 flex sm:col-span-2 sm:col-start-2 sm:place-content-end") do
-          label(class: "mr-2") { "Inkl i varighed" }
-          button(
-            type: "button",
-            data_action: " click->pos-employee#toggleFree",
-            data_pos_employee_target: "freeButton",
-            class:
-              "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent bg-gray-200 transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-sky-600 focus:ring-offset-2 aria-checked:bg-sky-600",
-            role: "switch",
-            aria_checked: "false"
-          ) do
-            span(class: "sr-only") { "free" }
-            span(data_pos_employee_target: "freeSpan", aria_hidden: "true", class: "pointer-events-none inline-block h-5 w-5 translate-x-0 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out")
-          end
-          input(id: "in", name: "punch[reason]", type: "radio", data_pos_employee_target: "workReason", value: "in", checked: "checked", class: "hidden")
-        end
-      end
-      comment_field
-      attachment_field
+      set_work_options
+
+      # set the free Options
+      set_options(reason: "free", label: helpers.t(".free_reason"), reasons: %w[rr_free senior_free unpaid_free maternity_free leave_free])
+
+      # set the sick Options
+      set_options(reason: "sick", label: helpers.t(".sick_reason"), reasons: %w[iam_sick child_sick nursing_sick lost_work_sick p56_sick])
     end
   end
 
-  def advanced_work_schedule
-    div(id: "work_schedule_advanced", class: "hidden") do
-      # comment { "schedule subject/title" }
-      div(class: "my-4 sm:grid sm:grid-cols-3 sm:items-start") do
-        whitespace
-        label(
-          for: "excluded_days",
-          class: "block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5"
-        ) { "Navn på plan" }
-        div(class: "mt-2 sm:col-span-2 sm:mt-0") do
-          input(
-            name: "punch[excluded_days]",
-            id: "punch_excluded_days",
-            data_pos_employee_target: "excluded_days",
-            class: "mort-form-text"
-          )
-        end
-      end
+  def show_task_tab
+    div(data: { tabs_target: "tabPanel" }) do
+      name_field I18n.t("event.task_name") # "Titel / Overskrift på opgaven"
+      all_day_field I18n.t("event.all_day_event") # "Varer aftalen hele dagen?"
+    end
+  end
 
-      # comment { "work type" }
-      div(class: "mt-4 sm:grid sm:grid-cols-3 sm:items-start") do
-        label(for: "reason", class: "block text-sm font-medium leading-6 text-gray-900") { "Arbejdstidstype" }
-        div(class: "mt-2 sm:col-span-2 sm:mt-0") do
-          div(class: "flex sm:max-w-md sm:place-content-end") do
-            div(class: "gap-y1 grid grid-flow-row-dense grid-cols-3 grid-rows-2 justify-items-center gap-x-4") do
-              div(class: "self-center text-xs font-medium") { "Arbejde" }
-              div(class: "self-center text-xs font-medium") { "Syg" }
-              div(class: "self-center text-xs font-medium") { "Fri" }
-              button(type: "button", data_action: " click->pos-employee#toggleWork", data_pos_employee_target: "workButton", class: "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent bg-gray-200 transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-sky-600 focus:ring-offset-2 aria-checked:bg-sky-600", role: "switch", aria_checked: "true") do
-                span(class: "sr-only") { "work" }
-                span(data_pos_employee_target: "workSpan", aria_hidden: "true", class: "pointer-events-none inline-block h-5 w-5 translate-x-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out")
-              end
-              button(type: "button", data_action: " click->pos-employee#toggleSick", data_pos_employee_target: "sickButton", class: "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent bg-gray-200 transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-sky-600 focus:ring-offset-2 aria-checked:bg-sky-600", role: "switch", aria_checked: "false") do
-                span(class: "sr-only") { "sick" }
-                span(data_pos_employee_target: "sickSpan", aria_hidden: "true", class: "pointer-events-none inline-block h-5 w-5 translate-x-0 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out")
-              end
-              button(type: "button", data_action: " click->pos-employee#toggleFree", data_pos_employee_target: "freeButton", class: "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent bg-gray-200 transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-sky-600 focus:ring-offset-2 aria-checked:bg-sky-600", role: "switch", aria_checked: "false") do
-                span(class: "sr-only") { "free" }
-                span(data_pos_employee_target: "freeSpan", aria_hidden: "true", class: "pointer-events-none inline-block h-5 w-5 translate-x-0 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out")
-              end
-              input(id: "in", name: "punch[reason]", type: "radio", data_pos_employee_target: "workReason", value: "in", checked: "checked", class: "hidden")
-            end
-          end
-        end
-      end
+  def show_recurring_tab
+    div(id: "recurring", data: { tabs_target: "tabPanel" }, class: "event-type recurring tab hidden") do
+      start_date_time_field(time_visible: false)
+      end_date_time_field(time_visible: false)
 
-      # comment { "autoPunch only visible on work_schedule" }
-      div(class: "mt-4 sm:grid sm:grid-cols-3 sm:items-start") do
-        label(for: "reason", class: "block text-sm font-medium leading-6 text-gray-900") { "Lad Mortimer stemple din arbejdstid" }
-        div(class: "mt-2 sm:col-span-2 sm:mt-0") do
-          div(class: "flex sm:max-w-md sm:place-content-end") do
-            div(class: "gap-y1 grid grid-flow-row-dense grid-cols-1 grid-rows-2 justify-items-center gap-x-4") do
-              div(class: "self-center text-xs font-medium") { "Automatisk stempling" }
-              button(
-                type: "button",
-                data_action: " click->pos-employee#toggleAutoPunch",
-                data_pos_employee_target: "autoPunchButton",
-                class:
-                  "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent bg-gray-200 transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-sky-600 focus:ring-offset-2 aria-checked:bg-sky-600",
-                role: "switch",
-                aria_checked: "true"
-              ) do
-                span(class: "sr-only") { "auto punch" }
-                span(
-                  data_pos_employee_target: "autoPunchSpan",
-                  aria_hidden: "true",
-                  class:
-                    "pointer-events-none inline-block h-5 w-5 translate-x-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
-                )
-              end
-              input(
-                id: "in",
-                name: "work_schedule[auto_punch]",
-                type: "radio",
-                data_pos_employee_target: "autoPunch",
-                value: "in",
-                checked: "checked",
-                class: "hidden"
-              )
-            end
-          end
-        end
-      end
-
-      # comment { %(start from_date only visible on single "punch") }
-      div(class: "my-4 sm:grid sm:grid-cols-3 sm:items-start") do
-        label(
-          for: "from_at",
-          class: "block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5"
-        ) { "Fra kl" }
-        div(class: "mt-2 flex sm:col-span-2 sm:mt-0 sm:place-content-end") do
-          input(
-            name: "punch[from_date]",
-            id: "from_date",
-            type: "date",
-            data_pos_employee_target: "fromDate",
-            autofocus: "",
-            class: "mort-form-text mr-2 max-w-44"
-          )
-          input(
-            name: "punch[from_time]",
-            id: "from_time",
-            type: "time",
-            data_pos_employee_target: "fromTime",
-            autofocus: "",
-            class: "mort-form-text max-w-28"
-          )
-        end
-      end
-
-      # comment { %(stop end_date only visible on single "punch") }
-      div(class: "my-4 sm:grid sm:grid-cols-3 sm:items-start") do
-        label(
-          for: "end_at",
-          class: "block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5"
-        ) { "Til kl" }
-        div(class: "mt-2 flex sm:col-span-2 sm:mt-0 sm:place-content-end") do
-          input(
-            name: "punch[end_date]",
-            id: "end_date",
-            type: "date",
-            data_pos_employee_target: "endDate",
-            autofocus: "",
-            class: "mort-form-text mr-2 max-w-44"
-          )
-          input(
-            name: "punch[end_time]",
-            id: "end_time",
-            type: "time",
-            data_pos_employee_target: "endTime",
-            autofocus: "",
-            class: "mort-form-text max-w-28"
-          )
-        end
-      end
-
-      # comment { "duration" }
-      div(class: "my-4 sm:grid sm:grid-cols-3 sm:items-start") do
-        label(for: "end_at", class: "block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5") { "Varighed" }
-        div(class: "mt-2 flex sm:col-span-2 sm:mt-0 sm:place-content-end") do
-          input(name: "punch[duration]", id: "punch_duration", type: "number", data_pos_employee_target: "duration", autofocus: "", class: "mort-form-text max-w-24")
-        end
-      end
-
-      # comment { "breaks" }
-      div(class: "my-4 sm:grid sm:grid-cols-3 sm:items-start") do
-        label(for: "end_at", class: "block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5") { "Pauser" }
-        div(class: "mt-2 flex sm:col-span-2 sm:mt-0 sm:place-content-end") do
-          input(name: "punch[breaks]", id: "punch_breaks", type: "number", data_pos_employee_target: "breaks", autofocus: "", class: "mort-form-text mr-4 max-w-24 sm:mr-0")
-        end
-        div(class: "mt-2 flex sm:col-span-2 sm:col-start-2 sm:place-content-end") do
-          label(class: "mr-2") { "Inkl i varighed" }
-          button(
-            type: "button",
-            data_action: " click->pos-employee#toggleFree",
-            data_pos_employee_target: "freeButton",
-            class:
-              "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent bg-gray-200 transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-sky-600 focus:ring-offset-2 aria-checked:bg-sky-600",
-            role: "switch",
-            aria_checked: "false"
-          ) do
-            whitespace
-            span(class: "sr-only") { "free" }
-            whitespace
-            span(
-              data_pos_employee_target: "freeSpan",
-              aria_hidden: "true",
-              class:
-                "pointer-events-none inline-block h-5 w-5 translate-x-0 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
-            )
-            whitespace
-          end
-          input(
-            id: "in",
-            name: "punch[reason]",
-            type: "radio",
-            data_pos_employee_target: "workReason",
-            value: "in",
-            checked: "checked",
-            class: "hidden"
-          )
-        end
-      end
-
-      # comment { "advanced scheduling starts here" }
-      hr
-      h3(class: "text-md mt-5") { "Gentagelser" }
-
-      # comment { %(start from_date only visible on single "punch") }
-      div(class: "my-4 sm:grid sm:grid-cols-3 sm:items-start") do
-        label(for: "from_at", class: "block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5") { "Fra dato" }
-        div(class: "mt-2 flex sm:col-span-2 sm:mt-0 sm:place-content-end") do
-          input(
-            name: "punch[from_date]",
-            id: "from_date",
-            type: "date",
-            data_pos_employee_target: "fromDate",
-            autofocus: "",
-            class: "mort-form-text mr-2 max-w-44"
-          )
-        end
-      end
-
-      # comment { %(stop end_date only visible on single "punch") }
-      div(class: "my-4 sm:grid sm:grid-cols-3 sm:items-start") do
-        label(for: "end_at", class: "block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5") { "Til dato" }
-        div(class: "mt-2 flex sm:col-span-2 sm:mt-0 sm:place-content-end") do
-          input(name: "punch[end_date]", id: "end_date", type: "date", data_pos_employee_target: "endDate", autofocus: "", class: "mort-form-text mr-2 max-w-44")
-        end
-      end
       p(class: "text-gray-300") do
         "Hvis blot én af betingelserne her nedenfor er opfyldt, træder denne plan i kraft"
       end
 
-      # comment { "daily" }
-      div(class: "my-4 sm:grid sm:grid-cols-3 sm:items-start") do
-        div(class: "col-span-3 flex border-b sm:col-span-1 sm:flex-row-reverse sm:place-items-center sm:border-0") do
-          label(for: "end_at", class: "flex-grow text-sm font-medium leading-6 text-gray-900 sm:ml-1") { "Dagligt" }
-          svg(xmlns: "http://www.w3.org/2000/svg", height: "24px", viewbox: "0 -960 960 960", width: "24px", fill: "#5f6368") do |s|
-            s.path(d: "M480-120 300-300l58-58 122 122 122-122 58 58-180 180ZM358-598l-58-58 180-180 180 180-58 58-122-122-122 122Z")
-          end
-        end
-        fieldset(class: "mt-2 flex sm:col-span-2 hidden") do
-          legend(class: "sr-only") { "Dagligt" }
-          div(class: "relative flex items-center") do
-            div(class: "flex") do
-              input(id: "schedule_daily", aria_describedby: "comments-description", name: "schedule[daily]", class: "mort-form-text mt-0")
-            end
-            div(class: "ml-3 text-sm leading-5") do
-              label(for: "comments", class: "font-medium text-gray-900") { "interval" }
-              span(id: "comments-description", class: "text-gray-500") do
-                span(class: "sr-only") { "interval " }
-                plain "i dage mellem aftalens ikrafttræden."
-              end
-            end
-          end
-        end
+
+      div(data: { controller: "tabs", tabs_index: "0" }) do
+        show_period_tabs
+        show_daily_inputs
+        show_weekly_inputs
+        show_monthly_inputs
+        show_yearly_inputs
       end
 
-      # comment { "weekly" }
-      div(class: "my-4 sm:grid sm:grid-cols-4 sm:items-start") do
-        div(class: "col-span-4 flex sm:col-span-2 sm:flex-row-reverse sm:place-items-center border-b sm:border-0") do
-          label(for: "end_at", class: "flex-grow text-sm font-medium leading-6 text-gray-900 sm:ml-1") { "Ugentligt" }
-          svg(xmlns: "http://www.w3.org/2000/svg", height: "24px", viewbox: "0 -960 960 960", width: "24px", fill: "#5f6368") do |s|
-            s.path(d: "m356-160-56-56 180-180 180 180-56 56-124-124-124 124Zm124-404L300-744l56-56 124 124 124-124 56 56-180 180Z")
-          end
-        end
-        div(class: "flex items-center col-span-2 mt-2 sm:place-content-end") do
-          div(class: "ml-3 text-sm leading-5") do
-            label(for: "comments", class: "font-medium text-gray-900 mr-2") { "Gentages hver" }
-          end
-          div(class: "flex") do
-            input(id: "schedule_daily", aria_describedby: "comments-description", name: "schedule[daily]", class: "mort-form-text mt-0 w-12")
-          end
-          div(class: "ml-3 text-sm leading-5") do
-            label(for: "comments", class: "font-medium text-gray-900") { "dag" }
-          end
-        end
-        fieldset(class: "mt-2 flex col-span-4 place-content-stretch hidden") do
-          legend(class: "sr-only") { "Ugentligt" }
-          div(class: "grid grid-cols-3 sm:grid-cols-4 gap-x-2 w-full") do
-            %w[mandag tirsdag onsdag torsdag fredag lørdag søndag].each do |day|
-              div(class: "flex items-start") do
-                div(class: "flex h-6 items-center") do
-                  input(id: "comments", aria_describedby: "comments-description", name: "comments", type: "checkbox", class: "h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600")
-                end
-                div(class: "ml-3 text-sm leading-6") do
-                  span(class: "sr-only") { day }
-                  label(for: "comments", class: "font-medium text-gray-900") { day }
-                end
-              end
-            end
-          end
-        end
-      end
+      # dates excluded
+      # div(class: "mort-field") do
+      #   label(for: "event_excluded_days", class: "block text-sm font-medium leading-6 text-gray-900") { I18n.t("event.weekly.excluded_days") }
+      #   div(class: "mt-2") do
+      #     input(id: "event_excluded_days", aria_describedby: "comments-description", name: "event[excluded_days]", class: "mort-form-text mt-0 w-full")
+      #   end
+      # end
+    end
+  end
 
-      # comment { "monthly" }
-      div(class: "my-4 sm:grid sm:grid-cols-3 sm:items-start") do
-        div(class: "col-span-3 flex border-b sm:col-span-1 sm:flex-row-reverse sm:place-items-center sm:border-0") do
-          label(for: "end_at", class: "flex-grow text-sm font-medium leading-6 text-gray-900 sm:ml-1") { "Månedligt" }
-          svg(xmlns: "http://www.w3.org/2000/svg", height: "24px", viewbox: "0 -960 960 960", width: "24px", fill: "#5f6368") do |s|
-            s.path(d: "M480-120 300-300l58-58 122 122 122-122 58 58-180 180ZM358-598l-58-58 180-180 180 180-58 58-122-122-122 122Z")
-          end
-        end
-        fieldset(class: "mt-2 grid col-span-3 sm:col-span-2 hidden") do
-          legend(class: "sr-only") { "Månedligt" }
-          div(class: "flex items-center col-span-2 mt-2") do
-            div(class: "flex") do
-              input(id: "schedule_daily", aria_describedby: "comments-description", name: "schedule[daily]", class: "mort-form-text mt-0")
-            end
-            div(class: "ml-3 text-sm leading-5") do
-              label(for: "comments", class: "font-medium text-gray-900") { "dag(e)" }
-              span(id: "comments-description", class: "text-gray-500") do
-                span(class: "sr-only") { "dag(e) " }
-                plain "i måneden"
-              end
-            end
-          end
-          div(class: "flex items-center col-span-2 mt-2 sm:place-content-end") do
-            div(class: "flex items-center") do
-              div(class: "text-sm leading-5 h-3") do
-                label(for: "comments", class: "font-medium text-gray-900 mr-2") { "den" }
-              end
-              div(class: "flex mr-2") do
-                input(id: "schedule_daily", aria_describedby: "comments-description", name: "schedule[daily]", class: "mort-form-text w-12")
-              end
-            end
-            div(class: "flex items-center") do
-              select(id: "ugedag", name: "ugedag", class: "mort-form-text w-32") do
-                option(selected: "selected") { "mandag" }
-                option { "tirsdag" }
-                option { "onsdag" }
-                option { "tordag" }
-                option { "fredag" }
-                option { "lørdag" }
-                option { "søndag" }
-              end
-            end
-          end
-          div(class: "flex items-center col-span-2 mt-2 sm:place-content-end") do
-            div(class: "text-sm leading-5") do
-              label(for: "comments", class: "font-medium text-gray-900 mr-2") { "for hver" }
-            end
-            div(class: "flex") do
-              input(id: "schedule_daily", aria_describedby: "comments-description", name: "schedule[daily]", class: "mort-form-text mt-0 w-12")
-            end
-            div(class: "ml-3 text-sm leading-5") do
-              label(for: "comments", class: "font-medium text-gray-900 mr-2") { "måned(er)" }
-            end
-          end
-        end
-      end
-
-      # comment { "yearly" }
-      div(class: "my-4 sm:grid sm:grid-cols-3 sm:items-start") do
-        div(class: "col-span-3 flex border-b sm:col-span-1 sm:flex-row-reverse sm:place-items-center sm:border-0") do
-          label(for: "end_at", class: "flex-grow text-sm font-medium leading-6 text-gray-900 sm:ml-1") { "Årligt" }
-          svg(xmlns: "http://www.w3.org/2000/svg", height: "24px", viewbox: "0 -960 960 960", width: "24px", fill: "#5f6368") do |s|
-            s.path(d: "M480-120 300-300l58-58 122 122 122-122 58 58-180 180ZM358-598l-58-58 180-180 180 180-58 58-122-122-122 122Z")
-          end
-        end
-        fieldset(class: "mt-2 grid col-span-3 sm:col-span-2") do
-          legend(class: "sr-only") { "Årligt" }
-          div(class: "flex items-center col-span-2 mt-2 sm:place-content-end") do
-            div(class: "ml-3 text-sm leading-5") do
-              label(for: "comments", class: "font-medium text-gray-900 mr-2") { "Gentages hvert" }
-            end
-            div(class: "flex") do
-              input(id: "schedule_daily", aria_describedby: "comments-description", name: "schedule[daily]", class: "mort-form-text mt-0 w-12")
-            end
-            div(class: "ml-3 text-sm leading-5") do
-              label(for: "comments", class: "font-medium text-gray-900") { "år" }
-            end
-          end
-          div(class: "flex items-center col-span-2 mt-2 sm:place-content-end") do
-            div(class: "flex items-center") do
-              div(class: "text-sm leading-5 h-3") do
-                label(for: "comments", class: "font-medium text-gray-900 mr-2") { "den" }
-              end
-              div(class: "flex mr-2") do
-                input(id: "schedule_daily", aria_describedby: "comments-description", name: "schedule[daily]", class: "mort-form-text w-12")
-              end
-            end
-            div(class: "flex items-center") do
-              select(id: "ugedag", name: "ugedag", class: "mort-form-text w-32") do
-                option(selected: "selected") { "januar" }
-                option { "februar" }
-                option { "marts" }
-                option { ".." }
-                option { "december" }
-              end
-            end
-          end
-          div(class: "flex items-center col-span-2 mt-2 sm:place-content-end") do
-            div(class: "flex items-center") do
-              div(class: "text-sm leading-5 h-3") do
-                label(for: "comments", class: "font-medium text-gray-900 mr-2") { "på den" }
-              end
-              div(class: "flex mr-2") do
-                input(id: "schedule_daily", aria_describedby: "comments-description", name: "schedule[daily]", class: "mort-form-text w-12")
-              end
-            end
-            div(class: "flex items-center") do
-              select(id: "ugedag", name: "ugedag", class: "mort-form-text w-32") do
-                option(selected: "selected") { "mandag" }
-                option { "tirsdag" }
-                option { "onsdag" }
-                option { "tordag" }
-                option { "fredag" }
-                option { "lørdag" }
-                option { "søndag" }
-              end
-            end
-          end
-          div(class: "flex items-center col-span-2 mt-2 sm:place-content-end") do
-            div(class: "text-sm leading-5") do
-              label(for: "comments", class: "font-medium text-gray-900 mr-2") { "de næste" }
-            end
-            div(class: "flex") do
-              input(id: "schedule_daily", aria_describedby: "comments-description", name: "schedule[daily]", class: "mort-form-text mt-0 w-12")
-            end
-            div(class: "ml-3 text-sm leading-5") do
-              label(for: "comments", class: "font-medium text-gray-900 mr-2") { "år, startende i" }
-            end
-            div(class: "flex") do
-              input(id: "schedule_daily", aria_describedby: "comments-description", name: "schedule[daily]", class: "mort-form-text mt-0 w-20")
-            end
-            div(class: "ml-3 text-sm leading-5") do
-              label(for: "comments", class: "font-medium text-gray-900 mr-2") { "??" }
-            end
-          end
-        end
-      end
-
-      # comment { "dates excluded" }
-      div do
-        label(for: "comment", class: "block text-sm font-medium leading-6 text-gray-900") { "Undtaget følgende datoer" }
-        div(class: "mt-2") do
-          input(id: "schedule_daily", aria_describedby: "comments-description", name: "schedule[daily]", class: "mort-form-text mt-0 w-full")
-        end
-      end
+  def show_notes_tab
+    div(id: "notes", data: { tabs_target: "tabPanel" }, class: "event-type notes tab hidden") do
       comment_field
       attachment_field
     end
   end
 
-  def appointment
-    # comment { "aftale" }
-    div(id: "appointment", class: "hidden") do
-      name_field "Titel / Overskrift på aftalen/opgaven"
-      all_day_field "Varer aftalen hele dagen?"
-      start_date_time_field
-      end_date_time_field
-      duration_field
-      comment_field
-      attachment_field
-    end
-  end
+  # simple punch
+  # def show_work_inputs
+  #   div(id: "work_inputs", data: { event_form_target: "workInputs" }, class: "event-type work") do
+  #     # comment { "work type" }
+  #     work_type_field
+
+  #     start_date_time_field
+  #     end_date_time_field()
+
+  #     # comment { "duration" }
+  #     duration_field
+
+  #     # comment { "breaks" }
+  #     set_work_options
+
+  #     # set the free Options
+  #     set_options(reason: "free", label: helpers.t(".free_reason"), reasons: %w[rr_free senior_free unpaid_free maternity_free leave_free])
+
+  #     # set the sick Options
+  #     set_options(reason: "sick", label: helpers.t(".sick_reason"), reasons: %w[iam_sick child_sick nursing_sick lost_work_sick p56_sick])
+
+  #     comment_field
+  #     attachment_field
+  #   end
+  # end
+
+  # def show_schedule_inputs
+  #   div(id: "schedule_inputs", data: { event_form_target: "scheduleInputs" }, class: "event-type schedule hidden") do
+  #     # comment { "schedule subject/title" }
+  #     name_field I18n.t("event.schedule_name")
+  #     work_type_field
+  #     let_mortimer_punch
+  #     start_date_time_field(date_visible: false)
+  #     end_date_time_field(date_visible: false)
+  #     duration_field
+
+  #     # comment { "breaks" }
+  #     set_work_options
+
+  #     # set the free Options
+  #     set_options(reason: "free", label: helpers.t(".free_reason"), reasons: %w[rr_free senior_free unpaid_free maternity_free leave_free])
+
+  #     # set the sick Options
+  #     set_options(reason: "sick", label: helpers.t(".sick_reason"), reasons: %w[iam_sick child_sick nursing_sick lost_work_sick p56_sick])
+
+  #     hr
+  #     h3(class: "text-md mt-5") { "Gentagelser" }
+
+  #     start_date_time_field(time_visible: false)
+  #     end_date_time_field(time_visible: false)
+
+  #     p(class: "text-gray-300") do
+  #       "Hvis blot én af betingelserne her nedenfor er opfyldt, træder denne plan i kraft"
+  #     end
+
+  #     ul(role: "list", class: "divide-y divide-gray-100 overflow-hidden bg-white shadow-sm ring-1 ring-gray-900/5 sm:rounded-xl") do
+  #       li(class: "relative cursor-pointer flex justify-between gap-x-6 px-4 py-5 hover:bg-gray-50 sm:px-6", data: { action: "click->event-form#togglePeriodPicker", type: "daily" }) do
+  #         show_daily_inputs
+  #       end
+  #       li(class: "relative cursor-pointer flex justify-between gap-x-6 px-4 py-5 hover:bg-gray-50 sm:px-6", data: { action: "click->event-form#togglePeriodPicker", type: "weekly" }) do
+  #         show_weekly_inputs
+  #       end
+  #       li(class: "relative cursor-pointer flex justify-between gap-x-6 px-4 py-5 hover:bg-gray-50 sm:px-6", data: { action: "click->event-form#togglePeriodPicker", type: "monthly" }) do
+  #         show_monthly_inputs
+  #       end
+  #       li(class: "relative cursor-pointer flex justify-between gap-x-6 px-4 py-5 hover:bg-gray-50 sm:px-6", data: { action: "click->event-form#togglePeriodPicker", type: "yearly" }) do
+  #         show_yearly_inputs
+  #       end
+  #    end
+
+  #     # dates excluded
+  #     # div(class: "mort-field") do
+  #     #   label(for: "comment", class: "block text-sm font-medium leading-6 text-gray-900") { "Undtaget følgende datoer" }
+  #     #   div(class: "mt-2") do
+  #     #     input(id: "event_excluded_dates", aria_describedby: "comments-description", name: "event[excluded_dates]", class: "mort-form-text mt-0 w-full")
+  #     #   end
+  #     # end
+
+  #     comment_field
+  #     attachment_field
+  #   end
+  # end
+
+  # def show_task_inputs
+  #   div(id: "task_inputs", data: { event_form_target: "taskInputs" }, class: "event-type task hidden") do
+  #     name_field I18n.t("event.task_name") # "Titel / Overskrift på opgaven"
+  #     # all_day_field "Varer aftalen hele dagen?"
+  #     start_date_time_field
+  #     end_date_time_field
+  #     duration_field
+  #     comment_field
+  #     attachment_field
+  #   end
+  # end
+
+  # def show_appointment_inputs
+  #   # comment { "aftale" }
+  #   div(id: "appointment_inputs", data: { event_form_target: "appointmentInputs" }, class: "event-type appointment hidden") do
+  #     name_field I18n.t("event.appointment_name") # "Titel / Overskrift på aftalen/opgaven"
+  #     all_day_field "Varer aftalen hele dagen?"
+  #     start_date_time_field
+  #     end_date_time_field
+  #     duration_field
+  #     comment_field
+  #     attachment_field
+  #   end
+  # end
 
   # comment { "helligdag" }
-  def holiday_event
-    div(id: "holiday", class: "hidden") do
-      name_field I18n.t("event.holiday_lbl")
-      all_day_field "Er helligdagen en hel fridag?"
-      start_date_time_field
-      end_date_time_field
-      comment_field
-      attachment_field
+  # def show_holiday_inputs
+  #   div(id: "holiday_inputs", data: { event_form_target: "workInputs" }, class: "event-type holiday hidden") do
+  #     name_field I18n.t("event.holiday_name")
+  #     all_day_field "Er helligdagen en hel fridag?"
+  #     start_date_time_field
+  #     end_date_time_field
+  #     comment_field
+  #     attachment_field
+  #   end
+  # end
+
+  # field methods ----------------
+
+  def work_type_field
+    div(class: "mt-4 sm:grid sm:grid-cols-3 sm:items-start") do
+      label(for: "reason", class: "block text-sm font-medium leading-6 text-gray-900 self-center") { I18n.t("event.work_type") }
+      div(class: "mt-2 sm:col-span-2 sm:mt-0") do
+        div(class: "flex sm:max-w-md sm:place-content-end") do
+          div(class: "gap-y1 grid grid-flow-row-dense grid-cols-3 grid-rows-2 justify-items-center gap-x-4") do
+            div(class: "self-center text-xs font-medium") { "Arbejde" }
+            div(class: "self-center text-xs font-medium") { "Syg" }
+            div(class: "self-center text-xs font-medium") { "Fri" }
+            button(
+              type: "button",
+              data_action: " click->event-form#toggleWork",
+              data_event_form_target: "workButton",
+              class: "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent bg-gray-200 transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-sky-600 focus:ring-offset-2 aria-checked:bg-sky-600",
+              role: "switch",
+              aria_checked: "true"
+            ) do
+              span(class: "sr-only") { "work" }
+              span(data_event_form_target: "workSpan", aria_hidden: "true", class: "pointer-events-none inline-block h-5 w-5 translate-x-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out")
+            end
+            button(
+              type: "button",
+              data_action: " click->event-form#toggleSick",
+              data_event_form_target: "sickButton",
+              class: "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent bg-gray-200 transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-sky-600 focus:ring-offset-2 aria-checked:bg-sky-600",
+              role: "switch",
+              aria_checked: "false"
+            ) do
+              span(class: "sr-only") { "sick" }
+              span(data_event_form_target: "sickSpan", aria_hidden: "true", class: "pointer-events-none inline-block h-5 w-5 translate-x-0 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out")
+            end
+            button(
+              type: "button",
+              data_action: " click->event-form#toggleFree",
+              data_event_form_target: "freeButton",
+              class: "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent bg-gray-200 transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-sky-600 focus:ring-offset-2 aria-checked:bg-sky-600",
+              role: "switch",
+              aria_checked: "false"
+            ) do
+              span(class: "sr-only") { "free" }
+              span(data_event_form_target: "freeSpan", aria_hidden: "true", class: "pointer-events-none inline-block h-5 w-5 translate-x-0 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out")
+            end
+            input(id: "event_work_type", name: "event[work_type]", type: "text", data_event_form_target: "workReason", value: "in", class: "hidden")
+          end
+        end
+      end
     end
   end
 
-  # field methods ----------------
+  # options for work
+  def set_work_options
+    div(class: "", data: { event_form_target: "workOptions" }) do
+      div(class: "my-4 sm:grid sm:grid-cols-3 sm:items-start") do
+        label(for: "end_at", class: "block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5 self-center") { "Pauser" }
+        div(class: "mt-2 flex sm:col-span-2 sm:mt-0 sm:place-content-end") do
+          input(name: "event[break_minutes]", id: "event_break_minutes", type: "number", data_event_form_target: "breaks", autofocus: "", class: "mort-form-text mt-0 mr-4 max-w-24 sm:mr-0")
+        end
+        div(class: "mt-2 flex sm:col-span-2 sm:col-start-2 sm:place-content-end") do
+          label(class: "mr-2 self-center") { "Inkl i varighed" }
+          button(
+            type: "button",
+            data_action: " click->event-form#toggleBreakIncluded",
+            data_event_form_target: "breakIncludedButton",
+            class: "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent bg-gray-200 transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-sky-600 focus:ring-offset-2 aria-checked:bg-sky-600",
+            role: "switch",
+            aria_checked: "false"
+          ) do
+            span(class: "sr-only") { "breakIncluded" }
+            span(data_event_form_target: "breakIncludedSpan", aria_hidden: "true", class: "pointer-events-none inline-block h-5 w-5 translate-x-0 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out")
+          end
+          input(id: "event_break_included", name: "event[break_included]", type: "radio", data_event_form_target: "breakIncludedInput", value: "false", class: "hidden")
+        end
+      end
+    end
+  end
+
+  # options for sick and free
+  def set_options(reason:, label:, reasons:)
+    div(class: "hidden", data: { event_form_target: "#{reason}Options" }) do
+      div(class: "my-4 sm:grid sm:grid-cols-3 sm:items-start") do
+        label(for: "punch_reason", class: "block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5") { label }
+        div(class: "mt-2 sm:col-span-2 sm:mt-0") do
+          div(class: "flex sm:max-w-md") do
+            div(class: "mt-4") do
+              legend(class: "sr-only") { "#{reason} reasons" }
+              div(class: "space-y-2") do
+                reasons.each do |r|
+                  div(class: "flex items-center") do
+                    input(
+                      id: "#{reason}_punch_reason",
+                      name: "event[reason]",
+                      type: "radio",
+                      value: r,
+                      # checked: "checked" if punch.state == r,
+                      class: "h-4 w-4 border-gray-300 text-sky-600 focus:ring-sky-600"
+                    )
+                    label(for: r, class: "ml-3 block text-sm font-medium leading-6 text-gray-900") { helpers.t(".#{r}") }
+                  end
+                end
+              end
+            end
+          end
+        end
+      end
+    end
+  end
+
+  def let_mortimer_punch
+    div(class: "mt-4 sm:grid sm:grid-cols-3 sm:items-start") do
+      label(for: "reason", class: "block text-sm col-span-2 font-medium leading-6 text-gray-900 self-center") { "Lad Mortimer stemple din arbejdstid" }
+      div(class: "mt-2 col-span-1 sm:mt-0") do
+        div(class: "flex sm:max-w-md sm:place-content-end") do
+          div(class: "gap-y1 grid grid-flow-row-dense grid-cols-1 justify-items-center gap-x-4") do
+            # div(class: "self-center text-xs font-medium") { "Automatisk stempling" }
+            button(
+              type: "button",
+              data_action: " click->event-form#toggleAutoPunch",
+              data_event_form_target: "autoPunchButton",
+              class: "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent bg-gray-200 transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-sky-600 focus:ring-offset-2 aria-checked:bg-sky-600",
+              role: "switch",
+              aria_checked: "true"
+            ) do
+              span(class: "sr-only") { "auto punch" }
+              span(data_event_form_target: "autoPunchSpan", aria_hidden: "true", class: "pointer-events-none inline-block h-5 w-5 translate-x-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out")
+            end
+            input(
+              id: "event_auto_punch",
+              name: "event[auto_punch]",
+              type: "radio",
+              data_event_form_target: "autoPunch",
+              value: "true",
+              checked: "checked",
+              class: "hidden"
+            )
+          end
+        end
+      end
+    end
+  end
 
   # comment { "name of day" }
   def name_field(lbl)
     div(class: "my-4 sm:grid sm:grid-cols-3 sm:items-start") do
-      label(for: "excluded_days", class: "block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5") { lbl }
+      label(for: "event_name", class: "block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5 self-center") { lbl }
       div(class: "mt-2 sm:col-span-2 sm:mt-0") do
-        input(name: "punch[excluded_days]", id: "punch_excluded_days", data_pos_employee_target: "excluded_days", class: "mort-form-text")
+        input(name: "event[name]", type: "text", id: "event_name", class: "mort-form-text")
       end
     end
   end
 
   # comment { "start from_time only visible on non-all_day appointments" }
-  def start_date_time_field
+  def start_date_time_field(date_visible: true, time_visible: true)
     div(class: "my-4 sm:grid sm:grid-cols-3 sm:items-start") do
-      label(
-        for: "from_at",
-        class: "block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5"
-      ) { "Fra kl" }
+      label(for: "from_at", class: "block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5 self-center") { I18n.t("event.from_at") }
       div(class: "mt-2 flex sm:col-span-2 sm:mt-0 sm:place-content-end") do
-        input(name: "punch[from_date]", id: "from_date", type: "date", data_pos_employee_target: "fromDate", autofocus: "", class: "mort-form-text mr-2 max-w-44")
-        input(name: "punch[from_time]", id: "from_time", type: "time", data_pos_employee_target: "fromTime", autofocus: "", class: "mort-form-text max-w-28")
+        input(name: "event[from_date]", id: "event_from_date", type: "date", data_event_form_target: "fromDate", autofocus: "", class: "mort-form-text mt-0 max-w-44") if date_visible
+        input(name: "event[from_time]", id: "event_from_time", type: "time", data_event_form_target: "fromTime", autofocus: "", class: "mort-form-text mt-0 ml-2 max-w-28") if time_visible
       end
     end
   end
+
   # comment { "stop end_time only visible on non-all_day appointments" }
-  def end_date_time_field
+  def end_date_time_field(date_visible: true, time_visible: true)
     div(class: "my-4 sm:grid sm:grid-cols-3 sm:items-start") do
-      label(for: "end_at", class: "block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5") { "Til kl" }
+      label(for: "end_at", class: "block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5 self-center")  { I18n.t("event.to_at") }
       div(class: "mt-2 flex sm:col-span-2 sm:mt-0 sm:place-content-end") do
-        input(name: "punch[end_date]", id: "end_date", type: "date", data_pos_employee_target: "endDate", autofocus: "", class: "mort-form-text mr-2 max-w-44")
-        input(name: "punch[end_time]", id: "end_time", type: "time", data_pos_employee_target: "endTime", autofocus: "", class: "mort-form-text max-w-28")
+        input(name: "punch[end_date]", id: "end_date", type: "date", data_event_form_target: "toDate", autofocus: "", class: "mort-form-text mt-0 max-w-44") if date_visible
+        input(name: "punch[end_time]", id: "end_time", type: "time", data_event_form_target: "toTime", autofocus: "", class: "mort-form-text mt-0 ml-2 max-w-28") if time_visible
       end
     end
   end
@@ -622,24 +428,23 @@ class EventComponent < ApplicationComponent
   # comment { "all_day" }
   def all_day_field(lbl)
     div(class: "mt-4 sm:grid sm:grid-cols-3 sm:items-start") do
-      label(for: "reason", class: "block text-sm font-medium leading-6 text-gray-900") { lbl }
-      div(class: "mt-2 sm:col-span-2 sm:mt-0") do
+      label(for: "reason", class: "block text-sm font-medium leading-6 text-gray-900 sm:col-span-2 self-center") { lbl }
+      div(class: "mt-2 sm:col-span-1 sm:mt-0") do
         div(class: "flex sm:max-w-md sm:place-content-end") do
           div(class: "gap-y1 grid grid-flow-row-dense grid-cols-1 grid-rows-2 justify-items-center gap-x-4") do
             div(class: "self-center text-xs font-medium") { "hele dagen" }
             button(
               type: "button",
-              data_action: " click->pos-employee#toggleAllDay",
-              data_pos_employee_target: "allDayButton",
-              class:
-                "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent bg-gray-200 transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-sky-600 focus:ring-offset-2 aria-checked:bg-sky-600",
+              data_action: " click->event-form#toggleAllDay",
+              data_event_form_target: "allDayButton",
+              class: "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent bg-gray-200 transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-sky-600 focus:ring-offset-2 aria-checked:bg-sky-600",
               role: "switch",
-              aria_checked: "true"
+              aria_checked: "false"
             ) do
               span(class: "sr-only") { "all day" }
-              span(data_pos_employee_target: "allDaySpan", aria_hidden: "true", class: "pointer-events-none inline-block h-5 w-5 translate-x-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out")
+              span(data_event_form_target: "allDaySpan", aria_hidden: "true", class: "pointer-events-none inline-block h-5 w-5 translate-x-0 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out")
             end
-            input(id: "in", name: "appointment[all_day]", type: "radio", data_pos_employee_target: "allDay", value: "in", checked: "checked", class: "hidden")
+            input(id: "event_all_day", name: "event[all_day]", type: "radio", data_event_form_target: "allDay", value: "false", class: "hidden")
           end
         end
       end
@@ -648,32 +453,292 @@ class EventComponent < ApplicationComponent
 
   # comment { "duration" }
   def duration_field
-    div(class: "my-4 sm:grid sm:grid-cols-3 sm:items-start") do
-      label(
-        for: "end_at",
-        class: "block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5"
-      ) do
-        "Varighed (angiv evt. t:m pr dag hvis aftalen strækker sig over flere dage)"
-      end
+    div(class: "my-4 sm:grid sm:grid-cols-3 sm:items-start", data: { event_form_target: "durationInput" }) do
+      label(for: "event_duration", class: "block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5 self-center") { I18n.t("event.duration") } # "Varighed (angiv evt. t:m pr dag hvis aftalen strækker sig over flere dage)"
       div(class: "mt-2 flex sm:col-span-2 sm:mt-0 sm:place-content-end") do
-        input(
-          name: "punch[duration]",
-          id: "punch_duration",
-          type: "number",
-          data_pos_employee_target: "duration",
-          autofocus: "",
-          class: "mort-form-text max-w-24"
-        )
+        input(name: "event[duration]", id: "event_duration", type: "number", data_event_form_target: "duration", autofocus: "", class: "mort-form-text mt-0 max-w-24")
+      end
+    end
+  end
+
+  def show_daily_inputs
+    div(class: "flex w-full", data: { tabs_target: "tabPanel" }) do
+      # show_period_picker I18n.t("event.pickers.daily") # "col-span-3 flex border-b sm:col-span-1 sm:flex-row-reverse sm:place-items-center sm:border-0"
+      div(id: "dailyInputs", class: "mt-2 tab grid grid-cols-1 gap-y-2") do
+        legend(class: "sr-only") { "Dagligt" }
+        div(class: "relative flex items-center") do
+          div(class: "flex") do
+            input(id: "event_daily_interval", aria_describedby: "comments-description", name: "event[daily_interval]", class: "mort-form-text w-20 mt-0")
+          end
+          div(class: "ml-3 text-sm leading-5") do
+            label(for: "comments", class: "mr-2") { I18n.t("event.daily.label") }
+            span(id: "comments-description", class: "text-gray-500") do
+              span(class: "sr-only") { "interval " }
+              plain I18n.t("event.daily.explain")
+            end
+          end
+        end
+        div(class: "relative flex items-center") do
+          div(class: "flex items-center") do
+            label(for: "comments", class: "mr-2") { I18n.t("event.daily.count") }
+            input(id: "event_days_count", aria_describedby: "comments-description", name: "event[days_count]", class: "mort-form-text w-20 mt-0")
+          end
+          div(class: "ml-3 text-sm leading-5") do
+            span(id: "comments-description", class: "text-gray-500") do
+              span(class: "sr-only") { "count " }
+              plain I18n.t("event.daily.counts_explain")
+            end
+          end
+        end
+      end
+    end
+  end
+
+  def show_weekly_inputs
+    div(class: "flex w-full", data: { tabs_target: "tabPanel" }) do
+      # show_period_picker I18n.t("event.pickers.weekly") # , "col-span-4 flex sm:col-span-2 sm:flex-row-reverse sm:place-items-center border-b sm:border-0"
+      div(id: "weeklyInputs", class: "mt-2 tab w-full") do
+        div(class: "flex items-center mt-2 ") do
+          div(class: "ml-3 text-sm leading-5") do
+            label(for: "event_weekly_days", class: " mr-2")  { I18n.t("event.weekly.repeat") }
+          end
+          div(class: "flex") do
+            input(id: "event_weekly_interval", aria_describedby: "comments-description", name: "event[weekly_interval]", class: "mort-form-text mt-0 w-12")
+          end
+          div(class: "ml-3 text-sm leading-5") do
+            label(for: "events_weekly_day", class: "") { I18n.t("event.weekly.day") }
+          end
+          div(class: "relative flex items-center ml-2") do
+            div(class: "flex items-center") do
+              label(for: "comments", class: "mr-2") { I18n.t("event.weekly.count.for") }
+              input(id: "event_weeks_count", aria_describedby: "comments-description", name: "event[weeks_count]", class: "mort-form-text w-20 mt-0")
+            end
+            div(class: "ml-3 text-sm leading-5") do
+              span(id: "comments-description", class: "text-gray-500") do
+                span(class: "sr-only") { "count " }
+                plain I18n.t("event.weekly.count.explain")
+              end
+            end
+          end
+        end
+        div(class: "mt-2 ") do # flex col-span-3 place-content-stretch
+          legend(class: "sr-only")  { I18n.t("event.weekly.week_day") }
+          show_weekdays_inputs("weekly")
+        end
+      end
+    end
+  end
+
+  def show_monthly_inputs
+    div(class: "flex w-full", data: { tabs_target: "tabPanel" }) do
+      # show_period_picker I18n.t("event.pickers.monthly") # "col-span-3 flex border-b sm:col-span-1 sm:flex-row-reverse sm:place-items-center sm:border-0"
+      div(id: "monthlyInputs", class: "mt-2 tab w-full grid col-span-3 sm:col-span-2") do
+        legend(class: "sr-only") { I18n.t("event.monthly.tab") }
+        div(class: "flex items-center col-span-2 mt-2 ") do
+          div(class: "flex") do
+            input(id: "event_monthly_days", aria_describedby: "comments-description", name: "event[monthly_days]", class: "mort-form-text mt-0")
+          end
+          div(class: "ml-3 text-sm leading-5") do
+            label(for: "comments", class: "font-medium text-gray-900") { I18n.t("event.monthly.days.label") } # "dag(e)" }
+            span(id: "comments-description", class: "text-gray-500") do
+              span(class: "sr-only")  { I18n.t("event.monthly.days.label") }  # { "dag(e) " }
+              plain I18n.t("event.monthly.days.explain") # "i måneden"
+            end
+          end
+        end
+        div(class: "flex items-center col-span-2 mt-2 ") do
+          div(class: "flex items-center") do
+            div(class: "text-sm leading-5 h-3") do
+              label(for: "comments", class: "font-medium text-gray-900 mr-2")  { I18n.t("event.monthly.day.label") }
+            end
+            div(class: "flex mr-2") do
+              input(id: "event_monthly_dow", aria_describedby: "comments-description", name: "event[monthly_dow]", class: "mort-form-text w-12")
+            end
+          end
+          show_weekdays_inputs("monthly")
+
+          # div(class: "flex items-center") do
+          #   select(id: "event_monthly_weekdays", name: "event[monthly_weekdays]", class: "mort-form-text w-32") do
+          #     option { I18n.t("event.weekly.monday") }
+          #     option { I18n.t("event.weekly.tuesday") }
+          #     option { I18n.t("event.weekly.wednesday") }
+          #     option { I18n.t("event.weekly.thursday") }
+          #     option { I18n.t("event.weekly.friday") }
+          #     option { I18n.t("event.weekly.saturday") }
+          #     option { I18n.t("event.weekly.sunday") }
+          #   end
+          # end
+        end
+
+        div(class: "flex items-center col-span-2 mt-2 sm:place-content-end") do
+          div(class: "text-sm leading-5") do
+            label(for: "events_monthly_every", class: "font-medium text-gray-900 mr-2")  { I18n.t("event.monthly.every_month.label") }
+          end
+          div(class: "flex") do
+            input(id: "event_monthly_interval", aria_describedby: "comments-description", name: "event[monthly_interval]", class: "mort-form-text mt-0 w-12")
+          end
+          div(class: "ml-3 text-sm leading-5") do
+            label(for: "comments", class: "font-medium text-gray-900 mr-2")  { I18n.t("event.monthly.every_month.explain") }
+          end
+          div(class: "flex") do
+            input(id: "event_monthly_count", aria_describedby: "comments-description", name: "event[monthly_count]", class: "mort-form-text mt-0 w-12")
+          end
+          div(class: "ml-3 text-sm leading-5") do
+            label(for: "comments", class: "font-medium text-gray-900 mr-2")  { I18n.t("event.monthly.every_month.count") }
+          end
+        end
+      end
+    end
+  end
+
+  def show_yearly_inputs
+    div(class: "flex w-full", data: { tabs_target: "tabPanel" }) do
+      # show_period_picker I18n.t("event.pickers.yearly") #  "col-span-3 flex border-b sm:col-span-1 sm:flex-row-reverse sm:place-items-center sm:border-0"
+      div(id: "yearlyInputs", class: "mt-2 tab grid col-span-3 w-full") do
+        legend(class: "sr-only") { "Årligt" }
+        div(class: "flex items-center col-span-2 mt-2") do
+          div(class: "ml-3 text-sm leading-5") do
+            label(for: "comments", class: "text-nowrap font-medium text-gray-900 mr-2")  { I18n.t("event.yearly.repeat") } # { "Gentages hvert" }
+          end
+          div(class: "flex") do
+            input(id: "event_yearly_interval", aria_describedby: "comments-description", name: "event[yearly_interval]", class: "mort-form-text mt-0 w-12")
+          end
+          div(class: "ml-3 text-sm leading-5") do
+            label(for: "comments", class: "font-medium text-gray-900") { I18n.t("event.yearly.year") }
+          end
+        end
+        show_months_selected()
+
+        div(class: "flex items-center col-span-2 mt-2 ") do
+          div(class: "flex items-center") do
+            div(class: "text-sm leading-5 h-3") do
+              label(for: "comments", class: "text-nowrap font-medium text-gray-900 mr-2") { I18n.t("event.yearly.on_weekday") }
+            end
+            div(class: "flex mr-2") do
+              input(id: "event_yearly_dows", aria_describedby: "comments-description", name: "event[yearly_dows]", class: "mort-form-text w-12")
+            end
+          end
+          show_weekdays_inputs("yearly")
+        end
+        div(class: "flex items-center col-span-2 mt-2 sm:place-content-end") do
+          div(class: "text-sm leading-5") do
+            label(for: "comments", class: "font-medium text-gray-900 mr-2") { I18n.t("event.yearly.next_years.label") }
+          end
+          div(class: "flex") do
+            input(id: "event_years_count", aria_describedby: "comments-description", name: "event[years_count]", class: "mort-form-text mt-0 w-12")
+          end
+          div(class: "ml-3 text-sm leading-5") do
+            label(for: "comments", class: "font-medium text-gray-900 mr-2") { I18n.t("event.yearly.next_years.explain") } # { "år, startende i" }
+          end
+          div(class: "flex") do
+            input(id: "event_yearly_next_years_start", aria_describedby: "comments-description", name: "event[yearly_next_years_start]", class: "mort-form-text mt-0 w-20")
+          end
+          # div(class: "ml-3 text-sm leading-5") do
+          #   label(for: "comments", class: "font-medium text-gray-900 mr-2") { "??" }
+          # end
+        end
+      end
+    end
+  end
+
+  def show_weekdays_inputs(prefix)
+    div(class: "grid grid-cols-3 sm:grid-cols-4 gap-x-2 w-full place-content-stretch ") do
+      %w[ monday tuesday wednesday thursday friday saturday sunday ].each do |day|
+        div(class: "flex items-start") do
+          div(class: "flex h-6 items-center") do
+            input(id: "event_#{prefix}_weekdays_#{day}", aria_describedby: "comments-description", name: "event[#{prefix}_weekdays][#{day}]", type: "checkbox", value: day, class: "h-4 w-4 rounded border-gray-300 text-sky-600 focus:ring-sky-600")
+          end
+          div(class: "ml-3 text-sm leading-6") do
+            span(class: "sr-only") { day }
+            label(for: "comments", class: "")  { I18n.t("event.#{prefix}.#{day}") }
+          end
+        end
+      end
+    end
+  end
+
+  def show_months_selected
+    label(for: "comments", class: "text-nowrap mr-2") { I18n.t("event.yearly.months") }
+    div(class: "flex items-center col-span-2 mt-2") do
+      # div(class: "flex items-center") do
+      #   div(class: "text-sm leading-5 h-3") do
+      #   end
+      # end
+      div(class: "grid grid-cols-3 sm:grid-cols-4 gap-x-2 w-full place-content-stretch items-center") do
+        %w[ january february march april may june july august september october november december ].each do |mth|
+          div(class: "flex items-start") do
+            div(class: "flex h-6 items-center") do
+              input(id: "event_monthly_months_#{mth}", aria_describedby: "comments-description", name: "event[monthly_months][#{mth}]", type: "checkbox", value: mth, class: "h-4 w-4 rounded border-gray-300 text-sky-600 focus:ring-sky-600")
+            end
+            div(class: "ml-3 text-sm leading-6") do
+              span(class: "sr-only") { mth }
+              label(for: "comments", class: "")  { I18n.t("event.yearly.month.#{mth}") }
+            end
+          end
+        end
+      end
+    end
+  end
+
+  def show_period_tabs
+    div do
+      div(class: "sm:hidden") do
+        label(for: "tabs", class: "sr-only") { "Select a tab" }
+        select(data: { action: "tabs#change" }, class: "block w-full rounded-md border-gray-300 focus:border-sky-500 focus:ring-sky-500") do
+          option(value: 0) { I18n.t("event.daily.tab") }
+          option(value: 1) { I18n.t("event.weekly.tab") }
+          option(value: 2) { I18n.t("event.monthly.tab") }
+          option(value: 3) { I18n.t("event.yearly.tab") }
+        end
+      end
+      div(class: "hidden sm:block") do
+        div(class: "border-b border-gray-200") do
+          nav(class: "-mb-px flex", aria_label: "Tabs") do
+            # comment do %(Current: "border-sky-500 text-sky-600", Default: "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700")
+            button(
+              type: "button",
+              data: { tabs_target: "tab", action: "tabs#change" },
+              value: 0,
+              # data_event_form_target: "workButton",
+              class: "tab-header w-1/4 border-b-2 border-transparent px-1 py-4 text-center text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700",
+              role: "switch",
+              aria_checked: "false") { I18n.t("event.daily.tab") }
+            button(
+              type: "button",
+              data: { tabs_target: "tab", action: "tabs#change" },
+              value: 1,
+              # data_event_form_target: "taskButton",
+              class: "tab-header w-1/4 border-b-2 border-transparent px-1 py-4 text-center text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700",
+              role: "switch",
+              aria_checked: "false") { I18n.t("event.weekly.tab") }
+            button(
+              type: "button",
+              data: { tabs_target: "tab", action: "tabs#change" },
+              value: 2,
+              # data_event_form_target: "recurringButton",
+              class: "tab-header w-1/4 border-b-2 border-transparent px-1 py-4 text-center text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700",
+              role: "switch",
+              aria_checked: "false") { I18n.t("event.monthly.tab") }
+            button(
+              type: "button",
+              data: { tabs_target: "tab", action: "tabs#change" },
+              value: 3,
+              # data_event_form_target: "notesButton",
+              class: "tab-header w-1/4 border-b-2 border-transparent px-1 py-4 text-center text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700",
+              role: "switch",
+              aria_checked: "false") { I18n.t("event.yearly.tab")  }
+          end
+        end
       end
     end
   end
 
   # comment { "comments" }
   def comment_field
-    div do
-      label(for: "comment", class: "block text-sm font-medium leading-6 text-gray-900") { "Bemærkninger/Kommentarer/Detaljer" }
+    div(class: "mort-field") do
+      label(for: "event_comment", class: "block text-sm font-medium leading-6 text-gray-900")  { I18n.t("event.comment") }
       div(class: "mt-2") do
-        textarea(rows: "4", name: "comment", id: "comment", class: "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6")
+        textarea(rows: "4", name: "event[comment]", id: "event_comment", class: "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-600 sm:text-sm sm:leading-6")
       end
     end
   end
@@ -681,9 +746,9 @@ class EventComponent < ApplicationComponent
   # comment { "attachments" }
   def attachment_field
     div(class: "mort-field") do
-      label(for: "user_mugshot") { "Bilag" }
+      label(for: "event_files")  { I18n.t("event.bilag") }
       br
-      input(class: "mort-form-file", type: "file", name: "user[mugshot]", id: "user_mugshot")
+      input(class: "mort-form-file", type: "file", name: "event[files]", id: "event_files", multiple: "multiple")
     end
   end
 end
