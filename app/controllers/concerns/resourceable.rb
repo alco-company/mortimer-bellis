@@ -1,7 +1,17 @@
 module Resourceable
   extend ActiveSupport::Concern
 
+  attr_reader :resource, :resources # , :filter, :filter_form, :url
+
   included do
+    def resource
+      @resource ||= set_resource
+    end
+
+    def resources
+      @resources ||= set_resources
+    end
+
     def resource_class
       @resource_class ||= case params_ctrl.split("/").last
       when "invitations"; EmployeeInvitation

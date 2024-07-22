@@ -2,12 +2,6 @@ module DefaultActions
   extend ActiveSupport::Concern
 
   included do
-    #
-    # defined in the resourceable concern
-    before_action :set_resource, only: %i[ new show edit update destroy ]
-    before_action :set_filter, only: %i[ index destroy ]
-    before_action :set_resources, only: %i[ index destroy ]
-
     # GET /employees or /employees.json
     def index
       params[:url] = resources_url

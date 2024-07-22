@@ -48,7 +48,7 @@ module RRuleEngine
     end
 
     def self.validate_range(int, valid, err_msg)
-      raise err_msg unless valid.include?(int)
+      raise err_msg unless valid.include?(int.to_i)
     end
 
     def self.validate_list(str, valid, err_msg)

@@ -1,10 +1,11 @@
 class ApplicationForm < Superform::Rails::Form
   include Phlex::Rails::Helpers::Pluralize
 
-  attr_accessor :editable, :api_key
+  attr_accessor :editable, :api_key, :resource
 
   def initialize(model, **options)
     super(model, **options)
+    @resource = model
     @editable = options[:editable]
     @api_key = options[:api_key] || ""
   end

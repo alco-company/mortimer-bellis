@@ -1,10 +1,18 @@
 class EventMetum < ApplicationRecord
   belongs_to :event
 
-  attr_accessor :rule
+  attr_accessor :rule, :uivalues
 
   def rule
     @rule ||= RRule.parse(rrule)
+  end
+
+  def uivalues
+    @uivalues ||= JSON.parse(ui_values) rescue {}
+  end
+
+  def get_field(field)
+    uivalues[field.to_s] rescue ""
   end
 
   # from_params is a hash of values from the UI
@@ -12,14 +20,47 @@ class EventMetum < ApplicationRecord
   #
   # either return a new RRule object or false
   #
+  # :daily_interval,
+  # :days_count,
+  # :weekly_interval,
+  # :weeks_count,
+  # :monthly_days,
+  # :monthly_dow,
+  # :yearly_next_years_start,
+  # :monthly_interval,
+  # :monthly_count,
+  # :yearly_interval,
+  # :yearly_dows,
+  # :years_count,
+  # :weekly_weekdays,
+  # :monthly_months,
+  # :monthly_weekdays,
+  # :yearly_weekdays,
+  # :daily_interval=,
+  # :days_count=,
+  # :weekly_interval=,
+  # :weeks_count=,
+  # :monthly_days=,
+  # :monthly_dow=,
+  # :yearly_next_years_start=,
+  # :monthly_interval=,
+  # :months_count=,
+  # :yearly_interval=,
+  # :yearly_dows=,
+  # :years_count=,
+  # :weekly_weekdays=,
+  # :monthly_months=,
+  # :monthly_weekdays=,
+  # :yearly_weekdays=,
+  #
   def from_params(params: {}, tz: nil)
     return false unless params.is_a?(Hash)
     self.ui_values = params.to_json
     tz = get_time_zone(tz)
-    build(params, tz)
+    set_rrules(params, tz)
   end
 
-  def build(params, tz)
+  def set_rrules(params, tz = nil)
     self.rrule = "RRULE:"
     set_daily(params)
     set_weekly(params)
@@ -32,6 +73,10 @@ class EventMetum < ApplicationRecord
     self.rrule += "FREQ=DAILY;" if params[:daily_interval].present? || params[:days_count].present?
     self.rrule += "INTERVAL=#{params[:daily_interval]};"                                          if params[:daily_interval].present?
     self.rrule += "COUNT=#{params[:days_count]};"                                                 if params[:days_count].present?
+  end
+
+  def get_daily
+    @daily_interval, @days_count = RRuleEngine::RRule.daily(self.rrule)
   end
 
   # # TODO allow for sunday start of week - important to Americans ua.

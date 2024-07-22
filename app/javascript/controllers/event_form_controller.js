@@ -88,11 +88,11 @@ export default class extends Controller {
 
   toggleAllDay(e) {
     if (e.target.getAttribute("aria-checked") === "true") {
-      this.allDayTargets.forEach( (e) => { e.value = "false" });
+      this.allDayTargets.forEach( (e) => { e.value = 0; });
       e.target.setAttribute("aria-checked", "false");
       this.allDaySpanTargets.forEach( (e) => { e.classList.remove("translate-x-5")} );
     } else {
-      this.allDayTargets.forEach( (e) => { e.value = "true"; });
+      this.allDayTargets.forEach( (e) => { e.value = 1; });
       e.target.setAttribute("aria-checked", "true");
       this.allDaySpanTargets.forEach( (e) => { e.classList.add("translate-x-5")} );
     }
@@ -100,23 +100,25 @@ export default class extends Controller {
 
   toggleAutoPunch(e) {
     if (e.target.getAttribute("aria-checked") === "true") {
-      this.autoPunchTargets.forEach( (e) => { e.value = "false" });
+      this.autoPunchTargets.forEach( (e) => { e.value = 0 });
       e.target.setAttribute("aria-checked", "false");
       this.autoPunchSpanTargets.forEach( (e) => { e.classList.remove("translate-x-5")} );
+      document.getElementById("work_details").classList.add("hidden");
     } else {
-      this.autoPunchTargets.forEach( (e) => { e.value = "true"; });
+      this.autoPunchTargets.forEach( (e) => { e.value = 1; });
       e.target.setAttribute("aria-checked", "true");
       this.autoPunchSpanTargets.forEach( (e) => { e.classList.add("translate-x-5")} );
+      document.getElementById("work_details").classList.remove("hidden");
     }
   }
 
   toggleBreakIncluded(e) {
     if (e.target.getAttribute("aria-checked") === "true") {
-      this.breakIncludedInputTargets.forEach( (e) => { e.value = "false" });
+      this.breakIncludedInputTargets.forEach( (e) => { e.value = 0 });
       e.target.setAttribute("aria-checked", "false");
       this.breakIncludedSpanTargets.forEach( (e) => { e.classList.remove("translate-x-5")} );
     } else {
-      this.breakIncludedInputTargets.forEach( (e) => { e.value = "true"; });
+      this.breakIncludedInputTargets.forEach( (e) => { e.value = 1 });
       e.target.setAttribute("aria-checked", "true");
       this.breakIncludedSpanTargets.forEach( (e) => { e.classList.add("translate-x-5")} );
     }

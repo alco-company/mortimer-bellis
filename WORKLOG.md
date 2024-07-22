@@ -19,6 +19,10 @@ guide idea:
 
 ## CHANGELOG
 
+### 20/7/2024
+
+* 
+
 ### 15-20/7/2024
 
 * add event model

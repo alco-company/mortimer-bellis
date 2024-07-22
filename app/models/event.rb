@@ -3,6 +3,16 @@ class Event < ApplicationRecord
   belongs_to :calendar
 
   has_many_attached :files
+  has_one :event_metum, dependent: :destroy
+
+  # accepts_nested_attributes_for :event_metum
+  def event_metum_attributes=(attributes)
+    event_metum = self.event_metum || build_event_metum
+    event_metum.from_params params: attributes, tz: calendar.time_zone
+    event_metum.save
+  end
+
+  attr_accessor :break_minutes, :break_included, :reason, :work_type
 
   def name
     super || I18n.t("events.default_name")

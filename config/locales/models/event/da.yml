@@ -3,6 +3,13 @@ da:
     default_name: Aftale
     
   event:
+    type:
+      task: Opgave
+      work: Arbejde
+      appointment: Aftale
+      holiday: Helligdag
+      schedule: Skabelon/Gentagelse
+      notes: Noter
     work_type: Arbejdstype
     duration: "Varighed"
     schedule_name: Navn på skabelon/arbejdsplan
