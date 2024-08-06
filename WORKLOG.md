@@ -9,19 +9,25 @@ guide idea:
 2. add tips_progress on the user
 3. allow user to skip further tips => set tips_progress to 1000
 4. on every 5th request, show a tip until user tips_progress is 10, then 10ths until 100, then 20ths until 200, then 50ths until 500, then 100ths until 1000
-
+5. allow sign_up in multiple languages
 
 ## BUGS
 
 * [ ] add breaks and included_in_duration to payroll_period#manual_punch
 * [ ] redesign punch and add work_schedule to payroll_period#manual_punch
 * add recurring_events table - with recurrence text field only
+* fix error on employee_invitation#create -> returns turbo_frame in clear text - not HTML - at least on iPad
+* send POS link email to (new) employees on registration
 
 ## CHANGELOG
 
+### 6/8/2024
+
+* add ?lang=da to sign_up path
+
 ### 20/7/2024
 
-* 
+* working on event save
 
 ### 15-20/7/2024
 

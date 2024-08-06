@@ -2,6 +2,7 @@
 
 class Users::RegistrationsController < Devise::RegistrationsController
   include Authentication
+  include TimezoneLocale
   # before_action :configure_sign_up_params, only: [:create]
   before_action :configure_account_update_params, only: [ :update ]
   skip_before_action :authenticate_user!, only: [ :new, :create ]

@@ -24,6 +24,7 @@ module TimezoneLocale
     #
     def switch_locale(&action)
       locale = extract_locale_from_tld || I18n.default_locale
+      locale = params[:lang] || locale
       locale = params[:locale] || locale
       # locale = current_user.preferred_locale if current_user rescue locale
       parsed_locale = get_locale_from_user_or_account || locale

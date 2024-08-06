@@ -53,7 +53,7 @@ en:
       new:
         create: Opret kontoen
         sign_up:
-          title: Opret en ny konto
+          title: Create a new account
         
     passwords:
       new: 
