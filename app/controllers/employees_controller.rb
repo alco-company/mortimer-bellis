@@ -89,6 +89,7 @@ class EmployeesController < MortimerController
       else
         if @resource.save
           @invite.update state: :completed, completed_at: DateTime.current
+          EmployeeMailer.with(employee: @resource, sender: @invite.sender).pos_link.deliver_later unless @resource.email.blank?
           render turbo_stream: turbo_stream.replace("employee_signup", partial: "/pos/employee/signup_success")
         else
           @invite.update state: :error

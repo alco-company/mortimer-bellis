@@ -75,6 +75,15 @@ da:
       action: "Ja, det er mig"
       not_interested: "Hvis du ikke er interesseret, eller hvis det er den forkerte email adresse, der er blevet benyttet, så beklager holdet bag  M O R T I M E R  ulejligheden, og beder dig ignorere denne email."
       salutations: "Med venlig hilsen"
+    pos_link:
+      title: "Dit personlige link til tidsregistrering i M O R T I M E R"
+      preheader: "Dit personlige link til tidsregistrering i M O R T I M E R"
+      subject: "Dit personlige link til tidsregistrering i M O R T I M E R"
+      hi: Hej,
+      you: du har afsluttet registreringen af dine personlige oplysninger - og er nu klar til at tidsregistrere med  M O R T I M E R.
+      introduction: "Du kan stemple ind, ud, og pause, som du kommer igennem din dag. Du kan starte ved at trykke på knappen herunder, og derefter fx knytte siden til din hjemmeskærm på din smartphone; så bliver det nemmere, hvis du fx har haft slukket telefonen eller 'smidt' alle apps ud."
+      action: "Vis mig mit stempelur"
+      salutations: "Med venlig hilsen"
     invite:
       title: "Invitation"
       preheader: "Du er blevet inviteret til at færdiggøre en medarbejder profil"

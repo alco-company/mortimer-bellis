@@ -8,6 +8,15 @@ class EmployeeMailer < ApplicationMailer
     @sender = params[:sender]
     mail to: @employee.email, subject: I18n.t("employee_mailer.welcome.subject")
   end
+
+  def pos_link
+    @employee = params[:employee]
+    @account = @employee.account
+    @url = pos_employee_url(@employee, api_key: @employee.access_token)
+    @sender = params[:sender]
+    mail to: @employee.email, subject: I18n.t("employee_mailer.pos_link.subject")
+  end
+
   # Subject can be set in your I18n file at config/locales/en.yml
   # with the following lookup:
   #

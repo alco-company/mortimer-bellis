@@ -33,6 +33,12 @@ class EmployeeInvitation < ApplicationRecord
     address.truncate(20)
   end
 
+  def sender
+    user.name
+  rescue
+    "unknown"
+  end
+
   def self.filtered(filter)
     flt = filter.filter
 
