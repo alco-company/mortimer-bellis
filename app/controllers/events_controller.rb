@@ -17,79 +17,60 @@ class EventsController < MortimerController
     super
   end
 
-  # <ActionController::Parameters {"authenticity_token"=>"Q99dYByTHh4flkpVUjL1nGycW5rroXovHMb4VET_KK7pG-fUeI1YpBhtBIUhK_Hrgw6BSlkZDcj4f7lceZBaow",
-  # "event"=>#<ActionController::Parameters {
-  # "calendar_id"=>"6",
-  # "account_id"=>"25",
-  # "name"=>"Aftale",
-  # "from_date"=>"2024-07-21",
-  # "from_time"=>"12:59",
-  # "duration"=>"5",
-  # "all_day"=>"1",
-  # "auto_punch"=>"1",
-  # "work_type"=>"in",
-  # "break_minutes"=>"45",
-  # "daily_interval"=>"1",
-  # "days_count"=>"10",
-  # "weekly_interval"=>"1",
-  # "weeks_count"=>"10",
-  # "weekly_weekdays"=> {
-  #   "monday"=>"monday",
-  #   "tuesday"=>"tuesday",
-  #   "wednesday"=>"wednesday",
-  #   "thursday"=>"thursday",
-  #   "friday"=>"friday",
-  #   "saturday"=>"saturday",
-  #   "sunday"=>"sunday"
-  # },
-  # "monthly_days"=>"1,2,3",
-  # "monthly_dow"=>"1",
-  # "monthly_weekdays"=>{
-  #   "monday"=>"monday",
-  #   "tuesday"=>"tuesday",
-  #   "wednesday"=>"wednesday",
-  #   "thursday"=>"thursday",
-  #   "friday"=>"friday",
-  #   "saturday"=>"saturday",
-  #   "sunday"=>"sunday"
-  # },
-  # "monthly_interval"=>"2",
-  # "monthly_count"=>"10",
-  # "yearly_interval"=>"1",
-  # "monthly_months"=>{
-  #   "january"=>"january",
-  #   "february"=>"february",
-  #   "march"=>"march",
-  #   "april"=>"april",
-  #   "may"=>"may",
-  #   "june"=>"june",
-  #   "july"=>"july",
-  #   "august"=>"august",
-  #   "september"=>"september",
-  #   "october"=>"october",
-  #   "november"=>"november",
-  #   "december"=>"december"
-  # },
-  # "yearly_dows"=>"1",
-  # "yearly_weekdays"=>{
-  #   "monday"=>"monday",
-  #   "tuesday"=>"tuesday",
-  #   "wednesday"=>"wednesday",
-  #   "thursday"=>"thursday",
-  #   "friday"=>"friday",
-  #   "saturday"=>"saturday",
-  #   "sunday"=>"sunday"
-  # },
-  # "years_count"=>"4",
-  # "yearly_next_years_start"=>"2026",
-  # "comment"=>""
-  # } permitted: false>,
-  # "punch"=>{"end_date"=>"0204-07-25",
-  # "end_time"=>"17:50"},
-  # "commit"=>"Opret",
-  # "controller"=>"events",
-  # "action"=>"create",
-  # "calendar_id"=>"6"} permitted: false>
+  # <ActionController::Parameters: {
+  #   "authenticity_token"=>"[FILTERED]",
+  #   "event"=>{
+  #     "calendar_id"=>"6",
+  #     "account_id"=>"25",
+  #     "name"=>"Aftale",
+  #     "from_date"=>"2024-08-07",
+  #     "from_time"=>"12:20",
+  #     "to_date"=>"2024-08-07",
+  #     "to_time"=>"13:20",
+  #     "duration"=>"",
+  #     "all_day"=>"on",
+  #     "auto_punch"=>"1",
+  #     "work_type"=>"free",
+  #     "break_minutes"=>"",
+  #     "reason"=>"unpaid_free",
+  #     "event_metum_attributes"=> {
+  #       "daily_interval"=>"1",
+  #       "days_count"=>"15",
+  #       "weekly_interval"=>"2",
+  #       "weeks_count"=>"10",
+  #       "weekly_weekdays"=> {
+  #         "monday"=>"monday",
+  #         "thursday"=>"thursday",
+  #         "sunday"=>"sunday"
+  #       },
+  #       "monthly_days"=>"1,15,20",
+  #       "monthly_dow"=>"2",
+  #       "monthly_weekdays"=>{
+  #         "monday"=>"monday",
+  #         "tuesday"=>"tuesday"
+  #       },
+  #       "monthly_interval"=>"1",
+  #       "months_count"=>"15",
+  #       "yearly_interval"=>"2",
+  #       "monthly_months"=>{
+  #         "january"=>"january",
+  #         "june"=>"june",
+  #         "october"=>"october",
+  #         "december"=>"december"
+  #       },
+  #       "yearly_dows"=>"1",
+  #       "yearly_weekdays"=>{
+  #         "monday"=>"monday",
+  #         "wednesday"=>"wednesday"
+  #       },
+  #       "years_count"=>"4",
+  #       "yearly_next_years_start"=>"2023"
+  #     },
+  #     "comment"=>""
+  #   },
+  #   "commit"=>"Opret",
+  #   "calendar_id"=>"6"
+  # } permitted: false>
   def create
     super if prepare_resource
   end
@@ -133,36 +114,74 @@ class EventsController < MortimerController
           :monthly_dow,
           :yearly_next_years_start,
           :monthly_interval,
-          :monthly_count,
+          :months_count,
           :yearly_interval,
           :yearly_dows,
           :years_count,
-          weekly_weekdays: [ :key, :value ],
-          monthly_months: [ :key, :value ],
-          monthly_weekdays: [ :key, :value ],
-          yearly_weekdays: [ :key, :value ]
-      ]
+          weekly_weekdays: [
+            :monday,
+            :tuesday,
+            :wednesday,
+            :thursday,
+            :friday,
+            :saturday,
+            :sunday
+          ],
+          monthly_weekdays: [
+            :monday,
+            :tuesday,
+            :wednesday,
+            :thursday,
+            :friday,
+            :saturday,
+            :sunday
+          ],
+          yearly_weekdays: [
+            :monday,
+            :tuesday,
+            :wednesday,
+            :thursday,
+            :friday,
+            :saturday,
+            :sunday
+          ],
+          yearly_months: [
+            :january,
+            :february,
+            :march,
+            :april,
+            :may,
+            :june,
+            :july,
+            :august,
+            :september,
+            :october,
+            :november,
+            :december
+          ]
+        ]
       )
     end
 
     def prepare_resource
-      # remove work related settings if auto_punch is disabled
+      # is this a work related event?
       if resource_params[:auto_punch] == "0"
         params.require(:event).extract!(:work_type, :break_included, :break_minutes, :reason)
       else
-        # if no schedule is set
+        # if this is not about 'scheduling' a work event, ie. it's about setting a set of punch in/out's
         if no_schedule_set?
           # add a set of punches ([IN|SICK|FREE]/OUT)
           # and forget about persisting the event
           return false
         end
       end
-      # if schedule is set
+      # if a schedule is set
       unless no_schedule_set?
         # else persist the schedule - as an event and an event_metum
         resource.event_metum ||= EventMetum.new
         resource.event_metum.set_rrules(resource_params[:event_metum_attributes])
       end
+      true
     end
 
     def no_schedule_set?

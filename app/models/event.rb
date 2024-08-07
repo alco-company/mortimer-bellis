@@ -20,7 +20,6 @@ class Event < ApplicationRecord
 
   scope :by_name, ->(name) { where("name LIKE ?", "%#{name}%") if name.present? }
 
-
   def self.filtered(filter)
     flt = filter.filter
 

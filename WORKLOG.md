@@ -21,6 +21,11 @@ guide idea:
 
 ## CHANGELOG
 
+### 7/8/2024
+
+* send mail after completing sign_up (employee)
+* persist most recurring event meta data
+
 ### 6/8/2024
 
 * add ?lang=da to sign_up path

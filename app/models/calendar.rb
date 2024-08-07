@@ -22,6 +22,6 @@ class Calendar < ApplicationRecord
   end
 
   def time_zone
-    calendarable.time_zone
+    calendarable.time_zone || Current.user.time_zone || Current.account.time_zone rescue nil
   end
 end
