@@ -114,19 +114,19 @@ module Resourceable
 
   private
     def rc_params
-      params.permit(:id, :_method, :commit, :authenticity_token, :controller)[:controller]
+      params.permit(:id, :s, :d, :_method, :commit, :authenticity_token, :controller)
     end
 
     def params_ctrl
-      params.permit(:controller)[:controller]
+      rc_params[:controller]
     end
 
     def params_s
-      params.permit(:s)[:s]
+      rc_params[:s]
     end
 
     def params_d
-      params.permit(:d)[:d]
+      rc_params[:d]
     end
 
     def params_parent(ref)
@@ -134,6 +134,6 @@ module Resourceable
     end
 
     def params_id
-      params.permit(:id)[:id]
+      rc_params[:id]
     end
 end

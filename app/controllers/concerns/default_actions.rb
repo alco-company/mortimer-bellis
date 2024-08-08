@@ -4,7 +4,7 @@ module DefaultActions
   included do
     # GET /employees or /employees.json
     def index
-      params[:url] = resources_url
+      params.permit(:url)[:url] = resources_url
       @pagy, @records = pagy(@resources)
 
       respond_to do |format|

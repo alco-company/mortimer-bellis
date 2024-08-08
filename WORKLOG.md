@@ -21,6 +21,10 @@ guide idea:
 
 ## CHANGELOG
 
+### 8/8/2024
+
+* remove log error `Unpermitted parameter: :url.`
+
 ### 7/8/2024
 
 * send mail after completing sign_up (employee)
