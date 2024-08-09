@@ -101,7 +101,7 @@ class EventsController < MortimerController
         :all_day,
         :work_type,
         :break_minutes,
-        :break_included,
+        :breaks_included,
         :reason,
         :comment,
         :files,
@@ -166,7 +166,7 @@ class EventsController < MortimerController
     def prepare_resource
       # is this a work related event?
       if resource_params[:auto_punch] == "0"
-        params.require(:event).extract!(:work_type, :break_included, :break_minutes, :reason)
+        params.require(:event).extract!(:work_type, :breaks_included, :break_minutes, :reason)
       else
         # if this is not about 'scheduling' a work event, ie. it's about setting a set of punch in/out's
         if no_schedule_set?
@@ -185,7 +185,20 @@ class EventsController < MortimerController
     end
 
     def no_schedule_set?
-      false # resource_params[:event_metum_attributes].blank?
+      resource_params[:event_metum_attributes].to_h == {
+        "daily_interval"=>"",
+        "days_count"=>"",
+        "weekly_interval"=>"",
+        "weeks_count"=>"",
+        "monthly_days"=>"",
+        "monthly_dow"=>"",
+        "yearly_next_years_start"=>"",
+        "monthly_interval"=>"",
+        "months_count"=>"",
+        "yearly_interval"=>"",
+        "yearly_dows"=>"",
+        "years_count"=>""
+      }
     end
 end
 

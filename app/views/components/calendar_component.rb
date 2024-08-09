@@ -136,7 +136,7 @@ class CalendarComponent < ApplicationComponent
       end
       div(class: "ml-6 h-6 w-px bg-gray-300")
       link_to(
-        helpers.modal_new_url(id: id, modal_form: "event", resource_class: "event", modal_next_step: "accept"),
+        helpers.modal_new_url(id: id, modal_form: "event", resource_class: "event", modal_next_step: "accept", view: view),
         data: { turbo_stream: true },
         # link_to helpers.delete_all_url(),
         # data: { turbo_method: :delete, turbo_confirm: "Are you sure?", turbo_stream: true, action: "click->contextmenu#hide" },

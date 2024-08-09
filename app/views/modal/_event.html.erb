@@ -1,8 +1,9 @@
 <div id="modal_container" data-controller="event-form">
   <%= form_with(id: "event_form", data: { event_form_target: "eventForm" }, url: modal_create_url, method: :post, multipart: true) do |form| %>
 
+    <input id="event_calendar_id" type="hidden" name="event[calendar_id]" value="<%= @calendar.id %>" />
+    <input id="event_account_id" type="hidden" name="event[account_id]" value="<%= @calendar.account.id %>" />
     <%= form.hidden_field :modal_form, value: @modal_form %>
-    <%#= form.hidden_field :import_file, value: @import_file %>
     <%= form.hidden_field :resource_class, value: "Event" %>
     <%= form.hidden_field :step, value: @step %>
 
@@ -23,14 +24,15 @@
     <div class="mx-auto max-w-md lg:max-w-2xl">
       <div class="divide-y divide-gray-300/50">
         <div class="space-y-6 py-8 text-base leading-7 text-gray-600">
-          <%= render EventComponent.new %>
+          <%= render EventComponent.new resource: @resource %>
         </div>
       </div>
     </div>
 
     <div class="flex">
       <div class="flex-grow-0">
-        <%= link_to calendar_url(@resource, date: params[:date] ,view: "year"), class: "mort-btn-primary" do 
+        <%= form.submit t("calendar.create_event"), class: "mort-btn-primary" %>
+        <%#= link_to calendar_url(@calendar, date: @date, view: @view), class: "mort-btn-primary" do 
           content_tag :span, "+", class: "sm:hidden"
           content_tag :span, t("calendar.create_event"), class: "hidden sm:block"
         end %>

@@ -19,9 +19,10 @@ export default class extends Controller {
     "workOptions",
     "sickOptions",
     "freeOptions",
-    "breakIncludedButton",
-    "breakIncludedSpan",
-    "breakIncludedInput",
+    "breakMinutesInput",
+    "breaksIncludedButton",
+    "breaksIncludedSpan",
+    "breaksIncludedInput",
     "durationInput",
     "autoPunch",
     "autoPunchSpan",
@@ -72,6 +73,8 @@ export default class extends Controller {
     this.sickOptionsTargets.forEach( (e) => { e.classList.add("hidden") })
     this.workOptionsTargets.forEach( (e) => { e.classList.add("hidden") });
     this.freeOptionsTargets.forEach( (e) => { e.classList.remove("hidden") });
+    this.breaksIncludedInputTargets.forEach( (e) => { e.value = 0 });
+    this.breakMinutesInputTargets.forEach( (e) => { e.value = "" });
   }
 
   toggleSick(e) {
@@ -84,6 +87,8 @@ export default class extends Controller {
     this.sickOptionsTargets.forEach( (e) => { e.classList.remove("hidden")});
     this.freeOptionsTargets.forEach( (e) => { e.classList.add("hidden")});
     this.workOptionsTargets.forEach( (e) => { e.classList.add("hidden")});
+    this.breaksIncludedInputTargets.forEach((e) => { e.value = 0; });
+    this.breakMinutesInputTargets.forEach((e) => { e.value = ""; });
   }
 
   toggleAllDay(e) {
@@ -114,13 +119,13 @@ export default class extends Controller {
 
   toggleBreakIncluded(e) {
     if (e.target.getAttribute("aria-checked") === "true") {
-      this.breakIncludedInputTargets.forEach( (e) => { e.value = 0 });
+      this.breaksIncludedInputTargets.forEach( (e) => { e.value = 0 });
       e.target.setAttribute("aria-checked", "false");
-      this.breakIncludedSpanTargets.forEach( (e) => { e.classList.remove("translate-x-5")} );
+      this.breaksIncludedSpanTargets.forEach( (e) => { e.classList.remove("translate-x-5")} );
     } else {
-      this.breakIncludedInputTargets.forEach( (e) => { e.value = 1 });
+      this.breaksIncludedInputTargets.forEach( (e) => { e.value = 1 });
       e.target.setAttribute("aria-checked", "true");
-      this.breakIncludedSpanTargets.forEach( (e) => { e.classList.add("translate-x-5")} );
+      this.breaksIncludedSpanTargets.forEach( (e) => { e.classList.add("translate-x-5")} );
     }
   }
 

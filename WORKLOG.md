@@ -21,6 +21,10 @@ guide idea:
 
 ## CHANGELOG
 
+### 9/8/2024
+
+* persist most of event and event_metum
+
 ### 8/8/2024
 
 * remove log error `Unpermitted parameter: :url.`

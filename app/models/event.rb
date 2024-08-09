@@ -12,8 +12,6 @@ class Event < ApplicationRecord
     event_metum.save
   end
 
-  attr_accessor :break_minutes, :break_included, :reason, :work_type
-
   def name
     super || I18n.t("events.default_name")
   end

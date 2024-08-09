@@ -26,7 +26,15 @@ class ModalController < BaseController
     case resource_class.to_s.underscore
     when "employee"; process_employee_create
     when "punch_card"; process_punch_card_create
+    when "event"; process_event_create
     else; process_other_create
+    end
+  end
+
+  def update
+    case resource_class.to_s.underscore
+    when "event"; process_event_update
+    else; process_other_update
     end
   end
 
@@ -41,16 +49,16 @@ class ModalController < BaseController
     def set_vars
       @modal_form = params[:modal_form]
       @attachment = params[:attachment]
-      resource
+      resource()
       @step = params[:step]
     end
 
     def resource
       if params[:id].present?
-        rc = resource_class.to_s.underscore == "event" ? Calendar : resource_class
+        rc = (resource_class.to_s.underscore == "event" && params[:action] == "new") ? Calendar : resource_class
         @resource = rc.find(params[:id])
       else
-        false
+        @resource = resource_class.new
       end
     end
 
@@ -62,8 +70,10 @@ class ModalController < BaseController
     # --------------------------- NEW --------------------------------
 
     def process_event_new
-      # @date = params[:date] ? Date.parse(params[:date]) : Date.current
-      @event = Calendar.first
+      @date = params[:date] ? Date.parse(params[:date]) : Date.current
+      @view = params[:view] || "month"
+      @calendar = @resource
+      @resource = Event.new(account: @calendar.account, calendar: @calendar, event_metum: EventMetum.new)
       @step = "accept"
     end
 
@@ -136,7 +146,30 @@ class ModalController < BaseController
       end
     end
 
+    def process_event_create
+      case EventService.new(resource: @resource, params: params).create
+      in { ok:    Event   => rc };  redirect_to calendar_url(rc.calendar) and return # update calendar
+      in { ok:    String => msg };        # flash the string
+      in { error: String  => msg };       # return event form with error
+      end
+    end
+
     def process_other_create
+    end
+
+    #
+    # --------------------------- UPDATE --------------------------------
+
+    def process_event_update
+      case EventService.new(resource: resource, params: params).update
+      in { ok:    Event   => resource };  # update calendar
+      in { ok:    String => msg };        # flash the string
+      in { error: String  => msg };       # return event form with error
+      end
+    end
+
+    def process_other_update
+      raise "ModalController: Update Not Implemented"
     end
 
     #

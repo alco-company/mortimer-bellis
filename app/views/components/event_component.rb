@@ -66,25 +66,6 @@ class EventComponent < ApplicationComponent
     end
   end
 
-  def show_work_tab
-    div(data: { tabs_target: "tabPanel" }) do
-      let_mortimer_punch
-      div(id: "work_details", class: "hidden") do
-        # comment { "work type" }
-        work_type_field
-
-        # comment { "breaks" }
-        set_work_options
-
-        # set the free Options
-        set_options(reason: "free", label: helpers.t(".free_reason"), reasons: %w[rr_free senior_free unpaid_free maternity_free leave_free])
-
-        # set the sick Options
-        set_options(reason: "sick", label: helpers.t(".sick_reason"), reasons: %w[iam_sick child_sick nursing_sick lost_work_sick p56_sick])
-      end
-    end
-  end
-
   def show_task_tab
     div(data: { tabs_target: "tabPanel" }) do
       name_field I18n.t("event.task_name") # "Titel / Overskrift på opgaven"
@@ -97,10 +78,30 @@ class EventComponent < ApplicationComponent
     end
   end
 
+  def show_work_tab
+    div(data: { tabs_target: "tabPanel" }) do
+      let_mortimer_punch
+      div(id: "work_details", class: "#{resource.auto_punch ? "" : "hidden"}") do
+        # comment { "work type" }
+        work_type_field
+
+        # comment { "breaks" }
+        set_work_options
+
+        reason = resource.work_type == "in" ? "" : resource.reason
+        # set the free Options
+        set_options(reason: "free", label: helpers.t(".free_reason"), reasons: %w[rr_free senior_free unpaid_free maternity_free leave_free], value: reason)
+
+        # set the sick Options
+        set_options(reason: "sick", label: helpers.t(".sick_reason"), reasons: %w[iam_sick child_sick nursing_sick lost_work_sick p56_sick], value: reason)
+      end
+    end
+  end
+
   def show_recurring_tab
     div(id: "recurring", data: { tabs_target: "tabPanel" }, class: "event-type recurring tab hidden") do
-      start_date_time_field(time_visible: false)
-      end_date_time_field(time_visible: false)
+      # start_date_time_field(time_visible: false)
+      # end_date_time_field(time_visible: false)
 
       p(class: "text-gray-300") do
         "Hvis blot én af betingelserne her nedenfor er opfyldt, træder denne plan i kraft"
@@ -132,126 +133,6 @@ class EventComponent < ApplicationComponent
     end
   end
 
-  # simple punch
-  # def show_work_inputs
-  #   div(id: "work_inputs", data: { event_form_target: "workInputs" }, class: "event-type work") do
-  #     # comment { "work type" }
-  #     work_type_field
-
-  #     start_date_time_field
-  #     end_date_time_field()
-
-  #     # comment { "duration" }
-  #     duration_field
-
-  #     # comment { "breaks" }
-  #     set_work_options
-
-  #     # set the free Options
-  #     set_options(reason: "free", label: helpers.t(".free_reason"), reasons: %w[rr_free senior_free unpaid_free maternity_free leave_free])
-
-  #     # set the sick Options
-  #     set_options(reason: "sick", label: helpers.t(".sick_reason"), reasons: %w[iam_sick child_sick nursing_sick lost_work_sick p56_sick])
-
-  #     comment_field
-  #     attachment_field
-  #   end
-  # end
-
-  # def show_schedule_inputs
-  #   div(id: "schedule_inputs", data: { event_form_target: "scheduleInputs" }, class: "event-type schedule hidden") do
-  #     # comment { "schedule subject/title" }
-  #     name_field I18n.t("event.schedule_name")
-  #     work_type_field
-  #     let_mortimer_punch
-  #     start_date_time_field(date_visible: false)
-  #     end_date_time_field(date_visible: false)
-  #     duration_field
-
-  #     # comment { "breaks" }
-  #     set_work_options
-
-  #     # set the free Options
-  #     set_options(reason: "free", label: helpers.t(".free_reason"), reasons: %w[rr_free senior_free unpaid_free maternity_free leave_free])
-
-  #     # set the sick Options
-  #     set_options(reason: "sick", label: helpers.t(".sick_reason"), reasons: %w[iam_sick child_sick nursing_sick lost_work_sick p56_sick])
-
-  #     hr
-  #     h3(class: "text-md mt-5") { "Gentagelser" }
-
-  #     start_date_time_field(time_visible: false)
-  #     end_date_time_field(time_visible: false)
-
-  #     p(class: "text-gray-300") do
-  #       "Hvis blot én af betingelserne her nedenfor er opfyldt, træder denne plan i kraft"
-  #     end
-
-  #     ul(role: "list", class: "divide-y divide-gray-100 overflow-hidden bg-white shadow-sm ring-1 ring-gray-900/5 sm:rounded-xl") do
-  #       li(class: "relative cursor-pointer flex justify-between gap-x-6 px-4 py-5 hover:bg-gray-50 sm:px-6", data: { action: "click->event-form#togglePeriodPicker", type: "daily" }) do
-  #         show_daily_inputs
-  #       end
-  #       li(class: "relative cursor-pointer flex justify-between gap-x-6 px-4 py-5 hover:bg-gray-50 sm:px-6", data: { action: "click->event-form#togglePeriodPicker", type: "weekly" }) do
-  #         show_weekly_inputs
-  #       end
-  #       li(class: "relative cursor-pointer flex justify-between gap-x-6 px-4 py-5 hover:bg-gray-50 sm:px-6", data: { action: "click->event-form#togglePeriodPicker", type: "monthly" }) do
-  #         show_monthly_inputs
-  #       end
-  #       li(class: "relative cursor-pointer flex justify-between gap-x-6 px-4 py-5 hover:bg-gray-50 sm:px-6", data: { action: "click->event-form#togglePeriodPicker", type: "yearly" }) do
-  #         show_yearly_inputs
-  #       end
-  #    end
-
-  #     # dates excluded
-  #     # div(class: "mort-field") do
-  #     #   label(for: "comment", class: "block text-sm font-medium leading-6 text-gray-900") { "Undtaget følgende datoer" }
-  #     #   div(class: "mt-2") do
-  #     #     input(id: "event_excluded_dates", aria_describedby: "comments-description", name: "event[excluded_dates]", class: "mort-form-text mt-0 w-full")
-  #     #   end
-  #     # end
-
-  #     comment_field
-  #     attachment_field
-  #   end
-  # end
-
-  # def show_task_inputs
-  #   div(id: "task_inputs", data: { event_form_target: "taskInputs" }, class: "event-type task hidden") do
-  #     name_field I18n.t("event.task_name") # "Titel / Overskrift på opgaven"
-  #     # all_day_field "Varer aftalen hele dagen?"
-  #     start_date_time_field
-  #     end_date_time_field
-  #     duration_field
-  #     comment_field
-  #     attachment_field
-  #   end
-  # end
-
-  # def show_appointment_inputs
-  #   # comment { "aftale" }
-  #   div(id: "appointment_inputs", data: { event_form_target: "appointmentInputs" }, class: "event-type appointment hidden") do
-  #     name_field I18n.t("event.appointment_name") # "Titel / Overskrift på aftalen/opgaven"
-  #     all_day_field "Varer aftalen hele dagen?"
-  #     start_date_time_field
-  #     end_date_time_field
-  #     duration_field
-  #     comment_field
-  #     attachment_field
-  #   end
-  # end
-
-  # comment { "helligdag" }
-  # def show_holiday_inputs
-  #   div(id: "holiday_inputs", data: { event_form_target: "workInputs" }, class: "event-type holiday hidden") do
-  #     name_field I18n.t("event.holiday_name")
-  #     all_day_field "Er helligdagen en hel fridag?"
-  #     start_date_time_field
-  #     end_date_time_field
-  #     comment_field
-  #     attachment_field
-  #   end
-  # end
-
   # field methods ----------------
 
   def work_type_field
@@ -269,10 +150,10 @@ class EventComponent < ApplicationComponent
               data_event_form_target: "workButton",
               class: "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent bg-gray-200 transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-sky-600 focus:ring-offset-2 aria-checked:bg-sky-600",
               role: "switch",
-              aria_checked: "true"
+              aria_checked: work_type_value("in", "true", "false")
             ) do
               span(class: "sr-only") { "work" }
-              span(data_event_form_target: "workSpan", aria_hidden: "true", class: "pointer-events-none inline-block h-5 w-5 translate-x-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out")
+              span(data_event_form_target: "workSpan", aria_hidden: "true", class: "pointer-events-none inline-block h-5 w-5 #{work_type_value("in", "translate-x-5", "translate-x-0")} transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out")
             end
             button(
               type: "button",
@@ -280,10 +161,10 @@ class EventComponent < ApplicationComponent
               data_event_form_target: "sickButton",
               class: "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent bg-gray-200 transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-sky-600 focus:ring-offset-2 aria-checked:bg-sky-600",
               role: "switch",
-              aria_checked: "false"
+              aria_checked: work_type_value("sick", "true", "false")
             ) do
               span(class: "sr-only") { "sick" }
-              span(data_event_form_target: "sickSpan", aria_hidden: "true", class: "pointer-events-none inline-block h-5 w-5 translate-x-0 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out")
+              span(data_event_form_target: "sickSpan", aria_hidden: "true", class: "pointer-events-none inline-block h-5 w-5  #{work_type_value("sick", "translate-x-5", "translate-x-0")} transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out")
             end
             button(
               type: "button",
@@ -291,48 +172,52 @@ class EventComponent < ApplicationComponent
               data_event_form_target: "freeButton",
               class: "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent bg-gray-200 transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-sky-600 focus:ring-offset-2 aria-checked:bg-sky-600",
               role: "switch",
-              aria_checked: "false"
+              aria_checked: work_type_value("free", "true", "false")
             ) do
               span(class: "sr-only") { "free" }
-              span(data_event_form_target: "freeSpan", aria_hidden: "true", class: "pointer-events-none inline-block h-5 w-5 translate-x-0 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out")
+              span(data_event_form_target: "freeSpan", aria_hidden: "true", class: "pointer-events-none inline-block h-5 w-5  #{work_type_value("free", "translate-x-5", "translate-x-0")} transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out")
             end
-            input(id: "event_work_type", name: "event[work_type]", type: "text", data_event_form_target: "workReason", value: "in", class: "hidden")
+            input(id: "event_work_type", name: "event[work_type]", type: "text", data_event_form_target: "workReason", value: resource.work_type, class: "hidden")
           end
         end
       end
     end
   end
 
+  def work_type_value(type, true_value, false_value)
+    resource.work_type==type ? true_value : false_value
+  end
+
   # options for work
   def set_work_options
-    div(class: "", data: { event_form_target: "workOptions" }) do
+    div(class: work_type_value("in", "", "hidden"), data: { event_form_target: "workOptions" }) do
       div(class: "my-4 sm:grid sm:grid-cols-3 sm:items-start") do
         label(for: "end_at", class: "block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5 self-center") { "Pauser" }
         div(class: "mt-2 flex sm:col-span-2 sm:mt-0 sm:place-content-end") do
-          input(name: "event[break_minutes]", id: "event_break_minutes", type: "number", data_event_form_target: "breaks", autofocus: "", class: "mort-form-text mt-0 mr-4 max-w-24 sm:mr-0")
+          input(name: "event[break_minutes]", id: "event_break_minutes", type: "number", data_event_form_target: "breakMinutesInput", autofocus: "", value: resource.break_minutes, class: "mort-form-text mt-0 mr-4 max-w-24 sm:mr-0")
         end
         div(class: "mt-2 flex sm:col-span-2 sm:col-start-2 sm:place-content-end") do
           label(class: "mr-2 self-center") { "Inkl i varighed" }
           button(
             type: "button",
             data_action: " click->event-form#toggleBreakIncluded",
-            data_event_form_target: "breakIncludedButton",
+            data_event_form_target: "breaksIncludedButton",
             class: "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent bg-gray-200 transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-sky-600 focus:ring-offset-2 aria-checked:bg-sky-600",
             role: "switch",
-            aria_checked: resource.break_included ? "true" : "false"
+            aria_checked: resource.breaks_included ? "true" : "false"
           ) do
             span(class: "sr-only") { "breakIncluded" }
-            span(data_event_form_target: "breakIncludedSpan", aria_hidden: "true", class: "pointer-events-none inline-block h-5 w-5 #{ resource.break_included ? "translate-x-5" : "translate-x-0"} transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out")
+            span(data_event_form_target: "breaksIncludedSpan", aria_hidden: "true", class: "pointer-events-none inline-block h-5 w-5 #{ resource.breaks_included ? "translate-x-5" : "translate-x-0"} transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out")
           end
-          input(id: "event_break_included", name: "event[break_included]", type: "checkbox", data_event_form_target: "breakIncludedInput", value: resource.break_included ? "1" : "0", class: "hidden")
+          input(id: "event_breaks_included", name: "event[breaks_included]", type: "checkbox", data_event_form_target: "breaksIncludedInput", value: resource.breaks_included ? "1" : "0", checked: "checked", class: "hidden")
         end
       end
     end
   end
 
   # options for sick and free
-  def set_options(reason:, label:, reasons:)
-    div(class: "hidden", data: { event_form_target: "#{reason}Options" }) do
+  def set_options(reason:, label:, reasons:, value: "")
+    div(class: "#{ reasons.include?(value) ? "" : "hidden"}", data: { event_form_target: "#{reason}Options" }) do
       div(class: "my-4 sm:grid sm:grid-cols-3 sm:items-start") do
         label(for: "punch_reason", class: "block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5") { label }
         div(class: "mt-2 sm:col-span-2 sm:mt-0") do
@@ -341,13 +226,14 @@ class EventComponent < ApplicationComponent
               legend(class: "sr-only") { "#{reason} reasons" }
               div(class: "space-y-2") do
                 reasons.each do |r|
+                  chck = value == r
                   div(class: "flex items-center") do
                     input(
                       id: "#{reason}_punch_reason",
                       name: "event[reason]",
                       type: "radio",
                       value: r,
-                      # checked: "checked" if punch.state == r,
+                      checked: chck,
                       class: "h-4 w-4 border-gray-300 text-sky-600 focus:ring-sky-600"
                     )
                     label(for: r, class: "ml-3 block text-sm font-medium leading-6 text-gray-900") { helpers.t(".#{r}") }
@@ -445,7 +331,7 @@ class EventComponent < ApplicationComponent
               span(class: "sr-only") { "all day" }
               span(data_event_form_target: "allDaySpan", aria_hidden: "true", class: "pointer-events-none inline-block h-5 w-5 #{ resource.all_day ? "translate-x-5" : "translate-x-0" } transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out")
             end
-            input(id: "event_all_day", name: "event[all_day]", type: "radio", data_event_form_target: "allDay", value: resource.all_day, checked: "checked", class: "hidden")
+            input(id: "event_all_day", name: "event[all_day]", type: "checkbox", data_event_form_target: "allDay", value: resource.all_day ? "1" : "0", checked: "checked", class: "hidden")
           end
         end
       end
@@ -644,7 +530,7 @@ class EventComponent < ApplicationComponent
 
   def show_weekdays_inputs(prefix)
     div(class: "grid grid-cols-3 sm:grid-cols-4 gap-x-2 w-full place-content-stretch ") do
-      wd = resource.event_metum.get_field("#{prefix}_weekdays".to_sym).keys
+      wd = resource.event_metum.get_field("#{prefix}_weekdays".to_sym).keys rescue []
       %w[ monday tuesday wednesday thursday friday saturday sunday ].each do |day|
         chck = wd.include?(day)
         div(class: "flex items-start") do
@@ -761,3 +647,123 @@ class EventComponent < ApplicationComponent
     "00:00"
   end
 end
+
+# simple punch
+# def show_work_inputs
+#   div(id: "work_inputs", data: { event_form_target: "workInputs" }, class: "event-type work") do
+#     # comment { "work type" }
+#     work_type_field
+
+#     start_date_time_field
+#     end_date_time_field()
+
+#     # comment { "duration" }
+#     duration_field
+
+#     # comment { "breaks" }
+#     set_work_options
+
+#     # set the free Options
+#     set_options(reason: "free", label: helpers.t(".free_reason"), reasons: %w[rr_free senior_free unpaid_free maternity_free leave_free])
+
+#     # set the sick Options
+#     set_options(reason: "sick", label: helpers.t(".sick_reason"), reasons: %w[iam_sick child_sick nursing_sick lost_work_sick p56_sick])
+
+#     comment_field
+#     attachment_field
+#   end
+# end
+
+# def show_schedule_inputs
+#   div(id: "schedule_inputs", data: { event_form_target: "scheduleInputs" }, class: "event-type schedule hidden") do
+#     # comment { "schedule subject/title" }
+#     name_field I18n.t("event.schedule_name")
+#     work_type_field
+#     let_mortimer_punch
+#     start_date_time_field(date_visible: false)
+#     end_date_time_field(date_visible: false)
+#     duration_field
+
+#     # comment { "breaks" }
+#     set_work_options
+
+#     # set the free Options
+#     set_options(reason: "free", label: helpers.t(".free_reason"), reasons: %w[rr_free senior_free unpaid_free maternity_free leave_free])
+
+#     # set the sick Options
+#     set_options(reason: "sick", label: helpers.t(".sick_reason"), reasons: %w[iam_sick child_sick nursing_sick lost_work_sick p56_sick])
+
+#     hr
+#     h3(class: "text-md mt-5") { "Gentagelser" }
+
+#     start_date_time_field(time_visible: false)
+#     end_date_time_field(time_visible: false)
+
+#     p(class: "text-gray-300") do
+#       "Hvis blot én af betingelserne her nedenfor er opfyldt, træder denne plan i kraft"
+#     end
+
+#     ul(role: "list", class: "divide-y divide-gray-100 overflow-hidden bg-white shadow-sm ring-1 ring-gray-900/5 sm:rounded-xl") do
+#       li(class: "relative cursor-pointer flex justify-between gap-x-6 px-4 py-5 hover:bg-gray-50 sm:px-6", data: { action: "click->event-form#togglePeriodPicker", type: "daily" }) do
+#         show_daily_inputs
+#       end
+#       li(class: "relative cursor-pointer flex justify-between gap-x-6 px-4 py-5 hover:bg-gray-50 sm:px-6", data: { action: "click->event-form#togglePeriodPicker", type: "weekly" }) do
+#         show_weekly_inputs
+#       end
+#       li(class: "relative cursor-pointer flex justify-between gap-x-6 px-4 py-5 hover:bg-gray-50 sm:px-6", data: { action: "click->event-form#togglePeriodPicker", type: "monthly" }) do
+#         show_monthly_inputs
+#       end
+#       li(class: "relative cursor-pointer flex justify-between gap-x-6 px-4 py-5 hover:bg-gray-50 sm:px-6", data: { action: "click->event-form#togglePeriodPicker", type: "yearly" }) do
+#         show_yearly_inputs
+#       end
+#    end
+
+#     # dates excluded
+#     # div(class: "mort-field") do
+#     #   label(for: "comment", class: "block text-sm font-medium leading-6 text-gray-900") { "Undtaget følgende datoer" }
+#     #   div(class: "mt-2") do
+#     #     input(id: "event_excluded_dates", aria_describedby: "comments-description", name: "event[excluded_dates]", class: "mort-form-text mt-0 w-full")
+#     #   end
+#     # end
+
+#     comment_field
+#     attachment_field
+#   end
+# end
+
+# def show_task_inputs
+#   div(id: "task_inputs", data: { event_form_target: "taskInputs" }, class: "event-type task hidden") do
+#     name_field I18n.t("event.task_name") # "Titel / Overskrift på opgaven"
+#     # all_day_field "Varer aftalen hele dagen?"
+#     start_date_time_field
+#     end_date_time_field
+#     duration_field
+#     comment_field
+#     attachment_field
+#   end
+# end
+
+# def show_appointment_inputs
+#   # comment { "aftale" }
+#   div(id: "appointment_inputs", data: { event_form_target: "appointmentInputs" }, class: "event-type appointment hidden") do
+#     name_field I18n.t("event.appointment_name") # "Titel / Overskrift på aftalen/opgaven"
+#     all_day_field "Varer aftalen hele dagen?"
+#     start_date_time_field
+#     end_date_time_field
+#     duration_field
+#     comment_field
+#     attachment_field
+#   end
+# end
+
+# comment { "helligdag" }
+# def show_holiday_inputs
+#   div(id: "holiday_inputs", data: { event_form_target: "workInputs" }, class: "event-type holiday hidden") do
+#     name_field I18n.t("event.holiday_name")
+#     all_day_field "Er helligdagen en hel fridag?"
+#     start_date_time_field
+#     end_date_time_field
+#     comment_field
+#     attachment_field
+#   end
+# end

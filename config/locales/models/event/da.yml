@@ -1,8 +1,23 @@
 da:
   events:
     default_name: Aftale
+    create:
+      post: Aftalen blev oprettet
+    update:
+      post: Aftalen blev opdateret
+    destroy:
+      post: Aftalen blev slettet
     
   event:
+    modal:
+      delete_all: 
+        title: Slet alle aftaler
+        instruction: Er du sikker på, at du vil slette alle aftaler?
+      delete:
+        title: Slet denne aftale
+        instruction: Er du sikker på, at du vil slette aftalen %{name}?
+        button: Slet
+
     type:
       task: Opgave
       work: Arbejde

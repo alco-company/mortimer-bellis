@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_07_15_081624) do
+ActiveRecord::Schema[8.0].define(version: 2024_08_07_145706) do
   create_table "accounts", force: :cascade do |t|
     t.string "name"
     t.string "email"
@@ -177,6 +177,10 @@ ActiveRecord::Schema[8.0].define(version: 2024_07_15_081624) do
     t.text "comment"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "work_type"
+    t.string "reason"
+    t.integer "break_minutes"
+    t.boolean "breaks_included"
     t.index ["account_id"], name: "index_events_on_account_id"
     t.index ["calendar_id"], name: "index_events_on_calendar_id"
   end
