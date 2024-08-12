@@ -36,7 +36,6 @@ class EventService
   private
 
     def prepare_resource
-      debugger
       self.params.require(:event).extract!(:event_metum_attributes) if no_schedule_set?
       #
       # is this a work related event?

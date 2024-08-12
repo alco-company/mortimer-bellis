@@ -1,21 +1,22 @@
 class CalendarComponent < ApplicationComponent
   include Phlex::Rails::Helpers::LinkTo
 
-  attr_reader :id, :url, :date, :view
+  attr_reader :id, :url, :date, :view, :calendars
 
-  def initialize(id:, url:, date:, view: nil, &block)
+  def initialize(id:, url:, date:, calendars: [], view: nil, &block)
     @id = id
     @url = url
     @date = date || Date.current
+    @calendars = calendars
     @view = view || "month"
   end
 
   def view_template(&block)
     case view
-    when "day"; render DayComponent.new(id: id, url: url, date:, view: view, &block)
-    when "week"; render WeekComponent.new(id: id, url: url, date:, view: view, &block)
-    when "month"; render MonthComponent.new(id: id, url: url, date:, view: view, &block)
-    when "year"; render YearComponent.new(id: id, url: url, date:, view: view, &block)
+    when "day"; render DayComponent.new(id: id, url: url, date: date, calendars: calendars, view: view, &block)
+    when "week"; render WeekComponent.new(id: id, url: url, date: date, calendars: calendars, view: view, &block)
+    when "month"; render MonthComponent.new(id: id, url: url, date: date, calendars: calendars, view: view, &block)
+    when "year"; render YearComponent.new(id: id, url: url, date: date, calendars: calendars, view: view, &block)
     end
   end
 
@@ -512,7 +513,7 @@ class CalendarComponent < ApplicationComponent
 
 
   def holiday?(dt)
-    dt.day == 25
+    Holiday.today? dt
   end
 
   def week_number(day, dt, cls = "")
@@ -528,24 +529,70 @@ class CalendarComponent < ApplicationComponent
   end
 
   def all_day_events(dt, cls = "")
-    dt.day == 8 ?
-      div(class: "text-amber-500 font-extrabold justify-self-end text-sm pr-1.5 #{cls}") { "!" } :
+    unless any_calendars?
       div(class: "pr-1.5 #{cls}") { " " }
+    else
+      hits = 0
+      calendar_events do |event|
+        if event.all_day? && event.from_date.to_date == dt
+          hits += 1
+          div(class: "text-amber-500 font-extrabold justify-self-end text-sm pr-1.5 #{cls}") { "!" }
+        end
+      end
+      div(class: "pr-1.5 #{cls}") { " " } if hits.zero?
+    end
   end
 
   def punches?(dt, cls = "")
-    dt.day == 8 ?
+    punch_cards.flatten.select { |p| p.work_date == dt }.any? ?
       div(class: "text-sky-500 font-bold justify-self-start text-xl #{cls}") { "|" } :
       div() { " " }
   end
 
-  def events?(dt, cls = "")
-    case dt.day
-    when 11;   div(class: "font-extrabold justify-self-end text-2xl #{cls}") { "." }
-    when 15;   div(class: "font-extrabold justify-self-end text-2xl #{cls}") { ".." }
-    when 18;   div(class: "font-extrabold justify-self-end text-2xl #{cls}") { "..." }
-    when 8;    div(class: "font-extrabold justify-self-end text-2xl #{cls}") { "...." }
-    else;     div() { " " }
+  def punch_cards(rg = nil)
+    return @punch_cards if rg.nil?
+    @punch_cards = calendars.collect { |c| c.punch_cards(rg) }
+  end
+
+  def events?(dt, window = nil, cls = "")
+    unless any_calendars?
+      div() { " " }
+    else
+      hits = 0
+      calendar_events do |event, tz|
+        hits += 1 if event_occurs?(event, window, dt, tz)
+      end
+      if hits.zero?
+        div() { " " }
+      else
+        case hits
+        when    1;   div(class: "font-extrabold justify-self-end text-2xl #{cls}") { "." }
+        when 2..3;   div(class: "font-extrabold justify-self-end text-2xl #{cls}") { ".." }
+        when 4..5;   div(class: "font-extrabold justify-self-end text-2xl #{cls}") { "..." }
+        when 6.. ;   div(class: "font-extrabold justify-self-end text-2xl #{cls}") { "...." }
+        end
+      end
     end
+  end
+
+  def any_calendars?
+    calendars.any?
+  end
+
+  def calendar_events
+    calendars.each do |calendar|
+      tz = calendar.time_zone
+      calendar.events.each do |event|
+        yield event, tz
+      end
+    end
+  end
+
+  def event_occurs?(event, window, dt, tz)
+    return false if event.all_day?
+    return false if !event.from_date.nil? && event.from_date.to_date > dt
+    return false if !event.to_date.nil? && event.to_date.to_date < dt
+    return true  if event.event_metum.nil?
+    event.event_metum.occurs_on?(dt, window, tz)
   end
 end

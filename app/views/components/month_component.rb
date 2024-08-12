@@ -2,6 +2,8 @@ class MonthComponent < CalendarComponent
   #
   #
   def view_template(&block)
+    punch_cards(date.beginning_of_month..date.end_of_month)
+
     div(class: "lg:flex lg:h-full lg:flex-col") do
       show_header(date)
       month_view
@@ -99,7 +101,7 @@ class MonthComponent < CalendarComponent
       week_number(day, dt, "pl-2 ")
       all_day_events(dt, "min-h-10")
       punches?(dt, "pl-1.5")
-      events?(dt, "pr-1.5")
+      events?(dt, { from: dt.beginning_of_month.to_time, to: dt.end_of_month.to_time }, "pr-1.5")
 
       cls = "absolute col-span-2 place-self-center "
       cls += (dt == Date.today) ? " bg-sky-600 text-white rounded-full w-6 text-center" : "  "

@@ -3,8 +3,15 @@ class EventMetum < ApplicationRecord
 
   attr_accessor :rule, :uivalues
 
-  def rule
-    @rule ||= RRule.parse(rrule)
+  def rule(from, tz)
+    @rule ||= RRule::Rule.new(rrule, dtstart: from, tzid: tz)
+  end
+
+  def occurs_on?(date, window, tz)
+    rule(window[:from], tz).between(window[:from], window[:to]).map { |e| e.day }.include?(date.to_time.day)
+  rescue => error
+    say "EventMetum#occurs_on? #{error.message}"
+    false
   end
 
   def uivalues

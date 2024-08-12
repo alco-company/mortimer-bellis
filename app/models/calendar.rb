@@ -24,4 +24,8 @@ class Calendar < ApplicationRecord
   def time_zone
     calendarable.time_zone || Current.user.time_zone || Current.account.time_zone rescue nil
   end
+
+  def punch_cards(rg)
+    calendarable.punch_cards.where(work_date: rg)
+  end
 end

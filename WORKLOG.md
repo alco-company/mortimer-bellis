@@ -21,9 +21,14 @@ guide idea:
 
 ## CHANGELOG
 
+### 12/8/2024
+
+* show events on month view II
+
 ### 9/8/2024
 
 * persist most of event and event_metum
+* show events on month view
 
 ### 8/8/2024
 
