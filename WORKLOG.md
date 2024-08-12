@@ -24,6 +24,7 @@ guide idea:
 ### 12/8/2024
 
 * show events on month view II
+* prepare for HTTP/2 - add httpx
 
 ### 9/8/2024
 

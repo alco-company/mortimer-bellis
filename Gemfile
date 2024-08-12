@@ -98,3 +98,5 @@ gem "rss", "~> 0.3.0"
 gem "psych", "~> 5.1.2"
 
 gem "rrule", "~> 0.6.0"
+
+gem "httpx", "~> 1.3"
