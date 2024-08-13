@@ -306,7 +306,7 @@ class CalendarComponent < ApplicationComponent
   #
   # events are display with a 5-minute resolution
   #
-  def show_events(cls = "")
+  def show_events_on_day_and_week(window, cls = "")
     ol(class: "col-start-1 col-end-2 row-start-1 grid #{cls}", style: "grid-template-rows:1.75rem repeat(288, minmax(0, 1fr)) auto") do
       #
       # col-start-1 = monday
@@ -315,81 +315,100 @@ class CalendarComponent < ApplicationComponent
       # hover:col-start-(x-3) hover:col-span-4 sm:hover:col-span-1 sm:hover:col-start-(x)
 
       # holiday marker
-      li(class: "relative col-start-4 col-end-5 flex border-violet-600 border-t-2", style: "grid-row:1 /span 1")
-
-      # all day event
-      li(class: "relative col-start-1 col-end-3 flex ", style: "grid-row:1 /span 1") do
-        a(href: "#", class: "group absolute inset-1 flex flex-col overflow-hidden rounded-md bg-amber-50 pl-2 text-amber-500 text-xs hover:bg-amber-100") { "juleaften" }
+      # li(class: "relative col-start-4 col-end-5 flex border-violet-600 border-t-2", style: "grid-row:1 /span 1")
+      (window[:from].to_date..window[:to].to_date).each_with_index do |dt, index|
+        holiday?(dt) ?
+          li(class: "relative col-start-#{index+1} flex border-violet-600 border-t-2", style: "grid-row:1 /span 1") :
+          {}
       end
 
-
-      li(class: "relative col-start-6 flex", style: "grid-row:51 /span 112") do
-        a(href: "#", class: "group absolute inset-1 flex flex-col overflow-hidden rounded-md bg-pink-50 p-2 text-xs leading-5 hover:bg-pink-100")
-      end
-
-
-
-      li(class: "relative col-start-1 flex", style: "grid-row:2 /span 12") do
-        a(href: "#", class: "group absolute inset-1 flex flex-col overflow-hidden rounded-md bg-green-50 p-2 text-xs leading-5 hover:bg-blue-100")
-      end
-
-      li(class: "relative col-start-2 flex", style: "grid-row:14 /span 6") do
-        a(href: "#", class: "group absolute inset-1 flex flex-col overflow-hidden rounded-md bg-blue-50 p-2 text-xs leading-5 hover:bg-blue-100")
-      end
-
-      li(class: "relative col-start-3 flex", style: "grid-row:26 /span 6") do
-        a(href: "#", class: "group absolute inset-1 flex flex-col overflow-hidden rounded-md bg-blue-50 p-2 text-xs leading-5 hover:bg-blue-100")
-      end
-
-      li(
-        class: "relative col-start-4 flex hover:col-start-2 hover:col-span-4 sm:hover:col-span-1 sm:hover:col-start-2",
-        style: "grid-row:38 /span 16"
-      ) do
-        a(href: "#", class: "group absolute inset-1 flex flex-col overflow-hidden rounded-md bg-blue-50 p-2 text-xs leading-5 hover:bg-blue-100") do
-          p(class: "order-1 font-semibold text-blue-700 truncate") { "Breakfast" }
-          p(class: "text-blue-500 group-hover:text-blue-700") do
-            time(datetime: "2022-01-12T06:00") { "6:00 AM" }
+      #  event
+      calendar_events do |event, tz|
+        (window[:from].to_date..window[:to].to_date).each_with_index do |dt, index|
+          if event_occurs?(event, window, dt, tz)
+            if event.all_day? && event.from_date.to_date == dt
+              li(class: "relative col-start-#{index+1} flex ", style: "grid-row:1 /span 1") do
+                a(href: "#", class: "group absolute inset-1 flex flex-col overflow-hidden rounded-md bg-amber-50 pl-2 text-amber-500 text-xs hover:bg-amber-100") { event.name }
+              end
+            else
+              start = event.from_time.hour * 12 + event.from_time.min / 5
+              duration = (event.to_time.hour * 12 + event.to_time.min / 5) - start
+              li(class: "relative col-start-#{index+1} flex ", style: "grid-row:#{start + 2} /span #{duration}") do
+                a(href: "#", class: "group absolute inset-1 flex flex-col overflow-hidden rounded-md bg-amber-50 pl-2 text-amber-500 text-xs hover:bg-amber-100") { "%s" % [ event.name, event.from_time ] }
+              end
+            end
           end
         end
       end
-      li(
-        class: "relative mt-px flex sm:col-start-3",
-        style: "grid-row:92 /span 30"
-      ) do
-        whitespace
-        a(
-          href: "#",
-          class:
-            "group absolute inset-1 flex flex-col overflow-y-auto rounded-lg bg-pink-50 p-2 text-xs leading-5 hover:bg-pink-100"
-        ) do
-          p(class: "order-1 font-semibold text-pink-700") do
-            "Flight to Paris"
-          end
-          p(class: "text-pink-500 group-hover:text-pink-700") do
-            time(datetime: "2022-01-12T07:30") { "7:30 AM" }
-          end
-          whitespace
-        end
-      end
-      li(
-        class: "relative mt-px hidden sm:col-start-6 sm:flex",
-        style: "grid-row:122 /span 24"
-      ) do
-        whitespace
-        a(
-          href: "#",
-          class:
-            "group absolute inset-1 flex flex-col overflow-y-auto rounded-lg bg-gray-100 p-2 text-xs leading-5 hover:bg-gray-200"
-        ) do
-          p(class: "order-1 font-semibold text-gray-700") do
-            "Meeting with design team at Disney"
-          end
-          p(class: "text-gray-500 group-hover:text-gray-700") do
-            time(datetime: "2022-01-15T10:00") { "10:00 AM" }
-          end
-          whitespace
-        end
-      end
+
+
+      # (2..278).step(12).each do |i|
+      #   li(class: "relative col-start-1 flex", style: "grid-row:#{i} /span 12") do
+      #     a(href: "#", class: "group absolute inset-1 flex flex-col overflow-hidden rounded-md bg-green-50 p-2 text-xs leading-5 hover:bg-blue-100")
+      #   end
+      # end
+
+      # li(class: "relative col-start-6 flex", style: "grid-row:51 /span 112") do
+      #   a(href: "#", class: "group absolute inset-1 flex flex-col overflow-hidden rounded-md bg-pink-50 p-2 text-xs leading-5 hover:bg-pink-100")
+      # end
+
+      # li(class: "relative col-start-2 flex", style: "grid-row:14 /span 6") do
+      #   a(href: "#", class: "group absolute inset-1 flex flex-col overflow-hidden rounded-md bg-blue-50 p-2 text-xs leading-5 hover:bg-blue-100")
+      # end
+
+      # li(class: "relative col-start-3 flex", style: "grid-row:26 /span 6") do
+      #   a(href: "#", class: "group absolute inset-1 flex flex-col overflow-hidden rounded-md bg-blue-50 p-2 text-xs leading-5 hover:bg-blue-100")
+      # end
+
+      # li(
+      #   class: "relative col-start-4 flex hover:col-start-2 hover:col-span-4 sm:hover:col-span-1 sm:hover:col-start-2",
+      #   style: "grid-row:38 /span 16"
+      # ) do
+      #   a(href: "#", class: "group absolute inset-1 flex flex-col overflow-hidden rounded-md bg-blue-50 p-2 text-xs leading-5 hover:bg-blue-100") do
+      #     p(class: "order-1 font-semibold text-blue-700 truncate") { "Breakfast" }
+      #     p(class: "text-blue-500 group-hover:text-blue-700") do
+      #       time(datetime: "2022-01-12T06:00") { "6:00 AM" }
+      #     end
+      #   end
+      # end
+      # li(
+      #   class: "relative mt-px flex sm:col-start-3",
+      #   style: "grid-row:92 /span 30"
+      # ) do
+      #   whitespace
+      #   a(
+      #     href: "#",
+      #     class:
+      #       "group absolute inset-1 flex flex-col overflow-y-auto rounded-lg bg-pink-50 p-2 text-xs leading-5 hover:bg-pink-100"
+      #   ) do
+      #     p(class: "order-1 font-semibold text-pink-700") do
+      #       "Flight to Paris"
+      #     end
+      #     p(class: "text-pink-500 group-hover:text-pink-700") do
+      #       time(datetime: "2022-01-12T07:30") { "7:30 AM" }
+      #     end
+      #     whitespace
+      #   end
+      # end
+      # li(
+      #   class: "relative mt-px hidden sm:col-start-6 sm:flex",
+      #   style: "grid-row:122 /span 24"
+      # ) do
+      #   whitespace
+      #   a(
+      #     href: "#",
+      #     class:
+      #       "group absolute inset-1 flex flex-col overflow-y-auto rounded-lg bg-gray-100 p-2 text-xs leading-5 hover:bg-gray-200"
+      #   ) do
+      #     p(class: "order-1 font-semibold text-gray-700") do
+      #       "Meeting with design team at Disney"
+      #     end
+      #     p(class: "text-gray-500 group-hover:text-gray-700") do
+      #       time(datetime: "2022-01-15T10:00") { "10:00 AM" }
+      #     end
+      #     whitespace
+      #   end
+      # end
 
       # punches
       (1..5).each do |i|
@@ -471,6 +490,7 @@ class CalendarComponent < ApplicationComponent
           else; ""
           end
           cls += (dt.month == from_date.month) ? " bg-white text-gray-900" : " bg-gray-50 text-gray-400"
+          cls += holiday?(dt) ? " bg-violet-100" : ""
           # button(type: "button",
           #   data: { action: "click->calendar#showDaySummary", date: I18n.l(dt, format: :short_iso) },
           #   class: "#{cls} bg-gray-50 py-1.5 text-gray-400 hover:bg-gray-100 focus:z-10") do
@@ -479,6 +499,7 @@ class CalendarComponent < ApplicationComponent
           #   cls = (dt == Date.today && (dt.month == from_date.month)) ? "bg-sky-600 font-semibold text-white" : ""
           #   time(datetime: I18n.l(dt, format: :short_iso), class: "#{cls} mx-auto flex h-7 w-7 items-center justify-center rounded-full") { dt.day }
           # end
+          # div(class: "h-7 w-7") { dt.day }
           link_to(
             helpers.modal_new_url(id: id, modal_form: "day_summary", resource_class: "calendar", modal_next_step: "accept", date: I18n.l(dt, format: :short_iso)),
             data: { turbo_stream: true },
@@ -589,7 +610,6 @@ class CalendarComponent < ApplicationComponent
   end
 
   def event_occurs?(event, window, dt, tz)
-    return false if event.all_day?
     return false if !event.from_date.nil? && event.from_date.to_date > dt
     return false if !event.to_date.nil? && event.to_date.to_date < dt
     return true  if event.event_metum.nil?

@@ -18,7 +18,7 @@ class WeekComponent < CalendarComponent
       div(class: "grid flex-auto grid-cols-1 grid-rows-1") do
         show_horizontal_lines("hidden sm:block ")
         show_vertical_lines()
-        show_events(" grid-cols-7 sm:pr-8")
+        show_events_on_day_and_week({ from: date.beginning_of_week.to_time, to: date.end_of_week.to_time }, " grid-cols-7 sm:pr-8")
       end
     end
   end

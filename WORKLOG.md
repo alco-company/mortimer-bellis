@@ -21,6 +21,10 @@ guide idea:
 
 ## CHANGELOG
 
+### 13/8/2024
+
+* show events on week view
+
 ### 12/8/2024
 
 * show events on month view II
