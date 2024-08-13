@@ -30,8 +30,8 @@ class Contextmenu < Phlex::HTML
       end
       whitespace
       case true
-      when !resource.nil?; dropdown
       when !list.nil?; list_dropdown
+      when !resource.nil?; dropdown
       end
     end
   end

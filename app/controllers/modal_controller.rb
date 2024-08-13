@@ -55,8 +55,7 @@ class ModalController < BaseController
 
     def resource
       if params[:id].present?
-        rc = (resource_class.to_s.underscore == "event" && params[:action] == "new") ? Calendar : resource_class
-        @resource = rc.find(params[:id])
+        @resource = resource_class.find(params[:id]) rescue resource_class.new
       else
         @resource = resource_class.new
       end
@@ -70,10 +69,14 @@ class ModalController < BaseController
     # --------------------------- NEW --------------------------------
 
     def process_event_new
-      @date = params[:date] ? Date.parse(params[:date]) : Date.current
-      @view = params[:view] || "month"
-      @calendar = @resource
-      @resource = Event.new(account: @calendar.account, calendar: @calendar, event_metum: EventMetum.new)
+      case @modal_form
+      when "delete"; @step = "accept"
+      else
+        @date = params[:date] ? Date.parse(params[:date]) : Date.current
+        @view = params[:view] || "month"
+        @calendar = Calendar.find(params[:id])
+        @resource = Event.new(account: @calendar.account, calendar: @calendar, event_metum: EventMetum.new)
+      end
       @step = "accept"
     end
 

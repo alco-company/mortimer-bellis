@@ -15,11 +15,13 @@ guide idea:
 
 * [ ] add breaks and included_in_duration to payroll_period#manual_punch
 * [ ] redesign punch and add work_schedule to payroll_period#manual_punch
-* add recurring_events table - with recurrence text field only
 * fix error on employee_invitation#create -> returns turbo_frame in clear text - not HTML - at least on iPad
-* send POS link email to (new) employees on registration
 
 ## CHANGELOG
+
+### 14/8/2024
+
+* fix regression on delete/delete_all
 
 ### 13/8/2024
 
