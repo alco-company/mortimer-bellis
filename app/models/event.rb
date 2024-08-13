@@ -32,4 +32,8 @@ class Event < ApplicationRecord
   def self.form(resource, editable = true)
     Events::Form.new resource, editable: editable, enctype: "multipart/form-data"
   end
+
+  def occurs_on?(dt, window, tz)
+    event_metum.occurs_on?(dt, window, tz)
+  end
 end

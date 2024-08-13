@@ -8,7 +8,8 @@ class EventMetum < ApplicationRecord
   end
 
   def occurs_on?(date, window, tz)
-    rule(window[:from], tz).between(window[:from], window[:to]).map { |e| e.day }.include?(date.to_time.day)
+    start = event.from_date.to_time || window[:from].to_time
+    rule(start, tz).between(window[:from], window[:to]).map { |e| e.day }.include?(date.to_time.day)
   rescue => error
     say "EventMetum#occurs_on? #{error.message}"
     false
@@ -38,6 +39,8 @@ class EventMetum < ApplicationRecord
   # :monthly_count,
   # :yearly_interval,
   # :yearly_dows,
+  # :yearly_doy,
+  # :yearly_weeks,
   # :years_count,
   # :weekly_weekdays,
   # :monthly_months,
@@ -68,7 +71,6 @@ class EventMetum < ApplicationRecord
   end
 
   def set_rrules(params, tz = nil)
-    self.rrule = "RRULE:"
     set_daily(params)
     set_weekly(params)
     set_monthly(params)
@@ -77,7 +79,7 @@ class EventMetum < ApplicationRecord
   end
 
   def set_daily(params)
-    self.rrule += "FREQ=DAILY;"                           if params[:daily_interval].present? || params[:days_count].present?
+    self.rrule = "RRULE:FREQ=DAILY;"                      if params[:daily_interval].present? || params[:days_count].present?
     self.rrule += "INTERVAL=#{params[:daily_interval]};"  if params[:daily_interval].present?
     self.rrule += "COUNT=#{params[:days_count]};"         if params[:days_count].present?
   end
@@ -88,15 +90,15 @@ class EventMetum < ApplicationRecord
 
   # # TODO allow for sunday start of week - important to Americans ua.
   def set_weekly(params)
-    self.rrule += "FREQ=WEEKLY;WKST=MO;" if params[:weekly_interval].present? || params[:weekly_weekdays].present? || params[:weekly_weeks].present? || params[:weeks_count].present?
-    self.rrule += "INTERVAL=#{params[:weekly_interval].to_i};"                                    if params[:weekly_interval].present?
-    set_byday(params)                                                                             if params[:weekly_weekdays].present?
-    self.rrule += "BYWEEKNO=#{params[:weekly_weeks].join(',')};"                                  if params[:weekly_weeks].present?
-    self.rrule += "COUNT=#{params[:weeks_count]};"                                                if params[:weeks_count].present?
+    self.rrule = "RRULE:FREQ=WEEKLY;WKST=MO;"                   if params[:weekly_interval].present? || params[:weekly_weekdays].present? || params[:weeks_count].present?
+    self.rrule += "INTERVAL=#{params[:weekly_interval].to_i};"  if params[:weekly_interval].present?
+    set_byday(params)                                           if params[:weekly_weekdays].present?
+    self.rrule += "COUNT=#{params[:weeks_count]};"              if params[:weeks_count].present?
   end
 
   #
-  # BYDAY=1MO, -2TU,WE,TH,FR,SA,SU
+  # (FREQ=MONTHLY;BYMONTH=1,2);BYDAY=1MO,-2TU,WE,TH,FR,SA,SU => first monday, second last tuesday, and all wednesdays, thursdays, fridays, saturdays, sundays
+  # (FREQ=YEARLY) BYDAY=1MO, -2TU,WE,TH,FR,SA,SU
   def set_byday(params, freq = :weekly)
     case freq
     when :weekly;   set_byday_rrule(params[:weekly_weekdays]) # self.rrule += "BYDAY=#{params[:weekly_weekdays].keys.map { |d| d.to_s[0..1].upcase }.join(",") };"
@@ -107,10 +109,10 @@ class EventMetum < ApplicationRecord
         self.rrule += "BYDAY=#{params[:monthly_weekdays].keys.map { |d| "#{params[:monthly_dow]}%s" % d.to_s[0..1].upcase }.join(",") };"
       end
     when :yearly
-      unless params[:yearly_dow].present?
+      unless params[:yearly_dows].present?
         set_byday_rrule(params[:yearly_weekdays])
       else
-        self.rrule += "BYDAY=#{params[:yearly_weekdays].keys.map { |d| set_days(d, params[:yearly_dow]) }.join(",") };"
+        self.rrule += "BYDAY=#{params[:yearly_weekdays].keys.map { |d| set_days(d, params[:yearly_dows]) }.join(",") };"
       end
     end
   end
@@ -124,20 +126,23 @@ class EventMetum < ApplicationRecord
   end
 
   def set_monthly(params)
-    self.rrule += "FREQ=MONTHLY;"                                 if params[:monthly_interval].present? || params[:monthly_days].present? || params[:months_count].present? || params[:monthly_weekdays].present? || params[:monthly_dow].present?
+    self.rrule = "RRULE:FREQ=MONTHLY;"                            if params[:monthly_interval].present? || params[:monthly_days].present? || params[:months_count].present? || params[:monthly_weekdays].present? || params[:monthly_dow].present?
     self.rrule += "INTERVAL=#{params[:monthly_interval].to_i};"   if params[:monthly_interval].present?
     set_byday(params, :monthly)                                   if params[:monthly_weekdays].present? || params[:monthly_dow].present?
     self.rrule += "BYMONTHDAY=#{params[:monthly_days]};"          if params[:monthly_days].present?
     self.rrule += "COUNT=#{params[:months_count]};"               if params[:months_count].present?
   end
 
-  # { yearly_interval: 2, years_count: 3, first_year: 2024, yearly_months: [ 1 ], yearly_dow: [ 1 ] }
+  # { yearly_interval: 2, years_count: 3, first_year: 2024, yearly_months: [ 1 ], yearly_dows: [ 1 ] }
   def set_yearly(params)
-    self.rrule += "FREQ=YEARLY;" if params[:yearly_interval].present? || params[:yearly_months].present? || params[:years_count].present?
-    self.rrule += "INTERVAL=#{params[:yearly_interval].to_i};"                                    if params[:yearly_interval].present?
-    set_byday(params, :yearly)                                                                    if params[:yearly_weekdays].present? || params[:yearly_dow].present?
-    self.rrule += "BYMONTH=#{ get_month_indexes(params[:yearly_months].keys) };"                  if params[:yearly_months].present?
-    self.rrule += "COUNT=#{params[:years_count]};"                                                if params[:years_count].present?
+    self.rrule = "RRULE:FREQ=YEARLY;"                                             if params[:yearly_interval].present? || params[:yearly_weekdays].present? || params[:yearly_dows].present? || params[:yearly_doy].present? || params[:yearly_months].present? || params[:yearly_weeks].present? || params[:years_count].present? || params[:yearly_days].present?
+    self.rrule += "INTERVAL=#{params[:yearly_interval].to_i};"                    if params[:yearly_interval].present?
+    set_byday(params, :yearly)                                                    if params[:yearly_weekdays].present? || params[:yearly_dows].present?
+    self.rrule += "BYMONTH=#{ get_month_indexes(params[:yearly_months].keys) };"  if params[:yearly_months].present?
+    self.rrule += "BYYEARDAY=#{ params[:yearly_doy] };"                           if params[:yearly_doy].present?
+    self.rrule += "BYMONTHDAY=#{ params[:yearly_days] };"                         if params[:yearly_days].present?
+    self.rrule += "BYWEEKNO=#{params[:yearly_weeks]};"                            if params[:yearly_weeks].present?
+    self.rrule += "COUNT=#{params[:years_count]};"                                if params[:years_count].present?
   end
 
   def get_month_indexes(params)

@@ -117,7 +117,10 @@ class EventsController < MortimerController
           :months_count,
           :yearly_interval,
           :yearly_dows,
+          :yearly_doy,
+          :yearly_days,
           :years_count,
+          :yearly_weeks,
           weekly_weekdays: [
             :monday,
             :tuesday,
@@ -192,15 +195,20 @@ class EventsController < MortimerController
         "weeks_count"=>"",
         "monthly_days"=>"",
         "monthly_dow"=>"",
-        "yearly_next_years_start"=>"",
         "monthly_interval"=>"",
         "months_count"=>"",
         "yearly_interval"=>"",
+        "yearly_doy"=>"",
+        "yearly_days"=>"",
+        "yearly_weeks"=>"",
         "yearly_dows"=>"",
-        "years_count"=>""
+        "years_count"=>"",
+        "yearly_next_years_start"=>""
       }
     end
 end
+
+
 
 # before_action :set_event, only: %i[ show edit update destroy ]
 

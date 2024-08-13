@@ -326,15 +326,21 @@ class CalendarComponent < ApplicationComponent
       calendar_events do |event, tz|
         (window[:from].to_date..window[:to].to_date).each_with_index do |dt, index|
           if event_occurs?(event, window, dt, tz)
-            if event.all_day? && event.from_date.to_date == dt
+            if event.all_day?
               li(class: "relative col-start-#{index+1} flex ", style: "grid-row:1 /span 1") do
                 a(href: "#", class: "group absolute inset-1 flex flex-col overflow-hidden rounded-md bg-amber-50 pl-2 text-amber-500 text-xs hover:bg-amber-100") { event.name }
               end
             else
               start = event.from_time.hour * 12 + event.from_time.min / 5
               duration = (event.to_time.hour * 12 + event.to_time.min / 5) - start
+              cls = duration < 12 ? "hidden" : ""
               li(class: "relative col-start-#{index+1} flex ", style: "grid-row:#{start + 2} /span #{duration}") do
-                a(href: "#", class: "group absolute inset-1 flex flex-col overflow-hidden rounded-md bg-amber-50 pl-2 text-amber-500 text-xs hover:bg-amber-100") { "%s" % [ event.name, event.from_time ] }
+                a(href: edit_event_url(event), class: "group absolute inset-1 flex flex-col overflow-hidden rounded-md bg-blue-50 p-2 text-xs leading-5 hover:bg-blue-100") do
+                  p(class: "order-1 font-semibold text-blue-700 truncate") { event.name }
+                  p(class: "text-blue-500 group-hover:text-blue-700 #{cls}") do
+                    time(datetime: Time.new(dt.year, dt.month, dt.day, event.from_time.hour, event.from_time.min)) { "%02d:%02d" % [ event.from_time.hour, event.from_time.min ] }
+                  end
+                end
               end
             end
           end
@@ -613,6 +619,6 @@ class CalendarComponent < ApplicationComponent
     return false if !event.from_date.nil? && event.from_date.to_date > dt
     return false if !event.to_date.nil? && event.to_date.to_date < dt
     return true  if event.event_metum.nil?
-    event.event_metum.occurs_on?(dt, window, tz)
+    event.occurs_on?(dt, window, tz)
   end
 end

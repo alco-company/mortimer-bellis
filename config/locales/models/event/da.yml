@@ -60,6 +60,7 @@ da:
       count:
         for: ""
         explain: " gange"
+      for_the_weeks: " i ugerne "
     monthly:
       tab: Månedligt
       monday: Mandag
@@ -73,7 +74,7 @@ da:
       day: 
         label: den
       days:
-        label: Dag(e)
+        label: på følgende dag(e)
         explain: " i måneden"
       every_month:
         label: for hver
@@ -93,6 +94,8 @@ da:
       friday: Fredag
       saturday: Lørdag
       sunday: Søndag
+      repeat_on_days_of_year: " på følgende dage i året"
+      for_the_weeks: " i ugerne "
 
       months: i månederne
       month:

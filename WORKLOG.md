@@ -24,6 +24,7 @@ guide idea:
 ### 13/8/2024
 
 * show events on week view
+* show events on day view - wip
 
 ### 12/8/2024
 

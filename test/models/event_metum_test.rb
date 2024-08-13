@@ -40,7 +40,7 @@ class EventMetumTest < ActiveSupport::TestCase
   end
 
   test "event should recur every other year on 1st Monday in February for the next 3 years, starting in 2024" do
-    params = { yearly_interval: 2, years_count: 3, first_year: 2024, yearly_months: [ 1 ], yearly_dow: [ 1 ], yearly_weekdays: [ :monday ] }
+    params = { yearly_interval: 2, years_count: 3, first_year: 2024, yearly_months: [ 1 ], yearly_dows: [ 1 ], yearly_weekdays: [ :monday ] }
     tm = Time.new(2024, 7, 17, 18, 44, 0).in_time_zone("Moscow")
     @em.from_params(params: params, tz: tm)
     assert @em.save, true
