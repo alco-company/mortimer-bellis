@@ -29,7 +29,7 @@
         <div class="w-auto max-w-32 relative border rounded-md shadow px-3 mt-4">
           <%= image_tag resource.mugshot %>          
           <%= link_to(
-              modal_new_url(modal_form: "delete", id: resource.id, attachment: "mugshot", resource_class: "user", modal_next_step: "accept"),
+              new_modal_url(modal_form: "delete", id: resource.id, attachment: "mugshot", resource_class: "user", modal_next_step: "accept"),
               data: { turbo_stream: true },
               # link_to((@links[1] || resource),
               class: "absolute top-0 right-0 ",

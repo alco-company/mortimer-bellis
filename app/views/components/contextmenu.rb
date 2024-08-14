@@ -90,7 +90,7 @@ class Contextmenu < Phlex::HTML
       end
       whitespace
       link_to(
-        helpers.modal_new_url(modal_form: "delete", resource_class: resource_class.to_s.underscore, modal_next_step: "accept"),
+        helpers.new_modal_url(modal_form: "delete", resource_class: resource_class.to_s.underscore, modal_next_step: "accept"),
         data: { turbo_stream: true },
         # link_to helpers.delete_all_url(),
         # data: { turbo_method: :delete, turbo_confirm: "Are you sure?", turbo_stream: true, action: "click->contextmenu#hide" },
@@ -105,7 +105,7 @@ class Contextmenu < Phlex::HTML
       end
       whitespace
       link_to(
-        helpers.modal_new_url(modal_form: "import", resource_class: resource_class.to_s.underscore, modal_next_step: "preview"),
+        helpers.new_modal_url(modal_form: "import", resource_class: resource_class.to_s.underscore, modal_next_step: "preview"),
         class: "block px-3 py-1 text-sm leading-6 text-gray-900",
         data: { turbo_stream: true }
         ) do
@@ -189,7 +189,7 @@ class Contextmenu < Phlex::HTML
       end
       # delete resource
       link_to(
-        helpers.modal_new_url(modal_form: "delete", id: resource.id, resource_class: resource_class.to_s.underscore, modal_next_step: "accept"),
+        helpers.new_modal_url(modal_form: "delete", id: resource.id, resource_class: resource_class.to_s.underscore, modal_next_step: "accept"),
         data: { turbo_stream: true },
         # link_to((@links[1] || resource),
         class: "block px-3 py-1 text-sm leading-6 text-gray-900",

@@ -1,10 +1,4 @@
 Rails.application.routes.draw do
-  resources :events
-  resources :holidays
-  resources :calendars do
-    resources :events
-  end
-  get "tooltips/show"
   devise_for :users, controllers: {
     invitations: "users/invitations",
     registrations: "users/registrations",
@@ -14,6 +8,14 @@ Rails.application.routes.draw do
     unlocks: "users/unlocks",
     omniauth_callbacks: "users/omniauth_callbacks"
   }
+
+  resources :events
+  resources :holidays
+  resources :calendars do
+    resources :events
+  end
+
+  get "tooltips/show"
 
   resources :dashboards
   resources :background_jobs
@@ -73,10 +75,7 @@ Rails.application.routes.draw do
   # Can be used by load balancers and uptime monitors to verify that the app is live.
   get "up" => "rails/health#show", as: :rails_health_check
 
-  get "modal/new"
-  get "modal/show"
-  post "modal/destroy"
-  post "modal/create"
+  resources :modal, controller: "modal"
 
   # Render dynamic PWA files from app/views/pwa/*
   get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker

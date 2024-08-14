@@ -1,10 +1,23 @@
 <div id="modal_container" data-controller="event-form">
-  <%= form_with(id: "event_form", data: { event_form_target: "eventForm" }, url: modal_create_url, method: :post, multipart: true) do |form| %>
+  <% 
+    if @resource.new_record? 
+      url = modal_index_url
+      method = :post
+      submit_text = t("calendar.create_event")
+    else
+      url = modal_url(@resource)
+      method = :put
+      submit_text = t("calendar.update_event")
+    end
+  %>
+  <%= form_with(id: "event_form", data: { event_form_target: "eventForm" }, url: url, method: method, multipart: true) do |form| %>
 
     <input id="event_calendar_id" type="hidden" name="event[calendar_id]" value="<%= @calendar.id %>" />
     <input id="event_account_id" type="hidden" name="event[account_id]" value="<%= @calendar.account.id %>" />
     <%= form.hidden_field :modal_form, value: @modal_form %>
     <%= form.hidden_field :resource_class, value: "Event" %>
+    <%= form.hidden_field :date, value: @date %>
+    <%= form.hidden_field :view, value: @view %>
     <%= form.hidden_field :step, value: @step %>
 
     <div class="sm:flex sm:items-start">
@@ -29,9 +42,9 @@
       </div>
     </div>
 
-    <div class="flex">
-      <div class="flex-grow-0">
-        <%= form.submit t("calendar.create_event"), class: "mort-btn-primary" %>
+    <div class="grid justify-items-stretch">
+      <div class="justify-self-end">
+        <%= form.submit submit_text, class: "mort-btn-primary" %>
         <%#= link_to calendar_url(@calendar, date: @date, view: @view), class: "mort-btn-primary" do 
           content_tag :span, "+", class: "sm:hidden"
           content_tag :span, t("calendar.create_event"), class: "hidden sm:block"

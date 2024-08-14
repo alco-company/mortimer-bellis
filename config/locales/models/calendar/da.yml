@@ -1,6 +1,7 @@
 da:
   calendar:
     create_event: "Opret aftale"
+    update_event: "Ret aftale"
     go_today: "I dag"
     previous_month: "Forrige måned"
     next_month: "Næste måned"

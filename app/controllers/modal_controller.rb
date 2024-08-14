@@ -1,5 +1,5 @@
 class ModalController < BaseController
-  before_action :set_vars, only: [ :new, :show, :create, :destroy ]
+  before_action :set_vars, only: [ :new, :show, :create, :destroy, :update ]
   skip_before_action :authenticate_user!, only: [ :destroy ]
   skip_before_action :ensure_accounted_user, only: [ :destroy ]
 
@@ -74,8 +74,12 @@ class ModalController < BaseController
       else
         @date = params[:date] ? Date.parse(params[:date]) : Date.current
         @view = params[:view] || "month"
-        @calendar = Calendar.find(params[:id])
-        @resource = Event.new(account: @calendar.account, calendar: @calendar, event_metum: EventMetum.new)
+        case @step
+        when "new"
+          @calendar = Calendar.find(params[:id])
+          @resource = Event.new(account: @calendar.account, calendar: @calendar, event_metum: EventMetum.new)
+        when "edit";  @calendar = @resource.calendar
+        end
       end
       @step = "accept"
     end
@@ -150,8 +154,10 @@ class ModalController < BaseController
     end
 
     def process_event_create
+      @date = params[:date] ? Date.parse(params[:date]) : Date.current
+      @view = params[:view] || "month"
       case EventService.new(resource: @resource, params: params).create
-      in { ok:    Event   => rc };  redirect_to calendar_url(rc.calendar) and return # update calendar
+      in { ok:    Event   => rc };  redirect_to calendar_url(rc.calendar, date: @date, view: @view) and return # update calendar
       in { ok:    String => msg };        # flash the string
       in { error: String  => msg };       # return event form with error
       end
@@ -164,8 +170,11 @@ class ModalController < BaseController
     # --------------------------- UPDATE --------------------------------
 
     def process_event_update
-      case EventService.new(resource: resource, params: params).update
-      in { ok:    Event   => resource };  # update calendar
+      @date = params[:date] ? Date.parse(params[:date]) : Date.current
+      @view = params[:view] || "month"
+
+      case EventService.new(resource: @resource, params: params).update
+      in { ok:    Event   => rc };  redirect_to calendar_url(rc.calendar, date: @date, view: @view) and return
       in { ok:    String => msg };        # flash the string
       in { error: String  => msg };       # return event form with error
       end

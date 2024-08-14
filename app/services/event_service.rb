@@ -31,6 +31,15 @@ class EventService
   # either return true => event was updated
   # or false => event was not updated
   def update
+    if prepare_resource
+      if self.resource.update(resource_params)
+        { ok: self.resource }
+      else
+        { error: I18n.t("events.update.event_validation_errors") }
+      end
+    else
+      { ok: I18n.t("events.update.punches_created") }
+    end
   end
 
   private

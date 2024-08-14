@@ -10,9 +10,14 @@
     </div>
   </div>
   <div class="">
-    <% @resource.create_calendar if @resource.calendars.count < 1 %>
     <div class="ID mb-2"><strong>ID</strong><br/><%= @resource.id %></div>
-    <span class="calendar"><strong><%= t("calendars") %></strong><br/><%= link_to @resource.calendars.pluck(:name).join(", "), employee_calendars_url(@resource) %></span>
+    <span class="calendar"><strong><%= t("calendars") %></strong>
+    <% @resource.create_calendar if @resource.calendars.count < 1 %>
+    <div class="flex">
+      <% @resource.all_calendars.each do |calendar| %>
+        <%=  link_to calendar.name, calendar_url(calendar), class: "mr-2 rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10" %>        
+      <% end %>
+    </div>
     <%= render resource_class.form @resource, false %>
   </div>
   <hr>

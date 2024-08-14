@@ -132,7 +132,7 @@ class ApplicationForm < Superform::Rails::Form
             img(src: url_for(field.value), class: "mort-img m-2")
             div(class: "absolute top-0 right-0 w-8 h-8 rounded-lg bg-white/75") do
               link_to(
-                helpers.modal_new_url(modal_form: "delete", id: field.parent.object.id, attachment: field.value.name, api_key: @_parent.api_key, resource_class: field.parent.object.class.to_s.underscore, modal_next_step: "accept"),
+                helpers.new_modal_url(modal_form: "delete", id: field.parent.object.id, attachment: field.value.name, api_key: @_parent.api_key, resource_class: field.parent.object.class.to_s.underscore, modal_next_step: "accept"),
                 data: { turbo_stream: true },
                 # link_to((@links[1] || resource),
                 class: "absolute top-1 right-1",

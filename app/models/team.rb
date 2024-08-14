@@ -31,6 +31,10 @@ class Team < ApplicationRecord
     all
   end
 
+  def all_calendars
+    calendars
+  end
+
   def self.form(resource, editable = true)
     Teams::Form.new resource, editable: editable
   end

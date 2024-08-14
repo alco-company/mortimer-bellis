@@ -33,6 +33,14 @@ class Event < ApplicationRecord
     Events::Form.new resource, editable: editable, enctype: "multipart/form-data"
   end
 
+  # call event_metum.get_field(:field_name) to get the value of the field
+  # return "" if no event_metum exist
+  def get_field(field_name)
+    return "" unless event_metum
+
+    event_metum.get_field(field_name)
+  end
+
   def occurs_on?(dt, window, tz)
     event_metum.occurs_on?(dt, window, tz)
   end

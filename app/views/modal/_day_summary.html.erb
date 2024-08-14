@@ -1,5 +1,5 @@
 <div id="modal_container">
-  <%= form_with(url: modal_create_url, method: :post, multipart: true) do |form| %>
+  <%= form_with(url: modal_index_url, method: :post, multipart: true) do |form| %>
 
     <%= form.hidden_field :modal_form, value: @modal_form %>
     <%#= form.hidden_field :import_file, value: @import_file %>

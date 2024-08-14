@@ -137,7 +137,7 @@ class CalendarComponent < ApplicationComponent
       end
       div(class: "ml-6 h-6 w-px bg-gray-300")
       link_to(
-        helpers.modal_new_url(id: id, modal_form: "event", resource_class: "event", modal_next_step: "accept", view: view),
+        helpers.new_modal_url(id: id, modal_form: "event", resource_class: "event", step: "new", view: view),
         data: { turbo_stream: true },
         # link_to helpers.delete_all_url(),
         # data: { turbo_method: :delete, turbo_confirm: "Are you sure?", turbo_stream: true, action: "click->contextmenu#hide" },
@@ -172,7 +172,7 @@ class CalendarComponent < ApplicationComponent
       ) do
         div(class: "py-1", role: "none") do
           link_to(
-            helpers.modal_new_url(id: id, modal_form: "event", resource_class: "event", modal_next_step: "accept"),
+            helpers.new_modal_url(id: id, modal_form: "event", resource_class: "event", modal_next_step: "accept"),
             data: { turbo_stream: true },
             # link_to helpers.delete_all_url(),
             # data: { turbo_method: :delete, turbo_confirm: "Are you sure?", turbo_stream: true, action: "click->contextmenu#hide" },
@@ -246,7 +246,7 @@ class CalendarComponent < ApplicationComponent
           dt = date.beginning_of_week
           dt += i.days if i > 0
           link_to(
-            helpers.modal_new_url(id: id, modal_form: "day_summary", resource_class: "calendar", modal_next_step: "accept", date: I18n.l(dt, format: :short_iso)),
+            helpers.new_modal_url(id: id, modal_form: "day_summary", resource_class: "calendar", modal_next_step: "accept", date: I18n.l(dt, format: :short_iso)),
             data: { turbo_stream: true },
             class: "flex flex-col items-center pb-3 pt-2",
             role: "menuitem",
@@ -267,7 +267,7 @@ class CalendarComponent < ApplicationComponent
           dt = date.beginning_of_week
           dt += i.days if i > 0
           link_to(
-            helpers.modal_new_url(id: id, modal_form: "day_summary", resource_class: "calendar", modal_next_step: "accept", date: I18n.l(dt, format: :short_iso)),
+            helpers.new_modal_url(id: id, modal_form: "day_summary", resource_class: "calendar", modal_next_step: "accept", date: I18n.l(dt, format: :short_iso)),
             data: { turbo_stream: true },
             class: "flex justify-center py-2",
             role: "menuitem",
@@ -322,20 +322,32 @@ class CalendarComponent < ApplicationComponent
           {}
       end
 
-      #  event
+      #  events
       calendar_events do |event, tz|
         (window[:from].to_date..window[:to].to_date).each_with_index do |dt, index|
           if event_occurs?(event, window, dt, tz)
             if event.all_day?
               li(class: "relative col-start-#{index+1} flex ", style: "grid-row:1 /span 1") do
-                a(href: "#", class: "group absolute inset-1 flex flex-col overflow-hidden rounded-md bg-amber-50 pl-2 text-amber-500 text-xs hover:bg-amber-100") { event.name }
+                link_to(
+                  helpers.new_modal_url(id: event.id, modal_form: "event", resource_class: "event", step: "edit", view: view, date: date),
+                  data: { turbo_stream: true },
+                  class: "group absolute inset-1 flex flex-col overflow-hidden rounded-md bg-amber-50 pl-2 text-amber-500 text-xs hover:bg-amber-100",
+                  role: "menuitem",
+                  tabindex: "-1") do
+                  plain event.name
+                end
               end
             else
               start = event.from_time.hour * 12 + event.from_time.min / 5
               duration = (event.to_time.hour * 12 + event.to_time.min / 5) - start
               cls = duration < 12 ? "hidden" : ""
               li(class: "relative col-start-#{index+1} flex ", style: "grid-row:#{start + 2} /span #{duration}") do
-                a(href: edit_event_url(event), class: "group absolute inset-1 flex flex-col overflow-hidden rounded-md bg-blue-50 p-2 text-xs leading-5 hover:bg-blue-100") do
+                link_to(
+                  helpers.new_modal_url(id: event.id, modal_form: "event", resource_class: "event", step: "edit", view: view, date: date),
+                  data: { turbo_stream: true },
+                  class: "group absolute inset-1 flex flex-col overflow-hidden rounded-md bg-blue-50 pl-2 text-blue-500 text-xs hover:bg-blue-100",
+                  role: "menuitem",
+                  tabindex: "-1") do
                   p(class: "order-1 font-semibold text-blue-700 truncate") { event.name }
                   p(class: "text-blue-500 group-hover:text-blue-700 #{cls}") do
                     time(datetime: Time.new(dt.year, dt.month, dt.day, event.from_time.hour, event.from_time.min)) { "%02d:%02d" % [ event.from_time.hour, event.from_time.min ] }
@@ -507,19 +519,20 @@ class CalendarComponent < ApplicationComponent
           # end
           # div(class: "h-7 w-7") { dt.day }
           link_to(
-            helpers.modal_new_url(id: id, modal_form: "day_summary", resource_class: "calendar", modal_next_step: "accept", date: I18n.l(dt, format: :short_iso)),
+            helpers.new_modal_url(id: id, modal_form: "day_summary", resource_class: "calendar", modal_next_step: "accept", date: I18n.l(dt, format: :short_iso)),
             data: { turbo_stream: true },
-            # link_to helpers.delete_all_url(),
-            # data: { turbo_method: :delete, turbo_confirm: "Are you sure?", turbo_stream: true, action: "click->contextmenu#hide" },
             class: "#{cls} bg-gray-50 py-1.5 text-gray-400 hover:bg-gray-100 focus:z-10",
             role: "menuitem",
             tabindex: "-1") do
-            cls = (dt == Date.today && (dt.month == from_date.month)) ? "bg-sky-600 font-semibold text-white" : ""
-            time(datetime: I18n.l(dt, format: :short_iso), class: "#{cls} mx-auto flex h-7 w-7 items-center justify-center rounded-full") { dt.day }
-            span(class: "sr-only") do
-              plain "datetime: #{I18n.l(dt, format: :short_iso)} "
-              plain "day summary"
-            end
+              cls = (dt == Date.today && (dt.month == from_date.month)) ? "bg-sky-600 font-semibold text-white" : ""
+              time(datetime: I18n.l(dt, format: :short_iso), class: "#{cls} mx-auto flex flex-col h-7 w-7 items-center justify-center rounded-full") do
+                span { dt.day }
+                events?(dt, :year, { from: dt.beginning_of_month.to_time, to: dt.end_of_month.to_time })
+              end
+              span(class: "sr-only") do
+                plain "datetime: #{I18n.l(dt, format: :short_iso)} "
+                plain "day summary"
+              end
           end
         end
       end
@@ -581,24 +594,22 @@ class CalendarComponent < ApplicationComponent
     @punch_cards = calendars.collect { |c| c.punch_cards(rg) }
   end
 
-  def events?(dt, window = nil, cls = "")
+  def events?(dt, view, window = nil, cls = "")
     unless any_calendars?
       div() { " " }
     else
-      hits = 0
       calendar_events do |event, tz|
-        hits += 1 if event_occurs?(event, window, dt, tz)
-      end
-      if hits.zero?
-        div() { " " }
-      else
-        case hits
-        when    1;   div(class: "font-extrabold justify-self-end text-2xl #{cls}") { "." }
-        when 2..3;   div(class: "font-extrabold justify-self-end text-2xl #{cls}") { ".." }
-        when 4..5;   div(class: "font-extrabold justify-self-end text-2xl #{cls}") { "..." }
-        when 6.. ;   div(class: "font-extrabold justify-self-end text-2xl #{cls}") { "...." }
+        if event_occurs?(event, window, dt, tz)
+          case view
+          when :day;   hits = 1
+          when :week;  hits = 2
+          when :month; div(class: "font-extrabold place-self-center col-span-2 text-2xl #{cls}") { "." }
+          when :year;  span(class: "font-extrabold text-base #{cls}", style: "margin-top: -16px; margin-bottom: -7px") { "." }
+          end
+          return
         end
       end
+      div() { " " }
     end
   end
 

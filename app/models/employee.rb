@@ -47,6 +47,10 @@ class Employee < ApplicationRecord
     resources.joins(:team).order(field => direction)
   end
 
+  def all_calendars
+    team.calendars + calendars
+  end
+
   def self.form(resource, editable = true)
     Employees::Form.new resource, editable: editable, enctype: "multipart/form-data"
   end

@@ -92,16 +92,20 @@ class MonthComponent < CalendarComponent
     cls += holiday?(dt) ? " border-violet-600" : " border-white hover:border-gray-100"
     cls += (dt.month == from_date.month) ? " bg-white" : " bg-gray-50 text-gray-500"
     link_to(
-      # helpers.modal_new_url(id: id, modal_form: "day_summary", resource_class: "calendar", modal_next_step: "accept", date: I18n.l(dt, format: :short_iso)),
-      helpers.calendar_events_url(calendar_id: id, date: dt),
-      data: { turbo_frame: "events_list", turbo_stream: true },
-      class: cls,
+      helpers.new_modal_url(id: id, modal_form: "day_summary", resource_class: "calendar", modal_next_step: "accept", date: I18n.l(dt, format: :short_iso)),
+      data: { turbo_stream: true },
+      class: "#{cls} bg-gray-50 py-1.5 text-gray-400 hover:bg-gray-100 focus:z-10",
       role: "menuitem",
       tabindex: "-1") do
+      # helpers.calendar_events_url(calendar_id: id, date: dt),
+      # data: { turbo_frame: "events_list", turbo_stream: true },
+      # class: cls,
+      # role: "menuitem",
+      # tabindex: "-1") do
       week_number(day, dt, "pl-2 ")
-      all_day_events(dt, "min-h-10")
-      punches?(dt, "pl-1.5")
-      events?(dt, { from: dt.beginning_of_month.to_time, to: dt.end_of_month.to_time }, "pr-1.5")
+      # all_day_events(dt, "min-h-10")
+      # punches?(dt, "pl-1.5")
+      events?(dt, :month, { from: dt.beginning_of_month.to_time, to: dt.end_of_month.to_time })
 
       cls = "absolute col-span-2 place-self-center "
       cls += (dt == Date.today) ? " bg-sky-600 text-white rounded-full w-6 text-center" : "  "
@@ -195,15 +199,15 @@ class MonthComponent < CalendarComponent
     cls += holiday?(dt) ? " border-violet-600" : " border-white"
     cls += (dt == Date.today && (dt.month == from_date.month)) ? " text-gray-900" : " text-gray-500"
     link_to(
-      helpers.modal_new_url(id: id, modal_form: "day_summary", resource_class: "calendar", modal_next_step: "accept", date: I18n.l(dt, format: :short_iso)),
+      helpers.new_modal_url(id: id, modal_form: "day_summary", resource_class: "calendar", modal_next_step: "accept", date: I18n.l(dt, format: :short_iso)),
       data: { turbo_stream: true },
       class: cls,
       role: "menuitem",
       tabindex: "-1") do
       week_number(day, dt, "pl-1 h-6 text-[8px]")
-      all_day_events(dt)
+      # all_day_events(dt)
       punches?(dt, "pl-0.5")
-      events?(dt, "pr-0.5")
+      events?(dt, :month, { from: dt.beginning_of_month.to_time, to: dt.end_of_month.to_time })
 
       cls = "absolute col-span-2 place-self-center "
       cls += (dt == Date.today) ? " bg-sky-600 text-white rounded-full w-6 text-center" : "  "
@@ -218,7 +222,7 @@ class MonthComponent < CalendarComponent
     #   helpers.events_calendar_url(id: id, date: dt),
     #   data: { turbo_frame: "events_list", turbo_stream: true },
     #   # modal view alternative:
-    #   # helpers.modal_new_url(id: id, modal_form: "day_summary", resource_class: "calendar", modal_next_step: "accept", date: I18n.l(dt, format: :short_iso)),
+    #   # helpers.new_modal_url(id: id, modal_form: "day_summary", resource_class: "calendar", modal_next_step: "accept", date: I18n.l(dt, format: :short_iso)),
     #   # data: { turbo_stream: true },
     #   class: cls,
     #   role: "menuitem",

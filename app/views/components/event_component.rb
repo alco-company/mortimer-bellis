@@ -355,7 +355,7 @@ class EventComponent < ApplicationComponent
         legend(class: "sr-only") { "Dagligt" }
         div(class: "relative flex items-center") do
           div(class: "flex") do
-            input(id: "event_event_metum_daily_interval", aria_describedby: "comments-description", name: "event[event_metum_attributes][daily_interval]", value: resource.event_metum.get_field(:daily_interval), class: "mort-form-text w-20 mt-0")
+            input(id: "event_event_metum_daily_interval", aria_describedby: "comments-description", name: "event[event_metum_attributes][daily_interval]", value: resource.get_field(:daily_interval), class: "mort-form-text w-20 mt-0")
           end
           div(class: "ml-3 text-sm leading-5") do
             label(for: "comments", class: "mr-2") { I18n.t("event.daily.label") }
@@ -368,7 +368,7 @@ class EventComponent < ApplicationComponent
         div(class: "relative flex items-center") do
           div(class: "flex items-center") do
             label(for: "comments", class: "mr-2") { I18n.t("event.daily.count") }
-            input(id: "event_event_metum_days_count", aria_describedby: "comments-description", name: "event[event_metum_attributes][days_count]", value: resource.event_metum.get_field(:days_count), class: "mort-form-text w-20 mt-0")
+            input(id: "event_event_metum_days_count", aria_describedby: "comments-description", name: "event[event_metum_attributes][days_count]", value: resource.get_field(:days_count), class: "mort-form-text w-20 mt-0")
           end
           div(class: "ml-3 text-sm leading-5") do
             span(id: "comments-description", class: "text-gray-500") do
@@ -390,7 +390,7 @@ class EventComponent < ApplicationComponent
             label(for: "event_weekly_days", class: " mr-2")  { I18n.t("event.weekly.repeat") }
           end
           div(class: "flex") do
-            input(id: "event_event_metum_weekly_interval", aria_describedby: "comments-description", name: "event[event_metum_attributes][weekly_interval]", value: resource.event_metum.get_field(:weekly_interval), class: "mort-form-text mt-0 w-12")
+            input(id: "event_event_metum_weekly_interval", aria_describedby: "comments-description", name: "event[event_metum_attributes][weekly_interval]", value: resource.get_field(:weekly_interval), class: "mort-form-text mt-0 w-12")
           end
           div(class: "ml-3 text-sm leading-5") do
             label(for: "events_weekly_day", class: "") { I18n.t("event.weekly.day") }
@@ -398,7 +398,7 @@ class EventComponent < ApplicationComponent
           div(class: "relative flex items-center ml-2") do
             div(class: "flex items-center") do
               label(for: "comments", class: "mr-2") { I18n.t("event.weekly.count.for") }
-              input(id: "event_event_metum_weeks_count", aria_describedby: "comments-description", name: "event[event_metum_attributes][weeks_count]", value: resource.event_metum.get_field(:weeks_count), class: "mort-form-text w-20 mt-0")
+              input(id: "event_event_metum_weeks_count", aria_describedby: "comments-description", name: "event[event_metum_attributes][weeks_count]", value: resource.get_field(:weeks_count), class: "mort-form-text w-20 mt-0")
             end
             div(class: "ml-3 text-sm leading-5") do
               span(id: "comments-description", class: "text-gray-500") do
@@ -427,13 +427,13 @@ class EventComponent < ApplicationComponent
             label(for: "events_monthly_every", class: "font-medium text-gray-900 mr-2")  { I18n.t("event.monthly.every_month.label") }
           end
           div(class: "flex") do
-            input(id: "event_event_metum_monthly_interval", aria_describedby: "comments-description", name: "event[event_metum_attributes][monthly_interval]", value: resource.event_metum.get_field(:monthly_interval), class: "mort-form-text mt-0 w-12")
+            input(id: "event_event_metum_monthly_interval", aria_describedby: "comments-description", name: "event[event_metum_attributes][monthly_interval]", value: resource.get_field(:monthly_interval), class: "mort-form-text mt-0 w-12")
           end
           div(class: "ml-3 text-sm leading-5") do
             label(for: "event_event_metum_monthly_interval", class: "font-medium text-gray-900 mr-2")  { I18n.t("event.monthly.every_month.explain") }
           end
           div(class: "flex") do
-            input(id: "event_event_metum_monthly_count", aria_describedby: "comments-description", name: "event[event_metum_attributes][months_count]", value: resource.event_metum.get_field(:months_count), class: "mort-form-text mt-0 w-12")
+            input(id: "event_event_metum_monthly_count", aria_describedby: "comments-description", name: "event[event_metum_attributes][months_count]", value: resource.get_field(:months_count), class: "mort-form-text mt-0 w-12")
           end
           div(class: "ml-3 text-sm leading-5") do
             label(for: "event_event_metum_monthly_count", class: "font-medium text-gray-900 mr-2")  { I18n.t("event.monthly.every_month.count") }
@@ -443,7 +443,7 @@ class EventComponent < ApplicationComponent
         div(class: "flex items-center col-span-2 mt-2 ") do
           div(class: "flex items-center ") do
             label(for: "comments", class: "font-medium text-sm text-nowrap text-gray-500 mr-2") { I18n.t("event.monthly.days.label") } # "dag(e)" }
-            input(id: "event_event_metum_monthly_days", aria_describedby: "comments-description", name: "event[event_metum_attributes][monthly_days]", value: resource.event_metum.get_field(:monthly_days), class: "mort-form-text mt-0")
+            input(id: "event_event_metum_monthly_days", aria_describedby: "comments-description", name: "event[event_metum_attributes][monthly_days]", value: resource.get_field(:monthly_days), class: "mort-form-text mt-0")
           end
           div(class: "ml-3 text-sm leading-5") do
             span(id: "comments-description", class: "text-gray-500") do
@@ -458,7 +458,7 @@ class EventComponent < ApplicationComponent
               label(for: "comments", class: "font-medium text-gray-900 mr-2")  { I18n.t("event.monthly.day.label") }
             end
             div(class: "flex mr-2") do
-              input(id: "event_event_metum_monthly_dow", aria_describedby: "comments-description", name: "event[event_metum_attributes][monthly_dow]", value: resource.event_metum.get_field(:monthly_dow), class: "mort-form-text w-12")
+              input(id: "event_event_metum_monthly_dow", aria_describedby: "comments-description", name: "event[event_metum_attributes][monthly_dow]", value: resource.get_field(:monthly_dow), class: "mort-form-text w-12")
             end
           end
           show_weekdays_inputs("monthly")
@@ -489,7 +489,7 @@ class EventComponent < ApplicationComponent
             label(for: "event_event_metum_yearly_interval", class: "text-nowrap font-medium text-gray-900 mr-2")  { I18n.t("event.yearly.repeat") } # { "Gentages hvert" }
           end
           div(class: "flex") do
-            input(id: "event_event_metum_yearly_interval", aria_describedby: "comments-description", name: "event[event_metum_attributes][yearly_interval]", value: resource.event_metum.get_field(:yearly_interval), class: "mort-form-text mt-0 w-12")
+            input(id: "event_event_metum_yearly_interval", aria_describedby: "comments-description", name: "event[event_metum_attributes][yearly_interval]", value: resource.get_field(:yearly_interval), class: "mort-form-text mt-0 w-12")
           end
           div(class: "ml-3 text-sm leading-5") do
             label(for: "event_event_metum_yearly_interval", class: "font-medium text-gray-900") { I18n.t("event.yearly.year") }
@@ -498,20 +498,20 @@ class EventComponent < ApplicationComponent
             label(for: "event_event_metum_yearly_doy", class: "text-nowrap font-medium text-gray-900 mr-2")  { I18n.t("event.yearly.repeat_on_days_of_year") } # { "på følgende dage i året" }
           end
           div(class: "flex") do
-            input(id: "event_event_metum_yearly_doy", aria_describedby: "comments-description", name: "event[event_metum_attributes][yearly_doy]", value: resource.event_metum.get_field(:yearly_doy), class: "mort-form-text mt-0 w-24")
+            input(id: "event_event_metum_yearly_doy", aria_describedby: "comments-description", name: "event[event_metum_attributes][yearly_doy]", value: resource.get_field(:yearly_doy), class: "mort-form-text mt-0 w-24")
           end
         end
         div(class: "flex items-center col-span-3 mt-2") do
           div(class: "flex items-center") do
             label(for: "event_event_metum_yearly_weeks", class: "text-nowrap mx-2 text-sm leading-5 text-gray-500") { I18n.t("event.yearly.for_the_weeks") }
-            input(id: "event_event_metum_yearly_weeks", aria_describedby: "comments-description", name: "event[event_metum_attributes][yearly_weeks]", value: resource.event_metum.get_field(:yearly_weeks), class: "mort-form-text w-full mt-0")
+            input(id: "event_event_metum_yearly_weeks", aria_describedby: "comments-description", name: "event[event_metum_attributes][yearly_weeks]", value: resource.get_field(:yearly_weeks), class: "mort-form-text w-full mt-0")
           end
         end
 
         div(class: "flex items-center col-span-2 mt-2 ") do
           div(class: "flex items-center ") do
             label(for: "event_event_metum_yearly_days", class: "font-medium text-sm text-nowrap text-gray-500 mr-2") { I18n.t("event.monthly.days.label") } # "dag(e)" }
-            input(id: "event_event_metum_yearly_days", aria_describedby: "comments-description", name: "event[event_metum_attributes][yearly_days]", value: resource.event_metum.get_field(:yearly_days), class: "mort-form-text mt-0")
+            input(id: "event_event_metum_yearly_days", aria_describedby: "comments-description", name: "event[event_metum_attributes][yearly_days]", value: resource.get_field(:yearly_days), class: "mort-form-text mt-0")
           end
         end
         div(class: "flex items-center col-span-2 mt-2 ") do
@@ -525,7 +525,7 @@ class EventComponent < ApplicationComponent
               label(for: "comments", class: "text-nowrap font-medium text-gray-900 mr-2") { I18n.t("event.yearly.on_weekday") }
             end
             div(class: "flex mr-2") do
-              input(id: "event_event_metum_yearly_dows", aria_describedby: "comments-description", name: "event[event_metum_attributes][yearly_dows]", value: resource.event_metum.get_field(:yearly_dows), class: "mort-form-text w-12")
+              input(id: "event_event_metum_yearly_dows", aria_describedby: "comments-description", name: "event[event_metum_attributes][yearly_dows]", value: resource.get_field(:yearly_dows), class: "mort-form-text w-12")
             end
           end
           show_weekdays_inputs("yearly")
@@ -535,13 +535,13 @@ class EventComponent < ApplicationComponent
             label(for: "comments", class: "font-medium text-gray-900 mr-2") { I18n.t("event.yearly.next_years.label") }
           end
           div(class: "flex") do
-            input(id: "event_event_metum_years_count", aria_describedby: "comments-description", name: "event[event_metum_attributes][years_count]", value: resource.event_metum.get_field(:years_count), class: "mort-form-text mt-0 w-12")
+            input(id: "event_event_metum_years_count", aria_describedby: "comments-description", name: "event[event_metum_attributes][years_count]", value: resource.get_field(:years_count), class: "mort-form-text mt-0 w-12")
           end
           div(class: "ml-3 text-sm leading-5") do
             label(for: "comments", class: "font-medium text-gray-900 mr-2") { I18n.t("event.yearly.next_years.explain") } # { "år, startende i" }
           end
           div(class: "flex") do
-            input(id: "event_event_metum_yearly_next_years_start", aria_describedby: "comments-description", name: "event[event_metum_attributes][yearly_next_years_start]", value: resource.event_metum.get_field(:yearly_next_years_start), class: "mort-form-text mt-0 w-20")
+            input(id: "event_event_metum_yearly_next_years_start", aria_describedby: "comments-description", name: "event[event_metum_attributes][yearly_next_years_start]", value: resource.get_field(:yearly_next_years_start), class: "mort-form-text mt-0 w-20")
           end
           # div(class: "ml-3 text-sm leading-5") do
           #   label(for: "comments", class: "font-medium text-gray-900 mr-2") { "??" }
@@ -553,7 +553,7 @@ class EventComponent < ApplicationComponent
 
   def show_weekdays_inputs(prefix)
     div(class: "grid grid-cols-3 sm:grid-cols-4 gap-x-2 w-full place-content-stretch ") do
-      wd = resource.event_metum.get_field("#{prefix}_weekdays".to_sym).keys rescue []
+      wd = resource.get_field("#{prefix}_weekdays".to_sym).keys rescue []
       %w[ monday tuesday wednesday thursday friday saturday sunday ].each do |day|
         chck = wd.include?(day)
         div(class: "flex items-start") do
@@ -577,7 +577,7 @@ class EventComponent < ApplicationComponent
       #   end
       # end
       div(class: "grid grid-cols-3 sm:grid-cols-4 gap-x-2 w-full place-content-stretch items-center") do
-        wd = resource.event_metum.get_field("yearly_months".to_sym).keys rescue []
+        wd = resource.get_field("yearly_months".to_sym).keys rescue []
         %w[ january february march april may june july august september october november december ].each do |mth|
           chck = wd.include?(mth)
           div(class: "flex items-start") do
