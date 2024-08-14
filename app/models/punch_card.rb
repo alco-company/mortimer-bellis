@@ -15,6 +15,7 @@ class PunchCard < ApplicationRecord
   scope :by_work_minutes, ->(work_minutes) { where(work_minutes: work_minutes..) if work_minutes.present? }
   scope :by_break_minutes, ->(break_minutes) { where(break_minutes: break_minutes..) if break_minutes.present? }
   scope :by_ot_minutes, ->(ot_minutes) { where("(ot1_minutes + ot2_minutes) >= #{ot_minutes}") if ot_minutes.present? }
+  scope :today, ->(date) { where(work_date: date) }
 
   # used by eg delete
   def name

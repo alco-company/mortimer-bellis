@@ -16,6 +16,25 @@ WORK_STATES = [
   [ "leave_free", I18n.t("punch.leave_free") ],
   [ "archived", I18n.t("punch.archived") ]
 ]
+
+WORK_STATE_H = {
+  "out" =>  I18n.t("punch.out"),
+  "in" =>  I18n.t("punch.in"),
+  "break" =>  I18n.t("punch.break"),
+  "sick" =>  I18n.t("punch.sick"),
+  "iam_sick" =>  I18n.t("punch.iam_sick"),
+  "child_sick" =>  I18n.t("punch.child_sick"),
+  "nursing_sick" =>  I18n.t("punch.nursing_sick"),
+  "lost_work_sick" =>  I18n.t("punch.lost_work_sick"),
+  "p56_sick" =>  I18n.t("punch.p56_sick"),
+  "free" =>  I18n.t("punch.free"),
+  "rr_free" => I18n.t("punch.rr_free"),
+  "senior_free" => I18n.t("punch.senior_free"),
+  "unpaid_free" => I18n.t("punch.unpaid_free"),
+  "maternity_free" => I18n.t("punch.maternity_free"),
+  "leave_free" => I18n.t("punch.leave_free"),
+  "archived" => I18n.t("punch.archived")
+}
 module Stateable
   extend ActiveSupport::Concern
 

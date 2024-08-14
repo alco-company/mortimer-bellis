@@ -519,7 +519,7 @@ class CalendarComponent < ApplicationComponent
           # end
           # div(class: "h-7 w-7") { dt.day }
           link_to(
-            helpers.new_modal_url(id: id, modal_form: "day_summary", resource_class: "calendar", modal_next_step: "accept", date: I18n.l(dt, format: :short_iso)),
+            helpers.new_modal_url(id: id, modal_form: "day_summary", resource_class: "calendar", modal_next_step: "accept", view: view, date: I18n.l(dt, format: :short_iso)),
             data: { turbo_stream: true },
             class: "#{cls} bg-gray-50 py-1.5 text-gray-400 hover:bg-gray-100 focus:z-10",
             role: "menuitem",

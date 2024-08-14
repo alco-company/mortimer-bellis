@@ -1,7 +1,12 @@
 class EventsList < ApplicationComponent
-  attr_reader :request, :platform
+  include Phlex::Rails::Helpers::LinkTo
 
-  def initialize(&block)
+  attr_reader :request, :platform, :date, :view, :calendar
+
+  def initialize(date:, calendar:, view:, &block)
+    @date = date
+    @calendar = calendar
+    @view = view
   end
 
   def view_template(&block)
@@ -15,45 +20,49 @@ class EventsList < ApplicationComponent
   #
   # holidays, more
   def holidays
-    li(class: "flex items-center p-1") do
-      div(class: "flex flex-col flex-grow truncate") do
-        div(class: "text-xs text-violet-600 font-thin flex justify-start items-center") do
-          svg(
-            class: "pr-1 text-violet-600",
-            xmlns: "http://www.w3.org/2000/svg",
-            height: "24px",
-            viewbox: "0 -960 960 960",
-            width: "24px",
-            fill: "currentColor"
-          ) do |s|
-            s.path(
-              d:
-                "m80-80 200-560 360 360L80-80Zm132-132 282-100-182-182-100 282Zm370-246-42-42 224-224q32-32 77-32t77 32l24 24-42 42-24-24q-14-14-35-14t-35 14L582-458ZM422-618l-42-42 24-24q14-14 14-34t-14-34l-26-26 42-42 26 26q32 32 32 76t-32 76l-24 24Zm80 80-42-42 144-144q14-14 14-35t-14-35l-64-64 42-42 64 64q32 32 32 77t-32 77L502-538Zm160 160-42-42 64-64q32-32 77-32t77 32l64 64-42 42-64-64q-14-14-35-14t-35 14l-64 64ZM212-212Z"
-            )
+    Holiday.today(date).each do |holiday|
+      li(class: "flex items-center p-1") do
+        div(class: "flex flex-col flex-grow truncate") do
+          div(class: "text-xs text-violet-600 font-thin flex justify-start items-center") do
+            svg(
+              class: "pr-1 text-violet-600",
+              xmlns: "http://www.w3.org/2000/svg",
+              height: "24px",
+              viewbox: "0 -960 960 960",
+              width: "24px",
+              fill: "currentColor"
+            ) do |s|
+              s.path(
+                d:
+                  "m80-80 200-560 360 360L80-80Zm132-132 282-100-182-182-100 282Zm370-246-42-42 224-224q32-32 77-32t77 32l24 24-42 42-24-24q-14-14-35-14t-35 14L582-458ZM422-618l-42-42 24-24q14-14 14-34t-14-34l-26-26 42-42 26 26q32 32 32 76t-32 76l-24 24Zm80 80-42-42 144-144q14-14 14-35t-14-35l-64-64 42-42 64 64q32 32 32 77t-32 77L502-538Zm160 160-42-42 64-64q32-32 77-32t77 32l64 64-42 42-64-64q-14-14-35-14t-35 14l-64 64ZM212-212Z"
+              )
+            end
+            div(class: "pr-1") { I18n.t(".holyday") }
+            div(class: "") { I18n.l(@date, format: :day_name) } # "fredag"
+            div(class: "") { ", %s" % I18n.l(@date, format: :day_month) } # "5. maj"
+            div(class: "") { ", %s" % I18n.l(@date, format: :year) } # "1945"
+            div(class: "pr-1") { ", %s" % I18n.l(@date, format: :week_string) } # "uge 26"
           end
-          div(class: "pr-1") { "helligdag" }
-          div(class: "pr-1") { "fredag" }
-          div(class: "pr-1") { "uge 26" }
-          div(class: "pr-1") { "5. maj" }
-          div(class: "pr-1") { "1945" }
+          div(class: "grid grid-flow-col") do
+            p(class: "truncate") { holiday.name }
+          end
         end
-        div(class: "grid grid-flow-col") do
-          p(class: "truncate") { "Danmarks befrielse" }
-        end
-      end
-      div(class: "flex-grow-0") do
-        svg(
-          class: "text-gray-300",
-          xmlns: "http://www.w3.org/2000/svg",
-          height: "24px",
-          viewbox: "0 -960 960 960",
-          width: "24px",
-          fill: "currentColor"
-        ) do |s|
-          s.path(
-            d:
-              "M480-160q-33 0-56.5-23.5T400-240q0-33 23.5-56.5T480-320q33 0 56.5 23.5T560-240q0 33-23.5 56.5T480-160Zm0-240q-33 0-56.5-23.5T400-480q0-33 23.5-56.5T480-560q33 0 56.5 23.5T560-480q0 33-23.5 56.5T480-400Zm0-240q-33 0-56.5-23.5T400-720q0-33 23.5-56.5T480-800q33 0 56.5 23.5T560-720q0 33-23.5 56.5T480-640Z"
-          )
+        div(class: "flex-grow-0") do
+          link_to(holiday_url(holiday)) do
+            svg(
+              class: "text-gray-300",
+              xmlns: "http://www.w3.org/2000/svg",
+              height: "24px",
+              viewbox: "0 -960 960 960",
+              width: "24px",
+              fill: "currentColor"
+            ) do |s|
+              s.path(
+                d:
+                  "M480-160q-33 0-56.5-23.5T400-240q0-33 23.5-56.5T480-320q33 0 56.5 23.5T560-240q0 33-23.5 56.5T480-160Zm0-240q-33 0-56.5-23.5T400-480q0-33 23.5-56.5T480-560q33 0 56.5 23.5T560-480q0 33-23.5 56.5T480-400Zm0-240q-33 0-56.5-23.5T400-720q0-33 23.5-56.5T480-800q33 0 56.5 23.5T560-720q0 33-23.5 56.5T480-640Z"
+              )
+            end
+          end
         end
       end
     end
@@ -62,52 +71,297 @@ class EventsList < ApplicationComponent
   #
   # punches from the punch_card
   def punch_list
-    li(class: "flex items-center p-1") do
-      div(class: "flex flex-col flex-grow truncate") do
-        div(
-          class: "text-xs font-thin flex justify-start items-center"
-        ) do
-          whitespace
-          svg(
-            class: "pr-1 text-sky-600",
-            xmlns: "http://www.w3.org/2000/svg",
-            height: "24px",
-            viewbox: "0 -960 960 960",
-            width: "24px",
-            fill: "currentColor"
-          ) do |s|
-            s.path(
-              d:
-                "M200-80q-33 0-56.5-23.5T120-160v-480q0-33 23.5-56.5T200-720h40v-200h480v200h40q33 0 56.5 23.5T840-640v480q0 33-23.5 56.5T760-80H200Zm120-640h320v-120H320v120ZM200-160h560v-480H200v480Zm280-40q83 0 141.5-58.5T680-400q0-83-58.5-141.5T480-600q-83 0-141.5 58.5T280-400q0 83 58.5 141.5T480-200Zm0-60q-58 0-99-41t-41-99q0-58 41-99t99-41q58 0 99 41t41 99q0 58-41 99t-99 41Zm46-66 28-28-54-54v-92h-40v108l66 66Zm-46-74Z"
-            )
+    if calendar.calendarable.punch_cards.today(date).any?
+      li(class: "flex items-center p-1") do
+        div(class: "flex flex-col flex-grow truncate") do
+          div(
+            class: "text-xs font-thin flex justify-start items-center"
+          ) do
+            whitespace
+            svg(
+              class: "pr-1 text-sky-600",
+              xmlns: "http://www.w3.org/2000/svg",
+              height: "24px",
+              viewbox: "0 -960 960 960",
+              width: "24px",
+              fill: "currentColor"
+            ) do |s|
+              s.path(
+                d:
+                  "M200-80q-33 0-56.5-23.5T120-160v-480q0-33 23.5-56.5T200-720h40v-200h480v200h40q33 0 56.5 23.5T840-640v480q0 33-23.5 56.5T760-80H200Zm120-640h320v-120H320v120ZM200-160h560v-480H200v480Zm280-40q83 0 141.5-58.5T680-400q0-83-58.5-141.5T480-600q-83 0-141.5 58.5T280-400q0 83 58.5 141.5T480-200Zm0-60q-58 0-99-41t-41-99q0-58 41-99t99-41q58 0 99 41t41 99q0 58-41 99t-99 41Zm46-66 28-28-54-54v-92h-40v108l66 66Zm-46-74Z"
+              )
+            end
+            div(class: "pr-4 text-sky-600 font-mono") { I18n.t("punches.punches") }
+            # div(class: "pr-1") { "torsdag" }
+            # div(class: "pr-1") { "uge 30" }
+            # div(class: "pr-1") { "20. september" }
+            # div(class: "pr-1") { "2024" }
           end
-          div(class: "pr-1 text-sky-600 font-mono") { "stemplinger" }
-          div(class: "pr-1") { "torsdag" }
-          div(class: "pr-1") { "uge 30" }
-          div(class: "pr-1") { "20. september" }
-          div(class: "pr-1") { "2024" }
-        end
-        ul(class: "text-xs space-y-1") do
-          li(class: "grid grid-cols-6 gap-x-1") do
-            div(class: "place-self-end font-mono") { "7:05" }
-            div { "arbejde" }
-            div(class: "col-span-3 truncate") do
-              "mødte tidligt - men glemte alt om julen"
+          ul(class: "text-xs space-y-1") do
+            if calendar.calendarable_type == "Team"
+              li(class: "grid grid-cols-6 gap-x-1") do
+                div(class: "col-span-1 place-self-end font-mono") { calendar.calendarable.employees.count }
+                div(class: "col-span-5 ") { I18n.t("calendar.employees_has_punched_total_punches", count: Punch.where(punch_card_id: calendar.calendarable.punch_cards.today(date).map(&:id)).count) }
+              end
+            else
+              calendar.calendarable.punch_cards.today(date).each do |punch_card|
+                punch_card.punches.each do |punch|
+                  li(class: "grid grid-cols-6 gap-x-1") do
+                    div(class: "place-self-end font-mono") { I18n.l(punch.punched_at, format: :ultra_short) }
+                    div { WORK_STATE_H[punch.state] }
+                    div(class: "col-span-3 truncate") { punch.comment }
+                  end
+                end
+              end
             end
           end
-          li(class: "grid grid-cols-6 gap-x-1") do
-            div(class: "place-self-end font-mono") { "7:05" }
-            div { "pause" }
-            div(class: "col-span-3 truncate") { "mødte tidligt" }
-          end
-          li(class: "grid grid-cols-6 gap-x-1") do
-            div(class: "place-self-end font-mono") { "7:05" }
-            div(class: "truncate") { "bediningun" }
-            div(class: "col-span-3 truncate") { "mødte tidligt" }
+        end
+        div(class: "flex-grow-0") do
+          link_to(punch_cards_url) do
+            svg(
+              class: "text-gray-300",
+              xmlns: "http://www.w3.org/2000/svg",
+              height: "24px",
+              viewbox: "0 -960 960 960",
+              width: "24px",
+              fill: "currentColor"
+            ) do |s|
+              s.path(
+                d:
+                  "M480-160q-33 0-56.5-23.5T400-240q0-33 23.5-56.5T480-320q33 0 56.5 23.5T560-240q0 33-23.5 56.5T480-160Zm0-240q-33 0-56.5-23.5T400-480q0-33 23.5-56.5T480-560q33 0 56.5 23.5T560-480q0 33-23.5 56.5T480-400Zm0-240q-33 0-56.5-23.5T400-720q0-33 23.5-56.5T480-800q33 0 56.5 23.5T560-720q0 33-23.5 56.5T480-640Z"
+              )
+            end
           end
         end
       end
-      div(class: "flex-grow-0") do
+    end
+  end
+
+  #
+  # hele dagen
+  def event_list
+    calendar_events do |event, tz|
+      if event_occurs?(event, { from: date.beginning_of_week.to_time, to: date.end_of_week.to_time }, date, tz)
+      # all_day_event(event) if event.all_day?
+      # when event.event_metum.present?; recurring_event(event)
+      # else
+      # end
+      regular_event(event)
+      end
+    end
+
+    # whitespace
+    # # almindelig m/kort tekst
+    # li(class: "flex items-center bg-yellow-200 p-1") do
+    #   div(class: "flex flex-col flex-grow truncate") do
+    #     div(class: "text-xs font-thin") do
+    #       whitespace
+    #       span { "08.00 - 14:45" }
+    #       whitespace
+    #       span { "torsdag" }
+    #       whitespace
+    #       span { "uge 30" }
+    #       whitespace
+    #       span { "20. september" }
+    #       whitespace
+    #       span { "2024" }
+    #     end
+    #     div(class: "grid grid-flow-col") do
+    #       p(class: "truncate") { "Klippe hæk" }
+    #     end
+    #   end
+    #   div(class: "flex-grow-0") do
+    #     div do
+    #       whitespace
+    #       svg(
+    #         class: "text-gray-300",
+    #         xmlns: "http://www.w3.org/2000/svg",
+    #         height: "24px",
+    #         viewbox: "0 -960 960 960",
+    #         width: "24px",
+    #         fill: "currentColor"
+    #       ) do |s|
+    #         s.path(
+    #           d:
+    #             "M480-160q-33 0-56.5-23.5T400-240q0-33 23.5-56.5T480-320q33 0 56.5 23.5T560-240q0 33-23.5 56.5T480-160Zm0-240q-33 0-56.5-23.5T400-480q0-33 23.5-56.5T480-560q33 0 56.5 23.5T560-480q0 33-23.5 56.5T480-400Zm0-240q-33 0-56.5-23.5T400-720q0-33 23.5-56.5T480-800q33 0 56.5 23.5T560-720q0 33-23.5 56.5T480-640Z"
+    #         )
+    #       end
+    #     end
+    #   end
+    # end
+    # whitespace
+    # # lang tekst + attention på more
+    # li(class: "flex items-center p-1") do
+    #   div(class: "flex flex-col flex-grow truncate") do
+    #     div(class: "text-xs font-thin") do
+    #       whitespace
+    #       span { "08.00 - 14:45" }
+    #       whitespace
+    #       span { "torsdag" }
+    #       whitespace
+    #       span { "uge 30" }
+    #       whitespace
+    #       span { "20. september" }
+    #       whitespace
+    #       span { "2024" }
+    #     end
+    #     div(class: "grid grid-flow-col") do
+    #       p(class: "truncate") do
+    #         "Klippe hæk - men herefter kommer der en kæmpelang beskrivelse"
+    #       end
+    #     end
+    #   end
+    #   div(class: "") do
+    #     whitespace
+    #     svg(
+    #       class: "text-pink-500",
+    #       xmlns: "http://www.w3.org/2000/svg",
+    #       height: "24px",
+    #       viewbox: "0 -960 960 960",
+    #       width: "24px",
+    #       fill: "currentColor"
+    #     ) do |s|
+    #       s.path(
+    #         d:
+    #           "M480-160q-33 0-56.5-23.5T400-240q0-33 23.5-56.5T480-320q33 0 56.5 23.5T560-240q0 33-23.5 56.5T480-160Zm0-240q-33 0-56.5-23.5T400-480q0-33 23.5-56.5T480-560q33 0 56.5 23.5T560-480q0 33-23.5 56.5T480-400Zm0-240q-33 0-56.5-23.5T400-720q0-33 23.5-56.5T480-800q33 0 56.5 23.5T560-720q0 33-23.5 56.5T480-640Z"
+    #       )
+    #     end
+    #   end
+    # end
+    # whitespace
+    # # attention på hele opgaven
+    # li(class: "flex items-center border-l border-red-400 p-1 pl-3") do
+    #   div(class: "flex flex-col flex-grow truncate") do
+    #     div(class: "text-xs font-thin") do
+    #       whitespace
+    #       span { "08.00 - 14:45" }
+    #       whitespace
+    #       span { "torsdag" }
+    #       whitespace
+    #       span { "uge 30" }
+    #       whitespace
+    #       span { "20. september" }
+    #       whitespace
+    #       span { "2024" }
+    #     end
+    #     div(class: "grid grid-flow-col") do
+    #       p(class: "truncate") do
+    #         "Klippe hæk - men herefter kommer der en kæmpelang beskrivelse"
+    #       end
+    #     end
+    #   end
+    #   div do
+    #     whitespace
+    #     svg(
+    #       class: "text-gray-300",
+    #       xmlns: "http://www.w3.org/2000/svg",
+    #       height: "24px",
+    #       viewbox: "0 -960 960 960",
+    #       width: "24px",
+    #       fill: "currentColor"
+    #     ) do |s|
+    #       s.path(
+    #         d:
+    #           "M480-160q-33 0-56.5-23.5T400-240q0-33 23.5-56.5T480-320q33 0 56.5 23.5T560-240q0 33-23.5 56.5T480-160Zm0-240q-33 0-56.5-23.5T400-480q0-33 23.5-56.5T480-560q33 0 56.5 23.5T560-480q0 33-23.5 56.5T480-400Zm0-240q-33 0-56.5-23.5T400-720q0-33 23.5-56.5T480-800q33 0 56.5 23.5T560-720q0 33-23.5 56.5T480-640Z"
+    #       )
+    #     end
+    #   end
+    # end
+    # whitespace
+    # whitespace
+    # # comment/note
+    # li(class: "flex items-center p-1") do
+    #   div(class: "flex flex-col flex-grow truncate") do
+    #     div(class: "text-xs font-thin") do
+    #       whitespace
+    #       span { "08.00 - 14:45" }
+    #       whitespace
+    #       span { "torsdag" }
+    #       whitespace
+    #       span { "uge 30" }
+    #       whitespace
+    #       span { "20. september" }
+    #       whitespace
+    #       span { "2024" }
+    #     end
+    #     div(class: "grid grid-flow-col justify-start items-end") do
+    #       whitespace
+    #       svg(
+    #         class: "mr-1 text-lime-400",
+    #         xmlns: "http://www.w3.org/2000/svg",
+    #         height: "24px",
+    #         viewbox: "0 -960 960 960",
+    #         width: "24px",
+    #         fill: "currentColor"
+    #       ) do |s|
+    #         s.path(
+    #           d:
+    #             "M320-520q17 0 28.5-11.5T360-560q0-17-11.5-28.5T320-600q-17 0-28.5 11.5T280-560q0 17 11.5 28.5T320-520Zm160 0q17 0 28.5-11.5T520-560q0-17-11.5-28.5T480-600q-17 0-28.5 11.5T440-560q0 17 11.5 28.5T480-520Zm160 0q17 0 28.5-11.5T680-560q0-17-11.5-28.5T640-600q-17 0-28.5 11.5T600-560q0 17 11.5 28.5T640-520ZM80-80v-720q0-33 23.5-56.5T160-880h640q33 0 56.5 23.5T880-800v480q0 33-23.5 56.5T800-240H240L80-80Zm126-240h594v-480H160v525l46-45Zm-46 0v-480 480Z"
+    #         )
+    #       end
+    #       p(class: "truncate") do
+    #         "Klippe hæk - men herefter kommer der en kæmpelang beskrivelse"
+    #       end
+    #     end
+    #   end
+    #   div do
+    #     whitespace
+    #     svg(
+    #       class: "text-gray-300",
+    #       xmlns: "http://www.w3.org/2000/svg",
+    #       height: "24px",
+    #       viewbox: "0 -960 960 960",
+    #       width: "24px",
+    #       fill: "currentColor"
+    #     ) do |s|
+    #       s.path(
+    #         d:
+    #           "M480-160q-33 0-56.5-23.5T400-240q0-33 23.5-56.5T480-320q33 0 56.5 23.5T560-240q0 33-23.5 56.5T480-160Zm0-240q-33 0-56.5-23.5T400-480q0-33 23.5-56.5T480-560q33 0 56.5 23.5T560-480q0 33-23.5 56.5T480-400Zm0-240q-33 0-56.5-23.5T400-720q0-33 23.5-56.5T480-800q33 0 56.5 23.5T560-720q0 33-23.5 56.5T480-640Z"
+    #       )
+    #     end
+    #   end
+    # end
+  end
+
+  def events?(dt, &block)
+    calendar_events do |event, tz|
+      if event_occurs?(event, { from: dt, to: dt }, dt, tz)
+        yield event
+      end
+    end
+  end
+
+  # calendars.each do |calendar|
+  # end
+  def calendar_events(&block)
+    tz = calendar.time_zone
+    calendar.events.each do |event|
+      yield event, tz
+    end
+  end
+
+  def event_occurs?(event, window, dt, tz)
+    return false if !event.from_date.nil? && event.from_date.to_date > dt
+    return false if !event.to_date.nil? && event.to_date.to_date < dt
+    return true  if event.event_metum.nil?
+    event.occurs_on?(dt, window, tz)
+  end
+
+  def all_day_event(event)
+    li(class: "flex items-center p-1") do
+      div(class: "flex flex-col flex-grow truncate") do
+        div(class: "text-xs font-thin") do
+          span(class: "text-amber-500") { "hele dagen" }
+          span { "torsdag" }
+          span { "uge 30" }
+          span { "20. september asd asd " }
+          span { "2024" }
+        end
+        div(class: "grid grid-flow-col") do
+          p(class: "truncate") { event.name }
+        end
+      end
+      div(class: "") do
         whitespace
         svg(
           class: "text-gray-300",
@@ -126,164 +380,7 @@ class EventsList < ApplicationComponent
     end
   end
 
-  #
-  # hele dagen
-  def event_list
-    li(class: "flex items-center p-1") do
-      div(class: "flex flex-col flex-grow truncate") do
-        div(class: "text-xs font-thin") do
-          whitespace
-          span(class: "text-amber-500") { "hele dagen" }
-          whitespace
-          span { "torsdag" }
-          whitespace
-          span { "uge 30" }
-          whitespace
-          span { "20. september asd asd " }
-          whitespace
-          span { "2024" }
-        end
-        div(class: "grid grid-flow-col") do
-          p(class: "truncate") do
-            "Klippe hæk - men herefter kommer der en kæmpelang beskrivelse, og den bliver bare ved og ved"
-          end
-        end
-      end
-      div(class: "") do
-        whitespace
-        svg(
-          class: "text-gray-300",
-          xmlns: "http://www.w3.org/2000/svg",
-          height: "24px",
-          viewbox: "0 -960 960 960",
-          width: "24px",
-          fill: "currentColor"
-        ) do |s|
-          s.path(
-            d:
-              "M480-160q-33 0-56.5-23.5T400-240q0-33 23.5-56.5T480-320q33 0 56.5 23.5T560-240q0 33-23.5 56.5T480-160Zm0-240q-33 0-56.5-23.5T400-480q0-33 23.5-56.5T480-560q33 0 56.5 23.5T560-480q0 33-23.5 56.5T480-400Zm0-240q-33 0-56.5-23.5T400-720q0-33 23.5-56.5T480-800q33 0 56.5 23.5T560-720q0 33-23.5 56.5T480-640Z"
-          )
-        end
-      end
-    end
-    whitespace
-    # almindelig m/kort tekst
-    li(class: "flex items-center bg-yellow-200 p-1") do
-      div(class: "flex flex-col flex-grow truncate") do
-        div(class: "text-xs font-thin") do
-          whitespace
-          span { "08.00 - 14:45" }
-          whitespace
-          span { "torsdag" }
-          whitespace
-          span { "uge 30" }
-          whitespace
-          span { "20. september" }
-          whitespace
-          span { "2024" }
-        end
-        div(class: "grid grid-flow-col") do
-          p(class: "truncate") { "Klippe hæk" }
-        end
-      end
-      div(class: "flex-grow-0") do
-        div do
-          whitespace
-          svg(
-            class: "text-gray-300",
-            xmlns: "http://www.w3.org/2000/svg",
-            height: "24px",
-            viewbox: "0 -960 960 960",
-            width: "24px",
-            fill: "currentColor"
-          ) do |s|
-            s.path(
-              d:
-                "M480-160q-33 0-56.5-23.5T400-240q0-33 23.5-56.5T480-320q33 0 56.5 23.5T560-240q0 33-23.5 56.5T480-160Zm0-240q-33 0-56.5-23.5T400-480q0-33 23.5-56.5T480-560q33 0 56.5 23.5T560-480q0 33-23.5 56.5T480-400Zm0-240q-33 0-56.5-23.5T400-720q0-33 23.5-56.5T480-800q33 0 56.5 23.5T560-720q0 33-23.5 56.5T480-640Z"
-            )
-          end
-        end
-      end
-    end
-    whitespace
-    # lang tekst + attention på more
-    li(class: "flex items-center p-1") do
-      div(class: "flex flex-col flex-grow truncate") do
-        div(class: "text-xs font-thin") do
-          whitespace
-          span { "08.00 - 14:45" }
-          whitespace
-          span { "torsdag" }
-          whitespace
-          span { "uge 30" }
-          whitespace
-          span { "20. september" }
-          whitespace
-          span { "2024" }
-        end
-        div(class: "grid grid-flow-col") do
-          p(class: "truncate") do
-            "Klippe hæk - men herefter kommer der en kæmpelang beskrivelse"
-          end
-        end
-      end
-      div(class: "") do
-        whitespace
-        svg(
-          class: "text-pink-500",
-          xmlns: "http://www.w3.org/2000/svg",
-          height: "24px",
-          viewbox: "0 -960 960 960",
-          width: "24px",
-          fill: "currentColor"
-        ) do |s|
-          s.path(
-            d:
-              "M480-160q-33 0-56.5-23.5T400-240q0-33 23.5-56.5T480-320q33 0 56.5 23.5T560-240q0 33-23.5 56.5T480-160Zm0-240q-33 0-56.5-23.5T400-480q0-33 23.5-56.5T480-560q33 0 56.5 23.5T560-480q0 33-23.5 56.5T480-400Zm0-240q-33 0-56.5-23.5T400-720q0-33 23.5-56.5T480-800q33 0 56.5 23.5T560-720q0 33-23.5 56.5T480-640Z"
-          )
-        end
-      end
-    end
-    whitespace
-    # attention på hele opgaven
-    li(class: "flex items-center border-l border-red-400 p-1 pl-3") do
-      div(class: "flex flex-col flex-grow truncate") do
-        div(class: "text-xs font-thin") do
-          whitespace
-          span { "08.00 - 14:45" }
-          whitespace
-          span { "torsdag" }
-          whitespace
-          span { "uge 30" }
-          whitespace
-          span { "20. september" }
-          whitespace
-          span { "2024" }
-        end
-        div(class: "grid grid-flow-col") do
-          p(class: "truncate") do
-            "Klippe hæk - men herefter kommer der en kæmpelang beskrivelse"
-          end
-        end
-      end
-      div do
-        whitespace
-        svg(
-          class: "text-gray-300",
-          xmlns: "http://www.w3.org/2000/svg",
-          height: "24px",
-          viewbox: "0 -960 960 960",
-          width: "24px",
-          fill: "currentColor"
-        ) do |s|
-          s.path(
-            d:
-              "M480-160q-33 0-56.5-23.5T400-240q0-33 23.5-56.5T480-320q33 0 56.5 23.5T560-240q0 33-23.5 56.5T480-160Zm0-240q-33 0-56.5-23.5T400-480q0-33 23.5-56.5T480-560q33 0 56.5 23.5T560-480q0 33-23.5 56.5T480-400Zm0-240q-33 0-56.5-23.5T400-720q0-33 23.5-56.5T480-800q33 0 56.5 23.5T560-720q0 33-23.5 56.5T480-640Z"
-          )
-        end
-      end
-    end
-    whitespace
+  def recurring_event(event)
     # recurring event
     li(class: "flex items-center p-1") do
       div(class: "flex flex-col flex-grow truncate") do
@@ -317,9 +414,7 @@ class EventsList < ApplicationComponent
           span(class: "pr-1") { "2024" }
         end
         div(class: "grid grid-flow-col") do
-          p(class: "truncate") do
-            "Klippe hæk - men herefter kommer der en kæmpelang beskrivelse"
-          end
+          p(class: "truncate") { event.name }
         end
       end
       div do
@@ -339,8 +434,10 @@ class EventsList < ApplicationComponent
         end
       end
     end
-    whitespace
-    # comment/note
+  end
+
+  def regular_event(event)
+    # almindelig m/kort tekst
     li(class: "flex items-center p-1") do
       div(class: "flex flex-col flex-grow truncate") do
         div(class: "text-xs font-thin") do
@@ -355,40 +452,18 @@ class EventsList < ApplicationComponent
           whitespace
           span { "2024" }
         end
-        div(class: "grid grid-flow-col justify-start items-end") do
-          whitespace
-          svg(
-            class: "mr-1 text-lime-400",
-            xmlns: "http://www.w3.org/2000/svg",
-            height: "24px",
-            viewbox: "0 -960 960 960",
-            width: "24px",
-            fill: "currentColor"
-          ) do |s|
-            s.path(
-              d:
-                "M320-520q17 0 28.5-11.5T360-560q0-17-11.5-28.5T320-600q-17 0-28.5 11.5T280-560q0 17 11.5 28.5T320-520Zm160 0q17 0 28.5-11.5T520-560q0-17-11.5-28.5T480-600q-17 0-28.5 11.5T440-560q0 17 11.5 28.5T480-520Zm160 0q17 0 28.5-11.5T680-560q0-17-11.5-28.5T640-600q-17 0-28.5 11.5T600-560q0 17 11.5 28.5T640-520ZM80-80v-720q0-33 23.5-56.5T160-880h640q33 0 56.5 23.5T880-800v480q0 33-23.5 56.5T800-240H240L80-80Zm126-240h594v-480H160v525l46-45Zm-46 0v-480 480Z"
-            )
-          end
-          p(class: "truncate") do
-            "Klippe hæk - men herefter kommer der en kæmpelang beskrivelse"
-          end
+        div(class: "grid grid-flow-col") do
+          p(class: "truncate") { event.name }
         end
       end
-      div do
-        whitespace
-        svg(
-          class: "text-gray-300",
-          xmlns: "http://www.w3.org/2000/svg",
-          height: "24px",
-          viewbox: "0 -960 960 960",
-          width: "24px",
-          fill: "currentColor"
-        ) do |s|
-          s.path(
-            d:
-              "M480-160q-33 0-56.5-23.5T400-240q0-33 23.5-56.5T480-320q33 0 56.5 23.5T560-240q0 33-23.5 56.5T480-160Zm0-240q-33 0-56.5-23.5T400-480q0-33 23.5-56.5T480-560q33 0 56.5 23.5T560-480q0 33-23.5 56.5T480-400Zm0-240q-33 0-56.5-23.5T400-720q0-33 23.5-56.5T480-800q33 0 56.5 23.5T560-720q0 33-23.5 56.5T480-640Z"
-          )
+      div(class: "flex-grow-0") do
+        link_to(helpers.new_modal_url(id: event.id, modal_form: "event", resource_class: "event", step: "edit", view: view, date: date),
+            data: { turbo_stream: true },
+            role: "menuitem",
+            tabindex: "-1") do
+              svg(class: "text-gray-300", xmlns: "http://www.w3.org/2000/svg", height: "24px", viewbox: "0 -960 960 960", width: "24px", fill: "currentColor") do |s|
+                s.path(d: "M480-160q-33 0-56.5-23.5T400-240q0-33 23.5-56.5T480-320q33 0 56.5 23.5T560-240q0 33-23.5 56.5T480-160Zm0-240q-33 0-56.5-23.5T400-480q0-33 23.5-56.5T480-560q33 0 56.5 23.5T560-480q0 33-23.5 56.5T480-400Zm0-240q-33 0-56.5-23.5T400-720q0-33 23.5-56.5T480-800q33 0 56.5 23.5T560-720q0 33-23.5 56.5T480-640Z")
+              end
         end
       end
     end

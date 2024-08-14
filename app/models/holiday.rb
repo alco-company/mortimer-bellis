@@ -7,7 +7,11 @@ class Holiday < ApplicationRecord
   scope :order_by_number, ->(field) { order("length(#{field}) DESC, #{field} DESC") }
 
   def self.today?(dt)
-    where(from_date: ..dt).and(where(to_date: dt..)).any?
+    today(dt).any?
+  end
+
+  def self.today(dt)
+    where(from_date: ..dt).and(where(to_date: dt..))
   end
 
   def self.filtered(filter)

@@ -23,6 +23,7 @@ guide idea:
 
 * fix regression on delete/delete_all
 * edit events on day and week view
+* finish day_summary - wip
 
 ### 13/8/2024
 

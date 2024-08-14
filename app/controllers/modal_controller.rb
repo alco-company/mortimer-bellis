@@ -51,6 +51,7 @@ class ModalController < BaseController
       @attachment = params[:attachment]
       resource()
       @step = params[:step]
+      @view = params[:view] || "month"
     end
 
     def resource

@@ -25,6 +25,7 @@ da:
   unauthorized: Du har ikke rettigheder til at gennemføre denne handling
   cannot_change_role: Du kan ikke ændre din egen rolle til super_user!
   form_not_processable: Formularen kunne ikke behandles - prøv igen
+  holyday: Helligdag
 
   expected_time_zone: "Vi tror at den tidszone, der passer dig bedst er:"
 
@@ -266,6 +267,13 @@ da:
         action: handling 
         title: titel 
         description: beskrivelse
+      holiday:
+        name: Navn
+        from_date: Fra dato
+        to_date: Til dato
+        all_day: En hel (fri/hellig)dag
+        description: Beskrivelse
+        countries: Hvilke lande (sprogområder) gælder helligdagen for
       lead:
         email_address: Email adresse
         trial_ends_at: Prøveperioden slutter
@@ -592,6 +600,7 @@ da:
     formats:
       default: "%d.%m.%Y"
       dm: "%d/%m"
+      day_month: "%d. %B"
       dmy: "%d/%m/%y"
       long: "%e. %B %Y"
       short: "%e. %b %Y"

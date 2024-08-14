@@ -33,6 +33,7 @@ da:
         button: Slet
 
   punches:
+    punches: Stemplinger
     create:
       post: Stemplingen blev oprettet
     update:

@@ -157,7 +157,7 @@ class ApplicationForm < Superform::Rails::Form
     end
     def template(&)
       div(class: attributes[:class], data: { controller: "boolean" }) do
-        input(name: dom.name, data: { boolean_target: "input" }, type: :hidden, value: field.value ? "1" : "0")
+        input(name: dom.name, data: { boolean_target: "input" }, type: :hidden, value: setValue)
         button(
           type: "button",
           data: { action: (attributes[:disabled] ? "" : "click->boolean#toggle"), boolean_target: "button" },
@@ -188,11 +188,14 @@ class ApplicationForm < Superform::Rails::Form
         end
       end
     end
+    def setValue
+      (field.value == true || field.value.to_s == "1") ? "1" : "0"
+    end
     def setIndicator
-      field.value ? "bg-sky-600" : "bg-gray-200"
+      (field.value == true || field.value.to_s == "1") ? "bg-sky-600" : "bg-gray-200"
     end
     def setHandle
-      field.value ? "translate-x-5" : "translate-x-0"
+      (field.value == true || field.value.to_s == "1") ? "translate-x-5" : "translate-x-0"
     end
   end
 

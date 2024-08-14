@@ -21,6 +21,7 @@ da:
     week_view: "Uge"
     month_view: "Måned"
     year_view: "År"
+    employees_has_punched_total_punches: "medarbejdere har stemplet ialt %{count} gange idag"
 
     week_labels:
       abbr: Uge
@@ -77,5 +78,5 @@ da:
       month: "Måned"
       year: "År"
     modal:
-      day_summary: "Dagens aftaler"
+      day_summary: "Dagens aftaler for %{name}"
     
