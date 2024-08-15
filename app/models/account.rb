@@ -31,6 +31,10 @@ class Account < ApplicationRecord
   validates :name, presence: true, uniqueness: { message: I18n.t("accounts.errors.messages.name_exist") }
   validates :email, presence: true
 
+  def all_calendars
+    calendars
+  end
+
   def self.filtered(filter)
     flt = filter.filter
 

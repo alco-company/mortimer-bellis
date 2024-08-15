@@ -67,6 +67,7 @@ da:
   menu:
     login: Log ind
     home: Hjem
+    calendars: Kalendere
     pages: Sider
     holidays: Helligdage
     account: Konto
@@ -213,6 +214,8 @@ da:
         schedule: Plan 
         next_run_at: Næste kørsel
         params: Argumenter
+      calendar:
+        name: Navn
       dashboard:
         name: Navn
         layout: Skabelon

@@ -17,6 +17,7 @@
         <%= form.hidden_field :all, value: !@resource.id.present? %>
         <%= form.hidden_field :attachment, value: @attachment %>
         <%= form.hidden_field :id, value: @resource&.id %>
+        <%= form.hidden_field :url, value: @url %>
         <!-- <div class="relative flex items-start mt-3">
           <div class="ml-3 text-sm leading-6">
             <label for="import_model" class="font-medium text-gray-900"><%= t("#{@resource_class.to_s.underscore}.modal.import.label") %></label>

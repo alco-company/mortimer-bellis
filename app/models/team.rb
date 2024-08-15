@@ -32,7 +32,7 @@ class Team < ApplicationRecord
   end
 
   def all_calendars
-    calendars
+    account.calendars + calendars
   end
 
   def self.form(resource, editable = true)

@@ -48,7 +48,7 @@ class Employee < ApplicationRecord
   end
 
   def all_calendars
-    team.calendars + calendars
+    team.all_calendars + calendars
   end
 
   def self.form(resource, editable = true)

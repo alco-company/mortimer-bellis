@@ -1,4 +1,10 @@
 class CalendarsController < MortimerController
+  def new
+    @resource.calendarable = Employee.find(params[:employee_id]) if params[:employee_id]
+    @resource.calendarable = Team.find(params[:team_id]) if params[:team_id]
+    @resource.calendarable = Account.find(params[:account_id]) if params[:account_id]
+  end
+
   #
   def show
     @date = params[:date] ? Date.parse(params[:date]) : Date.current

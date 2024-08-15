@@ -10,7 +10,7 @@
     <%= render_datetime_column value: calendar.updated_at, css: "hidden lg:block" %>
   </div>
   <div class="flex flex-none items-center gap-x-4 ">
-<!--    <a href="<%#= product_stock_items_url(product) %>" class=" rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:block">Lokationer<span class="sr-only">, GraphQL API</span></a>-->
-    <%= render_contextmenu resource: calendar, resource_class: Calendar, alter: true, links: [ edit_calendar_url(calendar), calendar_url(calendar) ] %>
+    <% links = set_links_for_edit_delete calendar %>
+    <%= render_contextmenu resource: calendar, resource_class: Calendar, alter: true, links: links %>
   </div>
 </li>

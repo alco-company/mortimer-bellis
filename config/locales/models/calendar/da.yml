@@ -22,6 +22,9 @@ da:
     month_view: "Måned"
     year_view: "År"
     employees_has_punched_total_punches: "medarbejdere har stemplet ialt %{count} gange idag"
+    list_all_account_calendars: "List kontoens kalendere"
+    list_all_team_calendars: "List holdets kalendere"
+    list_all_employee_calendars: "List medarbejderens kalendere"
 
     week_labels:
       abbr: Uge
@@ -79,4 +82,19 @@ da:
       year: "År"
     modal:
       day_summary: "Dagens aftaler for %{name}"
-    
+      delete_all: 
+        title: Slet alle kalendere
+        instruction: Er du sikker på, at du vil slette alle kalendere?
+      delete:
+        title: Slet denne kalender
+        instruction: Er du sikker på, at du vil slette kalenderen %{name}?
+        button: Slet
+
+  calendars:
+    link: "Kalendere"
+    create:
+      post: Kalenderen blev oprettet
+    update:
+      post: Kalenderen blev opdateret
+    destroy:
+      post: Kalenderen blev slettet

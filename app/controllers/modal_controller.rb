@@ -51,6 +51,7 @@ class ModalController < BaseController
       @attachment = params[:attachment]
       resource()
       @step = params[:step]
+      @url = params[:url] || resources_url
       @view = params[:view] || "month"
     end
 
@@ -193,8 +194,9 @@ class ModalController < BaseController
         set_filter resource_class.to_s.underscore.pluralize
         set_resources
         DeleteAllJob.perform_later account: Current.account, resource_class: resource_class.to_s, sql_resources: @resources.to_sql
+        @url.gsub!(/\/\d+$/, "") if @url.match?(/\d+$/)
         respond_to do |format|
-          format.html { redirect_to resources_url, status: 303, success: t("delete_all_later") }
+          format.html { redirect_to @url, status: 303, success: t("delete_all_later") }
           format.json { head :no_content }
         end
       rescue => e
@@ -215,8 +217,9 @@ class ModalController < BaseController
           cb = get_cb_eval_after_destroy(resource)
           if resource.destroy!
             eval(cb) unless cb.nil?
+            @url.gsub!(/\/\d+$/, "") if @url.match?(/\d+$/)
             respond_to do |format|
-              format.html { redirect_to resources_url, status: 303, success: t(".post") }
+              format.html { redirect_to @url, status: 303, success: t(".post") }
               format.json { head :no_content }
             end
           else

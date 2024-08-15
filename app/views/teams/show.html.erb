@@ -11,13 +11,7 @@
   </div>
   <div class="">
     <div class="ID mb-2"><strong>ID</strong><br/><%= @resource.id %></div>
-    <span class="calendar"><strong><%= t("calendars") %></strong>
-    <% @resource.create_calendar if @resource.calendars.count < 1 %>
-    <div class="flex">
-      <% @resource.all_calendars.each do |calendar| %>
-        <%=  link_to calendar.name, calendar_url(calendar), class: "rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10" %>        
-      <% end %>
-    </div>
+    <%= render partial: "list_calendars", locals: { header_text: t("calendar.list_all_team_calendars"), list_url: team_calendars_url(@resource) } %>
     <%= render resource_class.form @resource, false %>
   </div>
   <hr>

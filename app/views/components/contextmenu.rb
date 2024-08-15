@@ -192,7 +192,7 @@ class Contextmenu < Phlex::HTML
       end
       # delete resource
       link_to(
-        helpers.new_modal_url(modal_form: "delete", id: resource.id, resource_class: resource_class.to_s.underscore, modal_next_step: "accept"),
+        helpers.new_modal_url(modal_form: "delete", id: resource.id, resource_class: resource_class.to_s.underscore, modal_next_step: "accept", url: @links[1]),
         data: { turbo_stream: true },
         # link_to((@links[1] || resource),
         class: "block px-3 py-1 text-sm leading-6 text-gray-900",
