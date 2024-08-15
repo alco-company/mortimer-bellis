@@ -22,6 +22,7 @@ guide idea:
 ### 15/8/2024
 
 * fix regression on delete/delete_all II
+* disable delete_all when no records
 * link to list of calendars on team and employees
 
 ### 14/8/2024

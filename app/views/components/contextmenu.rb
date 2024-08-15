@@ -89,20 +89,23 @@ class Contextmenu < Phlex::HTML
         end
       end
       whitespace
-      link_to(
-        helpers.new_modal_url(modal_form: "delete", resource_class: resource_class.to_s.underscore, modal_next_step: "accept"),
-        data: { turbo_stream: true },
-        # link_to helpers.delete_all_url(),
-        # data: { turbo_method: :delete, turbo_confirm: "Are you sure?", turbo_stream: true, action: "click->contextmenu#hide" },
-        class: "block px-3 py-1 text-sm leading-6 text-gray-900",
-        role: "menuitem",
-        tabindex: "-1") do
-        plain I18n.t(".delete_all")
-        span(class: "sr-only") do
-          plain ", "
-          plain "delete all"
-        end
-      end
+      resource_class.any? ?
+        link_to(
+          helpers.new_modal_url(modal_form: "delete", resource_class: resource_class.to_s.underscore, modal_next_step: "accept"),
+          disabled: true,
+          data: { turbo_stream: true },
+          # link_to helpers.delete_all_url(),
+          # data: { turbo_method: :delete, turbo_confirm: "Are you sure?", turbo_stream: true, action: "click->contextmenu#hide" },
+          class: "block px-3 py-1 text-sm leading-6 text-gray-900",
+          role: "menuitem",
+          tabindex: "-1") do
+          plain I18n.t(".delete_all")
+          span(class: "sr-only") do
+            plain ", "
+            plain "delete all"
+          end
+        end :
+        div(class: "block px-3 py-1 text-sm leading-6 text-gray-400") { I18n.t(".delete_all") }
       whitespace
       link_to(
         helpers.new_modal_url(modal_form: "import", resource_class: resource_class.to_s.underscore, modal_next_step: "preview"),
