@@ -322,6 +322,11 @@ class CalendarComponent < ApplicationComponent
           {}
       end
 
+      # punches
+      (window[:from].to_date..window[:to].to_date).each_with_index do |dt, index|
+        punches?(dt, :day_week, index, window)
+      end
+
       #  events
       calendar_events do |event, tz|
         (window[:from].to_date..window[:to].to_date).each_with_index do |dt, index|
@@ -359,103 +364,10 @@ class CalendarComponent < ApplicationComponent
         end
       end
 
-
-      # (2..278).step(12).each do |i|
-      #   li(class: "relative col-start-1 flex", style: "grid-row:#{i} /span 12") do
-      #     a(href: "#", class: "group absolute inset-1 flex flex-col overflow-hidden rounded-md bg-green-50 p-2 text-xs leading-5 hover:bg-blue-100")
-      #   end
-      # end
-
-      # li(class: "relative col-start-6 flex", style: "grid-row:51 /span 112") do
-      #   a(href: "#", class: "group absolute inset-1 flex flex-col overflow-hidden rounded-md bg-pink-50 p-2 text-xs leading-5 hover:bg-pink-100")
-      # end
-
-      # li(class: "relative col-start-2 flex", style: "grid-row:14 /span 6") do
-      #   a(href: "#", class: "group absolute inset-1 flex flex-col overflow-hidden rounded-md bg-blue-50 p-2 text-xs leading-5 hover:bg-blue-100")
-      # end
-
-      # li(class: "relative col-start-3 flex", style: "grid-row:26 /span 6") do
-      #   a(href: "#", class: "group absolute inset-1 flex flex-col overflow-hidden rounded-md bg-blue-50 p-2 text-xs leading-5 hover:bg-blue-100")
-      # end
-
-      # li(
-      #   class: "relative col-start-4 flex hover:col-start-2 hover:col-span-4 sm:hover:col-span-1 sm:hover:col-start-2",
-      #   style: "grid-row:38 /span 16"
-      # ) do
-      #   a(href: "#", class: "group absolute inset-1 flex flex-col overflow-hidden rounded-md bg-blue-50 p-2 text-xs leading-5 hover:bg-blue-100") do
-      #     p(class: "order-1 font-semibold text-blue-700 truncate") { "Breakfast" }
-      #     p(class: "text-blue-500 group-hover:text-blue-700") do
-      #       time(datetime: "2022-01-12T06:00") { "6:00 AM" }
-      #     end
-      #   end
-      # end
-      # li(
-      #   class: "relative mt-px flex sm:col-start-3",
-      #   style: "grid-row:92 /span 30"
-      # ) do
-      #   whitespace
-      #   a(
-      #     href: "#",
-      #     class:
-      #       "group absolute inset-1 flex flex-col overflow-y-auto rounded-lg bg-pink-50 p-2 text-xs leading-5 hover:bg-pink-100"
-      #   ) do
-      #     p(class: "order-1 font-semibold text-pink-700") do
-      #       "Flight to Paris"
-      #     end
-      #     p(class: "text-pink-500 group-hover:text-pink-700") do
-      #       time(datetime: "2022-01-12T07:30") { "7:30 AM" }
-      #     end
-      #     whitespace
-      #   end
-      # end
-      # li(
-      #   class: "relative mt-px hidden sm:col-start-6 sm:flex",
-      #   style: "grid-row:122 /span 24"
-      # ) do
-      #   whitespace
-      #   a(
-      #     href: "#",
-      #     class:
-      #       "group absolute inset-1 flex flex-col overflow-y-auto rounded-lg bg-gray-100 p-2 text-xs leading-5 hover:bg-gray-200"
-      #   ) do
-      #     p(class: "order-1 font-semibold text-gray-700") do
-      #       "Meeting with design team at Disney"
-      #     end
-      #     p(class: "text-gray-500 group-hover:text-gray-700") do
-      #       time(datetime: "2022-01-15T10:00") { "10:00 AM" }
-      #     end
-      #     whitespace
-      #   end
-      # end
-
-      # punches
-      (1..5).each do |i|
-        list_punch_items(i)
-      end
+      # making sure the OL returns at least one LI element
+      li { }
     end
   end
-
-  def list_punch_items(i)
-    from_at = rand(1..288)
-    li(class: "relative col-start-#{i} flex", style: "grid-row:#{from_at} /span 2") do
-      div(href: "#", class: "absolute flex flex-col overflow-hidden text-sky-500 text-md ") do
-        svg(
-          class: "pr-1 text-sky-600 h-6 w-6",
-          xmlns: "http://www.w3.org/2000/svg",
-          height: "24px",
-          viewbox: "0 -960 960 960",
-          width: "24px",
-          fill: "currentColor"
-        ) do |s|
-          s.path(
-            d:
-              "M200-80q-33 0-56.5-23.5T120-160v-480q0-33 23.5-56.5T200-720h40v-200h480v200h40q33 0 56.5 23.5T840-640v480q0 33-23.5 56.5T760-80H200Zm120-640h320v-120H320v120ZM200-160h560v-480H200v480Zm280-40q83 0 141.5-58.5T680-400q0-83-58.5-141.5T480-600q-83 0-141.5 58.5T280-400q0 83 58.5 141.5T480-200Zm0-60q-58 0-99-41t-41-99q0-58 41-99t99-41q58 0 99 41t41 99q0 58-41 99t-99 41Zm46-66 28-28-54-54v-92h-40v108l66 66Zm-46-74Z"
-          )
-        end
-      end
-    end
-  end
-
 
   def month_component(month, show_navigation = false)
     from_date = Date.new(date.year, month, 1)
@@ -521,13 +433,16 @@ class CalendarComponent < ApplicationComponent
           link_to(
             helpers.new_modal_url(id: id, modal_form: "day_summary", resource_class: "calendar", modal_next_step: "accept", view: view, date: I18n.l(dt, format: :short_iso)),
             data: { turbo_stream: true },
-            class: "#{cls} bg-gray-50 py-1.5 text-gray-400 hover:bg-gray-100 focus:z-10",
+            class: "#{cls} relative bg-gray-50 py-1.5 text-gray-400 hover:bg-gray-100 focus:z-10",
             role: "menuitem",
             tabindex: "-1") do
               cls = (dt == Date.today && (dt.month == from_date.month)) ? "bg-sky-600 font-semibold text-white" : ""
-              time(datetime: I18n.l(dt, format: :short_iso), class: "#{cls} mx-auto flex flex-col h-7 w-7 items-center justify-center rounded-full") do
+              time(datetime: I18n.l(dt, format: :short_iso), class: " #{cls} mx-auto flex flex-col h-7 w-7 items-center justify-center rounded-full") do
                 span { dt.day }
-                events?(dt, :year, { from: dt.beginning_of_month.to_time, to: dt.end_of_month.to_time })
+                div(class: "absolute bottom-0") do
+                  events?(dt, :year, { from: dt.beginning_of_month.to_time, to: dt.end_of_month.to_time })
+                  punches?(dt, :year, 0, { from: dt.beginning_of_month.to_time, to: dt.end_of_month.to_time })
+                end
               end
               span(class: "sr-only") do
                 plain "datetime: #{I18n.l(dt, format: :short_iso)} "
@@ -583,16 +498,61 @@ class CalendarComponent < ApplicationComponent
     end
   end
 
-  def punches?(dt, cls = "")
-    punch_cards.flatten.select { |p| p.work_date == dt }.any? ?
-      div(class: "text-sky-500 font-bold justify-self-start text-xl #{cls}") { "|" } :
-      div() { " " }
+  def punches?(dt, view, index, window)
+    # punch_cards.flatten.select { |p| p.work_date == dt }.any? ?
+    #   div(class: "text-sky-500 font-bold justify-self-start text-xl #{cls}") { "|" } :
+    #   div() { " " }
+    from_ats = []
+    hits = 0
+    calendar_punches(window) do |punch|
+      if punch.punched_at.to_date == dt
+        from_at = punch.punched_at.hour * 12 + punch.punched_at.min / 5
+        from_at += 2 if from_ats.include? from_at
+        from_ats.push(from_at)
+        case view
+        when :day_week; list_punch_item(index, dt, punch, from_at)
+        when :month; hits += 1
+        when :year; hits += 1
+        end
+      end
+    end
+    span(class: "font-extrabold place-self-center col-span-2 text-2xl text-blue-500") { "." } if hits > 0 && view == :month
+    span(class: "text-xs text-blue-500") { "." } if hits > 0 && view == :year
   end
 
-  def punch_cards(rg = nil)
-    return @punch_cards if rg.nil?
-    @punch_cards = calendars.collect { |c| c.punch_cards(rg) }
+  def list_punch_item(i, dt, punch, from_at)
+    punch_color = case true
+    when punch.in?; "text-green-500"
+    when punch.out?; "text-blue-500"
+    when punch.break?; "text-amber-500"
+    else; "text-gray-500"
+    end
+    li(class: "relative col-start-#{i+1} flex", style: "grid-row:#{from_at + 2} /span 2") do
+      div(href: "#", class: "absolute flex flex-col overflow-hidden text-md ") do
+        link_to(helpers.modal_url(id: punch.id, modal_form: "punch", resource_class: "punch", step: "view"), data: { turbo_stream: true }) do
+          svg(
+            class: "pr-1 #{punch_color}  h-6 w-6 ml-2",
+            xmlns: "http://www.w3.org/2000/svg",
+            height: "24px",
+            viewbox: "0 -960 960 960",
+            width: "24px",
+            stroke: "currentColor",
+            fill: "currentColor"
+          ) do |s|
+            s.path(
+              d:
+                "M200-80q-33 0-56.5-23.5T120-160v-480q0-33 23.5-56.5T200-720h40v-200h480v200h40q33 0 56.5 23.5T840-640v480q0 33-23.5 56.5T760-80H200Zm120-640h320v-120H320v120ZM200-160h560v-480H200v480Zm280-40q83 0 141.5-58.5T680-400q0-83-58.5-141.5T480-600q-83 0-141.5 58.5T280-400q0 83 58.5 141.5T480-200Zm0-60q-58 0-99-41t-41-99q0-58 41-99t99-41q58 0 99 41t41 99q0 58-41 99t-99 41Zm46-66 28-28-54-54v-92h-40v108l66 66Zm-46-74Z"
+            )
+          end
+        end
+      end
+    end
   end
+
+  # def punch_cards(rg = nil)
+  #   return @punch_cards if rg.nil?
+  #   @punch_cards = calendars.collect { |c| c.punch_cards(rg) }
+  # end
 
   def events?(dt, view, window = nil, cls = "")
     unless any_calendars?
@@ -601,10 +561,10 @@ class CalendarComponent < ApplicationComponent
       calendar_events do |event, tz|
         if event_occurs?(event, window, dt, tz)
           case view
-          when :day;   hits = 1
-          when :week;  hits = 2
-          when :month; div(class: "font-extrabold place-self-center col-span-2 text-2xl #{cls}") { "." }
-          when :year;  span(class: "font-extrabold text-base #{cls}", style: "margin-top: -16px; margin-bottom: -7px") { "." }
+          # when :day;   hits = 1
+          # when :week;  hits = 2
+          when :month; span(class: "font-extrabold place-self-center col-span-2 text-2xl #{cls}") { "." }
+          when :year;  span(class: "text-xs text-gray-500") { "." }
           end
           return
         end
@@ -622,6 +582,16 @@ class CalendarComponent < ApplicationComponent
       tz = calendar.time_zone
       calendar.events.each do |event|
         yield event, tz
+      end
+    end
+  end
+
+  def calendar_punches(window, &block)
+    calendars.each do |calendar|
+      if calendar.calendarable_type == "Employee"
+        calendar.calendarable.punch_cards.windowed(window).map(&:punches).flatten.each do |punch|
+          yield punch
+        end
       end
     end
   end

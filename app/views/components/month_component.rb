@@ -2,18 +2,18 @@ class MonthComponent < CalendarComponent
   #
   #
   def view_template(&block)
-    punch_cards(date.beginning_of_month..date.end_of_month)
-
+    # Month view
     div(class: "lg:flex lg:h-full lg:flex-col") do
       show_header(date)
       month_view
 
       # todays list of events
-      div(class: "px-4 py-10 sm:px-6 lg:mx-auto") do
-        div(id: "events_list", class: "") do
-          # render EventsList.new
-        end
-      end
+      # if implemented somewhat like Apple Calendar month view
+      # div(class: "px-4 py-10 sm:px-6 lg:mx-auto") do
+      #   div(id: "events_list", class: "") do
+      #     render EventsList.new
+      #   end
+      # end
     end
   end
 
@@ -105,7 +105,10 @@ class MonthComponent < CalendarComponent
       week_number(day, dt, "pl-2 ")
       # all_day_events(dt, "min-h-10")
       # punches?(dt, "pl-1.5")
-      events?(dt, :month, { from: dt.beginning_of_month.to_time, to: dt.end_of_month.to_time })
+      div(class: "font-extrabold place-self-center col-span-2 text-2xl") do
+        events?(dt, :month, { from: dt.beginning_of_month.to_time, to: dt.end_of_month.to_time })
+        punches?(dt, :month, 0, { from: dt.beginning_of_month.to_time, to: dt.end_of_month.to_time })
+      end
 
       cls = "absolute col-span-2 place-self-center "
       cls += (dt == Date.today) ? " bg-sky-600 text-white rounded-full w-6 text-center" : "  "
@@ -206,7 +209,7 @@ class MonthComponent < CalendarComponent
       tabindex: "-1") do
       week_number(day, dt, "pl-1 h-6 text-[8px]")
       # all_day_events(dt)
-      punches?(dt, "pl-0.5")
+      punches?(dt, :month, 0, { from: dt.beginning_of_month.to_time, to: dt.end_of_month.to_time })
       events?(dt, :month, { from: dt.beginning_of_month.to_time, to: dt.end_of_month.to_time })
 
       cls = "absolute col-span-2 place-self-center "

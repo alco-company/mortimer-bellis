@@ -17,6 +17,7 @@ class ModalController < BaseController
   def show
     case resource_class.to_s.underscore
     when "employee"; process_employee_show
+    when "punch"; process_punch_show
     else; head :not_found and return
     end
   end
@@ -120,6 +121,13 @@ class ModalController < BaseController
         # render :import_preview, locals: { model_form: params[:modal_form], step: "approve", resource_class: params[:resource_class], records: @records }
         render turbo_stream: turbo_stream.replace("modal_container", partial: "modal/import_preview", local: { records: @records })
       end
+    end
+
+    def process_punch_show
+      # case params[:step]
+      # when "view"
+      #   render turbo_stream: turbo_stream.replace("modal_container", partial: "modal/punch", local: { resource: @resource })
+      # end
     end
 
 

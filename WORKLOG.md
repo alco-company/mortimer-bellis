@@ -19,6 +19,10 @@ guide idea:
 
 ## CHANGELOG
 
+### 16/8/2024
+
+* list punches on calendar views
+  
 ### 15/8/2024
 
 * fix regression on delete/delete_all II
