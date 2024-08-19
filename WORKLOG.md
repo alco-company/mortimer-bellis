@@ -24,6 +24,7 @@ guide idea:
 ### 19/8/2024
 
 * fix show events when none present
+* fix misssing add button on day_summary
 
 ### 16/8/2024
 

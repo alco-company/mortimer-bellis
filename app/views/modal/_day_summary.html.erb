@@ -31,10 +31,10 @@
 
     <div class="flex">
       <div class="flex flex-grow space-x-2">
-        <%= link_to t("calendar.day_view"), calendar_url(@resource, date: @date ,view: "day"), class: "mort-btn-secondary" %>        
-        <%= link_to t("calendar.week_view"), calendar_url(@resource, date: @date ,view: "week"), class: "mort-btn-secondary" %>        
-        <%= link_to t("calendar.month_view"), calendar_url(@resource, date: @date ,view: "month"), class: "mort-btn-secondary" %>        
-        <%= link_to t("calendar.year_view"), calendar_url(@resource, date: @date ,view: "year"), class: "mort-btn-secondary" %>        
+        <%#= link_to t("calendar.day_view"), calendar_url(@resource, date: @date ,view: "day"), class: "mort-btn-secondary" %>        
+        <%#= link_to t("calendar.week_view"), calendar_url(@resource, date: @date ,view: "week"), class: "mort-btn-secondary" %>        
+        <%#= link_to t("calendar.month_view"), calendar_url(@resource, date: @date ,view: "month"), class: "mort-btn-secondary" %>        
+        <%#= link_to t("calendar.year_view"), calendar_url(@resource, date: @date ,view: "year"), class: "mort-btn-secondary" %>        
       </div>
       <div class="flex-grow-0">
         <%= link_to( new_modal_url(id: @resource.id, modal_form: "event", resource_class: "event", date: @date, step: "new", view: @view),
@@ -43,14 +43,13 @@
               # data: { turbo_method: :delete, turbo_confirm: "Are you sure?", turbo_stream: true, action: "click->contextmenu#hide" },
               class: "mort-btn-primary",
               role: "menuitem",
-              tabindex: "-1") do
-                content_tag :span, "+", class: "sm:hidden"
-                content_tag :span, t("calendar.create_event"), class: "hidden sm:block"
-        end %>
+              tabindex: "-1") do %>
+                <div class="sm:hidden"> + </div>
+                <div class="hidden sm:block">
+                   <%= t("calendar.create_event") %> 
+                </div>
+        <% end %>
       </div>
-
-
     </div>
-
   <% end %>
 </div>

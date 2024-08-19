@@ -170,9 +170,8 @@ ActiveRecord::Schema[8.0].define(version: 2024_08_07_145706) do
     t.date "from_date"
     t.datetime "from_time"
     t.date "to_date"
-    t.datetime "to_time"
+    t.datetime "to_datetime"
     t.integer "duration"
-    t.boolean "auto_punch"
     t.boolean "all_day"
     t.text "comment"
     t.datetime "created_at", null: false
