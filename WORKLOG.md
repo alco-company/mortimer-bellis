@@ -27,6 +27,7 @@ guide idea:
 * fix misssing add button on day_summary
 * drop header on calendars/:id
 * fix non-working menuitems on 'more' on calendars/:id in mobile view
+* show events spanning multiple days
 
 ### 16/8/2024
 

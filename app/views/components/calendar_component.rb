@@ -343,8 +343,16 @@ class CalendarComponent < ApplicationComponent
                 end
               end
             else
-              start = event.from_time.hour * 12 + event.from_time.min / 5
-              duration = (event.to_time.hour * 12 + event.to_time.min / 5) - start
+              if event.from_date < dt && event.event_metum.nil?
+                start = 0
+              else
+                start = event.from_time.hour * 12 + event.from_time.min / 5
+              end
+              if event.to_date > dt && event.event_metum.nil?
+                duration = 288 - start
+              else
+                duration = (event.to_time.hour * 12 + event.to_time.min / 5) - start
+              end
               cls = duration < 12 ? "hidden" : ""
               li(class: "relative col-start-#{index+1} flex ", style: "grid-row:#{start + 2} /span #{duration}") do
                 link_to(
