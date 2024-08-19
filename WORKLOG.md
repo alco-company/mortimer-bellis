@@ -25,6 +25,7 @@ guide idea:
 
 * fix show events when none present
 * fix misssing add button on day_summary
+* drop header on calendars/:id
 
 ### 16/8/2024
 

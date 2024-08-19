@@ -1,5 +1,5 @@
 <div class="w-full">
-  <div class="flex justify-between items-center">
+  <div class="hidden flex justify-between items-center">
     <div>
       <h1 class="font-bold text-4xl"> <%= @resource.name %> </h1>
     </div>
@@ -8,7 +8,7 @@
     </div>
   </div>
   <div class="" data-controller="calendar">
-    <div class="ID mb-2"><strong>ID</strong><br/><%= @resource.id %></div>
+    <div class="ID mb-2 hidden"><strong>ID</strong><br/><%= @resource.id %></div>
     <%= render CalendarComponent.new(id: @resource.id, url: resource_url, date: @date, calendars: [@resource], view: params[:view]) %> 
   </div>
 </div>
