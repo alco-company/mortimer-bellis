@@ -28,6 +28,7 @@ guide idea:
 * drop header on calendars/:id
 * fix non-working menuitems on 'more' on calendars/:id in mobile view
 * show events spanning multiple days
+* show [whimsical](https://whimsical.com/pos-RGjYYm84RR3pbF4fL5XUzU) POS punch options
 
 ### 16/8/2024
 

@@ -17,6 +17,9 @@ class PunchClockEmployee < PunchClockBase
         else; show_today
         end
       end
+      div(class: "fixed bottom-[103px] z-40 bg-slate-100 opaque-5 w-full") do
+        punch_more
+      end
       div(class: %(w-full fixed bottom-[39px] z-40 bg-slate-100 opaque-5)) do
         div(class: "max-w-full lg:max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 mb-2") do
           div(class: "border-gray-200 py-2 text-gray-400 justify-items-stretch flex flex-row-reverse gap-2") do
@@ -24,6 +27,26 @@ class PunchClockEmployee < PunchClockBase
           end
         end
       end unless tab == "profile"
+    end
+  end
+
+
+  def punch_more
+    div(class: "flex flex-row flex-wrap text-xs hidden", data: { pos_employee_target: "evenMoreOptions" }) do
+      button_tag helpers.t(".child_sick"), type: "submit", form: "inform", class: "bg-red-500 text-white block mx-2 my-2 rounded-md px-3 py-2 font-medium"
+      button_tag helpers.t(".nursing_sick"), type: "submit", form: "inform", class: "bg-red-500 text-white block mx-2 my-2 rounded-md px-3 py-2 font-medium"
+      button_tag helpers.t(".p56_sick"), type: "submit", form: "inform", class: "bg-red-500 text-white block mx-2 my-2 rounded-md px-3 py-2 font-medium"
+      button_tag helpers.t(".loss_work_sick"), type: "submit", form: "inform", class: "bg-red-500 text-white block mx-2 my-2 rounded-md px-3 py-2 font-medium"
+      button_tag helpers.t(".rr_free"), type: "submit", form: "inform", class: "bg-blue-500 text-white block mx-2 my-2 rounded-md px-3 py-2 font-medium"
+      button_tag helpers.t(".senior_free"), type: "submit", form: "inform", class: "bg-blue-500 text-white block mx-2 my-2 rounded-md px-3 py-2 font-medium"
+      button_tag helpers.t(".unpaid_free"), type: "submit", form: "inform", class: "bg-blue-500 text-white block mx-2 my-2 rounded-md px-3 py-2 font-medium"
+      button_tag helpers.t(".maternity_free"), type: "submit", form: "inform", class: "bg-blue-500 text-white block mx-2 my-2 rounded-md px-3 py-2 font-medium"
+      button_tag helpers.t(".leave_free"), type: "submit", form: "inform", class: "bg-blue-500 text-white block mx-2 my-2 rounded-md px-3 py-2 font-medium"
+    end
+    div(class: "flex flex-row flex-wrap text-xs hidden", data: { pos_employee_target: "moreOptions" }) do
+      button_tag(helpers.t(".even_more_options"), type: "button", data: { action: "click->pos-employee#toggleEvenMoreOptions" }, class: "bg-slate-200 text-white block mx-2 my-2 rounded-md px-3 py-2 font-medium")
+      button_tag helpers.t(".free"), type: "submit", form: "inform", class: "bg-blue-500 text-white block mx-2 my-2 rounded-md px-3 py-2 font-medium"
+      button_tag helpers.t(".iam_sick"), type: "submit", form: "inform", class: "bg-red-500 text-white block mx-2 my-2 rounded-md px-3 py-2 font-medium"
     end
   end
 end

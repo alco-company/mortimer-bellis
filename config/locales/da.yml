@@ -120,6 +120,8 @@ da:
   pos:
     employee:
       show:
+        more_options: mere
+        even_more_options: endnu mere
         today: I dag
         payroll_period: Lønperiode
         profile: Profil
@@ -145,7 +147,7 @@ da:
         free_reason: Årsag til fravær
         sick_reason: Sygdomsårsag
         free: Fri
-        rr_free: Ferie
+        rr_free: Frivalg
         senior_free: Senior
         unpaid_free: Selvbetalt
         maternity_free: Barsel

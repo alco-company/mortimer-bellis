@@ -25,14 +25,22 @@ class PunchClockButtons < ApplicationComponent
         punch_in
         punch_break
         punch_out
+        more_button
       end
+    end
+  end
+
+  def more_button
+    return unless employee.out?
+    div(class: "justify-self-end") do
+      button_tag(helpers.t(".more_options"), type: "button", data: { action: "click->pos-employee#toggleMoreOptions" }, class: "bg-slate-200 text-white block rounded-md px-3 py-2 text-xl font-medium mr-2")
     end
   end
 
   def punch_in
     return if employee.in?
     div(class: "justify-self-end") do
-      button_tag helpers.t(".in"), type: "submit", form: "inform", class: "bg-green-500 text-white block rounded-md px-3 py-2 text-xl font-medium"
+      button_tag(helpers.t(".in"), type: "submit", form: "inform", class: "bg-green-500 text-white block rounded-md px-3 py-2 text-xl font-medium")
       form_with url: @url, id: "inform", method: :post do
         @punch_clock ?
           hidden_field(:punch_clock, :api_key, value: @punch_clock.access_token) :
