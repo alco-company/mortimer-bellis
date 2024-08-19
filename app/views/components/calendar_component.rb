@@ -172,7 +172,7 @@ class CalendarComponent < ApplicationComponent
       ) do
         div(class: "py-1", role: "none") do
           link_to(
-            helpers.new_modal_url(id: id, modal_form: "event", resource_class: "event", modal_next_step: "accept"),
+            helpers.new_modal_url(id: id, modal_form: "event", resource_class: "event", step: "new"),
             data: { turbo_stream: true },
             # link_to helpers.delete_all_url(),
             # data: { turbo_method: :delete, turbo_confirm: "Are you sure?", turbo_stream: true, action: "click->contextmenu#hide" },
@@ -191,13 +191,13 @@ class CalendarComponent < ApplicationComponent
           # ) { I18n.t("calendar.create_event") }
         end
         div(class: "py-1", role: "none") do
-          a(
-            href: "#{url}?view=day&date=#{date}",
+          link_to("#{url}?view=#{view}&date=#{Date.today}",
             class: "block px-4 py-2 text-sm text-gray-700",
             role: "menuitem",
             tabindex: "-1",
-            id: "menu-0-item-1"
-          ) { I18n.t("calendar.go_today") }
+            id: "menu-0-item-1") do
+              I18n.t("calendar.go_today")
+          end
         end
         views_list
       end

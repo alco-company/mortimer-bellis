@@ -75,7 +75,7 @@ class ModalController < BaseController
       case @modal_form
       when "delete"; @step = "accept"
       else
-        @date = params[:date] ? Date.parse(params[:date]) : Date.current
+        @date = params[:date] ? Date.parse(params[:date]) : Date.today
         @view = params[:view] || "month"
         case @step
         when "new"
