@@ -10,14 +10,20 @@ guide idea:
 3. allow user to skip further tips => set tips_progress to 1000
 4. on every 5th request, show a tip until user tips_progress is 10, then 10ths until 100, then 20ths until 200, then 50ths until 500, then 100ths until 1000
 5. allow sign_up in multiple languages
+6. build a native app - https://blog.corsego.com/navigating-turbo-native / https://www.youtube.com/watch?v=TDQ2wtmgeKw
 
 ## BUGS
 
 * [ ] add breaks and included_in_duration to payroll_period#manual_punch
 * [ ] redesign punch and add work_schedule to payroll_period#manual_punch
 * fix error on employee_invitation#create -> returns turbo_frame in clear text - not HTML - at least on iPad
-
+* https://railsdesigner.com/preview-images-with-hotwire
+  
 ## CHANGELOG
+
+### 19/8/2024
+
+* fix show events when none present
 
 ### 16/8/2024
 

@@ -7,6 +7,7 @@ class EventsList < ApplicationComponent
     @date = date
     @calendar = calendar
     @view = view
+    @any = false
   end
 
   def view_template(&block)
@@ -14,6 +15,7 @@ class EventsList < ApplicationComponent
       holidays
       punch_list
       event_list
+      li { "" } unless @any
     end
   end
 
@@ -21,6 +23,7 @@ class EventsList < ApplicationComponent
   # holidays, more
   def holidays
     Holiday.today(date).each do |holiday|
+      @any=true
       li(class: "flex items-center p-1") do
         div(class: "flex flex-col flex-grow truncate") do
           div(class: "text-xs text-violet-600 font-thin flex justify-start items-center") do
@@ -72,6 +75,7 @@ class EventsList < ApplicationComponent
   # punches from the punch_card
   def punch_list
     if calendar.calendarable.punch_cards.today(date).any?
+      @any=true
       li(class: "flex items-center p-1") do
         div(class: "flex flex-col flex-grow truncate") do
           div(
@@ -146,6 +150,7 @@ class EventsList < ApplicationComponent
       # when event.event_metum.present?; recurring_event(event)
       # else
       # end
+      @any=true
       regular_event(event)
       end
     end
