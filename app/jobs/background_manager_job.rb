@@ -10,22 +10,26 @@ class BackgroundManagerJob < ApplicationJob
   #
   def perform
     dt = DateTime.current
-    #   prepare_state_job if dt.hour == 5 and dt.min == 0
-    #   prepare_eu_state_job if dt.hour == 5 and dt.min == 5
-    prepare_auto_punch_job # if dt.hour == 23 and dt.min == 50
-    # rescue => error
-    #   UserMailer.error_report(error.to_s, "BackgroundManagerJob.perform").deliver_later
+    prepare_state_job if dt.hour == 5 and dt.min == 0
+    prepare_eu_state_job if dt.hour == 5 and dt.min == 5
+    prepare_auto_punch_job if dt.hour == 23 and dt.min == 50
+    rescue => error
+      UserMailer.error_report(error.to_s, "BackgroundManagerJob.perform").deliver_later
   end
 
   def prepare_state_job
     Account.all.each do |account|
-      EmployeeStateJob.perform_later account: account
+      if account.employees.any?
+        EmployeeStateJob.perform_later account: account
+      end
     end
   end
 
   def prepare_eu_state_job
     Account.all.each do |account|
-      EmployeeEuStateJob.perform_later account: account
+      if account.employees.any?
+        EmployeeEuStateJob.perform_later account: account
+      end
     end
   end
 

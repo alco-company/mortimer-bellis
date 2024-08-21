@@ -21,6 +21,11 @@ guide idea:
   
 ## CHANGELOG
 
+### 21/8/2024
+
+* add noticed gem for sending notifications
+* fix background_jobs - solid queue issues
+
 ### 20/8/2024
 
 * work on background jobs - solid queue issues - wip
