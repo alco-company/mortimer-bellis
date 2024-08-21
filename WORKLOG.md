@@ -25,6 +25,7 @@ guide idea:
 
 * add noticed gem for sending notifications
 * fix background_jobs - solid queue issues
+* put punch methods in their place
 
 ### 20/8/2024
 

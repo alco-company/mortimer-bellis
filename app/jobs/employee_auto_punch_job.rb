@@ -3,7 +3,6 @@ class EmployeeAutoPunchJob < ApplicationJob
 
   def perform(**args)
     super(**args)
-    puts "EmployeeAutoPunchJob %s" % Current.account.name
     date=DateTime.current
     Employee.by_account.each do |employee|
       next if employee.did_punch(date)

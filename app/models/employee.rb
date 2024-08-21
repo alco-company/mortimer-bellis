@@ -109,29 +109,4 @@ class Employee < ApplicationRecord
   rescue
     "border-white"
   end
-
-  def did_punch(date)
-    todays_punches(date: date).any?
-  end
-
-  def punch_by_calendar(date)
-    all_calendars.each do |calendar|
-      tz = calendar.time_zone
-      calendar.events.each do |event|
-        if event.occurs?({ from: date.beginning_of_week, to: date.end_of_week }, date, tz)
-          from_at = DateTime.new date.year, date.month, date.day, event.from_time.hour, event.from_time.min, 0, tz
-          to_at = DateTime.new date.year, date.month, date.day, event.to_time.hour, event.to_time.min, 0, tz
-          reason = event.work_type
-          ip = "calendar punch"
-          PunchJob.new.punch_it!(self, reason, ip, from_at, to_at, event.comment)
-        end
-      end
-    end
-    Rails.env.local? ?
-      PunchCardJob.perform_now(account: account, employee: self, date: date) :
-      PunchCardJob.perform_later(account: account, employee: self, date: date)
-    true
-  rescue => error
-    UserMailer.error_report(error.to_s, "Employee#punch_by_calendar").deliver_later
-  end
 end
