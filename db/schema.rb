@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_08_07_145706) do
+ActiveRecord::Schema[8.0].define(version: 2024_08_20_180124) do
   create_table "accounts", force: :cascade do |t|
     t.string "name"
     t.string "email"
@@ -170,8 +170,9 @@ ActiveRecord::Schema[8.0].define(version: 2024_08_07_145706) do
     t.date "from_date"
     t.datetime "from_time"
     t.date "to_date"
-    t.datetime "to_datetime"
+    t.datetime "to_time"
     t.integer "duration"
+    t.boolean "auto_punch"
     t.boolean "all_day"
     t.text "comment"
     t.datetime "created_at", null: false
@@ -345,6 +346,22 @@ ActiveRecord::Schema[8.0].define(version: 2024_08_07_145706) do
     t.datetime "created_at", null: false
     t.index ["job_id"], name: "index_solid_queue_recurring_executions_on_job_id", unique: true
     t.index ["task_key", "run_at"], name: "index_solid_queue_recurring_executions_on_task_key_and_run_at", unique: true
+  end
+
+  create_table "solid_queue_recurring_tasks", force: :cascade do |t|
+    t.string "key", null: false
+    t.string "schedule", null: false
+    t.string "command", limit: 2048
+    t.string "class_name"
+    t.text "arguments"
+    t.string "queue_name"
+    t.integer "priority", default: 0
+    t.boolean "static", default: true
+    t.text "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["key"], name: "index_solid_queue_recurring_tasks_on_key", unique: true
+    t.index ["static"], name: "index_solid_queue_recurring_tasks_on_static"
   end
 
   create_table "solid_queue_scheduled_executions", force: :cascade do |t|

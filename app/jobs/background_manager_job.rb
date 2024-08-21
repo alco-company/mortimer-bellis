@@ -10,11 +10,11 @@ class BackgroundManagerJob < ApplicationJob
   #
   def perform
     dt = DateTime.current
-    prepare_state_job if dt.hour == 5 and dt.min == 0
-    prepare_eu_state_job if dt.hour == 5 and dt.min == 5
-    prepare_auto_punch_job if dt.hour == 23 and dt.min == 50
-  rescue => error
-    UserMailer.error_report(error.to_s, "BackgroundManagerJob.perform").deliver_later
+    #   prepare_state_job if dt.hour == 5 and dt.min == 0
+    #   prepare_eu_state_job if dt.hour == 5 and dt.min == 5
+    prepare_auto_punch_job # if dt.hour == 23 and dt.min == 50
+    # rescue => error
+    #   UserMailer.error_report(error.to_s, "BackgroundManagerJob.perform").deliver_later
   end
 
   def prepare_state_job
@@ -32,9 +32,10 @@ class BackgroundManagerJob < ApplicationJob
   def prepare_auto_punch_job
     Account.all.each do |account|
       if account.employees.any?
-        EmployeeAutoPunchJob.perform_later account: account
+        EmployeeAutoPunchJob.perform_now account: account
       end
     end
+    true
   end
   #
   # from the solid_queue.yml

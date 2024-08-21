@@ -1,3 +1,18 @@
+# create_table "background_jobs", force: :cascade do |t|
+#   t.integer "account_id", null: false
+#   t.integer "user_id"
+#   t.integer "state", default: 0
+#   t.string "job_klass"
+#   t.text "params"
+#   t.text "schedule"
+#   t.datetime "next_run_at"
+#   t.string "job_id"
+#   t.datetime "created_at", null: false
+#   t.datetime "updated_at", null: false
+#   t.index ["account_id"], name: "index_background_jobs_on_account_id"
+#   t.index ["user_id"], name: "index_background_jobs_on_user_id"
+# end
+#
 class BackgroundJob < ApplicationRecord
   include Accountable
   include Queueable
@@ -22,7 +37,7 @@ class BackgroundJob < ApplicationRecord
   end
 
   def active?
-    !not_active?
+    !in_active?
   end
 
   def self.filtered(filter)

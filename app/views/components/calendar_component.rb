@@ -330,7 +330,7 @@ class CalendarComponent < ApplicationComponent
       #  events
       calendar_events do |event, tz|
         (window[:from].to_date..window[:to].to_date).each_with_index do |dt, index|
-          if event_occurs?(event, window, dt, tz)
+          if event.occurs?(window, dt, tz)
             if event.all_day?
               li(class: "relative col-start-#{index+1} flex ", style: "grid-row:1 /span 1") do
                 link_to(
@@ -567,7 +567,7 @@ class CalendarComponent < ApplicationComponent
       div() { " " }
     else
       calendar_events do |event, tz|
-        if event_occurs?(event, window, dt, tz)
+        if event.occurs?(window, dt, tz)
           case view
           # when :day;   hits = 1
           # when :week;  hits = 2
@@ -602,12 +602,5 @@ class CalendarComponent < ApplicationComponent
         end
       end
     end
-  end
-
-  def event_occurs?(event, window, dt, tz)
-    return false if !event.from_date.nil? && event.from_date.to_date > dt
-    return false if !event.to_date.nil? && event.to_date.to_date < dt
-    return true  if event.event_metum.nil?
-    event.occurs_on?(dt, window, tz)
   end
 end

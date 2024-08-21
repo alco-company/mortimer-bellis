@@ -150,7 +150,7 @@ module Queueable
     def persist(job_id, next_run_at)
       update_columns job_id: job_id, next_run_at: next_run_at
       Current.account ||= self.account
-      broadcast_update
+      # broadcast_update
       [ job_id, next_run_at ]
     end
   end

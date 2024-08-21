@@ -145,7 +145,7 @@ class EventsList < ApplicationComponent
   # hele dagen
   def event_list
     calendar_events do |event, tz|
-      if event_occurs?(event, { from: date.beginning_of_week.to_time, to: date.end_of_week.to_time }, date, tz)
+      if event.occurs?({ from: date.beginning_of_week.to_time, to: date.end_of_week.to_time }, date, tz)
       # all_day_event(event) if event.all_day?
       # when event.event_metum.present?; recurring_event(event)
       # else
@@ -330,7 +330,7 @@ class EventsList < ApplicationComponent
 
   def events?(dt, &block)
     calendar_events do |event, tz|
-      if event_occurs?(event, { from: dt, to: dt }, dt, tz)
+      if event.occurs?({ from: dt, to: dt }, dt, tz)
         yield event
       end
     end
@@ -343,13 +343,6 @@ class EventsList < ApplicationComponent
     calendar.events.each do |event|
       yield event, tz
     end
-  end
-
-  def event_occurs?(event, window, dt, tz)
-    return false if !event.from_date.nil? && event.from_date.to_date > dt
-    return false if !event.to_date.nil? && event.to_date.to_date < dt
-    return true  if event.event_metum.nil?
-    event.occurs_on?(dt, window, tz)
   end
 
   def all_day_event(event)

@@ -1,7 +1,7 @@
 # WORKLOG
 
 # fonts to use: Inter, Helvetica, Futura, Garamond, Times New Roman, Bodoni, Baskerville, Century Expanded
-# https://www.somanycode.com/awesome/awesome-ruby/ listing for many projects and gems
+# <https://www.somanycode.com/awesome/awesome-ruby/> listing for many projects and gems
 
 guide idea:
 
@@ -10,16 +10,20 @@ guide idea:
 3. allow user to skip further tips => set tips_progress to 1000
 4. on every 5th request, show a tip until user tips_progress is 10, then 10ths until 100, then 20ths until 200, then 50ths until 500, then 100ths until 1000
 5. allow sign_up in multiple languages
-6. build a native app - https://blog.corsego.com/navigating-turbo-native / https://www.youtube.com/watch?v=TDQ2wtmgeKw
+6. build a native app - <https://blog.corsego.com/navigating-turbo-native> / <https://www.youtube.com/watch?v=TDQ2wtmgeKw>
 
 ## BUGS
 
 * [ ] add breaks and included_in_duration to payroll_period#manual_punch
 * [ ] redesign punch and add work_schedule to payroll_period#manual_punch
 * fix error on employee_invitation#create -> returns turbo_frame in clear text - not HTML - at least on iPad
-* https://railsdesigner.com/preview-images-with-hotwire
+* <https://railsdesigner.com/preview-images-with-hotwire>
   
 ## CHANGELOG
+
+### 20/8/2024
+
+* work on background jobs - solid queue issues - wip
 
 ### 19/8/2024
 
@@ -159,7 +163,6 @@ guide idea:
 * prepare for hotwired flash messages (and later notifications)
 * prepare for tooltips - wip: turbo_frame not loading!
 
-
 ### 21/6/2024
 
 * archive employees once they off-board (or only work as temps)
@@ -170,12 +173,12 @@ guide idea:
 ### 20/6/2024
 
 * mail format on password_change & email_changed touch up
-* advice on new 'lead' on accounts to walther@alco.dk
+* advice on new 'lead' on accounts to <walther@alco.dk>
 
 ### 19/6/2024
 
 * change ringcolor to ring-sky-600 on input fields
-* trying to signup with user@existing.domain does not work - if no users exist!
+* trying to signup with <user@existing.domain> does not work - if no users exist!
 * show ID on accounts, and add tax_number
 * css error 700-400
 * fix mail formats - prettier mails and views for Devise
@@ -283,7 +286,7 @@ guide idea:
 * set time_zone = creators on create employee
 * show h:m on updated_at on punch
 * 'ret' = 'gem' when saving edit on punch
-* fix <ActiveRecord::ReadOnlyError: Write query attempted while in readonly mode: UPDATE..> - perhaps use: https://blog.saeloun.com/2023/12/06/rails-dual-database-setup/
+* fix <ActiveRecord::ReadOnlyError: Write query attempted while in readonly mode: UPDATE..> - perhaps use: <https://blog.saeloun.com/2023/12/06/rails-dual-database-setup/>
 * link on punch err's
 
 ### 28/5/2024
@@ -542,7 +545,7 @@ guide idea:
 
 ### 23/4/2024
 
-* https://guillaumebriday.fr/how-to-deploy-rails-with-kamal-and-ssl-certificate-on-vps to the rescue on setting up Letsencrypt
+* <https://guillaumebriday.fr/how-to-deploy-rails-with-kamal-and-ssl-certificate-on-vps> to the rescue on setting up Letsencrypt
 * add account
 * add superform and lay foundation for views using Phlex
 * make account tests green

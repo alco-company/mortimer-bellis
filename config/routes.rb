@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  mount MissionControl::Jobs::Engine, at: "/solid_queue_jobs"
+
   devise_for :users, controllers: {
     invitations: "users/invitations",
     registrations: "users/registrations",

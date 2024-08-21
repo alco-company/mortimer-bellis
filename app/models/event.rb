@@ -41,6 +41,13 @@ class Event < ApplicationRecord
     event_metum.get_field(field_name)
   end
 
+  def occurs?(window, dt, tz)
+    return false if !from_date.nil? && from_date.to_date > dt
+    return false if !to_date.nil? && to_date.to_date < dt
+    return true  if event_metum.nil?
+    occurs_on?(dt, window, tz)
+  end
+
   def occurs_on?(dt, window, tz)
     event_metum.occurs_on?(dt, window, tz)
   end

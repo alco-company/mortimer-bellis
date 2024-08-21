@@ -79,7 +79,7 @@ gem "rqrcode", "~> 2.2"
 
 gem "activerecord-enhancedsqlite3-adapter", "~> 0.8.0"
 
-gem "solid_queue", "~> 0.3.1"
+gem "solid_queue", "~> 0.5.0"
 
 gem "get_process_mem", "~> 0.2.7"
 
@@ -100,3 +100,5 @@ gem "psych", "~> 5.1.2"
 gem "rrule", "~> 0.6.0"
 
 gem "httpx", "~> 1.3"
+
+gem "mission_control-jobs", "~> 0.3.1"
