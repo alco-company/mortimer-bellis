@@ -36,7 +36,7 @@ class NavigationComponent < ApplicationComponent
             end
           end
           div(class: " absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0") do
-            # view_notifications
+            view_notifications
             profile_dropdown if Current.user.present?
           end
         end
@@ -141,16 +141,13 @@ class NavigationComponent < ApplicationComponent
   end
 
   def view_notifications
+    swing = Current.user.notifications.any? ? "animate-swing" : "" rescue ""
     comment { "View notifications" }
-    button(
-      type: "button",
-      class:
-        " relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
-    ) do
+    link_to notifications_path, class: "relative rounded-full bg-transparent p-1 text-blue-300 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800" do
       span(class: "absolute -inset-1.5")
       span(class: "sr-only") { "View notifications" }
       svg(
-        class: "h-6 w-6",
+        class: "h-6 w-6 #{swing}",
         fill: "none",
         viewbox: "0 0 24 24",
         stroke_width: "1.5",

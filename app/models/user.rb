@@ -12,6 +12,8 @@ class User < ApplicationRecord
 
   has_many :user_invitations, class_name: "User", as: :invited_by
 
+  has_many :notifications, as: :recipient, class_name: "Noticed::Notification"
+
   enum :role, { user: 0, admin: 1, superadmin: 2 }
   has_one_attached :mugshot
 

@@ -15,7 +15,7 @@ module Resourceable
     def resource_class
       @resource_class ||= case params_ctrl.split("/").last
       when "invitations"; EmployeeInvitation
-      else; params_ctrl.split("/").last.classify.constantize
+      else; params_ctrl.split("/").last.classify.constantize rescue nil
       end
     end
 
@@ -26,11 +26,11 @@ module Resourceable
 
     def set_resources
       @resources = any_filters? ? resource_class.filtered(@filter) : parent_or_class
-      @resources = any_sorts? ? resource_class.ordered(@resources, params_s, params_d) : @resources.order(created_at: :desc)
+      @resources = any_sorts? ? resource_class.ordered(@resources, params_s, params_d) : @resources.order(created_at: :desc) rescue nil
     end
 
     def parent_or_class
-      parent? ? parent_resources : resource_class.by_account()
+      parent? ? parent_resources : resource_class.by_account() rescue nil
     end
 
     # "/teams/37/calendars"

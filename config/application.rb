@@ -34,5 +34,11 @@ module Mortimer
     #   Rails::ConsoleMethods.send :include, Alco::Console
     #   TOPLEVEL_BINDING.eval("self").extend Alco::Console # PRY
     # end
+
+    # Noticed notifications configuration
+    config.to_prepare do
+      Noticed::Event.include Noticed::EventExtensions
+      Noticed::Notification.include Noticed::NotificationExtensions
+    end
   end
 end

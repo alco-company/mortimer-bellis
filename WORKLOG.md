@@ -3,7 +3,13 @@
 # fonts to use: Inter, Helvetica, Futura, Garamond, Times New Roman, Bodoni, Baskerville, Century Expanded
 # <https://www.somanycode.com/awesome/awesome-ruby/> listing for many projects and gems
 
-guide idea:
+## Rescue tools
+
+* How to rescue your SQLite database - https://support.storj.io/hc/en-us/articles/360029309111-How-to-fix-a-database-disk-image-is-malformed
+
+## Ideas
+
+### Guide for new users
 
 1. build a list of necessary guide tips
 2. add tips_progress on the user
@@ -21,9 +27,12 @@ guide idea:
   
 ## CHANGELOG
 
+### 22/8/2024
+
+* add noticed gem for sending notifications - wip
+
 ### 21/8/2024
 
-* add noticed gem for sending notifications
 * fix background_jobs - solid queue issues
 * put punch methods in their place
 

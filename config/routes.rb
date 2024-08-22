@@ -12,6 +12,7 @@ Rails.application.routes.draw do
   }
 
   resources :events
+  resources :notifications
   resources :holidays
   resources :calendars do
     resources :events

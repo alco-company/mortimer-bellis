@@ -107,5 +107,6 @@ class EmployeesController < MortimerController
     #
     def create_callback(obj)
       EmployeeMailer.with(employee: obj, sender: current_user.name).welcome.deliver_later unless obj.email.blank?
+      CompletedEmployeeNotifier.with(record: obj, message: "Employee Filled Out Their Form!").deliver(User.by_role [ :admin, :superadmin ])
     end
 end

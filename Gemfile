@@ -102,3 +102,5 @@ gem "rrule", "~> 0.6.0"
 gem "httpx", "~> 1.3"
 
 gem "mission_control-jobs", "~> 0.3.1"
+
+gem "noticed", "~> 2.4"
