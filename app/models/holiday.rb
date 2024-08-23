@@ -6,6 +6,8 @@ class Holiday < ApplicationRecord
   scope :by_country, ->(country) { where("countries LIKE ?", "%#{country}%") if country.present? }
   scope :order_by_number, ->(field) { order("length(#{field}) DESC, #{field} DESC") }
 
+  validates :name, presence: true
+
   def self.today?(dt)
     today(dt).any?
   end
@@ -19,8 +21,8 @@ class Holiday < ApplicationRecord
 
     all
       .by_name(flt["name"])
-      .by_from_date(Date.parse(flt["from_date"]))
-      .by_to_date(Date.parse(flt["to_date"]))
+      .by_from_date((Date.parse(flt["from_date"]) rescue nil))
+      .by_to_date((Date.parse(flt["to_date"]) rescue nil))
       .by_country(flt["countries"])
   rescue
     filter.destroy if filter

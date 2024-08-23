@@ -7,6 +7,22 @@
 
 * How to rescue your SQLite database - https://support.storj.io/hc/en-us/articles/360029309111-How-to-fix-a-database-disk-image-is-malformed
 
+```bash
+?1 storage % sqlite3 development.sqlite3   
+SQLite version 3.43.2 2023-10-10 13:08:14
+Enter ".help" for usage hints.
+sqlite> .mode insert
+sqlite> .output dump_all.sql
+sqlite> .dump
+sqlite> .exit
+√ storage % { echo "PRAGMA synchronous = OFF ;"; cat dump_all.sql; } | grep -v -e TRANSACTION -e ROLLBACK -e COMMIT >dump_all_notrans.sql 
+√ storage % mv development.sqlite3 corrupted_23_8_2024.development.sqlite3
+√ storage % sqlite3 development.sqlite3 ".read dump_all_notrans.sql"
+√ storage % sqlite3 development.sqlite3 "PRAGMA integrity_check;"                                                                        
+ok
+
+```
+
 ## Ideas
 
 ### Guide for new users
@@ -26,6 +42,10 @@
 * <https://railsdesigner.com/preview-images-with-hotwire>
   
 ## CHANGELOG
+
+### 23/8/2024
+
+* fix error on holidays filter
 
 ### 22/8/2024
 
