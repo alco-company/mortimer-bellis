@@ -48,7 +48,7 @@ Rails.application.configure do
   # config.assume_ssl = true
 
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
-  config.force_ssl = true
+  config.force_ssl = false
 
   # Log to STDOUT by default
   config.logger = ActiveSupport::Logger.new(STDOUT)
@@ -69,6 +69,10 @@ Rails.application.configure do
   # Use a real queuing backend for Active Job (and separate queues per environment).
   config.active_job.queue_adapter = :solid_queue
   config.solid_queue.connects_to = { database: { writing: :writer, reading: :reader } }
+
+  # config.action_cable.url = "ws://localhost:3000/cable"
+  config.action_cable.allowed_request_origins = [ %r{http://*}, %r{https://*} ]
+
   config.active_job.enqueue_after_transaction_commit = :never
   # config.active_job.queue_name_prefix = "mortimer_production"
 
