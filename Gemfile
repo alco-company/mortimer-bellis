@@ -81,7 +81,7 @@ gem "activerecord-enhancedsqlite3-adapter", "~> 0.8.0"
 
 gem "solid_queue", "~> 0.3.1"
 
-gem "get_process_mem", "~> 0.2.7"
+gem "get_process_mem", "~> 1.0.0"
 
 gem "devise", "~> 4.9"
 
