@@ -73,7 +73,6 @@ module DefaultActions
     def destroy
       if params[:all].present? && params[:all] == "true"
         DeleteAllJob.perform_later account: Current.account, resource_class: resource_class.to_s, sql_resources: @resources.to_sql
-        Broadcasters::Resource.new(@resource).destroy
         respond_to do |format|
           format.html { redirect_to root_path, status: 303, success: t("delete_all_later") }
           format.json { head :no_content }

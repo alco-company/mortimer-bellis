@@ -2,7 +2,7 @@
   <div class="min-w-0 w-full columns-2 md:columns-3">
     <%= render_text_column value: link_to(calendar.name, calendar_url(calendar)), css: "truncate mort-link-primary" do |value| %>
       <%= value %>
-      <% if current_user.global_queries? %>
+      <% if global_queries? Current.user %>
         <p class="text-xs"><%=  link_to calendar.account.name, calendar.account %> </p>
       <% end %>
     <% end %>
@@ -11,6 +11,6 @@
   </div>
   <div class="flex flex-none items-center gap-x-4 ">
     <% links = set_links_for_edit_delete calendar %>
-    <%= render_contextmenu resource: calendar, resource_class: Calendar, alter: true, links: links %>
+    <%= render_contextmenu resource: calendar, turbo_frame: "form", resource_class: Calendar, alter: true, links: links %>
   </div>
 </li>

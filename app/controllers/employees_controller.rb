@@ -21,6 +21,7 @@ class EmployeesController < MortimerController
         (@resource.update(state: :out) && notice = t("employees.unarchived")) :
         (@resource.archived! && notice = t("employees.archived"))
       redirect_back(fallback_location: root_path, notice: notice)
+      Broadcasters::Resource.new(@resource).replace
     else
       redirect_back(fallback_location: root_path, warning: t("employees.not_found"))
     end

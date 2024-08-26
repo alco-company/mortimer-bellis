@@ -43,6 +43,9 @@ ok
   
 ## CHANGELOG
 
+### 27/8/2024
+
+
 ### 26/8/2024
 
 * work on general turbo_stream model CRUD methods

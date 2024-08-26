@@ -2,7 +2,7 @@
   <div class="min-w-0 w-full columns-2 md:columns-3">
     <%= render_text_column value: link_to(location.name, location_url(location)), css: "truncate mort-link-primary" do |value| %>
       <%= value %>
-      <% if current_user.global_queries? %>
+      <% if global_queries? Current.user %>
         <p class="text-xs"><%=  link_to location.account.name, location.account %> </p>
       <% end %>
     <% end %>
@@ -11,6 +11,6 @@
   </div>
   <div class="flex flex-none items-center gap-x-4 ">
 <!--    <a href="<%#= product_stock_items_url(product) %>" class=" rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:block">Lokationer<span class="sr-only">, GraphQL API</span></a>-->
-    <%= render_contextmenu resource: location %>
+    <%= render_contextmenu resource: location, turbo_frame: "form", resource_class: Location, alter: true, links: [ edit_location_url(location), location_url(location) ] %>
   </div>
 </li>

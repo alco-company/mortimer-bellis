@@ -55,7 +55,7 @@ class EmployeeInvitationsController < MortimerController
           end
 
           resource.update state: :sent, invited_at: DateTime.current
-
+          Broadcasters::Resource.new(resource).create
         end
       end
       obj.destroy

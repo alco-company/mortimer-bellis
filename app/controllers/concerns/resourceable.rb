@@ -25,7 +25,7 @@ module Resourceable
     end
 
     def set_resources
-      @resources_stream = resource_class.to_s.underscore.pluralize
+      @resources_stream = "%s_%s" % [ Current.account.id, resource_class.to_s.underscore.pluralize ]
       @resources = any_filters? ? resource_class.filtered(@filter) : parent_or_class
       @resources = any_sorts? ? resource_class.ordered(@resources, params_s, params_d) : @resources.order(created_at: :desc) rescue nil
     end

@@ -223,10 +223,11 @@ class ModalController < BaseController
           redirect_back fallback_location: root_path, success: t(".attachment_deleted")
         else
           cb = get_cb_eval_after_destroy(resource)
+          r = resource
           if resource.destroy!
             eval(cb) unless cb.nil?
             @url.gsub!(/\/\d+$/, "") if @url.match?(/\d+$/)
-            Broadcasters::Resource.new(@resource).destroy
+            Broadcasters::Resource.new(r).destroy
             respond_to do |format|
               format.turbo_stream { }
               format.html { redirect_to @url, status: 303, success: t(".post") }
