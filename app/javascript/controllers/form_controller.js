@@ -3,13 +3,19 @@ import { Controller } from "@hotwired/stimulus"
 // Connects to data-controller="form"
 export default class extends Controller {
   static targets = [
-    "form"
+    "form",
   ]
 
   connect() {
+    // console.log("fisk");
   }
 
   clearForm(e) {
-    this.formTarget.reset();
+    document.forms[0].reset();
+    // this.formTarget.reset();
+  }
+
+  closeForm(e) {
+   document.getElementById("form").innerHTML="";
   }
 }

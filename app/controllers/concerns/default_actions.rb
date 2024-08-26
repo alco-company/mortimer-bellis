@@ -39,10 +39,11 @@ module DefaultActions
       @resource = resource_class.new(resource_params)
       @resource.account_id = Current.account.id if resource_class.has_attribute? :account_id
       @resource.user_id = Current.user.id if resource_class.has_attribute? :user_id
-
       respond_to do |format|
         if @resource.save
           create_callback @resource
+          Broadcasters::Resource.new(@resource).create
+          format.turbo_stream { render turbo_stream: turbo_stream.update("form", "") }
           format.html { redirect_to resources_url, success: t(".post") }
           format.json { render :show, status: :created, location: @resource }
         else
@@ -57,6 +58,8 @@ module DefaultActions
       respond_to do |format|
         if @resource.update(resource_params)
           update_callback @resource
+          Broadcasters::Resource.new(@resource).replace
+          format.turbo_stream { render turbo_stream: turbo_stream.update("form", "") }
           format.html { redirect_to resources_url, success: t(".post") }
           format.json { render :show, status: :ok, location: @resource }
         else
@@ -70,6 +73,7 @@ module DefaultActions
     def destroy
       if params[:all].present? && params[:all] == "true"
         DeleteAllJob.perform_later account: Current.account, resource_class: resource_class.to_s, sql_resources: @resources.to_sql
+        Broadcasters::Resource.new(@resource).destroy
         respond_to do |format|
           format.html { redirect_to root_path, status: 303, success: t("delete_all_later") }
           format.json { head :no_content }
@@ -84,11 +88,12 @@ module DefaultActions
         else
           cb = destroy_callback @resource
           begin
-            eval(cb) if @resource.destroy!
+            eval(cb) && Broadcasters::Resource.new(@resource).destroy if @resource.destroy!
           rescue => error
             say error
           end
           respond_to do |format|
+            format.turbo_stream { render turbo_stream: turbo_stream.remove(dom_id(@resource)) }
             format.html { redirect_to resources_url, status: 303, success: t(".post") }
             format.json { head :no_content }
           end

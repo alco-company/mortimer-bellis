@@ -124,7 +124,7 @@ class Contextmenu < Phlex::HTML
         class: "block px-3 py-1 text-sm leading-6 text-gray-900",
         role: "menuitem",
         tabindex: "-1",
-        data: { turbo_frame: @turbo_frame }) do
+        data: { turbo_frame: "_top" }) do
         plain I18n.t(".export")
         span(class: "sr-only") do
           plain ", "
@@ -137,7 +137,7 @@ class Contextmenu < Phlex::HTML
         class: "block px-3 py-1 text-sm leading-6 text-gray-900",
         role: "menuitem",
         tabindex: "-1",
-        data: { turbo_frame: @turbo_frame }) do
+        data: { turbo_frame: "_top" }) do
         plain I18n.t(".pdf")
         span(class: "sr-only") do
           plain ", "
@@ -167,7 +167,7 @@ class Contextmenu < Phlex::HTML
         button_to((helpers.archive_employee_url(resource)),
           class: "block px-3 py-1 text-sm leading-6 text-gray-900",
           role: "menuitem",
-          data: { turbo_action: "advance", turbo_frame: @turbo_frame },
+          data: { turbo_action: "advance", turbo_frame: "_top" },
           tabindex: "-1") do
           resource.archived? ?
             plain(I18n.t(".unarchive")) :

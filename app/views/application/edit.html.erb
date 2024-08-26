@@ -1,4 +1,18 @@
-<div class="mx-auto md:w-2/3 w-full">
-  <h1 class="font-bold text-4xl"> <%= t("#{ resource_class.table_name}.form.edit") %></h1>
-  <%= render resource_class.form @resource %>
-</div>
+<%= turbo_frame_tag "form" do %>
+  <div data-controller="form" class="absolute top-16 right-0 z-30 bg-white mx-auto h-full w-full md:w-2/3 xl:w-1/2 2xl:w-1/3 border-l">
+    <div class="fixed place-items-center h-22 py-8 bg-white px-4  w-full md:w-2/3 xl:w-1/2 2xl:w-1/3  flex">
+      <h1 class="grow font-bold text-4xl"> <%= t("#{ resource_class.table_name}.form.edit") %> </h1>
+      <div class="flex-none pt-2">
+        <%= link_to resources_url, data: { turbo_frame: "_top"} do %>
+          <span class="sr-only">Close</span>
+          <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        <% end %>
+      </div>
+    </div>
+    <div class="px-4 py-20">
+    <%= render resource_class.form @resource %>
+    </div>
+  </div>
+<% end %>

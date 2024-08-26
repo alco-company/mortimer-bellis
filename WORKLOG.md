@@ -43,6 +43,10 @@ ok
   
 ## CHANGELOG
 
+### 26/8/2024
+
+* work on general turbo_stream model CRUD methods
+
 ### 23/8/2024
 
 * fix error on holidays filter

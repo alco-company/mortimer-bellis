@@ -18,7 +18,7 @@
       <%== pagy_nav(@pagy) if @pagy.pages > 1 %>
     </div>
     <div class="flex gap-2 justify-end">
-      <%= link_to t("#{ resource_class.table_name}.list.new"), new_resource_url, class: "mort-btn-primary" unless params[:controller] == "users" %>
+      <%= link_to t("#{ resource_class.table_name}.list.new"), new_resource_url, class: "mort-btn-primary", data: { turbo_frame: "form" } unless params[:controller] == "users" %>
     </div>
   </div>
 </div>

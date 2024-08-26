@@ -5,6 +5,7 @@ class ApplicationForm < Superform::Rails::Form
   attr_accessor :editable, :api_key, :resource
 
   def initialize(model, **options)
+    options[:data] = { form_target: "form" }
     super(model, **options)
     @resource = model
     @editable = options[:editable]
@@ -371,8 +372,9 @@ class ApplicationForm < Superform::Rails::Form
         div(class: "flex flex-row flex-row-reverse m-5 gap-4") do
           if @editable
             submit(submit_string, tabindex: "0", class: "mort-btn-primary")
-            input(
-              type: "reset",
+            button(
+              type: "button",
+              data: { action: "click->form#clearForm" },
               tabindex: "0",
               class: "mort-btn-cancel"
             ) { helpers.t("cancel") }

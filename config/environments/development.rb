@@ -67,6 +67,12 @@ Rails.application.configure do
 
   config.active_job.verbose_enqueue_logs = true
 
+  config.action_cable.url = "ws://localhost:3000/cable"
+  config.action_cable.allowed_request_origins = [ %r{http://*}, %r{https://*} ]
+  # config.hotwire_livereload.listen_paths << Rails.root.join("app/assets/builds")
+
+  config.action_controller.default_url_options = { protocol: "https", host: "localhost", port: 3000 }
+
 
   # Raises error for missing translations.
   # config.i18n.raise_on_missing_translations = true

@@ -25,6 +25,7 @@ module Resourceable
     end
 
     def set_resources
+      @resources_stream = resource_class.to_s.underscore.pluralize
       @resources = any_filters? ? resource_class.filtered(@filter) : parent_or_class
       @resources = any_sorts? ? resource_class.ordered(@resources, params_s, params_d) : @resources.order(created_at: :desc) rescue nil
     end
@@ -80,6 +81,7 @@ module Resourceable
     def edit_resource_url(**options)
       options[:id] = @resource.try(:id) || options.delete(:id)
       url_for(controller: params_ctrl, action: :edit, **options)
+    rescue
     end
 
     def delete_resource_url(resource)
