@@ -45,6 +45,7 @@ ok
 
 ### 27/8/2024
 
+* first stab at system testing with login
 
 ### 26/8/2024
 

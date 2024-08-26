@@ -7,7 +7,7 @@ one:
   from_date: 2024-07-15
   from_time: 2024-07-15 09:36:24
   to_date: 2024-07-15
-  to_datetime: 2024-07-15 09:36:24
+  to_time: 2024-07-15 09:36:24
   duration: 1
   all_day: false
   comment: MyText
@@ -19,7 +19,7 @@ two:
   from_date: 2024-07-15
   from_time: 2024-07-15 09:36:24
   to_date: 2024-07-15
-  to_datetime: 2024-07-15 09:36:24
+  to_time: 2024-07-15 09:36:24
   duration: 1
   all_day: false
   comment: MyText

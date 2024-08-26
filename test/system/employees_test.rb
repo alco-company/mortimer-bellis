@@ -1,14 +1,15 @@
 require "application_system_test_case"
 
 class EmployeesTest < ApplicationSystemTestCase
-  # setup do
-  #   @employee = employees(:one)
-  # end
+  setup do
+    login_as users(:one)
+    #   @employee = employees(:one)
+  end
 
-  # test "visiting the index" do
-  #   visit employees_url
-  #   assert_selector "h1", text: "Employees"
-  # end
+  test "visiting the index" do
+    visit employees_url
+    assert_selector "h1", text: "Employees"
+  end
 
   # test "should create employee" do
   #   visit employees_url
