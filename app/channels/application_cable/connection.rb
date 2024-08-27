@@ -8,14 +8,14 @@ module ApplicationCable
       self.current_user = find_verified_user
       logger.add_tags "ActionCable", "User #{current_user.id}"
     rescue
-      Rails.logger.error "ActionCable: Connection refused -----------------------------"
+      Rails.logger.error { "ActionCable: Connection refused -----------------------------" }
     end
 
     protected
 
       def set_user
         Current.user = find_verified_user
-        Rails.logger.error "ActionCable: Current.user #{Current.user&.name} -----------------------------"
+        Rails.logger.error { "ActionCable: Current.user #{Current.user&.name} -----------------------------" }
         yield
       end
 

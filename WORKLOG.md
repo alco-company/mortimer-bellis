@@ -46,6 +46,7 @@ ok
 ### 27/8/2024
 
 * first stab at system testing with login
+* reduce object generation when logging
 
 ### 26/8/2024
 

@@ -21,9 +21,9 @@ class ApplicationJob < ActiveJob::Base
   # allow jobs to say what they need to say
   #
   def say(msg)
-    Rails.logger.info "----------------------------------------------------------------------"
-    Rails.logger.info msg
-    Rails.logger.info "----------------------------------------------------------------------"
+    Rails.logger.info { "----------------------------------------------------------------------" }
+    Rails.logger.info { msg }
+    Rails.logger.info { "----------------------------------------------------------------------" }
   end
 
   def switch_locale(locale = nil, &action)
