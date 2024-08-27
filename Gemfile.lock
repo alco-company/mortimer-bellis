@@ -246,7 +246,7 @@ GEM
     phlex-rails (1.2.1)
       phlex (~> 1.10.0)
       railties (>= 6.1, < 8)
-    propshaft (0.9.0)
+    propshaft (0.9.1)
       actionpack (>= 7.0.0)
       activesupport (>= 7.0.0)
       rack
