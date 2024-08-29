@@ -15,6 +15,7 @@ sqlite> .mode insert
 sqlite> .output dump_all.sql
 sqlite> .dump
 sqlite> .exit
+√ storage % sqlite3 development.sqlite3 ".mode insert; .output dump_all.sql; .dump;"
 √ storage % { echo "PRAGMA synchronous = OFF ;"; cat dump_all.sql; } | grep -v -e TRANSACTION -e ROLLBACK -e COMMIT >dump_all_notrans.sql 
 √ storage % mv development.sqlite3 corrupted_23_8_2024.development.sqlite3
 √ storage % sqlite3 development.sqlite3 ".read dump_all_notrans.sql"
@@ -42,6 +43,11 @@ ok
 * <https://railsdesigner.com/preview-images-with-hotwire>
   
 ## CHANGELOG
+
+### 29/8/2024
+
+* add bin/fixsql to fix SQLite database
+
 
 ### 27/8/2024
 
