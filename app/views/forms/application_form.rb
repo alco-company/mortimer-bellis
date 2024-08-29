@@ -366,7 +366,7 @@ class ApplicationForm < Superform::Rails::Form
 
   def around_template(&)
     super do
-      div(class: "", data: { controller: "form" }) do
+      div() do
         error_messages
         yield
         div(class: "flex flex-row flex-row-reverse m-5 gap-4") do

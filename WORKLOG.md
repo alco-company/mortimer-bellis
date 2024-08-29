@@ -41,6 +41,7 @@ ok
 * [ ] redesign punch and add work_schedule to payroll_period#manual_punch
 * fix error on employee_invitation#create -> returns turbo_frame in clear text - not HTML - at least on iPad
 * <https://railsdesigner.com/preview-images-with-hotwire>
+* overscroll-none on edit.html and new.html
   
 ## CHANGELOG
 
@@ -49,6 +50,7 @@ ok
 * add bin/fixsql to fix SQLite database
 * mark notifications as read
 * send notification to (super)admin when new employee signs up
+* show notifications as dropdown
 
 ### 27/8/2024
 

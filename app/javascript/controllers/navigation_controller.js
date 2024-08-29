@@ -8,6 +8,8 @@ export default class extends Controller {
     "menuClose",
     "profileMenu",
     "profileMenuButton",
+    "viewNotifications",
+    "viewNotificationsButton",
   ]
 
   connect() {
@@ -35,6 +37,43 @@ export default class extends Controller {
       this.showDrop();
     } else {
       this.hideDrop(null);
+    }
+  }
+
+  tapNotificationDrop(event) {
+    event.preventDefault();
+
+    if (this.viewNotificationsButtonTarget.getAttribute("aria-expanded") == "false") {
+      this.showNotificationDrop();
+    } else {
+      this.hideNotificationDrop(null);
+    }
+  }
+
+  showNotificationDrop() {
+    this.viewNotificationsButtonTarget.setAttribute("aria-expanded", "true");
+    this.viewNotificationsButtonTarget.classList.add("active");
+    this.viewNotificationsTarget.classList.remove("hidden");
+  }
+
+  hideNotificationDrop(event) {
+    try {      
+      if (
+        event &&
+        (this.viewNotificationsTarget.contains(event.target) ||
+          this.viewNotificationsButtonTarget.contains(event.target))
+      ) {
+        // changed your solution with crispinheneise's recommendation and added additional check:
+        // event.preventDefault();
+        if (event.target.tagName != "A") return;
+      }
+
+      this.viewNotificationsButtonTarget.setAttribute("aria-expanded", "false");
+      this.viewNotificationsButtonTarget.classList.remove("active");
+      this.viewNotificationsTarget.classList.add("hidden");
+    } catch (error) {
+      console.error("Error in hide function: ", error);
+      return
     }
   }
 
