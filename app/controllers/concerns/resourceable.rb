@@ -26,7 +26,8 @@ module Resourceable
     end
 
     def set_resources_stream
-      @resources_stream = "%s_%s" % [ Current.account.id, resource_class.to_s.underscore.pluralize ]
+      account = Current.account || @resource.account || nil
+      @resources_stream = "%s_%s" % [ account&.id, resource_class.to_s.underscore.pluralize ]
     end
 
     def set_resources

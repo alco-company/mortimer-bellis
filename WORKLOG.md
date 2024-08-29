@@ -52,6 +52,7 @@ ok
 * send notification to (super)admin when new employee signs up
 * show notifications as dropdown
 * fix bug on application.html.erb - missing check for Current.user
+* fix bug on set_resources_stream - missing check for Current.account
 
 ### 27/8/2024
 
