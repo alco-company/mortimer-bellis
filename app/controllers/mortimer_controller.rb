@@ -4,6 +4,7 @@ class MortimerController < BaseController
   before_action :set_resource, only: %i[ new show edit update destroy ]
   before_action :set_filter, only: %i[ index destroy ]
   before_action :set_resources, only: %i[ index destroy ]
+  before_action :set_resources_stream
 
   include Resourceable
   include DefaultActions

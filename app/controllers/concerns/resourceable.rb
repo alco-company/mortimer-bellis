@@ -15,6 +15,7 @@ module Resourceable
     def resource_class
       @resource_class ||= case params_ctrl.split("/").last
       when "invitations"; EmployeeInvitation
+      when "notifications"; Noticed::Notification
       else; params_ctrl.split("/").last.classify.constantize rescue nil
       end
     end
@@ -24,8 +25,11 @@ module Resourceable
       @resource = params_id ? (resource_class.find(params_id) rescue resource_class.new) : resource_class.new
     end
 
-    def set_resources
+    def set_resources_stream
       @resources_stream = "%s_%s" % [ Current.account.id, resource_class.to_s.underscore.pluralize ]
+    end
+
+    def set_resources
       @resources = any_filters? ? resource_class.filtered(@filter) : parent_or_class
       @resources = any_sorts? ? resource_class.ordered(@resources, params_s, params_d) : @resources.order(created_at: :desc) rescue nil
     end

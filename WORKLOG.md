@@ -47,7 +47,7 @@ ok
 ### 29/8/2024
 
 * add bin/fixsql to fix SQLite database
-
+* mark notifications as read
 
 ### 27/8/2024
 

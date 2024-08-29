@@ -6,3 +6,4 @@ sqlite3 corrupted_$date.sqlite3 < ../bin/fix.sql
 { echo "PRAGMA synchronous = OFF ;"; cat dump_all.sql; } | grep -v -e TRANSACTION -e ROLLBACK -e COMMIT >dump_all_notrans.sql 
 sqlite3 development.sqlite3 ".read dump_all_notrans.sql"
 sqlite3 development.sqlite3 "PRAGMA integrity_check;"                                                                        
+cd ..

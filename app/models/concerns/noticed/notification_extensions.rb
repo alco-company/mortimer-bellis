@@ -1,13 +1,31 @@
 module Noticed::NotificationExtensions
   extend ActiveSupport::Concern
 
+  included do
+    after_save_commit :broadcast_changes
+
+    def broadcast_changes
+      broadcast_update_to_bell
+      broadcast_replace_notifications
+    end
+  end
+
   def broadcast_update_to_bell
-    # broadcast_update_to(
-    #   "notifications_#{recipient.id}",
-    #   target: "notification_bell",
-    #   partial: "navbar/notifications/bell",
-    #   locals: { user: recipient }
-    # )
+    broadcast_replace_later_to(
+      "#{recipient.id}_noticed/notifications",
+      target: "notification_bell",
+      partial: "notifications/bell",
+      locals: { recipient: recipient }
+    )
+  end
+
+  def broadcast_replace_notifications
+    broadcast_replace_later_to(
+      "#{recipient.id}_noticed/notifications",
+      target: "notifications",
+      partial: "notifications/notifications",
+      locals: { recipient: recipient }
+    )
   end
 
   def broadcast_replace_to_index_count
@@ -21,7 +39,7 @@ module Noticed::NotificationExtensions
 
   def broadcast_prepend_to_index_list
     broadcast_prepend_to(
-      "notifications_index_list_#{recipient.id}",
+      "#{recipient.id}_noticed/notifications",
       target: "notifications",
       partial: "notifications/notification",
       locals: { notification: self }

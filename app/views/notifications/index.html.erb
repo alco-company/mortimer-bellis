@@ -1,10 +1,10 @@
 <h1 class="text-xl mb-4">
   <%= t("notifications", name: Current.user.name) %>
 </h1>
-<%= turbo_stream_from current_user, "notifications_index_list_#{current_user.id}" %>
-<%= turbo_frame_tag "notifications" do %>
-
-  <% @notifications.each do |notification| %>
-    <%= render partial: "notifications/notification", locals: {notification: notification}%>
+<div data-turbo-prefetch="false">
+  <%= turbo_frame_tag "notifications" do %>
+    <% @notifications.each do |notification| %>
+      <%= render partial: "notifications/notification", locals: {notification: notification}%>
+    <% end %>
   <% end %>
-<% end %>
+</div>
