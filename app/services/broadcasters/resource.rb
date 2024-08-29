@@ -2,15 +2,17 @@ class Broadcasters::Resource
   include Turbo::StreamsHelper
   include ActionView::RecordIdentifier
 
-  attr_reader :resource, :resource_class, :resources_stream
+  attr_reader :account, :resource, :resource_class, :resources_stream
 
   def initialize(resource)
     @resource = resource
     @resource_class = resource.class
-    @resources_stream = "%s_%s" % [ Current.account.id, @resource_class.to_s.underscore.pluralize ]
+    @account = resource.respond_to?(:account) ? resource.account : Current.account rescue nil
+    @resources_stream = "%s_%s" % [ account&.id, @resource_class.to_s.underscore.pluralize ]
   end
 
   def create
+    return unless account
     Turbo::StreamsChannel.broadcast_action_later_to(
       resources_stream,
       target: :append_new,
@@ -21,6 +23,7 @@ class Broadcasters::Resource
   end
 
   def replace
+    return unless account
     Turbo::StreamsChannel.broadcast_action_later_to(
       resources_stream,
       target: dom_id(resource),
@@ -31,6 +34,18 @@ class Broadcasters::Resource
   end
 
   def destroy
+    return unless account
     Turbo::StreamsChannel.broadcast_remove_to resources_stream, target: dom_id(resource)
+  end
+
+  def destroy_all
+    return unless account
+    Turbo::StreamsChannel.broadcast_action_later_to(
+      resources_stream,
+      target: "list",
+      action: :replace,
+      partial: "empty_record_list",
+      locals: { account: account, resources: [], resource_class: resource_class, list: "#{@resource_class.to_s.underscore.pluralize}/list" }
+    )
   end
 end

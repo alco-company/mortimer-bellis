@@ -90,7 +90,9 @@ class EmployeesController < MortimerController
       else
         if @resource.save
           @invite.update state: :completed, completed_at: DateTime.current
+          Broadcasters::Resource.new(@invite).replace
           EmployeeMailer.with(employee: @resource, sender: @invite.sender).pos_link.deliver_later unless @resource.email.blank?
+          CompletedEmployeeNotifier.with(record: @resource, message: "Employee Filled Out Their Form!").deliver(User.by_role [ :admin, :superadmin ])
           render turbo_stream: turbo_stream.replace("employee_signup", partial: "/pos/employee/signup_success")
         else
           @invite.update state: :error
@@ -108,6 +110,5 @@ class EmployeesController < MortimerController
     #
     def create_callback(obj)
       EmployeeMailer.with(employee: obj, sender: current_user.name).welcome.deliver_later unless obj.email.blank?
-      CompletedEmployeeNotifier.with(record: obj, message: "Employee Filled Out Their Form!").deliver(User.by_role [ :admin, :superadmin ])
     end
 end

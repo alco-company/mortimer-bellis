@@ -48,6 +48,7 @@ ok
 
 * add bin/fixsql to fix SQLite database
 * mark notifications as read
+* send notification to (super)admin when new employee signs up
 
 ### 27/8/2024
 
