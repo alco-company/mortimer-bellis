@@ -8,7 +8,7 @@
 
   </head>
   <body class="h-full w-full">
-    <%= turbo_stream_from "#{Current.user.id}_noticed/notifications" %>
+    <%= turbo_stream_from "#{Current.user.id}_noticed/notifications" if Current.user %>
     <%= render NavigationComponent.new items: menu_items %>
     <main class="m-4 mt-20">
       <%= yield %>

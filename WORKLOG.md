@@ -51,6 +51,7 @@ ok
 * mark notifications as read
 * send notification to (super)admin when new employee signs up
 * show notifications as dropdown
+* fix bug on application.html.erb - missing check for Current.user
 
 ### 27/8/2024
 
