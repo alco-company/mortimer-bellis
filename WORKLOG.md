@@ -45,6 +45,10 @@ ok
   
 ## CHANGELOG
 
+### 30/8/2024
+
+* fix yet another Current.account issue - set_resources_stream
+
 ### 29/8/2024
 
 * add bin/fixsql to fix SQLite database
