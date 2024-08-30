@@ -7,19 +7,18 @@
     <%#= tag :meta, name: :vapid_public_key, content: Rails.application.credentials.vapid.public_key %>
 
   </head>
-  <body class="h-full w-full">
+  <body class="flex flex-row h-screen w-full">
+    <%= turbo_frame_tag "tooltip", class: "absolute", target: "_top" %>
     <%= turbo_stream_from "#{Current.user.id}_noticed/notifications" if Current.user %>
     <%= render NavigationComponent.new items: menu_items %>
-    <main class="m-4 mt-20">
+    <main class="grow-0 w-full p-4">
       <%= yield %>
-      <%= turbo_frame_tag "tooltip", class: "absolute", target: "_top" %>
-      <%= turbo_frame_tag "form" %>
-
     </main>
     <%# 
     in honor of Tailwind not being able to know 'tags' in advance
     span(class: "hidden mort-flash-info mort-flash-error mort-flash-success mort-flash-warning mort-flash-notice mort-flash-timedout mort-flash-alert") %>
     <%= render FlashComponent.new flash: flash %>
     <remote-modal-container></remote-modal-container>
+    <%= turbo_frame_tag "form" %>
   </body>
 </html>

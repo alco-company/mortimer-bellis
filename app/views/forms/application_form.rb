@@ -6,6 +6,7 @@ class ApplicationForm < Superform::Rails::Form
 
   def initialize(model, **options)
     options[:data] = { form_target: "form" }
+    options[:class] = "mort-form"
     super(model, **options)
     @resource = model
     @editable = options[:editable]
@@ -366,7 +367,7 @@ class ApplicationForm < Superform::Rails::Form
 
   def around_template(&)
     super do
-      div() do
+      div(class: "") do
         error_messages
         yield
         div(class: "flex flex-row flex-row-reverse m-5 gap-4") do
@@ -379,9 +380,6 @@ class ApplicationForm < Superform::Rails::Form
               class: "mort-btn-cancel"
             ) { helpers.t("cancel") }
           end
-        end
-        div(class: "h-10") do
-          plain "&nbsp;".html_safe
         end
       end
     end
