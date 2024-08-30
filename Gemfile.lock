@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/rails/rails.git
-  revision: 48aaffd0507205c69502aad0ebf7597f4d41807f
+  revision: 35bfb52609289a29b232f39b8a921d0ab46babe3
   branch: main
   specs:
     actioncable (8.0.0.alpha)
@@ -210,7 +210,7 @@ GEM
     msgpack (1.7.2)
     multi_xml (0.7.1)
       bigdecimal (~> 3.1)
-    net-imap (0.4.14)
+    net-imap (0.4.15)
       date
       net-protocol
     net-pop (0.1.2)
@@ -379,7 +379,7 @@ GEM
       railties (>= 7.0.0)
     tailwindcss-rails (2.7.3-x86_64-linux)
       railties (>= 7.0.0)
-    thor (1.3.1)
+    thor (1.3.2)
     timeout (0.4.1)
     turbo-rails (2.0.6)
       actionpack (>= 6.0.0)
