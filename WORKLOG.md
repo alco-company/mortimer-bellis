@@ -42,13 +42,14 @@ ok
 * fix error on employee_invitation#create -> returns turbo_frame in clear text - not HTML - at least on iPad
 * <https://railsdesigner.com/preview-images-with-hotwire>
 
-  
 ## CHANGELOG
 
 ### 30/8/2024
 
 * fix yet another Current.account issue - set_resources_stream
 * overscroll-contain on edit.html and new.html
+* fix layout on main and index and new/edit/show
+* allow free and sick punches for the day
 
 ### 29/8/2024
 

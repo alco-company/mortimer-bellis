@@ -11,7 +11,7 @@
     <%= turbo_frame_tag "tooltip", class: "absolute", target: "_top" %>
     <%= turbo_stream_from "#{Current.user.id}_noticed/notifications" if Current.user %>
     <%= render NavigationComponent.new items: menu_items %>
-    <main class="grow-0 w-full p-4">
+    <main class="grow-0 w-full p-4 pt-20">
       <%= yield %>
     </main>
     <%# 
