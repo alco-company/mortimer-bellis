@@ -119,6 +119,12 @@ da:
       body: Indhold
       updated_at: Opdateret den
       created_at: Oprettet den
+
+  profile:
+    overview: Oversigt
+    invite_new_user: Invitér ny bruger
+    invite_new_employee: Invitér ny medarbejder
+
   pos:
     employee:
       show:
@@ -170,6 +176,18 @@ da:
       show:
         network_not_available: Netværket er ikke tilgængeligt
 
+  salutations:
+    good_morning: Godmorgen, %{name}
+    good_afternoon: God eftermiddag, %{name}
+    good_evening: God aften, %{name}
+    good_night: Godnat, %{name}
+
+  stats:
+    workers_present: Indstemplede
+    hours_worked_this_week: Arbejdstimer denne uge
+    billable_hours: Fakturerbare timer
+    planned_vacation_days: Planlagte feriedage
+    sick_days_ytd: Sygedage i år
 
 # Standard localization ------------------------------
 

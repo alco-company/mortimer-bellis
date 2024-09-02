@@ -42,13 +42,13 @@ ok
 * fix error on employee_invitation#create -> returns turbo_frame in clear text - not HTML - at least on iPad
 * <https://railsdesigner.com/preview-images-with-hotwire>
 
-
 ## CHANGELOG
 
 ### 2/9/2024
 
 * allow free and sick punches for the day
 * move invite to users
+* fresh landing page - welcoming new users - wip
 
 ### 30/8/2024
 
