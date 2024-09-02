@@ -45,4 +45,10 @@ class Team < ApplicationRecord
     return -1 if allowed_ot_minutes < 0
     allowed_ot_minutes
   end
+
+  def days_per_payroll
+    contract_days_per_payroll
+  rescue
+    0
+  end
 end

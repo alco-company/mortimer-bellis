@@ -51,13 +51,18 @@ module Punchable
       get_contract_minutes_per_day divmod 60
     end
 
+    def days_per_payroll
+      contract_days_per_payroll.blank? or contract_days_per_payroll==0 ? team.days_per_payroll : contract_days_per_payroll
+    end
+
     def get_contract_minutes_per_day
-      dpp = contract_days_per_payroll > 0 ? contract_days_per_payroll : (team.contract_days_per_payroll || 0)
+      dpp = days_per_payroll
       if dpp == 0 # monthly
-        get_contract_minutes * 12 / 52 / get_contract_days_per_week
+        cmpd = (get_contract_minutes * 12 / 52 / get_contract_days_per_week) rescue 0
       else
-        get_contract_minutes / dpp / get_contract_days_per_week
+        cmpd = (get_contract_minutes / dpp / get_contract_days_per_week) rescue 0
       end
+      cmpd == 0 ? 444 : cmpd # 1924/52/5 => = 7.4 * 60,
     rescue
       say "No contract minutes per day found for #{name}"
       0
@@ -135,27 +140,27 @@ module Punchable
     def punch_range(params, ip)
       Rails.env.local? ?
         PunchJob.perform_now(account: self.account,
-          reason: params["reason"],
+          reason: params["reason"] || params[:reason],
           ip: ip,
           employee: self,
-          from_date: params["from_date"],
-          from_time: params["from_time"],
-          to_date: params["to_date"],
-          to_time: params["to_time"],
-          comment: params["comment"],
-          days: params["days"],
-          excluded_days: params["excluded_days"]) :
+          from_date: params["from_date"] || params[:from_date],
+          from_time: params["from_time"] || params[:from_time],
+          to_date: params["to_date"] || params[:to_date],
+          to_time: params["to_time"] || params[:to_time],
+          comment: params["comment"] || params[:comment],
+          days: params["days"] || params[:days],
+          excluded_days: params["excluded_days"] || params[:excluded_days]) :
         PunchJob.perform_later(account: self.account,
-          reason: params["reason"],
+          reason: params["reason"] || params[:reason],
           ip: ip,
           employee: self,
-          from_date: params["from_date"],
-          from_time: params["from_time"],
-          to_date: params["to_date"],
-          to_time: params["to_time"],
-          comment: params["comment"],
-          days: params["days"],
-          excluded_days: params["excluded_days"])
+          from_date: params["from_date"] || params[:from_date],
+          from_time: params["from_time"] || params[:from_time],
+          to_date: params["to_date"] || params[:to_date],
+          to_time: params["to_time"] || params[:to_time],
+          comment: params["comment"] || params[:comment],
+          days: params["days"] || params[:days],
+          excluded_days: params["excluded_days"] || params[:excluded_days])
     rescue => e
       say "Punchable#punch_range (outer) failed: #{e.message}"
     end

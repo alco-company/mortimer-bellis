@@ -107,8 +107,9 @@ class Pos::EmployeeController < Pos::PosController
     end
 
     def verify_employee
+      api = params.permit(:api_key)[:api_key]
       @resource = case true
-      when params[:api_key].present?; Employee.by_account.find_by(access_token: params[:api_key])
+      when params[:api_key].present?; Employee.by_account.find_by(access_token: api)
       # when params[:employee].present?; Employee.by_account.find(params[:employee][:id])
       # when params[:q].present?; Employee.by_account.find_by(pincode: params[:q])
       else nil
@@ -122,9 +123,28 @@ class Pos::EmployeeController < Pos::PosController
       if params[:employee][:state] == @resource.state
         redirect_to pos_employee_url(api_key: @resource.access_token), warning: t("state_eq_current_state", state: @resource.state) and return
       else
-        punch_clock = PunchClock.where(account: @resource.account).first
-        @resource.punch punch_clock, employee_params[:state], request.remote_ip
-        @resource.update state: employee_params[:state]
+        if @resource.out? && !params[:employee][:state].blank?
+          duration = @resource&.get_contract_minutes_per_day
+          dt = Date.today
+          from = DateTime.new(dt.year, dt.month, dt.day, 8, 0, 0)
+          to_at = (from + duration.minutes).strftime("%H:%M")
+          parms = {
+            from_date: dt,
+            from_time: "08:00", # Time.now.strftime("%H:%M"),
+            duration: duration.minutes,
+            to_date: dt,
+            to_time: to_at,
+            comment: "",
+            reason: params[:employee][:state],
+            days: [],
+            excluded_days: ""
+          }
+          @resource.punch_range parms, request.remote_ip
+        else
+          punch_clock = PunchClock.where(account: @resource.account).first
+          @resource.punch punch_clock, employee_params[:state], request.remote_ip
+          @resource.update state: employee_params[:state]
+        end
         redirect_to pos_employee_url(api_key: @resource.access_token) and return
       end
     end
