@@ -41,13 +41,14 @@ ok
 * [ ] redesign punch and add work_schedule to payroll_period#manual_punch
 * fix error on employee_invitation#create -> returns turbo_frame in clear text - not HTML - at least on iPad
 * <https://railsdesigner.com/preview-images-with-hotwire>
-* move invite to users
+
 
 ## CHANGELOG
 
 ### 2/9/2024
 
 * allow free and sick punches for the day
+* move invite to users
 
 ### 30/8/2024
 

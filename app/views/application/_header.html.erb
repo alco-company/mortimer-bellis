@@ -18,7 +18,11 @@
       <%== pagy_nav(@pagy) if @pagy.pages > 1 %>
     </div>
     <div class="flex gap-2 justify-end">
-      <%= link_to t("#{ resource_class.table_name}.list.new"), new_resource_url, class: "mort-btn-primary", data: { turbo_frame: "form" } unless params[:controller] == "users" %>
+      <% case params[:controller]
+         when "users"; %><%= link_to("Invite New User", new_user_invitation_path, class: "mort-btn-primary", role: "menuitem", tabindex: "-1", id: "user-menu-item-0") unless Current.user.user?  %>
+      <% else; %>
+           <%= link_to t("#{ resource_class.table_name}.list.new"), new_resource_url, class: "mort-btn-primary", data: { turbo_frame: "form" } %>
+      <% end %>
     </div>
   </div>
 </div>
