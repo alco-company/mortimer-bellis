@@ -109,4 +109,8 @@ class Employee < ApplicationRecord
   rescue
     "border-white"
   end
+
+  def self.working
+    where(state: :in)
+  end
 end

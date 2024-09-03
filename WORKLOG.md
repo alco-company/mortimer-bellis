@@ -44,6 +44,10 @@ ok
 
 ## CHANGELOG
 
+### 3/9/2024
+
+* stats on landing page - wip
+
 ### 2/9/2024
 
 * allow free and sick punches for the day

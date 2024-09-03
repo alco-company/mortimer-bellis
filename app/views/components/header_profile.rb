@@ -1,31 +1,34 @@
 class HeaderProfile < Phlex::HTML
+  include Phlex::Rails::Helpers::ImageTag
   include Phlex::Rails::Helpers::LinkTo
 
   def view_template
     comment { "Page header" }
-    div(class: "bg-white shadow") do
+    div(class: "bg-white shadow border-t border-gray-50") do
       div(class: "px-4 sm:px-6 lg:mx-auto lg:max-w-6xl lg:px-8") do
         div(
           class:
-            "py-6 md:flex md:items-center md:justify-between lg:border-t lg:border-gray-200"
+            "py-6 md:flex md:items-center md:justify-between"
         ) do
           div(class: "min-w-0 flex-1") do
             comment { "Profile" }
             div(class: "flex items-center") do
-              img(
-                class: "hidden h-16 w-16 rounded-full sm:block",
-                src:
-                  "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.6&w=256&h=256&q=80",
-                alt: ""
-              )
+              if Current.user
+                if Current.user.mugshot.attached?
+                  image_tag(Current.user.mugshot, class: "hidden h-16 w-16 rounded-full sm:block")
+                else
+                  image_tag("icons8-customer-64.png", class: "hidden h-16 w-16 rounded-full sm:block")
+                end
+              end
               div do
                 div(class: "flex items-center") do
-                  img(
-                    class: "h-16 w-16 rounded-full sm:hidden",
-                    src:
-                      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.6&w=256&h=256&q=80",
-                    alt: ""
-                  )
+                  if Current.user
+                    if Current.user.mugshot.attached?
+                      image_tag(Current.user.mugshot, class: " h-16 w-16 rounded-full sm:hidden")
+                    else
+                      image_tag("icons8-customer-64.png", class: " h-16 w-16 rounded-full sm:hidden")
+                    end
+                  end
                   h1(
                     class:
                       "ml-3 text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:leading-9"

@@ -7,7 +7,7 @@
         <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
           <h2 class="text-lg font-medium leading-6 text-gray-900"><%= I18n.t("profile.overview") %></h2>
           <div class="mt-2 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
-            <%= render StatsCard.new label: I18n.t("stats.workers_present"), value: 1_000,  css: "" %>
+            <%= render StatsCard.new label: I18n.t("stats.workers_present"), value: Employee.working.count,  css: "" %>
             <%= render StatsCard.new label: I18n.t("stats.hours_worked_this_week"), value: 1_000,  css: "hidden sm:block" %>
             <%= render StatsCard.new label: I18n.t("stats.billable_hours"), value: 1_000,  css: "hidden lg:block" %>
             <%= render StatsCard.new label: I18n.t("stats.planned_vacation_days"), value: 1_000,  css: "hidden xl:block" %>
