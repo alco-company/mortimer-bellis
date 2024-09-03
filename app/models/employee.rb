@@ -23,6 +23,7 @@ class Employee < ApplicationRecord
   scope :by_time_zone, ->(time_zone) { where("time_zone LIKE ?", "%#{time_zone}%") if time_zone.present? }
   scope :by_pincode, ->(pincode) { where("pincode LIKE ?", "%#{pincode}%").order(pincode: :asc) if pincode.present? }
   scope :punching_absence, -> { where(punching_absence: true) }
+  scope :working, -> { where(state: :in) }
   scope :order_by_number, ->(field) { order("length(#{field}) DESC, #{field} DESC") }
 
   validates :name, presence: true, uniqueness: { scope: [ :account_id, :team_id ], message: I18n.t("employees.errors.messages.name_exist_for_team") }
@@ -108,9 +109,5 @@ class Employee < ApplicationRecord
     team.team_color.blank? ? "border-white" : team.team_color
   rescue
     "border-white"
-  end
-
-  def self.working
-    where(state: :in)
   end
 end

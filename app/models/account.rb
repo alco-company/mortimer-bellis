@@ -51,4 +51,16 @@ class Account < ApplicationRecord
   def self.form(resource, editable = true)
     Accounts::Form.new resource, editable: editable, enctype: "multipart/form-data"
   end
+
+  def working_hours_this_week
+    punch_cards.this_week.sum(:work_minutes) % 60
+  end
+
+  def extra_working_hours_this_week
+    (punch_cards.this_week.sum(:ot1_minutes) + punch_cards.this_week.sum(:ot2_minutes)) % 60
+  end
+
+  def sick_absence_this_week
+    punches.sick_absence.this_week.count
+  end
 end

@@ -48,6 +48,7 @@ ok
 
 * stats on landing page - wip
 * fix small error on processing punches
+* finish landing page - v1
 
 ### 2/9/2024
 

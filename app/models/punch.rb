@@ -10,8 +10,9 @@ class Punch < ApplicationRecord
   scope :by_punch_clock, ->(punch_clock) { joins(:punch_clock).where("punch_clocks.name LIKE ?", "%#{punch_clock}%") if punch_clock.present? }
   scope :by_punched_at, ->(punched_at) { where(punched_at: punched_at..) if punched_at.present? }
   scope :by_payroll_period, ->(payroll_period) { where(punch: payroll_period..) if payroll_period.present? }
-  # scope :by_state, ->(state) { where(state: state) if state.present? }
-
+  scope :by_state, ->(state) { where(state: state) if state.present? }
+  scope :this_week, ->() { where(punched_at: Time.now.beginning_of_week..) }
+  scope :sick_absence, ->() { where(state: [ :sick, :iam_sick, :child_sick, :nursing_sick, :lost_work_sick, :p56_sick ]) }
   # used by eg delete
   def name
     "#{employee.name} #{punched_at}"

@@ -1,8 +1,9 @@
 class StatsCard < Phlex::HTML
-  def initialize(label:, css:, value:)
+  def initialize(label:, css:, value:, url:)
     @label = label
     @css = css
     @value = value
+    @url = url
   end
 
   def view_template
@@ -40,12 +41,12 @@ class StatsCard < Phlex::HTML
         end
       end
       div(class: "bg-gray-50 px-5 py-3") do
-        div(class: "text-sm") do
-          a(
-            href: "#",
-            class: "font-medium text-cyan-700 hover:text-cyan-900"
-          ) { "View all" }
-        end
+        # div(class: "text-sm") do
+        #   a(
+        #     href: @url,
+        #     class: "font-medium text-cyan-700 hover:text-cyan-900"
+        #   ) { I18n.t("view_all") }
+        # end
       end
     end
   end

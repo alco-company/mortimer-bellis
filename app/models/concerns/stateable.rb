@@ -35,6 +35,7 @@ WORK_STATE_H = {
   "leave_free" => I18n.t("punch.leave_free"),
   "archived" => I18n.t("punch.archived")
 }
+
 module Stateable
   extend ActiveSupport::Concern
 

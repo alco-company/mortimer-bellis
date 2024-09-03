@@ -30,6 +30,7 @@ da:
   notification_sent_at: Sendt den
   mark_as_read: Læst
   expected_time_zone: "Vi tror at den tidszone, der passer dig bedst er:"
+  view_all: Se alle
 
   weekdays: Ugedage
   monday: Mandag
@@ -39,6 +40,26 @@ da:
   friday: Fredag
   saturday: Lørdag
   sunday: Søndag
+  
+  colors:
+    red: Rød
+    fuchsia: Fuchsia
+    lime: Lime
+    cyan: Cyan
+    green: Grøn
+    blue: Blå
+    yellow: Gul
+    orange: Orange
+    purple: Lilla
+    pink: Pink
+    amber: Brun
+    indigo: Indigo
+    rose: Rose
+    slate: Skifer
+    gray: Grå
+    stone: Granit
+    black: Sort
+    white: Hvid
 
   devise:
     mailer:
@@ -54,6 +75,19 @@ da:
         accept_until: "Invitationen er gyldig indtil %{due_date}."
         ignore: "Ønsker du ikke at acceptere invitationen, behøver du intet at gøre (måske bortset fra evt at smide email'en bort). <br /><br />Din bruger konto bliver først oprettet i det øjeblik, du klikker på link'et her ovenfor, og derefter angiver din adgangskode."
         regards: "Med venlig hilsen"
+
+  landing:
+    recent_activity: Seneste aktiviteter
+    activity_description: "%{name} brugte %{punch_clock}"
+    activity_list:
+      transaction: transaktion
+      time: klokken
+      state: status
+      date: dato
+  locale:
+    da: Dansk
+    en: Engelsk
+    de: Tysk
 
   modal:
     destroy:
@@ -87,30 +121,6 @@ da:
       profile: Profil
       today: I dag
       payroll_period: Lønperiode
-    
-  locale:
-    da: Dansk
-    en: Engelsk
-    de: Tysk
-  colors:
-    red: Rød
-    fuchsia: Fuchsia
-    lime: Lime
-    cyan: Cyan
-    green: Grøn
-    blue: Blå
-    yellow: Gul
-    orange: Orange
-    purple: Lilla
-    pink: Pink
-    amber: Brun
-    indigo: Indigo
-    rose: Rose
-    slate: Skifer
-    gray: Grå
-    stone: Granit
-    black: Sort
-    white: Hvid
 
   pages:
     list:
@@ -185,9 +195,10 @@ da:
   stats:
     workers_present: Indstemplede
     hours_worked_this_week: Arbejdstimer denne uge
+    extra_hours_worked_this_week: Overtid denne uge
     billable_hours: Fakturerbare timer
     planned_vacation_days: Planlagte feriedage
-    sick_days_ytd: Sygedage i år
+    sick_days_week: Sygedage i denne uge
 
 # Standard localization ------------------------------
 

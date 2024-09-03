@@ -112,6 +112,39 @@
     @apply border border-green-400;
   }
 
+  .mort-state-in {
+    @apply bg-green-100 text-green-800;
+  }
+
+  .mort-state-out {
+    @apply bg-red-100 text-red-800;
+  }
+
+  .mort-state-break {
+    @apply bg-yellow-100 text-yellow-800;
+  }
+
+  .mort-state-sick,
+  .mort-state-iam_sick,
+  .mort-state-child_sick,
+  .mort-state-nursing_sick,
+  .mort-state-lost_work_sick,
+  .mort-state-p56_sick {
+    @apply bg-red-100 text-red-800;
+  }
+
+  .mort-state-free,
+  .mort-state-rr_free,
+  .mort-state-senior_free,
+  .mort-state-unpaid_free,
+  .mort-state-maternity_free,
+  .mort-state-leave_free {
+    @apply bg-blue-100 text-blue-800;
+  }
+  .mort-state-archived {
+    @apply bg-gray-100 text-gray-800;
+  }
+
 }
 
 
