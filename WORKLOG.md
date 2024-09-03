@@ -47,6 +47,7 @@ ok
 ### 3/9/2024
 
 * stats on landing page - wip
+* fix small error on processing punches
 
 ### 2/9/2024
 
