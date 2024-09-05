@@ -143,19 +143,7 @@ class ActivityList < Phlex::HTML
       a(href: helpers.url_for(item), class: "block bg-white px-4 py-4 hover:bg-gray-50") do
         span(class: "flex items-center space-x-4") do
           span(class: "flex flex-1 space-x-2 truncate") do
-            svg(
-              class: "h-5 w-5 flex-shrink-0 text-gray-400",
-              viewbox: "0 0 20 20",
-              fill: "currentColor",
-              aria_hidden: "true"
-            ) do |s|
-              s.path(
-                fill_rule: "evenodd",
-                d:
-                  "M1 4a1 1 0 011-1h16a1 1 0 011 1v8a1 1 0 01-1 1H2a1 1 0 01-1-1V4zm12 4a3 3 0 11-6 0 3 3 0 016 0zM4 9a1 1 0 100-2 1 1 0 000 2zm13-1a1 1 0 11-2 0 1 1 0 012 0zM1.75 14.5a.75.75 0 000 1.5c4.417 0 8.693.603 12.749 1.73 1.111.309 2.251-.512 2.251-1.696v-.784a.75.75 0 00-1.5 0v.784a.272.272 0 01-.35.25A49.043 49.043 0 001.75 14.5z",
-                clip_rule: "evenodd"
-              )
-            end
+            punch_clock_svg
             span(class: "flex flex-col truncate text-sm text-gray-500") do
               span(class: "truncate") { I18n.t("landing.activity_description", name: item.employee.name, punch_clock: item.punch_clock.name) }
               span do
@@ -194,20 +182,7 @@ class ActivityList < Phlex::HTML
             href: helpers.url_for(item),
             class: "group inline-flex space-x-2 truncate text-sm"
           ) do
-            svg(
-              class:
-                "h-5 w-5 flex-shrink-0 text-gray-400 group-hover:text-gray-500",
-              viewbox: "0 0 20 20",
-              fill: "currentColor",
-              aria_hidden: "true"
-            ) do |s|
-              s.path(
-                fill_rule: "evenodd",
-                d:
-                  "M1 4a1 1 0 011-1h16a1 1 0 011 1v8a1 1 0 01-1 1H2a1 1 0 01-1-1V4zm12 4a3 3 0 11-6 0 3 3 0 016 0zM4 9a1 1 0 100-2 1 1 0 000 2zm13-1a1 1 0 11-2 0 1 1 0 012 0zM1.75 14.5a.75.75 0 000 1.5c4.417 0 8.693.603 12.749 1.73 1.111.309 2.251-.512 2.251-1.696v-.784a.75.75 0 00-1.5 0v.784a.272.272 0 01-.35.25A49.043 49.043 0 001.75 14.5z",
-                clip_rule: "evenodd"
-              )
-            end
+              punch_clock_svg
             p(
               class:
                 "truncate text-gray-500 group-hover:text-gray-900"
@@ -234,6 +209,23 @@ class ActivityList < Phlex::HTML
         class:
           "whitespace-nowrap px-6 py-4 text-right text-sm text-gray-500"
       ) { time(datetime: item.punched_at) { I18n.l(item.punched_at, format: :date) } }
+    end
+  end
+
+  def punch_clock_svg
+    svg(
+      class: "pr-1 text-gray-300 h-6 w-6 ml-2",
+      xmlns: "http://www.w3.org/2000/svg",
+      height: "24px",
+      viewbox: "0 -960 960 960",
+      width: "24px",
+      stroke: "currentColor",
+      fill: "currentColor"
+    ) do |s|
+      s.path(
+        d:
+          "M200-80q-33 0-56.5-23.5T120-160v-480q0-33 23.5-56.5T200-720h40v-200h480v200h40q33 0 56.5 23.5T840-640v480q0 33-23.5 56.5T760-80H200Zm120-640h320v-120H320v120ZM200-160h560v-480H200v480Zm280-40q83 0 141.5-58.5T680-400q0-83-58.5-141.5T480-600q-83 0-141.5 58.5T280-400q0 83 58.5 141.5T480-200Zm0-60q-58 0-99-41t-41-99q0-58 41-99t99-41q58 0 99 41t41 99q0 58-41 99t-99 41Zm46-66 28-28-54-54v-92h-40v108l66 66Zm-46-74Z"
+      )
     end
   end
 end

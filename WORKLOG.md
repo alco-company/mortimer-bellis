@@ -24,6 +24,8 @@ ok
 
 ```
 
+If Solid Queue bites me again, look here: https://github.com/rails/solid_queue/issues/309:
+
 ## Ideas
 
 ### Guide for new users
@@ -43,6 +45,10 @@ ok
 * <https://railsdesigner.com/preview-images-with-hotwire>
 
 ## CHANGELOG
+
+### 5/9/2024
+
+* small typo fixed on dividing with 60
 
 ### 3/9/2024
 
