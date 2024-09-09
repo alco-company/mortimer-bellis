@@ -51,6 +51,7 @@ class EmployeesController < MortimerController
         :mugshot,
         :country,
         :pincode,
+        :employee_color,
         :payroll_employee_ident,
         :punching_absence,
         :access_token,

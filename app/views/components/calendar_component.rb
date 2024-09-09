@@ -336,7 +336,7 @@ class CalendarComponent < ApplicationComponent
                 link_to(
                   helpers.new_modal_url(id: event.id, modal_form: "event", resource_class: "event", step: "edit", view: view, date: date),
                   data: { turbo_stream: true },
-                  class: "group absolute inset-1 flex flex-col overflow-hidden rounded-md bg-amber-50 pl-2 text-amber-500 text-xs hover:bg-amber-100",
+                  class: "#{event.event_color} border group absolute inset-1 flex flex-col overflow-hidden rounded-md bg-amber-50 pl-2 text-amber-500 text-xs hover:bg-amber-100",
                   role: "menuitem",
                   tabindex: "-1") do
                   plain event.name
@@ -358,7 +358,7 @@ class CalendarComponent < ApplicationComponent
                 link_to(
                   helpers.new_modal_url(id: event.id, modal_form: "event", resource_class: "event", step: "edit", view: view, date: date),
                   data: { turbo_stream: true },
-                  class: "group absolute inset-1 flex flex-col overflow-hidden rounded-md bg-blue-50 pl-2 text-blue-500 text-xs hover:bg-blue-100",
+                  class: "#{event.event_color} border group absolute inset-1 flex flex-col overflow-hidden rounded-md bg-blue-50 pl-2 text-blue-500 text-xs hover:bg-blue-100",
                   role: "menuitem",
                   tabindex: "-1") do
                   p(class: "order-1 font-semibold text-blue-700 truncate") { event.name }
@@ -499,7 +499,7 @@ class CalendarComponent < ApplicationComponent
       calendar_events do |event|
         if event.all_day? && event.from_date.to_date == dt
           hits += 1
-          div(class: "text-amber-500 font-extrabold justify-self-end text-sm pr-1.5 #{cls}") { "!" }
+          div(class: "#{event.event_color} text-amber-500 font-extrabold justify-self-end text-sm pr-1.5 #{cls}") { "!" }
         end
       end
       div(class: "pr-1.5 #{cls}") { " " } if hits.zero?

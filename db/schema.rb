@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_08_22_104623) do
+ActiveRecord::Schema[8.0].define(version: 2024_09_09_084549) do
   create_table "accounts", force: :cascade do |t|
     t.string "name"
     t.string "email"
@@ -144,6 +144,7 @@ ActiveRecord::Schema[8.0].define(version: 2024_08_22_104623) do
     t.integer "allowed_ot_minutes"
     t.boolean "punching_absence"
     t.string "country"
+    t.string "employee_color"
     t.index ["account_id"], name: "index_employees_on_account_id"
     t.index ["team_id"], name: "index_employees_on_team_id"
   end
@@ -181,6 +182,7 @@ ActiveRecord::Schema[8.0].define(version: 2024_08_22_104623) do
     t.string "reason"
     t.integer "break_minutes"
     t.boolean "breaks_included"
+    t.string "event_color"
     t.index ["account_id"], name: "index_events_on_account_id"
     t.index ["calendar_id"], name: "index_events_on_calendar_id"
   end

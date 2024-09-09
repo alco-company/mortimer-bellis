@@ -80,7 +80,7 @@ class ModalController < BaseController
         case @step
         when "new"
           @calendar = Calendar.find(params[:id])
-          @resource = Event.new(account: @calendar.account, calendar: @calendar, event_metum: EventMetum.new)
+          @resource = Event.new(account: @calendar.account, calendar: @calendar, event_color: @calendar.calendarable.color, event_metum: EventMetum.new)
         when "edit";  @calendar = @resource.calendar
         end
       end

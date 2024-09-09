@@ -30,6 +30,10 @@ class Employee < ApplicationRecord
   validates :pincode, presence: true, uniqueness: { scope: :account_id, message: I18n.t("employees.errors.messages.pincode_exist_for_account") }
   validates :payroll_employee_ident, presence: true, uniqueness: { scope: :account_id, message: I18n.t("employees.errors.messages.payroll_employee_ident_exist_for_account") }
 
+  def color
+    employee_color
+  end
+
   def self.filtered(filter)
     flt = filter.filter
 

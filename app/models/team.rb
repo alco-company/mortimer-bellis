@@ -17,6 +17,10 @@ class Team < ApplicationRecord
 
   validates :name, presence: true, uniqueness: { scope: :account_id, message: "already exists for this account" }
 
+  def color
+    team_color
+  end
+
   def self.filtered(filter)
     flt = filter.filter
 

@@ -69,6 +69,7 @@ class EventComponent < ApplicationComponent
   def show_task_tab
     div(data: { tabs_target: "tabPanel" }) do
       name_field I18n.t("event.task_name") # "Titel / Overskrift på opgaven"
+      color_field
       start_date_time_field
       end_date_time_field()
 
@@ -287,6 +288,22 @@ class EventComponent < ApplicationComponent
       div(class: "mt-2 sm:col-span-2 sm:mt-0") do
         input(name: "event[name]", type: "text", id: "event_name", class: "mort-form-text", autofocus: true, value: resource.name)
       end
+    end
+  end
+
+  # comment { "name of day" }
+  def color_field
+    div(class: "my-4 sm:grid sm:grid-cols-3 sm:items-start") do
+      label(for: "event_name", class: "block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5 self-center") { plain I18n.t("activerecord.attributes.event.event_color") }
+      render SelectComponent.new(resource: resource,
+        field: :event_color,
+        field_class: "mt-2 flex sm:col-span-2 sm:mt-0 sm:place-content-end",
+        label_class: "hidden",
+        value_class: "mt-2 sm:col-span-2 sm:mt-0",
+        collection: Team.colors,
+        show_label: false,
+        prompt: I18n.t(".select_team_color"),
+        editable: true)
     end
   end
 

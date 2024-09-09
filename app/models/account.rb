@@ -35,6 +35,10 @@ class Account < ApplicationRecord
     calendars
   end
 
+  def color
+    account_color
+  end
+
   def self.filtered(filter)
     flt = filter.filter
 
