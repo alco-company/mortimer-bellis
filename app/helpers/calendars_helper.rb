@@ -1,4 +1,12 @@
 module CalendarsHelper
+  def toggle_template_view(params)
+    if params[:template].present?
+      params[:template]=="off" ? "on" : "off"
+    else
+      "on"
+    end
+  end
+
   def set_links_for_edit_delete(calendar)
     case true
     when request.path.include?("team")

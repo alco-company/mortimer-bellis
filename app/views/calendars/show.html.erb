@@ -1,10 +1,16 @@
-<div class="w-full">
+<div class="w-full" data-controller="toggle-button">
   <div class=" flex justify-between items-center">
     <div>
       <h1 class="font-bold text-4xl"> <%= @resource.name %> </h1>
     </div>
-    <div class="hidden grid gap-2 grid-cols-1 lg:grid-cols-2 items-center">
-      <%= link_to t("#{ resource_class.table_name}.form.edit"), edit_resource_url, class: "mort-btn-primary" %>
+    <div class="grid gap-2 grid-cols-1 lg:grid-cols-2 items-center place-content-end">
+    <% if params[:view] == "month" or !params[:view].present? %>
+      <%  params[:template] = toggle_template_view(params.permit!)
+          url = calendar_url @resource, params.permit! %>
+      <div class="flex items-center lg:col-span-2">
+        <%= render ToggleButton.new(resource: @resource, label: "Arbejdsskabelon", url: url, params: params) %>
+      </div>
+    <% end %>
     </div>
   </div>
   <div class="" data-controller="calendar">

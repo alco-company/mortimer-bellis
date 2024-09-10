@@ -105,6 +105,7 @@ class MonthComponent < CalendarComponent
       week_number(day, dt, "pl-2 ")
       # all_day_events(dt, "min-h-10")
       # punches?(dt, "pl-1.5")
+      input(type: "text", name: "template[#{dt.to_s.gsub("-", "_")}]", class: "hidden mort-form-text py-1 px-1 h-6 w-16 justify-self-end text-xs mt-0 mr-2", data: { toggle_button_target: "templateSpan" }, value: "")
       div(class: "font-extrabold place-self-center col-span-2 text-2xl") do
         events?(dt, :month, { from: dt.beginning_of_month.to_time, to: dt.end_of_month.to_time })
         punches?(dt, :month, 0, { from: dt.beginning_of_month.to_time, to: dt.end_of_month.to_time })
