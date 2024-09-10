@@ -46,6 +46,10 @@ If Solid Queue bites me again, look here: https://github.com/rails/solid_queue/i
 
 ## CHANGELOG
 
+### 10/9/2024
+
+* show calendar name
+
 ### 9/9/2024
 
 * color calendars on account, team, employee
