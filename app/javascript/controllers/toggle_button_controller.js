@@ -7,7 +7,8 @@ export default class extends Controller {
     "toggle",
     "toggleSpan",
     "toggleButton",
-    "templateSpan"
+    "templateSpan",
+    "newTemplate"
   ];
 
   connect() {
@@ -20,11 +21,13 @@ export default class extends Controller {
       e.target.setAttribute("aria-checked", "false");
       this.toggleSpanTargets.forEach( (e) => { e.classList.remove("translate-x-5")} );
       this.templateSpanTargets.forEach( (e) => { e.classList.add("hidden")} );
+      this.newTemplateTarget.classList.add("hidden");
     } else {
       this.toggleTargets.forEach( (e) => { e.value = 1; e.classList.add("bg-indigo-600"); e.classList.remove("bg-gray-200");});
       e.target.setAttribute("aria-checked", "true");
       this.toggleSpanTargets.forEach( (e) => { e.classList.add("translate-x-5")} );
       this.templateSpanTargets.forEach( (e) => { e.classList.remove("hidden")} );
+      this.newTemplateTarget.classList.remove("hidden");
     }
   }
 }

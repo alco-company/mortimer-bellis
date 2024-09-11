@@ -26,6 +26,13 @@ da:
     list_all_team_calendars: "List holdets kalendere"
     list_all_employee_calendars: "List medarbejderens kalendere"
 
+    template:
+      event_name: "Skabelon navn"
+      instructions_1: "Du kan give skabelonen et navn, og en farve, og så kan du bruge den, når du opretter aftaler i kalendere."
+      instructions_2: "Udfyld de af felterne, som du vil bruge. Se bort fra datoerne. Tænk på det som fx første mandag i måneden, anden fredag, osv"
+      instructions_3: "Angiv tid som f.eks. 10.15, eller 10,25 (betyder det samme). Angiver du en tid, er det længden i timer/minutter. Angiver du 2 tidspunkter adskilt af mellemrum eller bindestreg, er det fra/til stempeltidspunkterne."
+
+
     week_labels:
       abbr: Uge
       full: Uge

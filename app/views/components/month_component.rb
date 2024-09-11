@@ -19,13 +19,32 @@ class MonthComponent < CalendarComponent
 
   def month_view
     # Month view
-    div(class: "shadow ring-1 ring-black ring-opacity-5 lg:flex lg:flex-auto lg:flex-col") do
-      month_header
-      div(
-        class: "flex bg-gray-200 text-xs leading-6 text-gray-700 lg:flex-auto"
-      ) do
-        small_screen_view
-        large_screen_view
+    form(action: "POST", url: events_url) do
+      div(class: "shadow ring-1 ring-black ring-opacity-5 lg:flex lg:flex-auto lg:flex-col") do
+        month_header
+        div(
+          class: "flex bg-gray-200 text-xs leading-6 text-gray-700 lg:flex-auto"
+        ) do
+          small_screen_view
+          large_screen_view
+        end
+      end
+      div(data: { toggle_button_target: "newTemplate" }, class: "hidden my-4 w-full xl:w-1/2 grid grid-cols-2") do
+        p(class: "col-span-2 my-2 ") { I18n.t("calendar.template.instructions_1") }
+        p(class: "col-span-2 my-2 ") { I18n.t("calendar.template.instructions_2") }
+        p(class: "col-span-2 my-2 ") { I18n.t("calendar.template.instructions_3") }
+        label(class: "my-2 font-bold mx-2 ") { I18n.t("calendar.template.event_name") }
+        input(type: "text", name: "event[name]", class: "mort-form-text my-2")
+        render SelectComponent.new(resource: Event.new,
+          field: :event_color,
+          field_class: "my-2 grid grid-cols-2 col-span-2",
+          label_class: "mx-2 col-span-1",
+          value_class: "mt-2 ",
+          collection: Team.colors,
+          show_label: true,
+          prompt: I18n.t(".select_team_color"),
+          editable: true)
+        button(type: "submit", class: "col-span-2 place-self-end mort-btn-primary") { "Gem" }
       end
     end
   end
@@ -105,7 +124,7 @@ class MonthComponent < CalendarComponent
       week_number(day, dt, "pl-2 ")
       # all_day_events(dt, "min-h-10")
       # punches?(dt, "pl-1.5")
-      input(type: "text", name: "template[#{dt.to_s.gsub("-", "_")}]", class: "hidden mort-form-text py-1 px-1 h-6 w-16 justify-self-end text-xs mt-0 mr-2", data: { toggle_button_target: "templateSpan" }, value: "")
+      # input(type: "text", name: "template[#{dt.to_s.gsub("-", "_")}]", class: "hidden mort-form-text py-1 px-1 h-6 w-16 justify-self-end text-xs mt-0 mr-2", data: { toggle_button_target: "templateSpan" }, value: "")
       div(class: "font-extrabold place-self-center col-span-2 text-2xl") do
         events?(dt, :month, { from: dt.beginning_of_month.to_time, to: dt.end_of_month.to_time })
         punches?(dt, :month, 0, { from: dt.beginning_of_month.to_time, to: dt.end_of_month.to_time })
@@ -113,7 +132,10 @@ class MonthComponent < CalendarComponent
 
       cls = "absolute col-span-2 place-self-center "
       cls += (dt == Date.today) ? " bg-sky-600 text-white rounded-full w-6 text-center" : "  "
-      time(datetime: I18n.l(dt, format: :short_iso), class: "#{cls}") { dt.day }
+        # div(class: "") do
+        time(datetime: I18n.l(dt, format: :short_iso), class: "#{cls}") { dt.day }
+        input(placeholder: dt.day, type: "text", name: "template[#{dt.to_s.gsub("-", "_")}]", class: "hidden absolute col-span-2 place-self-center mort-form-text placeholder:text-slate-200 py-1 px-1 h-6 w-16 text-xs mt-0 mr-2", data: { toggle_button_target: "templateSpan" }, value: "")
+      # end
       span(class: "sr-only") do
         plain "datetime: #{I18n.l(dt, format: :short_iso)} "
         plain "day summary"
