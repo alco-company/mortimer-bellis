@@ -49,6 +49,7 @@ If Solid Queue bites me again, look here: https://github.com/rails/solid_queue/i
 ### 20/9/2024
 
 * add locale pick to sign_up, sign_in, more
+* first shot at work_schedule_templates UI
 
 ### 19/9/2024
 

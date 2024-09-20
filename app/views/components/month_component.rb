@@ -29,23 +29,7 @@ class MonthComponent < CalendarComponent
           large_screen_view
         end
       end
-      div(data: { toggle_button_target: "newTemplate" }, class: "hidden my-4 w-full xl:w-1/2 grid grid-cols-2") do
-        p(class: "col-span-2 my-2 ") { I18n.t("calendar.template.instructions_1") }
-        p(class: "col-span-2 my-2 ") { I18n.t("calendar.template.instructions_2") }
-        p(class: "col-span-2 my-2 ") { I18n.t("calendar.template.instructions_3") }
-        label(class: "my-2 font-bold mx-2 ") { I18n.t("calendar.template.event_name") }
-        input(type: "text", name: "event[name]", class: "mort-form-text my-2")
-        render SelectComponent.new(resource: Event.new,
-          field: :event_color,
-          field_class: "my-2 grid grid-cols-2 col-span-2",
-          label_class: "mx-2 col-span-1",
-          value_class: "mt-2 ",
-          collection: Team.colors,
-          show_label: true,
-          prompt: I18n.t(".select_team_color"),
-          editable: true)
-        button(type: "submit", class: "col-span-2 place-self-end mort-btn-primary") { "Gem" }
-      end
+      render WorkScheduleTemplateList.new
     end
   end
 
