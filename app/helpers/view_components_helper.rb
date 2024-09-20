@@ -1,4 +1,7 @@
 module ViewComponentsHelper
+  def punch_button(user:)
+    render PunchButtonComponent.new user: user
+  end
   def render_component(component, locals = {})
     render partial: component, locals: locals
   end

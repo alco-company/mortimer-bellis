@@ -51,6 +51,7 @@ If Solid Queue bites me again, look here: https://github.com/rails/solid_queue/i
 * add locale pick to sign_up, sign_in, more
 * first shot at work_schedule_templates UI
 * force SSL in development and allow box.mortimer:3000
+* show punch_button on user's dashboard
 
 ### 19/9/2024
 

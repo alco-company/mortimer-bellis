@@ -70,4 +70,8 @@ class User < ApplicationRecord
 
     self.update(role: r)
   end
+
+  def in?
+    true
+  end
 end
