@@ -28,9 +28,12 @@
 #       enabled: "ON"
 
 en:
+  danish: "Danish"
+  english: "English"
 
   menu:
     home: Home
+    login: Login
     pages: Pages
     accounts: Accounts
     users: Users

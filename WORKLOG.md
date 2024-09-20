@@ -46,8 +46,19 @@ If Solid Queue bites me again, look here: https://github.com/rails/solid_queue/i
 
 ## CHANGELOG
 
+### 20/9/2024
+
+* add locale pick to sign_up, sign_in, more
+
+### 19/9/2024
+
+* designing all views
+
+--- intermezzo on bluebox ---
+
 ### 11/9/2024
 
+* persist work_schedule_templates
 * show work-template - wip II
 
 ### 10/9/2024

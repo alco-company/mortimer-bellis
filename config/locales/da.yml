@@ -1,4 +1,6 @@
 da:
+  danish: "Dansk"
+  english: "Engelsk"
   hours_minutes: "%{hours}t %{minutes}m"
   select_team: Vælg hold
   last_payroll_at: Lønperiode til og med

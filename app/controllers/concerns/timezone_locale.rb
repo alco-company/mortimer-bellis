@@ -24,9 +24,8 @@ module TimezoneLocale
     #
     def switch_locale(&action)
       locale = extract_locale_from_tld || I18n.default_locale
-      locale = params.permit(:lang)[:lang] || locale
-      locale = params.permit(:locale)[:locale] || locale
-      # locale = current_user.preferred_locale if current_user rescue locale
+      locale = params.permit![:lang] || locale
+      locale = params.permit![:locale] || locale
       parsed_locale = get_locale_from_user_or_account || locale
       I18n.with_locale(parsed_locale, &action)
     end
@@ -51,7 +50,7 @@ module TimezoneLocale
     # make sure we use the timezone (of the current_user)
     #
     def user_time_zone(&block)
-      timezone = Current.user.time_zone || Current.account.time_zone rescue nil
+      timezone = Current.user&.time_zone || Current.tenant&.time_zone rescue nil
       timezone.blank? ?
         Time.use_zone("Europe/Copenhagen", &block) :
         Time.use_zone(timezone, &block)

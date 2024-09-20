@@ -1,68 +1,70 @@
 en:
 
+  2FA: 2 Factor Authentication
+
   users:
 
     create:
-      post: Bruger blev oprettet
+      post: The user was created
     update:
-      post: Bruger blev opdateret
+      post: The user was updated
     destroy:
-      post: Bruger blev slettet
+      post: The user was deleted
         
     list:
-      title: Brugere
+      title: Users
       new: Ny bruger
-      edit: Rediger
-      delete: Slet
-      show: Vis
-      name: Navn
-      role: Rolle
-      locale: Sprog
-      time_zone: Tidszone
+      edit: Edit
+      delete: Delete
+      show: Show
+      name: Name
+      role: Role
+      locale: Language
+      time_zone: Time zone
       email: Email
-      phone: Telefon
-      pincode: Pinkode
+      phone: Phone number
+      pincode: Pin code
       state: Status
-      updated_at: Opdateret den
+      updated_at: Opdated on
 
     form:
-      new: Ny bruger
-      edit: Rediger bruger
+      new: New user
+      edit: Edit user
 
     confirmations:
       new:
-        resend: Send igen
+        resend: Send again
         resend_confirmation: 
-          title: Bekræftelses email
-          action: Send igen
+          title: Confirmation email
+          action: Send again
 
     sessions:
       new: 
-        sign_in: Log ind
+        sign_in: Login
 
     sign_in:
-      title: Log ind
+      title: Login
       email: Email
-      password: Adgangskode
-      remember_me: Husk mig
-      forgot_password: Glemt adgangskode?
-      sign_in: Log ind
-      sign_up: Opret en ny konto
+      password: Password
+      remember_me: Remember me
+      forgot_password: Forgot your password?
+      sign_in: Login
+      sign_up: Setup a new account
 
     registrations:
       new:
-        create: Opret kontoen
+        create: Create the user
         sign_up:
-          title: Create a new account
+          title: Create a new user account
         
     passwords:
       new: 
-        reset_password: Nulstil adgangskoden
+        reset_password: Reset password
       edit:
-        change_password: Skift din adgangskode
-        password: Adgangskode
-        password_confirmation: Bekræft/Gentag adgangskoden
-        change_password_action: Skift adgangskoden
+        change_password: Change your password
+        password: Password
+        password_confirmation: Confirm/Repeat password
+        change_password_action: Change password
 
     edit_profile:
       title: Rediger profil
@@ -85,6 +87,12 @@ en:
         M O R T I M E R
         
   devise:
+    login: "Log in"
+    remember_me: "Remember me"
+    sign_up: "Sign up"
+    forgot_password: "Forgot your password?"
+    missing_confirmation_email: "Didn't receive confirmation instructions?"
+    missing_unlock_email: "Didn't receive unlock instructions?"
     confirmations:
       confirmed: "Your email address has been successfully confirmed."
       send_instructions: "You will receive an email with instructions for how to confirm your email address in a few minutes."
@@ -133,6 +141,11 @@ en:
       signed_out: "Signed out successfully."
       already_signed_out: "Signed out successfully."
     unlocks:
+      new:
+        resend: "Resend unlock instructions"
+        resend_unlock: 
+          title: "Unlock instructions"
+          action: "Resend unlock instructions"
       send_instructions: "You will receive an email with instructions for how to unlock your account in a few minutes."
       send_paranoid_instructions: "If your account exists, you will receive an email with instructions for how to unlock it in a few minutes."
       unlocked: "Your account has been unlocked successfully. Please sign in to continue."
