@@ -12,9 +12,9 @@
       <%= link_to_team_employees_status('all') %>
     <% end %>
   </div>
-  <div class="grid gap-2 grid-cols-1 lg:grid-cols-2 items-center">
+  <div class="flex items-center">
     <%#= render partial: 'search', locals: { klass: :employee }  %>
-    <div class="hidden md:block">
+    <div class="hidden md:block mr-2 justify-end">
       <%== pagy_nav(@pagy) if @pagy.pages > 1 %>
     </div>
     <div class="flex gap-2 justify-end">
