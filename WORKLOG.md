@@ -46,6 +46,10 @@ If Solid Queue bites me again, look here: https://github.com/rails/solid_queue/i
 
 ## CHANGELOG
 
+### 22/9/2024
+
+* add settings table
+
 ### 21/9/2024
 
 * add vertical menu in sidebar

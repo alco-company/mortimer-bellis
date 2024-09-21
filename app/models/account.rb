@@ -7,6 +7,7 @@ class Account < ApplicationRecord
   include Localeable
   include Colorable
   include Calendarable
+  include Setable
 
   has_many :dashboards, dependent: :destroy
   has_many :background_jobs, dependent: :destroy

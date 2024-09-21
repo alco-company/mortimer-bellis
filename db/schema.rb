@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_09_09_084549) do
+ActiveRecord::Schema[8.0].define(version: 2024_09_21_222010) do
   create_table "accounts", force: :cascade do |t|
     t.string "name"
     t.string "email"
@@ -292,6 +292,20 @@ ActiveRecord::Schema[8.0].define(version: 2024_09_09_084549) do
     t.index ["employee_id"], name: "index_punches_on_employee_id"
   end
 
+  create_table "settings", force: :cascade do |t|
+    t.integer "account_id", null: false
+    t.string "setable_type"
+    t.integer "setable_id"
+    t.string "key"
+    t.integer "priority"
+    t.string "format"
+    t.string "value"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_settings_on_account_id"
+    t.index ["setable_type", "setable_id"], name: "index_settings_on_setable"
+  end
+
   create_table "solid_queue_blocked_executions", force: :cascade do |t|
     t.integer "job_id", null: false
     t.string "queue_name", null: false
@@ -521,6 +535,7 @@ ActiveRecord::Schema[8.0].define(version: 2024_09_09_084549) do
   add_foreign_key "punches", "employees"
   add_foreign_key "punches", "employees", on_delete: :cascade
   add_foreign_key "punches", "punch_cards", on_delete: :cascade
+  add_foreign_key "settings", "accounts"
   add_foreign_key "solid_queue_blocked_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
   add_foreign_key "solid_queue_claimed_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
   add_foreign_key "solid_queue_failed_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade

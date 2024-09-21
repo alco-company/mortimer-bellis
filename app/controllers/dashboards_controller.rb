@@ -65,7 +65,7 @@ class DashboardsController < MortimerController
       unless @dashboard
         @dashboard = Dashboard.create(account: Current.account, feed: "https://www.dr.dk/nyheder/service/feeds/penge")
       end
-      get_feed if @dashboard
+      # get_feed if @dashboard
     end
 
     # Only allow a list of trusted parameters through.

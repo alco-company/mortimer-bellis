@@ -37,7 +37,7 @@ class SidebarComponent < ApplicationComponent
           li(class: "-mx-6 mt-auto") do
             div(class: "flex items-center gap-x-2 pl-10") do
               a(
-                href: "#",
+                href: settings_url,
                 class:
                   "flex items-center gap-x-4 px-2 py-3 text-sm font-semibold leading-6 text-gray-900 hover:bg-gray-50"
               ) do
