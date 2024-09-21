@@ -50,6 +50,7 @@ If Solid Queue bites me again, look here: https://github.com/rails/solid_queue/i
 
 * add vertical menu in sidebar
 * keep pagination to the right
+* Kamal config validation has an issue with 'servers/web/options - should be a hash'
 
 ### 20/9/2024
 

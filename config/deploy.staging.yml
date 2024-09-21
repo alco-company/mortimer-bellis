@@ -14,7 +14,7 @@ servers:
   web:
     hosts:
       - 135.181.202.106
-    options:
+    options: {}
       # "add-host": host.docker.internal:host-gateway
       # network: "mortimer"    
     labels:
