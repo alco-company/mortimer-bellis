@@ -46,6 +46,10 @@ If Solid Queue bites me again, look here: https://github.com/rails/solid_queue/i
 
 ## CHANGELOG
 
+### 21/9/2024
+
+* add vertical menu in sidebar
+
 ### 20/9/2024
 
 * add locale pick to sign_up, sign_in, more

@@ -1,4 +1,26 @@
 <!DOCTYPE html>
+<!--
+  This example requires some changes to your config:
+  
+  ```
+  // tailwind.config.js
+  module.exports = {
+    // ...
+    plugins: [
+      // ...
+      require('@tailwindcss/forms'),
+    ],
+  }
+  ```
+-->
+<!--
+  This example requires updating your template:
+
+  ```
+  <html class="h-full bg-white">
+  <body class="h-full">
+  ```
+-->
 <html lang="<%= I18n.locale %>" class="h-full bg-white">
   <head>
     <%= render partial: "layouts/generic_header" %>
@@ -7,15 +29,28 @@
     <%#= tag :meta, name: :vapid_public_key, content: Rails.application.credentials.vapid.public_key %>
 
   </head>
-  <body class="flex flex-row h-screen w-full">
+  <body class="h-full">
     <%= turbo_frame_tag "tooltip", class: "absolute", target: "_top" %>
     <%= turbo_stream_from "#{Current.user.id}_noticed/notifications" if Current.user %>
-    <%#= render NavigationComponent.new items: menu_items %>
-    <%#= render_vertical_menu %>
-    <main class="grow-0 w-full p-4 pt-0">
-      <%#= render_menu user: Current.user %>
-      <%= yield %>
-    </main>
+
+    <div data-controller="menu">
+      <!-- Off-canvas menu for mobile, show/hide based on off-canvas menu state. -->
+      <%= render_mobile_sidebar %>
+
+      <!-- Static sidebar for desktop -->
+      <div class="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-72 lg:flex-col">
+        <!-- Sidebar component, swap this element with another sidebar if you like -->
+        <%= render SidebarComponent.new %>
+      </div>
+
+      <div class="lg:pl-72">
+        <%= render_topbar %>
+        <main class="px-4 py-2">
+          <%= yield %>
+        </main>
+      </div>
+    </div>
+
     <%# 
     in honor of Tailwind not being able to know 'tags' in advance
     span(class: "hidden mort-flash-info mort-flash-error mort-flash-success mort-flash-warning mort-flash-notice mort-flash-timedout mort-flash-alert") 
@@ -24,5 +59,6 @@
     <%= render FlashComponent.new flash: flash %>
     <remote-modal-container></remote-modal-container>
     <%= turbo_frame_tag "form" %>
+
   </body>
 </html>
