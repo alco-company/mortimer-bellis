@@ -1,5 +1,5 @@
 class Page < ApplicationRecord
-  scope :by_account, -> { all }
+  scope :by_tenant, -> { all }
 
   def name
     title

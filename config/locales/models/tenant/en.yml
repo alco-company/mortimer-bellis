@@ -1,15 +1,15 @@
 en:
-  accounts:
+  tenants:
     create:
-      post: The account was created
+      post: The tenant was created
     update:
-      post: The account was updated
+      post: The tenant was updated
     destroy:
-      post: The account was deleted
+      post: The tenant was deleted
 
     list:
-      title: Accounts
-      new: New account
+      title: Tenants
+      new: New tenant
       edit: Edit
       delete: Delete
       show: Show
@@ -19,17 +19,17 @@ en:
       updated_at: Updated on
 
     form:
-      new: New account
-      edit: Edit account
+      new: New tenant
+      edit: Edit tenant
 
     new:
-      title: New account
+      title: New tenant
       create: Create
 
     edit:
-      title: Edit account
+      title: Edit tenant
       update: Update
 
     show:
-      title: Account
+      title: Tenant
       back: Back

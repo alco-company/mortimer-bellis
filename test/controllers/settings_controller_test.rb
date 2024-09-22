@@ -17,7 +17,7 @@ class SettingsControllerTest < ActionDispatch::IntegrationTest
 
   test "should create setting" do
     assert_difference("Setting.count") do
-      post settings_url, params: { setting: { account_id: @setting.account_id, format: @setting.format, key: @setting.key, priority: @setting.priority, setable_id: @setting.setable_id, setable_type: @setting.setable_type, value: @setting.value } }
+      post settings_url, params: { setting: { tenant_id: @setting.tenant_id, format: @setting.format, key: @setting.key, priority: @setting.priority, setable_id: @setting.setable_id, setable_type: @setting.setable_type, value: @setting.value } }
     end
 
     assert_redirected_to setting_url(Setting.last)
@@ -34,7 +34,7 @@ class SettingsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update setting" do
-    patch setting_url(@setting), params: { setting: { account_id: @setting.account_id, format: @setting.format, key: @setting.key, priority: @setting.priority, setable_id: @setting.setable_id, setable_type: @setting.setable_type, value: @setting.value } }
+    patch setting_url(@setting), params: { setting: { tenant_id: @setting.tenant_id, format: @setting.format, key: @setting.key, priority: @setting.priority, setable_id: @setting.setable_id, setable_type: @setting.setable_type, value: @setting.value } }
     assert_redirected_to setting_url(@setting)
   end
 

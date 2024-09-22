@@ -22,7 +22,7 @@ da:
     month_view: "Måned"
     year_view: "År"
     employees_has_punched_total_punches: "medarbejdere har stemplet ialt %{count} gange idag"
-    list_all_account_calendars: "List kontoens kalendere"
+    list_all_tenant_calendars: "List kontoens kalendere"
     list_all_team_calendars: "List holdets kalendere"
     list_all_employee_calendars: "List medarbejderens kalendere"
 

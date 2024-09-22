@@ -16,7 +16,7 @@ class EmployeesTest < ApplicationSystemTestCase
   #   click_on "New employee"
 
   #   fill_in "Access token", with: @employee.access_token
-  #   fill_in "Account", with: @employee.account_id
+  #   fill_in "Tenant", with: @employee.tenant_id
   #   fill_in "Employee ident", with: @employee.employee_ident
   #   fill_in "Last punched at", with: @employee.last_punched_at
   #   fill_in "Name", with: @employee.name
@@ -34,7 +34,7 @@ class EmployeesTest < ApplicationSystemTestCase
   #   click_on "Edit this employee", match: :first
 
   #   fill_in "Access token", with: @employee.access_token
-  #   fill_in "Account", with: @employee.account_id
+  #   fill_in "Tenant", with: @employee.tenant_id
   #   fill_in "Employee ident", with: @employee.employee_ident
   #   fill_in "Last punched at", with: @employee.last_punched_at.to_s
   #   fill_in "Name", with: @employee.name

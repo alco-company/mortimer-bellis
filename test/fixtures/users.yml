@@ -5,12 +5,12 @@
 # below each fixture, per the syntax in the comments below
 #
 one:
-  account: one
+  tenant: one
   email: "john@doe.com"
   locale: "en"
 # column: value
 #
 two: 
-  account: two
+  tenant: two
   email: "jane@doe.com"
 # column: value

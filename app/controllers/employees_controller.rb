@@ -4,7 +4,7 @@ class EmployeesController < MortimerController
   def new
     @resource.locale = Current.user.locale
     @resource.time_zone = Current.user.time_zone
-    @resource.team = Team.by_account.first
+    @resource.team = Team.by_tenant.first
     super
   end
 
@@ -45,7 +45,7 @@ class EmployeesController < MortimerController
       params[:employee][:pincode] = Employee.next_pincode(rp[:pincode]) if rp[:pincode].blank?
       params[:employee][:payroll_employee_ident] = Employee.next_payroll_employee_ident(rp[:payroll_employee_ident]) if rp[:payroll_employee_ident].blank?
       params.require(:employee).permit(
-        :account_id,
+        :tenant_id,
         :team_id,
         :name,
         :mugshot,

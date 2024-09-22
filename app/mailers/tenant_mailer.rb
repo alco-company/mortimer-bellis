@@ -1,15 +1,15 @@
-class AccountMailer < ApplicationMailer
+class TenantMailer < ApplicationMailer
   #
   #
   def welcome
-    @rcpt =  email_address_with_name params[:account].email, params[:account].name
-    locale = params[:account].locale
+    @rcpt =  email_address_with_name params[:tenant].email, params[:tenant].name
+    locale = params[:tenant].locale
     @pw = params[:pw]
-    @account = params[:account]
-    @resource = @account.users.first
+    @tenant = params[:tenant]
+    @resource = @tenant.users.first
     @url = new_user_session_url
     I18n.with_locale(locale) do
-      mail to: @rcpt, subject: I18n.t("account.mailer.welcome.subject")
+      mail to: @rcpt, subject: I18n.t("tenant.mailer.welcome.subject")
     end
   end
 
@@ -27,12 +27,12 @@ class AccountMailer < ApplicationMailer
       File.delete tmpfile
     end
 
-    mail to: rcpt, subject: I18n.t("account_mailer.datalon_email.subject")
+    mail to: rcpt, subject: I18n.t("tenant_mailer.datalon_email.subject")
   end
 
   def report_state
-    Current.account = params[:account]
-    rcpt =  email_address_with_name Current.account.email, Current.account.name
+    Current.tenant = params[:tenant]
+    rcpt =  email_address_with_name Current.tenant.email, Current.tenant.name
     params[:tmpfiles].each_with_index do |tmpfile, i|
       attachments["report_state_#{i}.pdf"] = File.read(tmpfile)
 
@@ -40,6 +40,6 @@ class AccountMailer < ApplicationMailer
       File.delete tmpfile
     end
 
-    mail to: rcpt, subject: I18n.t("account_mailer.report_state.subject")
+    mail to: rcpt, subject: I18n.t("tenant_mailer.report_state.subject")
   end
 end

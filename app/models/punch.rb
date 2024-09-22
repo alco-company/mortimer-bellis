@@ -1,5 +1,5 @@
 class Punch < ApplicationRecord
-  include Accountable
+  include Tenantable
   include Stateable
 
   belongs_to :employee
@@ -22,7 +22,7 @@ class Punch < ApplicationRecord
     flt = filter.filter
 
     all
-      .by_account()
+      .by_tenant()
       .by_name(flt["name"])
       .by_punch_clock(flt["punch_clock"])
       .by_punched_at(flt["punched_at"])

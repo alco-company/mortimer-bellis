@@ -1,7 +1,7 @@
 class ModalController < BaseController
   before_action :set_vars, only: [ :new, :show, :create, :destroy, :update ]
   skip_before_action :authenticate_user!, only: [ :destroy ]
-  skip_before_action :ensure_accounted_user, only: [ :destroy ]
+  skip_before_action :ensure_tenanted_user, only: [ :destroy ]
 
   def new
     # resource
@@ -41,7 +41,7 @@ class ModalController < BaseController
 
   #
   def destroy
-    (authenticate_user! && ensure_accounted_user) || verify_api_key
+    (authenticate_user! && ensure_tenanted_user) || verify_api_key
     params[:all] == "true" ? process_destroy_all : process_destroy
   end
 
@@ -80,7 +80,7 @@ class ModalController < BaseController
         case @step
         when "new"
           @calendar = Calendar.find(params[:id])
-          @resource = Event.new(account: @calendar.account, calendar: @calendar, event_color: @calendar.calendarable.color, event_metum: EventMetum.new)
+          @resource = Event.new(tenant: @calendar.tenant, calendar: @calendar, event_color: @calendar.calendarable.color, event_metum: EventMetum.new)
         when "edit";  @calendar = @resource.calendar
         end
       end
@@ -145,8 +145,8 @@ class ModalController < BaseController
         render turbo_stream: turbo_stream.replace("modal_container", partial: "modal/import_preview", local: { records: @records, import_file: @import_file })
       when "approve"
         Rails.env.local? ?
-          ImportEmployeesJob.new.perform(account: Current.account, import_file: params[:import_file]) :
-          ImportEmployeesJob.perform_later(account: Current.account, import_file: params[:import_file])
+          ImportEmployeesJob.new.perform(tenant: Current.tenant, import_file: params[:import_file]) :
+          ImportEmployeesJob.perform_later(tenant: Current.tenant, import_file: params[:import_file])
 
         render turbo_stream: turbo_stream.replace("modal_container", partial: "modal/import_approved")
       end
@@ -156,9 +156,9 @@ class ModalController < BaseController
       case params[:modal_form]
       when "payroll"
         params[:update_payroll] = params[:update_payroll] == "on" ? true : false
-        DatalonPreparationJob.perform_later account: Current.account, last_payroll_at: Date.parse(params[:last_payroll_at]), update_payroll: params[:update_payroll]
+        DatalonPreparationJob.perform_later tenant: Current.tenant, last_payroll_at: Date.parse(params[:last_payroll_at]), update_payroll: params[:update_payroll]
       when "state"
-        Current.account.update send_state_rrule: params[:send_state_at], send_eu_state_rrule: params[:send_eu_state_at]
+        Current.tenant.update send_state_rrule: params[:send_state_at], send_eu_state_rrule: params[:send_eu_state_at]
         send_file(PunchCard.pdf_file(html_content), filename: "employees_state-#{Date.yesterday}.pdf")
       end
     end
@@ -201,7 +201,7 @@ class ModalController < BaseController
       begin
         set_filter resource_class.to_s.underscore.pluralize
         set_resources
-        DeleteAllJob.perform_later account: Current.account, resource_class: resource_class.to_s, sql_resources: @resources.to_sql
+        DeleteAllJob.perform_later tenant: Current.tenant, resource_class: resource_class.to_s, sql_resources: @resources.to_sql
         @url.gsub!(/\/\d+$/, "") if @url.match?(/\d+$/)
         respond_to do |format|
           format.html { redirect_to @url, status: 303, success: t("delete_all_later") }
@@ -261,13 +261,13 @@ class ModalController < BaseController
     end
 
     def set_resources
-      @resources = any_filters? ? resource_class.filtered(@filter) : resource_class.by_account()
+      @resources = any_filters? ? resource_class.filtered(@filter) : resource_class.by_tenant()
       @resources = any_sorts? ? resource_class.ordered(@resources, params[:s], params[:d]) : @resources.order(created_at: :desc)
     end
 
     def set_filter(view = params[:controller].split("/").last)
       @filter_form = resource_class.to_s.underscore.pluralize
-      @filter = Filter.where(account: Current.account).where(view: view).take || Filter.new
+      @filter = Filter.where(tenant: Current.tenant).where(view: view).take || Filter.new
       @filter.filter ||= {}
     end
 
@@ -289,13 +289,13 @@ end
 # case params[:modal_form]
 # when "payroll"
 #   params[:update_payroll] = params[:update_payroll] == "on" ? true : false
-#    DatalonPreparationJob.perform_later account: Current.account, last_payroll_at: Date.parse(params[:last_payroll_at]), update_payroll: params[:update_payroll]
+#    DatalonPreparationJob.perform_later tenant: Current.tenant, last_payroll_at: Date.parse(params[:last_payroll_at]), update_payroll: params[:update_payroll]
 # end
 
 # html_filename = Rails.root.join("tmp", "report_state.html")
 # pdf_filename = Rails.root.join("tmp", "#{Current.user.id}_report_state.pdf")
 # File.open(html_filename, "w") { |f| f.write(html) }
 # if BuildPdfJob.new.perform(html: html_filename, pdf: pdf_filename)
-#   AccountMailer.with(account: Current.account, tmpfiles: [ pdf_filename.to_s ]).report_state.deliver_later
+#   TenantMailer.with(tenant: Current.tenant, tmpfiles: [ pdf_filename.to_s ]).report_state.deliver_later
 # end
-# EmployeeEuStateJob.perform_later account: Current.account
+# EmployeeEuStateJob.perform_later tenant: Current.tenant

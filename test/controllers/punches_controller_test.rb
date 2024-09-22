@@ -17,7 +17,7 @@ class PunchesControllerTest < ActionDispatch::IntegrationTest
 
   # test "should create punch" do
   #   assert_difference("Punch.count") do
-  #     post punches_url, params: { punch: { account_id: @punch.account_id, employee_id: @punch.employee_id, punch_clock: @punch.punch_clock, punched_at: @punch.punched_at, remote_ip: @punch.remote_ip, state: @punch.state } }
+  #     post punches_url, params: { punch: { tenant_id: @punch.tenant_id, employee_id: @punch.employee_id, punch_clock: @punch.punch_clock, punched_at: @punch.punched_at, remote_ip: @punch.remote_ip, state: @punch.state } }
   #   end
 
   #   assert_redirected_to punch_url(Punch.last)
@@ -34,7 +34,7 @@ class PunchesControllerTest < ActionDispatch::IntegrationTest
   # end
 
   # test "should update punch" do
-  #   patch punch_url(@punch), params: { punch: { account_id: @punch.account_id, employee_id: @punch.employee_id, punch_clock: @punch.punch_clock, punched_at: @punch.punched_at, remote_ip: @punch.remote_ip, state: @punch.state } }
+  #   patch punch_url(@punch), params: { punch: { tenant_id: @punch.tenant_id, employee_id: @punch.employee_id, punch_clock: @punch.punch_clock, punched_at: @punch.punched_at, remote_ip: @punch.remote_ip, state: @punch.state } }
   #   assert_redirected_to punch_url(@punch)
   # end
 

@@ -11,7 +11,7 @@ class EventMetumTest < ActiveSupport::TestCase
     assert_not event_metum.save, true
   end
 
-  test "should save event_metum with account, calendar, and event" do
+  test "should save event_metum with tenant, calendar, and event" do
     assert @em.save, true
   end
 

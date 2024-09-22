@@ -1,5 +1,5 @@
 # create_table "background_jobs", force: :cascade do |t|
-#   t.integer "account_id", null: false
+#   t.integer "tenant_id", null: false
 #   t.integer "user_id"
 #   t.integer "state", default: 0
 #   t.string "job_klass"
@@ -9,12 +9,12 @@
 #   t.string "job_id"
 #   t.datetime "created_at", null: false
 #   t.datetime "updated_at", null: false
-#   t.index ["account_id"], name: "index_background_jobs_on_account_id"
+#   t.index ["tenant_id"], name: "index_background_jobs_on_tenant_id"
 #   t.index ["user_id"], name: "index_background_jobs_on_user_id"
 # end
 #
 class BackgroundJob < ApplicationRecord
-  include Accountable
+  include Tenantable
   include Queueable
 
   enum :state, {
@@ -44,7 +44,7 @@ class BackgroundJob < ApplicationRecord
     flt = filter.filter
 
     all
-      .by_account()
+      .by_tenant()
       .by_job_klass(flt["job_klass"])
   rescue
     filter.destroy if filter

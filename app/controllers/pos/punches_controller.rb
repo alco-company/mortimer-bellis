@@ -19,9 +19,9 @@ class Pos::PunchesController < Pos::PosController
   private
     def verify_employee
       @employee = case true
-      when params[:employee_id].present?; Employee.by_account.find(params.delete(:employee_id))
-      when params[:employee].present?; Employee.by_account.find(params[:employee][:id])
-      when params[:q].present?; Employee.by_account.find_by(pincode: params[:q])
+      when params[:employee_id].present?; Employee.by_tenant.find(params.delete(:employee_id))
+      when params[:employee].present?; Employee.by_tenant.find(params[:employee][:id])
+      when params[:q].present?; Employee.by_tenant.find_by(pincode: params[:q])
       else nil
       end
       redirect_to pos_punch_clock_path(api_key: @resource.access_token) and return unless @employee

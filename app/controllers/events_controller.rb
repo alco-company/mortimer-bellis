@@ -1,7 +1,7 @@
 class EventsController < MortimerController
   def new
     @resource.calendar = parent
-    @resource.account = parent.account
+    @resource.tenant = parent.tenant
     @resource.from_date = Date.today
     @resource.from_time = Time.now
     @resource.to_date = Date.today
@@ -22,7 +22,7 @@ class EventsController < MortimerController
   #   "authenticity_token"=>"[FILTERED]",
   #   "event"=>{
   #     "calendar_id"=>"6",
-  #     "account_id"=>"25",
+  #     "tenant_id"=>"25",
   #     "name"=>"Aftale",
   #     "event_color"=>"border-fuchsia-500",
   #     "from_date"=>"2024-08-07",
@@ -90,7 +90,7 @@ class EventsController < MortimerController
     # Only allow a list of trusted parameters through.
     def resource_params
       params.require(:event).permit(
-        :account_id,
+        :tenant_id,
         :calendar_id,
         :id,
         :auto_punch,

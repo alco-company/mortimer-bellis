@@ -3,13 +3,13 @@ class Users::InvitationsController < Devise::InvitationsController
   include TimezoneLocale
 
   before_action :configure_permitted_parameters
-  skip_before_action :ensure_accounted_user, only: [ :edit, :update ]
+  skip_before_action :ensure_tenanted_user, only: [ :edit, :update ]
   skip_before_action :authenticate_user!, only: [ :edit, :update ]
 
   private
 
     def configure_permitted_parameters
-      devise_parameter_sanitizer.permit(:invite, keys: [ :account_id, :locale, :time_zone ])
+      devise_parameter_sanitizer.permit(:invite, keys: [ :tenant_id, :locale, :time_zone ])
     end
 
     def after_invite_path_for(inviter, invitee = nil)

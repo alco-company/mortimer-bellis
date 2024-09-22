@@ -4,7 +4,7 @@ class Events::Form < ApplicationForm
       # row field(:name).input(class: "mort-form-text")
       # row field(:files).file(class: "mort-form-file", multiple: true)
       row field(:calendar_id).hidden
-      row field(:account_id).hidden
+      row field(:tenant_id).hidden
       render EventComponent.new resource: resource
     end
   end

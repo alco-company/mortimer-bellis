@@ -22,7 +22,7 @@ module SumPunches
           fdate = across_midnight ? date.yesterday : date
           tdate = date
           say "Recalculating #{employee.name} on #{date}"
-          pc = PunchCard.where(account: employee.account, employee: employee, work_date: fdate).first_or_create
+          pc = PunchCard.where(tenant: employee.tenant, employee: employee, work_date: fdate).first_or_create
           unless pc.nil?
             begin
               # obviously, we're only interested in punches for the day in question

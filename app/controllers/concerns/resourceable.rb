@@ -26,10 +26,10 @@ module Resourceable
     end
 
     def set_resources_stream
-      account = Current.account || @resource&.account || nil
-      @resources_stream ||= account.nil? ?
+      tenant = Current.tenant || @resource&.tenant || nil
+      @resources_stream ||= tenant.nil? ?
         "1_#{resource_class.to_s.underscore.pluralize}" :
-        "%s_%s" % [ account&.id, resource_class.to_s.underscore.pluralize ]
+        "%s_%s" % [ tenant&.id, resource_class.to_s.underscore.pluralize ]
     end
 
     def set_resources
@@ -38,16 +38,16 @@ module Resourceable
     end
 
     def parent_or_class
-      parent? ? parent_resources : resource_class.by_account() rescue nil
+      parent? ? parent_resources : resource_class.by_tenant() rescue nil
     end
 
     # "/teams/37/calendars"
-    # "/accounts/37/calendars"
+    # "/tenants/37/calendars"
     # "/employees/37/calendars"
     # "/calendars/6/events"
     #
     def parent?
-      (request.path =~ /\/(team|employee|account|calendar)s\/(\d+)\/(calendars|events)/).nil? ? false : true
+      (request.path =~ /\/(team|employee|tenant|calendar)s\/(\d+)\/(calendars|events)/).nil? ? false : true
     end
 
     def parent_resources
@@ -55,25 +55,25 @@ module Resourceable
     end
 
     def parent
-      parent_class, parent_id, _ = request.path.scan(/\/(team|employee|account|calendar)s\/(\d+)\/(calendars|events)/).first
+      parent_class, parent_id, _ = request.path.scan(/\/(team|employee|tenant|calendar)s\/(\d+)\/(calendars|events)/).first
       @parent ||= parent_class.classify.constantize.find(parent_id)
-      # @parent ||= parent_class.find(params_parent(:team_id) || params_parent(:employee_id) || params_parent(:account_id))
+      # @parent ||= parent_class.find(params_parent(:team_id) || params_parent(:employee_id) || params_parent(:tenant_id))
     end
 
     def parent_class
-      parent_class, _, _ = request.path.scan(/\/(team|employee|account|calendar)s\/(\d+)\/(calendars|events)/).first
+      parent_class, _, _ = request.path.scan(/\/(team|employee|tenant|calendar)s\/(\d+)\/(calendars|events)/).first
       @parent_class ||= parent_class.classify.constantize
       # @parent_class ||= case request.path.split("/").second
       # when "teams"; Team
       # when "employees"; Employee
-      # when "accounts"; Account
+      # when "tenants"; Tenant
       # end
     end
 
     def set_filter
       @filter_form = params_ctrl.split("/").last
       @url = resources_url
-      @filter = Filter.where(account: Current.account).where(view: params_ctrl.split("/").last).take || Filter.new
+      @filter = Filter.where(tenant: Current.tenant).where(view: params_ctrl.split("/").last).take || Filter.new
       @filter.filter ||= {}
     end
 
@@ -139,7 +139,7 @@ module Resourceable
     end
 
     def params_parent(ref)
-      params.permit(:team_id, :employee_id, :account_id)[ref]
+      params.permit(:team_id, :employee_id, :tenant_id)[ref]
     end
 
     def params_id

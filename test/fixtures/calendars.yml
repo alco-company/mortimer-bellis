@@ -1,13 +1,13 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  account: one
+  tenant: one
   calendarable: one
   calendarable_type: Calendarable
   name: MyString
 
 two:
-  account: two
+  tenant: two
   calendarable: two
   calendarable_type: Calendarable
   name: MyString

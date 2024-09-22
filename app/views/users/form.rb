@@ -1,6 +1,6 @@
 class Users::Form < ApplicationForm
   def view_template(&)
-    view_only field("account.name").input(class: "mort-form-text")
+    view_only field("tenant.name").input(class: "mort-form-text")
     if model.superadmin? and not Current.user.superadmin?
       view_only field(:name).input(class: "mort-form-text")
       view_only field(:email).input(class: "mort-form-text")

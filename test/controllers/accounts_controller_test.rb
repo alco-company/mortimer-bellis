@@ -1,49 +1,49 @@
 require "test_helper"
 
-class AccountsControllerTest < ActionDispatch::IntegrationTest
+class TenantsControllerTest < ActionDispatch::IntegrationTest
   # setup do
-  #   Current.account = accounts(:one)
-  #   @account = accounts(:one)
+  #   Current.tenant = tenants(:one)
+  #   @tenant = tenants(:one)
   # end
 
   # test "should get index" do
-  #   get accounts_url
+  #   get tenants_url
   #   assert_response :success
   # end
 
   # test "should get new" do
-  #   get new_account_url
+  #   get new_tenant_url
   #   assert_response :success
   # end
 
-  # test "should create account" do
-  #   assert_difference("Account.count") do
-  #     post accounts_url, params: { account: { email: @account.email, locale: @account.locale, name: @account.name, pp_identification: @account.pp_identification, time_zone: @account.time_zone } }
+  # test "should create tenant" do
+  #   assert_difference("Tenant.count") do
+  #     post tenants_url, params: { tenant: { email: @tenant.email, locale: @tenant.locale, name: @tenant.name, pp_identification: @tenant.pp_identification, time_zone: @tenant.time_zone } }
   #   end
 
-  #   assert_redirected_to accounts_url()
+  #   assert_redirected_to tenants_url()
   # end
 
-  # test "should show account" do
-  #   get account_url(@account)
+  # test "should show tenant" do
+  #   get tenant_url(@tenant)
   #   assert_response :success
   # end
 
   # test "should get edit" do
-  #   get edit_account_url(@account)
+  #   get edit_tenant_url(@tenant)
   #   assert_response :success
   # end
 
-  # test "should update account" do
-  #   patch account_url(@account), params: { account: { email: @account.email, locale: @account.locale, name: @account.name, pp_identification: @account.pp_identification, time_zone: @account.time_zone } }
-  #   assert_redirected_to accounts_url()
+  # test "should update tenant" do
+  #   patch tenant_url(@tenant), params: { tenant: { email: @tenant.email, locale: @tenant.locale, name: @tenant.name, pp_identification: @tenant.pp_identification, time_zone: @tenant.time_zone } }
+  #   assert_redirected_to tenants_url()
   # end
 
-  # test "should destroy account" do
-  #   assert_difference("Account.count", -1) do
-  #     delete account_url(@account)
+  # test "should destroy tenant" do
+  #   assert_difference("Tenant.count", -1) do
+  #     delete tenant_url(@tenant)
   #   end
 
-  #   assert_redirected_to accounts_url
+  #   assert_redirected_to tenants_url
   # end
 end

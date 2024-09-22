@@ -9,14 +9,14 @@
       "file": "app/controllers/punch_clocks_controller.rb",
       "line": 11,
       "link": "https://brakemanscanner.org/docs/warning_types/mass_assignment/",
-      "code": "params.require(:punch_clock).permit(:account_id, :location_id, :name, :ip_addr, :last_punched_at, :access_token, :locale, :time_zone)",
+      "code": "params.require(:punch_clock).permit(:tenant_id, :location_id, :name, :ip_addr, :last_punched_at, :access_token, :locale, :time_zone)",
       "render_path": null,
       "location": {
         "type": "method",
         "class": "PunchClocksController",
         "method": "resource_params"
       },
-      "user_input": ":account_id",
+      "user_input": ":tenant_id",
       "confidence": "High",
       "cwe_id": [
         915
@@ -55,14 +55,14 @@
       "file": "app/controllers/background_jobs_controller.rb",
       "line": 8,
       "link": "https://brakemanscanner.org/docs/warning_types/mass_assignment/",
-      "code": "params.require(:background_job).permit(:id, :account_id, :user_id, :state, :job_klass, :params, :schedule, :next_run_at, :job_id)",
+      "code": "params.require(:background_job).permit(:id, :tenant_id, :user_id, :state, :job_klass, :params, :schedule, :next_run_at, :job_id)",
       "render_path": null,
       "location": {
         "type": "method",
         "class": "BackgroundJobsController",
         "method": "resource_params"
       },
-      "user_input": ":account_id",
+      "user_input": ":tenant_id",
       "confidence": "High",
       "cwe_id": [
         915
@@ -78,14 +78,14 @@
       "file": "app/controllers/punch_cards_controller.rb",
       "line": 63,
       "link": "https://brakemanscanner.org/docs/warning_types/mass_assignment/",
-      "code": "params.require(:punch_card).permit(:account_id, :employee_id, :work_date, :work_minutes, :ot1_minutes, :ot2_minutes, :break_minutes, :punches_settled_at)",
+      "code": "params.require(:punch_card).permit(:tenant_id, :employee_id, :work_date, :work_minutes, :ot1_minutes, :ot2_minutes, :break_minutes, :punches_settled_at)",
       "render_path": null,
       "location": {
         "type": "method",
         "class": "PunchCardsController",
         "method": "resource_params"
       },
-      "user_input": ":account_id",
+      "user_input": ":tenant_id",
       "confidence": "High",
       "cwe_id": [
         915
@@ -124,14 +124,14 @@
       "file": "app/controllers/dashboards_controller.rb",
       "line": 73,
       "link": "https://brakemanscanner.org/docs/warning_types/mass_assignment/",
-      "code": "params.require(:dashboard).permit(:account_id, :feed)",
+      "code": "params.require(:dashboard).permit(:tenant_id, :feed)",
       "render_path": null,
       "location": {
         "type": "method",
         "class": "DashboardsController",
         "method": "dashboard_params"
       },
-      "user_input": ":account_id",
+      "user_input": ":tenant_id",
       "confidence": "High",
       "cwe_id": [
         915
@@ -216,14 +216,14 @@
       "file": "app/controllers/teams_controller.rb",
       "line": 6,
       "link": "https://brakemanscanner.org/docs/warning_types/mass_assignment/",
-      "code": "params.require(:team).permit(:account_id, :name, :team_color, :locale, :time_zone, :punches_settled_at, :blocked, :payroll_team_ident, :description, :email, :cell_phone, :pbx_extension, :contract_minutes, :contract_days_per_payroll, :contract_days_per_week, :hour_pay, :ot1_add_hour_pay, :ot2_add_hour_pay, :tmp_overtime_allowed, :eu_state, :allowed_ot_minutes)",
+      "code": "params.require(:team).permit(:tenant_id, :name, :team_color, :locale, :time_zone, :punches_settled_at, :blocked, :payroll_team_ident, :description, :email, :cell_phone, :pbx_extension, :contract_minutes, :contract_days_per_payroll, :contract_days_per_week, :hour_pay, :ot1_add_hour_pay, :ot2_add_hour_pay, :tmp_overtime_allowed, :eu_state, :allowed_ot_minutes)",
       "render_path": null,
       "location": {
         "type": "method",
         "class": "TeamsController",
         "method": "resource_params"
       },
-      "user_input": ":account_id",
+      "user_input": ":tenant_id",
       "confidence": "High",
       "cwe_id": [
         915
@@ -239,14 +239,14 @@
       "file": "app/controllers/employee_invitations_controller.rb",
       "line": 26,
       "link": "https://brakemanscanner.org/docs/warning_types/mass_assignment/",
-      "code": "params.require(:employee_invitation).permit(:account_id, :user_id, :team_id, :state, :address, :invited_at, :seen_at, :completed_at)",
+      "code": "params.require(:employee_invitation).permit(:tenant_id, :user_id, :team_id, :state, :address, :invited_at, :seen_at, :completed_at)",
       "render_path": null,
       "location": {
         "type": "method",
         "class": "EmployeeInvitationsController",
         "method": "resource_params"
       },
-      "user_input": ":account_id",
+      "user_input": ":tenant_id",
       "confidence": "High",
       "cwe_id": [
         915
@@ -262,14 +262,14 @@
       "file": "app/controllers/punches_controller.rb",
       "line": 6,
       "link": "https://brakemanscanner.org/docs/warning_types/mass_assignment/",
-      "code": "params.require(:punch).permit(:account_id, :employee_id, :punch_clock_id, :punched_at, :state, :remote_ip, :comment)",
+      "code": "params.require(:punch).permit(:tenant_id, :employee_id, :punch_clock_id, :punched_at, :state, :remote_ip, :comment)",
       "render_path": null,
       "location": {
         "type": "method",
         "class": "PunchesController",
         "method": "resource_params"
       },
-      "user_input": ":account_id",
+      "user_input": ":tenant_id",
       "confidence": "High",
       "cwe_id": [
         915
@@ -308,14 +308,14 @@
       "file": "app/controllers/employees_controller.rb",
       "line": 46,
       "link": "https://brakemanscanner.org/docs/warning_types/mass_assignment/",
-      "code": "params.require(:employee).permit(:account_id, :team_id, :name, :mugshot, :pincode, :payroll_employee_ident, :punching_absence, :access_token, :last_punched_at, :state, :punches_settled_at, :job_title, :birthday, :hired_at, :description, :email, :cell_phone, :pbx_extension, :contract_minutes, :contract_days_per_payroll, :contract_days_per_week, :flex_balance_minutes, :hour_pay, :ot1_add_hour_pay, :ot2_add_hour_pay, :hour_rate_cent, :ot1_hour_add_cent, :ot2_hour_add_cent, :tmp_overtime_allowed, :eu_state, :blocked, :locale, :time_zone)",
+      "code": "params.require(:employee).permit(:tenant_id, :team_id, :name, :mugshot, :pincode, :payroll_employee_ident, :punching_absence, :access_token, :last_punched_at, :state, :punches_settled_at, :job_title, :birthday, :hired_at, :description, :email, :cell_phone, :pbx_extension, :contract_minutes, :contract_days_per_payroll, :contract_days_per_week, :flex_balance_minutes, :hour_pay, :ot1_add_hour_pay, :ot2_add_hour_pay, :hour_rate_cent, :ot1_hour_add_cent, :ot2_hour_add_cent, :tmp_overtime_allowed, :eu_state, :blocked, :locale, :time_zone)",
       "render_path": null,
       "location": {
         "type": "method",
         "class": "EmployeesController",
         "method": "resource_params"
       },
-      "user_input": ":account_id",
+      "user_input": ":tenant_id",
       "confidence": "High",
       "cwe_id": [
         915
@@ -331,14 +331,14 @@
       "file": "app/controllers/locations_controller.rb",
       "line": 5,
       "link": "https://brakemanscanner.org/docs/warning_types/mass_assignment/",
-      "code": "params.require(:location).permit(:id, :account_id, :name, :location_color)",
+      "code": "params.require(:location).permit(:id, :tenant_id, :name, :location_color)",
       "render_path": null,
       "location": {
         "type": "method",
         "class": "LocationsController",
         "method": "resource_params"
       },
-      "user_input": ":account_id",
+      "user_input": ":tenant_id",
       "confidence": "High",
       "cwe_id": [
         915
@@ -354,7 +354,7 @@
       "file": "app/models/concerns/datalon.rb",
       "line": 104,
       "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
-      "code": "PunchCard.find_by_sql(\"        SELECT\\n        \\\"punch_cards\\\".\\\"id\\\"\\n        FROM \\\"punch_cards\\\"\\n        INNER JOIN \\\"employees\\\" ON \\\"punch_cards\\\".\\\"employee_id\\\" = \\\"employees\\\".\\\"id\\\"\\n        WHERE \\\"punch_cards\\\".\\\"account_id\\\" = #{Current.account.id} AND\\n        punch_cards.punches_settled_at IS NULL AND\\n        punch_cards.work_date >= '#{fd}' AND\\n        punch_cards.work_date <= '#{td}' #{(\" \" or \" AND employees.id IN (#{[ids].flatten.join(\",\")}) \")}\\n\")",
+      "code": "PunchCard.find_by_sql(\"        SELECT\\n        \\\"punch_cards\\\".\\\"id\\\"\\n        FROM \\\"punch_cards\\\"\\n        INNER JOIN \\\"employees\\\" ON \\\"punch_cards\\\".\\\"employee_id\\\" = \\\"employees\\\".\\\"id\\\"\\n        WHERE \\\"punch_cards\\\".\\\"tenant_id\\\" = #{Current.tenant.id} AND\\n        punch_cards.punches_settled_at IS NULL AND\\n        punch_cards.work_date >= '#{fd}' AND\\n        punch_cards.work_date <= '#{td}' #{(\" \" or \" AND employees.id IN (#{[ids].flatten.join(\",\")}) \")}\\n\")",
       "render_path": null,
       "location": {
         "type": "method",
@@ -377,14 +377,14 @@
       "file": "app/controllers/filters_controller.rb",
       "line": 47,
       "link": "https://brakemanscanner.org/docs/warning_types/mass_assignment/",
-      "code": "params.require(:filter).permit(:url, :filter_form, :account_id, :name)",
+      "code": "params.require(:filter).permit(:url, :filter_form, :tenant_id, :name)",
       "render_path": null,
       "location": {
         "type": "method",
         "class": "FiltersController",
         "method": "filter_params"
       },
-      "user_input": ":account_id",
+      "user_input": ":tenant_id",
       "confidence": "High",
       "cwe_id": [
         915
@@ -400,7 +400,7 @@
       "file": "app/controllers/users_controller.rb",
       "line": 22,
       "link": "https://brakemanscanner.org/docs/warning_types/mass_assignment/",
-      "code": "params.require(:user).permit(:account_id, :email, :role, :mugshot, :locale, :time_zone)",
+      "code": "params.require(:user).permit(:tenant_id, :email, :role, :mugshot, :locale, :time_zone)",
       "render_path": null,
       "location": {
         "type": "method",
@@ -423,14 +423,14 @@
       "file": "app/controllers/users_controller.rb",
       "line": 22,
       "link": "https://brakemanscanner.org/docs/warning_types/mass_assignment/",
-      "code": "params.require(:user).permit(:account_id, :email, :role, :mugshot, :locale, :time_zone)",
+      "code": "params.require(:user).permit(:tenant_id, :email, :role, :mugshot, :locale, :time_zone)",
       "render_path": null,
       "location": {
         "type": "method",
         "class": "UsersController",
         "method": "resource_params"
       },
-      "user_input": ":account_id",
+      "user_input": ":tenant_id",
       "confidence": "High",
       "cwe_id": [
         915
@@ -469,7 +469,7 @@
       "file": "app/models/concerns/datalon.rb",
       "line": 80,
       "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
-      "code": "PunchCard.find_by_sql(\"        SELECT\\n        SUM(\\\"payroll\\\".\\\"work_minutes\\\") AS work_minutes,\\n        SUM(\\\"payroll\\\".\\\"ot1_minutes\\\") AS ot1_minutes,\\n        SUM(\\\"payroll\\\".\\\"ot2_minutes\\\") AS ot2_minutes,\\n        '#{name}' AS group_name,\\n        \\\"employees\\\".\\\"payroll_employee_ident\\\" AS emp_number,\\n        \\\"employees\\\".\\\"id\\\" AS emp_id,\\n        \\\"employees\\\".\\\"name\\\" AS emp_name\\n        FROM \\\"punch_cards\\\" AS \\\"payroll\\\"\\n        INNER JOIN \\\"employees\\\" ON \\\"payroll\\\".\\\"employee_id\\\" = \\\"employees\\\".\\\"id\\\"\\n        WHERE \\\"payroll\\\".\\\"account_id\\\" = #{Current.account.id} AND\\n        payroll.punches_settled_at IS NULL AND\\n        payroll.work_date >= '#{fd}' AND\\n        payroll.work_date <= '#{td}' #{(\" \" or \" AND employees.id IN (#{[ids].flatten.join(\",\")}) \")} \\n  \\t\\t\\tGROUP BY \\\"group_name\\\", \\\"employees\\\".\\\"payroll_employee_ident\\\", \\\"employees\\\".\\\"name\\\", \\\"employees\\\".\\\"id\\\"\\n        ORDER BY \\\"employees\\\".\\\"payroll_employee_ident\\\"\\n\")",
+      "code": "PunchCard.find_by_sql(\"        SELECT\\n        SUM(\\\"payroll\\\".\\\"work_minutes\\\") AS work_minutes,\\n        SUM(\\\"payroll\\\".\\\"ot1_minutes\\\") AS ot1_minutes,\\n        SUM(\\\"payroll\\\".\\\"ot2_minutes\\\") AS ot2_minutes,\\n        '#{name}' AS group_name,\\n        \\\"employees\\\".\\\"payroll_employee_ident\\\" AS emp_number,\\n        \\\"employees\\\".\\\"id\\\" AS emp_id,\\n        \\\"employees\\\".\\\"name\\\" AS emp_name\\n        FROM \\\"punch_cards\\\" AS \\\"payroll\\\"\\n        INNER JOIN \\\"employees\\\" ON \\\"payroll\\\".\\\"employee_id\\\" = \\\"employees\\\".\\\"id\\\"\\n        WHERE \\\"payroll\\\".\\\"tenant_id\\\" = #{Current.tenant.id} AND\\n        payroll.punches_settled_at IS NULL AND\\n        payroll.work_date >= '#{fd}' AND\\n        payroll.work_date <= '#{td}' #{(\" \" or \" AND employees.id IN (#{[ids].flatten.join(\",\")}) \")} \\n  \\t\\t\\tGROUP BY \\\"group_name\\\", \\\"employees\\\".\\\"payroll_employee_ident\\\", \\\"employees\\\".\\\"name\\\", \\\"employees\\\".\\\"id\\\"\\n        ORDER BY \\\"employees\\\".\\\"payroll_employee_ident\\\"\\n\")",
       "render_path": null,
       "location": {
         "type": "method",

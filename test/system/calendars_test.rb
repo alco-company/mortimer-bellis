@@ -14,7 +14,7 @@ class CalendarsTest < ApplicationSystemTestCase
     visit calendars_url
     click_on "New calendar"
 
-    fill_in "Account", with: @calendar.account_id
+    fill_in "Tenant", with: @calendar.tenant_id
     fill_in "Calendarable", with: @calendar.calendarable_id
     fill_in "Calendarable type", with: @calendar.calendarable_type
     fill_in "Name", with: @calendar.name
@@ -28,7 +28,7 @@ class CalendarsTest < ApplicationSystemTestCase
     visit calendar_url(@calendar)
     click_on "Edit this calendar", match: :first
 
-    fill_in "Account", with: @calendar.account_id
+    fill_in "Tenant", with: @calendar.tenant_id
     fill_in "Calendarable", with: @calendar.calendarable_id
     fill_in "Calendarable type", with: @calendar.calendarable_type
     fill_in "Name", with: @calendar.name

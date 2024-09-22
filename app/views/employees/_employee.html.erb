@@ -3,7 +3,7 @@
     <%= render_text_column value: link_to(employee.name, employee_url(employee)), css: "truncate mort-link-primary "  do |value| %>
       <%= value %>
       <% if global_queries? Current.user %>
-        <p class="text-xs"><%=  link_to employee.account.name, employee.account %> </p>
+        <p class="text-xs"><%=  link_to employee.tenant.name, employee.tenant %> </p>
       <% end %>
     <% end %>
     <%= render_text_column value: link_to(employee.team.name, team_url(employee.team)), css: "truncate mort-link-primary" %>

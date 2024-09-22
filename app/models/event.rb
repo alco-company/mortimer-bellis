@@ -1,5 +1,5 @@
 class Event < ApplicationRecord
-  include Accountable
+  include Tenantable
   belongs_to :calendar
 
   has_many_attached :files
@@ -22,7 +22,7 @@ class Event < ApplicationRecord
     flt = filter.filter
 
     all
-      .by_account()
+      .by_tenant()
       .by_name(flt["name"])
   rescue
     filter.destroy if filter

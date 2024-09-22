@@ -76,7 +76,7 @@ class EventService
     # Only allow a list of trusted parameters through.
     def resource_params
       self.params.require(:event).permit(
-        :account_id,
+        :tenant_id,
         :calendar_id,
         :id,
         :auto_punch,

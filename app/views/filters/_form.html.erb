@@ -2,7 +2,7 @@
     <%= form_with model: @filter, class: "w-full flex items-center justify-between gap-x-6" do |form| %>
       <%= form.hidden_field :url, value: @url %>
       <%= form.hidden_field :filter_form, value: @filter_form %>
-      <%= form.hidden_field :account_id, value: 1 %>
+      <%= form.hidden_field :tenant_id, value: 1 %>
       <%= render partial: "filters/#{@filter_form}", locals: { form: form, filter: @filter.filter } %>
       <div class="flex flex-none items-center gap-x-4 ">
         <%= form.button :submit do %>

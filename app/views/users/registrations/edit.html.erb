@@ -8,8 +8,8 @@
 
     <% if Current.user.superadmin? %>
       <div class="mort-field">
-        <%= f.label :account %><br />
-        <%= f.select :account_id, Account.all.order(name: :asc).pluck([:name, :id]), autofocus: true, class: "mort-form-text" %>
+        <%= f.label :tenant %><br />
+        <%= f.select :tenant_id, Tenant.all.order(name: :asc).pluck([:name, :id]), autofocus: true, class: "mort-form-text" %>
       </div>
       <div class="mort-field">
         <%= f.label :global_queries %><br />

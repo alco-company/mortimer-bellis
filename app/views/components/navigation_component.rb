@@ -26,8 +26,8 @@ class NavigationComponent < ApplicationComponent
               "flex flex-1 items-center justify-center sm:items-stretch sm:justify-start"
           ) do
             div(class: "flex flex-shrink-0 items-center hidden lg:block") do
-              if Current.account && Current.account.logo.attached?
-                helpers.render_logo logo: Current.account.logo, root: @root
+              if Current.tenant && Current.tenant.logo.attached?
+                helpers.render_logo logo: Current.tenant.logo, root: @root
               else
                 helpers.render_logo root: @root
               end

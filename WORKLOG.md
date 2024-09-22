@@ -50,6 +50,7 @@ If Solid Queue bites me again, look here: https://github.com/rails/solid_queue/i
 
 * add settings table
 * add punch to the dashboard - wip
+* rename account to tenant
 
 ### 21/9/2024
 

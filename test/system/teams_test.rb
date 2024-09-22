@@ -14,7 +14,7 @@ class TeamsTest < ApplicationSystemTestCase
   #   visit teams_url
   #   click_on "New team"
 
-  #   fill_in "Account", with: @team.account_id
+  #   fill_in "Tenant", with: @team.tenant_id
   #   fill_in "Locale", with: @team.locale
   #   fill_in "Name", with: @team.name
   #   fill_in "Team color", with: @team.team_color
@@ -29,7 +29,7 @@ class TeamsTest < ApplicationSystemTestCase
   #   visit team_url(@team)
   #   click_on "Edit this team", match: :first
 
-  #   fill_in "Account", with: @team.account_id
+  #   fill_in "Tenant", with: @team.tenant_id
   #   fill_in "Locale", with: @team.locale
   #   fill_in "Name", with: @team.name
   #   fill_in "Team color", with: @team.team_color

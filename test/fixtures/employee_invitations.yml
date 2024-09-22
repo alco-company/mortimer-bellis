@@ -1,7 +1,7 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  account: one
+  tenant: one
   user: one
   team: one
   address: MyString
@@ -11,7 +11,7 @@ one:
   completed_at: 2024-06-04 17:28:36
 
 two:
-  account: two
+  tenant: two
   user: two
   team: two
   address: MyString

@@ -3,7 +3,7 @@
     <%= render_text_column value: link_to(calendar.name, calendar_url(calendar)), css: "truncate mort-link-primary" do |value| %>
       <%= value %>
       <% if global_queries? Current.user %>
-        <p class="text-xs"><%=  link_to calendar.account.name, calendar.account %> </p>
+        <p class="text-xs"><%=  link_to calendar.tenant.name, calendar.tenant %> </p>
       <% end %>
     <% end %>
     <%= render_text_column value: calendar.time_zone, css: "hidden lg:block truncate" %>

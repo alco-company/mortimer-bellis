@@ -14,7 +14,7 @@ class BackgroundJobsTest < ApplicationSystemTestCase
   #   visit background_jobs_url
   #   click_on "New background job"
 
-  #   fill_in "Account", with: @background_job.account_id
+  #   fill_in "Tenant", with: @background_job.tenant_id
   #   fill_in "Job", with: @background_job.job_id
   #   fill_in "Job klass", with: @background_job.job_klass
   #   fill_in "Next run at", with: @background_job.next_run_at
@@ -32,7 +32,7 @@ class BackgroundJobsTest < ApplicationSystemTestCase
   #   visit background_job_url(@background_job)
   #   click_on "Edit this background job", match: :first
 
-  #   fill_in "Account", with: @background_job.account_id
+  #   fill_in "Tenant", with: @background_job.tenant_id
   #   fill_in "Job", with: @background_job.job_id
   #   fill_in "Job klass", with: @background_job.job_klass
   #   fill_in "Next run at", with: @background_job.next_run_at.to_s

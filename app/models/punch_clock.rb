@@ -1,5 +1,5 @@
 class PunchClock < ApplicationRecord
-  include Accountable
+  include Tenantable
   include Localeable
   belongs_to :location
   has_many :punches, dependent: :destroy
@@ -12,13 +12,13 @@ class PunchClock < ApplicationRecord
   scope :by_locale, ->(locale) { where("locale LIKE ?", "%#{locale}%") if locale.present? }
   scope :by_time_zone, ->(time_zone) { where("time_zone LIKE ?", "%#{time_zone}%") if time_zone.present? }
 
-  validates :name, presence: true, uniqueness: { scope: :account_id, message: "already exists for this account" }
+  validates :name, presence: true, uniqueness: { scope: :tenant_id, message: "already exists for this tenant" }
 
   def self.filtered(filter)
     flt = filter.filter
 
     all
-      .by_account()
+      .by_tenant()
       .by_name(flt["name"])
       .by_location(flt["location"])
       .by_ip_addr(flt["ip_addr"])

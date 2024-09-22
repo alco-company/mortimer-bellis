@@ -2,7 +2,7 @@ class CalendarsController < MortimerController
   def new
     @resource.calendarable = Employee.find(params[:employee_id]) if params[:employee_id]
     @resource.calendarable = Team.find(params[:team_id]) if params[:team_id]
-    @resource.calendarable = Account.find(params[:account_id]) if params[:account_id]
+    @resource.calendarable = Tenant.find(params[:tenant_id]) if params[:tenant_id]
   end
 
   #
@@ -25,7 +25,7 @@ class CalendarsController < MortimerController
 
     # Only allow a list of trusted parameters through.
     def resource_params
-      params.require(:calendar).permit(:account_id, :calendarable_id, :calendarable_type, :name)
+      params.require(:calendar).permit(:tenant_id, :calendarable_id, :calendarable_type, :name)
     end
 end
 

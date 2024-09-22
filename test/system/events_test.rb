@@ -14,7 +14,7 @@ class EventsTest < ApplicationSystemTestCase
     visit events_url
     click_on "New event"
 
-    fill_in "Account", with: @event.account_id
+    fill_in "Tenant", with: @event.tenant_id
     check "All day" if @event.all_day
     fill_in "Calendar", with: @event.calendar_id
     fill_in "Comment", with: @event.comment
@@ -34,7 +34,7 @@ class EventsTest < ApplicationSystemTestCase
     visit event_url(@event)
     click_on "Edit this event", match: :first
 
-    fill_in "Account", with: @event.account_id
+    fill_in "Tenant", with: @event.tenant_id
     check "All day" if @event.all_day
     fill_in "Calendar", with: @event.calendar_id
     fill_in "Comment", with: @event.comment

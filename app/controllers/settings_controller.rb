@@ -65,6 +65,6 @@ class SettingsController < MortimerController
 
     # Only allow a list of trusted parameters through.
     def setting_params
-      params.require(:setting).permit(:account_id, :setable_id, :setable_type, :key, :priority, :format, :value)
+      params.require(:setting).permit(:tenant_id, :setable_id, :setable_type, :key, :priority, :format, :value)
     end
 end

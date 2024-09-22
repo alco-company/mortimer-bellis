@@ -1,5 +1,5 @@
 class Employee < ApplicationRecord
-  include Accountable
+  include Tenantable
   include TimeZoned
   include Punchable
   include Localeable
@@ -26,9 +26,9 @@ class Employee < ApplicationRecord
   scope :working, -> { where(state: :in) }
   scope :order_by_number, ->(field) { order("length(#{field}) DESC, #{field} DESC") }
 
-  validates :name, presence: true, uniqueness: { scope: [ :account_id, :team_id ], message: I18n.t("employees.errors.messages.name_exist_for_team") }
-  validates :pincode, presence: true, uniqueness: { scope: :account_id, message: I18n.t("employees.errors.messages.pincode_exist_for_account") }
-  validates :payroll_employee_ident, presence: true, uniqueness: { scope: :account_id, message: I18n.t("employees.errors.messages.payroll_employee_ident_exist_for_account") }
+  validates :name, presence: true, uniqueness: { scope: [ :tenant_id, :team_id ], message: I18n.t("employees.errors.messages.name_exist_for_team") }
+  validates :pincode, presence: true, uniqueness: { scope: :tenant_id, message: I18n.t("employees.errors.messages.pincode_exist_for_tenant") }
+  validates :payroll_employee_ident, presence: true, uniqueness: { scope: :tenant_id, message: I18n.t("employees.errors.messages.payroll_employee_ident_exist_for_tenant") }
 
   def color
     employee_color
@@ -38,7 +38,7 @@ class Employee < ApplicationRecord
     flt = filter.filter
 
     all
-      .by_account()
+      .by_tenant()
       .by_name(flt["name"])
       .by_team(flt["team"])
       .by_locale(flt["locale"])
@@ -82,7 +82,7 @@ class Employee < ApplicationRecord
   end
 
   def self.next_pincode(pin = "")
-    pins = Employee.by_account.order_by_number("pincode").pluck(:pincode)
+    pins = Employee.by_tenant.order_by_number("pincode").pluck(:pincode)
     pin = "1000" if pin.blank?
     return pin if pins.empty?
     pin = pins.first.to_i + 1 if pin.to_i < pins.first.to_i
@@ -94,7 +94,7 @@ class Employee < ApplicationRecord
   end
 
   def self.next_payroll_employee_ident(pin)
-    pins = Employee.by_account.order_by_number("payroll_employee_ident").pluck(:payroll_employee_ident)
+    pins = Employee.by_tenant.order_by_number("payroll_employee_ident").pluck(:payroll_employee_ident)
     pin = "1" if pin.blank?
     return pin if pins.empty?
     pin = pins.first.to_i + 1 if pin.to_i < pins.first.to_i

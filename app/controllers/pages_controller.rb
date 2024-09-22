@@ -1,7 +1,7 @@
 class PagesController < MortimerController
   before_action :authorize, except: :show
   skip_before_action :authenticate_user!, only: :show
-  skip_before_action :ensure_accounted_user, only: :show
+  skip_before_action :ensure_tenanted_user, only: :show
 
   def show
     user_signed_in? ?

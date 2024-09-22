@@ -2,7 +2,7 @@ require "test_helper"
 
 class LocationsControllerTest < ActionDispatch::IntegrationTest
   # setup do
-  #   Current.account = accounts(:one)
+  #   Current.tenant = tenants(:one)
   #   @location = locations(:one)
   # end
 
@@ -18,7 +18,7 @@ class LocationsControllerTest < ActionDispatch::IntegrationTest
 
   # test "should create location" do
   #   assert_difference("Location.count") do
-  #     post locations_url, params: { location: { account_id: @location.account.id, location_color: @location.location_color, name: @location.name } }
+  #     post locations_url, params: { location: { tenant_id: @location.tenant.id, location_color: @location.location_color, name: @location.name } }
   #   end
 
   #   assert_redirected_to locations_url()
@@ -35,7 +35,7 @@ class LocationsControllerTest < ActionDispatch::IntegrationTest
   # end
 
   # test "should update location" do
-  #   patch location_url(@location), params: { location: { account_id: @location.account.id, location_color: @location.location_color, name: @location.name } }
+  #   patch location_url(@location), params: { location: { tenant_id: @location.tenant.id, location_color: @location.location_color, name: @location.name } }
   #   assert_redirected_to locations_url()
   # end
 

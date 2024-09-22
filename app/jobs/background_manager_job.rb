@@ -18,25 +18,25 @@ class BackgroundManagerJob < ApplicationJob
   end
 
   def prepare_state_job
-    Account.all.each do |account|
-      if account.employees.any?
-        EmployeeStateJob.perform_later account: account
+    Tenant.all.each do |tenant|
+      if tenant.employees.any?
+        EmployeeStateJob.perform_later tenant: tenant
       end
     end
   end
 
   def prepare_eu_state_job
-    Account.all.each do |account|
-      if account.employees.any?
-        EmployeeEuStateJob.perform_later account: account
+    Tenant.all.each do |tenant|
+      if tenant.employees.any?
+        EmployeeEuStateJob.perform_later tenant: tenant
       end
     end
   end
 
   def prepare_auto_punch_job
-    Account.all.each do |account|
-      if account.employees.any?
-        EmployeeAutoPunchJob.perform_now account: account
+    Tenant.all.each do |tenant|
+      if tenant.employees.any?
+        EmployeeAutoPunchJob.perform_now tenant: tenant
       end
     end
     true

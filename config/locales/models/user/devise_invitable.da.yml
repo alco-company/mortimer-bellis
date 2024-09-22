@@ -25,7 +25,7 @@ da:
         preheader: "Invitation til at oprette en brugerprofil på Mortimer"
         hi: "Hej"
         title: "Er %{email} din email adresse?"
-        introduction: "%{sender} hos %{account} har inviteret dig til at færdiggøre oprettelsen af en brugerprofil på %{url}. Du kan acceptere invitationen ved at trykke på knappen her nedenfor."
+        introduction: "%{sender} hos %{tenant} har inviteret dig til at færdiggøre oprettelsen af en brugerprofil på %{url}. Du kan acceptere invitationen ved at trykke på knappen her nedenfor."
         accept: "Ja det er min email adresse"
         action: "Jeg accepterer invitationen"
         accept_until: "Invitationen er gyldig indtil %{due_date}."

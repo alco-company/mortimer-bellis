@@ -35,7 +35,7 @@ en:
     home: Home
     login: Login
     pages: Pages
-    accounts: Accounts
+    tenants: Tenants
     users: Users
     teams: Teams
     locations: Locations
@@ -62,7 +62,7 @@ en:
 
   activerecord:
     attributes:
-      account:
+      tenant:
         name: Kontonavn
         pp_identification: Lønbureau ID
         eu_work_directive: EU regulativ (2003/88/EC)
@@ -268,9 +268,9 @@ en:
         receive_notifications: Modtager notifikationer
 
     models:
-      account:
-        one: account
-        other: accounts
+      tenant:
+        one: tenant
+        other: tenants
       asset_work_session:
         one: komme/gå stempling
         other: komme/gå stemplinger

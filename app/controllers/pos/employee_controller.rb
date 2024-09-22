@@ -8,7 +8,7 @@ class Pos::EmployeeController < Pos::PosController
   end
 
   def index
-    @employees = Employee.by_account()
+    @employees = Employee.by_tenant()
   end
 
   def punches
@@ -109,14 +109,14 @@ class Pos::EmployeeController < Pos::PosController
     def verify_employee
       api = params.permit(:api_key)[:api_key]
       @resource = case true
-      when params[:api_key].present?; Employee.by_account.find_by(access_token: api)
-      # when params[:employee].present?; Employee.by_account.find(params[:employee][:id])
-      # when params[:q].present?; Employee.by_account.find_by(pincode: params[:q])
+      when params[:api_key].present?; Employee.by_tenant.find_by(access_token: api)
+      # when params[:employee].present?; Employee.by_tenant.find(params[:employee][:id])
+      # when params[:q].present?; Employee.by_tenant.find_by(pincode: params[:q])
       else nil
       end
       redirect_to root_path and return unless @resource
 
-      Current.account = @resource.account
+      Current.tenant = @resource.tenant
     end
 
     def now_punch
@@ -125,7 +125,7 @@ class Pos::EmployeeController < Pos::PosController
       else
         case employee_params[:state]
         when "in", "break", "out"
-          punch_clock = PunchClock.where(account: @resource.account).first
+          punch_clock = PunchClock.where(tenant: @resource.tenant).first
           @resource.punch punch_clock, employee_params[:state], request.remote_ip
           @resource.update state: employee_params[:state]
         else

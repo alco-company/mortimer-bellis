@@ -56,9 +56,9 @@ class HeaderProfile < Phlex::HTML
                         clip_rule: "evenodd"
                       )
                     end
-                    plain Current.user.account.name
+                    plain Current.user.tenant.name
                   end
-                  # dt(class: "sr-only") { "Account status" }
+                  # dt(class: "sr-only") { "Tenant status" }
                   # dd(
                   #   class:
                   #     "mt-3 flex items-center text-sm font-medium capitalize text-gray-500 sm:mr-6 sm:mt-0"
@@ -76,7 +76,7 @@ class HeaderProfile < Phlex::HTML
                   #       clip_rule: "evenodd"
                   #     )
                   #   end
-                  #   plain " Verified account"
+                  #   plain " Verified tenant"
                   # end
                 end
               end

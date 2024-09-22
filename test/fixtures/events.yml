@@ -1,7 +1,7 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  account: one
+  tenant: one
   calendar: one
   name: MyString
   from_date: 2024-07-15
@@ -13,7 +13,7 @@ one:
   comment: MyText
 
 two:
-  account: two
+  tenant: two
   calendar: two
   name: MyString
   from_date: 2024-07-15

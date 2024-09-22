@@ -14,7 +14,7 @@ class SettingsTest < ApplicationSystemTestCase
     visit settings_url
     click_on "New setting"
 
-    fill_in "Account", with: @setting.account_id
+    fill_in "Tenant", with: @setting.tenant_id
     fill_in "Format", with: @setting.format
     fill_in "Key", with: @setting.key
     fill_in "Priority", with: @setting.priority
@@ -31,7 +31,7 @@ class SettingsTest < ApplicationSystemTestCase
     visit setting_url(@setting)
     click_on "Edit this setting", match: :first
 
-    fill_in "Account", with: @setting.account_id
+    fill_in "Tenant", with: @setting.tenant_id
     fill_in "Format", with: @setting.format
     fill_in "Key", with: @setting.key
     fill_in "Priority", with: @setting.priority

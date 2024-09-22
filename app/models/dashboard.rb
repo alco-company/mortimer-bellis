@@ -1,3 +1,3 @@
 class Dashboard < ApplicationRecord
-  belongs_to :account
+  belongs_to :tenant
 end

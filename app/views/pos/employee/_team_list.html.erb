@@ -1,4 +1,4 @@
-<% Team.by_account.all.order(:name).each do |t|
+<% Team.by_tenant.all.order(:name).each do |t|
   next if t.employees.empty?
   next unless ((t.name =~ /#{params[:t]}/) or (params[:t].downcase == 'all')) %>
   <div class="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">

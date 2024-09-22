@@ -1,7 +1,7 @@
 class Employees::Form < ApplicationForm
   def view_template(&)
     div(data: { controller: "employee" }) do
-      row field(:team_id).select(Team.by_account.order(name: :asc).select(:id, :name), prompt: I18n.t(".select_team"), class: "mort-form-text").focus
+      row field(:team_id).select(Team.by_tenant.order(name: :asc).select(:id, :name), prompt: I18n.t(".select_team"), class: "mort-form-text").focus
       row field(:name).input(class: "mort-form-text")
       row field(:mugshot).file(class: "mort-form-file")
       row field(:pincode).input(class: "mort-form-text")

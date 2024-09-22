@@ -365,7 +365,7 @@
                   <%= I18n.t("employee_mailer.pos_link.you", email: @employee.email) %>
                   <br>
                   <br>
-                  <%= raw I18n.t("employee_mailer.pos_link.introduction", account: @account.name) %>
+                  <%= raw I18n.t("employee_mailer.pos_link.introduction", tenant: @tenant.name) %>
                 </p>
                 <div role="separator" style="line-height: 24px">&zwj;</div>
                 <div>
@@ -386,7 +386,7 @@
                   <%= I18n.t("employee_mailer.pos_link.salutations") %>
                   <br>
                   <strong class="text-sky-700 text-xl">
-                    <%= @account.name %>
+                    <%= @tenant.name %>
                   </strong>
                   <br>
                   <br>

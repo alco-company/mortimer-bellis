@@ -1,7 +1,7 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  account: one
+  tenant: one
   location: one
   name: Employee Own PunchClock
   ip_addr: 1.2.3.4
@@ -11,7 +11,7 @@ one:
   time_zone: Copenhagen
 
 two:
-  account: two
+  tenant: two
   location: two
   name: MyString
   ip_addr: 2.3.4.2

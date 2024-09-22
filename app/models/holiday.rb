@@ -1,5 +1,5 @@
 class Holiday < ApplicationRecord
-  scope :by_account, ->() { all }
+  scope :by_tenant, ->() { all }
   scope :by_name, ->(name) { where("name LIKE ?", "%#{name}%") if name.present? }
   scope :by_from_date, ->(from_date) { where("from_date >= ?", from_date) if from_date.present? }
   scope :by_to_date, ->(to_date) { where("to_date <= ?", to_date) if to_date.present? }

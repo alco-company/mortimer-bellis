@@ -11,7 +11,7 @@ module TimezoneLocale
     # about handling date and timezone
     # https://nandovieira.com/working-with-dates-on-ruby-on-rails
     #
-    around_action :user_time_zone if Current.user || Current.account
+    around_action :user_time_zone if Current.user || Current.tenant
   end
 
 
@@ -26,7 +26,7 @@ module TimezoneLocale
       locale = extract_locale_from_tld || I18n.default_locale
       locale = params.permit![:lang] || locale
       locale = params.permit![:locale] || locale
-      parsed_locale = get_locale_from_user_or_account || locale
+      parsed_locale = get_locale_from_user_or_tenant || locale
       I18n.with_locale(parsed_locale, &action)
     end
 
@@ -41,9 +41,9 @@ module TimezoneLocale
       I18n.available_locales.map(&:to_s).include?(parsed_locale) ? parsed_locale : nil
     end
 
-    def get_locale_from_user_or_account
+    def get_locale_from_user_or_tenant
       Current.user&.locale ||
-      Current.account&.locale
+      Current.tenant&.locale
     end
 
     #

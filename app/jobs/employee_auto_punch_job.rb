@@ -4,7 +4,7 @@ class EmployeeAutoPunchJob < ApplicationJob
   def perform(**args)
     super(**args)
     date=DateTime.current
-    Employee.by_account.each do |employee|
+    Employee.by_tenant.each do |employee|
       next if employee.did_punch(date)
       employee.punch_by_calendar(date)
       # next if employee.get_contract_days_per_week < 6 and (DateTime.current.saturday? or DateTime.current.sunday?)

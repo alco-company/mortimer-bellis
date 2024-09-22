@@ -35,8 +35,8 @@ class PunchJob < ApplicationJob
     @from_at, @to_at = setTimeSlot(@employee, @reason, @from_at.to_datetime, @to_at.to_datetime, @from_at.to_datetime)
     punch_it!(@employee, @reason, @ip, @from_at.to_datetime, @to_at.to_datetime, @comment)
     Rails.env.local? ?
-      PunchCardJob.perform_now(account: @employee.account, employee: @employee, date: @from_at) :
-      PunchCardJob.perform_later(account: @employee.account, employee: @employee, date: @from_at)
+      PunchCardJob.perform_now(tenant: @employee.tenant, employee: @employee, date: @from_at) :
+      PunchCardJob.perform_later(tenant: @employee.tenant, employee: @employee, date: @from_at)
   end
 
   def range_punch
@@ -47,8 +47,8 @@ class PunchJob < ApplicationJob
       punch_it!(@employee, @reason, @ip, f_at, t_at, @comment)
     end
     Rails.env.local? ?
-      PunchCardJob.perform_now(account: @employee.account, employee: @employee, from_at: @from_at.to_date, to_at: @to_at.to_date) :
-      PunchCardJob.perform_later(account: @employee.account, employee: @employee, from_at: @from_at.to_date, to_at: @to_at.to_date)
+      PunchCardJob.perform_now(tenant: @employee.tenant, employee: @employee, from_at: @from_at.to_date, to_at: @to_at.to_date) :
+      PunchCardJob.perform_later(tenant: @employee.tenant, employee: @employee, from_at: @from_at.to_date, to_at: @to_at.to_date)
   end
 
   def excluded_days_include(date, excluded_days)
@@ -77,9 +77,9 @@ class PunchJob < ApplicationJob
   end
 
   def punch_it!(employee, reason, ip, from_at, to_at, comment = nil)
-    punch_clock = PunchClock.by_account(employee.account).first
-    Punch.create! account: employee.account, employee: employee, punch_clock: punch_clock, punched_at: from_at, state: reason, remote_ip: ip, comment: comment
-    Punch.create! account: employee.account, employee: employee, punch_clock: punch_clock, punched_at: to_at, state: :out, remote_ip: ip, comment: comment
+    punch_clock = PunchClock.by_tenant(employee.tenant).first
+    Punch.create! tenant: employee.tenant, employee: employee, punch_clock: punch_clock, punched_at: from_at, state: reason, remote_ip: ip, comment: comment
+    Punch.create! tenant: employee.tenant, employee: employee, punch_clock: punch_clock, punched_at: to_at, state: :out, remote_ip: ip, comment: comment
   end
 
   def setTimeSlot(employee, reason, from_at, to_at, date)

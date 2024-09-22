@@ -45,7 +45,7 @@ class PunchCardTest < ActiveSupport::TestCase
     assert @employee.out?
     punch_params = { "punch"=>{ "reason"=>"in", "from_date"=>"2024-06-16", "from_time"=>"07:30", "to_date"=>"2024-06-16", "to_time"=>"15:45", "comment"=>"normal dag" } }
     PunchJob.perform_now(
-      account: @employee.account, reason: punch_params["punch"]["reason"],
+      tenant: @employee.tenant, reason: punch_params["punch"]["reason"],
       ip: "1.2.3.4", employee: @employee,
       from_date: punch_params["punch"]["from_date"],
       from_time: punch_params["punch"]["from_time"],
@@ -62,7 +62,7 @@ class PunchCardTest < ActiveSupport::TestCase
   test "recalculating punch_card" do
     punch_params = { "punch"=>{ "reason"=>"in", "from_date"=>"2024-06-16", "from_time"=>"07:30", "to_date"=>"2024-06-16", "to_time"=>"15:45", "comment"=>"normal dag" } }
     PunchJob.perform_now(
-      account: @employee.account, reason: punch_params["punch"]["reason"],
+      tenant: @employee.tenant, reason: punch_params["punch"]["reason"],
       ip: "1.2.3.4", employee: @employee,
       from_date: punch_params["punch"]["from_date"],
       from_time: punch_params["punch"]["from_time"],
@@ -77,7 +77,7 @@ class PunchCardTest < ActiveSupport::TestCase
   test "recalculating punch_card - 3 days straigth" do
     punch_params = { "punch"=>{ "reason"=>"in", "from_date"=>"2024-06-16", "from_time"=>"10:00", "to_date"=>"2024-06-18", "to_time"=>"18:00", "comment"=>"normal dag" } }
     PunchJob.perform_now(
-      account: @employee.account, reason: punch_params["punch"]["reason"],
+      tenant: @employee.tenant, reason: punch_params["punch"]["reason"],
       ip: "1.2.3.4", employee: @employee,
       from_date: punch_params["punch"]["from_date"],
       from_time: punch_params["punch"]["from_time"],
@@ -92,7 +92,7 @@ class PunchCardTest < ActiveSupport::TestCase
   test "recalculating punch_card across midnight - but effectively on one PunchCard!" do
     punch_params = { "punch"=>{ "reason"=>"in", "from_date"=>"2024-06-16", "from_time"=>"23:30", "to_date"=>"2024-06-17", "to_time"=>"00:45", "comment"=>"normal dag" } }
     PunchJob.perform_now(
-      account: @employee.account, reason: punch_params["punch"]["reason"],
+      tenant: @employee.tenant, reason: punch_params["punch"]["reason"],
       ip: "1.2.3.4", employee: @employee,
       from_date: punch_params["punch"]["from_date"],
       from_time: punch_params["punch"]["from_time"],
@@ -107,7 +107,7 @@ class PunchCardTest < ActiveSupport::TestCase
   test "recalculating punch_card across midnight" do
     punch_params = { "punch"=>{ "reason"=>"in", "from_date"=>"2024-06-16", "from_time"=>"23:30", "to_date"=>"2024-06-17", "to_time"=>"02:45", "comment"=>"normal dag" } }
     PunchJob.perform_now(
-      account: @employee.account, reason: punch_params["punch"]["reason"],
+      tenant: @employee.tenant, reason: punch_params["punch"]["reason"],
       ip: "1.2.3.4", employee: @employee,
       from_date: punch_params["punch"]["from_date"],
       from_time: punch_params["punch"]["from_time"],
@@ -189,7 +189,7 @@ class PunchCardTest < ActiveSupport::TestCase
   test "recalculating punch_card - 3 days straigth being sick" do
     punch_params = { "punch"=>{ "reason"=>"sick", "from_date"=>"2024-06-16", "from_time"=>"10:00", "to_date"=>"2024-06-18", "to_time"=>"18:00", "comment"=>"bollocks" } }
     PunchJob.perform_now(
-      account: @employee.account, reason: punch_params["punch"]["reason"],
+      tenant: @employee.tenant, reason: punch_params["punch"]["reason"],
       ip: "1.2.3.4", employee: @employee,
       from_date: punch_params["punch"]["from_date"],
       from_time: punch_params["punch"]["from_time"],

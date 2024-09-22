@@ -336,7 +336,7 @@ class ApplicationForm < Superform::Rails::Form
 
   def display_field(field)
     case field.key
-    when /account_id$/; plain(model&.account.name)
+    when /tenant_id$/; plain(model&.tenant.name)
     when /team_id$/; div(class: "flex") { link_to(model&.team.name, team_url(model&.team), class: "flex place-items-center truncate mort-btn-secondary") } # plain(model&.team.name)
     when /user_id$/; plain(model&.user.name)
     when /employee_id$/; plain(model&.employee.name)

@@ -3,7 +3,7 @@
     <%= render_text_column value: link_to(event.name, event_url(event)), css: "truncate mort-link-primary "  do |value| %>
       <%= value %>
       <% if global_queries? Current.user %>
-        <p class="text-xs"><%=  link_to event.account.name, event.account %> </p>
+        <p class="text-xs"><%=  link_to event.tenant.name, event.tenant %> </p>
       <% end %>
     <% end %>
     <%= render_datetime_column value: event.updated_at, css: "hidden lg:block" %>
@@ -15,7 +15,7 @@
 </li>
 
 <!--
-event.account_id
+event.tenant_id
 event.calendar_id
 event.name
 event.from_date

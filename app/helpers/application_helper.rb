@@ -12,7 +12,7 @@ module ApplicationHelper
     if user_signed_in?
       if current_user.superadmin?
         items += [
-          { title: I18n.t("menu.accounts"), url: accounts_url },
+          { title: I18n.t("menu.tenants"), url: tenants_url },
           { title: I18n.t("menu.holidays"), url: holidays_url },
           { title: I18n.t("menu.pages"), url: pages_url },
           { title: I18n.t("menu.users"), url: users_url }
@@ -20,7 +20,7 @@ module ApplicationHelper
       end
       if current_user.admin?
         items += [
-          { title: I18n.t("menu.account"), url: account_url(Current.account) },
+          { title: I18n.t("menu.tenant"), url: tenant_url(Current.tenant) },
           { title: I18n.t("menu.users"), url: users_url }
         ]
       end

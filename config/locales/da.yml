@@ -71,7 +71,7 @@ da:
         preheader: "Invitation til at oprette en brugerprofil på Mortimer"
         hi: "Hej"
         title: "Er %{email} din email adresse?"
-        introduction: "%{sender} hos %{account} har inviteret dig til at færdiggøre oprettelsen af en brugerprofil på %{url}. Du kan acceptere invitationen ved at trykke på knappen her nedenfor."
+        introduction: "%{sender} hos %{tenant} har inviteret dig til at færdiggøre oprettelsen af en brugerprofil på %{url}. Du kan acceptere invitationen ved at trykke på knappen her nedenfor."
         accept: "Ja det er min email adresse"
         action: "Jeg accepterer invitationen"
         accept_until: "Invitationen er gyldig indtil %{due_date}."
@@ -108,8 +108,8 @@ da:
     calendars: Kalendere
     pages: Sider
     holidays: Helligdage
-    account: Konto
-    accounts: Konti
+    tenant: Konto
+    tenants: Konti
     users: Brugere
     teams: Hold
     locations: Arbejdssteder
@@ -206,7 +206,7 @@ da:
 
   activerecord:
     attributes:
-      account:
+      tenant:
         name: Kontonavn
         email: Email adresse - konto ansvarlig
         pp_identification: Lønbureau ID
@@ -216,7 +216,7 @@ da:
         locale: Sprog
         country: Land - for at få vist korrekte nationale helligdage
         logo: Logo (80 x 40)
-        account_color: Farve
+        tenant_color: Farve
       asset:
         name: 'Navn'
         asset_teams: 'Hold/grupper'
@@ -240,7 +240,7 @@ da:
         comment: Beskrivelse - især ved overarbejde, vikariat, evt sygdom og mere
         reason: Årsag - '15MIN', og 'XTRA' ved aftalte særlige indstemplinger
       background_job:
-        account_id: Konto
+        tenant_id: Konto
         user_id: Bruger
         state: Status
         job_klass: Klasse/Model
@@ -469,7 +469,7 @@ da:
         sub_scheme: Under skema
       user:
         name: Navn
-        account:
+        tenant:
           one: Konto
           name: Konto
         invited_by: 
@@ -497,7 +497,7 @@ da:
         time_zone: tidszone
 
     models:
-      account:
+      tenant:
         one: konto
         other: konti
       asset_work_session:

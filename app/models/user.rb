@@ -2,7 +2,7 @@ class User < ApplicationRecord
   include Localeable
   include Punchable
 
-  belongs_to :account
+  belongs_to :tenant
   has_many :employee_invitations, dependent: :destroy
 
   # Include default devise modules. Others available are:
@@ -18,15 +18,15 @@ class User < ApplicationRecord
   enum :role, { user: 0, admin: 1, superadmin: 2 }
   has_one_attached :mugshot
 
-  scope :by_account, ->() {
+  scope :by_tenant, ->() {
     if Current.user.present?
        case Current.user.role
        when "superadmin"
-         Current.user.global_queries? ? all : where(account: Current.account)
+         Current.user.global_queries? ? all : where(tenant: Current.tenant)
        when "admin"
-         where(account: Current.account)
+         where(tenant: Current.tenant)
        when "user"
-         where(account: Current.account, id: Current.user.id)
+         where(tenant: Current.tenant, id: Current.user.id)
        end
     else
       all
@@ -47,7 +47,7 @@ class User < ApplicationRecord
     flt = filter.filter
 
     all
-      .by_account()
+      .by_tenant()
       .by_email(flt["email"])
       .by_role(flt["role"])
       .by_locale(flt["locale"])
@@ -64,8 +64,8 @@ class User < ApplicationRecord
   def add_role
     r = 0
     begin
-      r = 2 if Account.unscoped.count == 1
-      r = 1 if self.account.users.count == 1
+      r = 2 if Tenant.unscoped.count == 1
+      r = 1 if self.tenant.users.count == 1
     rescue
     end
 

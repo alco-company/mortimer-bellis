@@ -1,6 +1,6 @@
 require "test_helper"
 
-class AccountTest < ActiveSupport::TestCase
+class TenantTest < ActiveSupport::TestCase
   # test "the truth" do
   #   assert true
   # end

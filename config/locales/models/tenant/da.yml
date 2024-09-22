@@ -1,5 +1,5 @@
 da:
-  account:
+  tenant:
     modal:
       delete_all: 
         title: Slet alle konti
@@ -14,12 +14,12 @@ da:
         preheader: "Velkomst email fra  M O R T I M E R  - måske Europa's enkleste og billigste tidsregistreringssystem"
         subject: Velkommen til M O R T I M E R
         hello: Velkommen %{name},
-        we_created_an_account: "Vi har oprettet en konto til jer på  M O R T I M E R.<br>For at logge på, skal du <a href='%{url}'>klikke her</a> og bruge de nedenstående oplysninger.<p>Du kan rette adgangskoden (faktisk vil vi gerne hvis du gør det), når du er logget korrekt ind:"
+        we_created_an_tenant: "Vi har oprettet en konto til jer på  M O R T I M E R.<br>For at logge på, skal du <a href='%{url}'>klikke her</a> og bruge de nedenstående oplysninger.<p>Du kan rette adgangskoden (faktisk vil vi gerne hvis du gør det), når du er logget korrekt ind:"
         confirmation_instruction: "Brugernavn: %{email}<br>Adgangskode: %{pw}"
         ignore: "Hvis du ikke har bedt om en konto, kan du ignorere denne e-mail, og så beklager vi ulejligheden."
         regards: Med venlig hilsen,
 
-  accounts:
+  tenants:
     create:
       post: Kontoen blev oprettet
     update:
@@ -34,7 +34,7 @@ da:
       delete: Slet
       show: Vis
       name: Navn
-      account_color: Farve
+      tenant_color: Farve
       locale: Sprog
       time_zone: Tidszone
       updated_at: Opdateret den
@@ -59,7 +59,7 @@ da:
       messages:
         name_exist: "Kontoen findes allerede"
         
-    account_mailer:
+    tenant_mailer:
       report_state:
         subject: Medarbejdernes indstemplinger det sidste døgn
         body: |

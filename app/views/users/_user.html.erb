@@ -3,7 +3,7 @@
     <%= render_text_column value: link_to(user.email, user), css: "truncate mort-link-primary grid grid-cols-1" do |value| %>
       <%= value %>
       <% if global_queries? Current.user %>
-        <p class="text-xs"><%=  link_to user.account.name, user.account %> </p>
+        <p class="text-xs"><%=  link_to user.tenant.name, user.tenant %> </p>
       <% end %>
     <% end %>
     <%= render_text_column value: user.role, css: "truncate" do |value| %> <%= value %><p>&nbsp;</p> <% end %>

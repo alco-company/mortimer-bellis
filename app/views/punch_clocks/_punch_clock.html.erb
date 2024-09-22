@@ -3,7 +3,7 @@
     <%= render_text_column value: link_to(punch_clock.name, punch_clock_url(punch_clock)), css: "truncate mort-link-primary" do |value| %>
       <%= value %>
       <% if global_queries? Current.user %>
-        <p class="text-xs"><%=  link_to punch_clock.account.name, punch_clock.account %> </p>
+        <p class="text-xs"><%=  link_to punch_clock.tenant.name, punch_clock.tenant %> </p>
       <% end %>
     <% end %>
     <%= render_text_column value: link_to(punch_clock.location.name, location_url(punch_clock.location)), css: "truncate  mort-link-primary" %>

@@ -1,19 +1,19 @@
 class Current < ActiveSupport::CurrentAttributes
-  attribute :account, :user, :locale
+  attribute :tenant, :user, :locale
 
   resets { Time.zone = nil }
 
-  class MissingCurrentAccount < StandardError; end
+  class MissingCurrentTenant < StandardError; end
 
-  def account_or_raise!
-    return Account.first if Rails.env.test?
-    raise Current::MissingCurrentAccount, "You must set an account with Current.account=" unless account
-    account
+  def tenant_or_raise!
+    return Tenant.first if Rails.env.test?
+    raise Current::MissingCurrentTenant, "You must set an tenant with Current.tenant=" unless tenant
+    tenant
   end
 
   def user=(user)
     super
-    self.account      = user&.account
+    self.tenant      = user&.tenant
     self.locale       = user&.locale
     Time.zone         = user&.time_zone
   end

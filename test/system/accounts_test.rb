@@ -1,49 +1,49 @@
 require "application_system_test_case"
 
-class AccountsTest < ApplicationSystemTestCase
+class TenantsTest < ApplicationSystemTestCase
   setup do
-    @account = accounts(:one)
+    @tenant = tenants(:one)
   end
 
   # test "visiting the index" do
-  #   visit accounts_url
-  #   assert_selector "h1", text: "Accounts"
+  #   visit tenants_url
+  #   assert_selector "h1", text: "Tenants"
   # end
 
-  # test "should create account" do
-  #   visit accounts_url
-  #   click_on "New account"
+  # test "should create tenant" do
+  #   visit tenants_url
+  #   click_on "New tenant"
 
-  #   fill_in "Email", with: @account.email
-  #   fill_in "Locale", with: @account.locale
-  #   fill_in "Name", with: @account.name
-  #   fill_in "Pp identification", with: @account.pp_identification
-  #   fill_in "Time zone", with: @account.time_zone
-  #   click_on "Create Account"
+  #   fill_in "Email", with: @tenant.email
+  #   fill_in "Locale", with: @tenant.locale
+  #   fill_in "Name", with: @tenant.name
+  #   fill_in "Pp identification", with: @tenant.pp_identification
+  #   fill_in "Time zone", with: @tenant.time_zone
+  #   click_on "Create Tenant"
 
-  #   assert_text "Account was successfully created"
+  #   assert_text "Tenant was successfully created"
   #   click_on "Back"
   # end
 
-  # test "should update Account" do
-  #   visit account_url(@account)
-  #   click_on "Edit this account", match: :first
+  # test "should update Tenant" do
+  #   visit tenant_url(@tenant)
+  #   click_on "Edit this tenant", match: :first
 
-  #   fill_in "Email", with: @account.email
-  #   fill_in "Locale", with: @account.locale
-  #   fill_in "Name", with: @account.name
-  #   fill_in "Pp identification", with: @account.pp_identification
-  #   fill_in "Time zone", with: @account.time_zone
-  #   click_on "Update Account"
+  #   fill_in "Email", with: @tenant.email
+  #   fill_in "Locale", with: @tenant.locale
+  #   fill_in "Name", with: @tenant.name
+  #   fill_in "Pp identification", with: @tenant.pp_identification
+  #   fill_in "Time zone", with: @tenant.time_zone
+  #   click_on "Update Tenant"
 
-  #   assert_text "Account was successfully updated"
+  #   assert_text "Tenant was successfully updated"
   #   click_on "Back"
   # end
 
-  # test "should destroy Account" do
-  #   visit account_url(@account)
-  #   click_on "Destroy this account", match: :first
+  # test "should destroy Tenant" do
+  #   visit tenant_url(@tenant)
+  #   click_on "Destroy this tenant", match: :first
 
-  #   assert_text "Account was successfully destroyed"
+  #   assert_text "Tenant was successfully destroyed"
   # end
 end

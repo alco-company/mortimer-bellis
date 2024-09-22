@@ -10,7 +10,7 @@ class EmployeeInvitationsController < MortimerController
     if params[:api_key].present? && params[:api_key] == @resource.access_token
       @resource.update state: :opened, seen_at: DateTime.current
       @inviter = @resource.user.name rescue "not disclosed"
-      @employee = Employee.new account: @resource.account, email: @resource.address, locale: @resource.user.locale, time_zone: @resource.user.time_zone, team: @resource.team, access_token: @resource.access_token
+      @employee = Employee.new tenant: @resource.tenant, email: @resource.address, locale: @resource.user.locale, time_zone: @resource.user.time_zone, team: @resource.team, access_token: @resource.access_token
       render "employee_sign_up"
     else
       authenticate_user! || redirect_to(new_user_session_path)
@@ -23,7 +23,7 @@ class EmployeeInvitationsController < MortimerController
     # Only allow a list of trusted parameters through.
     def resource_params
       params.require(:employee_invitation).permit(
-        :account_id,
+        :tenant_id,
         :user_id,
         :team_id,
         :state,
@@ -41,7 +41,7 @@ class EmployeeInvitationsController < MortimerController
     def create_callback(obj)
       obj.address.split(/[ ,;]/).each do |addr|
         resource = EmployeeInvitation.create(
-          account_id: obj.account_id,
+          tenant_id: obj.tenant_id,
           user_id: obj.user_id,
           team_id: obj.team_id,
           address: addr,

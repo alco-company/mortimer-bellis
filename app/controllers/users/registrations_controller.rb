@@ -3,10 +3,10 @@
 class Users::RegistrationsController < Devise::RegistrationsController
   include Authentication
   include TimezoneLocale
-  # before_action :configure_sign_up_params, only: [:create]
+  before_action :configure_sign_up_params, only: [ :create ]
   before_action :configure_account_update_params, only: [ :update ]
   skip_before_action :authenticate_user!, only: [ :new, :create ]
-  skip_before_action :ensure_accounted_user, only: [ :new, :create ]
+  skip_before_action :ensure_tenanted_user, only: [ :new, :create ]
 
   # GET /resource/sign_up
   # def new
@@ -17,14 +17,15 @@ class Users::RegistrationsController < Devise::RegistrationsController
   def create
     begin
       usr = nil
-      params[:user][:account_id] = Account.find_or_create_by(name: account_name, email: sign_up_params[:email]).id
-      configure_sign_up_params
+      params[:user][:tenant_id] = Tenant.find_or_create_by(name: tenant_name, email: sign_up_params[:email]).id
+      # configure_sign_up_params
       super do |resource|
         resource.add_role
         usr = resource
         UserRegistrationService.call(resource)
       end
     rescue => e
+      UserMailer.error_report(e.to_s, "Users::RegistrationController#create - failed for email #{usr&.email}").deliver_later
       usr.destroy unless usr.nil?
       redirect_to root_path, alert: I18n.t("errors.messages.user_registration_failed", error: e.message)
     end
@@ -63,22 +64,22 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   # If you have extra params to permit, append them to the sanitizer.
   def configure_sign_up_params
-    devise_parameter_sanitizer.permit(:sign_up, keys: [ :account_id, :role ])
+    devise_parameter_sanitizer.permit(:sign_up, keys: [ :tenant_id, :role ])
   end
 
   #
   # a_waffle_23_company_com - random company name generator by AHD 19/6/2024
   #
-  def account_name
+  def tenant_name
     sign_up_params[:email]
     # sign_up_params[:email].split("@")[1].split(".")[..-2].join(" ").capitalize
   rescue
-    "Unknown Account Name"
+    "Unknown Tenant Name"
   end
 
   # If you have extra params to permit, append them to the sanitizer.
   def configure_account_update_params
-    devise_parameter_sanitizer.permit(:account_update, keys: [ :account_id, :global_queries, :name, :mugshot, :locale, :time_zone ])
+    devise_parameter_sanitizer.permit(:account_update, keys: [ :tenant_id, :global_queries, :name, :mugshot, :locale, :time_zone ])
   end
 
   # The path used after sign up.
@@ -87,7 +88,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
     "/users/sign_in_success"
   end
 
-  # The path used after sign up for inactive accounts.
+  # The path used after sign up for inactive tenants.
   def after_inactive_sign_up_path_for(resource)
     # super(resource)
     "/users/sign_in_success"

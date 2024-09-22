@@ -1,5 +1,5 @@
 class Calendar < ApplicationRecord
-  include Accountable
+  include Tenantable
   belongs_to :calendarable, polymorphic: true
   has_many :events, dependent: :destroy
 
@@ -10,7 +10,7 @@ class Calendar < ApplicationRecord
     flt = filter.filter
 
     all
-      .by_account()
+      .by_tenant()
       .by_name(flt["name"])
   rescue
     filter.destroy if filter
@@ -22,7 +22,7 @@ class Calendar < ApplicationRecord
   end
 
   def time_zone
-    calendarable.time_zone || Current.user.time_zone || Current.account.time_zone rescue nil
+    calendarable.time_zone || Current.user.time_zone || Current.tenant.time_zone rescue nil
   end
 
   def punch_cards(rg)

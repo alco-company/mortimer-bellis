@@ -1,9 +1,9 @@
 <% content_for :head do %>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jstimezonedetect/1.0.7/jstz.min.js" integrity="sha512-pZ0i46J1zsMwPd2NQZ4IaL427jXE2RVHMk3uv/wPTNlBVp9AbB1L65/4YdrXRPLEmyZCkY9qYOOsQp44V4orHg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <% end %>
-<h1 class="text-xl"><%= I18n.t( "employee_signup.title", account: @employee.account.name) %></h1>
+<h1 class="text-xl"><%= I18n.t( "employee_signup.title", tenant: @employee.tenant.name) %></h1>
 <div id="employee_signup">
-  <p class="mt-2 mb-4"><%= I18n.t("employee_signup.introduction", inviter: @inviter, account: @employee.account.name) %></p>
+  <p class="mt-2 mb-4"><%= I18n.t("employee_signup.introduction", inviter: @inviter, tenant: @employee.tenant.name) %></p>
   <%= render Employee.signup(@employee, signup_employees_url) %>
 
   <div class="mort-field">

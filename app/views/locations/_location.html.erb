@@ -3,7 +3,7 @@
     <%= render_text_column value: link_to(location.name, location_url(location)), css: "truncate mort-link-primary" do |value| %>
       <%= value %>
       <% if global_queries? Current.user %>
-        <p class="text-xs"><%=  link_to location.account.name, location.account %> </p>
+        <p class="text-xs"><%=  link_to location.tenant.name, location.tenant %> </p>
       <% end %>
     <% end %>
     <%= render_text_column value: Location.colors( location.location_color), css: "truncate" %>

@@ -3,7 +3,7 @@ class ImportEmployeesJob < ApplicationJob
   queue_as :default
 
   #
-  # args: account, import_file
+  # args: tenant, import_file
   #
   def perform(**args)
     super(**args)
@@ -16,7 +16,7 @@ class ImportEmployeesJob < ApplicationJob
           attributes.each do |key|
             record = field(record, employee, key)
           end
-          record.account_id = Current.account.id
+          record.tenant_id = Current.tenant.id
           record = set_team(record, employee)
           record.save
           EmployeeMailer.with(employee: record).welcome.deliver_later
@@ -43,7 +43,7 @@ class ImportEmployeesJob < ApplicationJob
 
   def set_team(record, emp)
     emp["team"] = "empty" if emp["team"].blank?
-    record.team_id = Team.find_or_create_by(account: Current.account, name: emp["team"]).id
+    record.team_id = Team.find_or_create_by(tenant: Current.tenant, name: emp["team"]).id
     record
   end
 end

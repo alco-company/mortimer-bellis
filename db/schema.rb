@@ -10,22 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_09_21_222010) do
-  create_table "accounts", force: :cascade do |t|
-    t.string "name"
-    t.string "email"
-    t.string "pp_identification"
-    t.string "locale"
-    t.string "time_zone"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string "send_state_rrule"
-    t.string "send_eu_state_rrule"
-    t.string "account_color"
-    t.string "tax_number"
-    t.string "country"
-  end
-
+ActiveRecord::Schema[8.0].define(version: 2024_09_22_140549) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -55,7 +40,7 @@ ActiveRecord::Schema[8.0].define(version: 2024_09_21_222010) do
   end
 
   create_table "background_jobs", force: :cascade do |t|
-    t.integer "account_id", null: false
+    t.integer "tenant_id", null: false
     t.integer "user_id"
     t.integer "state", default: 0
     t.string "job_klass"
@@ -65,29 +50,29 @@ ActiveRecord::Schema[8.0].define(version: 2024_09_21_222010) do
     t.string "job_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["account_id"], name: "index_background_jobs_on_account_id"
+    t.index ["tenant_id"], name: "index_background_jobs_on_tenant_id"
     t.index ["user_id"], name: "index_background_jobs_on_user_id"
   end
 
   create_table "calendars", force: :cascade do |t|
-    t.integer "account_id", null: false
+    t.integer "tenant_id", null: false
     t.string "calendarable_type", null: false
     t.integer "calendarable_id", null: false
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["account_id"], name: "index_calendars_on_account_id"
     t.index ["calendarable_type", "calendarable_id"], name: "index_calendars_on_calendarable"
+    t.index ["tenant_id"], name: "index_calendars_on_tenant_id"
   end
 
   create_table "dashboards", force: :cascade do |t|
-    t.integer "account_id", null: false
+    t.integer "tenant_id", null: false
     t.string "feed"
     t.text "last_feed"
     t.datetime "last_feed_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["account_id"], name: "index_dashboards_on_account_id"
+    t.index ["tenant_id"], name: "index_dashboards_on_tenant_id"
   end
 
   create_table "employee_invitations", force: :cascade do |t|
@@ -165,7 +150,7 @@ ActiveRecord::Schema[8.0].define(version: 2024_09_21_222010) do
   end
 
   create_table "events", force: :cascade do |t|
-    t.integer "account_id", null: false
+    t.integer "tenant_id", null: false
     t.integer "calendar_id", null: false
     t.string "name"
     t.date "from_date"
@@ -182,18 +167,18 @@ ActiveRecord::Schema[8.0].define(version: 2024_09_21_222010) do
     t.string "reason"
     t.integer "break_minutes"
     t.boolean "breaks_included"
-    t.string "event_color"
-    t.index ["account_id"], name: "index_events_on_account_id"
+    t.string "color"
     t.index ["calendar_id"], name: "index_events_on_calendar_id"
+    t.index ["tenant_id"], name: "index_events_on_tenant_id"
   end
 
   create_table "filters", force: :cascade do |t|
-    t.integer "account_id", null: false
+    t.integer "tenant_id", null: false
     t.string "view"
     t.json "filter"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["account_id"], name: "index_filters_on_account_id"
+    t.index ["tenant_id"], name: "index_filters_on_tenant_id"
   end
 
   create_table "holidays", force: :cascade do |t|
@@ -207,12 +192,12 @@ ActiveRecord::Schema[8.0].define(version: 2024_09_21_222010) do
   end
 
   create_table "locations", force: :cascade do |t|
-    t.integer "account_id", null: false
+    t.integer "tenant_id", null: false
     t.string "name"
-    t.string "location_color"
+    t.string "color"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["account_id"], name: "index_locations_on_account_id"
+    t.index ["tenant_id"], name: "index_locations_on_tenant_id"
   end
 
   create_table "noticed_events", force: :cascade do |t|
@@ -248,7 +233,7 @@ ActiveRecord::Schema[8.0].define(version: 2024_09_21_222010) do
   end
 
   create_table "punch_cards", force: :cascade do |t|
-    t.integer "account_id", null: false
+    t.integer "tenant_id", null: false
     t.integer "employee_id", null: false
     t.date "work_date"
     t.integer "work_minutes"
@@ -258,12 +243,12 @@ ActiveRecord::Schema[8.0].define(version: 2024_09_21_222010) do
     t.datetime "punches_settled_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["account_id"], name: "index_punch_cards_on_account_id"
     t.index ["employee_id"], name: "index_punch_cards_on_employee_id"
+    t.index ["tenant_id"], name: "index_punch_cards_on_tenant_id"
   end
 
   create_table "punch_clocks", force: :cascade do |t|
-    t.integer "account_id", null: false
+    t.integer "tenant_id", null: false
     t.integer "location_id", null: false
     t.string "name"
     t.string "ip_addr"
@@ -273,12 +258,12 @@ ActiveRecord::Schema[8.0].define(version: 2024_09_21_222010) do
     t.string "time_zone"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["account_id"], name: "index_punch_clocks_on_account_id"
     t.index ["location_id"], name: "index_punch_clocks_on_location_id"
+    t.index ["tenant_id"], name: "index_punch_clocks_on_tenant_id"
   end
 
   create_table "punches", force: :cascade do |t|
-    t.integer "account_id", null: false
+    t.integer "tenant_id", null: false
     t.integer "employee_id", null: false
     t.bigint "punch_clock_id"
     t.datetime "punched_at"
@@ -288,12 +273,12 @@ ActiveRecord::Schema[8.0].define(version: 2024_09_21_222010) do
     t.datetime "updated_at", null: false
     t.integer "punch_card_id"
     t.string "comment"
-    t.index ["account_id"], name: "index_punches_on_account_id"
     t.index ["employee_id"], name: "index_punches_on_employee_id"
+    t.index ["tenant_id"], name: "index_punches_on_tenant_id"
   end
 
   create_table "settings", force: :cascade do |t|
-    t.integer "account_id", null: false
+    t.integer "tenant_id", null: false
     t.string "setable_type"
     t.integer "setable_id"
     t.string "key"
@@ -302,8 +287,8 @@ ActiveRecord::Schema[8.0].define(version: 2024_09_21_222010) do
     t.string "value"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["account_id"], name: "index_settings_on_account_id"
     t.index ["setable_type", "setable_id"], name: "index_settings_on_setable"
+    t.index ["tenant_id"], name: "index_settings_on_tenant_id"
   end
 
   create_table "solid_queue_blocked_executions", force: :cascade do |t|
@@ -426,9 +411,9 @@ ActiveRecord::Schema[8.0].define(version: 2024_09_21_222010) do
   end
 
   create_table "teams", force: :cascade do |t|
-    t.integer "account_id", null: false
+    t.integer "tenant_id", null: false
     t.string "name"
-    t.string "team_color"
+    t.string "color"
     t.string "locale"
     t.string "time_zone"
     t.datetime "created_at", null: false
@@ -454,11 +439,26 @@ ActiveRecord::Schema[8.0].define(version: 2024_09_21_222010) do
     t.boolean "blocked"
     t.integer "allowed_ot_minutes"
     t.string "country"
-    t.index ["account_id"], name: "index_teams_on_account_id"
+    t.index ["tenant_id"], name: "index_teams_on_tenant_id"
+  end
+
+  create_table "tenants", force: :cascade do |t|
+    t.string "name"
+    t.string "email"
+    t.string "pp_identification"
+    t.string "locale"
+    t.string "time_zone"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "send_state_rrule"
+    t.string "send_eu_state_rrule"
+    t.string "color"
+    t.string "tax_number"
+    t.string "country"
   end
 
   create_table "users", force: :cascade do |t|
-    t.integer "account_id", null: false
+    t.integer "tenant_id", null: false
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
     t.string "reset_password_token"
@@ -490,60 +490,60 @@ ActiveRecord::Schema[8.0].define(version: 2024_09_21_222010) do
     t.datetime "locked_at"
     t.integer "failed_attempts", default: 0, null: false
     t.string "unlock_token"
-    t.index ["account_id"], name: "index_users_on_account_id"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["invitation_token"], name: "index_users_on_invitation_token", unique: true
     t.index ["invited_by_id"], name: "index_users_on_invited_by_id"
     t.index ["invited_by_type", "invited_by_id"], name: "index_users_on_invited_by"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+    t.index ["tenant_id"], name: "index_users_on_tenant_id"
     t.index ["unlock_token"], name: "index_users_on_unlock_token", unique: true
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
-  add_foreign_key "background_jobs", "accounts"
-  add_foreign_key "background_jobs", "accounts", on_delete: :cascade
-  add_foreign_key "calendars", "accounts"
-  add_foreign_key "dashboards", "accounts"
-  add_foreign_key "dashboards", "accounts", on_delete: :cascade
-  add_foreign_key "employee_invitations", "accounts"
-  add_foreign_key "employee_invitations", "accounts", on_delete: :cascade
+  add_foreign_key "background_jobs", "tenants"
+  add_foreign_key "background_jobs", "tenants", on_delete: :cascade
+  add_foreign_key "calendars", "tenants"
+  add_foreign_key "dashboards", "tenants"
+  add_foreign_key "dashboards", "tenants", on_delete: :cascade
   add_foreign_key "employee_invitations", "teams"
   add_foreign_key "employee_invitations", "teams", on_delete: :cascade
+  add_foreign_key "employee_invitations", "tenants", column: "account_id"
+  add_foreign_key "employee_invitations", "tenants", column: "account_id", on_delete: :cascade
   add_foreign_key "employee_invitations", "users"
   add_foreign_key "employee_invitations", "users", on_delete: :cascade
-  add_foreign_key "employees", "accounts"
-  add_foreign_key "employees", "accounts", on_delete: :cascade
   add_foreign_key "employees", "teams"
   add_foreign_key "employees", "teams", on_delete: :cascade
+  add_foreign_key "employees", "tenants", column: "account_id"
+  add_foreign_key "employees", "tenants", column: "account_id", on_delete: :cascade
   add_foreign_key "event_meta", "events"
-  add_foreign_key "events", "accounts"
   add_foreign_key "events", "calendars"
-  add_foreign_key "filters", "accounts"
-  add_foreign_key "filters", "accounts"
-  add_foreign_key "filters", "accounts"
-  add_foreign_key "filters", "accounts", on_delete: :cascade
-  add_foreign_key "locations", "accounts", on_delete: :cascade
-  add_foreign_key "punch_cards", "accounts"
-  add_foreign_key "punch_cards", "accounts", on_delete: :cascade
+  add_foreign_key "events", "tenants"
+  add_foreign_key "filters", "tenants"
+  add_foreign_key "filters", "tenants"
+  add_foreign_key "filters", "tenants"
+  add_foreign_key "filters", "tenants", on_delete: :cascade
+  add_foreign_key "locations", "tenants", on_delete: :cascade
   add_foreign_key "punch_cards", "employees"
   add_foreign_key "punch_cards", "employees", on_delete: :cascade
-  add_foreign_key "punch_clocks", "accounts", on_delete: :cascade
+  add_foreign_key "punch_cards", "tenants"
+  add_foreign_key "punch_cards", "tenants", on_delete: :cascade
   add_foreign_key "punch_clocks", "locations", on_delete: :cascade
-  add_foreign_key "punches", "accounts"
-  add_foreign_key "punches", "accounts", on_delete: :cascade
+  add_foreign_key "punch_clocks", "tenants", on_delete: :cascade
   add_foreign_key "punches", "employees"
   add_foreign_key "punches", "employees", on_delete: :cascade
   add_foreign_key "punches", "punch_cards", on_delete: :cascade
-  add_foreign_key "settings", "accounts"
+  add_foreign_key "punches", "tenants"
+  add_foreign_key "punches", "tenants", on_delete: :cascade
+  add_foreign_key "settings", "tenants"
   add_foreign_key "solid_queue_blocked_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
   add_foreign_key "solid_queue_claimed_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
   add_foreign_key "solid_queue_failed_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
   add_foreign_key "solid_queue_ready_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
   add_foreign_key "solid_queue_recurring_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
   add_foreign_key "solid_queue_scheduled_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
-  add_foreign_key "teams", "accounts"
-  add_foreign_key "teams", "accounts", on_delete: :cascade
-  add_foreign_key "users", "accounts"
-  add_foreign_key "users", "accounts", on_delete: :cascade
+  add_foreign_key "teams", "tenants"
+  add_foreign_key "teams", "tenants", on_delete: :cascade
+  add_foreign_key "users", "tenants"
+  add_foreign_key "users", "tenants", on_delete: :cascade
 end

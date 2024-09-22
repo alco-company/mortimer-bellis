@@ -53,7 +53,7 @@ Rails.application.routes.draw do
     resources :punch_clocks
   end
   resources :filters
-  resources :accounts do
+  resources :tenants do
     resources :calendars
   end
 

@@ -21,8 +21,8 @@ class ProfileDropmenuComponent < ApplicationComponent
           span(class: "absolute -inset-1.5")
           span(class: "sr-only") { "Open user menu" }
           if Current.user
-            if Current.user.mugshot.attached?
-              image_tag(Current.user.mugshot, class: "h-8 w-8 rounded-full")
+            if Current.user&.mugshot&.attached?
+              image_tag(Current.user&.mugshot, class: "h-8 w-8 rounded-full")
             else
               image_tag("icons8-customer-64.png", class: "h-8 w-8 rounded-full")
             end
@@ -49,7 +49,7 @@ class ProfileDropmenuComponent < ApplicationComponent
         tabindex: "-1"
       ) do
         comment { %(Active: "bg-gray-100", Not Active: "") }
-        p(class: "text-sm font-medium px-4 py-2") { Current.user.name }
+        p(class: "text-sm font-medium px-4 py-2") { Current.user&.name }
         hr
         link_to("Your Profile", edit_user_registration_path, class: "block px-4 py-2 text-sm text-gray-700", role: "menuitem", tabindex: "-1", id: "user-menu-item-0")
         # link_to( "Settings", "#", class: "block px-4 py-2 text-sm text-gray-700", role: "menuitem", tabindex: "-1", id: "user-menu-item-1")

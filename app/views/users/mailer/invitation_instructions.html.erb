@@ -361,7 +361,7 @@
                   <%= I18n.t("devise.mailer.invitation_instructions.hello", email: @resource.email) %>                
                 </h1>
                 <p class="m-0 leading-6">
-                  <%= t("devise.mailer.invitation_instructions.someone_invited_you", url: root_url, sender: @resource.invited_by.name, account: @resource.account.name) %>
+                  <%= t("devise.mailer.invitation_instructions.someone_invited_you", url: root_url, sender: @resource.invited_by.name, tenant: @resource.tenant.name) %>
                 </p>
                 <div role="separator" style="line-height: 24px">&zwj;</div>
                 <div>
@@ -390,7 +390,7 @@
                   <%= I18n.t("devise.mailer.invitation_instructions.regards") %>
                   <br>
                   <strong class="text-sky-700 text-xl">
-                    <%= @resource.account.name %>
+                    <%= @resource.tenant.name %>
                   </strong>
                   <br>
                   <br>

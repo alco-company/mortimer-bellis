@@ -1,5 +1,5 @@
 class Team < ApplicationRecord
-  include Accountable
+  include Tenantable
   include Colorable
   include Localeable
   include Stateable
@@ -15,7 +15,7 @@ class Team < ApplicationRecord
   scope :by_locale, ->(locale) { where("locale LIKE ?", "%#{locale}%") if locale.present? }
   scope :by_time_zone, ->(time_zone) { where("time_zone LIKE ?", "%#{time_zone}%") if time_zone.present? }
 
-  validates :name, presence: true, uniqueness: { scope: :account_id, message: "already exists for this account" }
+  validates :name, presence: true, uniqueness: { scope: :tenant_id, message: "already exists for this tenant" }
 
   def color
     team_color
@@ -25,7 +25,7 @@ class Team < ApplicationRecord
     flt = filter.filter
 
     all
-      .by_account()
+      .by_tenant()
       .by_name(flt["name"])
       .by_team_color(flt["team_color"])
       .by_locale(flt["locale"])
@@ -36,7 +36,7 @@ class Team < ApplicationRecord
   end
 
   def all_calendars
-    account.calendars + calendars
+    tenant.calendars + calendars
   end
 
   def self.form(resource, editable = true)

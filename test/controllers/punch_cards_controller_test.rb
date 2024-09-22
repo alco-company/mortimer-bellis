@@ -2,7 +2,7 @@ require "test_helper"
 
 class PunchCardsControllerTest < ActionDispatch::IntegrationTest
   # setup do
-  #   Current.account = accounts(:one)
+  #   Current.tenant = tenants(:one)
   #   @punch_card = punch_cards(:one)
   # end
 
@@ -18,7 +18,7 @@ class PunchCardsControllerTest < ActionDispatch::IntegrationTest
 
   # test "should create punch_card" do
   #   assert_difference("PunchCard.count") do
-  #     post punch_cards_url, params: { punch_card: { account_id: @punch_card.account_id, break_minutes: @punch_card.break_minutes, employee_id: @punch_card.employee_id, ot1_minutes: @punch_card.ot1_minutes, ot2_minutes: @punch_card.ot2_minutes, punches_settled_at: @punch_card.punches_settled_at, work_date: @punch_card.work_date, work_minutes: @punch_card.work_minutes } }
+  #     post punch_cards_url, params: { punch_card: { tenant_id: @punch_card.tenant_id, break_minutes: @punch_card.break_minutes, employee_id: @punch_card.employee_id, ot1_minutes: @punch_card.ot1_minutes, ot2_minutes: @punch_card.ot2_minutes, punches_settled_at: @punch_card.punches_settled_at, work_date: @punch_card.work_date, work_minutes: @punch_card.work_minutes } }
   #   end
 
   #   assert_redirected_to punch_cards_url
@@ -35,7 +35,7 @@ class PunchCardsControllerTest < ActionDispatch::IntegrationTest
   # end
 
   # test "should update punch_card" do
-  #   patch punch_card_url(@punch_card), params: { punch_card: { account_id: @punch_card.account_id, break_minutes: @punch_card.break_minutes, employee_id: @punch_card.employee_id, ot1_minutes: @punch_card.ot1_minutes, ot2_minutes: @punch_card.ot2_minutes, punches_settled_at: @punch_card.punches_settled_at, work_date: @punch_card.work_date, work_minutes: @punch_card.work_minutes } }
+  #   patch punch_card_url(@punch_card), params: { punch_card: { tenant_id: @punch_card.tenant_id, break_minutes: @punch_card.break_minutes, employee_id: @punch_card.employee_id, ot1_minutes: @punch_card.ot1_minutes, ot2_minutes: @punch_card.ot2_minutes, punches_settled_at: @punch_card.punches_settled_at, work_date: @punch_card.work_date, work_minutes: @punch_card.work_minutes } }
   #   assert_redirected_to punch_cards_url
   # end
 

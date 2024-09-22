@@ -1,7 +1,7 @@
 <div class="min-w-0 w-full columns-2 md:columns-4 lg:columns-5">
   <%= render_text_column    value: t('.name'), sort: params, field: :name, css: "font-bold truncate" %>
   <%= render_number_column  value: t(".locale"), sort: params, field: :locale, css: "font-bold" %>
-  <%= render_text_column    value: t(".account_color"), sort: params, field: :account_color, css: "hidden md:block font-bold " %>
+  <%= render_text_column    value: t(".tenant_color"), sort: params, field: :tenant_color, css: "hidden md:block font-bold " %>
   <%= render_text_column    value: t(".time_zone"), sort: params, field: :time_zone, css: "hidden md:block font-bold " %>
   <%= render_text_column    value: t(".updated_at"), css: "hidden lg:block font-bold " %>
 </div>

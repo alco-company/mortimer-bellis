@@ -14,7 +14,7 @@ class DashboardsTest < ApplicationSystemTestCase
   #   visit dashboards_url
   #   click_on "New dashboard"
 
-  #   fill_in "Account", with: @dashboard.account_id
+  #   fill_in "Tenant", with: @dashboard.tenant_id
   #   fill_in "Feed", with: @dashboard.feed
   #   click_on "Create Dashboard"
 
@@ -26,7 +26,7 @@ class DashboardsTest < ApplicationSystemTestCase
   #   visit dashboard_url(@dashboard)
   #   click_on "Edit this dashboard", match: :first
 
-  #   fill_in "Account", with: @dashboard.account_id
+  #   fill_in "Tenant", with: @dashboard.tenant_id
   #   fill_in "Feed", with: @dashboard.feed
   #   click_on "Update Dashboard"
 

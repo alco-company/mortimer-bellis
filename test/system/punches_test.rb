@@ -14,7 +14,7 @@ class PunchesTest < ApplicationSystemTestCase
   #     visit punches_url
   #     click_on "New punch"
 
-  #     fill_in "Account", with: @punch.account_id
+  #     fill_in "Tenant", with: @punch.tenant_id
   #     fill_in "Employee", with: @punch.employee_id
   #     fill_in "Punch clock", with: @punch.punch_clock
   #     fill_in "Punched at", with: @punch.punched_at
@@ -30,7 +30,7 @@ class PunchesTest < ApplicationSystemTestCase
   #     visit punch_url(@punch)
   #     click_on "Edit this punch", match: :first
 
-  #     fill_in "Account", with: @punch.account_id
+  #     fill_in "Tenant", with: @punch.tenant_id
   #     fill_in "Employee", with: @punch.employee_id
   #     fill_in "Punch clock", with: @punch.punch_clock
   #     fill_in "Punched at", with: @punch.punched_at.to_s

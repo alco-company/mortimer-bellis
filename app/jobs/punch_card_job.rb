@@ -2,7 +2,7 @@ class PunchCardJob < ApplicationJob
   queue_as :default
 
   # args:
-  #   account,
+  #   tenant,
   #   employee:
   #   from_at:
   #   to_at:

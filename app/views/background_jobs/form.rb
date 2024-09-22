@@ -1,6 +1,6 @@
 class BackgroundJobs::Form < ApplicationForm
   def view_template(&)
-    view_only field(:account_id).input(class: "mort-form-text", value: model.account&.name)
+    view_only field(:tenant_id).input(class: "mort-form-text", value: model.tenant&.name)
     view_only field(:user_id).input(class: "mort-form-text", value: model.user&.name) if model.user
     row field(:job_klass).select(BackgroundJob.job_klasses, class: "mort-form-text").focus
     view_only field(:state).input(class: "mort-form-text")

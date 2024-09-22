@@ -1,0 +1,13 @@
+<li id="<%= dom_id tenant %>" class="flex items-center justify-between gap-x-6 py-5">
+  <div class="min-w-0 w-full columns-2 md:columns-4 lg:columns-5">
+    <%= render_text_column    value: link_to(tenant.name, tenant_url(tenant)), css: "truncate mort-link-primary" %>
+    <%= render_text_column    value: Tenant.locales(tenant.locale), css: "hidden md:block truncate" %>
+    <%= render_text_column    value: Tenant.colors(tenant.tenant_color), css: "hidden md:block" %>
+    <%= render_text_column    value: tenant.time_zone, css: "hidden md:block" %>
+    <%= render_date_column    value: tenant.updated_at, css: "hidden lg:block" %>
+  </div>
+  <div class="flex flex-none items-center gap-x-4 ">
+<!--    <a href="<%#= product_stock_items_url(product) %>" class=" rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:block">Lokationer<span class="sr-only">, GraphQL API</span></a>-->
+    <%= render_contextmenu resource: tenant, turbo_frame: "form", resource_class: Tenant, alter: true, links: [ edit_tenant_url(tenant), tenant_url(tenant) ] %>
+  </div>
+</li>

@@ -30,9 +30,9 @@ class Pos::PunchClockController < Pos::PosController
 
     def verify_employee
       @employee = case true
-      when params[:employee_id].present?; Employee.by_account.find(params.delete(:employee_id))
-      when params[:employee].present?; Employee.by_account.find(params[:employee][:id])
-      when params[:q].present?; Employee.by_account.find_by(pincode: params[:q])
+      when params[:employee_id].present?; Employee.by_tenant.find(params.delete(:employee_id))
+      when params[:employee].present?; Employee.by_tenant.find(params[:employee][:id])
+      when params[:q].present?; Employee.by_tenant.find_by(pincode: params[:q])
       else nil
       end
       redirect_to pos_punch_clock_path(api_key: @resource.access_token) and return unless @employee
@@ -45,9 +45,9 @@ class Pos::PunchClockController < Pos::PosController
       when params[:punch_clock].present?; params[:punch_clock].delete(:api_key)
       else ""
       end
-      @resource = PunchClock.by_account.find_by(access_token: api_key)
+      @resource = PunchClock.by_tenant.find_by(access_token: api_key)
       redirect_to root_path and return if @resource.nil?
-      Current.account = @resource.account
+      Current.tenant = @resource.tenant
       # @resource.regenerate_access_token
     end
 

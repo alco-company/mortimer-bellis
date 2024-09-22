@@ -1,9 +1,9 @@
 module Punchable
   extend ActiveSupport::Concern
   included do
-    def todays_punches(date: Date.current)
-      punches.where(punched_at: date.beginning_of_day..date.end_of_day).order(punched_at: :desc)
-    end
+    # def todays_punches(date: Date.current)
+    #   punches.where(punched_at: date.beginning_of_day..date.end_of_day).order(punched_at: :desc)
+    # end
 
     # def minutes_today_up_to_now
     #   counters = { work: [], break: [] }
@@ -27,7 +27,7 @@ module Punchable
     #     from
     #       punch_cards
     #     where
-    #       account_id = #{account.id} and
+    #       tenant_id = #{tenant.id} and
     #       employee_id = #{id} and
     #       punches_settled_at is null
     #   SQL
@@ -107,9 +107,9 @@ module Punchable
     #   [ work, ot1, ot2 ]
     # end
 
-    def self.at_work
-      Employee.where(state: [ :in, :break ]).count
-    end
+    # def self.at_work
+    #   Employee.where(state: [ :in, :break ]).count
+    # end
 
     # def this_payroll_punch_cards
     #   punch_cards.where("work_date > ?", punches_settled_at.to_date).order(work_date: :desc)
@@ -126,12 +126,12 @@ module Punchable
     def punch(punch_clock, state, ip, punched_at = DateTime.current)
       begin
         UserMailer.with(employee: self).confetti_first_punch.deliver_later if punches.count == 0
-        Punch.create! account: self.account, user: self, punch_clock: punch_clock, punched_at: punched_at, state: state, remote_ip: ip
+        Punch.create! tenant: self.tenant, user: self, punch_clock: punch_clock, punched_at: punched_at, state: state, remote_ip: ip
       rescue => e
         say "Punchable#punch failed: #{e.message}"
       end
       update last_punched_at: punched_at, state: state
-      # PunchCardJob.perform_later account: self.account, employee: self
+      # PunchCardJob.perform_later tenant: self.tenant, employee: self
     rescue => e
       say "Punchable#punch (outer) failed: #{e.message}"
     end
@@ -140,7 +140,7 @@ module Punchable
 
     # def punch_range(params, ip)
     #   Rails.env.local? ?
-    #     PunchJob.perform_now(account: self.account,
+    #     PunchJob.perform_now(tenant: self.tenant,
     #       reason: params["reason"] || params[:reason],
     #       ip: ip,
     #       employee: self,
@@ -151,7 +151,7 @@ module Punchable
     #       comment: params["comment"] || params[:comment],
     #       days: params["days"] || params[:days],
     #       excluded_days: params["excluded_days"] || params[:excluded_days]) :
-    #     PunchJob.perform_later(account: self.account,
+    #     PunchJob.perform_later(tenant: self.tenant,
     #       reason: params["reason"] || params[:reason],
     #       ip: ip,
     #       employee: self,
@@ -170,25 +170,25 @@ module Punchable
     #   todays_punches(date: date).any?
     # end
 
-  #   def punch_by_calendar(date)
-  #     all_calendars.each do |calendar|
-  #       tz = calendar.time_zone
-  #       calendar.events.each do |event|
-  #         if event.occurs?({ from: date.beginning_of_week, to: date.end_of_week }, date, tz)
-  #           from_at = DateTime.new date.year, date.month, date.day, event.from_time.hour, event.from_time.min, 0, tz
-  #           to_at = DateTime.new date.year, date.month, date.day, event.to_time.hour, event.to_time.min, 0, tz
-  #           reason = event.work_type
-  #           ip = "calendar punch"
-  #           PunchJob.new.punch_it!(self, reason, ip, from_at, to_at, event.comment)
-  #         end
-  #       end
-  #     end
-  #     Rails.env.local? ?
-  #       PunchCardJob.perform_now(account: account, employee: self, date: date) :
-  #       PunchCardJob.perform_later(account: account, employee: self, date: date)
-  #     true
-  #   rescue => error
-  #     UserMailer.error_report(error.to_s, "Employee#punch_by_calendar").deliver_later
-  #   end
-  # end
+    # def punch_by_calendar(date)
+    #   all_calendars.each do |calendar|
+    #     tz = calendar.time_zone
+    #     calendar.events.each do |event|
+    #       if event.occurs?({ from: date.beginning_of_week, to: date.end_of_week }, date, tz)
+    #         from_at = DateTime.new date.year, date.month, date.day, event.from_time.hour, event.from_time.min, 0, tz
+    #         to_at = DateTime.new date.year, date.month, date.day, event.to_time.hour, event.to_time.min, 0, tz
+    #         reason = event.work_type
+    #         ip = "calendar punch"
+    #         PunchJob.new.punch_it!(self, reason, ip, from_at, to_at, event.comment)
+    #       end
+    #     end
+    #   end
+    #   Rails.env.local? ?
+    #     PunchCardJob.perform_now(tenant: tenant, employee: self, date: date) :
+    #     PunchCardJob.perform_later(tenant: tenant, employee: self, date: date)
+    #   true
+    # rescue => error
+    #   UserMailer.error_report(error.to_s, "Employee#punch_by_calendar").deliver_later
+    # end
+  end
 end

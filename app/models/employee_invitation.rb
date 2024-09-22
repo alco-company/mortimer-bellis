@@ -7,9 +7,9 @@ INVITATION_STATES = [
 ]
 
 class EmployeeInvitation < ApplicationRecord
-  include Accountable
+  include Tenantable
 
-  belongs_to :account
+  belongs_to :tenant
   belongs_to :user
   belongs_to :team
 
@@ -43,7 +43,7 @@ class EmployeeInvitation < ApplicationRecord
     flt = filter.filter
 
     all
-      .by_account()
+      .by_tenant()
       .by_state(flt["state"])
       .by_address(flt["address"])
   rescue

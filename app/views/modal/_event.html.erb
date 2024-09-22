@@ -13,7 +13,7 @@
   <%= form_with(id: "event_form", data: { event_form_target: "eventForm" }, url: url, method: method, multipart: true) do |form| %>
 
     <input id="event_calendar_id" type="hidden" name="event[calendar_id]" value="<%= @calendar.id %>" />
-    <input id="event_account_id" type="hidden" name="event[account_id]" value="<%= @calendar.account.id %>" />
+    <input id="event_tenant_id" type="hidden" name="event[tenant_id]" value="<%= @calendar.tenant.id %>" />
     <%= form.hidden_field :modal_form, value: @modal_form %>
     <%= form.hidden_field :resource_class, value: "Event" %>
     <%= form.hidden_field :date, value: @date %>

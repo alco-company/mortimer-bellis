@@ -26,7 +26,7 @@ module DefaultActions
 
     # GET /employees/new
     def new
-      @resource.account_id = Current.account.id if resource_class.has_attribute? :account_id
+      @resource.tenant_id = Current.tenant.id if resource_class.has_attribute? :tenant_id
       @resource.user_id = Current.user.id if resource_class.has_attribute? :user_id
     end
 
@@ -37,7 +37,7 @@ module DefaultActions
     # POST /employees or /employees.json
     def create
       @resource = resource_class.new(resource_params)
-      @resource.account_id = Current.account.id if resource_class.has_attribute? :account_id
+      @resource.tenant_id = Current.tenant.id if resource_class.has_attribute? :tenant_id
       @resource.user_id = Current.user.id if resource_class.has_attribute? :user_id
       respond_to do |format|
         if @resource.save
@@ -72,7 +72,7 @@ module DefaultActions
     # DELETE /employees/1 or /employees/1.json
     def destroy
       if params[:all].present? && params[:all] == "true"
-        DeleteAllJob.perform_now account: Current.account, resource_class: resource_class.to_s, sql_resources: @resources.to_sql
+        DeleteAllJob.perform_now tenant: Current.tenant, resource_class: resource_class.to_s, sql_resources: @resources.to_sql
         respond_to do |format|
           format.html { redirect_to resources_url, success: t("delete_all_later") }
           format.json { head :no_content }

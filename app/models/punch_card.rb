@@ -1,5 +1,5 @@
 class PunchCard < ApplicationRecord
-  include Accountable
+  include Tenantable
   include SumPunches
   include Datalon
 
@@ -27,7 +27,7 @@ class PunchCard < ApplicationRecord
     flt = filter.filter
 
     all
-      .by_account()
+      .by_tenant()
       .by_name(flt["name"])
       .by_work_date(flt["work_date"])
       .by_work_minutes(flt["work_minutes"])
