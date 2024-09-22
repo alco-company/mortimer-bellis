@@ -49,6 +49,7 @@ If Solid Queue bites me again, look here: https://github.com/rails/solid_queue/i
 ### 22/9/2024
 
 * add settings table
+* add punch to the dashboard - wip
 
 ### 21/9/2024
 

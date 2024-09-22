@@ -8,8 +8,10 @@ class DashboardsController < MortimerController
   # end
 
   # # GET /dashboards/1 or /dashboards/1.json
-  # def show
-  # end
+  def show
+    @activity_list = Current.user.account.punches.order(punched_at: :desc).take(10)
+    @punch_clock = PunchClock.where(account: Current.user.account).first rescue nil
+  end
 
   # # GET /dashboards/new
   # def new

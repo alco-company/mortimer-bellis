@@ -1,5 +1,6 @@
 class User < ApplicationRecord
   include Localeable
+  include Punchable
 
   belongs_to :account
   has_many :employee_invitations, dependent: :destroy
