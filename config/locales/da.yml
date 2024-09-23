@@ -81,6 +81,7 @@ da:
   landing:
     recent_activity: Seneste aktiviteter
     activity_description: "%{name} brugte %{punch_clock}"
+    no_activity_description: "Du har ikke stemplet endnu"
     activity_list:
       transaction: transaktion
       time: klokken

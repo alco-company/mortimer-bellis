@@ -18,8 +18,14 @@ class ActivityList < Phlex::HTML
     div(class: "hidden mort-state-in mort-state-out mort-state-break mort-state-sick mort-state-iam_sick mort-state-child_sick mort-state-nursing_sick mort-state-lost_work_sick mort-state-p56_sick mort-state-free mort-state-rr_free mort-state-senior_free mort-state-unpaid_free mort-state-maternity_free mort-state-leave_free mort-state-archived") { }
     div(class: "shadow sm:hidden") do
       ul(role: "list", class: "mt-2 divide-y divide-gray-200 overflow-hidden shadow sm:hidden") do
-        @list.each do |item|
-          list_item(item: item)
+        if @list.empty?
+          li do
+            div(class: "px-4") { I18n.t("landing.no_activity_description") }
+          end
+        else
+          @list.each do |item|
+            list_item(item: item)
+          end
         end
       end
       div(class: "bg-gray-50 px-5 py-3") do
@@ -86,8 +92,18 @@ class ActivityList < Phlex::HTML
               end
 
               tbody(class: "divide-y divide-gray-200 bg-white") do
-                @list.each do |item|
-                  table_item(item: item)
+                if @list.empty?
+                  tr(class: "bg-white") do
+                    td(colspan: 4, class: "w-full max-w-0 whitespace-nowrap px-6 py-4 text-sm text-gray-900") do
+                      div(class: "flex") do
+                        plain I18n.t("landing.no_activity_description")
+                      end
+                    end
+                  end
+                else
+                  @list.each do |item|
+                    table_item(item: item)
+                  end
                 end
               end
             end
