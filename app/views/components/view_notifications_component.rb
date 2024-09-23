@@ -32,7 +32,7 @@ class ViewNotificationsComponent < ApplicationComponent
         tabindex: "-1"
       ) do
         nots = Current.user.notifications.unread
-        h1(class: "text-xl mb-4") { helpers.t("notifications", name: Current.user.name, count: nots.count) }
+        h1(class: "text-sm mb-4") { helpers.t("notifications", name: Current.user.name, count: nots.count) }
         div(class: "h-1/2 max-h-64 overflow-y-auto overflow-x-hidden", data: { turbo_prefetch: "false" }) do
           turbo_frame_tag("notifications") do
             ul(role: "notification_list", class: "divide-y divide-gray-100") do

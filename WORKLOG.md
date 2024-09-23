@@ -50,6 +50,7 @@ If Solid Queue bites me again, look here: https://github.com/rails/solid_queue/i
 
 * make top menu extend to borders
 * tell if no activity on dashboard
+* make notifications h1 text-sm
 
 ### 22/9/2024
 
