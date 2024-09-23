@@ -1,30 +1,17 @@
 # frozen_string_literal: true
 
 class SidebarComponent < ApplicationComponent
-  def initialize
-    @menu = {
-      dashboard: { title: "Dashboard", url: "/" },
-      time: { title: "Time", url: "/punches" },
-      calendar: { title: "Calendar", url: "/calendars" },
-      reports: { title: "Reports", url: "/pages" },
-      manage: { title: "Manage", submenu: {
-        punches: { title: "Punches", url: "/punches" },
-        users: { title: "Users", url: "/users" },
-        teams: { title: "Teams", url: "/teams" },
-        kiosks: { title: "Kiosks", url: "/punch_clocks" },
-        locations: { title: "Locations", url: "/locations" },
-        reports: { title: "Reports", url: "/reports" },
-        dashboards: { title: "Dashboards", url: "/dashboards" }
-      }
-     }
-    }
+  include Phlex::Rails::Helpers::Request
+
+  def initialize(**attribs, &block)
+    @menu = attribs[:menu] || default_menu
   end
   def view_template
     div(class: "flex grow flex-col gap-y-5 overflow-y-auto border-r border-gray-200 bg-white px-6") do
       div(class: "flex h-16 shrink-0 items-center") do
         render LogoComponent.new
       end
-      whitespace
+
       nav(class: "flex flex-1 flex-col") do
         ul(role: "list", class: "flex flex-1 flex-col gap-y-7") do
           li do
@@ -81,17 +68,57 @@ class SidebarComponent < ApplicationComponent
   end
 
   private
-    def menu_item(text, url, css = "block rounded-md bg-gray-50 py-2 pl-10 pr-2 text-sm font-semibold leading-6 text-gray-700")
+
+    def default_menu
+      {
+        dashboard: { title: "Dashboard", url: "/" },
+        time: { title: "Time", url: "/punches" },
+        calendar: { title: "Calendar", url: "/calendars" },
+        reports: { title: "Reports", url: "/pages" },
+        manage: { title: "Manage",
+          submenu: {
+            punches: { title: "Punches", url: "/punches" },
+            users: { title: "Users", url: "/users" },
+            teams: { title: "Teams", url: "/teams" },
+            kiosks: { title: "Kiosks", url: "/punch_clocks" },
+            locations: { title: "Locations", url: "/locations" },
+            reports: { title: "Reports", url: "/reports" },
+            dashboards: { title: "Dashboards", url: "/dashboards" }
+          }
+        }
+      }
+    end
+
+    def current_item?(url)
+      return request.path.split("?")[0] == "/" ? "bg-gray-50" : "" if url == "/"
+      request.path.split("?")[0].include?(url) ? "bg-gray-50" : ""
+    end
+
+    def menu_item(text, url, css = "block rounded-md hover:bg-gray-50 py-2 pl-10 pr-2 text-sm font-semibold leading-6 text-gray-700 truncate")
       # %(Current: "bg-gray-50", Default: "hover:bg-gray-50")
+      css = "#{css} #{current_item?(url)}"
       li do
         a(href: url, class: css, data: { action: "click->menu#closeMobileSidebar" }) { text.to_s.titleize }
       end
     end
 
+    def expanded_sub?(item)
+      item[:submenu].each do |key, i|
+        return "rotate-90 text-gray-500" if request.path.split("?")[0].include?(i[:url])
+      end
+      "text-gray-400"
+    end
+
+    def hidden_sub?(item)
+      item[:submenu].each do |key, i|
+        return "block" if request.path.split("?")[0].include?(i[:url])
+      end
+      "hidden"
+    end
+
     def sub_menu(text, item)
       li do
         div do
-          whitespace
           button(
             type: "button",
             data: { action: "click->menu#toggleSubmenu" },
@@ -100,13 +127,11 @@ class SidebarComponent < ApplicationComponent
             aria_controls: "sub-menu-1",
             aria_expanded: "false"
           ) do
-            whitespace
             comment do
               %(Expanded: "rotate-90 text-gray-500", Collapsed: "text-gray-400")
             end
-            whitespace
             svg(
-              class: "h-5 w-5 shrink-0 text-gray-400",
+              class: "h-5 w-5 shrink-0 #{expanded_sub?(item)}",
               viewbox: "0 0 20 20",
               fill: "currentColor",
               aria_hidden: "true"
@@ -124,9 +149,9 @@ class SidebarComponent < ApplicationComponent
           comment do
             "Expandable link section, show/hide based on state."
           end
-          ul(class: "submenu hidden mt-1 px-2", id: "sub-menu-1") do
-            item[:submenu].each do |key, item|
-              menu_item(item[:title], item[:url], "block rounded-md py-2 pl-9 pr-2 text-sm leading-6 text-gray-700 hover:bg-gray-50")
+          ul(class: "submenu #{hidden_sub?(item)} mt-1 px-2", id: "sub-menu-1") do
+            item[:submenu].each do |key, i|
+              menu_item(i[:title], i[:url], "block rounded-md py-2 pl-9 pr-2 text-sm leading-6 text-gray-700 hover:bg-gray-50")
             end
           end
         end
