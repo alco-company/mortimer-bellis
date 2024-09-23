@@ -46,6 +46,10 @@ If Solid Queue bites me again, look here: https://github.com/rails/solid_queue/i
 
 ## CHANGELOG
 
+### 23/9/2024
+
+* make top menu extend to borders
+
 ### 22/9/2024
 
 * add settings table
