@@ -53,6 +53,7 @@ If Solid Queue bites me again, look here: https://github.com/rails/solid_queue/i
 * make notifications h1 text-sm
 * weaponize SidebarComponent - like render SidebarComponent.new(menu: {})
 * make menu items on SidebarComponent visibly collapsible
+* rotate sub_menu items on SidebarComponent - chevron-down
 
 ### 22/9/2024
 

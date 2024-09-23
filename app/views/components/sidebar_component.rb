@@ -6,6 +6,7 @@ class SidebarComponent < ApplicationComponent
   def initialize(**attribs, &block)
     @menu = attribs[:menu] || default_menu
   end
+
   def view_template
     div(class: "flex grow flex-col gap-y-5 overflow-y-auto border-r border-gray-200 bg-white px-6") do
       div(class: "flex h-16 shrink-0 items-center") do

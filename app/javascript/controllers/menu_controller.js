@@ -22,6 +22,8 @@ export default class extends Controller {
 
   toggleSubmenu(e) {
     e.preventDefault()
+    e.target.setAttribute("aria-expanded", e.target.getAttribute("aria-expanded") === "true" ? "false" : "true");
+    e.target.getElementsByTagName("svg")[0].classList.toggle("rotate-90");
     const submenu = e.target.parentElement.getElementsByClassName("submenu")[0];
     const collection = document.getElementsByClassName("submenu");
     for (let i = 0; i < collection.length; i++) {
