@@ -50,6 +50,7 @@ If Solid Queue bites me again, look here: https://github.com/rails/solid_queue/i
 
 * rename employee to user
 * remove around_action on ActionCable connection
+* trying to get rename employee to user to work on migrations
 
 ### 23/9/2024
 
