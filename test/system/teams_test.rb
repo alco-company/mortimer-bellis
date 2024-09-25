@@ -1,49 +1,51 @@
 require "application_system_test_case"
 
 class TeamsTest < ApplicationSystemTestCase
-  # setup do
-  #   @team = teams(:one)
-  # end
+  setup do
+    @team = teams(:one)
+    user = users(:one)
+    sign_in user
+  end
 
-  # test "visiting the index" do
-  #   visit teams_url
-  #   assert_selector "h1", text: "Teams"
-  # end
+  test "visiting the index" do
+    visit teams_url
+    assert_selector "h1", text: "Teams"
+  end
 
-  # test "should create team" do
-  #   visit teams_url
-  #   click_on "New team"
+  test "should create team" do
+    visit teams_url
+    click_on "New team"
 
-  #   fill_in "Tenant", with: @team.tenant_id
-  #   fill_in "Locale", with: @team.locale
-  #   fill_in "Name", with: @team.name
-  #   fill_in "Team color", with: @team.team_color
-  #   fill_in "Time zone", with: @team.time_zone
-  #   click_on "Create Team"
+    fill_in "Tenant", with: @team.tenant_id
+    fill_in "Locale", with: @team.locale
+    fill_in "Name", with: @team.name
+    fill_in "Team color", with: @team.team_color
+    fill_in "Time zone", with: @team.time_zone
+    click_on "Create Team"
 
-  #   assert_text "Team was successfully created"
-  #   click_on "Back"
-  # end
+    assert_text "Team was successfully created"
+    click_on "Back"
+  end
 
-  # test "should update Team" do
-  #   visit team_url(@team)
-  #   click_on "Edit this team", match: :first
+  test "should update Team" do
+    visit team_url(@team)
+    click_on "Edit this team", match: :first
 
-  #   fill_in "Tenant", with: @team.tenant_id
-  #   fill_in "Locale", with: @team.locale
-  #   fill_in "Name", with: @team.name
-  #   fill_in "Team color", with: @team.team_color
-  #   fill_in "Time zone", with: @team.time_zone
-  #   click_on "Update Team"
+    fill_in "Tenant", with: @team.tenant_id
+    fill_in "Locale", with: @team.locale
+    fill_in "Name", with: @team.name
+    fill_in "Team color", with: @team.team_color
+    fill_in "Time zone", with: @team.time_zone
+    click_on "Update Team"
 
-  #   assert_text "Team was successfully updated"
-  #   click_on "Back"
-  # end
+    assert_text "Team was successfully updated"
+    click_on "Back"
+  end
 
-  # test "should destroy Team" do
-  #   visit team_url(@team)
-  #   click_on "Destroy this team", match: :first
+  test "should destroy Team" do
+    visit team_url(@team)
+    click_on "Destroy this team", match: :first
 
-  #   assert_text "Team was successfully destroyed"
-  # end
+    assert_text "Team was successfully destroyed"
+  end
 end

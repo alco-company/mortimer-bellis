@@ -84,7 +84,6 @@ class HeaderProfile < Phlex::HTML
           end
           div(class: "mt-6 flex space-x-3 md:ml-4 md:mt-0") do
             link_to(I18n.t("profile.invite_new_user"), helpers.new_user_invitation_path, class: "mort-btn-primary", role: "menuitem", tabindex: "-1", id: "user-menu-item-0") unless Current.user.user?
-            link_to(I18n.t("profile.invite_new_employee"), helpers.new_employee_invitation_path, class: "mort-btn-primary", data: { turbo_frame: "form" }, role: "menuitem", tabindex: "-1", id: "user-menu-item-0") unless Current.user.user?
             # button(
             #   type: "button",
             #   class:

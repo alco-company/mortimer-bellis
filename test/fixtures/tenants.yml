@@ -5,6 +5,7 @@ one:
   email: MyString
   pp_identification: 100
   locale: da
+  color: green
   time_zone: Europe/Copenhagen
 
 two:
@@ -12,4 +13,5 @@ two:
   email: MyString
   pp_identification: abc
   locale: en
+  color: blue
   time_zone: London

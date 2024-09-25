@@ -2,7 +2,7 @@
   <div class="min-w-0 w-full columns-2 md:columns-4 lg:columns-5">
     <%= render_text_column    value: link_to(tenant.name, tenant_url(tenant)), css: "truncate mort-link-primary" %>
     <%= render_text_column    value: Tenant.locales(tenant.locale), css: "hidden md:block truncate" %>
-    <%= render_text_column    value: Tenant.colors(tenant.tenant_color), css: "hidden md:block" %>
+    <%= render_text_column    value: Tenant.colors(tenant.color), css: "hidden md:block" %>
     <%= render_text_column    value: tenant.time_zone, css: "hidden md:block" %>
     <%= render_date_column    value: tenant.updated_at, css: "hidden lg:block" %>
   </div>

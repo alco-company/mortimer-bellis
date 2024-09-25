@@ -52,6 +52,7 @@ If Solid Queue bites me again, look here: https://github.com/rails/solid_queue/i
 * remove around_action on ActionCable connection
 * trying to get rename employee to user to work on migrations
 * access Mortimer from iWatch - small test
+* getting tests to work after last table and field adjustments - wip
 
 ### 23/9/2024
 

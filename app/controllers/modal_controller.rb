@@ -228,6 +228,7 @@ class ModalController < BaseController
             eval(cb) unless cb.nil?
             @url.gsub!(/\/\d+$/, "") if @url.match?(/\d+$/)
             Broadcasters::Resource.new(r).destroy
+            flash[:success] = t(".post")
             respond_to do |format|
               format.turbo_stream { }
               format.html { redirect_to @url, status: 303, success: t(".post") }

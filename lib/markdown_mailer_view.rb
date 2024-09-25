@@ -1,4 +1,4 @@
-require 'redcarpet/render_strip'
+require "redcarpet/render_strip"
 module MarkdownMailerView
   # include ApplicationMailerView
   include Phlex::Rails::Helpers::StripTags
@@ -7,17 +7,17 @@ module MarkdownMailerView
     strip_tags(Redcarpet::Markdown.new(Redcarpet::Render::StripDown).render(markdown_template))
   end
 
-  def markdown text
+  def markdown(text)
     Redcarpet::Markdown.new(Redcarpet::Render::HTML, {}).render(text)
   end
 
-  def template
+  def view_template
     div(class: "prose prose-stone mx-auto my-10 px-4") do
-      #header
+      # header
 
       markdown(markdown_template).html_safe
 
-      #footer
+      # footer
     end
   end
 end

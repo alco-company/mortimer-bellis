@@ -3,9 +3,9 @@
 one:
   tenant: one
   name: MyString
-  location_color: MyString
+  color: MyString
 
 two:
   tenant: two
   name: MyString
-  location_color: MyString
+  color: MyString

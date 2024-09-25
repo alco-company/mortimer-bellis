@@ -12,7 +12,6 @@ class Tenant < ApplicationRecord
   has_many :dashboards, dependent: :destroy
   has_many :background_jobs, dependent: :destroy
   has_many :users, dependent: :destroy
-  has_many :user_invitations, dependent: :destroy
   has_many :filters, dependent: :destroy
   has_many :locations, dependent: :destroy
   has_many :punch_cards, dependent: :destroy
@@ -34,10 +33,6 @@ class Tenant < ApplicationRecord
 
   def all_calendars
     calendars
-  end
-
-  def color
-    tenant_color
   end
 
   def self.filtered(filter)

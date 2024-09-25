@@ -3,13 +3,13 @@
 one:
   tenant: one
   name: Team 1
-  team_color: green
+  color: green
   locale: da
   time_zone: Copenhagen
 
 two:
   tenant: two
   name: Team 2
-  team_color: sky
+  color: sky
   locale: en
   time_zone: London

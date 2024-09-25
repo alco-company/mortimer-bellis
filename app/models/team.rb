@@ -6,7 +6,6 @@ class Team < ApplicationRecord
   include Calendarable
 
   has_many :users, dependent: :destroy
-  has_many :user_invitations, dependent: :destroy
   has_many :punch_cards, through: :users
   # has_and_belongs_to_many :users
 

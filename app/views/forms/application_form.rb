@@ -127,7 +127,7 @@ class ApplicationForm < Superform::Rails::Form
       @attributes.keys.include?(:multiple) ? super.merge(type: "file", accept: "image/*", multiple: true) : super.merge(type: "file", accept: "image/*")
     end
 
-    def template(&)
+    def view_template(&)
       div(class: "mort-field") do
         input(**attributes)
         if field.value.attached?
@@ -158,7 +158,7 @@ class ApplicationForm < Superform::Rails::Form
     def field_attributes
       super.merge(type: "boolean")
     end
-    def template(&)
+    def view_template(&)
       div(class: attributes[:class], data: { controller: "boolean" }) do
         input(name: dom.name, data: { boolean_target: "input" }, type: :hidden, value: setValue)
         button(
@@ -226,7 +226,7 @@ class ApplicationForm < Superform::Rails::Form
     def field_attributes
       super.merge(type: "hidden")
     end
-    def template(&)
+    def view_template(&)
       input(**attributes, value: field.value)
     end
   end
@@ -235,7 +235,7 @@ class ApplicationForm < Superform::Rails::Form
     def field_attributes
       super.merge(type: "time")
     end
-    def template(&)
+    def view_template(&)
       input(**attributes, value: field.value&.strftime("%H:%M"))
     end
   end
@@ -244,7 +244,7 @@ class ApplicationForm < Superform::Rails::Form
     def field_attributes
       super.merge(type: "date")
     end
-    def template(&)
+    def view_template(&)
       input(**attributes, value: field.value&.strftime("%Y-%m-%d"))
     end
   end
@@ -252,7 +252,7 @@ class ApplicationForm < Superform::Rails::Form
     def field_attributes
       super.merge(type: "datetime-local")
     end
-    def template(&)
+    def view_template(&)
       input(**attributes, value: field.value&.strftime("%Y-%m-%dT%H:%M"))
     end
   end

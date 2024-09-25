@@ -47,7 +47,7 @@ class Contextmenu < Phlex::HTML
   end
 
   def more_button
-    span(class: "sr-only") { "Open options" }
+    span(class: "sr-only") { "Open #{list.nil? ? "item " : "list "}options" }
     svg(
       class: "h-5 w-5",
       viewbox: "0 0 20 20",
@@ -196,7 +196,7 @@ class Contextmenu < Phlex::HTML
         data: { turbo_stream: true },
         # link_to((@links[1] || resource),
         class: "block px-3 py-1 text-sm leading-6 text-gray-900",
-        role: "menuitem",
+        role: "deleteitem",
         tabindex: "-1") do
         # data: { turbo_method: :delete, turbo_confirm: "Are you sure?" }) do
         plain I18n.t(".delete")

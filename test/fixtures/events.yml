@@ -10,6 +10,7 @@ one:
   to_time: 2024-07-15 09:36:24
   duration: 1
   all_day: false
+  color: gb-red-200
   comment: MyText
 
 two:
@@ -22,4 +23,5 @@ two:
   to_time: 2024-07-15 09:36:24
   duration: 1
   all_day: false
+  color: gb-yellow-200
   comment: MyText

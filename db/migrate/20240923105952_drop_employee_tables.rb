@@ -16,10 +16,8 @@ class DropEmployeeTables < ActiveRecord::Migration[8.0]
 
     add_foreign_key "users", "teams", on_delete: :cascade
     add_foreign_key "users", "tenants", on_delete: :cascade
-    # remove_foreign_key "punch_cards", "employees"
-    # remove_foreign_key "punch_cards", "employees", on_delete: :cascade
-    # remove_foreign_key "punches", "employees"
-    # remove_foreign_key "punches", "employees", on_delete: :cascade
+    remove_foreign_key "punch_cards", "employees" if foreign_key_exists? :punch_cards, :employees
+    remove_foreign_key "punches", "employees" if foreign_key_exists? :punches, :employees
 
     rename_column :punch_cards, :employee_id, :user_id
     remove_index :punch_cards, :employee_id if index_exists? :punch_cards, :employee_id

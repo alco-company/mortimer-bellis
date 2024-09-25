@@ -1,10 +1,10 @@
 class User < ApplicationRecord
   include Localeable
   include Punchable
+  include Stateable
 
   belongs_to :tenant
   belongs_to :team
-  has_many :user_invitations, dependent: :destroy
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable

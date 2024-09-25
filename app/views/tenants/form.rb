@@ -2,7 +2,7 @@ class Tenants::Form < ApplicationForm
   def view_template(&)
     row field(:name).input(class: "mort-form-text").focus
     row field(:email).input(class: "mort-form-text")
-    row field(:tenant_color).select(Tenant.colors, prompt: I18n.t(".select_tenant_color"), class: "mort-form-text")
+    row field(:color).select(Tenant.colors, prompt: I18n.t(".select_tenant_color"), class: "mort-form-text")
     row field(:logo).file(class: "mort-form-file")
     row field(:pp_identification).input(class: "mort-form-text")
     row field(:tax_number).input(class: "mort-form-text")

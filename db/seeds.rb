@@ -12,6 +12,7 @@ team = Team.find_or_create_by!(tenant: tenant, name: "Mortimer", email: "info@mo
 user = User.new(
   email: 'info@mortimer.pro',
   tenant: tenant,
+  global_queries: true,
   team: team,
   role: 2,
   password: 'mortimer',

@@ -215,7 +215,7 @@ da:
         locale: Sprog
         country: Land - for at få vist korrekte nationale helligdage
         logo: Logo (80 x 40)
-        tenant_color: Farve
+        color: Farve
       asset:
         name: 'Navn'
         asset_teams: 'Hold/grupper'

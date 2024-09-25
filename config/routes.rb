@@ -39,16 +39,15 @@ Rails.application.routes.draw do
   resources :punch_cards do
     resources :punches
   end
-  resources :employees do
-    resources :calendars
-    member do
-      post :archive
-    end
-    collection do
-      post :signup
-    end
-  end
-  resources :employee_invitations
+  # resources :employees do
+  #   resources :calendars
+  #   member do
+  #     post :archive
+  #   end
+  #   collection do
+  #     post :signup
+  #   end
+  # end
   resources :teams do
     resources :calendars
   end
