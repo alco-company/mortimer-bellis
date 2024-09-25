@@ -49,6 +49,7 @@ If Solid Queue bites me again, look here: https://github.com/rails/solid_queue/i
 ## 25/9/2024
 
 * rename employee to user
+* remove around_action on ActionCable connection
 
 ### 23/9/2024
 

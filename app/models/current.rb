@@ -13,6 +13,7 @@ class Current < ActiveSupport::CurrentAttributes
 
   def user=(user)
     super
+    return unless user.class == User
     self.tenant      = user&.tenant
     self.locale       = user&.locale
     Time.zone         = user&.time_zone
