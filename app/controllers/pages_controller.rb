@@ -7,6 +7,7 @@ class PagesController < MortimerController
     user_signed_in? ?
       @resource = Page.find(params[:id]) :
       @resource = Page.find_by(slug: params[:id])
+    # render :show, layout: "apple_watch" if request.subdomain == "watch"
   end
 
   private

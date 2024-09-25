@@ -5,6 +5,10 @@ class Page < ApplicationRecord
     title
   end
 
+  def tenant
+    false
+  end
+
   def self.form(resource, editable = true)
     Pages::Form.new resource, editable: editable
   end
