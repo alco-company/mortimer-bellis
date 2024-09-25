@@ -3,7 +3,7 @@
 one:
   tenant: one
   location: one
-  name: Employee Own PunchClock
+  name: User Own PunchClock
   ip_addr: 1.2.3.4
   last_punched_at: 2024-04-24 19:58:47
   access_token: 123

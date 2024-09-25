@@ -26,9 +26,9 @@ class Employee < ApplicationRecord
   scope :working, -> { where(state: :in) }
   scope :order_by_number, ->(field) { order("length(#{field}) DESC, #{field} DESC") }
 
-  validates :name, presence: true, uniqueness: { scope: [ :tenant_id, :team_id ], message: I18n.t("employees.errors.messages.name_exist_for_team") }
-  validates :pincode, presence: true, uniqueness: { scope: :tenant_id, message: I18n.t("employees.errors.messages.pincode_exist_for_tenant") }
-  validates :payroll_employee_ident, presence: true, uniqueness: { scope: :tenant_id, message: I18n.t("employees.errors.messages.payroll_employee_ident_exist_for_tenant") }
+  validates :name, presence: true, uniqueness: { scope: [ :tenant_id, :team_id ], message: I18n.t("users.errors.messages.name_exist_for_team") }
+  validates :pincode, presence: true, uniqueness: { scope: :tenant_id, message: I18n.t("users.errors.messages.pincode_exist_for_tenant") }
+  validates :payroll_employee_ident, presence: true, uniqueness: { scope: :tenant_id, message: I18n.t("users.errors.messages.payroll_employee_ident_exist_for_tenant") }
 
   def color
     employee_color
@@ -57,15 +57,15 @@ class Employee < ApplicationRecord
   end
 
   def self.form(resource, editable = true)
-    Employees::Form.new resource, editable: editable, enctype: "multipart/form-data"
+    Users::Form.new resource, editable: editable, enctype: "multipart/form-data"
   end
 
   def self.profile(resource, url, editable = true)
-    Employees::Profile.new resource, action: url, api_key: resource.access_token, editable: editable, enctype: "multipart/form-data"
+    Users::Profile.new resource, action: url, api_key: resource.access_token, editable: editable, enctype: "multipart/form-data"
   end
 
   def self.signup(resource, url, editable = true)
-    Employees::Signup.new resource, action: url, editable: editable, enctype: "multipart/form-data"
+    Users::Signup.new resource, action: url, editable: editable, enctype: "multipart/form-data"
   end
 
   #
@@ -82,7 +82,7 @@ class Employee < ApplicationRecord
   end
 
   def self.next_pincode(pin = "")
-    pins = Employee.by_tenant.order_by_number("pincode").pluck(:pincode)
+    pins = User.by_tenant.order_by_number("pincode").pluck(:pincode)
     pin = "1000" if pin.blank?
     return pin if pins.empty?
     pin = pins.first.to_i + 1 if pin.to_i < pins.first.to_i
@@ -94,7 +94,7 @@ class Employee < ApplicationRecord
   end
 
   def self.next_payroll_employee_ident(pin)
-    pins = Employee.by_tenant.order_by_number("payroll_employee_ident").pluck(:payroll_employee_ident)
+    pins = User.by_tenant.order_by_number("payroll_employee_ident").pluck(:payroll_employee_ident)
     pin = "1" if pin.blank?
     return pin if pins.empty?
     pin = pins.first.to_i + 1 if pin.to_i < pins.first.to_i

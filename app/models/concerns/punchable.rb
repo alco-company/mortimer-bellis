@@ -31,7 +31,7 @@ module Punchable
     #       employee_id = #{id} and
     #       punches_settled_at is null
     #   SQL
-    #   Employee.connection.select_all(sql).to_a[0]
+    #   User.connection.select_all(sql).to_a[0]
     # end
 
     # def get_contract_minutes
@@ -108,7 +108,7 @@ module Punchable
     # end
 
     # def self.at_work
-    #   Employee.where(state: [ :in, :break ]).count
+    #   User.where(state: [ :in, :break ]).count
     # end
 
     # def this_payroll_punch_cards
@@ -125,13 +125,13 @@ module Punchable
 
     def punch(punch_clock, state, ip, punched_at = DateTime.current)
       begin
-        UserMailer.with(employee: self).confetti_first_punch.deliver_later if punches.count == 0
+        UserMailer.with(user: self).confetti_first_punch.deliver_later if punches.count == 0
         Punch.create! tenant: self.tenant, user: self, punch_clock: punch_clock, punched_at: punched_at, state: state, remote_ip: ip
       rescue => e
         say "Punchable#punch failed: #{e.message}"
       end
       update last_punched_at: punched_at, state: state
-      # PunchCardJob.perform_later tenant: self.tenant, employee: self
+      # PunchCardJob.perform_later tenant: self.tenant, user: self
     rescue => e
       say "Punchable#punch (outer) failed: #{e.message}"
     end
@@ -143,7 +143,7 @@ module Punchable
     #     PunchJob.perform_now(tenant: self.tenant,
     #       reason: params["reason"] || params[:reason],
     #       ip: ip,
-    #       employee: self,
+    #       user: self,
     #       from_date: params["from_date"] || params[:from_date],
     #       from_time: params["from_time"] || params[:from_time],
     #       to_date: params["to_date"] || params[:to_date],
@@ -154,7 +154,7 @@ module Punchable
     #     PunchJob.perform_later(tenant: self.tenant,
     #       reason: params["reason"] || params[:reason],
     #       ip: ip,
-    #       employee: self,
+    #       user: self,
     #       from_date: params["from_date"] || params[:from_date],
     #       from_time: params["from_time"] || params[:from_time],
     #       to_date: params["to_date"] || params[:to_date],
@@ -184,11 +184,11 @@ module Punchable
     #     end
     #   end
     #   Rails.env.local? ?
-    #     PunchCardJob.perform_now(tenant: tenant, employee: self, date: date) :
-    #     PunchCardJob.perform_later(tenant: tenant, employee: self, date: date)
+    #     PunchCardJob.perform_now(tenant: tenant, user: self, date: date) :
+    #     PunchCardJob.perform_later(tenant: tenant, user: self, date: date)
     #   true
     # rescue => error
-    #   UserMailer.error_report(error.to_s, "Employee#punch_by_calendar").deliver_later
+    #   UserMailer.error_report(error.to_s, "User#punch_by_calendar").deliver_later
     # end
   end
 end

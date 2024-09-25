@@ -190,14 +190,14 @@
       "fingerprint": "658042b7d1172faf12bdcdea5a4605a3d26b20a907658e11fa07150eb1ce162c",
       "check_name": "SQL",
       "message": "Possible SQL injection",
-      "file": "app/models/employee.rb",
+      "file": "app/models/user.rb",
       "line": 25,
       "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
       "code": "order(\"length(#{field}) DESC, #{field} DESC\")",
       "render_path": null,
       "location": {
         "type": "method",
-        "class": "Employee",
+        "class": "User",
         "method": "order_by_number"
       },
       "user_input": "field",
@@ -243,7 +243,7 @@
       "render_path": null,
       "location": {
         "type": "method",
-        "class": "EmployeeInvitationsController",
+        "class": "UserInvitationsController",
         "method": "resource_params"
       },
       "user_input": ":tenant_id",
@@ -312,7 +312,7 @@
       "render_path": null,
       "location": {
         "type": "method",
-        "class": "EmployeesController",
+        "class": "UsersController",
         "method": "resource_params"
       },
       "user_input": ":tenant_id",
@@ -496,7 +496,7 @@
       "render_path": [
         {
           "type": "controller",
-          "class": "Pos::EmployeeController",
+          "class": "Pos::UserController",
           "method": "index",
           "line": 12,
           "file": "app/controllers/pos/employee_controller.rb",

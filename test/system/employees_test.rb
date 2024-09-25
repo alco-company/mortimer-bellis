@@ -3,54 +3,54 @@ require "application_system_test_case"
 class EmployeesTest < ApplicationSystemTestCase
   setup do
     login_as users(:one)
-    #   @employee = employees(:one)
+    #   @user = employees(:one)
   end
 
   test "visiting the index" do
     visit employees_url
-    assert_selector "h1", text: "Employees"
+    assert_selector "h1", text: "Users"
   end
 
   # test "should create employee" do
   #   visit employees_url
   #   click_on "New employee"
 
-  #   fill_in "Access token", with: @employee.access_token
-  #   fill_in "Tenant", with: @employee.tenant_id
-  #   fill_in "Employee ident", with: @employee.employee_ident
-  #   fill_in "Last punched at", with: @employee.last_punched_at
-  #   fill_in "Name", with: @employee.name
-  #   fill_in "Pincode", with: @employee.pincode
-  #   fill_in "State", with: @employee.state
-  #   fill_in "Team", with: @employee.team_id
-  #   click_on "Create Employee"
+  #   fill_in "Access token", with: @user.access_token
+  #   fill_in "Tenant", with: @user.tenant_id
+  #   fill_in "User ident", with: @user.user_ident
+  #   fill_in "Last punched at", with: @user.last_punched_at
+  #   fill_in "Name", with: @user.name
+  #   fill_in "Pincode", with: @user.pincode
+  #   fill_in "State", with: @user.state
+  #   fill_in "Team", with: @user.team_id
+  #   click_on "Create User"
 
-  #   assert_text "Employee was successfully created"
+  #   assert_text "User was successfully created"
   #   click_on "Back"
   # end
 
-  # test "should update Employee" do
-  #   visit employee_url(@employee)
+  # test "should update User" do
+  #   visit employee_url(@user)
   #   click_on "Edit this employee", match: :first
 
-  #   fill_in "Access token", with: @employee.access_token
-  #   fill_in "Tenant", with: @employee.tenant_id
-  #   fill_in "Employee ident", with: @employee.employee_ident
-  #   fill_in "Last punched at", with: @employee.last_punched_at.to_s
-  #   fill_in "Name", with: @employee.name
-  #   fill_in "Pincode", with: @employee.pincode
-  #   fill_in "State", with: @employee.state
-  #   fill_in "Team", with: @employee.team_id
-  #   click_on "Update Employee"
+  #   fill_in "Access token", with: @user.access_token
+  #   fill_in "Tenant", with: @user.tenant_id
+  #   fill_in "User ident", with: @user.user_ident
+  #   fill_in "Last punched at", with: @user.last_punched_at.to_s
+  #   fill_in "Name", with: @user.name
+  #   fill_in "Pincode", with: @user.pincode
+  #   fill_in "State", with: @user.state
+  #   fill_in "Team", with: @user.team_id
+  #   click_on "Update User"
 
-  #   assert_text "Employee was successfully updated"
+  #   assert_text "User was successfully updated"
   #   click_on "Back"
   # end
 
-  # test "should destroy Employee" do
-  #   visit employee_url(@employee)
+  # test "should destroy User" do
+  #   visit employee_url(@user)
   #   click_on "Destroy this employee", match: :first
 
-  #   assert_text "Employee was successfully destroyed"
+  #   assert_text "User was successfully destroyed"
   # end
 end

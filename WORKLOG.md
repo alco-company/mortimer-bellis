@@ -46,6 +46,10 @@ If Solid Queue bites me again, look here: https://github.com/rails/solid_queue/i
 
 ## CHANGELOG
 
+## 25/9/2024
+
+* rename employee to user
+
 ### 23/9/2024
 
 * make top menu extend to borders
@@ -54,6 +58,7 @@ If Solid Queue bites me again, look here: https://github.com/rails/solid_queue/i
 * weaponize SidebarComponent - like render SidebarComponent.new(menu: {})
 * make menu items on SidebarComponent visibly collapsible
 * rotate sub_menu items on SidebarComponent - chevron-down
+* move employee fields to user
 
 ### 22/9/2024
 

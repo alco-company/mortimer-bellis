@@ -1,4 +1,4 @@
-team;name;pincode;payroll_employee_ident;job_title;birthday;hired_at;description;email;cell_phone;pbx_extension;contract_minutes;contract_days_per_payroll;contract_days_per_week;flex_balance_minutes;hour_pay;ot1_add_hour_pay;ot2_add_hour_pay;tmp_overtime_allowed;blocked;locale;time_zone
+team;name;pincode;payroll_user_ident;job_title;birthday;hired_at;description;email;cell_phone;pbx_extension;contract_minutes;contract_days_per_payroll;contract_days_per_week;flex_balance_minutes;hour_pay;ot1_add_hour_pay;ot2_add_hour_pay;tmp_overtime_allowed;blocked;locale;time_zone
 team 1;John Doe;1234;1234;Manager;1970-01-01;2024-04-16;Manager on team 1;john@doe.com;1234567890;1234;444;0;5;0;50;25;50;180;false;en;America/New_York
 team 2;Maggie OR;1235;1235;CFO;1991-11-14;2021-12-24;CFO;maggie@or.ai;112;112;444;0;5;0;60;0;0;-1;true;en;London
 team 1;Donald Duck;;8100;-;1931-12-01;1946-10-01;painter;donald@disney.com;1235553360;90112;444;14;5;0;40;20;40;0;false;en;Tokyo

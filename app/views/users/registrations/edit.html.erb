@@ -49,13 +49,10 @@
       <%= f.label :email %><br />
       <%= f.email_field :email, autocomplete: "email", class: "mort-form-text" %>
     </div>
-
-    <%# = row field(:locale).select(Employee.locales, prompt: I18n.t(".select_employee_locale"), class: "mort-form-text") %>
-    <%#= row field(:time_zone).select(ActiveSupport::TimeZone.all.collect { |tz| [ "(GMT#{ActiveSupport::TimeZone.seconds_to_utc_offset(tz.utc_offset)}) #{tz.name}", tz.tzinfo.name ] }, class: "mort-form-text") %>
         
     <div class="mort-field">
       <%= f.label :locale %><br />
-      <%= f.select :locale, Employee.locales.collect { |loc| [loc.value, loc.id] }, class: "mort-form-text" %>
+      <%= f.select :locale, User.locales.collect { |loc| [loc.value, loc.id] }, class: "mort-form-text" %>
     </div>
 
     <div class="mort-field">

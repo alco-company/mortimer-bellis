@@ -145,8 +145,8 @@ class ModalController < BaseController
         render turbo_stream: turbo_stream.replace("modal_container", partial: "modal/import_preview", local: { records: @records, import_file: @import_file })
       when "approve"
         Rails.env.local? ?
-          ImportEmployeesJob.new.perform(tenant: Current.tenant, import_file: params[:import_file]) :
-          ImportEmployeesJob.perform_later(tenant: Current.tenant, import_file: params[:import_file])
+          ImportUsersJob.new.perform(tenant: Current.tenant, import_file: params[:import_file]) :
+          ImportUsersJob.perform_later(tenant: Current.tenant, import_file: params[:import_file])
 
         render turbo_stream: turbo_stream.replace("modal_container", partial: "modal/import_approved")
       end
@@ -246,7 +246,7 @@ class ModalController < BaseController
     def get_cb_eval_after_destroy(resource)
       case params[:resource_class]
       when "Punch"
-        "PunchCard.recalculate employee: Employee.find(#{resource.employee.id}), across_midnight: false, date: '#{resource.punched_at}'"
+        "PunchCard.recalculate user: User.find(#{resource.user.id}), across_midnight: false, date: '#{resource.punched_at}'"
       else
         nil
       end
@@ -298,4 +298,4 @@ end
 # if BuildPdfJob.new.perform(html: html_filename, pdf: pdf_filename)
 #   TenantMailer.with(tenant: Current.tenant, tmpfiles: [ pdf_filename.to_s ]).report_state.deliver_later
 # end
-# EmployeeEuStateJob.perform_later tenant: Current.tenant
+# UserEuStateJob.perform_later tenant: Current.tenant

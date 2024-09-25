@@ -104,8 +104,8 @@ class EventsList < ApplicationComponent
           ul(class: "text-xs space-y-1") do
             if calendar.calendarable_type == "Team"
               li(class: "grid grid-cols-6 gap-x-1") do
-                div(class: "col-span-1 place-self-end font-mono") { calendar.calendarable.employees.count }
-                div(class: "col-span-5 ") { I18n.t("calendar.employees_has_punched_total_punches", count: Punch.where(punch_card_id: calendar.calendarable.punch_cards.today(date).map(&:id)).count) }
+                div(class: "col-span-1 place-self-end font-mono") { calendar.calendarable.users.count }
+                div(class: "col-span-5 ") { I18n.t("calendar.users_has_punched_total_punches", count: Punch.where(punch_card_id: calendar.calendarable.punch_cards.today(date).map(&:id)).count) }
               end
             else
               calendar.calendarable.punch_cards.today(date).each do |punch_card|

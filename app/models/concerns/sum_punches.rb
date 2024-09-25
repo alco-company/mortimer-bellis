@@ -2,7 +2,7 @@ module SumPunches
   extend ActiveSupport::Concern
 
   class_methods do
-    def recalculate(employee:, across_midnight: false, date: Date.current, from_at: false, to_at: false, **args)
+    def recalculate(user:, across_midnight: false, date: Date.current, from_at: false, to_at: false, **args)
       (from_at && to_at) ?
         calc_range(employee, across_midnight, date, from_at, to_at) :
         calc_date(employee, across_midnight, date)
@@ -21,8 +21,8 @@ module SumPunches
           # Code in this block will be connected to the writing role
           fdate = across_midnight ? date.yesterday : date
           tdate = date
-          say "Recalculating #{employee.name} on #{date}"
-          pc = PunchCard.where(tenant: employee.tenant, employee: employee, work_date: fdate).first_or_create
+          say "Recalculating #{user.name} on #{date}"
+          pc = PunchCard.where(tenant: user.tenant, user: employee, work_date: fdate).first_or_create
           unless pc.nil?
             begin
               # obviously, we're only interested in punches for the day in question
@@ -30,8 +30,8 @@ module SumPunches
               # by the ID - so that we can easily find the first and last punches of the day
               # and using punched_at is not a good idea, as it's not guaranteed to be in order 'cause of the way
               # the punches are created
-              punches = employee.punches.where(punched_at: fdate.beginning_of_day..tdate.end_of_day).order(id: :desc)
-              say "Found #{punches.size} punches for #{employee.name} on #{fdate}-#{tdate}"
+              punches = user.punches.where(punched_at: fdate.beginning_of_day..tdate.end_of_day).order(id: :desc)
+              say "Found #{punches.size} punches for #{user.name} on #{fdate}-#{tdate}"
 
               # in case we gotta bail out
               pc.update work_minutes: -1
@@ -57,20 +57,20 @@ module SumPunches
     end
 
     def strange_no_punches(pc)
-      say "No punches found for #{employee.name} on #{date} - which is weird (considering where we're at, right now!)"
+      say "No punches found for #{user.name} on #{date} - which is weird (considering where we're at, right now!)"
     end
 
     def one_punch(pc, punches, employee, across_midnight, date)
       # we can't do anything with a single punch if we're across midnight
       return if across_midnight
 
-      return PunchCard.recalculate(employee: employee, across_midnight: true, date: date) unless punches.first.in?
+      return PunchCard.recalculate(user: employee, across_midnight: true, date: date) unless punches.first.in?
       # this is the only punch of the day, so we'll calculate the time from the punch to now -
       # and come back and do it again when the employee punches out'
       punches.update_all punch_card_id: pc.id
-      work, ot1, ot2 = employee.divide_minutes((DateTime.current.to_i - punches.first.punched_at.to_i) / 60)
+      work, ot1, ot2 = user.divide_minutes((DateTime.current.to_i - punches.first.punched_at.to_i) / 60)
       pc.update work_minutes: work, ot1_minutes: ot1, ot2_minutes: ot2, break_minutes: 0
-      say "Only one punch for #{employee.name} on #{date} - work_minutes set to #{pc.work_minutes}"
+      say "Only one punch for #{user.name} on #{date} - work_minutes set to #{pc.work_minutes}"
     end
 
     def two_punches(pc, punches, employee)
@@ -82,12 +82,12 @@ module SumPunches
       case punches.second.state
       when is_sick; work, ot1, ot2 = [ 0, 0, 0 ]
       when is_free; work, ot1, ot2 = [ 0, 0, 0 ]
-      when "in"; work, ot1, ot2 = employee.divide_minutes((punches.first.punched_at - punches.second.punched_at) / 60)
+      when "in"; work, ot1, ot2 = user.divide_minutes((punches.first.punched_at - punches.second.punched_at) / 60)
       else work, ot1, ot2 = [ -1, -1, -1 ]
       end
 
       pc.update work_minutes: work, ot1_minutes: ot1, ot2_minutes: ot2, break_minutes: 0
-      say "Two punches for #{employee.name} on #{pc.work_date} - work_minutes set to #{pc.work_minutes}"
+      say "Two punches for #{user.name} on #{pc.work_date} - work_minutes set to #{pc.work_minutes}"
     end
 
     def more_punches(pc, punches, employee)
@@ -107,7 +107,7 @@ module SumPunches
           end
           stop = punch.punched_at.to_i
         end
-        work, ot1, ot2 = employee.divide_minutes counters[:work].sum
+        work, ot1, ot2 = user.divide_minutes counters[:work].sum
         pc.update work_minutes: work, ot1_minutes: ot1, ot2_minutes: ot2, break_minutes: counters[:break].sum
       rescue => e
         say "Error in more_punches: #{e}"

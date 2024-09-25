@@ -1,6 +1,6 @@
 # To deliver this notification:
 #
-# CompletedEmployeeNotifier.with(record: @post, message: "New post").deliver(User.all)
+# CompletedUserNotifier.with(record: @post, message: "New post").deliver(User.all)
 
 class CompletedEmployeeNotifier < ApplicationNotifier
   # Add your delivery methods

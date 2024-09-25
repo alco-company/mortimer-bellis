@@ -17,7 +17,8 @@ class Users::RegistrationsController < Devise::RegistrationsController
   def create
     begin
       usr = nil
-      params[:user][:tenant_id] = Tenant.find_or_create_by(name: tenant_name, email: sign_up_params[:email]).id
+      params[:user][:tenant_id] = 1 # temporary placeholder - UserRegistrationService will fix!
+      params[:user][:team_id] = 1   # temporary placeholder - UserRegistrationService will fix!
       # configure_sign_up_params
       super do |resource|
         resource.add_role
@@ -64,7 +65,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   # If you have extra params to permit, append them to the sanitizer.
   def configure_sign_up_params
-    devise_parameter_sanitizer.permit(:sign_up, keys: [ :tenant_id, :role ])
+    devise_parameter_sanitizer.permit(:sign_up, keys: [ :tenant_id, :team_id, :role ])
   end
 
   #
@@ -79,7 +80,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   # If you have extra params to permit, append them to the sanitizer.
   def configure_account_update_params
-    devise_parameter_sanitizer.permit(:account_update, keys: [ :tenant_id, :global_queries, :name, :mugshot, :locale, :time_zone ])
+    devise_parameter_sanitizer.permit(:account_update, keys: [ :tenant_id, :team_id, :global_queries, :name, :mugshot, :locale, :time_zone ])
   end
 
   # The path used after sign up.

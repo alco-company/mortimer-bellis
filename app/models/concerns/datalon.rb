@@ -42,13 +42,13 @@ module Datalon
     def lon_export_to_csv(punches_settled_at, update_payroll)
       arr = []
       Current.tenant.teams.each do |team|
-        ids = team.employees.pluck(:id)
+        ids = team.users.pluck(:id)
         resources = lon_payroll_export team.name, team.punches_settled_at, punches_settled_at, ids
         arr << lon_to_csv(resources, punches_settled_at)
         if update_payroll
           punch_cards_to_update team.punches_settled_at, punches_settled_at, ids
           team.update punches_settled_at: punches_settled_at
-          team.employees.update_all punches_settled_at: punches_settled_at
+          team.users.update_all punches_settled_at: punches_settled_at
         end
       end
       arr
@@ -150,7 +150,7 @@ module Datalon
       hrs, min = (row.work_minutes + row.ot1_minutes + row.ot2_minutes).to_i.divmod 60
       min = min.to_f/60*100
       hrs = "%i%02i" % [ hrs, min ]
-      emp = Employee.find(row.emp_id)
+      emp = User.find(row.emp_id)
       csv << [ args[:organisation], args[:termin].to_i, row.emp_number, args[:group], "01", hrs ]
       generate_row args, csv, row, row.work_minutes, emp.get_hour_rate_cent, [ "12", "13" ]
       generate_row args, csv, row, row.ot1_minutes,  emp.get_ot1_hour_rate_cent, [ "16", "17" ] if row.ot1_minutes > 0

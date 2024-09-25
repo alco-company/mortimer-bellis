@@ -3,14 +3,14 @@ class PunchCard < ApplicationRecord
   include SumPunches
   include Datalon
 
-  belongs_to :employee
+  belongs_to :user
   has_many :punches, dependent: :destroy
 
   # scope :values_sum, ->(*keys) {
   #   summands = keys.collect { |k| arel_table[k].sum.as(k.to_s) }
   #   select(*summands)
   # }
-  scope :by_name, ->(name) { joins(:employee).where("employees.name LIKE ? or employees.pincode LIKE ? or employees.payroll_employee_ident LIKE ? or employees.job_title LIKE ? or employees.cell_phone LIKE ? or employees.email LIKE ?", "%#{name}%", "%#{name}%", "%#{name}%", "%#{name}%", "%#{name}%", "%#{name}%") if name.present? }
+  scope :by_name, ->(name) { joins(:user).where("users.name LIKE ? or users.pincode LIKE ? or users.job_title LIKE ? or users.cell_phone LIKE ? or users.email LIKE ?", "%#{name}%", "%#{name}%", "%#{name}%", "%#{name}%", "%#{name}%") if name.present? }
   scope :by_work_date, ->(work_date) { where(work_date: Date.parse(work_date)) if work_date.present? }
   scope :by_work_minutes, ->(work_minutes) { where(work_minutes: work_minutes..) if work_minutes.present? }
   scope :by_break_minutes, ->(break_minutes) { where(break_minutes: break_minutes..) if break_minutes.present? }
@@ -20,7 +20,7 @@ class PunchCard < ApplicationRecord
   scope :windowed, ->(window) { where(work_date: window[:from]..window[:to]) }
   # used by eg delete
   def name
-    "#{employee.name} #{work_date}"
+    "#{user.name} #{work_date}"
   end
 
   def self.filtered(filter)
@@ -39,7 +39,7 @@ class PunchCard < ApplicationRecord
   end
 
   def self.ordered(resources, field, direction = :desc)
-    resources.joins(:employee).order(field => direction)
+    resources.joins(:user).order(field => direction)
   end
 
   def self.form(resource, editable = true)

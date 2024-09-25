@@ -1,8 +1,8 @@
 <tr class="gap-x-6 py-5">
-  <%= render_text_column value: link_to(employee.name, employee_url(employee)), table: :row, css: "truncate mort-link-primary" %>
-  <%= render_text_column value: link_to(employee.team.name, team_url(employee.team)), table: :row, css: "truncate mort-link-primary" %>
-  <%= render_boolean_column value: employee.punching_absence, table: :row, css: "text-right" %>
-  <%= render_text_column value: employee.locale, table: :row, css: " truncate" %>
-  <%= render_text_column value: employee.time_zone, table: :row, css: " truncate" %>
-  <%= render_datetime_column value: employee.updated_at, table: :row, css: "" %>
+  <%= render_text_column value: link_to(user.name, employee_url(employee)), table: :row, css: "truncate mort-link-primary" %>
+  <%= render_text_column value: link_to(user.team.name, team_url(user.team)), table: :row, css: "truncate mort-link-primary" %>
+  <%= render_boolean_column value: user.punching_absence, table: :row, css: "text-right" %>
+  <%= render_text_column value: user.locale, table: :row, css: " truncate" %>
+  <%= render_text_column value: user.time_zone, table: :row, css: " truncate" %>
+  <%= render_datetime_column value: user.updated_at, table: :row, css: "" %>
 </tr>

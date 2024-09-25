@@ -1,6 +1,6 @@
 class CalendarsController < MortimerController
   def new
-    @resource.calendarable = Employee.find(params[:employee_id]) if params[:employee_id]
+    @resource.calendarable = User.find(params[:user_id]) if params[:user_id]
     @resource.calendarable = Team.find(params[:team_id]) if params[:team_id]
     @resource.calendarable = Tenant.find(params[:tenant_id]) if params[:tenant_id]
   end

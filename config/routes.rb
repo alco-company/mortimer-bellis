@@ -25,8 +25,12 @@ Rails.application.routes.draw do
   resources :background_jobs
   resources :pages
   resources :users do
+    resources :calendars
     collection do
       get "sign_in_success"
+    end
+    member do
+      post :archive
     end
   end
   resources :punches do

@@ -1,30 +1,30 @@
 class PosPunches < ApplicationComponent
   include Phlex::Rails::Helpers::LinkTo
-  attr_accessor :punches, :employee, :folded, :edit, :tab, :punch_clock
+  attr_accessor :punches, :user, :folded, :edit, :tab, :punch_clock
 
   def initialize(punches: [], folded: false, edit: true, tab: "today")
     @punches = punches
-    @employee = punches.first.employee rescue false
+    @user = punches.first.user rescue false
     @folded = folded
-    @edit = edit && !@employee&.archived? rescue false
+    @edit = edit && !@user&.archived? rescue false
     @tab = tab
   end
 
   def view_template
     current_date = nil
-    employee = punches.first.employee rescue false
+    user = punches.first.user rescue false
     punch_clock = punches.first.punch_clock rescue false
     punches.each do |punch|
-      Time.use_zone(employee.time_zone) do
+      Time.use_zone(user.time_zone) do
         if punch.punched_at.to_date != current_date
           current_date = punch.punched_at&.to_date
           li(id: "#{tab}_#{(helpers.dom_id punch)}", class: "flex items-center justify-between gap-x-6 py-5") do
             div(class: "grid grid-cols-2 min-w-0 w-full") do
-              display_date(punch, employee, punch_clock)
+              display_date(punch, user, punch_clock)
               div(class: "text-right") { display_work(punch.punch_card) }
             end
             div(class: "flex flex-none items-center gap-x-4") do
-              render(PosContextmenu.new(resource: punch, punch_clock: punch_clock, employee: employee, list: true, turbo_frame: helpers.dom_id(punch), alter: edit))
+              render(PosContextmenu.new(resource: punch, punch_clock: punch_clock, user: user, list: true, turbo_frame: helpers.dom_id(punch), alter: edit))
             end
           end
         end
@@ -37,27 +37,27 @@ class PosPunches < ApplicationComponent
             div do helpers.render_time_column(value: punch.punched_at, css: "text-right") end
           end
           div(class: "flex flex-none items-center gap-x-4") do
-            render PosContextmenu.new resource: punch, turbo_frame: helpers.dom_id(punch), alter: edit, links: [ pos_employee_edit_url(api_key: employee.access_token, id: punch.id), pos_employee_delete_url(api_key: employee.access_token, id: punch.id) ]
+            render PosContextmenu.new resource: punch, turbo_frame: helpers.dom_id(punch), alter: edit, links: [ pos_user_edit_url(api_key: user.access_token, id: punch.id), pos_user_delete_url(api_key: user.access_token, id: punch.id) ]
           end
         end unless folded
       end
     end
   end
 
-  def display_date(punch, employee, punch_clock)
+  def display_date(punch, user, punch_clock)
     div(class: "flex") do
       span(class: "mr-4") { I18n.l(punch.punched_at, format: :weekday_date) }
-      folded_icon(punch, employee, punch_clock, folded) if edit
+      folded_icon(punch, user, punch_clock, folded) if edit
     end
   end
 
-  def folded_icon(punch, employee, punch_clock, folded)
+  def folded_icon(punch, user, punch_clock, folded)
     folded ?
-      link_to(helpers.pos_employee_punches_url(id: punch.id, employee_id: employee&.id, punch_clock_id: punch_clock&.id), data: { turbo_stream: "" }) do
+      link_to(helpers.pos_user_punches_url(id: punch.id, user_id: user&.id, punch_clock_id: punch_clock&.id), data: { turbo_stream: "" }) do
         span(class: "sr-only") { "Get todays punches" }
         svg_icon(folded)
       end :
-      link_to(helpers.pos_employee_url(api_key: employee.access_token, tab: "payroll")) do
+      link_to(helpers.pos_user_url(api_key: user.access_token, tab: "payroll")) do
         span(class: "sr-only") { "Get todays punches" }
         svg_icon(folded)
       end
@@ -90,7 +90,7 @@ class PosPunches < ApplicationComponent
     return "" if punch_card.nil?
     counters = {}
     if punch_card.work_date == Date.current
-      counters = punch_card.employee.minutes_today_up_to_now
+      counters = punch_card.user.minutes_today_up_to_now
     else
       counters[:work] = punch_card&.work_minutes || 0
       counters[:break] = punch_card&.break_minutes || 0

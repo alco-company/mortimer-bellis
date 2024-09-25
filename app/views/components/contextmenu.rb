@@ -117,7 +117,7 @@ class Contextmenu < Phlex::HTML
           plain ", "
           plain "import"
         end
-      end if resource_class.to_s == "Employee"
+      end if resource_class.to_s == "User"
       whitespace
       link_to(
         helpers.resources_url() + ".csv",
@@ -163,7 +163,7 @@ class Contextmenu < Phlex::HTML
     ) do
       comment { %(Active: "bg-gray-50", Not Active: "") }
       # archive employee
-      if resource_class.to_s == "Employee"
+      if resource_class.to_s == "User"
         button_to((helpers.archive_employee_url(resource)),
           class: "block px-3 py-1 text-sm leading-6 text-gray-900",
           role: "menuitem",

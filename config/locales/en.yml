@@ -36,11 +36,10 @@ en:
     login: Login
     pages: Pages
     tenants: Tenants
-    users: Users
+    users: Employees
     teams: Teams
     locations: Locations
     punch_clocks: PunchClocks
-    employees: Employees
     punch_cards: PunchCards
     punches: Punches
     motds: MessageOfTheDay
@@ -77,7 +76,7 @@ en:
         user: admin bruger 
         state: Status
       asset_work_session:
-        employee_id: Medarbejder
+        user_id: Medarbejder
         start_at: Startet den 
         stop_at: Stoppet den
         session_type: Type 
@@ -100,7 +99,7 @@ en:
         name: Navn
         layout: Skabelon
         body: Indhold
-      employee:
+      user:
         name: Navn
         import: Indlæs CSV fil med medarbejdere
         access_token: nøgle
@@ -128,7 +127,7 @@ en:
 
       event:
         minutes: Minutter
-        employee_id: Medarbejder
+        user_id: Medarbejder
       faq:
         endpoint: URL 
         field: felt 
@@ -179,12 +178,12 @@ en:
 
       punch:
         punched_at: "stemplet kl:"
-        employee_id: Medarbejder
+        user_id: Medarbejder
         state: Status
         
       punch_card:
         punched_at: "stemplet kl:"
-        employee_id: Medarbejder
+        user_id: Medarbejder
         location_id: Arbejdssted
         punch_clock_id: Stempelur
         punch_type: Type
@@ -286,7 +285,7 @@ en:
       dashboard:
         one: Overblik 
         other: Overblik
-      employee:
+      user:
         one: medarbejder
         other: medarbejdere
       equipment:

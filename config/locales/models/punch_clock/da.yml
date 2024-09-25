@@ -38,7 +38,7 @@ da:
         today: I dag 
         this_payroll: Denne lønperiode
         todays_punches: Stemplinger idag 
-        for_employee: for %{name}
+        for_ user: for %{name}
 
         add_time: Tilføj tid
         this_payroll_punches: Stemplinger i denne lønperiode

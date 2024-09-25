@@ -1,13 +1,13 @@
 class PunchJob < ApplicationJob
   queue_as :default
 
-  attr_accessor :employee, :from_at, :to_at, :from_date, :from_time, :to_date, :to_time, :reason, :comment, :ip, :days, :excluded_days
+  attr_accessor :user, :from_at, :to_at, :from_date, :from_time, :to_date, :to_time, :reason, :comment, :ip, :days, :excluded_days
 
   def perform(**args)
     super(**args)
-    @employee = args[:employee]
-    switch_locale(@employee.locale) do
-      user_time_zone(@employee.time_zone) do
+    @user = args[:user]
+    switch_locale(@user.locale) do
+      user_time_zone(@user.time_zone) do
         calc_vars(args)
         its_today ? one_punch : range_punch
       end
@@ -32,23 +32,23 @@ class PunchJob < ApplicationJob
   end
 
   def one_punch
-    @from_at, @to_at = setTimeSlot(@employee, @reason, @from_at.to_datetime, @to_at.to_datetime, @from_at.to_datetime)
-    punch_it!(@employee, @reason, @ip, @from_at.to_datetime, @to_at.to_datetime, @comment)
+    @from_at, @to_at = setTimeSlot(@user, @reason, @from_at.to_datetime, @to_at.to_datetime, @from_at.to_datetime)
+    punch_it!(@user, @reason, @ip, @from_at.to_datetime, @to_at.to_datetime, @comment)
     Rails.env.local? ?
-      PunchCardJob.perform_now(tenant: @employee.tenant, employee: @employee, date: @from_at) :
-      PunchCardJob.perform_later(tenant: @employee.tenant, employee: @employee, date: @from_at)
+      PunchCardJob.perform_now(tenant: @user.tenant, user: @user, date: @from_at) :
+      PunchCardJob.perform_later(tenant: @user.tenant, user: @user, date: @from_at)
   end
 
   def range_punch
     (@from_at.to_date..@to_at.to_date).each do |date|
       next unless @days.empty? || @days.include?(date.strftime("%A").downcase)
       next if excluded_days_include date, @excluded_days
-      f_at, t_at = setTimeSlot(@employee, @reason, @from_at.to_datetime, @to_at.to_datetime, date.to_datetime)
-      punch_it!(@employee, @reason, @ip, f_at, t_at, @comment)
+      f_at, t_at = setTimeSlot(@user, @reason, @from_at.to_datetime, @to_at.to_datetime, date.to_datetime)
+      punch_it!(@user, @reason, @ip, f_at, t_at, @comment)
     end
     Rails.env.local? ?
-      PunchCardJob.perform_now(tenant: @employee.tenant, employee: @employee, from_at: @from_at.to_date, to_at: @to_at.to_date) :
-      PunchCardJob.perform_later(tenant: @employee.tenant, employee: @employee, from_at: @from_at.to_date, to_at: @to_at.to_date)
+      PunchCardJob.perform_now(tenant: @user.tenant, user: @user, from_at: @from_at.to_date, to_at: @to_at.to_date) :
+      PunchCardJob.perform_later(tenant: @user.tenant, user: @user, from_at: @from_at.to_date, to_at: @to_at.to_date)
   end
 
   def excluded_days_include(date, excluded_days)
@@ -77,14 +77,14 @@ class PunchJob < ApplicationJob
   end
 
   def punch_it!(employee, reason, ip, from_at, to_at, comment = nil)
-    punch_clock = PunchClock.by_tenant(employee.tenant).first
-    Punch.create! tenant: employee.tenant, employee: employee, punch_clock: punch_clock, punched_at: from_at, state: reason, remote_ip: ip, comment: comment
-    Punch.create! tenant: employee.tenant, employee: employee, punch_clock: punch_clock, punched_at: to_at, state: :out, remote_ip: ip, comment: comment
+    punch_clock = PunchClock.by_tenant(user.tenant).first
+    Punch.create! tenant: user.tenant, user: employee, punch_clock: punch_clock, punched_at: from_at, state: reason, remote_ip: ip, comment: comment
+    Punch.create! tenant: user.tenant, user: employee, punch_clock: punch_clock, punched_at: to_at, state: :out, remote_ip: ip, comment: comment
   end
 
   def setTimeSlot(employee, reason, from_at, to_at, date)
     if reason =~ /sick/
-      [ (date.beginning_of_day + 7.hours), date.beginning_of_day + 7.hours + employee.get_contract_minutes_per_day.minutes ]
+      [ (date.beginning_of_day + 7.hours), date.beginning_of_day + 7.hours + user.get_contract_minutes_per_day.minutes ]
     else
       fhour = from_at.hour
       minute = from_at.min

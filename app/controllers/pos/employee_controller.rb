@@ -1,20 +1,20 @@
 class Pos::EmployeeController < Pos::PosController
   before_action :verify_employee, only: [ :index, :show, :edit, :create, :update, :destroy ]
-  around_action :employee_time_zone, only: [ :show, :edit, :create, :update, :destroy ]
+  around_action :user_time_zone, only: [ :show, :edit, :create, :update, :destroy ]
 
-  layout -> { PosEmployeeLayout }
+  layout -> { PosUserLayout }
 
   def signup_success
   end
 
   def index
-    @employees = Employee.by_tenant()
+    @users = User.by_tenant()
   end
 
   def punches
     @first_punch = Punch.find(params[:id]) rescue false
     @punch_clock = (PunchClock.find(params[:punch_clock_id]) rescue false) if params[:punch_clock_id].present?
-    @resource = @employee = @first_punch.employee
+    @resource = @user = @first_punch.user
     if @first_punch
       if @punch_clock
         punch_clock_time_zone do
@@ -47,10 +47,10 @@ class Pos::EmployeeController < Pos::PosController
   # Manuel entry of sick/free
   #  "punch"=>{"from_at"=>"2024-05-06", "to_at"=>"2024-05-06", "comment" => "en ting", "reason"=>"nursing_sick"}, "api_key"=>"YqymK1swsjkqSSeG3DFVjq1d", "controller"=>"pos/employee", "action"=>"create"} permitted: false>
   def create
-    redirect_to(pos_employee_url(api_key: @resource.access_token), warning: t("employee.archived")) and return if @resource.archived?
-    redirect_to(pos_employee_url(api_key: @resource.access_token), warning: t("employee.blocked")) and return if @resource.is_blocked?
+    redirect_to(pos_employee_url(api_key: @resource.access_token), warning: t("user.archived")) and return if @resource.archived?
+    redirect_to(pos_employee_url(api_key: @resource.access_token), warning: t("user.blocked")) and return if @resource.is_blocked?
 
-    params[:employee].present? ? now_punch : range_punch
+    params[:user].present? ? now_punch : range_punch
   rescue ActionController::InvalidAuthenticityToken
     redirect_to pos_employee_url(api_key: @resource.access_token), alert: t("invalid_authenticity_token") and return
   end
@@ -60,26 +60,26 @@ class Pos::EmployeeController < Pos::PosController
   # or update a punch
   #
   def update
-    redirect_to(pos_employee_url(api_key: @resource.access_token), warning: t("employee.archived")) and return if @resource.archived?
-    redirect_to(pos_employee_url(api_key: @resource.access_token), warning: t("employee.blocked")) and return if @resource.is_blocked?
+    redirect_to(pos_employee_url(api_key: @resource.access_token), warning: t("user.archived")) and return if @resource.archived?
+    redirect_to(pos_employee_url(api_key: @resource.access_token), warning: t("user.blocked")) and return if @resource.is_blocked?
 
     if params[:punch].present?
       @punch = Punch.find(params[:id])
       @punch.update(punch_params)
-      PunchCard.recalculate(employee: @punch.employee, date: @punch.punched_at.to_date)
+      PunchCard.recalculate(user: @punch.user, date: @punch.punched_at.to_date)
       render turbo_stream: turbo_stream.replace("punch_#{@punch.id}", partial: "pos/employee/punch", locals: { punch: @punch })
     else
       if @resource.update(employee_params)
-        redirect_to pos_employee_url(api_key: @resource.access_token, tab: "profile"), success: I18n.t("employee.update.success")
+        redirect_to pos_employee_url(api_key: @resource.access_token, tab: "profile"), success: I18n.t("user.update.success")
       else
-        render turbo_stream: turbo_stream.replace("mortimer_form", partial: "pos/employee/profile", locals: { employee: @resource }, alert: I18n.t("employee.update.failed"))
+        render turbo_stream: turbo_stream.replace("mortimer_form", partial: "pos/employee/profile", locals: { user: @resource }, alert: I18n.t("user.update.failed"))
       end
     end
   end
 
   def destroy
-    redirect_to(pos_employee_url(api_key: @resource.access_token), warning: t("employee.archived")) and return if @resource.archived?
-    redirect_to(pos_employee_url(api_key: @resource.access_token), warning: t("employee.blocked")) and return if @resource.is_blocked?
+    redirect_to(pos_employee_url(api_key: @resource.access_token), warning: t("user.archived")) and return if @resource.archived?
+    redirect_to(pos_employee_url(api_key: @resource.access_token), warning: t("user.blocked")) and return if @resource.is_blocked?
 
     if params[:all].present?
       @resource.punch_cards.where(work_date: params[:date]).destroy_all
@@ -92,14 +92,14 @@ class Pos::EmployeeController < Pos::PosController
       else
         punch.destroy
       end
-      PunchCard.recalculate(employee: punch.employee, date: punch.punched_at.to_date)
+      PunchCard.recalculate(user: punch.user, date: punch.punched_at.to_date)
       redirect_to pos_employee_url(api_key: @resource.access_token, tab: "payroll") and return
     end
   end
 
   private
     def employee_params
-      params.require(:employee).permit(:state, :name, :description, :email, :cell_phone, :locale, :time_zone, :birthday, :mugshot)
+      params.require(:user).permit(:state, :name, :description, :email, :cell_phone, :locale, :time_zone, :birthday, :mugshot)
     end
 
     def punch_params
@@ -109,9 +109,9 @@ class Pos::EmployeeController < Pos::PosController
     def verify_employee
       api = params.permit(:api_key)[:api_key]
       @resource = case true
-      when params[:api_key].present?; Employee.by_tenant.find_by(access_token: api)
-      # when params[:employee].present?; Employee.by_tenant.find(params[:employee][:id])
-      # when params[:q].present?; Employee.by_tenant.find_by(pincode: params[:q])
+      when params[:api_key].present?; User.by_tenant.find_by(access_token: api)
+      # when params[:user].present?; User.by_tenant.find(params[:user][:id])
+      # when params[:q].present?; User.by_tenant.find_by(pincode: params[:q])
       else nil
       end
       redirect_to root_path and return unless @resource
@@ -120,7 +120,7 @@ class Pos::EmployeeController < Pos::PosController
     end
 
     def now_punch
-      if params[:employee][:state] == @resource.state
+      if params[:user][:state] == @resource.state
         redirect_to pos_employee_url(api_key: @resource.access_token), warning: t("state_eq_current_state", state: @resource.state) and return
       else
         case employee_params[:state]
@@ -141,7 +141,7 @@ class Pos::EmployeeController < Pos::PosController
               to_date: dt,
               to_time: to_at,
               comment: "",
-              reason: params[:employee][:state],
+              reason: params[:user][:state],
               days: [],
               excluded_days: ""
             }
@@ -156,7 +156,7 @@ class Pos::EmployeeController < Pos::PosController
       begin
         if (Date.today == Date.parse(punch_params[:from_date]) ||
           Date.today == Date.parse(punch_params[:to_date])) && !@resource.out?
-          redirect_to pos_employee_url(api_key: @resource.access_token), warning: t("employee_working_punch_out_first") and return
+          redirect_to pos_employee_url(api_key: @resource.access_token), warning: t("user_working_punch_out_first") and return
         end
         @resource.punch_range punch_params, request.remote_ip
         redirect_to pos_employee_url(api_key: @resource.access_token, tab: "payroll") and return
@@ -167,7 +167,7 @@ class Pos::EmployeeController < Pos::PosController
 
     def render_punches
       date_range = @first_punch.punched_at.beginning_of_day..@first_punch.punched_at.end_of_day
-      @punches = Punch.where(employee: @employee, punched_at: date_range).order(punched_at: :desc)
+      @punches = Punch.where(user: @user, punched_at: date_range).order(punched_at: :desc)
       render turbo_stream: turbo_stream.replace("payroll_#{helpers.dom_id(@first_punch)}", partial: "pos/punches/index")
     end
 

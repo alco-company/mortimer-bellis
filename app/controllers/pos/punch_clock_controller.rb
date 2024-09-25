@@ -15,27 +15,27 @@ class Pos::PunchClockController < Pos::PosController
   #
   # Parameters: {"authenticity_token"=>"[FILTERED]", "punch_clock"=>{"api_key"=>"[FILTERED]"}, "employee"=>{"state"=>"IN", "id"=>"1"}, "button"=>"", "id"=>"1"}
   def create
-    redirect_to(pos_punch_clock_path(api_key: @resource.access_token, q: @employee.pincode), warning: t("employee.archived")) and return if @employee.archived?
-    redirect_to(pos_punch_clock_path(api_key: @resource.access_token, q: @employee.pincode), warning: t("employee.blocked")) and return if @employee.is_blocked?
+    redirect_to(pos_punch_clock_path(api_key: @resource.access_token, q: @user.pincode), warning: t("user.archived")) and return if @user.archived?
+    redirect_to(pos_punch_clock_path(api_key: @resource.access_token, q: @user.pincode), warning: t("user.blocked")) and return if @user.is_blocked?
 
-    if params[:employee][:state] == @employee.state
-      redirect_to pos_punch_clock_url(api_key: @resource.access_token, q: @employee.pincode), warning: t("state_eq_current_state") and return
+    if params[:user][:state] == @user.state
+      redirect_to pos_punch_clock_url(api_key: @resource.access_token, q: @user.pincode), warning: t("state_eq_current_state") and return
     end
-    @employee.punch @resource, params[:employee][:state], request.remote_ip
-    @employee.update state: params[:employee][:state]
+    @user.punch @resource, params[:user][:state], request.remote_ip
+    @user.update state: params[:user][:state]
     redirect_to pos_punch_clock_url(api_key: @resource.access_token)
   end
 
   private
 
     def verify_employee
-      @employee = case true
-      when params[:employee_id].present?; Employee.by_tenant.find(params.delete(:employee_id))
-      when params[:employee].present?; Employee.by_tenant.find(params[:employee][:id])
-      when params[:q].present?; Employee.by_tenant.find_by(pincode: params[:q])
+      @user = case true
+      when params[:user_id].present?; User.by_tenant.find(params.delete(:user_id))
+      when params[:user].present?; User.by_tenant.find(params[:user][:id])
+      when params[:q].present?; User.by_tenant.find_by(pincode: params[:q])
       else nil
       end
-      redirect_to pos_punch_clock_path(api_key: @resource.access_token) and return unless @employee
+      redirect_to pos_punch_clock_path(api_key: @resource.access_token) and return unless @user
     end
 
     def verify_token

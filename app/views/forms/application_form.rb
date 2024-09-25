@@ -212,7 +212,7 @@ class ApplicationForm < Superform::Rails::Form
   #   def template(&)
   #     fieldset(class: "inline-block whitespace-nowrap p-px border-2 rounded-full focus-within:outline focus-within:outline-blue-400") do
   #       # plain collection_radio_buttons(**attributes) do |builder|
-  #       plain collection_radio_buttons(:employee, :punching_absence, [ true, "Option 1", false, "option 2" ]) do |builder|
+  #       plain collection_radio_buttons(:user, :punching_absence, [ true, "Option 1", false, "option 2" ]) do |builder|
   #         span(class: "relative inline-block") do
   #           plain builder.radio_button class: "sr-only peer"
   #           plain builder.label(class: "border-2 border-transparent rounded-full block py-1 px-2 peer-checked:bg-blue-500 peer-checked:text-white hover:bg-blue-200 hover:border-blue-500")
@@ -339,7 +339,6 @@ class ApplicationForm < Superform::Rails::Form
     when /tenant_id$/; plain(model&.tenant.name)
     when /team_id$/; div(class: "flex") { link_to(model&.team.name, team_url(model&.team), class: "flex place-items-center truncate mort-btn-secondary") } # plain(model&.team.name)
     when /user_id$/; plain(model&.user.name)
-    when /employee_id$/; plain(model&.employee.name)
     when /punch_clock_id$/; plain(model&.punch_clock.name) rescue I18n.t("punches.form.punched_on_app")
     else; plain(fformat(model, field.key))
     end

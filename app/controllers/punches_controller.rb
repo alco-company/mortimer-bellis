@@ -22,14 +22,14 @@ class PunchesController < MortimerController
     # implement on the controller inheriting this concern
     def create_callback(res)
       begin
-        PunchCard.recalculate employee: res.employee, across_midnight: false, date: res.punched_at.to_date
+        PunchCard.recalculate user: res.user, across_midnight: false, date: res.punched_at.to_date
       rescue => e
         say e
       end
     end
     def update_callback(res)
       begin
-        PunchCard.recalculate employee: res.employee, across_midnight: false, date: res.punched_at.to_date
+        PunchCard.recalculate user: res.user, across_midnight: false, date: res.punched_at.to_date
       rescue => e
          say e
       end
@@ -43,6 +43,6 @@ class PunchesController < MortimerController
     # ie - it cannot call methods on the object istself!
     #
     def destroy_callback(res)
-      "PunchCard.recalculate( employee: Employee.find(#{res.employee.id}), across_midnight: false, date: '#{res.punched_at.to_date}')"
+      "PunchCard.recalculate( user: User.find(#{res.user.id}), across_midnight: false, date: '#{res.punched_at.to_date}')"
     end
 end

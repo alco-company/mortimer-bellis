@@ -4,8 +4,7 @@ da:
   hours_minutes: "%{hours}t %{minutes}m"
   select_team: Vælg hold
   last_payroll_at: Lønperiode til og med
-  import_employee: Videre
-  import_employees: Indlæs medarbejder stamdata
+  import_users: Indlæs medarbejder stamdata
   form_errors_prohibited: "%{errors} fejl forhindrede denne post i at blive gemt"
   "yes": Ja
   "no": Nej
@@ -111,11 +110,10 @@ da:
     holidays: Helligdage
     tenant: Konto
     tenants: Konti
-    users: Brugere
+    users: Medarbejdere
     teams: Hold
     locations: Arbejdssteder
     punch_clocks: Stempelure
-    employees: Medarbejdere
     punch_cards: Stempelkort
     punches: Stemplinger
     motds: Dagens beskeder
@@ -136,10 +134,10 @@ da:
   profile:
     overview: Oversigt
     invite_new_user: Invitér ny bruger
-    invite_new_employee: Invitér ny medarbejder
+    invite_new_ user: Invitér ny medarbejder
 
   pos:
-    employee:
+    user:
       show:
         more_options: mere
         even_more_options: endnu mere
@@ -226,7 +224,7 @@ da:
         user: admin bruger 
         state: Status
       asset_work_session:
-        employee_id: Medarbejder
+        user_id: Medarbejder
         start_at: Startet den 
         stop_at: Stoppet den
         session_type: Type 
@@ -256,14 +254,14 @@ da:
         name: Navn
         layout: Skabelon
         body: Indhold
-      employee:
+      user:
         team_id: "Hold/arbejdsgruppe"
         name: Navn
         mugshot: Profil billede
         country: Land - for at få vist korrekte nationale helligdage - (overstyr hold land)
         pincode: Pinkode
         employee_color: Farve
-        payroll_employee_ident: Løn nummer
+        payroll_user_ident: Løn nummer
         punching_absence: Stempler kun fravær
         access_token: API nøgle
         last_punched_at: sidst stemplet
@@ -301,7 +299,7 @@ da:
       event:
         event_color: Farve
         minutes: Minutter
-        employee_id: Medarbejder
+        user_id: Medarbejder
       faq:
         endpoint: URL 
         field: felt 
@@ -361,17 +359,17 @@ da:
 
       punch:
         punched_at: "stemplet kl:"
-        employee_id: Medarbejder
+        user_id: Medarbejder
         state: Status
         punch_clock_id: Stempelur
         excluded_days: Undtagen disse dage
         comment: Bemærkning
         
       punch_card:
-        employee:
+        user:
           name: Medarbejder
         punched_at: "stemplet kl:"
-        employee_id: Medarbejder
+        user_id: Medarbejder
         location_id: Arbejdssted
         punch_clock_id: Stempelur
         punch_type: Type
@@ -516,7 +514,7 @@ da:
       dashboard:
         one: Overblik 
         other: Overblik
-      employee:
+      user:
         one: medarbejder
         other: medarbejdere
       equipment:

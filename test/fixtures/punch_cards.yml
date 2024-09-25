@@ -2,7 +2,7 @@
 
 # one:
 #   tenant: one
-#   employee: one
+#   user: one
 #   work_date: 2024-04-29
 #   work_minutes: 1
 #   ot1_minutes: 1
@@ -12,7 +12,7 @@
 
 # two:
 #   tenant: two
-#   employee: two
+#   user: two
 #   work_date: 2024-04-29
 #   work_minutes: 1
 #   ot1_minutes: 1

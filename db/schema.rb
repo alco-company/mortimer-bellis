@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_09_22_140549) do
+ActiveRecord::Schema[8.0].define(version: 2024_09_23_105952) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -73,65 +73,6 @@ ActiveRecord::Schema[8.0].define(version: 2024_09_22_140549) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["tenant_id"], name: "index_dashboards_on_tenant_id"
-  end
-
-  create_table "employee_invitations", force: :cascade do |t|
-    t.integer "account_id", null: false
-    t.integer "user_id", null: false
-    t.integer "team_id", null: false
-    t.string "address"
-    t.string "access_token"
-    t.integer "state"
-    t.datetime "invited_at"
-    t.datetime "seen_at"
-    t.datetime "completed_at"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["account_id"], name: "index_employee_invitations_on_account_id"
-    t.index ["team_id"], name: "index_employee_invitations_on_team_id"
-    t.index ["user_id"], name: "index_employee_invitations_on_user_id"
-  end
-
-  create_table "employees", force: :cascade do |t|
-    t.integer "account_id", null: false
-    t.integer "team_id", null: false
-    t.string "name"
-    t.string "pincode"
-    t.string "payroll_employee_ident"
-    t.string "access_token"
-    t.datetime "last_punched_at"
-    t.datetime "punches_settled_at"
-    t.integer "state", default: 0
-    t.string "job_title"
-    t.datetime "birthday"
-    t.datetime "hired_at"
-    t.text "description"
-    t.string "email"
-    t.string "cell_phone"
-    t.string "pbx_extension"
-    t.integer "contract_minutes"
-    t.integer "contract_days_per_payroll"
-    t.integer "contract_days_per_week"
-    t.integer "flex_balance_minutes"
-    t.string "hour_pay"
-    t.string "ot1_add_hour_pay"
-    t.string "ot2_add_hour_pay"
-    t.integer "hour_rate_cent", default: 0
-    t.integer "ot1_hour_add_cent", default: 0
-    t.integer "ot2_hour_add_cent", default: 0
-    t.datetime "tmp_overtime_allowed"
-    t.string "eu_state"
-    t.boolean "blocked"
-    t.string "locale"
-    t.string "time_zone"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.integer "allowed_ot_minutes"
-    t.boolean "punching_absence"
-    t.string "country"
-    t.string "employee_color"
-    t.index ["account_id"], name: "index_employees_on_account_id"
-    t.index ["team_id"], name: "index_employees_on_team_id"
   end
 
   create_table "event_meta", force: :cascade do |t|
@@ -234,7 +175,7 @@ ActiveRecord::Schema[8.0].define(version: 2024_09_22_140549) do
 
   create_table "punch_cards", force: :cascade do |t|
     t.integer "tenant_id", null: false
-    t.integer "employee_id", null: false
+    t.integer "user_id", null: false
     t.date "work_date"
     t.integer "work_minutes"
     t.integer "ot1_minutes"
@@ -243,8 +184,8 @@ ActiveRecord::Schema[8.0].define(version: 2024_09_22_140549) do
     t.datetime "punches_settled_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["employee_id"], name: "index_punch_cards_on_employee_id"
     t.index ["tenant_id"], name: "index_punch_cards_on_tenant_id"
+    t.index ["user_id"], name: "index_punch_cards_on_user_id"
   end
 
   create_table "punch_clocks", force: :cascade do |t|
@@ -264,7 +205,7 @@ ActiveRecord::Schema[8.0].define(version: 2024_09_22_140549) do
 
   create_table "punches", force: :cascade do |t|
     t.integer "tenant_id", null: false
-    t.integer "employee_id", null: false
+    t.integer "user_id", null: false
     t.bigint "punch_clock_id"
     t.datetime "punched_at"
     t.integer "state", default: 0
@@ -273,8 +214,8 @@ ActiveRecord::Schema[8.0].define(version: 2024_09_22_140549) do
     t.datetime "updated_at", null: false
     t.integer "punch_card_id"
     t.string "comment"
-    t.index ["employee_id"], name: "index_punches_on_employee_id"
     t.index ["tenant_id"], name: "index_punches_on_tenant_id"
+    t.index ["user_id"], name: "index_punches_on_user_id"
   end
 
   create_table "settings", force: :cascade do |t|
@@ -490,11 +431,24 @@ ActiveRecord::Schema[8.0].define(version: 2024_09_22_140549) do
     t.datetime "locked_at"
     t.integer "failed_attempts", default: 0, null: false
     t.string "unlock_token"
+    t.integer "team_id", default: 1, null: false
+    t.integer "state", default: 0
+    t.integer "eu_state", default: 0
+    t.string "color"
+    t.string "pincode"
+    t.string "pos_token"
+    t.string "job_title"
+    t.datetime "hired_at"
+    t.datetime "birthday"
+    t.datetime "last_punched_at"
+    t.string "cell_phone"
+    t.boolean "blocked_from_punching", default: false
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["invitation_token"], name: "index_users_on_invitation_token", unique: true
     t.index ["invited_by_id"], name: "index_users_on_invited_by_id"
     t.index ["invited_by_type", "invited_by_id"], name: "index_users_on_invited_by"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+    t.index ["team_id"], name: "index_users_on_team_id"
     t.index ["tenant_id"], name: "index_users_on_tenant_id"
     t.index ["unlock_token"], name: "index_users_on_unlock_token", unique: true
   end
@@ -506,16 +460,6 @@ ActiveRecord::Schema[8.0].define(version: 2024_09_22_140549) do
   add_foreign_key "calendars", "tenants"
   add_foreign_key "dashboards", "tenants"
   add_foreign_key "dashboards", "tenants", on_delete: :cascade
-  add_foreign_key "employee_invitations", "teams"
-  add_foreign_key "employee_invitations", "teams", on_delete: :cascade
-  add_foreign_key "employee_invitations", "tenants", column: "account_id"
-  add_foreign_key "employee_invitations", "tenants", column: "account_id", on_delete: :cascade
-  add_foreign_key "employee_invitations", "users"
-  add_foreign_key "employee_invitations", "users", on_delete: :cascade
-  add_foreign_key "employees", "teams"
-  add_foreign_key "employees", "teams", on_delete: :cascade
-  add_foreign_key "employees", "tenants", column: "account_id"
-  add_foreign_key "employees", "tenants", column: "account_id", on_delete: :cascade
   add_foreign_key "event_meta", "events"
   add_foreign_key "events", "calendars"
   add_foreign_key "events", "tenants"
@@ -524,14 +468,10 @@ ActiveRecord::Schema[8.0].define(version: 2024_09_22_140549) do
   add_foreign_key "filters", "tenants"
   add_foreign_key "filters", "tenants", on_delete: :cascade
   add_foreign_key "locations", "tenants", on_delete: :cascade
-  add_foreign_key "punch_cards", "employees"
-  add_foreign_key "punch_cards", "employees", on_delete: :cascade
   add_foreign_key "punch_cards", "tenants"
   add_foreign_key "punch_cards", "tenants", on_delete: :cascade
   add_foreign_key "punch_clocks", "locations", on_delete: :cascade
   add_foreign_key "punch_clocks", "tenants", on_delete: :cascade
-  add_foreign_key "punches", "employees"
-  add_foreign_key "punches", "employees", on_delete: :cascade
   add_foreign_key "punches", "punch_cards", on_delete: :cascade
   add_foreign_key "punches", "tenants"
   add_foreign_key "punches", "tenants", on_delete: :cascade
@@ -544,6 +484,9 @@ ActiveRecord::Schema[8.0].define(version: 2024_09_22_140549) do
   add_foreign_key "solid_queue_scheduled_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
   add_foreign_key "teams", "tenants"
   add_foreign_key "teams", "tenants", on_delete: :cascade
+  add_foreign_key "users", "teams"
+  add_foreign_key "users", "teams", on_delete: :cascade
   add_foreign_key "users", "tenants"
+  add_foreign_key "users", "tenants", on_delete: :cascade
   add_foreign_key "users", "tenants", on_delete: :cascade
 end

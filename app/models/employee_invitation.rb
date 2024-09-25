@@ -52,6 +52,6 @@ class EmployeeInvitation < ApplicationRecord
   end
 
   def self.form(resource, editable = true)
-    EmployeeInvitations::Form.new resource, editable: editable, enctype: "multipart/form-data"
+    UserInvitations::Form.new resource, editable: editable, enctype: "multipart/form-data"
   end
 end

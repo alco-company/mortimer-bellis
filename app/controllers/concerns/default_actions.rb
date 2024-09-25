@@ -2,7 +2,7 @@ module DefaultActions
   extend ActiveSupport::Concern
 
   included do
-    # GET /employees or /employees.json
+    # GET /users or /users.json
     def index
       params.permit(:url)[:url] = resources_url
       @pagy, @records = pagy(@resources)
@@ -20,21 +20,21 @@ module DefaultActions
       render_to_string layout: "pdf", formats: :pdf
     end
 
-    # GET /employees/1 or /employees/1.json
+    # GET /users/1 or /users/1.json
     def show
     end
 
-    # GET /employees/new
+    # GET /users/new
     def new
       @resource.tenant_id = Current.tenant.id if resource_class.has_attribute? :tenant_id
       @resource.user_id = Current.user.id if resource_class.has_attribute? :user_id
     end
 
-    # GET /employees/1/edit
+    # GET /users/1/edit
     def edit
     end
 
-    # POST /employees or /employees.json
+    # POST /users or /users.json
     def create
       @resource = resource_class.new(resource_params)
       @resource.tenant_id = Current.tenant.id if resource_class.has_attribute? :tenant_id
@@ -53,7 +53,7 @@ module DefaultActions
       end
     end
 
-    # PATCH/PUT /employees/1 or /employees/1.json
+    # PATCH/PUT /users/1 or /users/1.json
     def update
       respond_to do |format|
         if @resource.update(resource_params)
@@ -69,7 +69,7 @@ module DefaultActions
       end
     end
 
-    # DELETE /employees/1 or /employees/1.json
+    # DELETE /users/1 or /users/1.json
     def destroy
       if params[:all].present? && params[:all] == "true"
         DeleteAllJob.perform_now tenant: Current.tenant, resource_class: resource_class.to_s, sql_resources: @resources.to_sql

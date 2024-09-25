@@ -8,7 +8,7 @@ class Teams::Form < ApplicationForm
       row field(:time_zone).select(ActiveSupport::TimeZone.all.collect { |tz| [ "(GMT#{ActiveSupport::TimeZone.seconds_to_utc_offset(tz.utc_offset)}) #{tz.name}", tz.tzinfo.name ] }, class: "mort-form-text")
       row field(:blocked).boolean(class: "mort-form-bool")
       div do
-        div(class: "mort-btn-secondary", data: { action: "click->employee#toggleAdvanced" }) { I18n.t("employees.advanced_configuration") }
+        div(class: "mort-btn-secondary", data: { action: "click->employee#toggleAdvanced" }) { I18n.t("users.advanced_configuration") }
       end if @editable
       div(data: { employee_target: "advanced" }, class: "#{"hidden" if @editable}") do
         row field(:country).input(class: "mort-form-text")

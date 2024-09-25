@@ -15,7 +15,7 @@ class PunchesTest < ApplicationSystemTestCase
   #     click_on "New punch"
 
   #     fill_in "Tenant", with: @punch.tenant_id
-  #     fill_in "Employee", with: @punch.employee_id
+  #     fill_in "User", with: @punch.user_id
   #     fill_in "Punch clock", with: @punch.punch_clock
   #     fill_in "Punched at", with: @punch.punched_at
   #     fill_in "Remote ip", with: @punch.remote_ip
@@ -31,7 +31,7 @@ class PunchesTest < ApplicationSystemTestCase
   #     click_on "Edit this punch", match: :first
 
   #     fill_in "Tenant", with: @punch.tenant_id
-  #     fill_in "Employee", with: @punch.employee_id
+  #     fill_in "User", with: @punch.user_id
   #     fill_in "Punch clock", with: @punch.punch_clock
   #     fill_in "Punched at", with: @punch.punched_at.to_s
   #     fill_in "Remote ip", with: @punch.remote_ip

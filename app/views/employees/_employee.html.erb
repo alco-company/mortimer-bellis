@@ -1,19 +1,19 @@
-<li id="<%= dom_id employee %>" class="flex items-center justify-between gap-x-6 py-5 ">
+<li id="<%= dom_id user %>" class="flex items-center justify-between gap-x-6 py-5 ">
   <div class="min-w-0 w-full columns-3 md:columns-5 lg:columns-6">
-    <%= render_text_column value: link_to(employee.name, employee_url(employee)), css: "truncate mort-link-primary "  do |value| %>
+    <%= render_text_column value: link_to(user.name, user_url(user)), css: "truncate mort-link-primary "  do |value| %>
       <%= value %>
       <% if global_queries? Current.user %>
-        <p class="text-xs"><%=  link_to employee.tenant.name, employee.tenant %> </p>
+        <p class="text-xs"><%=  link_to user.tenant.name, user.tenant %> </p>
       <% end %>
     <% end %>
-    <%= render_text_column value: link_to(employee.team.name, team_url(employee.team)), css: "truncate mort-link-primary" %>
-    <%= render_boolean_column value: employee.punching_absence, css: "text-right" %>
-    <%= render_text_column value: Employee.locales(employee.locale), css: "hidden md:block truncate" %>
-    <%= render_text_column value: employee.time_zone, css: "hidden md:block truncate" %>
-    <%= render_datetime_column value: employee.updated_at, css: "hidden lg:block" %>
+    <%= render_text_column value: link_to(user.team.name, team_url(user.team)), css: "truncate mort-link-primary" %>
+    <%= render_boolean_column value: user.punching_absence, css: "text-right" %>
+    <%= render_text_column value: User.locales(user.locale), css: "hidden md:block truncate" %>
+    <%= render_text_column value: user.time_zone, css: "hidden md:block truncate" %>
+    <%= render_datetime_column value: user.updated_at, css: "hidden lg:block" %>
   </div>
   <div class="flex flex-none items-center gap-x-4 ">
 <!--    <a href="<%#= product_stock_items_url(product) %>" class=" rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:block">Lokationer<span class="sr-only">, GraphQL API</span></a>-->
-    <%= render_contextmenu resource: employee, turbo_frame: "form", resource_class: Employee, alter: true, links: [ edit_employee_url(employee), employee_url(employee) ] %>
+    <%= render_contextmenu resource: user, turbo_frame: "form", resource_class: User, alter: true, links: [ edit_user_url(user), user_url(user) ] %>
   </div>
 </li>

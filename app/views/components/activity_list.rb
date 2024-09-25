@@ -161,7 +161,7 @@ class ActivityList < Phlex::HTML
           span(class: "flex flex-1 space-x-2 truncate") do
             punch_clock_svg
             span(class: "flex flex-col truncate text-sm text-gray-500") do
-              span(class: "truncate") { I18n.t("landing.activity_description", name: item.employee.name, punch_clock: item.punch_clock.name) }
+              span(class: "truncate") { I18n.t("landing.activity_description", name: item.user.name, punch_clock: item.punch_clock.name) }
               span do
                 span(class: "font-medium text-gray-900 mr-2") { I18n.l(item.punched_at, format: :ultra_short) }
                 plain WORK_STATE_H[item.state]
@@ -202,7 +202,7 @@ class ActivityList < Phlex::HTML
             p(
               class:
                 "truncate text-gray-500 group-hover:text-gray-900"
-            ) { I18n.t("landing.activity_description", name: item.employee.name, punch_clock: item.punch_clock.name) }
+            ) { I18n.t("landing.activity_description", name: item.user.name, punch_clock: item.punch_clock.name) }
           end
         end
       end

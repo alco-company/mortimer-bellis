@@ -5,10 +5,10 @@ class Team < ApplicationRecord
   include Stateable
   include Calendarable
 
-  has_many :employees, dependent: :destroy
-  has_many :employee_invitations, dependent: :destroy
-  has_many :punch_cards, through: :employees
-  # has_and_belongs_to_many :employees
+  has_many :users, dependent: :destroy
+  has_many :user_invitations, dependent: :destroy
+  has_many :punch_cards, through: :users
+  # has_and_belongs_to_many :users
 
   scope :by_name, ->(name) { where("name LIKE ?", "%#{name}%") if name.present? }
   scope :by_team_color, ->(team_color) { where("team_color LIKE ?", "%#{team_color}%") if team_color.present? }

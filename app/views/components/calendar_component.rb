@@ -596,7 +596,7 @@ class CalendarComponent < ApplicationComponent
 
   def calendar_punches(window, &block)
     calendars.each do |calendar|
-      if calendar.calendarable_type == "Employee"
+      if calendar.calendarable_type == "User"
         calendar.calendarable.punch_cards.windowed(window).map(&:punches).flatten.each do |punch|
           yield punch
         end

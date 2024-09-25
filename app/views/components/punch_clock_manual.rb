@@ -3,14 +3,14 @@ class PunchClockManual < ApplicationComponent
   include Phlex::Rails::Helpers::FormWith
   include Phlex::Rails::Helpers::HiddenField
 
-  attr_accessor :employee
+  attr_accessor :user
 
-  def initialize(employee: nil)
-    @employee = employee || false
+  def initialize(user: nil)
+    @user = user || false
   end
 
   def view_template(&block)
-    form_with id: "manualpunch", data: { pos_employee_target: "manualForm" }, url: helpers.pos_employee_url(api_key: employee.access_token, tab: "payroll"), method: :post do
+    form_with id: "manualpunch", data: { pos_employee_target: "manualForm" }, url: helpers.pos_employee_url(api_key: user.access_token, tab: "payroll"), method: :post do
       div(class: "mx-4 my-2") do
         div do
           h2(class: "text-base font-semibold leading-7 text-gray-900") do
@@ -45,13 +45,13 @@ class PunchClockManual < ApplicationComponent
   end
 
   # def punch_in
-  #   return if employee.in?
+  #   return if user.in?
   #   div(class: "justify-self-end") do
   #     button_tag helpers.t("+"), type: "submit", form: "inform", class: "bg-green-500 text-white block rounded-md px-3 py-2 text-xl font-medium"
-  #     form_with url: helpers.pos_employee_url(api_key: employee.access_token), id: "inform", method: :post do
-  #       hidden_field :employee, :api_key, value: employee.access_token
-  #       hidden_field :employee, :state, value: :in
-  #       hidden_field :employee, :id, value: employee.id
+  #     form_with url: helpers.pos_employee_url(api_key: user.access_token), id: "inform", method: :post do
+  #       hidden_field :user, :api_key, value: user.access_token
+  #       hidden_field :user, :state, value: :in
+  #       hidden_field :user, :id, value: user.id
   #     end
   #   end
   # end

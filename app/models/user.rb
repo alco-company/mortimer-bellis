@@ -3,7 +3,8 @@ class User < ApplicationRecord
   include Punchable
 
   belongs_to :tenant
-  has_many :employee_invitations, dependent: :destroy
+  belongs_to :team
+  has_many :user_invitations, dependent: :destroy
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable

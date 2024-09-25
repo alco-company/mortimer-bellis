@@ -14,7 +14,7 @@ module Resourceable
 
     def resource_class
       @resource_class ||= case params_ctrl.split("/").last
-      when "invitations"; EmployeeInvitation
+      # when "invitations"; UserInvitation
       when "notifications"; Noticed::Notification
       else; params_ctrl.split("/").last.classify.constantize rescue nil
       end
@@ -57,7 +57,7 @@ module Resourceable
     def parent
       parent_class, parent_id, _ = request.path.scan(/\/(team|employee|tenant|calendar)s\/(\d+)\/(calendars|events)/).first
       @parent ||= parent_class.classify.constantize.find(parent_id)
-      # @parent ||= parent_class.find(params_parent(:team_id) || params_parent(:employee_id) || params_parent(:tenant_id))
+      # @parent ||= parent_class.find(params_parent(:team_id) || params_parent(:user_id) || params_parent(:tenant_id))
     end
 
     def parent_class
@@ -65,7 +65,7 @@ module Resourceable
       @parent_class ||= parent_class.classify.constantize
       # @parent_class ||= case request.path.split("/").second
       # when "teams"; Team
-      # when "employees"; Employee
+      # when "employees"; User
       # when "tenants"; Tenant
       # end
     end
@@ -139,7 +139,7 @@ module Resourceable
     end
 
     def params_parent(ref)
-      params.permit(:team_id, :employee_id, :tenant_id)[ref]
+      params.permit(:team_id, :user_id, :tenant_id)[ref]
     end
 
     def params_id
