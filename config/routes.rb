@@ -65,15 +65,15 @@ Rails.application.routes.draw do
     get "punch_clock/edit" => "pos/punch_clock#edit", as: :pos_punch_clock_edit
     post "punch_clock" => "pos/punch_clock#create", as: :pos_punch_clock_create
 
-    get "employee" => "pos/employee#show", as: :pos_employee
-    get "employees" => "pos/employee#index", as: :pos_employees
-    get "employee/punches" => "pos/employee#punches", as: :pos_employee_punches
-    get "employee/edit" => "pos/employee#edit", as: :pos_employee_edit
-    get "employee/signup_success" => "pos/employee#signup_success", as: :pos_employee_signup_success
-    post "employee" => "pos/employee#create", as: :pos_employee_create
-    # put "employee" => "pos/employee#update", as: :pos_employee_update
-    patch "employee" => "pos/employee#update", as: :pos_employee_update
-    delete "employee" => "pos/employee#destroy", as: :pos_employee_delete
+    get "user" => "pos/user#show", as: :pos_user
+    get "users" => "pos/user#index", as: :pos_users
+    get "user/punches" => "pos/user#punches", as: :pos_user_punches
+    get "user/edit" => "pos/user#edit", as: :pos_user_edit
+    get "user/signup_success" => "pos/user#signup_success", as: :pos_user_signup_success
+    post "user" => "pos/user#create", as: :pos_user_create
+    # put "user" => "pos/user#update", as: :pos_user_update
+    patch "user" => "pos/user#update", as: :pos_user_update
+    delete "user" => "pos/user#destroy", as: :pos_user_delete
   end
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html

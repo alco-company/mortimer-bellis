@@ -5,6 +5,12 @@ class ActivityList < Phlex::HTML
   end
 
   def view_template
+    div(id: "activity_list") do
+      activity_list
+    end
+  end
+
+  def activity_list
     comment { "Activity section" }
     h2(
       class:

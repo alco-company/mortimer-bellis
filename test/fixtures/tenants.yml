@@ -15,3 +15,11 @@ two:
   locale: en
   color: blue
   time_zone: London
+
+three:
+  name: German Company
+  email: MyString
+  pp_identification: abc
+  locale: de
+  color: blue
+  time_zone: Berlin

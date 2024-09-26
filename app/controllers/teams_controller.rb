@@ -5,7 +5,7 @@ class TeamsController < MortimerController
     def resource_params
       params.require(:team).permit(:tenant_id,
       :name,
-      :team_color,
+      :color,
       :country,
       :locale,
       :time_zone,

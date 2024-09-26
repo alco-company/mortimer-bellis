@@ -1,5 +1,5 @@
 module Pos::EmployeeHelper
-  def set_border_color(employee)
+  def set_border_color(user)
     user.get_team_color
   end
 

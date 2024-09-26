@@ -164,7 +164,7 @@ class Contextmenu < Phlex::HTML
       comment { %(Active: "bg-gray-50", Not Active: "") }
       # archive employee
       if resource_class.to_s == "User"
-        button_to((helpers.archive_employee_url(resource)),
+        button_to((helpers.archive_user_url(resource)),
           class: "block px-3 py-1 text-sm leading-6 text-gray-900",
           role: "menuitem",
           data: { turbo_action: "advance", turbo_frame: "_top" },
@@ -191,14 +191,23 @@ class Contextmenu < Phlex::HTML
         end
       end
       # delete resource
+      delete_record
+    end
+  end
+
+  def delete_record
+    if (resource_class.to_s == "User" && resource == Current.user) ||
+      resource_class.to_s == "Tenant" && Current.tenant == resource
+      span(class: "block px-3 py-1 text-sm leading-6 text-gray-400") do
+        plain I18n.t(".delete")
+      end
+    else
       link_to(
         helpers.new_modal_url(modal_form: "delete", id: resource.id, resource_class: resource_class.to_s.underscore, modal_next_step: "accept", url: @links[1]),
         data: { turbo_stream: true },
-        # link_to((@links[1] || resource),
         class: "block px-3 py-1 text-sm leading-6 text-gray-900",
         role: "deleteitem",
         tabindex: "-1") do
-        # data: { turbo_method: :delete, turbo_confirm: "Are you sure?" }) do
         plain I18n.t(".delete")
         span(class: "sr-only") do
           plain ", "

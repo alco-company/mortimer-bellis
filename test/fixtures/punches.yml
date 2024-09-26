@@ -3,15 +3,17 @@
 one:
   tenant: one
   user: one
-  punch_clock: MyString
+  punch_clock: one
   punched_at: 2024-04-29 22:03:40
-  state: MyString
-  remote_ip: MyString
+  state: in
+  remote_ip: 1.2.3.4
+  comment: a comment
 
 two:
   tenant: two
   user: two
-  punch_clock: MyString
+  punch_clock: two
   punched_at: 2024-04-29 22:03:40
-  state: MyString
-  remote_ip: MyString
+  state: out
+  remote_ip: 1.2.3.4
+  comment: a comment

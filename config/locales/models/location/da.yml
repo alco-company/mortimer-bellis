@@ -29,7 +29,7 @@ da:
       show: Vis
       name: Navn
       email: Email
-      location_color: Farve
+      color: Farve
       phone: Telefon
       pincode: Pinkode
       state: Status

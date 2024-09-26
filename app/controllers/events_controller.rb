@@ -9,7 +9,7 @@ class EventsController < MortimerController
     @resource.duration = "1:00"
     @resource.auto_punch = false
     @resource.event_metum = EventMetum.new
-    @resource.event_color = parent.color
+    @resource.color = parent.color
     super
   end
 
@@ -100,7 +100,7 @@ class EventsController < MortimerController
         :to_date,
         :to_time,
         :duration,
-        :event_color,
+        :color,
         :all_day,
         :work_type,
         :break_minutes,

@@ -13,7 +13,7 @@ class WorkScheduleTemplateList < ApplicationComponent
         label(class: "my-2 font-bold mx-2 ") { I18n.t("calendar.template.event_name") }
         input(type: "text", name: "event[name]", class: "mort-form-text my-2")
         render SelectComponent.new(resource: Event.new,
-          field: :event_color,
+          field: :color,
           field_class: "my-2 grid grid-cols-2 col-span-2",
           label_class: "mx-2 col-span-1",
           value_class: "mt-2 ",

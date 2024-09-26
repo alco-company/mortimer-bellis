@@ -241,7 +241,7 @@ en:
         norm_time_minutes: timer:min i et rul
         name: Hold navn
         time_zone: Tidszone
-        team_color: Hold farve
+        color: Hold farve
         locale: Sprog
         roll_days: antal dage i et rul
         week_workdays: arbejdsdage/uge

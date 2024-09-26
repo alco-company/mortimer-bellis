@@ -5,7 +5,7 @@ class Location < ApplicationRecord
   has_many :punch_clocks, dependent: :destroy
 
   scope :by_name, ->(name) { where("name LIKE ?", "%#{name}%") if name.present? }
-  scope :by_location_color, ->(location_color) { where("location_color LIKE ?", "%#{location_color}%") if location_color.present? }
+  scope :by_location_color, ->(location_color) { where("color LIKE ?", "%#{location_color}%") if location_color.present? }
 
   validates :name, presence: true, uniqueness: { scope: :tenant_id, message: I18n.t("locations.errors.messages.name_exist") }
 

@@ -2,12 +2,10 @@
 
 one:
   tenant: one
-  calendarable: one
-  calendarable_type: Calendarable
+  calendarable: one (Team)
   name: MyString
 
 two:
   tenant: two
-  calendarable: two
-  calendarable_type: Calendarable
+  calendarable: two (Team)
   name: MyString

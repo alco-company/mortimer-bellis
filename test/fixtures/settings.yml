@@ -13,7 +13,7 @@ two:
   tenant: two
   setable: two
   setable_type: Setable
-  key: MyString
+  key: deleteable
   priority: 1
   format: MyString
   value: MyString

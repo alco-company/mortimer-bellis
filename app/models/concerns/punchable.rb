@@ -1,6 +1,7 @@
 module Punchable
   extend ActiveSupport::Concern
   included do
+    has_many :punches, dependent: :destroy
     # def todays_punches(date: Date.current)
     #   punches.where(punched_at: date.beginning_of_day..date.end_of_day).order(punched_at: :desc)
     # end

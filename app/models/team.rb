@@ -10,15 +10,11 @@ class Team < ApplicationRecord
   # has_and_belongs_to_many :users
 
   scope :by_name, ->(name) { where("name LIKE ?", "%#{name}%") if name.present? }
-  scope :by_team_color, ->(team_color) { where("team_color LIKE ?", "%#{team_color}%") if team_color.present? }
+  scope :by_team_color, ->(team_color) { where("color LIKE ?", "%#{team_color}%") if team_color.present? }
   scope :by_locale, ->(locale) { where("locale LIKE ?", "%#{locale}%") if locale.present? }
   scope :by_time_zone, ->(time_zone) { where("time_zone LIKE ?", "%#{time_zone}%") if time_zone.present? }
 
   validates :name, presence: true, uniqueness: { scope: :tenant_id, message: "already exists for this tenant" }
-
-  def color
-    team_color
-  end
 
   def self.filtered(filter)
     flt = filter.filter

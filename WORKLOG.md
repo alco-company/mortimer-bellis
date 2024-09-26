@@ -46,7 +46,11 @@ If Solid Queue bites me again, look here: https://github.com/rails/solid_queue/i
 
 ## CHANGELOG
 
-## 25/9/2024
+### 26/9/2024
+
+* more work on making tests green - now system tests work too, (or getting there)
+
+### 25/9/2024
 
 * rename employee to user
 * remove around_action on ActionCable connection

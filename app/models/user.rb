@@ -1,9 +1,9 @@
 class User < ApplicationRecord
+  include Tenantable
   include Localeable
   include Punchable
   include Stateable
 
-  belongs_to :tenant
   belongs_to :team
 
   # Include default devise modules. Others available are:
@@ -71,6 +71,12 @@ class User < ApplicationRecord
     end
 
     self.update(role: r)
+  end
+
+  def get_team_color
+    team.color.blank? ? "border-white" : team.color
+  rescue
+    "border-white"
   end
 
   def in?

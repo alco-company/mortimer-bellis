@@ -2,10 +2,15 @@
 
 one:
   tenant: one
-  view: tenants
-  filter: {"name":"nish"}
+  view: users
+  filter: {"name":"joe"}
 
 two:
   tenant: two
   view: MyString
-  filter: 
+  # filter:
+
+filtered:
+  tenant: three
+  view: tenants
+  filter: {"name":"tish"}

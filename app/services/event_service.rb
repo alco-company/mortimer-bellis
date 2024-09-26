@@ -85,7 +85,7 @@ class EventService
         :from_time,
         :to_date,
         :to_time,
-        :event_color,
+        :color,
         :duration,
         :all_day,
         :work_type,

@@ -294,9 +294,9 @@ class EventComponent < ApplicationComponent
   # comment { "name of day" }
   def color_field
     div(class: "my-4 sm:grid sm:grid-cols-3 sm:items-start") do
-      label(for: "event_name", class: "block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5 self-center") { plain I18n.t("activerecord.attributes.event.event_color") }
+      label(for: "event_name", class: "block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5 self-center") { plain I18n.t("activerecord.attributes.event.color") }
       render SelectComponent.new(resource: resource,
-        field: :event_color,
+        field: :color,
         field_class: "mt-2 flex sm:col-span-2 sm:mt-0 sm:place-content-end",
         label_class: "hidden",
         value_class: "mt-2 sm:col-span-2 sm:mt-0",

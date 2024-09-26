@@ -28,7 +28,7 @@ da:
       delete: Slet
       show: Vis
       name: Navn
-      team_color: Hold farve
+      color: Hold farve
       locale: Sprog
       time_zone: Tidszone
       email: Email

@@ -1,5 +1,5 @@
 class SettingsController < MortimerController
-  before_action :set_setting, only: %i[ show edit update destroy ]
+  # before_action :set_setting, only: %i[ show edit update destroy ]
 
   # # GET /settings or /settings.json
   # def index
@@ -59,12 +59,12 @@ class SettingsController < MortimerController
 
   private
     # Use callbacks to share common setup or constraints between actions.
-    def set_setting
-      @setting = Setting.find(params[:id])
-    end
+    # def set_setting
+    #   @setting = Setting.find(params[:id])
+    # end
 
     # Only allow a list of trusted parameters through.
-    def setting_params
+    def resource_params
       params.require(:setting).permit(:tenant_id, :setable_id, :setable_type, :key, :priority, :format, :value)
     end
 end

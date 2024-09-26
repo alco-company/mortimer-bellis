@@ -4,9 +4,7 @@ class TenantsControllerTest < ActionDispatch::IntegrationTest
   setup do
     Current.tenant = tenants(:one)
     @tenant = tenants(:one)
-    get "/users/sign_in"
     sign_in users(:one)
-    post user_session_url
   end
 
   test "should get index" do
@@ -35,7 +33,6 @@ class TenantsControllerTest < ActionDispatch::IntegrationTest
       assert_response :success
       post tenants_url, params: { tenant: { email: @tenant.email, locale: @tenant.locale, country: "DK", color: "green", tax_number: "12345678", name: @tenant.name, pp_identification: @tenant.pp_identification, time_zone: @tenant.time_zone } }
       assert_response :success
-      debugger
     end
     # assert_redirected_to tenants_url()
   end

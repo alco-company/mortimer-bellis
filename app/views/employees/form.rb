@@ -5,7 +5,7 @@ class Employees::Form < ApplicationForm
       row field(:name).input(class: "mort-form-text")
       row field(:mugshot).file(class: "mort-form-file")
       row field(:pincode).input(class: "mort-form-text")
-      row field(:user_color).select(Team.colors, prompt: I18n.t(".select_team_color"), class: "mort-form-text")
+      row field(:color).select(Team.colors, prompt: I18n.t(".select_team_color"), class: "mort-form-text")
       row field(:punching_absence).boolean(class: "mort-form-bool")
       row field(:email).input(class: "mort-form-text")
       row field(:cell_phone).input(class: "mort-form-text")

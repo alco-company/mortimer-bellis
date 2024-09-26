@@ -20,6 +20,10 @@ da:
     destroy:
       post: Indstillingen blev slettet
 
+    errors:
+      messages:
+        key_exist: Nøglen findes allerede
+
     show:
       pos_punch_clock: indstilling
     list:

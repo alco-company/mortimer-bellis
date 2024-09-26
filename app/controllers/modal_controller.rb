@@ -80,7 +80,7 @@ class ModalController < BaseController
         case @step
         when "new"
           @calendar = Calendar.find(params[:id])
-          @resource = Event.new(tenant: @calendar.tenant, calendar: @calendar, event_color: @calendar.calendarable.color, event_metum: EventMetum.new)
+          @resource = Event.new(tenant: @calendar.tenant, calendar: @calendar, color: @calendar.calendarable.color, event_metum: EventMetum.new)
         when "edit";  @calendar = @resource.calendar
         end
       end
@@ -240,7 +240,7 @@ class ModalController < BaseController
         end
       rescue => e
         say "ERROR on destroy: #{e.message}"
-        redirect_to resources_url, status: 303, error: t("something_went_wrong")
+        redirect_to resources_url, status: 303, error: t("something_went_wrong", error: e.message)
       end
     end
 
