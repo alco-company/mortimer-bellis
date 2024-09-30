@@ -105,3 +105,14 @@ da:
       post: Kalenderen blev opdateret
     destroy:
       post: Kalenderen blev slettet
+
+    list:
+      title: Kalendere
+      new: Ny kalender
+      name: Navn
+      time_zone: Tidszone
+      description: Beskrivelse
+      color: Farve
+      created_at: Oprettet den
+      updated_at: Opdateret den
+      actions: Handlinger

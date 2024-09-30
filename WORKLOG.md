@@ -46,6 +46,10 @@ If Solid Queue bites me again, look here: https://github.com/rails/solid_queue/i
 
 ## CHANGELOG
 
+### 30/9/2024
+
+* keep going - making system tests green
+
 ### 26/9/2024
 
 * more work on making tests green - now system tests work too, (or getting there)
