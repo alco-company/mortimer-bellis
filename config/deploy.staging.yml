@@ -93,8 +93,11 @@ env:
     SSL_DOMAIN: 'anemone.mortimer.pro'
     WEB_HOST: 'anemone.mortimer.pro'
     MORTIMER_VERSION: '0.8.1'
+    DINERO_APP_CALLBACK: 'https://anemone.mortimer.pro/dinero/callback'
   secret:
     - RAILS_MASTER_KEY
+    - DINERO_APP_ID
+    - DINERO_APP_SECRET
     - SMTP_PASSWORD
     - WAVIX_APP_ID
 
