@@ -14,7 +14,7 @@
 
       </div>
       <div class="grid gap-2 grid-cols-1 lg:grid-cols-2 items-center">
-        <%= svg_qr_code_link(resource_url)  %>
+        <%= render partial: "provided_services/#{@resource.service.underscore}/authorize", locals: { path: request.path } unless @resource.authorized? %>
         <%= link_to t("#{ resource_class.table_name}.form.edit"), edit_resource_url, class: "mort-btn-primary" %>
       </div>
     </div>

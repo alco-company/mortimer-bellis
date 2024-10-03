@@ -54,6 +54,7 @@ If Solid Queue bites me again, look here: https://github.com/rails/solid_queue/i
 * setting ENV for staging on DINERO API
 * fixing small errors all around after removing employees, more
 * move entity show to right side - like edit
+* missing authorize link on provided_services
 
 ### 30/9/2024
 
