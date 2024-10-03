@@ -1,5 +1,6 @@
 class DashboardsController < MortimerController
   before_action :set_dashboard, only: %i[ show ]
+
   # before_action :set_dashboard, only: %i[ show edit update destroy ]
 
   # # GET /dashboards or /dashboards.json

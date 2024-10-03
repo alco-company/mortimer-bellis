@@ -46,6 +46,10 @@ If Solid Queue bites me again, look here: https://github.com/rails/solid_queue/i
 
 ## CHANGELOG
 
+### 1-3/10/2024
+
+* adding Dinero API to Mortimer - affording integration with Dinero accounting system
+
 ### 30/9/2024
 
 * keep going - making system tests green

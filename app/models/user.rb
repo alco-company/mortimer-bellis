@@ -15,9 +15,11 @@ class User < ApplicationRecord
   has_many :user_invitations, class_name: "User", as: :invited_by
 
   has_many :notifications, as: :recipient, class_name: "Noticed::Notification"
+  has_many :provided_services, foreign_key: "authorized_by_id", inverse_of: :authorized_by
 
   enum :role, { user: 0, admin: 1, superadmin: 2 }
   has_one_attached :mugshot
+  has_secure_token :pos_token
 
   scope :by_tenant, ->() {
     if Current.user.present?

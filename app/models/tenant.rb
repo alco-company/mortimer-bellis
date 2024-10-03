@@ -8,6 +8,7 @@ class Tenant < ApplicationRecord
   include Colorable
   include Calendarable
   include Setable
+  include Serviceable
 
   has_many :background_jobs, dependent: :destroy
   has_many :dashboards, dependent: :destroy
@@ -21,6 +22,7 @@ class Tenant < ApplicationRecord
   has_many :users, dependent: :destroy
 
   has_one_attached :logo
+  has_secure_token :access_token
 
   scope :by_tenant, ->() { Current.user.global_queries? ? all : where(id: Current.tenant.id) }
 
@@ -30,6 +32,11 @@ class Tenant < ApplicationRecord
 
   validates :name, presence: true, uniqueness: { message: I18n.t("tenants.errors.messages.name_exist") }
   validates :email, presence: true
+
+  def has_this_access_token(token)
+    access_token == token
+  end
+
 
   def all_calendars
     calendars
