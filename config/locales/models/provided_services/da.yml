@@ -48,3 +48,6 @@ da:
     errors:
       messages:
         name_exist: "Udvidelsen/integrationen findes allerede"
+        name_blank: "Navn kan ikke være blank"
+        service_blank: "Service klassen kan ikke være blank"
+        service_does_not_exist: "Service klassen findes ikke"

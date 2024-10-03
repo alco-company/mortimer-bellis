@@ -65,6 +65,7 @@ class ProvidedServicesController < MortimerController
 
     # Only allow a list of trusted parameters through.
     def resource_params
+      params[:provided_service][:authorized_by_id] = Current.user.id
       params.require(:provided_service).permit(:tenant_id, :authorized_by_id, :name, :service, :service_params)
     end
 end

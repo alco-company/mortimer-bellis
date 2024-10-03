@@ -7,7 +7,15 @@ class ProvidedService < ApplicationRecord
   scope :by_service, ->(service) { where("service LIKE ?", "%#{service}%") if service.present? }
   scope :by_params, ->(params) { where("params LIKE ?", "%#{params}%") if params.present? }
 
-  validates :name, presence: true, uniqueness: { scope: :tenant_id, message: I18n.t("locations.errors.messages.name_exist") }
+  validates :name, presence: true, uniqueness: { scope: :tenant_id, message: I18n.t("provided_services.errors.messages.name_exist") }
+  validates :service, presence: true, uniqueness: { scope: :tenant_id, message: I18n.t("provided_services.errors.messages.name_exist") }
+  validate :service_class_exists
+
+  def service_class_exists
+    unless (service&.classify&.constantize&.respond_to?(:new) rescue false)
+      errors.add(:service, I18n.t("provided_services.errors.messages.service_does_not_exist"))
+    end
+  end
 
   def self.filtered(filter)
     flt = filter.filter
