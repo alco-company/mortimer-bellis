@@ -1,14 +1,14 @@
 <li id="<%= dom_id punch %>" class="flex items-center justify-between gap-x-6 py-5">
   <div class="min-w-0 w-full columns-3 md:columns-4 lg:columns-5">
-    <%= render_text_column value: link_to(punch.user.name, user_url(punch.user)), css: "truncate mort-link-primary" do |value| %>
+    <%= render_text_column value: show_resource_link(resource: punch.user), css: "truncate mort-link-primary" do |value| %>
       <%= value %>
       <% if global_queries? Current.user %>
-        <p class="text-xs"><%= link_to punch.tenant.name, punch.tenant %> </p>
+        <p class="text-xs"><%= show_resource_link(resource: punch.tenant) %> </p>
       <% end %>
     <% end %>
     <%= render_text_column value: show_link_to_punch_card(punch), css: "mort-link-primary text-right" %>
     <%= render_text_column value: tell_state(punch), css: "truncate" %>
-    <%= render_text_column value: show_link_to_punch_clock(punch.punch_clock), css: "hidden md:block truncate" %>
+    <%= render_text_column value: show_resource_link(resource: punch.punch_clock), css: "hidden mort-link-primary md:block truncate" %>
     <%= render_datetime_column value: punch.updated_at, css: "hidden lg:block" %>
   </div>
   <div class="flex flex-none items-center gap-x-4 ">

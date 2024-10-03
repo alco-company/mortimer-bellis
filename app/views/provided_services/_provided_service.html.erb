@@ -1,9 +1,9 @@
 <li id="<%= dom_id provided_service %>" class="flex items-center justify-between gap-x-6 py-5">
   <div class="min-w-0 w-full columns-2 md:columns-4">
-    <%= render_text_column value: link_to(provided_service.name, provided_service_url(provided_service)), css: "truncate mort-link-primary" do |value| %>
+    <%= render_text_column value: show_resource_link(resource: provided_service), css: "truncate mort-link-primary" do |value| %>
       <%= value %>
       <% if global_queries? Current.user %>
-        <p class="text-xs"><%=  link_to provided_service.tenant.name, provided_service.tenant %> </p>
+        <p class="text-xs"><%= show_resource_link(resource: provided_service.tenant) %> </p>
       <% end %>
     <% end %>
     <%= render_text_column value: provided_service.service, css: "truncate" %>

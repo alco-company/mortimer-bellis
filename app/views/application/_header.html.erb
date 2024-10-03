@@ -7,7 +7,7 @@
       <%= link_to t(:state_order), new_modal_url(modal_form: 'state', resource_class: 'punch_card'), class: "inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10", data: { turbo_stream: true } %>
     <% when 'users' %>
       <%= link_to_user_status %>
-      <%= link_to t("user_invitations.link"), user_invitations_url, class: "inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10", data: { turbo_stream: true } %>
+      <%#= link_to t("user_invitations.link"), user_invitations_url, class: "inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10", data: { turbo_stream: true } %>
     <% when 'teams' %>
       <%= link_to_team_users_status('all') %>
     <% end %>

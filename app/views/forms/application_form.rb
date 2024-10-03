@@ -367,8 +367,6 @@ class ApplicationForm < Superform::Rails::Form
   def around_template(&)
     super do
       div(class: "") do
-        error_messages
-        yield
         div(class: "flex flex-row flex-row-reverse m-5 gap-4") do
           if @editable
             submit(submit_string, tabindex: "0", class: "mort-btn-primary")
@@ -380,6 +378,8 @@ class ApplicationForm < Superform::Rails::Form
             ) { helpers.t("cancel") }
           end
         end
+        error_messages
+        yield
       end
     end
   end
