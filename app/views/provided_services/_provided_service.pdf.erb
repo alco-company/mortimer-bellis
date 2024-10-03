@@ -1,0 +1,6 @@
+<tr class="flex gap-x-6 py-5">
+  <%= render_text_column value: link_to(provided_service.name, provided_service_url(provided_service)), table: :row, css: "truncate mort-link-primary" %>
+  <%= render_text_column value: provided_service.service, table: :row, css: "truncate" %>
+  <%= render_text_column value: provided_service.service_params, table: :row, css: "truncate" %>
+  <%= render_datetime_column value: provided_service.updated_at, table: :row, css: "" %>
+</tr>

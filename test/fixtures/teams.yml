@@ -13,3 +13,10 @@ two:
   color: sky
   locale: en
   time_zone: London
+
+no_dinero_authorization:
+  tenant: no_dinero_authorization
+  name: Team No Dinero Authorization
+  color: sky
+  locale: da
+  time_zone: Copenhagen

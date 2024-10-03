@@ -150,7 +150,7 @@ lots of template examples - https://github.com/thoughtbot/hotwire-example-templa
 https://labs.k.io/lessons-learned-with-hotwire/
 
 https://www.colby.so/posts/handling-modal-forms-with-rails-and-hotwire
-
+https://mattbrictson.com/blog/turbo-modal
 https://rguiscard.medium.com/turbo-stream-in-hotwire-6aec8e7e940c
 
 ### Javascript printer driver
@@ -222,3 +222,11 @@ introduction by Cody Norman https://www.youtube.com/watch?v=i-RwxAVMP-k&list=PLb
 ### Progressive Web Apps - PWA
 
 introduction by Avi Flombaum https://www.youtube.com/watch?v=g_0OaFreX3U&list=PLbHJudTY1K0chrs_E_XFz2pOJ3d8jCayh&index=40
+
+### Rails and Native Apps
+https://native.hotwired.dev/ios/getting-started
+
+### Content Security Policy
+https://www.writesoftwarewell.com/implement-content-security-policy-in-rails/
+https://content-security-policy.com/examples/meta/
+https://guides.rubyonrails.org/security.html#content-security-policy-header

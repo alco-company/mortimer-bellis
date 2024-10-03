@@ -7,6 +7,7 @@ one:
   locale: da
   color: green
   time_zone: Europe/Copenhagen
+  access_token: "12345678"
 
 two:
   name: British Company
@@ -15,6 +16,7 @@ two:
   locale: en
   color: blue
   time_zone: London
+  access_token: "12345678"
 
 three:
   name: German Company
@@ -23,3 +25,13 @@ three:
   locale: de
   color: blue
   time_zone: Berlin
+  access_token: "12345678"
+
+no_dinero_authorization:
+  name: using Dinero
+  email: MyString
+  pp_identification: abc
+  locale: da
+  color: blue
+  time_zone: Europe/Copenhagen
+  access_token: "12345678"

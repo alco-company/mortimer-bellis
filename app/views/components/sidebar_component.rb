@@ -43,7 +43,7 @@ class SidebarComponent < ApplicationComponent
                 end
               end
               a(
-                href: "#",
+                href: provided_services_url,
                 class:
                   "flex items-center gap-x-4 px-2 py-3 text-sm font-semibold leading-6 text-gray-900 hover:bg-gray-50"
               ) do

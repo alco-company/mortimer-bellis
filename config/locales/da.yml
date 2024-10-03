@@ -321,6 +321,11 @@ da:
         color: Farve
         locale: Sprog 
 
+      provided_service:
+        name: Navn
+        service: Service klasse
+        service_params: Service indstillinger
+
       punch:
         punched_at: "stemplet kl:"
         user_id: Medarbejder

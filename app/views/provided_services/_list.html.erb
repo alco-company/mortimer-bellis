@@ -1,0 +1,6 @@
+<div class="min-w-0 w-full columns-2 md:columns-4">
+  <%= render_text_column value: t('.name'), sort: params, field: :name, css: "font-bold truncate" %>
+  <%= render_text_column value: t(".service"), sort: params, field: :service, css: "font-bold truncate" %>
+  <%= render_text_column value: t(".service_params"), sort: params, field: :service_params, css: "hidden md:block font-bold truncate" %>
+  <%= render_text_column value: t(".updated_at"), css: "hidden md:block font-bold " %>
+</div>

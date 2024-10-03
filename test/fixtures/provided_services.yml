@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  tenant: one
+  authorized_by: one
+  name: MyString
+  service: MyString
+  params: MyText
+
+two:
+  tenant: two
+  authorized_by: two
+  name: MyString
+  service: MyString
+  params: MyText

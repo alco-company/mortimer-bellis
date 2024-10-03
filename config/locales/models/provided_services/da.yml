@@ -1,0 +1,50 @@
+da:
+  provided_service:
+    modal:
+      delete_all: 
+        title: Slet alle udvidelser/integrationer
+        instruction: Er du sikker på, at du vil slette alle udvidelser/integrationer?
+      delete:
+        title: Slet denne udvidelse/integration
+        instruction: Er du sikker på, at du vil slette udvidelsen/integrationen %{name}?
+        button: Slet
+
+  provided_services:
+    default_provided_service: Udvidelse/integration
+
+    create:
+      post: Udvidelsen/integrationen blev oprettet
+    update:
+      post: Udvidelsen/integrationen blev opdateret
+    destroy:
+      post: Udvidelsen/integrationen blev slettet
+
+    list:
+      title: Udvidelser/integrationer
+      new: Ny udvidelse/integration
+      edit: Rediger
+      delete: Slet
+      show: Vis
+      name: Navn
+      service: Tjeneste (klasse)
+      updated_at: Opdateret den
+
+    form:
+      new: Ny udvidelse/integration
+      edit: Rediger udvidelse/integration
+
+    new:
+      title: Ny udvidelse/integration
+      create: Opret
+
+    edit:
+      title: Rediger udvidelse/integration
+      update: Opdater
+
+    show:
+      title: udvidelse/integration
+      back: Tilbage
+
+    errors:
+      messages:
+        name_exist: "Udvidelsen/integrationen findes allerede"

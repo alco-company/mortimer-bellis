@@ -11,6 +11,9 @@ Rails.application.routes.draw do
     omniauth_callbacks: "users/omniauth_callbacks"
   }
 
+  post "dinero/callback" => "dinero#callback", as: :dinero_callback
+
+  resources :provided_services
   resources :settings
   resources :events
   resources :notifications

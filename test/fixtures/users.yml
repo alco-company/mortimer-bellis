@@ -57,3 +57,22 @@ superadmin:
   last_punched_at: 2024-04-25 12:49:56
   state: out
   time_zone: Copenhagen
+
+no_dinero_authorization:
+  tenant: no_dinero_authorization
+  team: no_dinero_authorization
+  email: "no_dinero_authorization@doe.com"
+  global_queries: true
+  encrypted_password: <%= Devise::Encryptor.digest(User, ENV['TEST_PASSWORD']) %>
+  confirmed_at: <%= Time.zone.now - 1.hour %>
+  confirmation_sent_at: <%= Time.zone.now - 2.hours %>
+  locale: "da"
+  name: No Dinero Authorization
+  pos_token: 12121212121212
+  pincode: 1236
+  role: admin
+  # payroll_user_ident: jd-1
+  # access_token: w123
+  last_punched_at: 2024-04-25 12:49:56
+  state: out
+  time_zone: Copenhagen
