@@ -45,6 +45,8 @@ class ProvidedService < ApplicationRecord
 
   def service_params_hash
     JSON.parse(params)
+  rescue
+    {}
   end
 
   def service_params=(p)

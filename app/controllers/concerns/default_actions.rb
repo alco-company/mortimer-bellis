@@ -16,6 +16,11 @@ module DefaultActions
       redirect_to root_path, warning: error.message
     end
 
+    def erp_pull
+      SyncErpCustomersJob.perform_now tenant: Current.tenant, user: Current.user
+      redirect_to resources_url, success: t(".erp_pull")
+    end
+
     def html_content
       render_to_string layout: "pdf", formats: :pdf
     end

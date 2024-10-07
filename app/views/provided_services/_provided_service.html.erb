@@ -7,7 +7,12 @@
       <% end %>
     <% end %>
     <%= render_text_column value: provided_service.service, css: "truncate" %>
-    <%= render_text_column value: provided_service.service_params, css: "hidden md:block truncate" %>
+    <%= render_text_column value: provided_service.authorized?, css: "hidden md:block truncate" do |value| %>
+      <%= value ? 
+            I18n.t('yes') :
+            render(partial: "provided_services/#{provided_service.service.underscore}/authorize", locals: { path: request.path })
+             %>
+    <% end %>
     <%= render_datetime_column value: provided_service.updated_at, css: "hidden md:block" %>
   </div>
   <div class="flex flex-none items-center gap-x-4 ">

@@ -1,4 +1,11 @@
 class DineroService < SaasService
+  attr_accessor :settings, :provided_service
+
+  def initialize(provided_service: nil, settings: nil)
+    @provided_service = provided_service || Current.tenant.provided_services.by_name("Dinero").first
+    @settings = settings || @provided_service.service_params_hash
+  end
+
   def auth_url(path)
     return unless Current.tenant
     host = "https://connect.visma.com/connect/authorize"
@@ -18,13 +25,6 @@ class DineroService < SaasService
     return false if user.nil?
 
     res = code_to_token(creds[:code])
-    # res = {
-    #   "access_token"=> "eyJhbGciOiJSUzI1NiIsImtpZCI6IjRCQjQzQzg4QzgzODc1MUI3QTI2MDFEMjg0ODFGNEVDOUQwMUExRUJSUzI1NiIsIng1dCI6IlM3UThpTWc0ZFJ0NkpnSFNoSUgwN0owQm9lcyIsInR5cCI6ImF0K0pXVCJ9.eyJpc3MiOiJodHRwczovL2Nvbm5lY3QudmlzbWEuY29tIiwibmJmIjoxNzI3Nzg5OTIyLCJpYXQiOjE3Mjc3ODk5MjIsImV4cCI6MTcyNzc5MzUyMiwiYXVkIjoiaHR0cHM6Ly9hcGkuZGluZXJvLmRrIiwic2NvcGUiOlsiZGluZXJvcHVibGljYXBpOndyaXRlIiwiZGluZXJvcHVibGljYXBpOnJlYWQiLCJvZmZsaW5lX2FjY2VzcyJdLCJhbXIiOlsicHdkbGVzcyIsImZhY2VfZnB0Il0sImNsaWVudF9pZCI6Imlzdl9tb3J0aW1lcl90ZXN0Iiwic3ViIjoiMWYzZWU4MWMtODlhYS00OTg0LWE1MzMtOGNhYWJhNjYxNmJlIiwiYXV0aF90aW1lIjoxNzI3NzcyMjczLCJpZHAiOiJWaXNtYSBDb25uZWN0IiwibGx0IjoxNzI3NzEzMTUyLCJjcmVhdGVkX2F0IjoxNTkyODM2NDkyLCJhY3IiOiIzIiwic2lkIjoiNWU3NzJlMmMtZGZmNC1mZTRjLTQzMzYtM2U0NGU4ZjlhNThmIn0.KQGNfAQiggxzxvx-70wfNufjc6w8kO2ihsUlCLhDXaed0pZlqoJjsBx1s5mO1DCS2x8TgzGsYUodNooIckkoTQaByFFn7AvwnmPKtV3kUcZ2ftR_Qd4tzxG6gG6hZf9PNmOvByMCKTkGHb7C5Y-4g6DXdh-TQ-VXJvUHT3RDdEdN4AszTEz4CC6gsgKhKRS78owg7iXExnGRcGBctnc-owssxyVr1IT7uQ-Aqh2LuIPzlnuxQqsGsWNqlsi29yqOZs-RlJ8J7_HzU8k6Tww4-qnEXVePqvJxSmZBM-U0PyfwLeTkOJhsW_6Nkl8igbjttq1lwA1vsO5qWXnVAjZ5qw",
-    #   "expires_in"=>3600,
-    #   "token_type"=>"Bearer",
-    #   "refresh_token"=>"B5B6AF198B3D7C535D46A4D22F334796E3DA3DE3D62C77FBB67D9CDF04A25AE8",
-    #   "scope"=>"dineropublicapi:write dineropublicapi:read offline_access"
-    # }
     if res["access_token"]
       return { result: true, service_params: res }
     end
@@ -35,9 +35,43 @@ class DineroService < SaasService
 
   def get(path, params = {})
     refresh_token if token_expired?
-    HTTParty.get("https://api.dinero.dk#{path}", headers: { "Authorization": "Bearer %s" % Current.tenant.provided_services.by_name("Dinero").first.service_params_hash["access_token"] })
+    HTTParty.get("https://api.dinero.dk#{path}", headers: { "Authorization": "Bearer %s" % settings["access_token"] })
   rescue => e
     debugger
+  end
+
+  # list.parsed_response["Pagination"] {"MaxPageSizeAllowed"=>1000, "PageSize"=>100, "Result"=>100, "ResultWithoutFilter"=>428, "Page"=>0}
+  # list.parsed_response["Collection"][0] {"Name"=>"13348820", "ContactGuid"=>"cd9f4403-5af3-4815-8fa6-41b15ecaf967", "Street"=>"", "ZipCode"=>"", "City"=>"", "Phone"=>"", "Email"=>"", "VatNumber"=>nil, "EanNumber"=>nil}
+  # organizationId = 118244
+  # fields = Name,ContactGuid,Street,ZipCode,City,Phone,Email,VatNumber,EanNumber
+  # page = 0
+  # changesSince = 2015-08-18T06:36:22Z (UTC)
+  # pageSize = 100 (max 1000)
+  #
+  def pull(resource_class:, all: false, page: 0, pageSize: 100, fields: "Name,ContactGuid,Street,ZipCode,City,Phone,Email,VatNumber,EanNumber", organizationId: 118244)
+    case resource_class.to_s
+    when "Customer"; tbl = "contacts"
+    else
+      return false
+    end
+    query = {}
+    query[:changesSince] = resource_class.order(updated_at: :desc).first.updated_at.iso8601 rescue nil
+    query.delete(:changesSince) if all
+    query[:page] = page
+    query[:pageSize] = pageSize
+    query[:fields] = fields
+    list = get "/v1/#{organizationId}/#{tbl}?#{query.to_query}"
+    return false unless list.parsed_response.present?
+    list.parsed_response["Collection"].each do |item|
+      resource_class.add_from_erp item
+    end
+    if list.parsed_response["Pagination"]["ResultWithoutFilter"].to_i > (query[:pageSize].to_i * (query[:page].to_i + 1))
+      pull resource_class: resource_class, organizationId: organizationId, all: all, page: query[:page].to_i + 1, pageSize: query[:pageSize].to_i, fields: fields
+    end
+    true
+  rescue => e
+    debugger
+    false
   end
 
   private
@@ -46,6 +80,15 @@ class DineroService < SaasService
     # --url https://connect.visma.com/connect/token
     # --header 'content-type: application/x-www-form-urlencoded'
     # --data 'grant_type=authorization_code&redirect_uri=https%3A%2F%2Fdemoapp.example.com/oauthcallback%2Fcallback&code=94c99b73c13c1e39f7b0a7d259628338&client_id=demoapp&client_secret=SECRET'
+    #
+    # returns
+    # res = {
+    #   "access_token"=> "eyJhbGciOiJSUzI1NiIsImtpZCI6IjRCQjQzQzg4QzgzODc1MUI3QTI2MDFEMjg0ODFGNEVDOUQwMUExRUJSUzI1NiIsIng1dCI6IlM3UThpTWc0ZFJ0NkpnSFNoSUgwN0owQm9lcyIsInR5cCI6ImF0K0pXVCJ9.eyJpc3MiOiJodHRwczovL2Nvbm5lY3QudmlzbWEuY29tIiwibmJmIjoxNzI3Nzg5OTIyLCJpYXQiOjE3Mjc3ODk5MjIsImV4cCI6MTcyNzc5MzUyMiwiYXVkIjoiaHR0cHM6Ly9hcGkuZGluZXJvLmRrIiwic2NvcGUiOlsiZGluZXJvcHVibGljYXBpOndyaXRlIiwiZGluZXJvcHVibGljYXBpOnJlYWQiLCJvZmZsaW5lX2FjY2VzcyJdLCJhbXIiOlsicHdkbGVzcyIsImZhY2VfZnB0Il0sImNsaWVudF9pZCI6Imlzdl9tb3J0aW1lcl90ZXN0Iiwic3ViIjoiMWYzZWU4MWMtODlhYS00OTg0LWE1MzMtOGNhYWJhNjYxNmJlIiwiYXV0aF90aW1lIjoxNzI3NzcyMjczLCJpZHAiOiJWaXNtYSBDb25uZWN0IiwibGx0IjoxNzI3NzEzMTUyLCJjcmVhdGVkX2F0IjoxNTkyODM2NDkyLCJhY3IiOiIzIiwic2lkIjoiNWU3NzJlMmMtZGZmNC1mZTRjLTQzMzYtM2U0NGU4ZjlhNThmIn0.KQGNfAQiggxzxvx-70wfNufjc6w8kO2ihsUlCLhDXaed0pZlqoJjsBx1s5mO1DCS2x8TgzGsYUodNooIckkoTQaByFFn7AvwnmPKtV3kUcZ2ftR_Qd4tzxG6gG6hZf9PNmOvByMCKTkGHb7C5Y-4g6DXdh-TQ-VXJvUHT3RDdEdN4AszTEz4CC6gsgKhKRS78owg7iXExnGRcGBctnc-owssxyVr1IT7uQ-Aqh2LuIPzlnuxQqsGsWNqlsi29yqOZs-RlJ8J7_HzU8k6Tww4-qnEXVePqvJxSmZBM-U0PyfwLeTkOJhsW_6Nkl8igbjttq1lwA1vsO5qWXnVAjZ5qw",
+    #   "expires_in"=>3600,
+    #   "token_type"=>"Bearer",
+    #   "refresh_token"=>"B5B6AF198B3D7C535D46A4D22F334796E3DA3DE3D62C77FBB67D9CDF04A25AE8",
+    #   "scope"=>"dineropublicapi:write dineropublicapi:read offline_access"
+    # }
     def code_to_token(code)
       return mocked_run(code) if Rails.env.test?
       # host = "https://localhost:3000/dinero/callback"
@@ -62,7 +105,7 @@ class DineroService < SaasService
     end
 
     def token_expired?
-      Time.now > Current.tenant.provided_services.by_name("Dinero").first.service_params_hash["expires_at"]
+      Time.now > settings["expires_at"]
     rescue => e
       true
     end
@@ -77,10 +120,14 @@ class DineroService < SaasService
         client_id: ENV["DINERO_APP_ID"],
         client_secret: ENV["DINERO_APP_SECRET"],
         grant_type: "refresh_token",
-        refresh_token: Current.tenant.provided_services.by_name("Dinero").first.service_params_hash["refresh_token"]
+        refresh_token: settings["refresh_token"]
       }
 
-      HTTParty.post(host, body: params, headers: { "Content-Type" => "application/x-www-form-urlencoded" })
+      res = HTTParty.post(host, body: params, headers: { "Content-Type" => "application/x-www-form-urlencoded" })
+      provided_service.update service_params: res
+      @settings = provided_service.service_params_hash
+    rescue => e
+      debugger
     end
 
     def mocked_run(code)

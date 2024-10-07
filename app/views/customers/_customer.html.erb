@@ -1,0 +1,19 @@
+<li id="<%= dom_id customer %>" class="flex items-center justify-between gap-x-6 py-5">
+  <div class="min-w-0 w-full columns-2 md:columns-3 lg:columns-4 xl:columns-6">
+    <%= render_text_column value: show_resource_link(resource: customer), css: "truncate mort-link-primary" do |value| %>
+      <%= value %>
+      <% if global_queries? Current.user %>
+        <p class="text-xs"><%= show_resource_link(resource: customer.tenant) %> </p>
+      <% end %>
+    <% end %>
+    <%= render_text_column value: customer.street, css: "hidden lg:block truncate" %>
+    <%= render_text_column value: customer.city, css: "hidden xl:block truncate" %>
+    <%= render_text_column value: customer.phone, css: "truncate" %>
+    <%= render_text_column value: customer.email, css: "hidden xl:block truncate" %>
+    <%= render_datetime_column value: customer.updated_at, css: "hidden md:block" %>
+  </div>
+  <div class="flex flex-none items-center gap-x-4 ">
+<!--    <a href="<%#= product_stock_items_url(product) %>" class=" rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:block">Lokationer<span class="sr-only">, GraphQL API</span></a>-->
+    <%= render_contextmenu resource: customer, turbo_frame: "form", resource_class: Customer, alter: true, links: [ edit_customer_url(customer), customer_url(customer) ] %>
+  </div>
+</li>

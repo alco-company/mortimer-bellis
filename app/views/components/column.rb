@@ -36,7 +36,7 @@ class Column < Phlex::HTML
 
   def div_value(&block)
     value.blank? ?
-      div { "&nbsp;".html_safe } :
+      div(class: @class) { "&nbsp;".html_safe } :
       div(class: @class) do
         if block_given?
           yield value

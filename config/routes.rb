@@ -1,4 +1,9 @@
 Rails.application.routes.draw do
+  resources :customers do
+    collection do
+      get "erp_pull"
+    end
+  end
   mount MissionControl::Jobs::Engine, at: "/solid_queue_jobs"
 
   devise_for :users, controllers: {

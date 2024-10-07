@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_10_01_203657) do
+ActiveRecord::Schema[8.0].define(version: 2024_10_07_113648) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -63,6 +63,22 @@ ActiveRecord::Schema[8.0].define(version: 2024_10_01_203657) do
     t.datetime "updated_at", null: false
     t.index ["calendarable_type", "calendarable_id"], name: "index_calendars_on_calendarable"
     t.index ["tenant_id"], name: "index_calendars_on_tenant_id"
+  end
+
+  create_table "customers", force: :cascade do |t|
+    t.integer "tenant_id", null: false
+    t.string "erp_guid"
+    t.string "name"
+    t.string "street"
+    t.string "zipcode"
+    t.string "city"
+    t.string "phone"
+    t.string "email"
+    t.string "vat_number"
+    t.string "ean_number"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["tenant_id"], name: "index_customers_on_tenant_id"
   end
 
   create_table "dashboards", force: :cascade do |t|
@@ -471,6 +487,7 @@ ActiveRecord::Schema[8.0].define(version: 2024_10_01_203657) do
   add_foreign_key "background_jobs", "tenants"
   add_foreign_key "background_jobs", "tenants", on_delete: :cascade
   add_foreign_key "calendars", "tenants"
+  add_foreign_key "customers", "tenants"
   add_foreign_key "dashboards", "tenants"
   add_foreign_key "dashboards", "tenants", on_delete: :cascade
   add_foreign_key "event_meta", "events"

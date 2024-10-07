@@ -251,6 +251,18 @@ da:
         params: Argumenter
       calendar:
         name: Navn
+      customer:
+        name: Navn
+        street: Adresse
+        city: By
+        zipcode: Postnr
+        country: Land
+        email: Emailadresse
+        phone: Telefon
+        vat_number: CVR nummer
+        ean_number: EAN nummer
+        contact_person: Kontaktperson
+        description: Beskrivelse
       dashboard:
         name: Navn
         layout: Skabelon
