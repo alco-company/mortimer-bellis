@@ -1,6 +1,8 @@
 class Customer  < ApplicationRecord
   include Tenantable
 
+  has_many :projects, dependent: :destroy
+
   scope :by_name, ->(name) { where("name LIKE ?", "%#{name}%") if name.present? }
   scope :by_street, ->(street) { where("street LIKE ?", "%#{street}%") if street.present? }
   scope :by_city, ->(city) { where("city LIKE ?", "%#{city}%") if city.present? }

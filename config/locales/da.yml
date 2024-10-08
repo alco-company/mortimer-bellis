@@ -336,6 +336,19 @@ da:
         base_amount_value: Pris
         account_number: Salgskonto nummer
         external_reference: Ekstern reference
+      project:
+        name: Navn
+        description: Beskrivelse
+        start_date: Start dato
+        end_date: Slut dato
+        state: Status
+        budget: Budget
+        is_billable: Fakturérbar
+        is_separate_invoice: Særskilt faktura
+        hourly_rate: Timepris
+        priority: Prioritet
+        estimated_minutes: Estimeret tid
+        actual_minutes: Forbrugt tid
       profile: 
         name: Brugernavn
         avatar: Profil billede

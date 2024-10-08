@@ -49,6 +49,7 @@ If Solid Queue bites me again, look here: https://github.com/rails/solid_queue/i
 ### 8/10/2024
 
 * EPIC 3 - sync products from Dinero to Mortimer
+* EPIC 3 - manage projects
 
 ### 7/10/2024
 

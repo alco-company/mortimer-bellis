@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :projects
   mount MissionControl::Jobs::Engine, at: "/solid_queue_jobs"
 
   devise_for :users, controllers: {

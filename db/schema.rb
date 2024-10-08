@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_10_08_065956) do
+ActiveRecord::Schema[8.0].define(version: 2024_10_08_115839) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -205,6 +205,27 @@ ActiveRecord::Schema[8.0].define(version: 2024_10_08_065956) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["tenant_id"], name: "index_products_on_tenant_id"
+  end
+
+  create_table "projects", force: :cascade do |t|
+    t.string "name"
+    t.integer "tenant_id", null: false
+    t.integer "customer_id", null: false
+    t.text "description"
+    t.datetime "start_date"
+    t.datetime "end_date"
+    t.integer "state"
+    t.decimal "budget", precision: 11, scale: 2
+    t.boolean "is_billable"
+    t.boolean "is_separate_invoice"
+    t.decimal "hourly_rate", precision: 11, scale: 2
+    t.integer "priority"
+    t.integer "estimated_minutes"
+    t.integer "actual_minutes"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["customer_id"], name: "index_projects_on_customer_id"
+    t.index ["tenant_id"], name: "index_projects_on_tenant_id"
   end
 
   create_table "provided_services", force: :cascade do |t|
@@ -517,6 +538,8 @@ ActiveRecord::Schema[8.0].define(version: 2024_10_08_065956) do
   add_foreign_key "filters", "tenants", on_delete: :cascade
   add_foreign_key "locations", "tenants", on_delete: :cascade
   add_foreign_key "products", "tenants"
+  add_foreign_key "projects", "customers"
+  add_foreign_key "projects", "tenants"
   add_foreign_key "provided_services", "tenants"
   add_foreign_key "provided_services", "users", column: "authorized_by_id"
   add_foreign_key "punch_cards", "tenants"

@@ -1,0 +1,31 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  tenant: one
+  customer: one
+  description: MyText
+  start_date: 2024-10-08 13:58:39
+  end_date: 2024-10-08 13:58:39
+  state: 1
+  budget: 9.99
+  is_billable: false
+  hourly_rate: 9.99
+  priority: 1
+  estimated_minutes: 1
+  actual_minutes: 1
+
+two:
+  name: MyString
+  tenant: two
+  customer: two
+  description: MyText
+  start_date: 2024-10-08 13:58:39
+  end_date: 2024-10-08 13:58:39
+  state: 1
+  budget: 9.99
+  is_billable: false
+  hourly_rate: 9.99
+  priority: 1
+  estimated_minutes: 1
+  actual_minutes: 1

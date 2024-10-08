@@ -1,0 +1,35 @@
+da:
+
+  projects:
+    create:
+      post: Projektet blev oprettet
+    update:
+      post: Projektet blev opdateret
+    destroy:
+      post: Projektet blev slettet
+
+    list:
+      title: Projekter
+      new: Nyt projekt
+      edit: Rediger
+      delete: Slet
+      show: Vis
+      name: Navn
+      barcode: Stregkode
+      updated_at: Opdateret den
+
+    form:
+      new: Nyt projekt
+      edit: Rediger projekt
+
+    new:
+      title: Nyt projekt
+      create: Opret
+
+    edit:
+      title: Rediger projekt
+      update: Opdater
+
+    show:
+      title: projekt
+      back: Tilbage
