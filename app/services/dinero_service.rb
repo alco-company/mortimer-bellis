@@ -48,9 +48,10 @@ class DineroService < SaasService
   # changesSince = 2015-08-18T06:36:22Z (UTC)
   # pageSize = 100 (max 1000)
   #
-  def pull(resource_class:, all: false, page: 0, pageSize: 100, fields: "Name,ContactGuid,Street,ZipCode,City,Phone,Email,VatNumber,EanNumber", organizationId: 118244)
+  def pull(resource_class:, all: false, page: 0, pageSize: 100, fields: nil, organizationId: 118244)
     case resource_class.to_s
     when "Customer"; tbl = "contacts"
+    when "Product"; tbl = "products"
     else
       return false
     end
@@ -59,7 +60,9 @@ class DineroService < SaasService
     query.delete(:changesSince) if all
     query[:page] = page
     query[:pageSize] = pageSize
-    query[:fields] = fields
+    if fields
+      query[:fields] = fields
+    end
     list = get "/v1/#{organizationId}/#{tbl}?#{query.to_query}"
     return false unless list.parsed_response.present?
     list.parsed_response["Collection"].each do |item|

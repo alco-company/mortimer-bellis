@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_10_07_113648) do
+ActiveRecord::Schema[8.0].define(version: 2024_10_08_065956) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -187,6 +187,24 @@ ActiveRecord::Schema[8.0].define(version: 2024_10_07_113648) do
     t.text "content"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "products", force: :cascade do |t|
+    t.integer "tenant_id", null: false
+    t.string "erp_guid"
+    t.string "name"
+    t.string "product_number"
+    t.decimal "quantity", precision: 9, scale: 3
+    t.string "unit"
+    t.integer "account_number"
+    t.decimal "base_amount_value", precision: 11, scale: 2
+    t.decimal "base_amount_value_incl_vat", precision: 11, scale: 2
+    t.decimal "total_amount", precision: 11, scale: 2
+    t.decimal "total_amount_incl_vat", precision: 11, scale: 2
+    t.string "external_reference"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["tenant_id"], name: "index_products_on_tenant_id"
   end
 
   create_table "provided_services", force: :cascade do |t|
@@ -498,6 +516,7 @@ ActiveRecord::Schema[8.0].define(version: 2024_10_07_113648) do
   add_foreign_key "filters", "tenants"
   add_foreign_key "filters", "tenants", on_delete: :cascade
   add_foreign_key "locations", "tenants", on_delete: :cascade
+  add_foreign_key "products", "tenants"
   add_foreign_key "provided_services", "tenants"
   add_foreign_key "provided_services", "users", column: "authorized_by_id"
   add_foreign_key "punch_cards", "tenants"

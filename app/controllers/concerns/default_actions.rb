@@ -17,7 +17,7 @@ module DefaultActions
     end
 
     def erp_pull
-      SyncErpCustomersJob.perform_now tenant: Current.tenant, user: Current.user
+      SyncErpJob.perform_now tenant: Current.tenant, user: Current.user, resource_class: resource_class
       redirect_to resources_url, success: t(".erp_pull")
     end
 

@@ -15,18 +15,20 @@ class ApplicationForm < Superform::Rails::Form
 
   class Phlex::SGML
     def format_object(object)
-      case object
-      when ActiveSupport::TimeWithZone; object.strftime("%d-%m-%y")
-      when Date; object.strftime("%Y-%m-%d")
-      when DateTime; object.strftime("%Y-%m-%d %H:%M:%S")
-      when Float, Integer; object.to_s
-      when FalseClass; I18n.t(:no)
-      when TrueClass; I18n.t(:yes)
-      when NilClass; ""
-      else
-        # debugger
-        object
+      case object.class.to_s
+      when "ActiveSupport::TimeWithZone"; object.strftime("%d-%m-%y")
+      when "Array"; object.map { |o| format_object(o) }.join(", ")
+      when "Date"; object.strftime("%Y-%m-%d")
+      when "DateTime"; object.strftime("%Y-%m-%d %H:%M:%S")
+      when "Decimal", "BigDecimal", "Float", "Integer"; object.to_s
+      when "Phlex::SGML::Decimal"; object.to_s
+      when "FalseClass"; I18n.t(:no)
+      when "TrueClass"; I18n.t(:yes)
+      when "NilClass"; ""
+      else; object
       end
+    rescue => e
+      debugger
     end
   end
 

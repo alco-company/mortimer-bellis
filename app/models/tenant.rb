@@ -11,10 +11,12 @@ class Tenant < ApplicationRecord
   include Serviceable
 
   has_many :background_jobs, dependent: :destroy
+  has_many :customers, dependent: :destroy
   has_many :dashboards, dependent: :destroy
   has_many :events, dependent: :destroy
   has_many :filters, dependent: :destroy
   has_many :locations, dependent: :destroy
+  has_many :products, dependent: :destroy
   has_many :punch_cards, dependent: :destroy
   has_many :punch_clocks, dependent: :destroy
   has_many :punches, dependent: :destroy

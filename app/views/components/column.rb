@@ -41,9 +41,11 @@ class Column < Phlex::HTML
         if block_given?
           yield value
         else
-          @sort ? build_link(value) : plain(value)
+          @sort ? build_link(value) : plain(value.to_s)
         end
       end
+    rescue => e
+      debugger
   end
 
   def build_link(val)

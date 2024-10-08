@@ -1,9 +1,4 @@
 Rails.application.routes.draw do
-  resources :customers do
-    collection do
-      get "erp_pull"
-    end
-  end
   mount MissionControl::Jobs::Engine, at: "/solid_queue_jobs"
 
   devise_for :users, controllers: {
@@ -17,6 +12,16 @@ Rails.application.routes.draw do
   }
 
   post "dinero/callback" => "dinero#callback", as: :dinero_callback
+  resources :products do
+    collection do
+      get "erp_pull"
+    end
+  end
+  resources :customers do
+    collection do
+      get "erp_pull"
+    end
+  end
 
   resources :provided_services
   resources :settings

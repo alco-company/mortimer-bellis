@@ -63,6 +63,9 @@ da:
     black: Sort
     white: Hvid
 
+  application:
+    header:
+      sync_with_ERP: Synkroniser med ERP
   devise:
     mailer:
       invitation_instructions:
@@ -325,7 +328,14 @@ da:
         mac_addr: MAC adresse 
         port: port 
         state: status 
-
+      product:
+        name: Navn
+        product_number: Produkt nummer
+        quantity: Antal
+        unit: Enhed
+        base_amount_value: Pris
+        account_number: Salgskonto nummer
+        external_reference: Ekstern reference
       profile: 
         name: Brugernavn
         avatar: Profil billede
