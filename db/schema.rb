@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_10_08_115839) do
+ActiveRecord::Schema[8.0].define(version: 2024_10_08_151154) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -146,6 +146,42 @@ ActiveRecord::Schema[8.0].define(version: 2024_10_08_115839) do
     t.integer "all_day"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "invoices", force: :cascade do |t|
+    t.integer "tenant_id", null: false
+    t.integer "customer_id", null: false
+    t.integer "project_id"
+    t.string "invoice_number"
+    t.string "currency"
+    t.integer "state"
+    t.integer "mail_out_state"
+    t.string "latest_mail_out_type"
+    t.string "locale"
+    t.string "external_reference"
+    t.string "description"
+    t.text "comment"
+    t.datetime "invoice_date"
+    t.datetime "payment_date"
+    t.string "address"
+    t.string "erp_guid"
+    t.boolean "show_lines_incl_vat"
+    t.string "invoice_template_id"
+    t.string "contact_guid"
+    t.integer "payment_condition_number_of_days"
+    t.string "payment_condition_type"
+    t.decimal "reminder_fee", precision: 10, scale: 2
+    t.decimal "reminder_interest_rate", precision: 10, scale: 2
+    t.decimal "total_excl_vat_in_dkk", precision: 10, scale: 2
+    t.decimal "total_excl_vat", precision: 10, scale: 2
+    t.decimal "total_incl_vat_in_dkk", precision: 10, scale: 2
+    t.decimal "total_incl_vat", precision: 10, scale: 2
+    t.boolean "is_mobile_pay_invoice_enabled"
+    t.boolean "is_penso_pay_enabled"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["customer_id"], name: "index_invoices_on_customer_id"
+    t.index ["tenant_id"], name: "index_invoices_on_tenant_id"
   end
 
   create_table "locations", force: :cascade do |t|
@@ -536,6 +572,8 @@ ActiveRecord::Schema[8.0].define(version: 2024_10_08_115839) do
   add_foreign_key "filters", "tenants"
   add_foreign_key "filters", "tenants"
   add_foreign_key "filters", "tenants", on_delete: :cascade
+  add_foreign_key "invoices", "customers"
+  add_foreign_key "invoices", "tenants"
   add_foreign_key "locations", "tenants", on_delete: :cascade
   add_foreign_key "products", "tenants"
   add_foreign_key "projects", "customers"

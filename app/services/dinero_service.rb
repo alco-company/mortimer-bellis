@@ -33,13 +33,6 @@ class DineroService < SaasService
     { result: false, service_params: { error: e } }
   end
 
-  def get(path, params = {})
-    refresh_token if token_expired?
-    HTTParty.get("https://api.dinero.dk#{path}", headers: { "Authorization": "Bearer %s" % settings["access_token"] })
-  rescue => e
-    debugger
-  end
-
   # list.parsed_response["Pagination"] {"MaxPageSizeAllowed"=>1000, "PageSize"=>100, "Result"=>100, "ResultWithoutFilter"=>428, "Page"=>0}
   # list.parsed_response["Collection"][0] {"Name"=>"13348820", "ContactGuid"=>"cd9f4403-5af3-4815-8fa6-41b15ecaf967", "Street"=>"", "ZipCode"=>"", "City"=>"", "Phone"=>"", "Email"=>"", "VatNumber"=>nil, "EanNumber"=>nil}
   # organizationId = 118244
@@ -48,14 +41,19 @@ class DineroService < SaasService
   # changesSince = 2015-08-18T06:36:22Z (UTC)
   # pageSize = 100 (max 1000)
   #
-  def pull(resource_class:, all: false, page: 0, pageSize: 100, fields: nil, organizationId: 118244)
+  def pull(resource_class:, all: false, page: 0, pageSize: 100, fields: nil, start_date: nil, end_date: nil, organizationId: 118244)
     case resource_class.to_s
     when "Customer"; tbl = "contacts"
     when "Product"; tbl = "products"
+    when "Invoice"; tbl = "invoices"
     else
       return false
     end
     query = {}
+    unless start_date.nil?
+      query[:startDate] = start_date
+      query[:endDate] = end_date
+    end
     query[:changesSince] = resource_class.order(updated_at: :desc).first.updated_at.iso8601 rescue nil
     query.delete(:changesSince) if all
     query[:page] = page
@@ -69,12 +67,19 @@ class DineroService < SaasService
       resource_class.add_from_erp item
     end
     if list.parsed_response["Pagination"]["ResultWithoutFilter"].to_i > (query[:pageSize].to_i * (query[:page].to_i + 1))
-      pull resource_class: resource_class, organizationId: organizationId, all: all, page: query[:page].to_i + 1, pageSize: query[:pageSize].to_i, fields: fields
+      pull resource_class: resource_class, organizationId: organizationId, all: all, page: query[:page].to_i + 1, pageSize: query[:pageSize].to_i, fields: fields, start_date: start_date, end_date: end_date
     end
     true
   rescue => e
     debugger
     false
+  end
+
+  def pull_invoice(guid:, organizationId: 118244)
+    get "/v1/#{organizationId}/invoices/#{guid}"
+  rescue => e
+    debugger
+    {}
   end
 
   private
@@ -105,6 +110,14 @@ class DineroService < SaasService
       }
 
       HTTParty.post(host, body: params, headers: { "Content-Type" => "application/x-www-form-urlencoded" })
+    end
+
+    def get(path, headers = {})
+      refresh_token if token_expired?
+      headers["Authorization"] = "Bearer %s" % settings["access_token"]
+      HTTParty.get("https://api.dinero.dk#{path}", headers: headers)
+    rescue => e
+      debugger
     end
 
     def token_expired?

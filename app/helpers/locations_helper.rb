@@ -1,5 +1,6 @@
 module LocationsHelper
   def show_resource_link(resource:, url: nil, turbo_frame: "form")
+    return "" unless resource
     link_to((url || url_for(resource)),
       class: "block ",
       role: "menuitem",

@@ -6,6 +6,8 @@
       <%= link_to t(".sync_with_ERP"), erp_pull_customers_url, class: "mort-link-primary", data: { turbo_prefetch: "false" } %>
     <% when 'products' %>
       <%= link_to t(".sync_with_ERP"), erp_pull_products_url, class: "mort-link-primary", data: { turbo_prefetch: "false" } %>
+    <% when 'invoices' %>
+      <%= link_to t(".sync_with_ERP"), erp_pull_invoices_url, class: "mort-link-primary", data: { turbo_prefetch: "false" } %>
     <% when 'punch_cards' %>
       <%= link_to t(:payroll_order), new_modal_url(modal_form: 'payroll', resource_class: 'punch_card'), class: "inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10", data: { turbo_stream: true } %>
       <%= link_to t(:state_order), new_modal_url(modal_form: 'state', resource_class: 'punch_card'), class: "inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10", data: { turbo_stream: true } %>

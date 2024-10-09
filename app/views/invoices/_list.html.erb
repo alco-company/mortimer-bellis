@@ -1,0 +1,7 @@
+<div class="min-w-0 w-full columns-2 md:columns-3">
+  <%= render_text_column value: t('.invoice_number'), sort: params, field: :invoice_number, css: "font-bold truncate" %>
+  <%= render_text_column value: t('.invoice_date'), sort: params, field: :invoice_date, css: "font-bold truncate" %>
+  <%= render_text_column value: t('.customer'), css: "font-bold truncate" %>
+  <%= render_text_column value: t('.project'), css: "font-bold truncate" %>
+  <%= render_text_column value: t(".updated_at"), css: "hidden md:block font-bold " %>
+</div>

@@ -292,6 +292,34 @@ da:
         all_day: En hel (fri/hellig)dag
         description: Beskrivelse
         countries: Hvilke lande (sprogområder) gælder helligdagen for
+      invoice:
+        customer_id: Kunde
+        invoice_number: Faktura nummer
+        currency: Valuta
+        state: Status
+        mail_out_state: Status for udsendelse
+        latest_mail_out_type: Sidste udsendelsestype
+        locale: Sprog
+        external_reference: Ekstern reference
+        description: Beskrivelse
+        comment: Kommentar
+        invoice_date: Faktura dato
+        payment_date: Betalingsdato
+        address:  Adresse
+        erp_guid: ERP GUID
+        show_lines_incl_vat: Vis linjer inkl. moms
+        invoice_template_id: Skabelon
+        contact_guid: Kontakt GUID
+        payment_condition_number_of_days: Betalingsbetingelse i dage
+        payment_condition_type: Betalingsbetingelse
+        reminder_fee: Rykkergebyr
+        reminder_interest_rate: Rykkerrente
+        total_excl_vat_in_dkk: Total ekskl. moms i DKK
+        total_excl_vat: Total ekskl. moms
+        total_incl_vat_in_dkk: Total inkl. moms i DKK
+        total_incl_vat: Total inkl. moms
+        is_mobile_pay_invoice_enabled: MobilePay faktura
+        is_penso_pay_enabled: PensoPay faktura
       lead:
         email_address: Email adresse
         trial_ends_at: Prøveperioden slutter
