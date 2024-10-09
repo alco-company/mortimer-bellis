@@ -4,6 +4,7 @@ class Invoice < ApplicationRecord
 
   belongs_to :customer
   belongs_to :project, optional: true
+  has_many :invoice_items, dependent: :destroy
 
   scope :by_invoice_number, ->(invoice_number) { where("invoice_number LIKE ?", "%#{invoice_number}%") if invoice_number.present? }
 

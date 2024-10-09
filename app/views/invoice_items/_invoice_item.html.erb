@@ -1,0 +1,16 @@
+<li id="<%= dom_id invoice_item %>" class="flex items-center justify-between gap-x-6 py-5">
+  <div class="min-w-0 w-full columns-3 md:columns-5 lg:columns-7 xl:columns-8 3xl:columns-11">
+    <%= render_text_column value: show_resource_link(resource: invoice_item), css: "truncate mort-link-primary" %>
+    <%= render_text_column value: invoice_item.quantity, css: "truncate" %>
+    <%= render_text_column value: invoice_item.unit, css: "truncate" %>
+    <%= render_text_column value: invoice_item.account_number, css: "hidden xl:block truncate" %>
+    <%= render_text_column value: invoice_item.discount, css: "hidden lg:block truncate" %>
+    <%= render_text_column value: invoice_item.line_type, css: "hidden lg:block truncate" %>
+    <%= render_text_column value: invoice_item.base_amount_value, css: "hidden md:block truncate" %>
+    <%= render_text_column value: invoice_item.updated_at, css: "hidden md:block truncate" %>
+  </div>
+  <div class="flex flex-none items-center gap-x-4 ">
+<!--    <a href="<%#= product_stock_items_url(product) %>" class=" rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:block">Lokationer<span class="sr-only">, GraphQL API</span></a>-->
+    <%= render_contextmenu resource: invoice_item, turbo_frame: "form", resource_class: InvoiceItem, alter: true, links: [ edit_invoice_item_url(invoice_item), invoice_item_url(invoice_item) ] %>
+  </div>
+</li>

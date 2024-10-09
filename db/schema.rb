@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_10_08_151154) do
+ActiveRecord::Schema[8.0].define(version: 2024_10_09_073749) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -146,6 +146,30 @@ ActiveRecord::Schema[8.0].define(version: 2024_10_08_151154) do
     t.integer "all_day"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "invoice_items", force: :cascade do |t|
+    t.integer "tenant_id", null: false
+    t.integer "invoice_id", null: false
+    t.integer "project_id"
+    t.integer "product_id", null: false
+    t.string "product_guid"
+    t.string "description"
+    t.text "comments"
+    t.decimal "quantity"
+    t.string "account_number"
+    t.string "unit"
+    t.decimal "discount"
+    t.string "line_type"
+    t.decimal "base_amount_value"
+    t.decimal "base_amount_value_incl_vat"
+    t.decimal "total_amount"
+    t.decimal "total_amount_incl_vat"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["invoice_id"], name: "index_invoice_items_on_invoice_id"
+    t.index ["product_id"], name: "index_invoice_items_on_product_id"
+    t.index ["tenant_id"], name: "index_invoice_items_on_tenant_id"
   end
 
   create_table "invoices", force: :cascade do |t|
@@ -572,6 +596,9 @@ ActiveRecord::Schema[8.0].define(version: 2024_10_08_151154) do
   add_foreign_key "filters", "tenants"
   add_foreign_key "filters", "tenants"
   add_foreign_key "filters", "tenants", on_delete: :cascade
+  add_foreign_key "invoice_items", "invoices"
+  add_foreign_key "invoice_items", "products"
+  add_foreign_key "invoice_items", "tenants"
   add_foreign_key "invoices", "customers"
   add_foreign_key "invoices", "tenants"
   add_foreign_key "locations", "tenants", on_delete: :cascade

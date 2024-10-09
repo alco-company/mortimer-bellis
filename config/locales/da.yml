@@ -320,6 +320,22 @@ da:
         total_incl_vat: Total inkl. moms
         is_mobile_pay_invoice_enabled: MobilePay faktura
         is_penso_pay_enabled: PensoPay faktura
+      invoice_item:
+        invoice_id: Faktura
+        project_id: Projekt
+        product_id: Produkt
+        product_guid: Produkt GUID
+        description: Beskrivelse
+        comments: Kommentar
+        quantity: Antal
+        account_number: Salgskonto nummer
+        unit: Enhed
+        discount: Rabat
+        line_type: Linje type
+        base_amount_value: Pris ialt
+        base_amount_value_incl_vat: Pris ialt inkl. moms
+        total_amount: Total ialt
+        total_amount_incl_vat: Total ialt inkl. moms
       lead:
         email_address: Email adresse
         trial_ends_at: Prøveperioden slutter

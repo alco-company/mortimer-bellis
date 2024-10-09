@@ -107,23 +107,14 @@ class InvoicesController < MortimerController
   #   ],
   #   "Address"=>"Bromøllevej 15\n7700 Thisted\nCvr-nr.: DK16177482"
   # }
-  # def show
-  #   json = DineroService.new.pull_invoice guid: @resource.erp_guid
-  #   json["ProductLines"].each do |item|
-  #     product = Product.find_by erp_guid: item["ProductGuid"]
-  #     @resource.invoice_lines.create(
-  #       product: product,
-  #       description: item["Description"],
-  #       comments: item["Comments"],
-  #       quantity: item["Quantity"],
-  #       account_number: item["AccountNumber"],
-  #       unit: item["Unit"],
-  #       discount: item["Discount"],
-  #       line_type: item["LineType"],
-  #       base_amount_value: item["BaseAmountValue"]
-  #     )
-  #   end
-  # end
+  def show
+    if @resource.invoice_items.empty?
+      json = DineroService.new.pull_invoice guid: @resource.erp_guid
+      json["ProductLines"].each do |item|
+        InvoiceItem.add_from_erp item, @resource
+      end
+    end
+  end
 
   private
     # Only allow a list of trusted parameters through.
