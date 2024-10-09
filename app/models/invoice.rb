@@ -31,7 +31,7 @@ class Invoice < ApplicationRecord
 
   def self.add_from_erp(item)
     return false unless item["Guid"].present?
-    invoice = Invoice.create_or_find_by(tenant: Current.tenant, erp_guid: item["Guid"])
+    invoice = Invoice.find_or_create_by(tenant: Current.tenant, erp_guid: item["Guid"])
     invoice.invoice_number = item["Number"]
     invoice.erp_guid = item["Guid"]
     invoice.external_reference = item["ExternalReference"]

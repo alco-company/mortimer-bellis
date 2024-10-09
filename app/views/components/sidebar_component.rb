@@ -45,7 +45,12 @@ class SidebarComponent < ApplicationComponent
             kiosks: { title: "Kiosks", url: "/punch_clocks" },
             locations: { title: "Locations", url: "/locations" },
             reports: { title: "Reports", url: "/reports" },
-            dashboards: { title: "Dashboards", url: "/dashboards" }
+            dashboards: { title: "Dashboards", url: "/dashboards" },
+            customers: { title: "Customers", url: "/customers" },
+            projects: { title: "Projects", url: "/projects" },
+            products: { title: "Products", url: "/products" },
+            invoices: { title: "Invoices", url: "/invoices" },
+            invoice_items: { title: "Invoice Items", url: "/invoice_items" }
           }
         }
       }

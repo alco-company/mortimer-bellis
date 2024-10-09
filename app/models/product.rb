@@ -38,7 +38,7 @@ class Product < ApplicationRecord
 
   def self.add_from_erp(item)
     return false unless item["Name"].present?
-    product = Product.create_or_find_by(tenant: Current.tenant, erp_guid: item["ProductGuid"])
+    product = Product.find_or_create_by(tenant: Current.tenant, erp_guid: item["ProductGuid"])
     product.name = item["Name"]
     product.product_number = item["ProductNumber"]
     product.quantity = item["Quantity"]

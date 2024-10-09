@@ -38,7 +38,7 @@ class Customer  < ApplicationRecord
 
   def self.add_from_erp(item)
     return false unless item["Name"].present?
-    customer = Customer.create_or_find_by(tenant: Current.tenant, erp_guid: item["ContactGuid"])
+    customer = Customer.find_or_create_by(tenant: Current.tenant, erp_guid: item["ContactGuid"])
     customer.name = item["Name"]
     customer.phone = item["Phone"]
     customer.email = item["Email"]

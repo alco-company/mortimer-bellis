@@ -1,0 +1,35 @@
+<div class="min-w-0 w-full columns-3 md:columns-5 lg:columns-7 xl:columns-8 3xl:columns-12">
+  <div class="flex justify-start">
+    <%= form.text_field :invoice_number, value: (filter["invoice_number"] rescue ''), class: "mort-filter-field" %>
+  </div>
+  <div class="flex justify-start">
+    <%= form.text_field :invoice_date, value: (filter["invoice_date"] rescue ''), class: "hidden lg:block mort-filter-field" %>
+  </div>
+  <div class="flex justify-start">
+    <%= form.text_field :customer, value: (filter["customer"] rescue ''), class: "mort-filter-field" %>
+  </div>
+  <div class="flex justify-start">
+    <%= form.text_field :project, value: (filter["project"] rescue ''), class: "hidden md:block mort-filter-field" %>
+  </div>
+  <div class="flex justify-start">
+    <%= form.text_field :state, value: (filter["state"] rescue ''), class: "mort-filter-field" %>
+  </div>
+  <div class="flex justify-start">
+    <%= form.text_field :external_reference, value: (filter["external_reference"] rescue ''), class: "hidden 3xl:block mort-filter-field" %>
+  </div>
+  <div class="flex justify-start">
+    <%= form.text_field :description, value: (filter["description"] rescue ''), class: "hidden lg:block mort-filter-field" %>
+  </div>
+  <div class="flex justify-start">
+    <%= form.text_field :total_excl_vat_in_dkk, value: (filter["total_excl_vat_in_dkk"] rescue ''), class: "hidden md:block mort-filter-field" %>
+  </div>
+  <div class="flex justify-start">
+    <%= form.text_field :total_incl_vat_in_dkk, value: (filter["total_incl_vat_in_dkk"] rescue ''), class: "hidden 3xl:block mort-filter-field" %>
+  </div>
+  <div class="flex justify-start">
+    <%= form.text_field :payment_date, value: (filter["payment_date"] rescue ''), class: "hidden 3xl:block mort-filter-field" %>
+  </div>
+  <div class="flex justify-start">
+    <%= form.text_field :currency, value: (filter["currency"] rescue ''), class: "hidden 3xl:block mort-filter-field" %>
+  </div>
+</div>

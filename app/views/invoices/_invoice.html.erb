@@ -1,15 +1,22 @@
 <li id="<%= dom_id invoice %>" class="flex items-center justify-between gap-x-6 py-5">
-  <div class="min-w-0 w-full columns-2 md:columns-3">
+  <div class="min-w-0 w-full columns-3 md:columns-5 lg:columns-7 xl:columns-8 3xl:columns-12">
     <%= render_text_column value: show_resource_link(resource: invoice), css: "truncate mort-link-primary" do |value| %>
       <%= value %>
       <% if global_queries? Current.user %>
         <p class="text-xs"><%= show_resource_link(resource: invoice.tenant) %> </p>
       <% end %>
     <% end %>
-    <%= render_text_column value: invoice.invoice_date, css: "truncate" %>
-    <%= render_text_column value: show_resource_link(resource: invoice.customer), css: "truncate" %>
-    <%= render_text_column value: show_resource_link(resource: invoice.project), css: "truncate" %>
-    <%= render_datetime_column value: invoice.updated_at, css: "hidden md:block" %>
+    <%= render_text_column value: invoice.invoice_date, css: "hidden lg:block truncate" %>
+    <%= render_text_column value: show_resource_link(resource: invoice.customer), css: "truncate mort-link-primary" %>
+    <%= render_text_column value: show_resource_link(resource: invoice.project), css: "hidden md:block truncate mort-link-primary" %>
+    <%= render_text_column value: invoice.state, css: "truncate" %>
+    <%= render_text_column value: invoice.external_reference, css: "hidden 3xl:block truncate" %>
+    <%= render_text_column value: invoice.description, css: "hidden lg:block truncate" %>
+    <%= render_text_column value: invoice.total_excl_vat_in_dkk, css: "hidden md:block truncate" %>
+    <%= render_text_column value: invoice.total_incl_vat_in_dkk, css: "hidden 3xl:block truncate" %>
+    <%= render_text_column value: invoice.payment_date, css: "hidden 3xl:block truncate" %>
+    <%= render_text_column value: invoice.currency, css: "hidden 3xl:block truncate" %>
+    <%= render_datetime_column value: invoice.updated_at, css: "hidden xl:block" %>
   </div>
   <div class="flex flex-none items-center gap-x-4 ">
 <!--    <a href="<%#= product_stock_items_url(product) %>" class=" rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:block">Lokationer<span class="sr-only">, GraphQL API</span></a>-->
