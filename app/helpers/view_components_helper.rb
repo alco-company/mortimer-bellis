@@ -2,6 +2,15 @@ module ViewComponentsHelper
   def punch_button(user:, punch_clock:)
     render PunchButtonComponent.new user: user, punch_clock: punch_clock
   end
+
+  def time_material_button(user:)
+    render TimeMaterialButtonComponent.new user: user
+  end
+
+  def time_material_form
+    render TimeMaterialForm.new
+  end
+
   def render_component(component, locals = {})
     render partial: component, locals: locals
   end

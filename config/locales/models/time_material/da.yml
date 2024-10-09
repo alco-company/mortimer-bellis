@@ -1,0 +1,5 @@
+da:
+  time_material:
+    type:
+      time: "Tid"
+      material: "Materiale"

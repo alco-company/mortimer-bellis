@@ -34,7 +34,7 @@ class SidebarComponent < ApplicationComponent
     def default_menu
       {
         dashboard: { title: "Dashboard", url: "/" },
-        time: { title: "Time", url: "/punches" },
+        time_material: { title: "Time & Material", url: "/time_materials" },
         calendar: { title: "Calendar", url: "/calendars" },
         reports: { title: "Reports", url: "/pages" },
         manage: { title: "Manage",

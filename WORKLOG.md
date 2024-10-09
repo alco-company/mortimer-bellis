@@ -51,6 +51,7 @@ If Solid Queue bites me again, look here: https://github.com/rails/solid_queue/i
 * EPIC 3 - manage invoices
 * EPIC 3 - manage invoice_items
 * missing filters on invoice and invoice_items
+* EPIC 3 - time & material input
 
 ### 8/10/2024
 
