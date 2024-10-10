@@ -46,6 +46,10 @@ If Solid Queue bites me again, look here: https://github.com/rails/solid_queue/i
 
 ## CHANGELOG
 
+### 10/10/2024
+
+* add time_material model for persisting time and material draft input
+
 ### 9/10/2024
 
 * EPIC 3 - manage invoices

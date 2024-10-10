@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_10_09_073749) do
+ActiveRecord::Schema[8.0].define(version: 2024_10_10_064203) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -526,6 +526,29 @@ ActiveRecord::Schema[8.0].define(version: 2024_10_09_073749) do
     t.string "access_token"
   end
 
+  create_table "time_materials", force: :cascade do |t|
+    t.integer "tenant_id", null: false
+    t.string "date"
+    t.string "time"
+    t.string "about"
+    t.string "customer"
+    t.string "customer_id"
+    t.string "project"
+    t.string "project_id"
+    t.string "product"
+    t.string "product_id"
+    t.string "quantity"
+    t.string "rate"
+    t.string "discount"
+    t.boolean "is_invoice"
+    t.boolean "is_free"
+    t.boolean "is_offer"
+    t.boolean "is_separate"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["tenant_id"], name: "index_time_materials_on_tenant_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.integer "tenant_id", null: false
     t.string "email", default: "", null: false
@@ -623,6 +646,7 @@ ActiveRecord::Schema[8.0].define(version: 2024_10_09_073749) do
   add_foreign_key "solid_queue_scheduled_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
   add_foreign_key "teams", "tenants"
   add_foreign_key "teams", "tenants", on_delete: :cascade
+  add_foreign_key "time_materials", "tenants"
   add_foreign_key "users", "teams"
   add_foreign_key "users", "teams", on_delete: :cascade
   add_foreign_key "users", "tenants"

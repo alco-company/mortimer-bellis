@@ -25,9 +25,13 @@ export default class extends Controller {
       if (i == this.index) {
         el.classList.remove("border-transparent");
         el.classList.add("border-sky-500", "text-sky-600");
+        el.firstElementChild.classList.add("text-sky-600")
+        el.firstElementChild.classList.remove("text-gray-600")
       } else {
         el.classList.add("border-transparent");
         el.classList.remove("border-sky-500", "text-sky-600");
+        el.firstElementChild.classList.remove("text-sky-600")
+        el.firstElementChild.classList.add("text-gray-600")
       }
     });
   }

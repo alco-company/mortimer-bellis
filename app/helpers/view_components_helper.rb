@@ -7,8 +7,8 @@ module ViewComponentsHelper
     render TimeMaterialButtonComponent.new user: user
   end
 
-  def time_material_form
-    render TimeMaterialForm.new
+  def time_material_form(**attribs, &block)
+    render TimeMaterialForm.new(**attribs), &block
   end
 
   def render_component(component, locals = {})

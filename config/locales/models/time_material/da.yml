@@ -3,3 +3,36 @@ da:
     type:
       time: "Tid"
       material: "Materiale"
+    date:
+      lbl: "Dato"
+    time:
+      lbl: "Tid"
+    about:
+      lbl: "Beskrivelse"
+      help: "Beskriv hvad opgaven går ud på"
+      placeholder: "fx 'Opsætning af server'"
+    customer:
+      lbl: "Kunde"
+      placeholder: "fx 'TG'"
+    project:
+      lbl: "Projekt"
+      placeholder: "fx 'Hjemmeside'"
+    rate:
+      hourly: "Timepris"
+      unit_price: "Enhedspris"
+    invoicing:
+      lead: "Fakturering"
+      invoice:
+        lbl: "Opgaven skal faktureres"
+        help: "Sæt flueben hvis opgaven skal faktureres"
+      free:
+        lbl: "per kulance"
+        help: "Opgaven skal sættes på faktura - med 100% rabat"
+      offer:
+        lbl: "Tilbud"
+        help: "Opgaven er en del af et tilbud"
+      batch:
+        lbl: Samlefakturering
+      separate:
+        lbl: "Separat faktura"
+        help: "Opgaven skal faktureres separat"

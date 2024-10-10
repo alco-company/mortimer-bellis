@@ -1,1 +1,2 @@
-<%= time_material_form %>
+<% url = @resource.id.nil? ? time_materials_url : time_material_url(@resource) %>
+<%= time_material_form(time_material: @resource, url: url) %>
