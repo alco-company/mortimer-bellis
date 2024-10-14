@@ -1,3 +1,11 @@
+<div class="flex flex-col w-full">
+  <!-- streams for view -->  
+  <%= turbo_stream_from @resources_stream %>
 
-<%= render @resources, as: :time_material %>
+  <!-- Begin header -->
+  <%= render TimeMaterialHeader.new resources: @resources, resource_class: @resource_class %>
+
+  <%= render TimeMaterialDetail.new items: @records %>
+</div>
+
 <%= time_material_button(user: current_user) %>

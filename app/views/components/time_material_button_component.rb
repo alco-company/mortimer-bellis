@@ -34,7 +34,7 @@ class TimeMaterialButtonComponent < ApplicationComponent
   end
 
   def add_time_material_button
-    link_to(new_time_material_url, class: "mort-btn-start-time-material rounded-full w-14 h-14", data: { turbo_frame: :_top }) do
+    link_to(new_time_material_url, class: "mort-btn-start-time-material rounded-full w-14 h-14", data: { turbo_frame: "form" }) do
       render Icons::Add.new
     end
   end

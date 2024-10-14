@@ -46,6 +46,10 @@ If Solid Queue bites me again, look here: https://github.com/rails/solid_queue/i
 
 ## CHANGELOG
 
+### 14/10/2024
+
+* list time_material on /time_materials
+
 ### 10/10/2024
 
 * add time_material model for persisting time and material draft input

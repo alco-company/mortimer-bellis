@@ -6,29 +6,19 @@ class Contextmenu < Phlex::HTML
 
   attr_accessor :resource, :resource_class, :list
 
-  def initialize(resource: nil, list: nil, resource_class: nil, turbo_frame: "_top", alter: true, links: [])
+  def initialize(resource: nil, list: nil, resource_class: nil, turbo_frame: "_top", alter: true, links: [], cls: "relative flex")
     @resource = resource
     @resource_class = resource_class || resource.class
     @list = list
     @turbo_frame = turbo_frame
     @alter = alter
     @links = links
+    @cls = cls
   end
 
   def view_template
-    div(data_controller: "contextmenu", class: "relative flex") do
-      button(
-        type: "button",
-        data_contextmenu_target: "button",
-        data_action: "touchstart->contextmenu#tap click->contextmenu#tap click@window->contextmenu#hide",
-        class: "-m-2.5 block p-2.5 text-gray-500 hover:text-gray-900",
-        id: "options-menu-0-button",
-        aria_expanded: "false",
-        aria_haspopup: "true"
-      ) do
-        contextmenu_button
-      end
-      whitespace
+    div(data_controller: "contextmenu", class: @cls) do
+      contextmenu_button
       case true
       when !list.nil?; list_dropdown
       when !resource.nil?; dropdown
@@ -41,24 +31,76 @@ class Contextmenu < Phlex::HTML
   end
 
   def archived_button
-    svg(xmlns: "http://www.w3.org/2000/svg", height: "24px", viewBox: "0 -960 960 960", width: "24px", fill: "#5f6368") do |s|
-      s.path(d: "M200-80q-33 0-56.5-23.5T120-160v-451q-18-11-29-28.5T80-680v-120q0-33 23.5-56.5T160-880h640q33 0 56.5 23.5T880-800v120q0 23-11 40.5T840-611v451q0 33-23.5 56.5T760-80H200Zm0-520v440h560v-440H200Zm-40-80h640v-120H160v120Zm200 280h240v-80H360v80Zm120 20Z")
+    button(
+      type: "button",
+      data_contextmenu_target: "button",
+      data_action: "touchstart->contextmenu#tap click->contextmenu#tap click@window->contextmenu#hide",
+      class: "-m-2.5 block p-2.5 text-gray-500 hover:text-gray-900",
+      id: "options-menu-0-button",
+      aria_expanded: "false",
+      aria_haspopup: "true"
+    ) do
+      svg(xmlns: "http://www.w3.org/2000/svg", height: "24px", viewBox: "0 -960 960 960", width: "24px", fill: "#5f6368") do |s|
+        s.path(d: "M200-80q-33 0-56.5-23.5T120-160v-451q-18-11-29-28.5T80-680v-120q0-33 23.5-56.5T160-880h640q33 0 56.5 23.5T880-800v120q0 23-11 40.5T840-611v451q0 33-23.5 56.5T760-80H200Zm0-520v440h560v-440H200Zm-40-80h640v-120H160v120Zm200 280h240v-80H360v80Zm120 20Z")
+      end
     end
   end
 
   def more_button
-    span(class: "sr-only") { "Open #{list.nil? ? "item " : "list "}options" }
-    svg(
-      class: "h-5 w-5",
-      viewbox: "0 0 20 20",
-      fill: "currentColor",
-      aria_hidden: "true"
-    ) do |s|
-      s.path(
-        d:
-          "M10 3a1.5 1.5 0 110 3 1.5 1.5 0 010-3zM10 8.5a1.5 1.5 0 110 3 1.5 1.5 0 010-3zM11.5 15.5a1.5 1.5 0 10-3 0 1.5 1.5 0 003 0z"
-      )
-    end if @alter
+    list.nil? ? more_button_single : more_button_list
+  end
+
+  def more_button_list
+    button(
+      type: "button",
+      data_contextmenu_target: "button",
+      data_action:
+        " touchstart->contextmenu#tap click->contextmenu#tap click@window->contextmenu#hide",
+      class:
+        "flex items-center p-1 text-gray-400 rounded-md hover:text-gray-900 border h-7 -mr-0.5 pl-3",
+      id: "options-menu-0-button",
+      aria_expanded: "false",
+      aria_haspopup: "true"
+    ) do
+      span(class: "sr-only") { "Open list options" }
+      span(class: "text-[10px]") { "More" }
+      svg(
+        class: "h-5 w-5",
+        viewbox: "0 0 20 20",
+        fill: "currentColor",
+        aria_hidden: "true"
+      ) do |s|
+        s.path(
+          d:
+            "M10 3a1.5 1.5 0 110 3 1.5 1.5 0 010-3zM10 8.5a1.5 1.5 0 110 3 1.5 1.5 0 010-3zM11.5 15.5a1.5 1.5 0 10-3 0 1.5 1.5 0 003 0z"
+        )
+      end
+    end
+  end
+
+  def more_button_single
+    button(
+      type: "button",
+      data_contextmenu_target: "button",
+      data_action: "touchstart->contextmenu#tap click->contextmenu#tap click@window->contextmenu#hide",
+      class: "-m-2.5 block p-2.5 text-gray-500 hover:text-gray-900",
+      id: "options-menu-0-button",
+      aria_expanded: "false",
+      aria_haspopup: "true"
+    ) do
+      span(class: "sr-only") { "Open #{list.nil? ? "item " : "list "}options" }
+      svg(
+        class: "h-5 w-5",
+        viewbox: "0 0 20 20",
+        fill: "currentColor",
+        aria_hidden: "true"
+      ) do |s|
+        s.path(
+          d:
+            "M10 3a1.5 1.5 0 110 3 1.5 1.5 0 010-3zM10 8.5a1.5 1.5 0 110 3 1.5 1.5 0 010-3zM11.5 15.5a1.5 1.5 0 10-3 0 1.5 1.5 0 003 0z"
+        )
+      end if @alter
+    end
   end
 
   def list_dropdown

@@ -5,5 +5,7 @@ rm -f dump_all.sql dump_all_notrans.sql
 sqlite3 corrupted_$date.sqlite3 < ../bin/fix.sql
 { echo "PRAGMA synchronous = OFF ;"; cat dump_all.sql; } | grep -v -e TRANSACTION -e ROLLBACK -e COMMIT >dump_all_notrans.sql 
 sqlite3 development.sqlite3 ".read dump_all_notrans.sql"
-sqlite3 development.sqlite3 "PRAGMA integrity_check;"                                                                        
+sqlite3 development.sqlite3 "PRAGMA integrity_check;"
+sqlite3 development.sqlite3 "DELETE FROM solid_queue_blocked_executions; DELETE FROM solid_queue_claimed_executions; DELETE FROM solid_queue_failed_executions; DELETE FROM solid_queue_jobs; DELETE FROM solid_queue_pauses; DELETE FROM solid_queue_processes; DELETE FROM solid_queue_ready_executions; DELETE FROM solid_queue_recurring_executions; DELETE FROM solid_queue_recurring_tasks; DELETE FROM solid_queue_scheduled_executions; DELETE FROM solid_queue_semaphores;"
+sqlite3 development.sqlite3 "DELETE FROM SQLITE_SEQUENCE WHERE name in ('solid_queue_blocked_executions',  'solid_queue_claimed_executions',  'solid_queue_failed_executions',  'solid_queue_jobs',  'solid_queue_pauses',  'solid_queue_processes',  'solid_queue_ready_executions',  'solid_queue_recurring_executions',  'solid_queue_recurring_tasks',  'solid_queue_scheduled_executions',  'solid_queue_semaphores');"
 cd ..

@@ -33,6 +33,7 @@ da:
   mark_as_read: Læst
   expected_time_zone: "Vi tror at den tidszone, der passer dig bedst er:"
   view_all: Se alle
+  more: Mere
 
   weekdays: Ugedage
   monday: Mandag
@@ -508,6 +509,20 @@ da:
         eu_state: EU regulativ (2003/88/EC) status
         blocked: Blokeret for tidsregistrering
         allowed_ot_minutes: Tilladt overtid i minutter (-1=ingen, 0=ubegrænset)
+      time_material:
+        date: Dato
+        time: Tid
+        material: Materiale
+        description: Beskrivelse
+        about: Beskrivelse
+        customer: Kunde
+        project: Projekt
+        rate: Timepris
+        is_invoice: Opgaven skal faktureres
+        is_free: per kulance
+        is_offer: Tilbud
+        is_separate: Separat faktura
+
 
       uri_scheme: 
         scheme: skema
@@ -599,9 +614,6 @@ da:
       dashboard:
         one: Overblik 
         other: Overblik
-      user:
-        one: medarbejder
-        other: medarbejdere
       equipment:
         one: materiel 
         other: materiel 
@@ -671,6 +683,9 @@ da:
       team:
         one: hold
         other: hold
+      time_material:
+        one: tid/materiale
+        other: tid/materialer
       uri_scheme:
         one: URI skema 
         other: URI skemaer

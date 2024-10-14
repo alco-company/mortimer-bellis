@@ -1,32 +1,38 @@
 class TimeMaterialForm < ApplicationComponent
   include Phlex::Rails::Helpers::LinkTo
+  include Phlex::Rails::Helpers::Pluralize
 
   def initialize(time_material:, url:)
     @time_material = time_material
     @url = url
+    @method = time_material.new_record? ? "post" : "patch"
   end
 
   #  TimeMaterial tenant:references date time about customer customer_id project project_id product product_id quantity rate discount is_invoice:boolean is_free:boolean is_offer:boolean is_separate:boolean
 
   def view_template
-    div(class: "relative flex min-h-screen flex-col overflow-hidden mx-auto max-w-lg lg:w-1/2 xl:w-1/3 lg:mx-0 lg:float-right py-6 sm:py-12") do
-      div(class: "relative bg-white px-6 pb-8 pt-10 ring-1 ring-gray-900/5 sm:rounded-lg sm:px-2", data: { controller: "tabs", tabs_index: "0" }) do
-        div(class: "mx-auto max-w-full") do
-          div do
-            div(class: "") do
-              div(class: "border-b border-gray-200") do
-                nav(class: "-mb-px flex space-x-8", aria_label: "Tabs") do
-                  time_tab
-                  material_tab
+        # div(class: "relative flex min-h-screen flex-col overflow-hidden mx-auto w-full lg:mx-0 lg:float-right py-6 sm:py-12") do
+        #   div(class: "relative bg-white px-6 pb-8 pt-10 ring-1 ring-gray-900/5 sm:rounded-lg sm:px-2", data: { controller: "tabs", tabs_index: "0" }) do
+        div(class: "mx-auto max-w-full", data: { controller: "tabs", tabs_index: "0" }) do
+          form(action: @url, method: @method, data: { form_target: "form" },  class: "mort-form") do
+            div do
+              div(class: "") do
+                error_messages
+
+                div(class: "border-b border-gray-200") do
+                  nav(class: "-mb-px flex space-x-8", aria_label: "Tabs") do
+                    time_tab
+                    material_tab
+                  end
                 end
               end
             end
+            show_time_tab
+            show_material_tab
           end
-          show_time_tab
-          show_material_tab
         end
-      end
-    end
+    #   end
+    # end
   end
 
   def time_tab
@@ -45,7 +51,7 @@ class TimeMaterialForm < ApplicationComponent
         # end
         svg(
           class:
-            "-ml-0.5 mr-2 h-5 w-5 text-sky-500 group-hover:text-sky-500",
+            "-ml-0.5 mr-2 h-5 w-5 text-sky-500 group-hover:text-sky-500 pointer-events-none",
           viewbox: "0 0 20 20",
           fill: "currentColor",
           aria_hidden: "true",
@@ -56,7 +62,7 @@ class TimeMaterialForm < ApplicationComponent
               "M10 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM3.465 14.493a1.23 1.23 0 0 0 .41 1.412A9.957 9.957 0 0 0 10 18c2.31 0 4.438-.784 6.131-2.1.43-.333.604-.903.408-1.41a7.002 7.002 0 0 0-13.074.003Z"
           )
         end
-        span { I18n.t("time_material.type.time") }
+        span(class: "pointer-events-none") { I18n.t("time_material.type.time") }
     end
   end
 
@@ -76,7 +82,7 @@ class TimeMaterialForm < ApplicationComponent
         # end
         svg(
           class:
-            "-ml-0.5 mr-2 h-5 w-5 text-gray-400 group-hover:text-gray-500",
+            "-ml-0.5 mr-2 h-5 w-5 text-gray-400 group-hover:text-gray-500 pointer-events-none",
           viewbox: "0 0 20 20",
           fill: "currentColor",
           aria_hidden: "true",
@@ -89,178 +95,162 @@ class TimeMaterialForm < ApplicationComponent
             clip_rule: "evenodd"
           )
         end
-        span { I18n.t("time_material.type.material") }
+        span(class: "pointer-events-none") { I18n.t("time_material.type.material") }
     end
   end
 
   def show_time_tab
     div(id: "time", data: { tabs_target: "tabPanel" }, class: "time-material-type time tab ") do
-      form(action: @url, method: "post", data: { form_target: "form" },  class: "mort-form") do
-        div(class: "space-y-12") do
-          div(class: "border-b border-gray-900/10 pb-12") do
-            div(
-              class: "mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6"
-            ) do
-              div(class: "sm:col-span-4") do
-                label(for: "date", class: "block text-sm font-medium leading-6 text-gray-900") { I18n.t("time_material.date.lbl") }
-                div(class: "mt-2") do
-                  div(
+      div(class: "space-y-12") do
+        div(class: "border-b border-gray-900/10 pb-12") do
+          div(
+            class: "mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6"
+          ) do
+            div(class: "sm:col-span-4") do
+              label(for: "date", class: "block text-sm font-medium leading-6 text-gray-900") { I18n.t("time_material.date.lbl") }
+              div(class: "mt-2") do
+                div(
+                  class:
+                    "flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-sky-600 sm:max-w-md"
+                ) do
+                  input(
+                    type: "date",
+                    name: "time_material[date]",
+                    id: "time_material_date",
+                    value: @time_material.date,
                     class:
-                      "flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-sky-600 sm:max-w-md"
-                  ) do
-                    input(
-                      type: "date",
-                      name: "time_material[date]",
-                      id: "time_material_date",
-                      class:
-                        "block flex-1 border-0 bg-transparent py-1.5 pl-2 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
-                    )
-                  end
+                      "block flex-1 border-0 bg-transparent py-1.5 pl-2 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
+                  )
                 end
               end
-              div(class: "sm:col-span-4") do
-                label(for: "time", class: "block text-sm font-medium leading-6 text-gray-900") { I18n.t("time_material.time.lbl") }
-                div(class: "mt-2") do
-                  div(
-                    class:
-                      "flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-sky-600 sm:max-w-md"
-                  ) do
-                    input(
-                      name: "time_material[time]",
-                      id: "time_material_time",
-                      class:
-                        "block flex-1 border-0 bg-transparent py-1.5 pl-2 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6",
-                      placeholder: "1,25 or 1.15 or 10:00-11:15"
-                    )
-                  end
-                end
-              end
-              #
-              about_field
-              #
-              customer_field
-              #
-              project_field
-              #
-              rate_field I18n.t("time_material.rate.hourly")
-              #
             end
+            div(class: "sm:col-span-4") do
+              label(for: "time", class: "block text-sm font-medium leading-6 text-gray-900") { I18n.t("time_material.time.lbl") }
+              div(class: "mt-2") do
+                div(
+                  class:
+                    "flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-sky-600 sm:max-w-md"
+                ) do
+                  input(
+                    name: "time_material[time]",
+                    id: "time_material_time",
+                    value: @time_material.time,
+                    class:
+                      "block flex-1 border-0 bg-transparent py-1.5 pl-2 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6",
+                    placeholder: "1,25 or 1.15 or 10:00-11:15"
+                  )
+                end
+              end
+            end
+            #
+            about_field
+            #
+            customer_field
+            #
+            project_field
+            #
+            rate_field I18n.t("time_material.rate.hourly")
+            #
           end
-          #
-          invoicing
-          #
         end
-        div(class: "mt-6 flex items-center justify-end gap-x-6") do
-          whitespace
-          link_to(time_materials_url, class: "mort-btn-cancel") { "Fortryd" }
-          button(type: "submit", class: "mort-btn-save") { "Gem" }
-        end
+        #
+        invoicing
+        #
       end
+      form_actions
     end
   end
 
   def show_material_tab
     div(id: "material", data: { tabs_target: "tabPanel" }, class: "time-material-type material tab hidden") do
-      form do
-        div(class: "space-y-12") do
-          div(class: "border-b border-gray-900/10 pb-12") do
-            div(
-              class: "mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6"
-            ) do
-              div(class: "sm:col-span-4") do
-                whitespace
-                label(
-                  for: "username",
-                  class: "block text-sm font-medium leading-6 text-gray-900"
-                ) { "Produkt" }
-                div(class: "mt-2") do
-                  div(
+      div(class: "space-y-12") do
+        div(class: "border-b border-gray-900/10 pb-12") do
+          div(
+            class: "mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6"
+          ) do
+            div(class: "sm:col-span-4") do
+              whitespace
+              label(
+                for: "username",
+                class: "block text-sm font-medium leading-6 text-gray-900"
+              ) { "Produkt" }
+              div(class: "mt-2") do
+                div(
+                  class:
+                    "flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-sky-600 sm:max-w-md"
+                ) do
+                  whitespace
+                  input(
+                    name: "username",
+                    id: "username",
                     class:
-                      "flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-sky-600 sm:max-w-md"
-                  ) do
-                    whitespace
-                    input(
-                      name: "username",
-                      id: "username",
-                      class:
-                        "block flex-1 border-0 bg-transparent py-1.5 pl-2 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6",
-                      placeholder: "1,25 or 1.15 or 10:00-11:15"
-                    )
-                  end
+                      "block flex-1 border-0 bg-transparent py-1.5 pl-2 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6",
+                    placeholder: "1,25 or 1.15 or 10:00-11:15"
+                  )
                 end
               end
-              #
-              about_field
-              #
-              customer_field
-              #
-              project_field
-              #
-              div(class: "sm:col-span-4") do
-                whitespace
-                label(
-                  for: "username",
-                  class: "block text-sm font-medium leading-6 text-gray-900"
-                ) { "Antal" }
-                div(class: "mt-2") do
-                  div(
+            end
+            #
+            about_field
+            #
+            customer_field
+            #
+            project_field
+            #
+            div(class: "sm:col-span-4") do
+              whitespace
+              label(
+                for: "username",
+                class: "block text-sm font-medium leading-6 text-gray-900"
+              ) { "Antal" }
+              div(class: "mt-2") do
+                div(
+                  class:
+                    "flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-sky-600 sm:max-w-md"
+                ) do
+                  whitespace
+                  input(
+                    name: "username",
+                    id: "username",
                     class:
-                      "flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-sky-600 sm:max-w-md"
-                  ) do
-                    whitespace
-                    input(
-                      name: "username",
-                      id: "username",
-                      class:
-                        "block flex-1 border-0 bg-transparent py-1.5 pl-2 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6",
-                      placeholder: "900"
-                    )
-                  end
+                      "block flex-1 border-0 bg-transparent py-1.5 pl-2 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6",
+                    placeholder: "900"
+                  )
                 end
               end
-              #
-              rate_field I18n.t("time_material.rate.unit_price")
-              #
-              div(class: "sm:col-span-4") do
-                whitespace
-                label(
-                  for: "username",
-                  class: "block text-sm font-medium leading-6 text-gray-900"
-                ) { "Rabat" }
-                div(class: "mt-2") do
-                  div(
+            end
+            #
+            rate_field I18n.t("time_material.rate.unit_price")
+            #
+            div(class: "sm:col-span-4") do
+              whitespace
+              label(
+                for: "username",
+                class: "block text-sm font-medium leading-6 text-gray-900"
+              ) { "Rabat" }
+              div(class: "mt-2") do
+                div(
+                  class:
+                    "flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-sky-600 sm:max-w-md"
+                ) do
+                  whitespace
+                  input(
+                    name: "username",
+                    id: "username",
                     class:
-                      "flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-sky-600 sm:max-w-md"
-                  ) do
-                    whitespace
-                    input(
-                      name: "username",
-                      id: "username",
-                      class:
-                        "block flex-1 border-0 bg-transparent py-1.5 pl-2 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6",
-                      placeholder: "900"
-                    )
-                  end
+                      "block flex-1 border-0 bg-transparent py-1.5 pl-2 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6",
+                    placeholder: "900"
+                  )
                 end
               end
             end
           end
-          #
-          invoicing
-          #
         end
-        div(class: "mt-6 flex items-center justify-end gap-x-6") do
-          button(
-            type: "button",
-            class: "text-sm font-semibold leading-6 text-gray-900"
-          ) { "Fortryd" }
-          button(
-            type: "submit",
-            class:
-              "rounded-md bg-sky-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-sky-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600"
-          ) { "Gem" }
-        end
+        #
+        invoicing
+        #
       end
+      form_actions
     end
   end
 
@@ -280,7 +270,9 @@ class TimeMaterialForm < ApplicationComponent
           class:
             "block w-full rounded-md border-0 py-1.5 px-2.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-600 sm:text-sm sm:leading-6",
           placeholder: I18n.t("time_material.about.placeholder")
-        )
+        ) do
+          plain @time_material.about
+        end
       end
       p(class: "mt-3 text-sm leading-6 text-gray-600") do
         I18n.t("time_material.about.help")
@@ -294,8 +286,8 @@ class TimeMaterialForm < ApplicationComponent
       div(class: "mt-2") do
         div(class: "flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-sky-600 sm:max-w-md") do
           input(
-            name: "time_material[customer]",
-            id: "time_material_customer",
+            name: "time_material[customer_name]",
+            id: "time_material_customer_name",
             autocomplete: "customer",
             class:
               "block flex-1 border-0 bg-transparent py-1.5 pl-2 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6",
@@ -312,8 +304,8 @@ class TimeMaterialForm < ApplicationComponent
       div(class: "mt-2") do
         div(class: "flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-sky-600 sm:max-w-md") do
           input(
-            name: "time_material[project]",
-            id: "time_material_project",
+            name: "time_material[project_name]",
+            id: "time_material_project_name",
             autocomplete: "project",
             class:
               "block flex-1 border-0 bg-transparent py-1.5 pl-2 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6",
@@ -417,5 +409,43 @@ class TimeMaterialForm < ApplicationComponent
         end
       end
     end
+  end
+
+  def error_messages
+    if @time_material.errors.any?
+      div(id: "error_explanation", class: "mt-4 p-4 sm: p-1") do
+        h2(class: "mort-err-resume") { I18n.t(:form_errors_prohibited, errors: @time_material.errors.count) }
+        ul do
+          @time_material.errors.each do |error|
+            li { error.full_message }
+          end
+        end
+      end
+    end
+  end
+
+  def form_actions
+    div(class: "my-6 flex items-center justify-end gap-x-6") do
+      link_to(time_materials_url, class: "mort-btn-cancel") { "Fortryd" }
+      button(type: "submit", class: "mort-btn-save") { "Gem" }
+    end
+
+    # div(class: "fixed flex items-center w-screen max-w-md right-0 px-4 py-3 font-semibold text-sm text-slate-900 dark:text-slate-200 bg-slate-50 dark:bg-slate-700") do
+    #   link_to(time_materials_url, class: "flex-none mr-6 rounded-md bg-slate-50 dark:bg-slate-700 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2") do
+    #     span(class: "absolute -inset-2.5")
+    #     span(class: "sr-only") { "Close panel" }
+    #     svg(class: "h-6 w-6", fill: "none", viewbox: "0 0 24 24", stroke_width: "1.5", stroke: "currentColor", aria_hidden: "true", data_slot: "icon") do |s|
+    #       s.path(stroke_linecap: "round", stroke_linejoin: "round", d: "M6 18 18 6M6 6l12 12")
+    #     end
+    #   end
+    #   h2(class: "grow text-base font-semibold text-gray-900", id: "slide-over-title") { "Panel title" }
+    #   button(type: "submit", class: "flex-none rounded-md bg-slate-50 dark:bg-slate-700 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2") do
+    #     span(class: "absolute -inset-2.5")
+    #     span(class: "sr-only") { "Save content" }
+    #     svg(class: "text-green-500", xmlns: "http://www.w3.org/2000/svg", height: "24px", viewbox: "0 -960 960 960", width: "24px", fill: "currentColor") do |s|
+    #       s.path(d: "M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z")
+    #     end
+    #   end
+    # end
   end
 end

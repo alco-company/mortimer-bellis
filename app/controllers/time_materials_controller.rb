@@ -3,6 +3,6 @@ class TimeMaterialsController < MortimerController
 
     # Only allow a list of trusted parameters through.
     def resource_params
-      params.require(:time_material).permit(:tenant_id, :date, :time, :about, :customer, :customer_id, :project, :project_id, :product, :product_id, :quantity, :rate, :discount, :is_invoice, :is_free, :is_offer, :is_separate)
+      params.require(:time_material).permit(:tenant_id, :date, :time, :about, :customer_name, :customer_id, :project_name, :project_id, :product_name, :product_id, :quantity, :rate, :discount, :state, :is_invoice, :is_free, :is_offer, :is_separate)
     end
 end

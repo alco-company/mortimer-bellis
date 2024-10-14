@@ -1,5 +1,14 @@
 da:
   time_material:
+    modal:
+      delete_all: 
+        title: Slet alle tid/materialer
+        instruction: Er du sikker på, at du vil slette alle tid/materialer?
+      delete:
+        title: Slet denne tid/materiale
+        instruction: Er du sikker på, at du vil slette denne tid/materiale %{name}?
+        button: Slet
+
     type:
       time: "Tid"
       material: "Materiale"
@@ -36,3 +45,46 @@ da:
       separate:
         lbl: "Separat faktura"
         help: "Opgaven skal faktureres separat"
+
+  time_materials:
+    create:
+      post: Tid/Materiale blev oprettet
+    update:
+      post: Tid/Materiale blev opdateret
+    destroy:
+      post: Tid/Materiale blev slettet
+
+    list:
+      title: Tid/materialer
+      new: Ny tid/materiale
+      time_logged: "%{time} logget"
+      edit: Rediger
+      delete: Slet
+      show: Vis
+      name: Navn
+      email: Email
+      color: Farve
+      phone: Telefon
+      pincode: Pinkode
+      state: Status
+      updated_at: Opdateret den
+
+    form:
+      new: Ny tid/materiale
+      edit: Rediger tid/materiale
+
+    new:
+      title: Ny tid/materiale
+      create: Opret
+
+    edit:
+      title: Rediger tid/materiale
+      update: Opdater
+
+    show:
+      title: tid/materiale
+      back: Tilbage
+
+    errors:
+      messages:
+        name_exist: "Tid/Materiale findes allerede"

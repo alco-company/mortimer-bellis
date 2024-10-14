@@ -5,15 +5,16 @@ class CreateTimeMaterials < ActiveRecord::Migration[8.0]
       t.string :date
       t.string :time
       t.string :about
-      t.string :customer
+      t.string :customer_name
       t.string :customer_id
-      t.string :project
+      t.string :project_name
       t.string :project_id
-      t.string :product
+      t.string :product_
       t.string :product_id
       t.string :quantity
       t.string :rate
       t.string :discount
+      t.integer :state, default: 0
       t.boolean :is_invoice
       t.boolean :is_free
       t.boolean :is_offer

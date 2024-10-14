@@ -21,6 +21,27 @@ class ApplicationRecord < ActiveRecord::Base
     end
   end
 
+  # implement this method on model that has mugshots
+  def has_mugshot?
+    false
+  end
+
+  # implement this method on model that has one/more photos
+  def mugshot
+    raise "implement this method on the model if mugshot exist!" if has_mugshot?
+  end
+
+
+  def list_item(links: [])
+    # TimeMaterialDetailItem.new(item: self, links: links)
+    raise "implement this method on the model in order to list_item!"
+  end
+
+  def self.form(resource, editable = true)
+    # Locations::Form.new resource, editable: editable
+    raise "implement this method on the model in order to show/edit post!"
+  end
+
   def self.ordered(resources, field, direction = :desc)
     resources.order(field => direction)
   end

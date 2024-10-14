@@ -6,6 +6,7 @@
   .mort-btn-punch-in {
     @apply flex justify-center rounded-md bg-green-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-green-500 hover:cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600;
   }
+
   .mort-btn-punch-break {
     @apply flex justify-center rounded-md bg-yellow-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-yellow-500 hover:cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-600;
   }
@@ -55,7 +56,7 @@
   }
 
   .mort-form-bool {
-    @apply block  px-3 py-2 mt-2;
+    @apply block px-3 py-2 mt-2;
   }
 
   .mort-filter-field {
@@ -93,36 +94,45 @@
   }
 
   .mort-flash-error {
-    @apply inline-block bg-red-100  text-red-700;
+    @apply inline-block bg-red-100 text-red-700;
   }
+
   .mort-flash-border-error {
     @apply border border-red-400;
   }
 
-  .mort-flash-warning, .mort-flash-alert {
-    @apply inline-block bg-yellow-100  text-yellow-700;
+  .mort-flash-warning,
+  .mort-flash-alert {
+    @apply inline-block bg-yellow-100 text-yellow-700;
   }
-  .mort-flash-border-warning, .mort-flash-border-alert {
+
+  .mort-flash-border-warning,
+  .mort-flash-border-alert {
     @apply border border-yellow-400;
   }
 
-  .mort-flash-info, .mort-flash-timedout {
-    @apply inline-block bg-sky-100  text-sky-700;
+  .mort-flash-info,
+  .mort-flash-timedout {
+    @apply inline-block bg-sky-100 text-sky-700;
   }
-  .mort-flash-border-info, .mort-flash-border-timedout {
+
+  .mort-flash-border-info,
+  .mort-flash-border-timedout {
     @apply border border-sky-400;
   }
 
   .mort-flash-notice {
-    @apply inline-block bg-blue-100  text-blue-700;
+    @apply inline-block bg-blue-100 text-blue-700;
   }
+
   .mort-flash-border-notice {
     @apply border border-blue-400;
   }
 
   .mort-flash-success {
-    @apply inline-block bg-green-50  text-green-500;
+    @apply inline-block bg-green-50 text-green-500;
   }
+
   .mort-flash-border-success {
     @apply border border-green-400;
   }
@@ -156,6 +166,7 @@
   .mort-state-leave_free {
     @apply bg-blue-100 text-blue-800;
   }
+
   .mort-state-archived {
     @apply bg-gray-100 text-gray-800;
   }

@@ -7,7 +7,22 @@ export default class extends Controller {
   ]
 
   connect() {
-    // console.log("fisk");
+    console.log("fisk");
+    console.log(this.formTarget);
+  }
+
+  cancelForm(e) {
+    e.preventDefault();
+    let el = e.target;
+    while('BUTTON' !== el.nodeName) {
+      el = el.parentElement;
+    }
+    document.getElementById('form').innerHTML = ""
+  }
+
+  submitForm(e) {
+    e.preventDefault();
+    this.formTarget.requestSubmit();
   }
 
   clearForm(e) {

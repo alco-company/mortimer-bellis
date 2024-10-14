@@ -9,8 +9,15 @@ export default class extends Controller {
   }
 
   change(e) {
-    this.index = e.target.value;
-    this.showTab();
+    try {      
+      while('BUTTON' != e.srcElement.nodeName){
+        e = e.srcElement.parentElement;
+      }
+      this.index = e.target.value;
+      this.showTab();
+    } catch (error) {
+      
+    }
   }
 
   showTab(i) {
