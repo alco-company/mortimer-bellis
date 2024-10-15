@@ -2,8 +2,8 @@ class BaseController < ApplicationController
   # Only allow modern browsers supporting webp images, web push, badges, import maps, CSS nesting, and CSS :has.
   # allow_browser versions: :modern
 
-  # layout "application"
-  layout "vertical_menu_application"
+  layout "application"
+  # layout "vertical_menu_application"
   # TODO - make Phlex layouts work
   # layout -> { ApplicationLayout }
 

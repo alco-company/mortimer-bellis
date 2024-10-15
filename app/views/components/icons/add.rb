@@ -1,9 +1,13 @@
 class Icons::Add < Phlex::HTML
+  def initialize(cls: "h-12 w-12")
+    @cls = cls
+  end
+
   def view_template
     svg(
       xmlns: "http://www.w3.org/2000/svg",
       viewbox: "0 -960 960 960",
-      class: "h-12 w-12",
+      class: @cls,
       fill: "currentColor",
       stoke: "currentColor"
     ) do |s|

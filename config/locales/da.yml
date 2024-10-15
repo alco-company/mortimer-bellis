@@ -33,7 +33,9 @@ da:
   mark_as_read: Læst
   expected_time_zone: "Vi tror at den tidszone, der passer dig bedst er:"
   view_all: Se alle
-  more: Mere
+  more: mere
+  ago: siden
+  last_update: sidst opdateret for
 
   weekdays: Ugedage
   monday: Mandag
@@ -136,6 +138,19 @@ da:
       updated_at: Opdateret den
       created_at: Oprettet den
 
+  pagy:
+    # showing: Viser %{from} til %{to}, af %{count} %{entry_name}
+    showing: Viser
+    from: fra
+    to: til
+    of: af
+    results: poster
+    page: Side
+    previous: Forrige
+    next: Næste
+    gap: "..."
+    truncate: "..."
+    more: "mere"
   profile:
     overview: Oversigt
     invite_new_user: Invitér ny bruger

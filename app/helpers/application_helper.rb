@@ -1,6 +1,23 @@
 module ApplicationHelper
   include Pagy::Frontend
 
+
+  def prev_page_link(url, page)
+    if url =~ /page=/
+      url.sub(/page=\d+/, "page=#{page || 1}")
+    else
+      url + "?page=#{page || 1}"
+    end
+  end
+
+  def next_page_link(url, page)
+    if url =~ /page=/
+      url.sub(/page=\d+/, "page=#{page || 1}")
+    else
+      url + "?page=#{page || 1}"
+    end
+  end
+
   def say(msg)
     Rails.logger.info { "===============================" }
     Rails.logger.info { msg }

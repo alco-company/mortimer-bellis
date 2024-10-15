@@ -46,9 +46,14 @@ If Solid Queue bites me again, look here: https://github.com/rails/solid_queue/i
 
 ## CHANGELOG
 
+### 15/10/2024
+
+* fix bug on application layout - missing format on mobile
+
 ### 14/10/2024
 
 * list time_material on /time_materials
+* bug on mobile topbar - not showing properly
 
 ### 10/10/2024
 

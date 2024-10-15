@@ -2,27 +2,58 @@
 <html lang="<%= I18n.locale %>" class="h-full bg-white">
   <head>
     <%= render partial: "layouts/generic_header" %>
-
-    <%# <link rel="manifest" crossorigin="use-credentials" href="/manifest.json?start_url=<%= request.url %>
     <%#= tag :meta, name: :vapid_public_key, content: Rails.application.credentials.vapid.public_key %>
-
   </head>
-  <body class="flex flex-row h-screen w-full">
+  <body class="h-full">
+    <!-- tooltip -->
     <%= turbo_frame_tag "tooltip", class: "absolute", target: "_top" %>
+
+    <!-- streams for notifications, menu, profile -->
     <%= turbo_stream_from "#{Current.user.id}_noticed/notifications" if Current.user %>
-    <%#= render NavigationComponent.new items: menu_items %>
-    <%#= render_vertical_menu %>
-    <main class="grow-0 w-full p-4 pt-0">
-      <%#= render_menu user: Current.user %>
-      <%= yield %>
-    </main>
+
+    <!-- view -->
+    <div data-controller="menu page">
+
+      <!-- Before menu -->
+      <div >
+
+        <!-- Off-canvas menu for mobile, show/hide based on off-canvas menu state. -->
+        <%= render_mobile_sidebar %>
+
+        <!-- Static sidebar for desktop -->
+        <div class="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-72 lg:flex-col">
+          <!-- Sidebar component, swap this element with another sidebar if you like -->
+          <%= render SidebarComponent.new %>
+        </div>
+
+      </div>
+      <!-- End menu -->
+
+      <div class="lg:pl-72">
+        <%= render_topbar %>
+        <main class="py-4">
+          <div class="px-4 sm:px-6 lg:px-8">
+            <%= yield %>
+
+            <!-- Before Sidebar Form -->
+            <%= turbo_frame_tag "form" %>
+            <!-- End Sidebar Form -->
+
+          </div>
+        </main>
+      </div>
+    </div>
+
     <%# 
     in honor of Tailwind not being able to know 'tags' in advance
     span(class: "hidden mort-flash-info mort-flash-error mort-flash-success mort-flash-warning mort-flash-notice mort-flash-timedout mort-flash-alert") 
     span(class: "hidden border-gray-500 border-red-500 border-fuchsia-500 border-blue-500 border-green-500 border-yellow-500 border-sky-500 border-orange-500 border-lime-500 border-cyan-500 border-pink-500 border-amber-500 border-stone-500")
     %>
     <%= render FlashComponent.new flash: flash %>
+
+    <!-- Before ModalContainer -->
     <remote-modal-container></remote-modal-container>
-    <%= turbo_frame_tag "form" %>
+    <!-- End ModalContainer -->
+
   </body>
 </html>

@@ -7,6 +7,7 @@ export default class extends Controller {
   ];
 
   connect() {
+    console.log("Connected to menu controller")
   }
 
   toggleFlyout(e) {
@@ -34,6 +35,7 @@ export default class extends Controller {
   }
 
   openMobileSidebar(e) {
+    console.log("openMobileSidebar")
     this.mobileSidebarTarget.classList.remove("hidden");
   }
 

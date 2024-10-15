@@ -18,13 +18,12 @@ class SidebarComponent < ApplicationComponent
           li do
             ul(role: "list", class: "-mx-2 space-y-1") do
               @menu.each do |key, item|
-                item[:submenu] ? sub_menu(key, item) : menu_item(item[:title], item[:url])
+                item[:submenu] ? sub_menu(key, item) : menu_item(item: item[:title], url: item[:url], icon: item[:icon])
               end
             end
           end
-          settings_and_integrations unless Current.user.user?
+          settings_and_integrations unless Current.user&.user?
         end
-        whitespace
       end
     end
   end
@@ -33,7 +32,7 @@ class SidebarComponent < ApplicationComponent
 
     def default_menu
       {
-        dashboard: { title: "Dashboard", url: "/" },
+        dashboard: { title: "Dashboard", url: "/", icon: "home" },
         time_material: { title: "Time & Material", url: "/time_materials" },
         calendar: { title: "Calendar", url: "/calendars" },
         reports: { title: "Reports", url: "/pages" },
@@ -61,11 +60,14 @@ class SidebarComponent < ApplicationComponent
       request.path.split("?")[0].include?(url) ? "bg-gray-50" : ""
     end
 
-    def menu_item(text, url, css = "block rounded-md hover:bg-gray-50 py-2 pl-10 pr-2 text-sm font-semibold leading-6 text-gray-700 truncate")
+    def menu_item(item:, url:, css: "group flex gap-x-3 rounded-md bg-white p-2 text-sm font-semibold leading-6 text-gray-700  hover:bg-gray-50", icon: nil)
       # %(Current: "bg-gray-50", Default: "hover:bg-gray-50")
       css = "#{css} #{current_item?(url)}"
       li do
-        a(href: url, class: css, data: { action: "click->menu#closeMobileSidebar" }) { text.to_s.titleize }
+        a(href: url, class: css, data: { action: "click->menu#closeMobileSidebar" }) do
+          render_icon(icon) if icon
+          plain item.to_s.titleize
+        end
       end
     end
 
@@ -95,11 +97,11 @@ class SidebarComponent < ApplicationComponent
             aria_controls: "sub-menu-1",
             aria_expanded: "false"
           ) do
-            comment do
-              %(Expanded: "rotate-90 text-gray-500", Collapsed: "text-gray-400")
-            end
+            # comment do
+            #   %(Expanded: "rotate-90 text-gray-500", Collapsed: "text-gray-400")
+            # end
             svg(
-              class: "h-5 w-5 shrink-0 #{expanded_sub?(item)}",
+              class: "pointer-events-none h-5 w-5 shrink-0 #{expanded_sub?(item)}",
               viewbox: "0 0 20 20",
               fill: "currentColor",
               aria_hidden: "true"
@@ -113,17 +115,17 @@ class SidebarComponent < ApplicationComponent
             end
             plain text
           end
-          whitespace
-          comment do
-            "Expandable link section, show/hide based on state."
-          end
+          # comment do
+          #   "Expandable link section, show/hide based on state."
+          # end
           ul(class: "submenu #{hidden_sub?(item)} mt-1 px-2", id: "sub-menu-1") do
             item[:submenu].each do |key, i|
-              menu_item(i[:title], i[:url], "block rounded-md py-2 pl-9 pr-2 text-sm leading-6 text-gray-700 hover:bg-gray-50")
+              menu_item(item: i[:title], url: i[:url], css: "block rounded-md py-2 pl-9 pr-2 text-sm leading-6 text-gray-700 hover:bg-gray-50", icon: i[:icon])
             end
           end
         end
       end
+    rescue
     end
 
     def settings_and_integrations
@@ -166,6 +168,12 @@ class SidebarComponent < ApplicationComponent
             end
           end
         end
+      end
+    end
+
+    def render_icon(icon)
+      case icon
+      when "home"; render Icons::Home.new
       end
     end
 end

@@ -26,7 +26,8 @@ export default class extends Controller {
   }
 
   toggleProfileMenu() {
-    this.profileMenuTarget.classList.toggle("hidden")
+    console.log("profile")
+    // this.profileMenuTarget.classList.toggle("hidden")
   }
 
   tapDrop(event) {

@@ -1,24 +1,5 @@
-<div class="w-full">
-  <%= render partial: "header" %>
-  <div class="class">
-    <div class="min-w-full">
-      <%= turbo_stream_from @resources_stream %>
-      <%= yield :list_header %>
-      <ul id="list" role="list" class="divide-y divide-gray-100">
-        <li  class="flex items-center justify-between gap-x-6 py-5">
-          <%= render partial: "list" %>
-          <div class="flex flex-none items-center gap-x-4 ">
-            <%= render_contextmenu list: @resources, resource_class: resource_class %>
-          </div>
-        </li>
-        <filter-container>
-          <% if any_filters? %>
-            <%= render partial: 'filters/form' %>
-          <% end %>
-        </filter-container>
-        <div id="append_new" class=""></div>
-        <%= render @records %>
-      </ul>
-    </div>
-  </div>
-</div>
+<%= render partial: "header" %>
+<%= render partial: "filtering" unless @filter.new_record? %>
+<%= turbo_frame_tag "form" %>
+<%= render partial: "list" %>
+<%= render partial: "pagination" if @pagy.pages > 1 %>

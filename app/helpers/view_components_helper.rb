@@ -39,9 +39,9 @@ module ViewComponentsHelper
     render ScanIconComponent.new
   end
 
-  def render_menu(**attribs, &block)
-    render MenuComponent.new(**attribs), &block
-  end
+  # def render_menu(**attribs, &block)
+  #   render MenuComponent.new(**attribs), &block
+  # end
 
   def render_mobile_sidebar(**attribs, &block)
     render MobileSidebarComponent.new(**attribs), &block
