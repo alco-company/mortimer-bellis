@@ -14,8 +14,9 @@ servers:
   web:
     hosts:
       - 135.181.202.106
-    options:
-      network: "mortimer"    
+    options: {}
+      # "add-host": host.docker.internal:host-gateway
+      # network: "mortimer"    
     labels:
       traefik.enable: true
       traefik.http.routers.mortimer.entrypoints: websecure
