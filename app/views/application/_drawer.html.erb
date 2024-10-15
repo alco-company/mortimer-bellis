@@ -2,7 +2,7 @@
 <!-- drawer -->
 <div class=" relative z-50" role="dialog" aria-modal="true" data-controller="form">
   <!-- Background backdrop, show/hide based on slide-over state. -->
-  <div data-form-target="form" class="fixed inset-0"></div>
+  <div class="fixed inset-0"></div>
 
   <div class="fixed inset-0 overflow-hidden">
     <div class="absolute inset-0 overflow-hidden">
@@ -43,7 +43,7 @@
             </div>
             <!-- Main -->
             <div>
-              <div class=" pb-1 sm:pb-6">
+              <!-- <div class=" pb-1 sm:pb-6">
                 <div>
                   <div class="relative h-40 sm:h-56">
                     <img class="absolute h-full w-full object-cover" src="https://images.unsplash.com/photo-1501031170107-cfd33f0cbdcc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&h=600&q=80" alt="">
@@ -72,7 +72,6 @@
                               </svg>
                             </button>
 
-                            <!--
                               Dropdown panel, show/hide based on dropdown state.
 
                               Entering: "transition ease-out duration-100"
@@ -81,10 +80,9 @@
                               Leaving: "transition ease-in duration-75"
                                 From: "transform opacity-100 scale-100"
                                 To: "transform opacity-0 scale-95"
-                            -->
                             <div class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="options-menu-button" tabindex="-1">
                               <div class="py-1" role="none">
-                                <!-- Active: "bg-gray-100 text-gray-900", Not Active: "text-gray-700" -->
+                                Active: "bg-gray-100 text-gray-900", Not Active: "text-gray-700"
                                 <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="options-menu-item-0">View profile</a>
                                 <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="options-menu-item-1">Copy profile link</a>
                               </div>
@@ -95,9 +93,10 @@
                     </div>
                   </div>
                 </div>
-              </div>
-              <div class="px-4 pb-5 pt-5 sm:px-0 sm:pt-0">
-                <dl class="space-y-8 px-4 sm:space-y-6 sm:px-6">
+              </div> -->
+              <div class="px-4 pb-5 pt-5 sm:pt-0">
+                  <%= render resource_class.form @resource %>
+                <!-- <dl class="space-y-8 px-4 sm:space-y-6 sm:px-6">
                   <div>
                     <dt class="text-sm font-medium text-gray-500 sm:w-40 sm:flex-shrink-0">Bio</dt>
                     <dd class="mt-1 text-sm text-gray-900 sm:col-span-2">
@@ -118,7 +117,7 @@
                       <time datetime="1988-06-23">June 23, 1988</time>
                     </dd>
                   </div>
-                </dl>
+                </dl> -->
               </div>
             </div>
           </div>

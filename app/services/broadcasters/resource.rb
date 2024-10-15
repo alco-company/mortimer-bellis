@@ -13,9 +13,9 @@ class Broadcasters::Resource
 
   def create
     return unless tenant
-    Turbo::StreamsChannel.broadcast_action_to(
+    Turbo::StreamsChannel.broadcast_action_later_to(
       resources_stream,
-      target: :list,
+      target: "list",
       action: :prepend,
       partial: resource,
       locals: { resource_class.to_s.underscore => resource }

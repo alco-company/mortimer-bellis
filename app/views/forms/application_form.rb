@@ -369,17 +369,6 @@ class ApplicationForm < Superform::Rails::Form
   def around_template(&)
     super do
       div(class: "") do
-        div(class: "flex flex-row flex-row-reverse m-5 gap-4") do
-          if @editable
-            submit(submit_string, tabindex: "0", class: "mort-btn-primary")
-            button(
-              type: "button",
-              data: { action: "click->form#clearForm" },
-              tabindex: "0",
-              class: "mort-btn-cancel"
-            ) { helpers.t("cancel") }
-          end
-        end
         error_messages
         yield
       end

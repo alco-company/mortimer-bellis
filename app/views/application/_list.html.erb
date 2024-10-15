@@ -1,4 +1,5 @@
 <!-- List -->
-<ul role="list" class="divide-y divide-gray-100">
+<%= turbo_stream_from @resources_stream %>
+<ul id="list" role="list" class="divide-y divide-gray-100">
   <%= render @records %>
 </ul>
