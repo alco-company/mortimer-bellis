@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_10_10_064203) do
+ActiveRecord::Schema[8.0].define(version: 2024_10_15_220911) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -535,7 +535,7 @@ ActiveRecord::Schema[8.0].define(version: 2024_10_10_064203) do
     t.string "customer_id"
     t.string "project_name"
     t.string "project_id"
-    t.string "product_"
+    t.string "product_name"
     t.string "product_id"
     t.string "quantity"
     t.string "rate"
@@ -547,7 +547,10 @@ ActiveRecord::Schema[8.0].define(version: 2024_10_10_064203) do
     t.boolean "is_separate"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "user_id", null: false
+    t.text "comment"
     t.index ["tenant_id"], name: "index_time_materials_on_tenant_id"
+    t.index ["user_id"], name: "index_time_materials_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -648,6 +651,7 @@ ActiveRecord::Schema[8.0].define(version: 2024_10_10_064203) do
   add_foreign_key "teams", "tenants"
   add_foreign_key "teams", "tenants", on_delete: :cascade
   add_foreign_key "time_materials", "tenants"
+  add_foreign_key "time_materials", "users"
   add_foreign_key "users", "teams"
   add_foreign_key "users", "teams", on_delete: :cascade
   add_foreign_key "users", "tenants"

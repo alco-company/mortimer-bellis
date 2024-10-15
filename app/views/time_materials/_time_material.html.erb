@@ -1,1 +1,23 @@
-<%= render TimeMaterialDetailItem.new item: time_material, id: dom_id(time_material), links: [ edit_time_material_url(time_material), time_material_url(time_material) ] %>
+  <li id="<%= dom_id time_material %>"  class="flex justify-between gap-x-6 py-5">
+    <div class="flex min-w-0 gap-x-4">
+      <!-- TODO add mugshots for time_materials <img class="h-12 w-12 flex-none rounded-full bg-gray-50" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt=""> -->
+      <div class="min-w-0 flex">
+        <p class="text-sm font-semibold leading-6 text-gray-900">
+          <%= show_resource_link(resource: time_material) %> 
+          <% if global_queries? Current.user %>
+            <span class="text-xs"><%= show_resource_link(resource: time_material.tenant) %> </span>
+          <% end %>
+        </p>
+        <p class="flex text-xs leading-5 text-gray-500">
+          something else
+        </p>
+      </div>
+    </div>
+    <div class="flex shrink-0 items-center gap-x-6">
+      <div class="hidden sm:flex sm:flex-col sm:items-end">
+        <p class="text-sm leading-6 text-gray-900"><%= show_resource_link(resource: time_material) %> </p>
+        <p class="mt-1 text-xs leading-5 text-gray-500"><%= I18n.t("last_update")%> <time datetime="<%= time_material.updated_at %>"><%= time_ago_in_words time_material.updated_at %> <%= I18n.t("ago") %></time></p>
+      </div>
+      <%= render_contextmenu resource: time_material, cls: "relative flex-none", turbo_frame: "form", resource_class: time_material, alter: true, links: [ edit_time_material_url(time_material), time_material_url(time_material) ] %>
+    </div>
+  </li>

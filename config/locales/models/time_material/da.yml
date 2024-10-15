@@ -26,9 +26,18 @@ da:
     project:
       lbl: "Projekt"
       placeholder: "fx 'Hjemmeside'"
+    product:
+      lbl: "Produkt"
+      placeholder: "fx 'Webshop'"
+    comment:
+      lbl: "Kommentar"
+      placeholder: "fx 'DNS for 3 domæner'"
     rate:
       hourly: "Timepris"
       unit_price: "Enhedspris"
+    discount:
+      lbl: "Rabat"
+      placeholder: "fx '10%'"
     invoicing:
       lead: "Fakturering"
       invoice:

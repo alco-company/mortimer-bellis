@@ -15,6 +15,10 @@ class TimeMaterialForm < ApplicationComponent
         #   div(class: "relative bg-white px-6 pb-8 pt-10 ring-1 ring-gray-900/5 sm:rounded-lg sm:px-2", data: { controller: "tabs", tabs_index: "0" }) do
         div(class: "mx-auto max-w-full", data: { controller: "tabs", tabs_index: "0" }) do
           form(action: @url, method: @method, data: { form_target: "form" },  class: "mort-form") do
+            input(type: "hidden", name: "time_material[user_id]", value: @time_material.user_id)
+            #
+            date_field
+            #
             div do
               div(class: "") do
                 error_messages
@@ -29,6 +33,16 @@ class TimeMaterialForm < ApplicationComponent
             end
             show_time_tab
             show_material_tab
+            #
+            customer_field
+            #
+            project_field
+            #
+
+            #
+            invoicing
+            #
+            form_actions
           end
         end
     #   end
@@ -104,27 +118,12 @@ class TimeMaterialForm < ApplicationComponent
       div(class: "space-y-12") do
         div(class: "border-b border-gray-900/10 pb-12") do
           div(
-            class: "mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6"
+            class: "mt-10 grid grid-cols-4 gap-x-6 gap-y-8 "
           ) do
-            div(class: "sm:col-span-4") do
-              label(for: "date", class: "block text-sm font-medium leading-6 text-gray-900") { I18n.t("time_material.date.lbl") }
-              div(class: "mt-2") do
-                div(
-                  class:
-                    "flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-sky-600 sm:max-w-md"
-                ) do
-                  input(
-                    type: "date",
-                    name: "time_material[date]",
-                    id: "time_material_date",
-                    value: @time_material.date,
-                    class:
-                      "block flex-1 border-0 bg-transparent py-1.5 pl-2 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
-                  )
-                end
-              end
-            end
-            div(class: "sm:col-span-4") do
+            #
+            about_field
+            #
+            div(class: "col-span-2") do
               label(for: "time", class: "block text-sm font-medium leading-6 text-gray-900") { I18n.t("time_material.time.lbl") }
               div(class: "mt-2") do
                 div(
@@ -143,21 +142,11 @@ class TimeMaterialForm < ApplicationComponent
               end
             end
             #
-            about_field
-            #
-            customer_field
-            #
-            project_field
-            #
             rate_field I18n.t("time_material.rate.hourly")
             #
           end
         end
-        #
-        invoicing
-        #
       end
-      form_actions
     end
   end
 
@@ -166,14 +155,14 @@ class TimeMaterialForm < ApplicationComponent
       div(class: "space-y-12") do
         div(class: "border-b border-gray-900/10 pb-12") do
           div(
-            class: "mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6"
+            class: "mt-10 grid grid-cols-4 gap-x-6 gap-y-8"
           ) do
-            div(class: "sm:col-span-4") do
+            div(class: "col-span-4") do
               whitespace
               label(
-                for: "username",
+                for: "product_name",
                 class: "block text-sm font-medium leading-6 text-gray-900"
-              ) { "Produkt" }
+              ) { I18n.t("time_material.product.lbl")  }
               div(class: "mt-2") do
                 div(
                   class:
@@ -181,26 +170,45 @@ class TimeMaterialForm < ApplicationComponent
                 ) do
                   whitespace
                   input(
-                    name: "username",
-                    id: "username",
+                    name: "time_material[product_name]",
+                    id: "time_material_product_name",
+                    value: @time_material.product_name,
                     class:
                       "block flex-1 border-0 bg-transparent py-1.5 pl-2 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6",
-                    placeholder: "1,25 or 1.15 or 10:00-11:15"
+                    placeholder: I18n.t("time_material.product.placeholder")
                   )
                 end
               end
             end
-            #
-            about_field
-            #
-            customer_field
-            #
-            project_field
-            #
-            div(class: "sm:col-span-4") do
+            div(class: "col-span-4") do
               whitespace
               label(
-                for: "username",
+                for: "comment",
+                class: "block text-sm font-medium leading-6 text-gray-900"
+              ) { I18n.t("time_material.comment.lbl")  }
+              div(class: "mt-2") do
+                div(
+                  class:
+                    "flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-sky-600 sm:max-w-md"
+                ) do
+                  textarea(
+                    id: "time_material_comment",
+                    name: "time_material[comment]",
+                    rows: "3",
+                    autofocus: true,
+                    class:
+                      "block w-full rounded-md border-0 py-1.5 px-2.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-600 sm:text-sm sm:leading-6",
+                    placeholder: I18n.t("time_material.comment.placeholder")
+                  ) do
+                    plain @time_material.comment
+                  end
+                end
+              end
+            end
+            div(class: "col-span-4") do
+              whitespace
+              label(
+                for: "quantity",
                 class: "block text-sm font-medium leading-6 text-gray-900"
               ) { "Antal" }
               div(class: "mt-2") do
@@ -210,8 +218,9 @@ class TimeMaterialForm < ApplicationComponent
                 ) do
                   whitespace
                   input(
-                    name: "username",
-                    id: "username",
+                    name: "time_material[quantity]",
+                    id: "time_material_quantity",
+                    value: @time_material.quantity,
                     class:
                       "block flex-1 border-0 bg-transparent py-1.5 pl-2 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6",
                     placeholder: "900"
@@ -222,12 +231,12 @@ class TimeMaterialForm < ApplicationComponent
             #
             rate_field I18n.t("time_material.rate.unit_price")
             #
-            div(class: "sm:col-span-4") do
+            div(class: "col-span-2") do
               whitespace
               label(
-                for: "username",
+                for: "discount",
                 class: "block text-sm font-medium leading-6 text-gray-900"
-              ) { "Rabat" }
+              ) { I18n.t("time_material.discount.lbl") }
               div(class: "mt-2") do
                 div(
                   class:
@@ -235,22 +244,19 @@ class TimeMaterialForm < ApplicationComponent
                 ) do
                   whitespace
                   input(
-                    name: "username",
-                    id: "username",
+                    name: "time_material[discount]",
+                    id: "time_material_discount",
+                    value: @time_material.discount,
                     class:
                       "block flex-1 border-0 bg-transparent py-1.5 pl-2 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6",
-                    placeholder: "900"
+                    placeholder: I18n.t("time_material.discount.placeholder")
                   )
                 end
               end
             end
           end
         end
-        #
-        invoicing
-        #
       end
-      form_actions
     end
   end
 
@@ -267,6 +273,7 @@ class TimeMaterialForm < ApplicationComponent
           id: "time_material_about",
           name: "time_material[about]",
           rows: "3",
+          autofocus: true,
           class:
             "block w-full rounded-md border-0 py-1.5 px-2.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-600 sm:text-sm sm:leading-6",
           placeholder: I18n.t("time_material.about.placeholder")
@@ -281,7 +288,7 @@ class TimeMaterialForm < ApplicationComponent
   end
 
   def customer_field
-    div(class: "sm:col-span-4") do
+    div(class: "mt-4 sm:col-span-4") do
       label(for: "time_material_customer", class: "block text-sm font-medium leading-6 text-gray-900") { I18n.t("time_material.customer.lbl") }
       div(class: "mt-2") do
         div(class: "flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-sky-600 sm:max-w-md") do
@@ -289,6 +296,7 @@ class TimeMaterialForm < ApplicationComponent
             name: "time_material[customer_name]",
             id: "time_material_customer_name",
             autocomplete: "customer",
+            value: @time_material.customer_name,
             class:
               "block flex-1 border-0 bg-transparent py-1.5 pl-2 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6",
             placeholder: I18n.t("time_material.customer.placeholder")
@@ -299,7 +307,7 @@ class TimeMaterialForm < ApplicationComponent
   end
 
   def project_field
-    div(class: "sm:col-span-4") do
+    div(class: "mt-4 sm:col-span-4") do
       label(for: "time_material_project", class: "block text-sm font-medium leading-6 text-gray-900") { I18n.t("time_material.project.lbl") }
       div(class: "mt-2") do
         div(class: "flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-sky-600 sm:max-w-md") do
@@ -307,6 +315,7 @@ class TimeMaterialForm < ApplicationComponent
             name: "time_material[project_name]",
             id: "time_material_project_name",
             autocomplete: "project",
+            value: @time_material.project_name,
             class:
               "block flex-1 border-0 bg-transparent py-1.5 pl-2 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6",
             placeholder: I18n.t("time_material.project.placeholder")
@@ -317,7 +326,7 @@ class TimeMaterialForm < ApplicationComponent
   end
 
   def rate_field(lbl)
-    div(class: "sm:col-span-4") do
+    div(class: "col-span-2") do
       label(for: "time_material_rate", class: "block text-sm font-medium leading-6 text-gray-900") { lbl }
       div(class: "mt-2") do
         div(
@@ -328,6 +337,7 @@ class TimeMaterialForm < ApplicationComponent
           input(
             name: "time_material[rate]",
             id: "time_material_rate",
+            value: @time_material.rate,
             class:
               "block flex-1 border-0 bg-transparent py-1.5 pl-2 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6",
             placeholder: "900"
@@ -349,6 +359,7 @@ class TimeMaterialForm < ApplicationComponent
                   id: "time_material_is_invoice",
                   name: "time_material[is_invoice]",
                   type: "checkbox",
+                  checked: @time_material.is_invoice?,
                   class: "h-4 w-4 rounded border-gray-300 text-sky-600 focus:ring-sky-600"
                 )
               end
@@ -363,6 +374,7 @@ class TimeMaterialForm < ApplicationComponent
                   id: "time_material_is_free",
                   name: "time_material[is_free]",
                   type: "checkbox",
+                  checked: @time_material.is_free?,
                   class: "h-4 w-4 rounded border-gray-300 text-sky-600 focus:ring-sky-600"
                 )
               end
@@ -397,6 +409,7 @@ class TimeMaterialForm < ApplicationComponent
                   id: "time_material_is_separate",
                   name: "time_material[is_separate]",
                   type: "checkbox",
+                  checked: @time_material.is_separate?,
                   class: "h-4 w-4 rounded border-gray-300 text-sky-600 focus:ring-sky-600"
                 )
               end
@@ -419,6 +432,27 @@ class TimeMaterialForm < ApplicationComponent
           @time_material.errors.each do |error|
             li { error.full_message }
           end
+        end
+      end
+    end
+  end
+
+  def date_field
+    div(class: "mt-2 sm:col-span-4") do
+      label(for: "date", class: "block text-sm font-medium leading-6 text-gray-900") { I18n.t("time_material.date.lbl") }
+      div(class: "mt-2") do
+        div(
+          class:
+            "flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-sky-600 sm:max-w-md"
+        ) do
+          input(
+            type: "date",
+            name: "time_material[date]",
+            id: "time_material_date",
+            value: @time_material.date,
+            class:
+              "block flex-1 border-0 bg-transparent py-1.5 pl-2 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
+          )
         end
       end
     end

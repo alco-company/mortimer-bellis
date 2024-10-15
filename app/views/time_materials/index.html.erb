@@ -1,11 +1,7 @@
-<div class="flex flex-col w-full">
-  <!-- streams for view -->  
-  <%= turbo_stream_from @resources_stream %>
-
-  <!-- Begin header -->
-  <%= render TimeMaterialHeader.new resources: @resources, resource_class: @resource_class %>
-
-  <%= render TimeMaterialDetail.new items: @records %>
-</div>
+<%= render partial: "header" %>
+<%= render partial: "filtering" unless @filter.new_record? %>
+<%= turbo_frame_tag "form" %>
+<%= render partial: "list" %>
+<%= render partial: "pagination" if @pagy.pages > 1 %>
 
 <%= time_material_button(user: current_user) %>

@@ -50,6 +50,7 @@ If Solid Queue bites me again, look here: https://github.com/rails/solid_queue/i
 
 * fix bug on application layout - missing format on mobile
 * make forms work with new drawer-style layout - and broadcasts
+* locations first - next up: time & material - wip
 
 ### 14/10/2024
 

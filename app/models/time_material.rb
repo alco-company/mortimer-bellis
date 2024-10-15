@@ -5,10 +5,15 @@ class TimeMaterial < ApplicationRecord
   belongs_to :customer, optional: true
   belongs_to :project, optional: true
   belongs_to :product, optional: true
+  belongs_to :user
 
   scope :by_about, ->(about) { where("about LIKE ?", "%#{about}%") if about.present? }
+  scope :by_exact_user, ->(user) { where("user_id= ?", "%#{user.id}%") if user.present? }
 
-  validates :about, presence: true
+  # validates :about, presence: true
+  validates_with TimeMaterialAboutValidator, on: [ :create, :update ], fields: [ :about, :product_name, :comment ]
+
+  validates :about, presence: true, if: [ Proc.new { |c| c.comment.blank? && c.product_name.blank? } ]
 
   def list_item(links: [], context:)
     TimeMaterialDetailItem.new(item: self, links: links, id: context.dom_id(self))
