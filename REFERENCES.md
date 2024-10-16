@@ -38,6 +38,7 @@ contributions to Open Source Software have in each their own way made a crucial 
 * Optimizing SQLite3 [Stephen Margheim](https://fractaledmind.github.io/2024/04/15/sqlite-on-rails-the-how-and-why-of-optimal-performance/)
 * CSV work [Yaroslav Shmarow](https://blog.corsego.com/import-csv-to-rails-database)
 * Working With TimeZones [Elle Meredith](https://thoughtbot.com/blog/its-about-time-zones)
+* (man)handling Turbo Frames [Radan Skoric](https://radanskoric.com/articles/update-full-page-on-form-in-frame-submit)
 
 ## Resources
 

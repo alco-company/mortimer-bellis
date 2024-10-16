@@ -38,18 +38,19 @@ class SidebarComponent < ApplicationComponent
         reports: { title: "Reports", url: "/pages" },
         manage: { title: "Manage",
           submenu: {
-            punches: { title: "Punches", url: "/punches" },
-            users: { title: "Users", url: "/users" },
-            teams: { title: "Teams", url: "/teams" },
+            background_jobs: { title: "BackgroundJobs", url: "/background_jobs" },
+            customers: { title: "Customers", url: "/customers" },
+            dashboards: { title: "Dashboards", url: "/dashboards" },
+            invoices: { title: "Invoices", url: "/invoices" },
+            invoice_items: { title: "Invoice Items", url: "/invoice_items" },
             kiosks: { title: "Kiosks", url: "/punch_clocks" },
             locations: { title: "Locations", url: "/locations" },
-            reports: { title: "Reports", url: "/reports" },
-            dashboards: { title: "Dashboards", url: "/dashboards" },
-            customers: { title: "Customers", url: "/customers" },
-            projects: { title: "Projects", url: "/projects" },
             products: { title: "Products", url: "/products" },
-            invoices: { title: "Invoices", url: "/invoices" },
-            invoice_items: { title: "Invoice Items", url: "/invoice_items" }
+            projects: { title: "Projects", url: "/projects" },
+            punches: { title: "Punches", url: "/punches" },
+            reports: { title: "Reports", url: "/reports" },
+            teams: { title: "Teams", url: "/teams" },
+            users: { title: "Users", url: "/users" }
           }
         }
       }

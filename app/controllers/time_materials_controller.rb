@@ -2,7 +2,7 @@ class TimeMaterialsController < MortimerController
   def new
     super
     @resource.customer_name = TimeMaterial.by_exact_user(Current.user).last&.customer_name
-    @resource.date = Date.today
+    @resource.date = Time.current.to_date
     @resource.time = "0,25"
     @resource.user_id = Current.user.id
   end

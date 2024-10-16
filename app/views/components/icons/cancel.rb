@@ -4,8 +4,8 @@ class Icons::Cancel < Phlex::HTML
   end
 
   def view_template
-svg(
-      class: "h-6 w-6 text-white",
+    svg(
+      class: @cls,
       fill: "none",
       viewbox: "0 0 24 24",
       stroke_width: "1.5",

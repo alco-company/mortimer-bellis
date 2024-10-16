@@ -46,6 +46,10 @@ If Solid Queue bites me again, look here: https://github.com/rails/solid_queue/i
 
 ## CHANGELOG
 
+### 16/10/2024
+
+* the rest of forms - from background_jobs
+
 ### 15/10/2024
 
 * fix bug on application layout - missing format on mobile

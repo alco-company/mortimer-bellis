@@ -39,6 +39,6 @@ class TimeMaterial < ApplicationRecord
   end
 
   def self.form(resource, editable = true)
-    Locations::Form.new resource, editable: editable
+    TimeMaterials::Form.new resource, editable: editable
   end
 end

@@ -7,8 +7,13 @@ export default class extends Controller {
   ]
 
   connect() {
-    console.log("fisk");
-    console.log(this.formTarget);
+    //
+    // looking for a way to handle the redirect after a form submission
+    //
+    // first clear the event listener
+    // this.element.removeEventListener("turbo:submit-end", this.next);
+    // then add it again
+    // this.element.addEventListener("turbo:submit-end", this.next);
   }
 
   cancelForm(e) {
@@ -18,11 +23,18 @@ export default class extends Controller {
       el = el.parentElement;
     }
     document.getElementById('form').innerHTML = ""
+
+  }
+
+  editForm(e) {
+    e.preventDefault();
+    Turbo.visit(e.target.dataset.url);
   }
 
   submitForm(e) {
     e.preventDefault();
-    this.formTarget.requestSubmit();
+    Turbo.navigator.submitForm(this.formTarget);
+    // this.formTarget.requestSubmit();
   }
 
   clearForm(e) {
@@ -33,4 +45,26 @@ export default class extends Controller {
   closeForm(e) {
    document.getElementById("form").innerHTML="";
   }
+
+  //
+  // looking for a way to handle the redirect after a form submission
+  //
+  // next(event) {
+  //   if (event.detail.success) {
+  //     const fetchResponse = event.detail.fetchResponse;
+  //     const url = fetchResponse.response.url;
+
+  //     if (fetchResponse.response.redirected) {
+  //       window.history.pushState(
+  //         { turbo_frame_history: true },
+  //         "",
+  //         url
+  //       );
+
+  //       window.Turbo.visit(url);
+  //     }
+  //   }
+  // }
+
+
 }

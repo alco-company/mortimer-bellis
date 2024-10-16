@@ -19,3 +19,7 @@ Turbo.StreamActions.show_filter = function () {
   container.replaceChildren(this.templateContent);
   container.querySelector("li").classList.remove("hidden");
 };
+
+Turbo.StreamActions.full_page_redirect = function () {
+  document.location = this.getAttribute("target");
+};
