@@ -26,20 +26,35 @@ module DefaultActions
     end
 
     # GET /users/1 or /users/1.json
+    # renders default views/:models/show.html.erb or views/application/show.html.erb
+    # which renders a views/:models/form.rb
+    # exceptions are fx dashboards/
+    #
     def show
     end
 
     # GET /users/new
+    # renders default views/:models/new.html.erb or views/application/new.html.erb
+    # which renders a views/:models/form.rb
+    # exceptions are fx time_materials/
+    #
     def new
       @resource.tenant_id = Current.tenant.id if resource_class.has_attribute? :tenant_id
       @resource.user_id = Current.user.id if resource_class.has_attribute? :user_id
     end
 
     # GET /users/1/edit
+    # renders default views/:models/edit.html.erb or views/application/edit.html.erb
+    # which renders a views/:models/form.rb
+    # exceptions are fx time_materials/
+    #
     def edit
     end
 
     # POST /users or /users.json
+    # on success removes turbo_frame 'form' and renders application/flash_message
+    # on error renders views/:models/_new.html.erb or views/application/_new.html.erb (Turbo)
+    #
     def create
       @resource = resource_class.new(resource_params)
       @resource.tenant_id = Current.tenant.id if resource_class.has_attribute? :tenant_id
@@ -53,6 +68,8 @@ module DefaultActions
           format.html { redirect_to resources_url, success: t(".post") }
           format.json { render :show, status: :created, location: @resource }
         else
+          flash[:warning] = t(".validation_errors")
+          format.turbo_stream { render turbo_stream: [ turbo_stream.update("form", partial: "new"), turbo_stream.replace("flash_container", partial: "application/flash_message") ] }
           format.html { render :new, status: :unprocessable_entity, warning: t(".warning") }
           format.json { render json: @resource.errors, status: :unprocessable_entity }
         end
@@ -66,10 +83,12 @@ module DefaultActions
           update_callback @resource
           Broadcasters::Resource.new(@resource).replace
           flash[:success] = t(".post")
-          format.turbo_stream { render turbo_stream:  [ turbo_stream.update("form", ""), turbo_stream.action(:full_page_redirect, resources_url), turbo_stream.replace("flash_container", partial: "application/flash_message") ] }
+          format.turbo_stream { render turbo_stream: [ turbo_stream.update("form", ""), turbo_stream.action(:full_page_redirect, resources_url), turbo_stream.replace("flash_container", partial: "application/flash_message") ] }
           format.html { redirect_to resources_url, success: t(".post") }
           format.json { render :show, status: :ok, location: @resource }
         else
+          flash[:warning] = t(".validation_errors")
+          format.turbo_stream { render turbo_stream: [ turbo_stream.update("form", partial: "edit"), turbo_stream.replace("flash_container", partial: "application/flash_message") ] }
           format.html { render :edit, status: :unprocessable_entity, warning: t(".warning") }
           format.json { render json: @resource.errors, status: :unprocessable_entity }
         end

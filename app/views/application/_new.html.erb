@@ -1,0 +1,55 @@
+<%= turbo_frame_tag "form" do %>
+  <div class=" relative z-50" role="dialog" aria-modal="true" data-controller="form">
+    <!-- Background backdrop, show/hide based on slide-over state. -->
+    <div class="fixed inset-0"></div>
+
+    <div class="fixed inset-0 overflow-hidden">
+      <div class="absolute inset-0 overflow-hidden">
+        <div class="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10 sm:pl-16">
+          <!--
+            Slide-over panel, show/hide based on slide-over state.
+
+            Entering: "transform transition ease-in-out duration-500 sm:duration-700"
+              From: "translate-x-full"
+              To: "translate-x-0"
+            Leaving: "transform transition ease-in-out duration-500 sm:duration-700"
+              From: "translate-x-0"
+              To: "translate-x-full"
+          -->
+          <div class="pointer-events-auto mt-0 w-screen max-w-md">
+            <div class="flex h-full flex-col overflow-x-hidden overflow-y-scroll bg-white shadow-xl">
+              <div class="sticky z-20 bg-white top-0 px-4 py-5 sm:px-6 border-b">
+                <div class="flex items-start justify-between">
+                  <%= link_to(resources_url,
+                    class: "relative rounded-md bg-white text-gray-400 hover:text-gray-500 focus:ring-2 focus:ring-indigo-500",
+                    role: "link", data: { turbo_action: "replace", turbo_frame: "form" }, tabindex: "-1") do %>
+                    <span class="pointer-events-none absolute -inset-2.5"></span>
+                    <span class="pointer-events-none sr-only">Go back to List</span>
+                    <%= render Icons::Cancel.new cls: "h-6 w-6 text-gray-400" %>
+                  <% end %>
+                  <h2 id="slide-over-heading" class="text-base font-semibold leading-6 text-gray-900"><%= I18n.t("%s.form.new" % resource_class.table_name)%></h2>
+                  <div class="ml-3 flex h-6 items-center">
+                    <button type="button"  data-action="click->form#submitForm" class="relative rounded-md bg-white text-gray-400 hover:text-gray-500 focus:ring-2 focus:ring-indigo-500">
+                      <span class="absolute -inset-2.5"></span>
+                      <span class="sr-only">Save content</span>
+                      
+                      <svg class="text-green-500" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor">
+                        <path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z"/>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <!-- Main -->
+              <div>
+                <div class="px-4 pb-1 pt-1 sm:pt-0">
+                    <%= render resource_class.form @resource %>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>

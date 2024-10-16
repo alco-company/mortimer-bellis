@@ -21,7 +21,7 @@ class TimeMaterialForm < ApplicationComponent
         #
         div do
           div(class: "") do
-            error_messages
+            # error_messages
 
             div(class: "border-b border-gray-200") do
               nav(class: "-mb-px flex space-x-8", aria_label: "Tabs") do
@@ -150,10 +150,8 @@ class TimeMaterialForm < ApplicationComponent
   def show_material_tab
     div(id: "material", data: { tabs_target: "tabPanel" }, class: "time-material-type material tab hidden") do
       div(class: "space-y-2") do
-        div(class: "border-b border-gray-900/10 ") do
-          div(
-            class: "mt-2 grid grid-cols-4 gap-x-4 gap-y-4"
-          ) do
+        div(class: "border-b border-gray-900/10 pb-2") do
+          div(class: "mt-2 grid grid-cols-4 gap-x-4 gap-y-4") do
             div(class: "col-span-4") do
               whitespace
               label(
@@ -202,52 +200,54 @@ class TimeMaterialForm < ApplicationComponent
                 end
               end
             end
-            div(class: "col-span-4") do
-              whitespace
-              label(
-                for: "quantity",
-                class: "block text-sm font-medium leading-6 text-gray-900"
-              ) { "Antal" }
-              div(class: "mt-2") do
-                div(
-                  class:
-                    "flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-sky-600 sm:max-w-md"
-                ) do
-                  whitespace
-                  input(
-                    name: "time_material[quantity]",
-                    id: "time_material_quantity",
-                    value: @time_material.quantity,
+            div(class: "col-span-4 grid gap-x-2 grid-cols-6") do
+              div(class: "col-span-2") do
+                whitespace
+                label(
+                  for: "quantity",
+                  class: "block text-sm font-medium leading-6 text-gray-900"
+                ) { "Antal" }
+                div(class: "mt-2") do
+                  div(
                     class:
-                      "block flex-1 border-0 bg-transparent py-1.5 pl-2 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6",
-                    placeholder: "900"
-                  )
+                      "flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-sky-600 sm:max-w-md"
+                  ) do
+                    whitespace
+                    input(
+                      name: "time_material[quantity]",
+                      id: "time_material_quantity",
+                      value: @time_material.quantity,
+                      class:
+                        "block flex-1 border-0 bg-transparent py-1.5 pl-2 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6",
+                      placeholder: "900"
+                    )
+                  end
                 end
               end
-            end
-            #
-            rate_field I18n.t("time_material.rate.unit_price")
-            #
-            div(class: "col-span-2") do
-              whitespace
-              label(
-                for: "discount",
-                class: "block text-sm font-medium leading-6 text-gray-900"
-              ) { I18n.t("time_material.discount.lbl") }
-              div(class: "mt-2") do
-                div(
-                  class:
-                    "flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-sky-600 sm:max-w-md"
-                ) do
-                  whitespace
-                  input(
-                    name: "time_material[discount]",
-                    id: "time_material_discount",
-                    value: @time_material.discount,
+              #
+              rate_field I18n.t("time_material.rate.unit_price")
+              #
+              div(class: "col-span-2") do
+                whitespace
+                label(
+                  for: "discount",
+                  class: "block text-sm font-medium leading-6 text-gray-900"
+                ) { I18n.t("time_material.discount.lbl") }
+                div(class: "mt-2") do
+                  div(
                     class:
-                      "block flex-1 border-0 bg-transparent py-1.5 pl-2 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6",
-                    placeholder: I18n.t("time_material.discount.placeholder")
-                  )
+                      "flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-sky-600 sm:max-w-md"
+                  ) do
+                    whitespace
+                    input(
+                      name: "time_material[discount]",
+                      id: "time_material_discount",
+                      value: @time_material.discount,
+                      class:
+                        "block flex-1 border-0 bg-transparent py-1.5 pl-2 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6",
+                      placeholder: I18n.t("time_material.discount.placeholder")
+                    )
+                  end
                 end
               end
             end

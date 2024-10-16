@@ -53,6 +53,7 @@ If Solid Queue bites me again, look here: https://github.com/rails/solid_queue/i
 * forgot about the pdf's :o
 * don't let t/m form 'skate'
 * dashboards up next
+* then invoice_items
 
 ### 15/10/2024
 

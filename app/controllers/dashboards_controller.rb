@@ -8,8 +8,8 @@ class DashboardsController < MortimerController
   #   @dashboards = Dashboard.all
   # end
 
-  # # GET /dashboards/1 or /dashboards/1.json
-  def show
+  # # GET /dashboards/show_dashboard or /dashboards/show_dashboard.json
+  def show_dashboard
     @activity_list = Current.user.tenant.punches.order(punched_at: :desc).take(10)
     @punch_clock = PunchClock.where(tenant: Current.user.tenant).first rescue nil
   end
@@ -72,8 +72,8 @@ class DashboardsController < MortimerController
     end
 
     # Only allow a list of trusted parameters through.
-    def dashboard_params
-      params.require(:dashboard).permit(:tenant_id, :feed)
+    def resource_params
+      params.require(:dashboard).permit(:tenant_id, :feed, :last_feed, :last_feed_at)
     end
 
     def get_feed

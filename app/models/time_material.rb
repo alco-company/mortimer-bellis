@@ -11,7 +11,6 @@ class TimeMaterial < ApplicationRecord
   scope :by_exact_user, ->(user) { where("user_id= ?", "%#{user.id}%") if user.present? }
 
   # validates :about, presence: true
-  validates_with TimeMaterialAboutValidator, on: [ :create, :update ], fields: [ :about, :product_name, :comment ]
 
   validates :about, presence: true, if: [ Proc.new { |c| c.comment.blank? && c.product_name.blank? } ]
 
@@ -21,6 +20,11 @@ class TimeMaterial < ApplicationRecord
 
   def name
     about[..50]
+    case false
+    when about.blank?; about[..50]
+    when product_name.blank?; product_name[..50]
+    when comment.blank?; comment[..50]
+    end
   end
 
   def self.filtered(filter)

@@ -36,6 +36,7 @@ da:
   more: mere
   ago: siden
   last_update: sidst opdateret for
+  collected at: indsamlet kl
 
   weekdays: Ugedage
   monday: Mandag
@@ -45,6 +46,10 @@ da:
   friday: Fredag
   saturday: Lørdag
   sunday: Søndag
+
+  application:
+    header:
+      sync_with_ERP: Synkroniser med ERP
   
   colors:
     red: Rød
@@ -66,9 +71,33 @@ da:
     black: Sort
     white: Hvid
 
-  application:
-    header:
-      sync_with_ERP: Synkroniser med ERP
+  dashboards:
+    list:
+      title: Overblik
+      new: Nyt overblik
+      edit: Rediger
+      delete: Slet
+      show: Vis
+      name: Navn
+      layout: Skabelon
+      body: Indhold
+      updated_at: Opdateret den
+
+    form:
+      new: Nyt overblik
+      edit: Rediger overblik
+
+    new:
+      title: Nyt overblik
+      create: Opret
+
+    edit:
+      title: Rediger overblik
+      update: Opdater
+
+    show:
+      title: Overblik
+
   devise:
     mailer:
       invitation_instructions:
@@ -284,6 +313,8 @@ da:
         description: Beskrivelse
       dashboard:
         name: Navn
+        feed: Indholdsstrøm
+        last_feed_at: Indhold sidst opdateret
         layout: Skabelon
         body: Indhold
       employee_invitation:
