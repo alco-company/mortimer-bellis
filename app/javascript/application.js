@@ -23,3 +23,18 @@ Turbo.StreamActions.show_filter = function () {
 Turbo.StreamActions.full_page_redirect = function () {
   document.location = this.getAttribute("target");
 };
+
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("/service-worker.js").then(
+      (registration) => {
+        console.log("Service Worker registered", registration);
+      },
+      (err) => {
+        console.error("Service Worker registration failed: ", err);
+      }
+    );
+  });
+} else {
+  console.log("Service Worker is not supported by browser.");
+}
