@@ -11,42 +11,41 @@ class TimeMaterialForm < ApplicationComponent
   #  TimeMaterial tenant:references date time about customer customer_id project project_id product product_id quantity rate discount is_invoice:boolean is_free:boolean is_offer:boolean is_separate:boolean
 
   def view_template
-        # div(class: "relative flex min-h-screen flex-col overflow-hidden mx-auto w-full lg:mx-0 lg:float-right py-6 sm:py-12") do
-        #   div(class: "relative bg-white px-6 pb-8 pt-10 ring-1 ring-gray-900/5 sm:rounded-lg sm:px-2", data: { controller: "tabs", tabs_index: "0" }) do
-        div(class: "mx-auto max-w-full", data: { controller: "tabs", tabs_index: "0" }) do
-          form(action: @url, method: @method, data: { form_target: "form" },  class: "mort-form") do
-            input(type: "hidden", name: "time_material[user_id]", value: @time_material.user_id)
-            #
-            date_field
-            #
-            div do
-              div(class: "") do
-                error_messages
+    # div(class: "relative flex min-h-screen flex-col overflow-hidden mx-auto w-full lg:mx-0 lg:float-right py-6 sm:py-12") do
+    #   div(class: "relative bg-white px-6 pb-8 pt-10 ring-1 ring-gray-900/5 sm:rounded-lg sm:px-2", data: { controller: "tabs", tabs_index: "0" }) do
+    div(class: "mx-auto max-w-full", data: { controller: "tabs", tabs_index: "0" }) do
+      form(action: @url, method: @method, data: { form_target: "form" },  class: "mort-form") do
+        input(type: "hidden", name: "time_material[user_id]", value: @time_material.user_id)
+        #
+        date_field
+        #
+        div do
+          div(class: "") do
+            error_messages
 
-                div(class: "border-b border-gray-200") do
-                  nav(class: "-mb-px flex space-x-8", aria_label: "Tabs") do
-                    time_tab
-                    material_tab
-                  end
-                end
+            div(class: "border-b border-gray-200") do
+              nav(class: "-mb-px flex space-x-8", aria_label: "Tabs") do
+                time_tab
+                material_tab
               end
             end
-            show_time_tab
-            show_material_tab
-            #
-            customer_field
-            #
-            project_field
-            #
-
-            #
-            invoicing
-            #
-            form_actions
           end
         end
-    #   end
-    # end
+        #
+        show_time_tab
+        show_material_tab
+        #
+        customer_field
+        #
+        project_field
+        #
+
+        #
+        invoicing
+        #
+        form_actions
+      end
+    end
   end
 
   def time_tab
@@ -115,11 +114,9 @@ class TimeMaterialForm < ApplicationComponent
 
   def show_time_tab
     div(id: "time", data: { tabs_target: "tabPanel" }, class: "time-material-type time tab ") do
-      div(class: "space-y-12") do
-        div(class: "border-b border-gray-900/10 pb-12") do
-          div(
-            class: "mt-10 grid grid-cols-4 gap-x-6 gap-y-8 "
-          ) do
+      div(class: "space-y-2 ") do
+        div(class: "border-b border-gray-900/10") do
+          div(class: "mt-2 grid grid-cols-4 gap-x-4 gap-y-4 ") do
             #
             about_field
             #
@@ -152,10 +149,10 @@ class TimeMaterialForm < ApplicationComponent
 
   def show_material_tab
     div(id: "material", data: { tabs_target: "tabPanel" }, class: "time-material-type material tab hidden") do
-      div(class: "space-y-12") do
-        div(class: "border-b border-gray-900/10 pb-12") do
+      div(class: "space-y-2") do
+        div(class: "border-b border-gray-900/10 ") do
           div(
-            class: "mt-10 grid grid-cols-4 gap-x-6 gap-y-8"
+            class: "mt-2 grid grid-cols-4 gap-x-4 gap-y-4"
           ) do
             div(class: "col-span-4") do
               whitespace
@@ -288,7 +285,7 @@ class TimeMaterialForm < ApplicationComponent
   end
 
   def customer_field
-    div(class: "mt-4 sm:col-span-4") do
+    div(class: "mt-4 col-span-4") do
       label(for: "time_material_customer", class: "block text-sm font-medium leading-6 text-gray-900") { I18n.t("time_material.customer.lbl") }
       div(class: "mt-2") do
         div(class: "flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-sky-600 sm:max-w-md") do
@@ -307,7 +304,7 @@ class TimeMaterialForm < ApplicationComponent
   end
 
   def project_field
-    div(class: "mt-4 sm:col-span-4") do
+    div(class: "mt-4 col-span-4") do
       label(for: "time_material_project", class: "block text-sm font-medium leading-6 text-gray-900") { I18n.t("time_material.project.lbl") }
       div(class: "mt-2") do
         div(class: "flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-sky-600 sm:max-w-md") do
@@ -349,10 +346,10 @@ class TimeMaterialForm < ApplicationComponent
 
   def invoicing
     div(class: "border-b border-gray-900/10 pb-12") do
-      div(class: "mt-10 space-y-10") do
+      div(class: "mt-2 space-y-4") do
         fieldset do
           legend(class: "text-sm font-semibold leading-6 text-gray-900") { I18n.t("time_material.invoicing.lead") }
-          div(class: "mt-6 space-y-6") do
+          div(class: "mt-6 space-y-3") do
             div(class: "relative flex gap-x-3") do
               div(class: "flex h-6 items-center") do
                 input(

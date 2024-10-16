@@ -28,7 +28,7 @@ class ProfileDropmenuComponent < ApplicationComponent
         end
         span(class: "hidden lg:flex lg:items-center") do
           span(
-            class: "ml-4 text-sm font-semibold leading-6 text-gray-900",
+            class: "ml-4 text-sm font-semibold leading-6 text-sky-300",
             aria_hidden: "true"
           ) { Current.user&.name }
           svg(
