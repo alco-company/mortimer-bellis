@@ -5,6 +5,8 @@
 
 ## Rescue tools
 
+BACKUP: Litestream
+
 * How to rescue your SQLite database - https://support.storj.io/hc/en-us/articles/360029309111-How-to-fix-a-database-disk-image-is-malformed
 
 ```bash
@@ -53,7 +55,7 @@ If Solid Queue bites me again, look here: https://github.com/rails/solid_queue/i
 * forgot about the pdf's :o
 * don't let t/m form 'skate'
 * dashboards up next
-* then invoice_items
+* then invoice_items and invoices
 
 ### 15/10/2024
 
