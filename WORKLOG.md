@@ -57,6 +57,7 @@ If Solid Queue bites me again, look here: https://github.com/rails/solid_queue/i
 * dashboards up next
 * then invoice_items and invoices
 * fast forward with kiosks (punch_clocks)
+* and products and projects
 * 
 
 ### 15/10/2024
