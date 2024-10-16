@@ -50,6 +50,7 @@ class SidebarComponent < ApplicationComponent
             punches: { title: "Punches", url: "/punches" },
             reports: { title: "Reports", url: "/reports" },
             teams: { title: "Teams", url: "/teams" },
+            tenants: { title: "Tenants", url: "/tenants" },
             users: { title: "Users", url: "/users" }
           }
         }
@@ -121,6 +122,7 @@ class SidebarComponent < ApplicationComponent
           # end
           ul(class: "submenu #{hidden_sub?(item)} mt-1 px-2", id: "sub-menu-1") do
             item[:submenu].each do |key, i|
+              next if key == :tenants && !Current.user.superadmin?
               menu_item(item: i[:title], url: i[:url], css: "block rounded-md py-2 pl-9 pr-2 text-sm leading-6 text-gray-700 hover:bg-gray-50", icon: i[:icon])
             end
           end

@@ -1,0 +1,9 @@
+<tr class="gap-x-6 py-5">
+    <%= render_text_column value: link_to(setting.key.blank? ? "N/A" : setting.key, setting_url(setting)), table: :row, css: "truncate" %>
+    <%= render_text_column value: setting.setable_type, table: :row, css: "truncate" %>
+    <%= render_text_column value: setting.setable_id, table: :row, css: "truncate" %>
+    <%= render_text_column value: setting.priority, table: :row, css: "truncate" %>
+    <%= render_text_column value: setting.format, table: :row, css: "truncate" %>
+    <%= render_text_column value: setting.value, table: :row, css: "truncate" %>
+    <%= render_datetime_column value: setting.updated_at, table: :row, css: "truncate" %>
+</tr>
