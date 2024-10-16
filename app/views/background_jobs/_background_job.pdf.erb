@@ -1,6 +1,10 @@
 <tr class="gap-x-6 py-5">
-  <%= render_text_column    value: link_to(tenant.name, tenant_url(tenant)), table: :row, css: "truncate mort-link-primary" %>
-  <%= render_number_column  value: tenant.locale, table: :row, css: "text-right" %>
-  <%= render_text_column    value: tenant.time_zone, table: :row, css: "" %>
-  <%= render_date_column    value: tenant.updated_at, table: :row, css: "" %>
+  <%= render_text_column    value: link_to(background_job.name, background_job_url(background_job)), table: :row, css: "truncate mort-link-primary" %>
+  <%= render_text_column    value: link_to(background_job.tenant.name, tenant_url(background_job.tenant)), table: :row, css: "truncate mort-link-primary" %>
+  <%= render_number_column  value: background_job.state, table: :row, css: "text-right" %>
+  <%= render_text_column    value: background_job.job_klass, table: :row, css: "" %>
+  <%= render_text_column    value: background_job.schedule, table: :row, css: "" %>
+  <%= render_text_column    value: background_job.next_run_at, table: :row, css: "" %>
+  <%= render_text_column    value: background_job.job_id, table: :row, css: "" %>
+  <%= render_date_column    value: background_job.updated_at, table: :row, css: "" %>
 </tr>
