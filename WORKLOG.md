@@ -49,6 +49,7 @@ If Solid Queue bites me again, look here: https://github.com/rails/solid_queue/i
 ### 16/10/2024
 
 * the rest of forms - from background_jobs
+* then customers
 
 ### 15/10/2024
 

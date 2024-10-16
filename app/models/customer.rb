@@ -2,6 +2,7 @@ class Customer  < ApplicationRecord
   include Tenantable
 
   has_many :projects, dependent: :destroy
+  has_many :invoices, dependent: :destroy
 
   scope :by_name, ->(name) { where("name LIKE ?", "%#{name}%") if name.present? }
   scope :by_street, ->(street) { where("street LIKE ?", "%#{street}%") if street.present? }
@@ -42,8 +43,8 @@ class Customer  < ApplicationRecord
     customer.name = item["Name"]
     customer.phone = item["Phone"]
     customer.email = item["Email"]
-    customer.street = item["Address"]
-    customer.zipcode = item["PostalCode"]
+    customer.street = item["Street"]
+    customer.zipcode = item["ZipCode"]
     customer.city = item["City"]
     # customer.country = item["Country"]
     customer.vat_number = item["VatNumber"]
