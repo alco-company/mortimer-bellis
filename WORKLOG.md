@@ -52,6 +52,7 @@ If Solid Queue bites me again, look here: https://github.com/rails/solid_queue/i
 ### 17/10/2024
 
 * start with keyboard events on t/m
+* fix bug on broadcastable/resource - drop broadcasting when resource is not persisted
 * test how to create invoices
 
 ### 16/10/2024

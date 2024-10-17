@@ -6,13 +6,14 @@ class Broadcasters::Resource
 
   def initialize(resource)
     @resource = resource
-    @resource_class = resource.class
+    @resource_class = resource.class rescue nil
     @tenant = resource.respond_to?(:tenant) ? resource.tenant : Current.tenant rescue nil
-    @resources_stream = "%s_%s" % [ tenant&.id, @resource_class.to_s.underscore.pluralize ]
+    @resources_stream = "%s_%s" % [ tenant&.id, @resource_class.to_s.underscore.pluralize ] rescue nil
   end
 
   def create
     return unless tenant
+    return unless resource.persisted?
     Turbo::StreamsChannel.broadcast_action_later_to(
       resources_stream,
       target: "list",
