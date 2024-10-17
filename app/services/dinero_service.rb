@@ -70,14 +70,14 @@ class DineroService < SaasService
       pull resource_class: resource_class, organizationId: organizationId, all: all, page: query[:page].to_i + 1, pageSize: query[:pageSize].to_i, fields: fields, start_date: start_date, end_date: end_date
     end
     true
-  rescue => e
+  rescue #=> e
     debugger
     false
   end
 
   def pull_invoice(guid:, organizationId: 118244)
     get "/v1/#{organizationId}/invoices/#{guid}"
-  rescue => e
+  rescue #=> e
     debugger
     {}
   end
@@ -116,13 +116,13 @@ class DineroService < SaasService
       refresh_token if token_expired?
       headers["Authorization"] = "Bearer %s" % settings["access_token"]
       HTTParty.get("https://api.dinero.dk#{path}", headers: headers)
-    rescue => e
+    rescue #=> e
       debugger
     end
 
     def token_expired?
       Time.now > settings["expires_at"]
-    rescue => e
+    rescue #=> e
       true
     end
 
@@ -142,7 +142,7 @@ class DineroService < SaasService
       res = HTTParty.post(host, body: params, headers: { "Content-Type" => "application/x-www-form-urlencoded" })
       provided_service.update service_params: res
       @settings = provided_service.service_params_hash
-    rescue => e
+    rescue #=> e
       debugger
     end
 

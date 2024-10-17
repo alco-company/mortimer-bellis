@@ -16,8 +16,27 @@ module DefaultActions
       redirect_to root_path, warning: error.message
     end
 
+    def lookup
+      @resources = resource_class.where("name LIKE ?", "%#{params.permit![:q]}%").limit(10) rescue nil
+      @resources = [ { id: 0, name: I18n.t("no records were found") } ] if @resources.nil? or @resources.empty?
+      lookup_options = "%s_lookup_options" % params.permit![:div_id]
+      respond_to do |format|
+        format.turbo_stream {
+          render turbo_stream: turbo_stream.replace(
+            lookup_options,
+            partial: "lookup",
+            locals: {
+              lookup_options: lookup_options,
+              resources: @resources,
+              div_id: params.permit![:div_id]
+            }
+          )
+        }
+      end
+    end
+
     def erp_pull
-      SyncErpJob.perform_now tenant: Current.tenant, user: Current.user, resource_class: resource_class
+      SyncErpJob.perform_later tenant: Current.tenant, user: Current.user, resource_class: resource_class
       redirect_to resources_url, success: t(".erp_pull")
     end
 

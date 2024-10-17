@@ -556,6 +556,7 @@ da:
         blocked: Blokeret for tidsregistrering
         allowed_ot_minutes: Tilladt overtid i minutter (-1=ingen, 0=ubegrænset)
       time_material:
+        customer_id: Kunde
         date: Dato
         time: Tid
         material: Materiale

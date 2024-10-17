@@ -7,6 +7,12 @@ class TimeMaterialsController < MortimerController
     @resource.user_id = Current.user.id
   end
 
+  def edit
+    @resource.customer_name = @resource.customer.name if @resource.customer_id
+    @resource.project_name = @resource.project.name if @resource.project_id
+    @resource.product_name = @resource.product.name if @resource.product_id
+  end
+
   private
 
     # Only allow a list of trusted parameters through.

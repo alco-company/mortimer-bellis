@@ -32,6 +32,9 @@ class ApplicationForm < Superform::Rails::Form
     end
   end
 
+  #
+  # Option Mapper
+  #
   class OptionMapper < Superform::Rails::OptionMapper
     def each(&options)
       @collection.each do |item|
@@ -90,6 +93,47 @@ class ApplicationForm < Superform::Rails::Form
         end
       end
     end
+  end
+
+  #
+  # *Field Components
+  #
+  class LookupField < Superform::Rails::Components::SelectField
+    # include Phlex::Rails::Helpers::Request
+    #
+    def view_template(&)
+      div(class: "relative mt-2", data: { controller: "lookup" }) do
+        input(type: "hidden", id: dom.id, name: dom.name, value: field.value, data: { lookup_target: "selectId" })
+        input(
+          data: { url: attributes[:lookup_path], div_id: field.dom.id, lookup_target: "input", action: "keydown->lookup#key_down change->lookup#change" },
+          type: "text",
+          list:  "%s_lookup_options" % field.dom.id,
+          value: attributes[:display_value],
+          id: dom.id.gsub(/_id$/, "_name"),
+          name: dom.name.gsub(/_id]/, "_name]"),
+          class:
+            "w-full rounded-md border-0 bg-white py-1.5 pl-3 pr-12 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6",
+          role: "combobox",
+          aria_controls: "options",
+          aria_expanded: "false"
+        )
+        hide = @collection.any? ? "" : "hidden"
+        button(type: "button", data: { lookup_target: "optionsIcon", action: "click->lookup#toggleOptions" }, class: "#{hide} absolute inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:outline-none") do
+          render Icons::ChevronUpDown.new cls: "h-5 w-5 text-gray-400"
+        end
+        hide = (!hide.blank? && field.value.nil?) ? "" : "hidden"
+        button(type: "button", data: { lookup_target: "searchIcon", action: "click->lookup#search" }, class: "#{hide} absolute inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:outline-none") do
+          render Icons::Search.new cls: "text-gray-400 right-2 top-0 h-full w-5 absolute pointer-events-none"
+        end
+        collection = @collection[0] rescue []
+        render SelectLookup.new(collection: collection, div_id: field.dom.id, field_value: field.value)
+      end
+    end
+
+    protected
+      def map_options(collection)
+        OptionMapper.new(collection)
+      end
   end
 
   class SelectField < Superform::Rails::Components::SelectField
@@ -260,6 +304,9 @@ class ApplicationForm < Superform::Rails::Form
   end
 
   class Field < Field
+    def lookup(*collection, **attributes, &)
+      LookupField.new(self, attributes: attributes, collection: collection, &)
+    end
     def select(*collection, **attributes, &)
       SelectField.new(self, attributes: attributes, collection: collection, &)
     end

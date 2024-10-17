@@ -28,7 +28,7 @@ class Customer  < ApplicationRecord
     .by_email(flt["email"])
     # .by_zipcode(flt["zipcode"])
     # .by_ean_number(flt["ean_number"])
-  rescue => error
+  rescue #=> error
     filter.destroy if filter
     all
   end

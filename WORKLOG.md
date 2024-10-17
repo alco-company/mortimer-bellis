@@ -54,6 +54,7 @@ If Solid Queue bites me again, look here: https://github.com/rails/solid_queue/i
 * start with keyboard events on t/m
 * fix bug on broadcastable/resource - drop broadcasting when resource is not persisted
 * tell the world (or at least those listening) about the sync'ed resources (customers, products, invoices/invoice_items)
+* build a lookup component for associations
 * test how to create invoices
 
 ### 16/10/2024
