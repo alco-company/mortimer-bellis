@@ -38,7 +38,7 @@ class InvoiceItem < ApplicationRecord
   #
   def self.add_from_erp(item, invoice)
     product = Product.find_by erp_guid: item["ProductGuid"]
-    InvoiceItem.create(
+    if ii = InvoiceItem.create(
       tenant: Current.tenant,
       invoice: invoice,
       product: product,
@@ -51,5 +51,7 @@ class InvoiceItem < ApplicationRecord
       line_type: item["LineType"],
       base_amount_value: item["BaseAmountValue"]
     )
+       Broadcasters::Resource.new(ii).create
+    end
   end
 end

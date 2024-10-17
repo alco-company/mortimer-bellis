@@ -61,6 +61,8 @@ class Invoice < ApplicationRecord
     invoice.total_incl_vat = item["TotalInclVat"]
     invoice.is_mobile_pay_invoice_enabled = item["IsMobilePayInvoiceEnabled"]
     invoice.is_penso_pay_enabled = item["IsPensoPayEnabled"]
-    invoice.save
+    if invoice.save
+      Broadcasters::Resource.new(invoice).create
+    end
   end
 end

@@ -49,6 +49,8 @@ class Customer  < ApplicationRecord
     # customer.country = item["Country"]
     customer.vat_number = item["VatNumber"]
     customer.ean_number = item["EanNumber"]
-    customer.save
+    if customer.save
+       Broadcasters::Resource.new(customer).create
+    end
   end
 end

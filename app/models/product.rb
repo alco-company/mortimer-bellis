@@ -49,6 +49,8 @@ class Product < ApplicationRecord
     product.total_amount = item["TotalAmount"]
     product.total_amount_incl_vat = item["TotalAmountInclVat"]
     product.external_reference = item["ExternalReference"]
-    product.save
+    if product.save
+      Broadcasters::Resource.new(product).create
+    end
   end
 end
