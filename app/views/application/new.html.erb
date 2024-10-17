@@ -3,7 +3,7 @@
     <!-- Background backdrop, show/hide based on slide-over state. -->
     <div class="fixed inset-0"></div>
 
-    <div class="fixed inset-0 overflow-hidden">
+    <div class="fixed inset-0 overflow-hidden" data-action="keydown->form#keydown">
       <div class="absolute inset-0 overflow-hidden">
         <div class="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10 sm:pl-16">
           <!--
@@ -21,8 +21,9 @@
               <div class="sticky z-20 bg-white top-0 px-4 py-5 sm:px-6 border-b">
                 <div class="flex items-start justify-between">
                   <%= link_to(resources_url,
+                    id: "cancel-form",
                     class: "relative rounded-md bg-white text-gray-400 hover:text-gray-500 focus:ring-2 focus:ring-indigo-500",
-                    role: "link", data: { turbo_action: "replace", turbo_frame: "form" }, tabindex: "-1") do %>
+                    role: "link", data: { form_target: "cancelForm", turbo_action: "replace", turbo_frame: "form" }, tabindex: "-1") do %>
                     <span class="pointer-events-none absolute -inset-2.5"></span>
                     <span class="pointer-events-none sr-only">Go back to List</span>
                     <%= render Icons::Cancel.new cls: "h-6 w-6 text-gray-400" %>

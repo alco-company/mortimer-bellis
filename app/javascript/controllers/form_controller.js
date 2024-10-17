@@ -4,6 +4,7 @@ import { Controller } from "@hotwired/stimulus"
 export default class extends Controller {
   static targets = [
     "form",
+    "cancelForm"
   ]
 
   connect() {
@@ -14,17 +15,40 @@ export default class extends Controller {
     // this.element.removeEventListener("turbo:submit-end", this.next);
     // then add it again
     // this.element.addEventListener("turbo:submit-end", this.next);
+    console.log("Connected to form controller")
   }
 
-  cancelForm(e) {
-    e.preventDefault();
-    let el = e.target;
-    while('BUTTON' !== el.nodeName) {
-      el = el.parentElement;
+  keydown(e) {
+    // e.preventDefault();
+    switch(e.key) {
+      case "Escape":
+        this.cancelFormTarget.click()
+        break;
+      case "Enter":
+        this.submitForm(e);
+        break;
+      // case "e":
+      //   this.editForm(e);
+      //   break;
+      // case "c":
+      //   this.clearForm(e);
+      //   break;
+      // case "q":
+      //   this.closeForm(e);
+      //   break;
+      default:
+        console.log(`you pressed ${e.key}`);
     }
-    document.getElementById('form').innerHTML = ""
-
   }
+
+  // cancelForm(e) {
+  //   e.preventDefault();
+  //   let el = e.target;
+  //   while('BUTTON' !== el.nodeName) {
+  //     el = el.parentElement;
+  //   }
+  //   document.getElementById('form').innerHTML = ""
+  // }
 
   editForm(e) {
     e.preventDefault();

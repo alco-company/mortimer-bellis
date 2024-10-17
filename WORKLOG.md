@@ -6,6 +6,7 @@
 ## Rescue tools
 
 BACKUP: Litestream
+PWA: https://onrails.blog/2021/03/02/rails-pwas-using-turbo-hhnpwa-7/
 
 * How to rescue your SQLite database - https://support.storj.io/hc/en-us/articles/360029309111-How-to-fix-a-database-disk-image-is-malformed
 
@@ -47,6 +48,11 @@ If Solid Queue bites me again, look here: https://github.com/rails/solid_queue/i
 * <https://railsdesigner.com/preview-images-with-hotwire>
 
 ## CHANGELOG
+
+### 17/10/2024
+
+* start with keyboard events on t/m
+* test how to create invoices
 
 ### 16/10/2024
 
