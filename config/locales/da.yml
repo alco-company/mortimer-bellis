@@ -558,6 +558,7 @@ da:
       time_material:
         customer_id: Kunde
         project_id: Projekt
+        product_id: Produkt
         date: Dato
         time: Tid
         material: Materiale

@@ -81,6 +81,7 @@ da:
     form:
       new: Ny tid/materiale
       edit: Rediger tid/materiale
+      show: Vis tid/materiale
 
     new:
       title: Ny tid/materiale

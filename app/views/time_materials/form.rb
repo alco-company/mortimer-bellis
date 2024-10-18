@@ -5,7 +5,7 @@ class TimeMaterials::Form < ApplicationForm
       #
       div do
         div(class: "") do
-          div(class: "border-b border-gray-200") do
+          div(class: "") do
             nav(class: "-mb-px flex space-x-8", aria_label: "Tabs") do
               time_tab
               material_tab
@@ -25,7 +25,7 @@ class TimeMaterials::Form < ApplicationForm
       #
       invoicing
       #
-      form_actions
+      # form_actions
 
       # url = @resource.id.nil? ? time_materials_url : time_material_url(@resource)
       # render TimeMaterialForm.new time_material: @resource, url: url
@@ -138,10 +138,11 @@ class TimeMaterials::Form < ApplicationForm
       div(class: "space-y-2") do
         div(class: "border-b border-gray-900/10 pb-2") do
           div(class: "mt-2 grid grid-cols-4 gap-x-4 gap-y-4") do
-            row field(:product_id).lookup(class: "mort-form-text",
-              lookup_path: "/products/lookup",
-              display_value: @resource.product_name) # Customer.all.select(:id, :name).take(9)
-
+            div(class: "col-span-4") do
+              row field(:product_id).lookup(class: "mort-form-text",
+                lookup_path: "/products/lookup",
+                display_value: @resource.product_name) # Customer.all.select(:id, :name).take(9)
+            end
             # div(class: "col-span-4") do
             #   label(
             #     for: "product_name",
@@ -315,7 +316,7 @@ class TimeMaterials::Form < ApplicationForm
   end
 
   def invoicing
-    div(class: "border-b border-gray-900/10 pb-12") do
+    div(class: "pb-12") do
       div(class: "mt-2 space-y-4") do
         fieldset do
           legend(class: "text-sm font-semibold leading-6 text-gray-900") { I18n.t("time_material.invoicing.lead") }
@@ -427,7 +428,7 @@ class TimeMaterials::Form < ApplicationForm
 
   def form_actions
     div(class: "my-6 flex items-center justify-end gap-x-6") do
-      render CancelSaveForm.new cancel_url: @resources_url, title: I18n.t("%s.form.new" % @resource_class.table_name)
+      render CancelSaveForm.new cancel_url: @resources_url, title: I18n.t("%s.form.new" % @resource.class.table_name)
       # link_to(time_materials_url, class: "mort-btn-cancel") { "Fortryd" }
       # button(type: "submit", class: "mort-btn-save") { "Gem" }
     end
