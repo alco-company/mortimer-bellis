@@ -119,23 +119,23 @@ class Contextmenu < Phlex::HTML
         class: "flex justify-between px-4 py-2 text-sm text-gray-700",
         role: "menuitem",
         tabindex: "-1" do
-        plain I18n.t(".filter")
+        plain I18n.t(".sort")
         span(class: "sr-only") do
           plain ", "
           plain "sort"
         end
       end
-      link_to helpers.filtering_url(),
-        data: { turbo_stream: true, action: "click->contextmenu#hide" },
-        class: "flex justify-between px-4 py-2 text-sm text-gray-700",
-        role: "menuitem",
-        tabindex: "-1" do
-        plain I18n.t(".filter")
-        span(class: "sr-only") do
-          plain ", "
-          plain "select"
-        end
-      end
+      # link_to helpers.filtering_url(),
+      #   data: { turbo_stream: true, action: "click->contextmenu#hide" },
+      #   class: "flex justify-between px-4 py-2 text-sm text-gray-700",
+      #   role: "menuitem",
+      #   tabindex: "-1" do
+      #   plain I18n.t(".select")
+      #   span(class: "sr-only") do
+      #     plain ", "
+      #     plain "select"
+      #   end
+      # end
 
       resource_class.any? ?
         link_to(
@@ -166,6 +166,17 @@ class Contextmenu < Phlex::HTML
           plain "import"
         end
       end if resource_class.to_s == "User"
+      link_to(
+        helpers.new_modal_url(modal_form: "upload_dinero", resource_class: resource_class.to_s.underscore, modal_next_step: "preview"),
+        class: "flex justify-between px-4 py-2 text-sm text-gray-700",
+        data: { turbo_stream: true }
+        ) do
+        plain I18n.t(".upload to ERP")
+        span(class: "sr-only") do
+          plain ", "
+          plain "import"
+        end
+      end if resource_class.to_s == "TimeMaterial"
       link_to(
         helpers.resources_url() + ".csv",
         class: "flex justify-between px-4 py-2 text-sm text-gray-700",

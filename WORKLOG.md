@@ -57,6 +57,7 @@ If Solid Queue bites me again, look here: https://github.com/rails/solid_queue/i
 * make color scheme and markup uniform
 * set x v in bottom - like in top
 * fix bug in views - t/m
+* add upload button in t/m
 * test how to create invoices
 
 ### 17/10/2024

@@ -17,6 +17,8 @@ da:
   save: Gem
   create: Opret 
   filter: Filtrér
+  sort: Sortér
+  select: Vælg (poster)
   delete: Slet
   delete_all: Slet alle
   import: Importér
