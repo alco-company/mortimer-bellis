@@ -5,7 +5,7 @@ class Dashboard < ApplicationRecord
     feed
   end
 
-  def self.form(resource, editable = true)
-    Dashboards::Form.new resource, editable: editable
+  def self.form(resource:, editable: true)
+    Dashboards::Form.new resource: resource, editable: editable
   end
 end

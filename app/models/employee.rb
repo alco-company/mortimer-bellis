@@ -56,15 +56,15 @@ class Employee < ApplicationRecord
     team.all_calendars + calendars
   end
 
-  def self.form(resource, editable = true)
-    Users::Form.new resource, editable: editable, enctype: "multipart/form-data"
+  def self.form(resource:, editable: true)
+    Users::Form.new resource: resource, editable: editable, enctype: "multipart/form-data"
   end
 
-  def self.profile(resource, url, editable = true)
+  def self.profile(resource, url, editable: true)
     Users::Profile.new resource, action: url, api_key: resource.access_token, editable: editable, enctype: "multipart/form-data"
   end
 
-  def self.signup(resource, url, editable = true)
+  def self.signup(resource, url, editable: true)
     Users::Signup.new resource, action: url, editable: editable, enctype: "multipart/form-data"
   end
 

@@ -35,7 +35,7 @@ class SidebarComponent < ApplicationComponent
         dashboard: { title: "Dashboard", url: "/", icon: "home" },
         time_material: { title: "Time & Material", url: "/time_materials" },
         calendar: { title: "Calendar", url: "/calendars" },
-        reports: { title: "Reports", url: "/pages" },
+        # reports: { title: "Reports", url: "/pages" },
         manage: { title: "Manage",
           submenu: {
             background_jobs: { title: "BackgroundJobs", url: "/background_jobs" },
@@ -48,7 +48,7 @@ class SidebarComponent < ApplicationComponent
             products: { title: "Products", url: "/products" },
             projects: { title: "Projects", url: "/projects" },
             punches: { title: "Punches", url: "/punches" },
-            reports: { title: "Reports", url: "/reports" },
+            # reports: { title: "Reports", url: "/reports" },
             teams: { title: "Teams", url: "/teams" },
             tenants: { title: "Tenants", url: "/tenants" },
             users: { title: "Users", url: "/users" }

@@ -29,8 +29,8 @@ class Event < ApplicationRecord
     all
   end
 
-  def self.form(resource, editable = true)
-    Events::Form.new resource, editable: editable, enctype: "multipart/form-data"
+  def self.form(resource:, editable: true)
+    Events::Form.new resource: resource, editable: editable, enctype: "multipart/form-data"
   end
 
   # call event_metum.get_field(:field_name) to get the value of the field

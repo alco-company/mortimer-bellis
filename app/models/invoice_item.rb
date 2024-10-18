@@ -25,8 +25,8 @@ class InvoiceItem < ApplicationRecord
     all
   end
 
-  def self.form(resource, editable = true)
-    InvoiceItems::Form.new resource, editable: editable
+  def self.form(resource:, editable: true)
+    InvoiceItems::Form.new resource: resource, editable: editable
   end
 
   def name

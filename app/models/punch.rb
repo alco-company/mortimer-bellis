@@ -37,7 +37,7 @@ class Punch < ApplicationRecord
     resources.joins(:user).joins(:punch_clock).order(field => direction)
   end
 
-  def self.form(resource, editable = true)
-    Punches::Form.new resource, editable: editable
+  def self.form(resource:, editable: true)
+    Punches::Form.new resource: resource, editable: editable
   end
 end

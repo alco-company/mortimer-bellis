@@ -17,8 +17,8 @@ class Calendar < ApplicationRecord
     all
   end
 
-  def self.form(resource, editable = true)
-    Calendars::Form.new resource, editable: editable
+  def self.form(resource:, editable: true)
+    Calendars::Form.new resource: resource, editable: editable
   end
 
   def time_zone

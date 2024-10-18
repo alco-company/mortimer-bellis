@@ -32,8 +32,8 @@ class Product < ApplicationRecord
     all
   end
 
-  def self.form(resource, editable = true)
-    Products::Form.new resource, editable: editable
+  def self.form(resource:, editable: true)
+    Products::Form.new resource: resource, editable: editable
   end
 
   def self.add_from_erp(item)

@@ -9,7 +9,7 @@ class Page < ApplicationRecord
     false
   end
 
-  def self.form(resource, editable = true)
-    Pages::Form.new resource, editable: editable
+  def self.form(resource:, editable: true)
+    Pages::Form.new resource: resource, editable: editable
   end
 end

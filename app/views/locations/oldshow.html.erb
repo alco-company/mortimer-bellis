@@ -19,7 +19,7 @@
       </div>
     </div>
     <div class="relative grow top-32 px-4 w-full">
-      <%= render resource_class.form @resource, false %>
+      <%= render resource_class.form resource: @resource, editable: false %>
     </div>
   </div>
 <% end %>

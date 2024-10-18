@@ -11,7 +11,7 @@
   <div class="">
     <div class="ID mb-2"><strong>ID</strong><br/><%= @resource.id %></div>
     <%= render partial: "list_calendars", locals: { header_text: t("calendar.list_all_tenant_calendars"), list_url: tenant_calendars_url(@resource) } %>
-    <%= render resource_class.form @resource, false %>
+    <%= render resource_class.form resource: @resource, editable: false %>
   </div>
   <hr>
   <div>

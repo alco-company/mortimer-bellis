@@ -34,8 +34,8 @@ class Team < ApplicationRecord
     tenant.calendars + calendars
   end
 
-  def self.form(resource, editable = true)
-    Teams::Form.new resource, editable: editable
+  def self.form(resource:, editable: true)
+    Teams::Form.new resource: resource, editable: editable
   end
 
   def get_allowed_ot_minutes

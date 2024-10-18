@@ -2,14 +2,14 @@ class ApplicationForm < Superform::Rails::Form
   include Phlex::Rails::Helpers::Pluralize
   include Phlex::Rails::Helpers::LinkTo
 
-  attr_accessor :editable, :api_key, :resource
+  attr_accessor :resource, :cancel_url, :title, :edit_url,  :editable, :api_key, :model
 
-  def initialize(model, **options)
+  def initialize(resource:, editable: nil, **options)
     options[:data] = { form_target: "form" }
     options[:class] = "mort-form"
-    super(model, **options)
-    @resource = model
-    @editable = options[:editable]
+    super(resource, **options)
+    @resource = @model = resource
+    @editable = editable
     @api_key = options[:api_key] || ""
   end
 
@@ -110,7 +110,7 @@ class ApplicationForm < Superform::Rails::Form
           list:  "%s_lookup_options" % field.dom.id,
           value: attributes[:display_value],
           id: dom.id.gsub(/_id$/, "_name"),
-          name: dom.name.gsub(/_id]/, "_name]"),
+          name: dom.name.gsub(/_id\]/, "_name]"),
           class:
             "w-full rounded-md border-0 bg-white py-1.5 pl-3 pr-12 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-1 focus:ring-inset focus:ring-sky-200 sm:text-sm sm:leading-6",
           role: "combobox",

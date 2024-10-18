@@ -60,8 +60,8 @@ class User < ApplicationRecord
     all
   end
 
-  def self.form(resource, editable = true)
-    Users::Form.new resource, editable: editable, enctype: "multipart/form-data"
+  def self.form(resource:, editable: true)
+    Users::Form.new resource: resource, editable: editable, enctype: "multipart/form-data"
   end
 
   def add_role

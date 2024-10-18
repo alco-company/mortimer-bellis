@@ -37,8 +37,8 @@ class ApplicationRecord < ActiveRecord::Base
     raise "implement this method on the model in order to list_item!"
   end
 
-  def self.form(resource, editable = true)
-    # Locations::Form.new resource, editable: editable
+  def self.form(resource:, editable: true)
+    # Locations::Form.new resource: resource, editable: editable
     raise "implement this method on the model in order to show/edit post!"
   end
 

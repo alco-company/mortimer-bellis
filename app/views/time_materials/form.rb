@@ -427,8 +427,9 @@ class TimeMaterials::Form < ApplicationForm
 
   def form_actions
     div(class: "my-6 flex items-center justify-end gap-x-6") do
-      link_to(time_materials_url, class: "mort-btn-cancel") { "Fortryd" }
-      button(type: "submit", class: "mort-btn-save") { "Gem" }
+      render CancelSaveForm.new cancel_url: @resources_url, title: I18n.t("%s.form.new" % @resource_class.table_name)
+      # link_to(time_materials_url, class: "mort-btn-cancel") { "Fortryd" }
+      # button(type: "submit", class: "mort-btn-save") { "Gem" }
     end
 
     # div(class: "fixed flex items-center w-screen max-w-md right-0 px-4 py-3 font-semibold text-sm text-slate-900 dark:text-slate-200 bg-slate-50 dark:bg-slate-700") do

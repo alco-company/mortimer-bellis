@@ -57,8 +57,8 @@ class Tenant < ApplicationRecord
     all
   end
 
-  def self.form(resource, editable = true)
-    Tenants::Form.new resource, editable: editable, enctype: "multipart/form-data"
+  def self.form(resource:, editable: true)
+    Tenants::Form.new resource: resource, editable: editable, enctype: "multipart/form-data"
   end
 
   def working_hours_this_week

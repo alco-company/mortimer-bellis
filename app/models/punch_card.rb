@@ -42,8 +42,8 @@ class PunchCard < ApplicationRecord
     resources.joins(:user).order(field => direction)
   end
 
-  def self.form(resource, editable = true)
-    PunchCards::Form.new resource, editable: editable
+  def self.form(resource:, editable: true)
+    PunchCards::Form.new resource: resource, editable: editable
   end
 
   def ot_minutes

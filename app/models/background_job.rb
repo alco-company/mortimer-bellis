@@ -63,7 +63,7 @@ class BackgroundJob < ApplicationRecord
     ]
   end
 
-  def self.form(resource, editable = true)
-    BackgroundJobs::Form.new resource, editable: editable
+  def self.form(resource:, editable: true)
+    BackgroundJobs::Form.new resource: resource, editable: editable
   end
 end

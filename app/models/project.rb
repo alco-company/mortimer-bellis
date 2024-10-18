@@ -42,7 +42,7 @@ class Project < ApplicationRecord
     all
   end
 
-  def self.form(resource, editable = true)
-    Projects::Form.new resource, editable: editable
+  def self.form(resource:, editable: true)
+    Projects::Form.new resource: resource, editable: editable
   end
 end

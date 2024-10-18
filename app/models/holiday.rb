@@ -29,8 +29,8 @@ class Holiday < ApplicationRecord
     all
   end
 
-  def self.form(resource, editable = true)
-    Holidays::Form.new resource, editable: editable, enctype: "multipart/form-data"
+  def self.form(resource:, editable: true)
+    Holidays::Form.new resource: resource, editable: editable, enctype: "multipart/form-data"
   end
 
   private

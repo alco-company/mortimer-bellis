@@ -43,7 +43,7 @@
               <!-- Main -->
               <div>
                 <div class="px-4 pb-5 pt-5 sm:pt-0">
-                    <%= render resource_class.form @resource %>
+                    <%= render resource_class.form resource: @resource, cancel_url: resources_url, title: I18n.t("%s.form.edit" % resource_class.table_name), editable: false %>
                 </div>
               </div>
             </div>
