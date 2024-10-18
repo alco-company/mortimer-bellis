@@ -52,7 +52,7 @@ class NavigationComponent < ApplicationComponent
       type: "button",
       data: { action: "click->navigation#toggleMenu" },
       class:
-        "relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-sky-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-cyan-300",
+        "relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-sky-700 hover:text-white focus:outline-none focus:ring-1 focus:ring-inset focus:ring-cyan-300",
       aria_controls: "mobile-menu",
       aria_expanded: "false"
     ) do
@@ -151,7 +151,7 @@ class NavigationComponent < ApplicationComponent
           action: "touchstart->navigation#tapNotificationDrop click->navigation#tapNotificationDrop click@window->navigation#hideNotificationDrop"
         },
         class:
-          "relative rounded-full bg-transparent p-1 text-blue-300 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800",
+          "relative rounded-full bg-transparent p-1 text-blue-300 hover:text-white focus:outline-none focus:ring-1 focus:ring-white focus:ring-offset-1 focus:ring-offset-gray-800",
         id: "user-notifications-button",
         aria_expanded: "false",
         aria_haspopup: "true"

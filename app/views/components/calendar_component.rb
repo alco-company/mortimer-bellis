@@ -433,7 +433,7 @@ class CalendarComponent < ApplicationComponent
           #   data: { action: "click->calendar#showDaySummary", date: I18n.l(dt, format: :short_iso) },
           #   class: "#{cls} bg-gray-50 py-1.5 text-gray-400 hover:bg-gray-100 focus:z-10") do
           #   # Always include: "mx-auto flex h-7 w-7 items-center justify-center rounded-full"
-          #   # Is today, include: "bg-indigo-600 font-semibold text-white")
+          #   # Is today, include: "bg-sky-200 font-semibold text-white")
           #   cls = (dt == Date.today && (dt.month == from_date.month)) ? "bg-sky-600 font-semibold text-white" : ""
           #   time(datetime: I18n.l(dt, format: :short_iso), class: "#{cls} mx-auto flex h-7 w-7 items-center justify-center rounded-full") { dt.day }
           # end

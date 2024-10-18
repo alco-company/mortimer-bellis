@@ -21,15 +21,15 @@
               <div class="sticky z-20 bg-white top-0 px-4 py-5 sm:px-6 border-b">
                 <div class="flex items-start justify-between">
                   <%= link_to(resources_url,
-                    class: "relative rounded-md bg-white text-gray-400 hover:text-gray-500 focus:ring-2 focus:ring-indigo-500",
-                    role: "link", data: { turbo_action: "replace", turbo_frame: "form" }, tabindex: "-1") do %>
+                    class: "relative rounded-md bg-white text-gray-400 hover:text-gray-500 focus:ring-1 focus:ring-sky-200",
+                    role: "link", data: { turbo_action: "replace", turbo_frame: "form" }) do %>
                     <span class="pointer-events-none absolute -inset-2.5"></span>
                     <span class="pointer-events-none sr-only">Go back to List</span>
                     <%= render Icons::Cancel.new cls: "h-6 w-6 text-gray-400" %>
                   <% end %>
                   <h2 id="slide-over-heading" class="text-base font-semibold leading-6 text-gray-900"><%= I18n.t("%s.form.edit" % resource_class.table_name)%></h2>
                   <div class="ml-3 flex h-6 items-center">
-                    <button type="button"  data-action="click->form#submitForm" class="relative rounded-md bg-white text-gray-400 hover:text-gray-500 focus:ring-2 focus:ring-indigo-500">
+                    <button type="button"  data-action="click->form#submitForm" class="relative rounded-md bg-white text-gray-400 hover:text-gray-500 focus:ring-1 focus:ring-sky-200">
                       <span class="absolute -inset-2.5"></span>
                       <span class="sr-only">Save content</span>
                       

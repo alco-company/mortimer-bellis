@@ -557,6 +557,7 @@ da:
         allowed_ot_minutes: Tilladt overtid i minutter (-1=ingen, 0=ubegrænset)
       time_material:
         customer_id: Kunde
+        project_id: Projekt
         date: Dato
         time: Tid
         material: Materiale

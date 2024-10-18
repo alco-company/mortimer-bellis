@@ -122,11 +122,11 @@
   }
 
   .mort-flash-notice {
-    @apply inline-block bg-blue-100 text-blue-700;
+    @apply inline-block bg-sky-100 text-sky-700;
   }
 
   .mort-flash-border-notice {
-    @apply border border-blue-400;
+    @apply border border-sky-200;
   }
 
   .mort-flash-success {
@@ -164,7 +164,7 @@
   .mort-state-unpaid_free,
   .mort-state-maternity_free,
   .mort-state-leave_free {
-    @apply bg-blue-100 text-blue-800;
+    @apply bg-sky-100 text-sky-800;
   }
 
   .mort-state-archived {

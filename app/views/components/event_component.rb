@@ -149,7 +149,7 @@ class EventComponent < ApplicationComponent
               type: "button",
               data_action: " click->event-form#toggleWork",
               data_event_form_target: "workButton",
-              class: "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent bg-gray-200 transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-sky-600 focus:ring-offset-2 aria-checked:bg-sky-600",
+              class: "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent bg-gray-200 transition-colors duration-200 ease-in-out focus:outline-none focus:ring-1 focus:ring-sky-600 focus:ring-offset-1 aria-checked:bg-sky-600",
               role: "switch",
               aria_checked: work_type_value("in", "true", "false")
             ) do
@@ -160,7 +160,7 @@ class EventComponent < ApplicationComponent
               type: "button",
               data_action: " click->event-form#toggleSick",
               data_event_form_target: "sickButton",
-              class: "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent bg-gray-200 transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-sky-600 focus:ring-offset-2 aria-checked:bg-sky-600",
+              class: "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent bg-gray-200 transition-colors duration-200 ease-in-out focus:outline-none focus:ring-1 focus:ring-sky-600 focus:ring-offset-1 aria-checked:bg-sky-600",
               role: "switch",
               aria_checked: work_type_value("sick", "true", "false")
             ) do
@@ -171,7 +171,7 @@ class EventComponent < ApplicationComponent
               type: "button",
               data_action: " click->event-form#toggleFree",
               data_event_form_target: "freeButton",
-              class: "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent bg-gray-200 transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-sky-600 focus:ring-offset-2 aria-checked:bg-sky-600",
+              class: "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent bg-gray-200 transition-colors duration-200 ease-in-out focus:outline-none focus:ring-1 focus:ring-sky-600 focus:ring-offset-1 aria-checked:bg-sky-600",
               role: "switch",
               aria_checked: work_type_value("free", "true", "false")
             ) do
@@ -203,7 +203,7 @@ class EventComponent < ApplicationComponent
             type: "button",
             data_action: " click->event-form#toggleBreakIncluded",
             data_event_form_target: "breaksIncludedButton",
-            class: "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent bg-gray-200 transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-sky-600 focus:ring-offset-2 aria-checked:bg-sky-600",
+            class: "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent bg-gray-200 transition-colors duration-200 ease-in-out focus:outline-none focus:ring-1 focus:ring-sky-600 focus:ring-offset-1 aria-checked:bg-sky-600",
             role: "switch",
             aria_checked: resource.breaks_included ? "true" : "false"
           ) do
@@ -259,7 +259,7 @@ class EventComponent < ApplicationComponent
               type: "button",
               data_action: " click->event-form#toggleAutoPunch",
               data_event_form_target: "autoPunchButton",
-              class: "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent bg-gray-200 transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-sky-600 focus:ring-offset-2 aria-checked:bg-sky-600",
+              class: "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent bg-gray-200 transition-colors duration-200 ease-in-out focus:outline-none focus:ring-1 focus:ring-sky-600 focus:ring-offset-1 aria-checked:bg-sky-600",
               role: "switch",
               aria_checked: resource.auto_punch ? "true" : "false"
             ) do
@@ -341,7 +341,7 @@ class EventComponent < ApplicationComponent
               type: "button",
               data_action: " click->event-form#toggleAllDay",
               data_event_form_target: "allDayButton",
-              class: "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent bg-gray-200 transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-sky-600 focus:ring-offset-2 aria-checked:bg-sky-600",
+              class: "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent bg-gray-200 transition-colors duration-200 ease-in-out focus:outline-none focus:ring-1 focus:ring-sky-600 focus:ring-offset-1 aria-checked:bg-sky-600",
               role: "switch",
               aria_checked: resource.all_day ? "true" : "false"
             ) do
@@ -669,7 +669,7 @@ class EventComponent < ApplicationComponent
     div(class: "mort-field") do
       label(for: "event_comment", class: "block text-sm font-medium leading-6 text-gray-900")  { I18n.t("event.comment") }
       div(class: "mt-2") do
-        textarea(rows: "4", name: "event[comment]", id: "event_comment", class: "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-600 sm:text-sm sm:leading-6")
+        textarea(rows: "4", name: "event[comment]", id: "event_comment", class: "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-sky-600 sm:text-sm sm:leading-6")
       end
     end
   end

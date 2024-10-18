@@ -54,6 +54,7 @@ If Solid Queue bites me again, look here: https://github.com/rails/solid_queue/i
 * now lookup works (at least for customers)
 * testing numbers on ios
 * continue working on the time_material form
+* make color scheme and markup uniform
 * test how to create invoices
 
 ### 17/10/2024

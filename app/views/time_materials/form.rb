@@ -109,10 +109,10 @@ class TimeMaterials::Form < ApplicationForm
               div(class: "mt-2") do
                 div(
                   class:
-                    "flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-sky-600 sm:max-w-md"
+                    "flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-1 focus-within:ring-inset focus-within:ring-sky-600 sm:max-w-md"
                 ) do
                   input(
-                    type: "tel",
+                    type: "tel",  # hack to allow iOS to show numeric keyboard
                     name: "time_material[time]",
                     id: "time_material_time",
                     pattern: "[0-9,.]*",
@@ -138,31 +138,32 @@ class TimeMaterials::Form < ApplicationForm
       div(class: "space-y-2") do
         div(class: "border-b border-gray-900/10 pb-2") do
           div(class: "mt-2 grid grid-cols-4 gap-x-4 gap-y-4") do
+            row field(:product_id).lookup(class: "mort-form-text",
+              lookup_path: "/products/lookup",
+              display_value: @resource.product_name) # Customer.all.select(:id, :name).take(9)
+
+            # div(class: "col-span-4") do
+            #   label(
+            #     for: "product_name",
+            #     class: "block text-sm font-medium leading-6 text-gray-900"
+            #   ) { I18n.t("time_material.product.lbl")  }
+            #   div(class: "mt-2") do
+            #     div(
+            #       class:
+            #         "flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-1 focus-within:ring-inset focus-within:ring-sky-600 sm:max-w-md"
+            #     ) do
+            #       input(
+            #         name: "time_material[product_name]",
+            #         id: "time_material_product_name",
+            #         value: @resource.product_name,
+            #         class:
+            #           "block flex-1 border-0 bg-transparent py-1.5 pl-2 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6",
+            #         placeholder: I18n.t("time_material.product.placeholder")
+            #       )
+            #     end
+            #   end
+            # end
             div(class: "col-span-4") do
-              whitespace
-              label(
-                for: "product_name",
-                class: "block text-sm font-medium leading-6 text-gray-900"
-              ) { I18n.t("time_material.product.lbl")  }
-              div(class: "mt-2") do
-                div(
-                  class:
-                    "flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-sky-600 sm:max-w-md"
-                ) do
-                  whitespace
-                  input(
-                    name: "time_material[product_name]",
-                    id: "time_material_product_name",
-                    value: @resource.product_name,
-                    class:
-                      "block flex-1 border-0 bg-transparent py-1.5 pl-2 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6",
-                    placeholder: I18n.t("time_material.product.placeholder")
-                  )
-                end
-              end
-            end
-            div(class: "col-span-4") do
-              whitespace
               label(
                 for: "comment",
                 class: "block text-sm font-medium leading-6 text-gray-900"
@@ -170,7 +171,7 @@ class TimeMaterials::Form < ApplicationForm
               div(class: "mt-2") do
                 div(
                   class:
-                    "flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-sky-600 sm:max-w-md"
+                    "flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-1 focus-within:ring-inset focus-within:ring-sky-600 sm:max-w-md"
                 ) do
                   textarea(
                     id: "time_material_comment",
@@ -178,7 +179,7 @@ class TimeMaterials::Form < ApplicationForm
                     rows: "3",
                     autofocus: true,
                     class:
-                      "block w-full rounded-md border-0 py-1.5 px-2.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-600 sm:text-sm sm:leading-6",
+                      "block w-full rounded-md border-0 py-1.5 px-2.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-sky-600 sm:text-sm sm:leading-6",
                     placeholder: I18n.t("time_material.comment.placeholder")
                   ) do
                     plain @resource.comment
@@ -188,7 +189,6 @@ class TimeMaterials::Form < ApplicationForm
             end
             div(class: "col-span-4 grid gap-x-2 grid-cols-6") do
               div(class: "col-span-2") do
-                whitespace
                 label(
                   for: "quantity",
                   class: "block text-sm font-medium leading-6 text-gray-900"
@@ -196,9 +196,8 @@ class TimeMaterials::Form < ApplicationForm
                 div(class: "mt-2") do
                   div(
                     class:
-                      "flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-sky-600 sm:max-w-md"
+                      "flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-1 focus-within:ring-inset focus-within:ring-sky-600 sm:max-w-md"
                   ) do
-                    whitespace
                     input(
                       name: "time_material[quantity]",
                       id: "time_material_quantity",
@@ -214,7 +213,6 @@ class TimeMaterials::Form < ApplicationForm
               rate_field I18n.t("time_material.rate.unit_price")
               #
               div(class: "col-span-2") do
-                whitespace
                 label(
                   for: "discount",
                   class: "block text-sm font-medium leading-6 text-gray-900"
@@ -222,9 +220,8 @@ class TimeMaterials::Form < ApplicationForm
                 div(class: "mt-2") do
                   div(
                     class:
-                      "flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-sky-600 sm:max-w-md"
+                      "flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-1 focus-within:ring-inset focus-within:ring-sky-600 sm:max-w-md"
                   ) do
-                    whitespace
                     input(
                       name: "time_material[discount]",
                       id: "time_material_discount",
@@ -245,20 +242,18 @@ class TimeMaterials::Form < ApplicationForm
 
   def about_field
     div(class: "col-span-full") do
-      whitespace
       label(
         for: "time_material_about",
-        class: "block text-sm font-medium leading-6 text-gray-900"
+        class: "block text-sm font-light leading-6 text-gray-900"
       ) { I18n.t("time_material.about.lbl") }
       div(class: "mt-2") do
-        whitespace
         textarea(
           id: "time_material_about",
           name: "time_material[about]",
           rows: "3",
           autofocus: true,
           class:
-            "block w-full rounded-md border-0 py-1.5 px-2.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-600 sm:text-sm sm:leading-6",
+            "block w-full rounded-md border-0 py-1.5 px-2.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-sky-600 sm:text-sm sm:leading-6",
           placeholder: I18n.t("time_material.about.placeholder")
         ) do
           plain @resource.about
@@ -273,43 +268,29 @@ class TimeMaterials::Form < ApplicationForm
   def customer_field
     row field(:customer_id).lookup(class: "mort-form-text",
       lookup_path: "/customers/lookup",
-      display_value: @resource.customer_name).focus # Customer.all.select(:id, :name).take(9)
+      display_value: @resource.customer_name) # Customer.all.select(:id, :name).take(9)
+  end
 
+  def project_field
+    row field(:project_id).lookup(class: "mort-form-text",
+      lookup_path: "/projects/lookup",
+      display_value: @resource.project_name) # Customer.all.select(:id, :name).take(9)
     # div(class: "mt-4 col-span-4") do
-    #   label(for: "time_material_customer", class: "block text-sm font-medium leading-6 text-gray-900") { I18n.t("time_material.customer.lbl") }
+    #   label(for: "time_material_project", class: "block text-sm font-medium leading-6 text-gray-900") { I18n.t("time_material.project.lbl") }
     #   div(class: "mt-2") do
-    #     div(class: "flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-sky-600 sm:max-w-md") do
+    #     div(class: "flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-1 focus-within:ring-inset focus-within:ring-sky-600 sm:max-w-md") do
     #       input(
-    #         name: "time_material[customer_name]",
-    #         id: "time_material_customer_name",
-    #         autocomplete: "customer",
-    #         value: @resource.customer_name,
+    #         name: "time_material[project_name]",
+    #         id: "time_material_project_name",
+    #         autocomplete: "project",
+    #         value: @resource.project_name,
     #         class:
     #           "block flex-1 border-0 bg-transparent py-1.5 pl-2 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6",
-    #         placeholder: I18n.t("time_material.customer.placeholder")
+    #         placeholder: I18n.t("time_material.project.placeholder")
     #       )
     #     end
     #   end
     # end
-  end
-
-  def project_field
-    div(class: "mt-4 col-span-4") do
-      label(for: "time_material_project", class: "block text-sm font-medium leading-6 text-gray-900") { I18n.t("time_material.project.lbl") }
-      div(class: "mt-2") do
-        div(class: "flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-sky-600 sm:max-w-md") do
-          input(
-            name: "time_material[project_name]",
-            id: "time_material_project_name",
-            autocomplete: "project",
-            value: @resource.project_name,
-            class:
-              "block flex-1 border-0 bg-transparent py-1.5 pl-2 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6",
-            placeholder: I18n.t("time_material.project.placeholder")
-          )
-        end
-      end
-    end
   end
 
   def rate_field(lbl)
@@ -318,9 +299,8 @@ class TimeMaterials::Form < ApplicationForm
       div(class: "mt-2") do
         div(
           class:
-            "flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-sky-600 sm:max-w-md"
+            "flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-1 focus-within:ring-inset focus-within:ring-sky-600 sm:max-w-md"
         ) do
-          whitespace
           input(
             name: "time_material[rate]",
             id: "time_material_rate",
@@ -430,7 +410,7 @@ class TimeMaterials::Form < ApplicationForm
       div(class: "mt-2") do
         div(
           class:
-            "flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-sky-600 sm:max-w-md"
+            "flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-1 focus-within:ring-inset focus-within:ring-sky-600 sm:max-w-md"
         ) do
           input(
             type: "date",
@@ -452,7 +432,7 @@ class TimeMaterials::Form < ApplicationForm
     end
 
     # div(class: "fixed flex items-center w-screen max-w-md right-0 px-4 py-3 font-semibold text-sm text-slate-900 dark:text-slate-200 bg-slate-50 dark:bg-slate-700") do
-    #   link_to(time_materials_url, class: "flex-none mr-6 rounded-md bg-slate-50 dark:bg-slate-700 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2") do
+    #   link_to(time_materials_url, class: "flex-none mr-6 rounded-md bg-slate-50 dark:bg-slate-700 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-1 focus:ring-sky-200 focus:ring-offset-1") do
     #     span(class: "absolute -inset-2.5")
     #     span(class: "sr-only") { "Close panel" }
     #     svg(class: "h-6 w-6", fill: "none", viewbox: "0 0 24 24", stroke_width: "1.5", stroke: "currentColor", aria_hidden: "true", data_slot: "icon") do |s|
@@ -460,7 +440,7 @@ class TimeMaterials::Form < ApplicationForm
     #     end
     #   end
     #   h2(class: "grow text-base font-semibold text-gray-900", id: "slide-over-title") { "Panel title" }
-    #   button(type: "submit", class: "flex-none rounded-md bg-slate-50 dark:bg-slate-700 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2") do
+    #   button(type: "submit", class: "flex-none rounded-md bg-slate-50 dark:bg-slate-700 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-1 focus:ring-sky-200 focus:ring-offset-1") do
     #     span(class: "absolute -inset-2.5")
     #     span(class: "sr-only") { "Save content" }
     #     svg(class: "text-green-500", xmlns: "http://www.w3.org/2000/svg", height: "24px", viewbox: "0 -960 960 960", width: "24px", fill: "currentColor") do |s|

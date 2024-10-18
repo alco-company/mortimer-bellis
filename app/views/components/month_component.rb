@@ -133,12 +133,12 @@ class MonthComponent < CalendarComponent
     #         a(href: "#", class: "group flex") do
     #           p(
     #             class:
-    #               "flex-auto truncate font-medium text-gray-900 group-hover:text-indigo-600"
+    #               "flex-auto truncate font-medium text-gray-900 group-hover:text-sky-200"
     #           ) { "Date night" }
     #           time(
     #             datetime: "2022-01-08T18:00",
     #             class:
-    #               "ml-3 hidden flex-none text-gray-500 group-hover:text-indigo-600 xl:block"
+    #               "ml-3 hidden flex-none text-gray-500 group-hover:text-sky-200 xl:block"
     #           ) { "6PM" }
     #         end
     #       end
@@ -148,19 +148,19 @@ class MonthComponent < CalendarComponent
     #     time(
     #       datetime: "2022-01-12",
     #       class:
-    #         "flex h-6 w-6 items-center justify-center rounded-full bg-indigo-600 font-semibold text-white"
+    #         "flex h-6 w-6 items-center justify-center rounded-full bg-sky-200 font-semibold text-white"
     #     ) { "12" }
     #     ol(class: "mt-2") do
     #       li do
     #         a(href: "#", class: "group flex") do
     #           p(
     #             class:
-    #               "flex-auto truncate font-medium text-gray-900 group-hover:text-indigo-600"
+    #               "flex-auto truncate font-medium text-gray-900 group-hover:text-sky-200"
     #           ) { "Sam's birthday party" }
     #           time(
     #             datetime: "2022-01-25T14:00",
     #             class:
-    #               "ml-3 hidden flex-none text-gray-500 group-hover:text-indigo-600 xl:block"
+    #               "ml-3 hidden flex-none text-gray-500 group-hover:text-sky-200 xl:block"
     #           ) { "2PM" }
     #         end
     #       end
@@ -177,7 +177,7 @@ class MonthComponent < CalendarComponent
       # Is not current month, include: "bg-gray-50"
       # Is selected or is today, include: "font-semibold"
       # Is selected, include: "text-white"
-      # Is not selected and is today, include: "text-indigo-600"
+      # Is not selected and is today, include: "text-sky-200"
       # Is not selected and is current month, and is not today, include: "text-gray-900"
       # Is not selected, is not current month, and is not today: "text-gray-500"
       #
@@ -256,7 +256,7 @@ class MonthComponent < CalendarComponent
     #     "flex h-14 flex-col bg-gray-50 px-3 py-2 text-gray-500 hover:bg-gray-100 focus:z-10"
     # ) do
     #   comment do
-    #     %(Always include: "ml-auto" Is selected, include: "flex h-6 w-6 items-center justify-center rounded-full" Is selected and is today, include: "bg-indigo-600" Is selected and is not today, include: "bg-gray-900")
+    #     %(Always include: "ml-auto" Is selected, include: "flex h-6 w-6 items-center justify-center rounded-full" Is selected and is today, include: "bg-sky-200" Is selected and is not today, include: "bg-gray-900")
     #   end
     #   time(datetime: "2021-12-27", class: "ml-auto") { "27" }
     #   span(class: "sr-only") { "0 events" }
@@ -391,7 +391,7 @@ class MonthComponent < CalendarComponent
     # button(
     #   type: "button",
     #   class:
-    #     "flex h-14 flex-col bg-white px-3 py-2 font-semibold text-indigo-600 hover:bg-gray-100 focus:z-10"
+    #     "flex h-14 flex-col bg-white px-3 py-2 font-semibold text-sky-200 hover:bg-gray-100 focus:z-10"
     # ) do
     #   time(datetime: "2022-01-12", class: "ml-auto") { "12" }
     #   span(class: "sr-only") { "1 event" }

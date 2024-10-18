@@ -80,17 +80,17 @@ class VerticalMenuComponent < ApplicationComponent
                       li do
                         whitespace
                         comment do
-                          %(Current: "bg-gray-50 text-indigo-600", Default: "text-gray-700 hover:text-indigo-600 hover:bg-gray-50")
+                          %(Current: "bg-gray-50 text-sky-200", Default: "text-gray-700 hover:text-sky-200 hover:bg-gray-50")
                         end
                         whitespace
                         a(
                           href: "#",
                           class:
-                            "group flex gap-x-3 rounded-md bg-gray-50 p-2 text-sm font-semibold leading-6 text-indigo-600"
+                            "group flex gap-x-3 rounded-md bg-gray-50 p-2 text-sm font-semibold leading-6 text-sky-200"
                         ) do
                           whitespace
                           svg(
-                            class: "h-6 w-6 shrink-0 text-indigo-600",
+                            class: "h-6 w-6 shrink-0 text-sky-200",
                             fill: "none",
                             viewbox: "0 0 24 24",
                             stroke_width: "1.5",
@@ -112,12 +112,12 @@ class VerticalMenuComponent < ApplicationComponent
                         a(
                           href: "#",
                           class:
-                            "group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-indigo-600"
+                            "group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-sky-200"
                         ) do
                           whitespace
                           svg(
                             class:
-                              "h-6 w-6 shrink-0 text-gray-400 group-hover:text-indigo-600",
+                              "h-6 w-6 shrink-0 text-gray-400 group-hover:text-sky-200",
                             fill: "none",
                             viewbox: "0 0 24 24",
                             stroke_width: "1.5",
@@ -139,12 +139,12 @@ class VerticalMenuComponent < ApplicationComponent
                         a(
                           href: "#",
                           class:
-                            "group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-indigo-600"
+                            "group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-sky-200"
                         ) do
                           whitespace
                           svg(
                             class:
-                              "h-6 w-6 shrink-0 text-gray-400 group-hover:text-indigo-600",
+                              "h-6 w-6 shrink-0 text-gray-400 group-hover:text-sky-200",
                             fill: "none",
                             viewbox: "0 0 24 24",
                             stroke_width: "1.5",
@@ -166,12 +166,12 @@ class VerticalMenuComponent < ApplicationComponent
                         a(
                           href: "#",
                           class:
-                            "group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-indigo-600"
+                            "group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-sky-200"
                         ) do
                           whitespace
                           svg(
                             class:
-                              "h-6 w-6 shrink-0 text-gray-400 group-hover:text-indigo-600",
+                              "h-6 w-6 shrink-0 text-gray-400 group-hover:text-sky-200",
                             fill: "none",
                             viewbox: "0 0 24 24",
                             stroke_width: "1.5",
@@ -193,12 +193,12 @@ class VerticalMenuComponent < ApplicationComponent
                         a(
                           href: "#",
                           class:
-                            "group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-indigo-600"
+                            "group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-sky-200"
                         ) do
                           whitespace
                           svg(
                             class:
-                              "h-6 w-6 shrink-0 text-gray-400 group-hover:text-indigo-600",
+                              "h-6 w-6 shrink-0 text-gray-400 group-hover:text-sky-200",
                             fill: "none",
                             viewbox: "0 0 24 24",
                             stroke_width: "1.5",
@@ -220,12 +220,12 @@ class VerticalMenuComponent < ApplicationComponent
                         a(
                           href: "#",
                           class:
-                            "group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-indigo-600"
+                            "group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-sky-200"
                         ) do
                           whitespace
                           svg(
                             class:
-                              "h-6 w-6 shrink-0 text-gray-400 group-hover:text-indigo-600",
+                              "h-6 w-6 shrink-0 text-gray-400 group-hover:text-sky-200",
                             fill: "none",
                             viewbox: "0 0 24 24",
                             stroke_width: "1.5",
@@ -256,18 +256,18 @@ class VerticalMenuComponent < ApplicationComponent
                       li do
                         whitespace
                         comment do
-                          %(Current: "bg-gray-50 text-indigo-600", Default: "text-gray-700 hover:text-indigo-600 hover:bg-gray-50")
+                          %(Current: "bg-gray-50 text-sky-200", Default: "text-gray-700 hover:text-sky-200 hover:bg-gray-50")
                         end
                         whitespace
                         a(
                           href: "#",
                           class:
-                            "group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-indigo-600"
+                            "group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-sky-200"
                         ) do
                           whitespace
                           span(
                             class:
-                              "flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-gray-200 bg-white text-[0.625rem] font-medium text-gray-400 group-hover:border-indigo-600 group-hover:text-indigo-600"
+                              "flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-gray-200 bg-white text-[0.625rem] font-medium text-gray-400 group-hover:border-sky-200 group-hover:text-sky-200"
                           ) { "H" }
                           whitespace
                           span(class: "truncate") { "Heroicons" }
@@ -279,12 +279,12 @@ class VerticalMenuComponent < ApplicationComponent
                         a(
                           href: "#",
                           class:
-                            "group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-indigo-600"
+                            "group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-sky-200"
                         ) do
                           whitespace
                           span(
                             class:
-                              "flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-gray-200 bg-white text-[0.625rem] font-medium text-gray-400 group-hover:border-indigo-600 group-hover:text-indigo-600"
+                              "flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-gray-200 bg-white text-[0.625rem] font-medium text-gray-400 group-hover:border-sky-200 group-hover:text-sky-200"
                           ) { "T" }
                           whitespace
                           span(class: "truncate") { "Tailwind Labs" }
@@ -296,12 +296,12 @@ class VerticalMenuComponent < ApplicationComponent
                         a(
                           href: "#",
                           class:
-                            "group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-indigo-600"
+                            "group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-sky-200"
                         ) do
                           whitespace
                           span(
                             class:
-                              "flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-gray-200 bg-white text-[0.625rem] font-medium text-gray-400 group-hover:border-indigo-600 group-hover:text-indigo-600"
+                              "flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-gray-200 bg-white text-[0.625rem] font-medium text-gray-400 group-hover:border-sky-200 group-hover:text-sky-200"
                           ) { "W" }
                           whitespace
                           span(class: "truncate") { "Workcation" }
@@ -315,12 +315,12 @@ class VerticalMenuComponent < ApplicationComponent
                     a(
                       href: "#",
                       class:
-                        "group -mx-2 flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-indigo-600"
+                        "group -mx-2 flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-sky-200"
                     ) do
                       whitespace
                       svg(
                         class:
-                          "h-6 w-6 shrink-0 text-gray-400 group-hover:text-indigo-600",
+                          "h-6 w-6 shrink-0 text-gray-400 group-hover:text-sky-200",
                         fill: "none",
                         viewbox: "0 0 24 24",
                         stroke_width: "1.5",
@@ -380,17 +380,17 @@ class VerticalMenuComponent < ApplicationComponent
                   li do
                     whitespace
                     comment do
-                      %(Current: "bg-gray-50 text-indigo-600", Default: "text-gray-700 hover:text-indigo-600 hover:bg-gray-50")
+                      %(Current: "bg-gray-50 text-sky-200", Default: "text-gray-700 hover:text-sky-200 hover:bg-gray-50")
                     end
                     whitespace
                     a(
                       href: "#",
                       class:
-                        "group flex gap-x-3 rounded-md bg-gray-50 p-2 text-sm font-semibold leading-6 text-indigo-600"
+                        "group flex gap-x-3 rounded-md bg-gray-50 p-2 text-sm font-semibold leading-6 text-sky-200"
                     ) do
                       whitespace
                       svg(
-                        class: "h-6 w-6 shrink-0 text-indigo-600",
+                        class: "h-6 w-6 shrink-0 text-sky-200",
                         fill: "none",
                         viewbox: "0 0 24 24",
                         stroke_width: "1.5",
@@ -412,12 +412,12 @@ class VerticalMenuComponent < ApplicationComponent
                     a(
                       href: "#",
                       class:
-                        "group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-indigo-600"
+                        "group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-sky-200"
                     ) do
                       whitespace
                       svg(
                         class:
-                          "h-6 w-6 shrink-0 text-gray-400 group-hover:text-indigo-600",
+                          "h-6 w-6 shrink-0 text-gray-400 group-hover:text-sky-200",
                         fill: "none",
                         viewbox: "0 0 24 24",
                         stroke_width: "1.5",
@@ -439,12 +439,12 @@ class VerticalMenuComponent < ApplicationComponent
                     a(
                       href: "#",
                       class:
-                        "group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-indigo-600"
+                        "group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-sky-200"
                     ) do
                       whitespace
                       svg(
                         class:
-                          "h-6 w-6 shrink-0 text-gray-400 group-hover:text-indigo-600",
+                          "h-6 w-6 shrink-0 text-gray-400 group-hover:text-sky-200",
                         fill: "none",
                         viewbox: "0 0 24 24",
                         stroke_width: "1.5",
@@ -466,12 +466,12 @@ class VerticalMenuComponent < ApplicationComponent
                     a(
                       href: "#",
                       class:
-                        "group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-indigo-600"
+                        "group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-sky-200"
                     ) do
                       whitespace
                       svg(
                         class:
-                          "h-6 w-6 shrink-0 text-gray-400 group-hover:text-indigo-600",
+                          "h-6 w-6 shrink-0 text-gray-400 group-hover:text-sky-200",
                         fill: "none",
                         viewbox: "0 0 24 24",
                         stroke_width: "1.5",
@@ -493,12 +493,12 @@ class VerticalMenuComponent < ApplicationComponent
                     a(
                       href: "#",
                       class:
-                        "group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-indigo-600"
+                        "group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-sky-200"
                     ) do
                       whitespace
                       svg(
                         class:
-                          "h-6 w-6 shrink-0 text-gray-400 group-hover:text-indigo-600",
+                          "h-6 w-6 shrink-0 text-gray-400 group-hover:text-sky-200",
                         fill: "none",
                         viewbox: "0 0 24 24",
                         stroke_width: "1.5",
@@ -520,12 +520,12 @@ class VerticalMenuComponent < ApplicationComponent
                     a(
                       href: "#",
                       class:
-                        "group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-indigo-600"
+                        "group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-sky-200"
                     ) do
                       whitespace
                       svg(
                         class:
-                          "h-6 w-6 shrink-0 text-gray-400 group-hover:text-indigo-600",
+                          "h-6 w-6 shrink-0 text-gray-400 group-hover:text-sky-200",
                         fill: "none",
                         viewbox: "0 0 24 24",
                         stroke_width: "1.5",
@@ -556,18 +556,18 @@ class VerticalMenuComponent < ApplicationComponent
                   li do
                     whitespace
                     comment do
-                      %(Current: "bg-gray-50 text-indigo-600", Default: "text-gray-700 hover:text-indigo-600 hover:bg-gray-50")
+                      %(Current: "bg-gray-50 text-sky-200", Default: "text-gray-700 hover:text-sky-200 hover:bg-gray-50")
                     end
                     whitespace
                     a(
                       href: "#",
                       class:
-                        "group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-indigo-600"
+                        "group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-sky-200"
                     ) do
                       whitespace
                       span(
                         class:
-                          "flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-gray-200 bg-white text-[0.625rem] font-medium text-gray-400 group-hover:border-indigo-600 group-hover:text-indigo-600"
+                          "flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-gray-200 bg-white text-[0.625rem] font-medium text-gray-400 group-hover:border-sky-200 group-hover:text-sky-200"
                       ) { "H" }
                       whitespace
                       span(class: "truncate") { "Heroicons" }
@@ -579,12 +579,12 @@ class VerticalMenuComponent < ApplicationComponent
                     a(
                       href: "#",
                       class:
-                        "group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-indigo-600"
+                        "group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-sky-200"
                     ) do
                       whitespace
                       span(
                         class:
-                          "flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-gray-200 bg-white text-[0.625rem] font-medium text-gray-400 group-hover:border-indigo-600 group-hover:text-indigo-600"
+                          "flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-gray-200 bg-white text-[0.625rem] font-medium text-gray-400 group-hover:border-sky-200 group-hover:text-sky-200"
                       ) { "T" }
                       whitespace
                       span(class: "truncate") { "Tailwind Labs" }
@@ -596,12 +596,12 @@ class VerticalMenuComponent < ApplicationComponent
                     a(
                       href: "#",
                       class:
-                        "group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-indigo-600"
+                        "group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-sky-200"
                     ) do
                       whitespace
                       span(
                         class:
-                          "flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-gray-200 bg-white text-[0.625rem] font-medium text-gray-400 group-hover:border-indigo-600 group-hover:text-indigo-600"
+                          "flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-gray-200 bg-white text-[0.625rem] font-medium text-gray-400 group-hover:border-sky-200 group-hover:text-sky-200"
                       ) { "W" }
                       whitespace
                       span(class: "truncate") { "Workcation" }
@@ -615,12 +615,12 @@ class VerticalMenuComponent < ApplicationComponent
                 a(
                   href: "#",
                   class:
-                    "group -mx-2 flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-indigo-600"
+                    "group -mx-2 flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-sky-200"
                 ) do
                   whitespace
                   svg(
                     class:
-                      "h-6 w-6 shrink-0 text-gray-400 group-hover:text-indigo-600",
+                      "h-6 w-6 shrink-0 text-gray-400 group-hover:text-sky-200",
                     fill: "none",
                     viewbox: "0 0 24 24",
                     stroke_width: "1.5",

@@ -20,6 +20,7 @@ Rails.application.routes.draw do
   resources :products do
     collection do
       get "erp_pull"
+      get "lookup"
     end
   end
   resources :customers do
@@ -34,7 +35,12 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :projects
+  resources :projects do
+    collection do
+      get "lookup"
+    end
+  end
+
 
   resources :provided_services
   resources :settings

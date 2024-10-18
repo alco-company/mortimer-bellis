@@ -17,7 +17,8 @@ module DefaultActions
     end
 
     def lookup
-      @resources = resource_class.where("name LIKE ?", "%#{params.permit![:q]}%").limit(10) rescue nil
+      search = params.permit![:q].blank? ? "1=1" : "name LIKE ?", "%#{params.permit![:q]}%"
+      @resources = resource_class.where(search).limit(10) rescue nil
       @resources = [ { id: 0, name: I18n.t("no records were found") } ] if @resources.nil? or @resources.empty?
       lookup_options = "%s_lookup_options" % params.permit![:div_id]
       respond_to do |format|
@@ -78,6 +79,7 @@ module DefaultActions
       @resource = resource_class.new(resource_params)
       @resource.tenant_id = Current.tenant.id if resource_class.has_attribute? :tenant_id
       @resource.user_id = Current.user.id if resource_class.has_attribute? :user_id
+      before_create_callback @resource
       respond_to do |format|
         if @resource.save
           create_callback @resource
@@ -143,6 +145,13 @@ module DefaultActions
           end
         end
       end
+    end
+
+    #
+    # implement on the controller inheriting this concern
+    # in order to 'fix' stuff right before the resource gets saved
+    #
+    def before_create_callback(obj)
     end
 
     #

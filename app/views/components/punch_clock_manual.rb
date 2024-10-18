@@ -230,7 +230,7 @@ class PunchClockManual < ApplicationComponent
         action: action,
         pos_employee_target: "#{reason}Button"
       },
-      class: "bg-gray-200 aria-checked:bg-sky-600 relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-sky-600 focus:ring-offset-2",
+      class: "bg-gray-200 aria-checked:bg-sky-600 relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-1 focus:ring-sky-600 focus:ring-offset-1",
       role: "switch",
       aria_checked: enabled ? "true" : "false"
     ) do

@@ -23,6 +23,8 @@ export default class extends Controller {
     if (!this.items_connected) {
       this.items_connected = true;
       await new Promise(r => setTimeout(r, 50));
+      this.optionsIconTarget.classList.remove("hidden");
+      this.searchIconTarget.classList.add("hidden");
       this.optionsListTarget.getElementsByTagName("LI")[0].focus();
     }
   }
@@ -42,8 +44,8 @@ export default class extends Controller {
       case "Escape": this.toggleOptions(e); this.inputTarget.focus(); break;
       case "ArrowDown": this.focusNextItem(e); break;
       case "ArrowUp": this.focusPreviousItem(e); break;
-      case "Enter": this.select_option(e); break;
-      case " ": this.select_option(e); break;
+      case "Enter": this.toggleOptions(e); this.select_option(e); break;
+      case " ": this.toggleOptions(e); this.select_option(e); break;
       default: console.log(`you pressed ${e.key}`);
     }
   }

@@ -262,7 +262,7 @@ class ApplicationForm < Superform::Rails::Form
   #       plain collection_radio_buttons(:user, :punching_absence, [ true, "Option 1", false, "option 2" ]) do |builder|
   #         span(class: "relative inline-block") do
   #           plain builder.radio_button class: "sr-only peer"
-  #           plain builder.label(class: "border-2 border-transparent rounded-full block py-1 px-2 peer-checked:bg-blue-500 peer-checked:text-white hover:bg-blue-200 hover:border-blue-500")
+  #           plain builder.label(class: "border-2 border-transparent rounded-full block py-1 px-2 peer-checked:bg-blue-500 peer-checked:text-white hover:bg-blue-200 hover:border-sky-200")
   #         end
   #       end
   #     end

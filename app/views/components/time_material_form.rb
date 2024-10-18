@@ -126,7 +126,7 @@ class TimeMaterialForm < ApplicationComponent
               div(class: "mt-2") do
                 div(
                   class:
-                    "flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-sky-600 sm:max-w-md"
+                    "flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-1 focus-within:ring-inset focus-within:ring-sky-600 sm:max-w-md"
                 ) do
                   input(
                     name: "time_material[time]",
@@ -162,7 +162,7 @@ class TimeMaterialForm < ApplicationComponent
               div(class: "mt-2") do
                 div(
                   class:
-                    "flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-sky-600 sm:max-w-md"
+                    "flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-1 focus-within:ring-inset focus-within:ring-sky-600 sm:max-w-md"
                 ) do
                   whitespace
                   input(
@@ -185,7 +185,7 @@ class TimeMaterialForm < ApplicationComponent
               div(class: "mt-2") do
                 div(
                   class:
-                    "flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-sky-600 sm:max-w-md"
+                    "flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-1 focus-within:ring-inset focus-within:ring-sky-600 sm:max-w-md"
                 ) do
                   textarea(
                     id: "time_material_comment",
@@ -193,7 +193,7 @@ class TimeMaterialForm < ApplicationComponent
                     rows: "3",
                     autofocus: true,
                     class:
-                      "block w-full rounded-md border-0 py-1.5 px-2.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-600 sm:text-sm sm:leading-6",
+                      "block w-full rounded-md border-0 py-1.5 px-2.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-sky-600 sm:text-sm sm:leading-6",
                     placeholder: I18n.t("time_material.comment.placeholder")
                   ) do
                     plain @time_material.comment
@@ -211,7 +211,7 @@ class TimeMaterialForm < ApplicationComponent
                 div(class: "mt-2") do
                   div(
                     class:
-                      "flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-sky-600 sm:max-w-md"
+                      "flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-1 focus-within:ring-inset focus-within:ring-sky-600 sm:max-w-md"
                   ) do
                     whitespace
                     input(
@@ -237,7 +237,7 @@ class TimeMaterialForm < ApplicationComponent
                 div(class: "mt-2") do
                   div(
                     class:
-                      "flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-sky-600 sm:max-w-md"
+                      "flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-1 focus-within:ring-inset focus-within:ring-sky-600 sm:max-w-md"
                   ) do
                     whitespace
                     input(
@@ -273,7 +273,7 @@ class TimeMaterialForm < ApplicationComponent
           rows: "3",
           autofocus: true,
           class:
-            "block w-full rounded-md border-0 py-1.5 px-2.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-600 sm:text-sm sm:leading-6",
+            "block w-full rounded-md border-0 py-1.5 px-2.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-sky-600 sm:text-sm sm:leading-6",
           placeholder: I18n.t("time_material.about.placeholder")
         ) do
           plain @time_material.about
@@ -289,7 +289,7 @@ class TimeMaterialForm < ApplicationComponent
     div(class: "mt-4 col-span-4") do
       label(for: "time_material_customer", class: "block text-sm font-medium leading-6 text-gray-900") { I18n.t("time_material.customer.lbl") }
       div(class: "mt-2") do
-        div(class: "flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-sky-600 sm:max-w-md") do
+        div(class: "flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-1 focus-within:ring-inset focus-within:ring-sky-600 sm:max-w-md") do
           input(
             name: "time_material[customer_name]",
             id: "time_material_customer_name",
@@ -308,7 +308,7 @@ class TimeMaterialForm < ApplicationComponent
     div(class: "mt-4 col-span-4") do
       label(for: "time_material_project", class: "block text-sm font-medium leading-6 text-gray-900") { I18n.t("time_material.project.lbl") }
       div(class: "mt-2") do
-        div(class: "flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-sky-600 sm:max-w-md") do
+        div(class: "flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-1 focus-within:ring-inset focus-within:ring-sky-600 sm:max-w-md") do
           input(
             name: "time_material[project_name]",
             id: "time_material_project_name",
@@ -329,7 +329,7 @@ class TimeMaterialForm < ApplicationComponent
       div(class: "mt-2") do
         div(
           class:
-            "flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-sky-600 sm:max-w-md"
+            "flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-1 focus-within:ring-inset focus-within:ring-sky-600 sm:max-w-md"
         ) do
           whitespace
           input(
@@ -441,7 +441,7 @@ class TimeMaterialForm < ApplicationComponent
       div(class: "mt-2") do
         div(
           class:
-            "flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-sky-600 sm:max-w-md"
+            "flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-1 focus-within:ring-inset focus-within:ring-sky-600 sm:max-w-md"
         ) do
           input(
             type: "date",
@@ -463,7 +463,7 @@ class TimeMaterialForm < ApplicationComponent
     end
 
     # div(class: "fixed flex items-center w-screen max-w-md right-0 px-4 py-3 font-semibold text-sm text-slate-900 dark:text-slate-200 bg-slate-50 dark:bg-slate-700") do
-    #   link_to(time_materials_url, class: "flex-none mr-6 rounded-md bg-slate-50 dark:bg-slate-700 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2") do
+    #   link_to(time_materials_url, class: "flex-none mr-6 rounded-md bg-slate-50 dark:bg-slate-700 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-1 focus:ring-sky-200 focus:ring-offset-1") do
     #     span(class: "absolute -inset-2.5")
     #     span(class: "sr-only") { "Close panel" }
     #     svg(class: "h-6 w-6", fill: "none", viewbox: "0 0 24 24", stroke_width: "1.5", stroke: "currentColor", aria_hidden: "true", data_slot: "icon") do |s|
@@ -471,7 +471,7 @@ class TimeMaterialForm < ApplicationComponent
     #     end
     #   end
     #   h2(class: "grow text-base font-semibold text-gray-900", id: "slide-over-title") { "Panel title" }
-    #   button(type: "submit", class: "flex-none rounded-md bg-slate-50 dark:bg-slate-700 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2") do
+    #   button(type: "submit", class: "flex-none rounded-md bg-slate-50 dark:bg-slate-700 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-1 focus:ring-sky-200 focus:ring-offset-1") do
     #     span(class: "absolute -inset-2.5")
     #     span(class: "sr-only") { "Save content" }
     #     svg(class: "text-green-500", xmlns: "http://www.w3.org/2000/svg", height: "24px", viewbox: "0 -960 960 960", width: "24px", fill: "currentColor") do |s|

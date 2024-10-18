@@ -18,7 +18,7 @@ class MenuComponent < ApplicationComponent
             icon: "
               svg(
                 class:
-                  'h-6 w-6 text-gray-600 group-hover:text-indigo-600',
+                  'h-6 w-6 text-gray-600 group-hover:text-sky-200',
                 fill: 'none',
                 viewbox: '0 0 24 24',
                 stroke_width: '1.5',
@@ -36,7 +36,7 @@ class MenuComponent < ApplicationComponent
             icon: "
               svg(
                 class:
-                  'h-6 w-6 text-gray-600 group-hover:text-indigo-600',
+                  'h-6 w-6 text-gray-600 group-hover:text-sky-200',
                 fill: 'none',
                 viewbox: '0 0 24 24',
                 stroke_width: '1.5',
@@ -54,7 +54,7 @@ class MenuComponent < ApplicationComponent
             icon: "
               svg(
                 class:
-                  'h-6 w-6 text-gray-600 group-hover:text-indigo-600',
+                  'h-6 w-6 text-gray-600 group-hover:text-sky-200',
                 fill: 'none',
                 viewbox: '0 0 24 24',
                 stroke_width: '1.5',
@@ -72,7 +72,7 @@ class MenuComponent < ApplicationComponent
             icon: "
               svg(
                 class:
-                  'h-6 w-6 text-gray-600 group-hover:text-indigo-600',
+                  'h-6 w-6 text-gray-600 group-hover:text-sky-200',
                 fill: 'none',
                 viewbox: '0 0 24 24',
                 stroke_width: '1.5',
@@ -134,7 +134,7 @@ class MenuComponent < ApplicationComponent
             icon: "
               svg(
                 class:
-                  'h-6 w-6 text-gray-600 group-hover:text-indigo-600',
+                  'h-6 w-6 text-gray-600 group-hover:text-sky-200',
                 fill: 'none',
                 viewbox: '0 0 24 24',
                 stroke_width: '1.5',
@@ -152,7 +152,7 @@ class MenuComponent < ApplicationComponent
             icon: "
               svg(
                 class:
-                  'h-6 w-6 text-gray-600 group-hover:text-indigo-600',
+                  'h-6 w-6 text-gray-600 group-hover:text-sky-200',
                 fill: 'none',
                 viewbox: '0 0 24 24',
                 stroke_width: '1.5',
@@ -170,7 +170,7 @@ class MenuComponent < ApplicationComponent
             icon: "
               svg(
                 class:
-                  'h-6 w-6 text-gray-600 group-hover:text-indigo-600',
+                  'h-6 w-6 text-gray-600 group-hover:text-sky-200',
                 fill: 'none',
                 viewbox: '0 0 24 24',
                 stroke_width: '1.5',
@@ -188,7 +188,7 @@ class MenuComponent < ApplicationComponent
             icon: "
               svg(
                 class:
-                  'h-6 w-6 text-gray-600 group-hover:text-indigo-600',
+                  'h-6 w-6 text-gray-600 group-hover:text-sky-200',
                 fill: 'none',
                 viewbox: '0 0 24 24',
                 stroke_width: '1.5',
@@ -206,7 +206,7 @@ class MenuComponent < ApplicationComponent
             icon: "
               svg(
                 class:
-                  'h-6 w-6 text-gray-600 group-hover:text-indigo-600',
+                  'h-6 w-6 text-gray-600 group-hover:text-sky-200',
                 fill: 'none',
                 viewbox: '0 0 24 24',
                 stroke_width: '1.5',
@@ -286,7 +286,7 @@ class MenuComponent < ApplicationComponent
             icon: "
               svg(
                 class:
-                  'h-6 w-6 text-gray-600 group-hover:text-indigo-600',
+                  'h-6 w-6 text-gray-600 group-hover:text-sky-200',
                 fill: 'none',
                 viewbox: '0 0 24 24',
                 stroke_width: '1.5',
@@ -304,7 +304,7 @@ class MenuComponent < ApplicationComponent
             icon: "
               svg(
                 class:
-                  'h-6 w-6 text-gray-600 group-hover:text-indigo-600',
+                  'h-6 w-6 text-gray-600 group-hover:text-sky-200',
                 fill: 'none',
                 viewbox: '0 0 24 24',
                 stroke_width: '1.5',
@@ -322,7 +322,7 @@ class MenuComponent < ApplicationComponent
             icon: "
               svg(
                 class:
-                  'h-6 w-6 text-gray-600 group-hover:text-indigo-600',
+                  'h-6 w-6 text-gray-600 group-hover:text-sky-200',
                 fill: 'none',
                 viewbox: '0 0 24 24',
                 stroke_width: '1.5',
@@ -575,7 +575,7 @@ class MenuComponent < ApplicationComponent
           action: "touchstart->navigation#tapNotificationDrop click->navigation#tapNotificationDrop click@window->navigation#hideNotificationDrop"
         },
         class:
-          "relative rounded-full bg-transparent p-1 text-blue-300 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800",
+          "relative rounded-full bg-transparent p-1 text-blue-300 hover:text-white focus:outline-none focus:ring-1 focus:ring-white focus:ring-offset-1 focus:ring-offset-gray-800",
         id: "user-notifications-button",
         aria_expanded: "false",
         aria_haspopup: "true"
@@ -620,7 +620,7 @@ class MenuComponent < ApplicationComponent
             action: "touchstart->navigation#tapDrop click->navigation#tapDrop click@window->navigation#hideDrop"
           },
           class:
-            "relative flex rounded-full bg-sky-200 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800",
+            "relative flex rounded-full bg-sky-200 text-sm focus:outline-none focus:ring-1 focus:ring-white focus:ring-offset-1 focus:ring-offset-gray-800",
           id: "user-menu-button",
           aria_expanded: "false",
           aria_haspopup: "true"
@@ -723,7 +723,7 @@ class MenuComponent < ApplicationComponent
             eval(item[:icon])
             # svg(
             #   class:
-            #     "h-6 w-6 text-gray-600 group-hover:text-indigo-600",
+            #     "h-6 w-6 text-gray-600 group-hover:text-sky-200",
             #   fill: "none",
             #   viewbox: "0 0 24 24",
             #   stroke_width: "1.5",
@@ -738,7 +738,7 @@ class MenuComponent < ApplicationComponent
         # second_level_menu_item("Engagement", "#", "Speak directly to your customers with our engagement tool") do
         #   svg(
         #     class:
-        #       "h-6 w-6 text-gray-600 group-hover:text-indigo-600",
+        #       "h-6 w-6 text-gray-600 group-hover:text-sky-200",
         #     fill: "none",
         #     viewbox: "0 0 24 24",
         #     stroke_width: "1.5",
@@ -756,7 +756,7 @@ class MenuComponent < ApplicationComponent
         # second_level_menu_item("Security", "#", "Your customers' data will be safe and secure") do
         #   svg(
         #     class:
-        #       "h-6 w-6 text-gray-600 group-hover:text-indigo-600",
+        #       "h-6 w-6 text-gray-600 group-hover:text-sky-200",
         #     fill: "none",
         #     viewbox: "0 0 24 24",
         #     stroke_width: "1.5",
@@ -774,7 +774,7 @@ class MenuComponent < ApplicationComponent
         # second_level_menu_item("Integration", "#", "Your customers' data can be integrated all over the place") do
         #   svg(
         #     class:
-        #       "h-6 w-6 text-gray-600 group-hover:text-indigo-600",
+        #       "h-6 w-6 text-gray-600 group-hover:text-sky-200",
         #     fill: "none",
         #     viewbox: "0 0 24 24",
         #     stroke_width: "1.5",

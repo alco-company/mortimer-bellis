@@ -9,12 +9,12 @@ class ToggleButton < ApplicationComponent
   end
 
   def view_template
-    comment { %(Enabled: "bg-indigo-600", Not Enabled: "bg-gray-200") }
+    comment { %(Enabled: "bg-sky-200", Not Enabled: "bg-gray-200") }
     button(
       type: "button",
       data: { toggle_button_target: "toggle", action: "click->toggle-button#toggle" },
       class:
-        "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent #{ @toggled_on ? "bg-indigo-600" : "bg-gray-200" } transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2",
+        "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent #{ @toggled_on ? "bg-sky-200" : "bg-gray-200" } transition-colors duration-200 ease-in-out focus:outline-none focus:ring-1 focus:ring-sky-200 focus:ring-offset-1",
       role: "switch",
       aria_checked: @toggled_on ? "true" : "false",
       aria_labelledby: "annual-billing-label"
