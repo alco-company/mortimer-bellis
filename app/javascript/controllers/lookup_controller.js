@@ -4,19 +4,48 @@ import { Controller } from "@hotwired/stimulus"
 export default class extends Controller {
   static targets = [
     "input",
-    "selectId",
-    "lookup_options",
+    "item",             // the li element
+    "selectId",         // the hidden input element
+    "lookupOptions",    // the div element containing the Ul element
+    "optionsList",      // the Ul element
     "searchIcon",
     "optionsIcon"
   ]
+
+  items_connected = false;
 
   connect() {
     console.log("Connected to lookup controller")
     this.inputTarget.addEventListener("input", this.change.bind(this));
   }
 
+  async itemTargetConnected(e) {
+    if (!this.items_connected) {
+      this.items_connected = true;
+      await new Promise(r => setTimeout(r, 50));
+      this.optionsListTarget.getElementsByTagName("LI")[0].focus();
+    }
+  }
+
   key_down(e) {
-    console.log(`you pressed ${e.key}`);
+    switch(e.key) {
+      case "Escape": e.stopPropagation(); this.toggleOptions(e); break;
+      case "ArrowDown": e.stopPropagation(); this.searchIconTarget.click(); break;
+      default: console.log(`you pressed ${e.key}`);
+    }
+  }
+
+  optionsKeydown(e) {
+    e.stopPropagation();
+    // console.log(`you pressed ${e.key} on a li item`);
+    switch(e.key) {
+      case "Escape": this.toggleOptions(e); this.inputTarget.focus(); break;
+      case "ArrowDown": this.focusNextItem(e); break;
+      case "ArrowUp": this.focusPreviousItem(e); break;
+      case "Enter": this.select_option(e); break;
+      case " ": this.select_option(e); break;
+      default: console.log(`you pressed ${e.key}`);
+    }
   }
 
   select_option(e) {
@@ -26,6 +55,9 @@ export default class extends Controller {
     }
     this.inputTarget.value = el.dataset.displayValue;
     this.selectIdTarget.value = el.dataset.value;
+    this.optionsIconTarget.classList.remove("hidden");
+    this.searchIconTarget.classList.add("hidden");
+
     el.closest("UL").querySelectorAll("LI > SPAN > SVG").forEach((e) => {
       e.parentElement.classList.add("hidden");
     });
@@ -36,26 +68,35 @@ export default class extends Controller {
   }
 
   change(e) {
-    this.optionsIconTarget.classList.add("hidden");
-    this.searchIconTarget.classList.remove("hidden");
+    if (this.searchIconTarget.classList.contains("hidden")) {
+      this.optionsIconTarget.classList.add("hidden");
+      this.searchIconTarget.classList.remove("hidden");
+      this.items_connected = false;
+    }
   }
 
   toggleOptions(e) {
-    const options = this.lookup_optionsTarget;
+    const options = this.lookupOptionsTarget;
     if (options.classList.contains("hidden")) {
       options.classList.remove("hidden");
+      this.items_connected = true;
+      this.optionsListTarget.getElementsByTagName("LI")[0].focus();
     } else {
       options.classList.add("hidden");
+      this.items_connected = false;
     }
   }
 
   search(e) {
     let el = e.target
-    while ('BUTTON' !== el.nodeName) {
-      el = el.parentElement;
-    }
-    while ('INPUT' !== el.nodeName) {
-      el = el.previousSibling;
+    this.items_connected = false;
+    if (el.nodeName != "INPUT") {
+      while ('BUTTON' !== el.nodeName) {
+        el = el.parentElement;
+      }
+      while ('INPUT' !== el.nodeName) {
+        el = el.previousSibling;
+      }
     }
     const input = el;
     // const list = document.querySelector(`#${input.getAttribute("list")}`);
@@ -67,20 +108,13 @@ export default class extends Controller {
     fetch(url)
     .then((r) => r.text())
     .then(html => Turbo.renderStreamMessage(html))
+  }
 
-    this.optionsIconTarget.classList.remove("hidden");
-    this.searchIconTarget.classList.add("hidden");
+  focusNextItem(e) {
+    e.target.nextElementSibling.focus();
+  }
 
-    // for (let i = 0; i < options.length; i++) {
-    //   const option = options[i];
-    //   if (option.value.toLowerCase() === value) {
-    //     found = true;
-    //     break;
-    //   }
-    // }
-
-    // if (!found) {
-    //   input.value = "";
-    // }
+  focusPreviousItem(e) {
+    e.target.previousElementSibling.focus();
   }
 }

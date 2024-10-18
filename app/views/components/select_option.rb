@@ -11,10 +11,10 @@ class SelectOption < ApplicationComponent
     # comment do
     #   %(Combobox option, manage highlight styles based on mouseenter/mouseleave and keyboard navigation. Active: "text-white bg-indigo-600", Not Active: "text-gray-900")
     # end
-    li(class: "relative cursor-default select-none py-2 pl-3 pr-9 text-gray-900 hoved:bg-sky-300",
+    li(class: "relative cursor-default select-none py-2 pl-3 pr-9 text-gray-900 hover:bg-sky-100 focus:bg-sky-100",
       id: "option-#{post.id}",
       role: "option",
-      data: { value: post.id, display_value: post.name, action: "click->lookup#select_option" },
+      data: { lookup_target: "item", value: post.id, display_value: post.name, action: "click->lookup#select_option" },
       tabindex: "-1") do
       # comment { %(Selected: "font-semibold") }
       span(class: "#{ selected ? "font-semibold" : "" } block truncate") { post.name }

@@ -23,6 +23,7 @@ class TimeMaterialForm < ApplicationComponent
           div(class: "") do
             # error_messages
 
+
             div(class: "border-b border-gray-200") do
               nav(class: "-mb-px flex space-x-8", aria_label: "Tabs") do
                 time_tab

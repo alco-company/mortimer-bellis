@@ -16,11 +16,11 @@
   }
 
   .mort-btn-start-time-material {
-    @apply flex justify-center rounded-md items-center bg-sky-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-sky-500 hover:cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600;
+    @apply flex justify-center rounded-md items-center bg-sky-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-sky-500 hover:cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-200;
   }
 
   .mort-btn-primary {
-    @apply flex justify-center rounded-md bg-sky-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-sky-500 hover:cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600;
+    @apply flex justify-center rounded-md bg-sky-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-sky-500 hover:cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-200;
   }
 
   .mort-btn-save {
@@ -28,7 +28,7 @@
   }
 
   .mort-btn-secondary {
-    @apply flex justify-center rounded-md bg-sky-400 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-sky-500 hover:cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600;
+    @apply flex justify-center rounded-md bg-sky-400 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-sky-500 hover:cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-200;
   }
 
   .mort-btn-cancel {
@@ -44,11 +44,11 @@
   }
 
   .mort-form-text {
-    @apply block shadow rounded-md border border-gray-200 focus:outline-none px-3 py-2 mt-2 w-full focus-visible:border-sky-600;
+    @apply block shadow rounded-md border border-gray-200 focus:outline-none px-3 py-2 mt-2 w-full focus-visible:border-sky-200;
   }
 
   .mort-form-select {
-    @apply block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-sky-600 sm:text-sm sm:leading-6;
+    @apply block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-1 focus:ring-sky-200 sm:text-sm sm:leading-6;
   }
 
   .mort-form-file {

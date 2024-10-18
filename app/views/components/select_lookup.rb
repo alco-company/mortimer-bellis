@@ -13,13 +13,14 @@ class SelectLookup < ApplicationComponent
   end
 
   def view_template(&block)
-    div(id: "%s_lookup_options" % div_id, data: { lookup_target: "lookup_options" }) do
+    div(id: "%s_lookup_options" % div_id, data: { lookup_target: "lookupOptions", action: "focus->lookup#focusFirstItem keydown->lookup#optionsKeydown" }) do
       if !collection.nil? and collection.any?
         #
         # options
         #
-        ul(class: "absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm",
+        ul(class: "absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg focus:outline-none sm:text-sm",
           id: "%s_lookup_container" % div_id,
+          data: { lookup_target: "optionsList" },
           role: "listbox"
         ) do
           collection.each do |post|

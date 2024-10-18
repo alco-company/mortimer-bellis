@@ -112,17 +112,18 @@ class ApplicationForm < Superform::Rails::Form
           id: dom.id.gsub(/_id$/, "_name"),
           name: dom.name.gsub(/_id]/, "_name]"),
           class:
-            "w-full rounded-md border-0 bg-white py-1.5 pl-3 pr-12 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6",
+            "w-full rounded-md border-0 bg-white py-1.5 pl-3 pr-12 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-1 focus:ring-inset focus:ring-sky-200 sm:text-sm sm:leading-6",
           role: "combobox",
+          autocomplete: "off",
           aria_controls: "options",
           aria_expanded: "false"
         )
         hide = @collection.any? ? "" : "hidden"
-        button(type: "button", data: { lookup_target: "optionsIcon", action: "click->lookup#toggleOptions" }, class: "#{hide} absolute inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:outline-none") do
+        button(type: "button", data: { lookup_target: "optionsIcon", action: "click->lookup#toggleOptions" }, class: "#{hide} absolute w-10 inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:ring-1 focus:ring-inset focus:ring-sky-200 focus:outline-none") do
           render Icons::ChevronUpDown.new cls: "h-5 w-5 text-gray-400"
         end
         hide = (!hide.blank? && field.value.nil?) ? "" : "hidden"
-        button(type: "button", data: { lookup_target: "searchIcon", action: "click->lookup#search" }, class: "#{hide} absolute inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:outline-none") do
+        button(type: "button", data: { lookup_target: "searchIcon", action: "click->lookup#search" }, class: "#{hide} absolute w-10 inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:ring-1 focus:ring-inset focus:ring-sky-200 focus:outline-none") do
           render Icons::Search.new cls: "text-gray-400 right-2 top-0 h-full w-5 absolute pointer-events-none"
         end
         collection = @collection[0] rescue []
@@ -211,7 +212,7 @@ class ApplicationForm < Superform::Rails::Form
           type: "button",
           data: { action: (attributes[:disabled] ? "" : "click->boolean#toggle"), boolean_target: "button" },
           class:
-            "group relative inline-flex h-5 w-10 flex-shrink-0 cursor-pointer items-center justify-center rounded-full focus:outline-none focus:ring-2 focus:ring-sky-600 focus:ring-offset-2",
+            "group relative inline-flex h-5 w-10 flex-shrink-0 cursor-pointer items-center justify-center rounded-full focus:outline-none focus:ring-1 focus:ring-sky-200 focus:ring-offset-1",
           role: "switch",
           aria_checked: "false"
         ) do
@@ -291,7 +292,8 @@ class ApplicationForm < Superform::Rails::Form
       super.merge(type: "date")
     end
     def view_template(&)
-      input(**attributes, value: field.value&.strftime("%Y-%m-%d"))
+      fld = field.value.class == String ? field.value : field.value&.strftime("%Y-%m-%d") rescue nil
+      input(**attributes, value: fld)
     end
   end
   class DateTimeField < Superform::Rails::Components::InputComponent
@@ -369,7 +371,7 @@ class ApplicationForm < Superform::Rails::Form
   def row(component)
     div(class: "mort-field") do
       render(component.field.label) do
-        span(class: "font-bold") do
+        span(class: "text-sm font-light") do
           plain I18n.t("activerecord.attributes.#{component.field.parent.key}.#{component.field.key}")
         end
       end unless component.class == ApplicationForm::HiddenField
