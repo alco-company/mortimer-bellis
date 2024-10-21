@@ -5,11 +5,10 @@ class SelectLookup < ApplicationComponent
   # div_id is the id of the div that will contain the lookup options
   # field_value is the value of the field
   #
-  def initialize(collection:, div_id:, role: nil, field_value: nil)
+  def initialize(collection:, div_id:, field_value: nil)
     @collection = collection
     @div_id = div_id
     @field_value = field_value
-    @role = role
     # debugger
   end
 
@@ -25,7 +24,7 @@ class SelectLookup < ApplicationComponent
           role: "listbox"
         ) do
           collection.each do |post|
-            render SelectOption.new(field_value: field_value, post: post, role: @role)
+            render SelectOption.new(field_value: field_value, post: post)
           end
         end
       end

@@ -1,10 +1,9 @@
 class SelectOption < ApplicationComponent
   attr_accessor :field_value, :post
 
-  def initialize(field_value:, post:, role: nil)
+  def initialize(field_value:, post:)
     @field_value = field_value
     @post = post
-    @role = role
   end
 
   def view_template(&block)
@@ -15,7 +14,7 @@ class SelectOption < ApplicationComponent
     li(class: "relative cursor-default select-none py-2 pl-3 pr-9 text-gray-900 hover:bg-sky-100 focus:bg-sky-100",
       id: "option-#{post.id}",
       role: "option",
-      data: post.select_data_attributes(role: @role),
+      data: post.respond_to?(:select_data_attributes) ? post.select_data_attributes : {},
       tabindex: "-1") do
       # comment { %(Selected: "font-semibold") }
       span(class: "#{ selected ? "font-semibold" : "" } block truncate") { post.name }

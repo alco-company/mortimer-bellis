@@ -36,10 +36,9 @@ class Product < ApplicationRecord
     Products::Form.new resource: resource, editable: editable
   end
 
-  def select_data_attributes(role: self.class.table_name.singularize)
+  def select_data_attributes
     {
       lookup_target: "item",
-      role: role,
       lookup_quantity_param: quantity,
       lookup_unit_price_param: base_amount_value,
       lookup_unit_param: unit,

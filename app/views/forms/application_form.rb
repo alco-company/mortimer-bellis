@@ -128,7 +128,7 @@ class ApplicationForm < Superform::Rails::Form
           render Icons::Search.new cls: "text-gray-400 right-2 top-0 h-full w-5 absolute pointer-events-none"
         end
         collection = @collection[0] rescue []
-        render SelectLookup.new(collection: collection, div_id: field.dom.id, field_value: field.value, role: attributes[:role])
+        render SelectLookup.new(collection: collection, div_id: field.dom.id, field_value: field.value)
       end
     end
 
