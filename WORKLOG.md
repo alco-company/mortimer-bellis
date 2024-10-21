@@ -55,6 +55,7 @@ If Solid Queue bites me again, look here: https://github.com/rails/solid_queue/i
 * fix bug in lookup
 * format t/m lines
 * more bug fixing on t/m
+* list t/m on /time_materials with day headers
 
 ### 18/10/2024
 

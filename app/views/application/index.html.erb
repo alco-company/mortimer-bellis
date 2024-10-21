@@ -1,5 +1,8 @@
 <%= render partial: "header" %>
 <%= render partial: "filtering" unless @filter.new_record? %>
 <%= turbo_frame_tag "form" %>
-<%= render partial: "list" %>
+<!-- List -->
+<%= turbo_stream_from @resources_stream %>
+<%= render List.new @records %>
+
 <%= render partial: "pagination" if @pagy.pages > 1 %>

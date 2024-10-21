@@ -12,11 +12,13 @@ module TimeMaterialsHelper
   def show_time_material_resource_link(resource:, url: nil, turbo_frame: "form")
     return "" unless resource
     link_to((url || url_for(resource)),
-      class: "inline grow flex-nowrap truncate",
+      class: "inline grow flex-nowrap",
       role: "menuitem",
       data: { turbo_action: "advance", turbo_frame: turbo_frame },
       tabindex: "-1") do
-      resource.name
+      content_tag :span, class: "truncate" do
+        resource.name
+      end
     end
   end
 
