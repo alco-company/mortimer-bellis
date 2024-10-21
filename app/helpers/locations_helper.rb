@@ -2,7 +2,7 @@ module LocationsHelper
   def show_resource_link(resource:, url: nil, turbo_frame: "form")
     return "" unless resource
     link_to((url || url_for(resource)),
-      class: "block ",
+      class: "inline grow flex-nowrap truncate",
       role: "menuitem",
       data: { turbo_action: "advance", turbo_frame: turbo_frame },
       tabindex: "-1") do

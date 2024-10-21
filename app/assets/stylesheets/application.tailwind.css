@@ -170,7 +170,14 @@
   .mort-state-archived {
     @apply bg-gray-100 text-gray-800;
   }
+  
+  .mort-tm-line-customer {
+    @apply text-sm font-semibold text-gray-900;
+  }
 
+  .mort-tm-line-product {
+    @apply text-xs font-semibold text-gray-700;
+  }
 }
 
 
