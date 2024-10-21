@@ -104,8 +104,9 @@ class ApplicationForm < Superform::Rails::Form
     def view_template(&)
       div(class: "relative mt-2", data: { controller: "lookup" }) do
         input(type: "hidden", id: dom.id, name: dom.name, value: field.value, data: { lookup_target: "selectId" })
+        data = attributes[:data] || { url: attributes[:lookup_path], div_id: field.dom.id, lookup_target: "input", action: "keydown->lookup#keyDown" }
         input(
-          data: { url: attributes[:lookup_path], div_id: field.dom.id, lookup_target: "input", action: "keydown->lookup#key_down change->lookup#change" },
+          data: data,
           type: "text",
           list:  "%s_lookup_options" % field.dom.id,
           value: attributes[:display_value],
@@ -113,7 +114,7 @@ class ApplicationForm < Superform::Rails::Form
           name: dom.name.gsub(/_id\]/, "_name]"),
           class:
             "w-full rounded-md border-0 bg-white py-1.5 pl-3 pr-12 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-1 focus:ring-inset focus:ring-sky-200 sm:text-sm sm:leading-6",
-          role: "combobox",
+          role: attributes[:role] || "combobox",
           autocomplete: "off",
           aria_controls: "options",
           aria_expanded: "false"
@@ -127,7 +128,7 @@ class ApplicationForm < Superform::Rails::Form
           render Icons::Search.new cls: "text-gray-400 right-2 top-0 h-full w-5 absolute pointer-events-none"
         end
         collection = @collection[0] rescue []
-        render SelectLookup.new(collection: collection, div_id: field.dom.id, field_value: field.value)
+        render SelectLookup.new(collection: collection, div_id: field.dom.id, field_value: field.value, role: attributes[:role])
       end
     end
 
@@ -370,6 +371,23 @@ class ApplicationForm < Superform::Rails::Form
 
   def row(component)
     div(class: "mort-field") do
+      render(component.field.label) do
+        span(class: "text-sm font-light") do
+          plain I18n.t("activerecord.attributes.#{component.field.parent.key}.#{component.field.key}")
+        end
+      end unless component.class == ApplicationForm::HiddenField
+      @editable ?
+        render(component) :
+        div(class: "mr-5") do
+          model.field_formats(component.field.key) == :file ?
+          display_image(component.field) :
+          display_field(component.field)
+        end
+    end
+  end
+
+  def naked_row(component)
+    div() do
       render(component.field.label) do
         span(class: "text-sm font-light") do
           plain I18n.t("activerecord.attributes.#{component.field.parent.key}.#{component.field.key}")

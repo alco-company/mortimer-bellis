@@ -17,9 +17,7 @@ module DefaultActions
     end
 
     def lookup
-      search = params.permit![:q].blank? ? "1=1" : "name LIKE ?", "%#{params.permit![:q]}%"
-      @resources = resource_class.where(search).limit(10) rescue nil
-      @resources = [ { id: 0, name: I18n.t("no records were found") } ] if @resources.nil? or @resources.empty?
+      set_query
       lookup_options = "%s_lookup_options" % params.permit![:div_id]
       respond_to do |format|
         format.turbo_stream {
@@ -177,5 +175,29 @@ module DefaultActions
     #
     def destroy_callback(obj)
     end
+
+    private
+
+      def set_query
+        @resources = case resource_class.to_s
+        when "Project"
+          unless params[:customer_id].blank?
+            resource_class
+              .where("customer_id = ?", params.permit![:customer_id])
+              .where(params.permit![:q].blank? ? "1=1" : "name LIKE ?", "%#{params.permit![:q]}%")
+              .limit(10)
+          else
+            resource_class
+              .where(params.permit![:q].blank? ? "1=1" : "name LIKE ?", "%#{params.permit![:q]}%")
+              .limit(10)
+          end
+        else
+          resource_class
+            .where(params.permit![:q].blank? ? "1=1" : "name LIKE ?", "%#{params.permit![:q]}%")
+            .limit(10)
+        end
+
+        @resources = [ Struct.new("Lookup", :id, :name).new(id: 0, name: I18n.t("no records were found")) ] if @resources.nil? or @resources.empty?
+      end
   end
 end

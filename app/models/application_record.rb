@@ -46,6 +46,16 @@ class ApplicationRecord < ActiveRecord::Base
     resources.order(field => direction)
   end
 
+  def select_data_attributes
+    {
+      lookup_target: "item",
+      role: self.class.table_name.singularize,
+      value: id,
+      display_value: name,
+      action: "keydown->lookup#optionKeydown click->lookup#selectOption"
+    }
+  end
+
 
   def say(msg, level = :info)
     Rails.logger.send(level, "-----------------")

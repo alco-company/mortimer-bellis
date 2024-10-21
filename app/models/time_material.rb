@@ -2,6 +2,8 @@ class TimeMaterial < ApplicationRecord
   include Tenantable
   include TimeMaterialStateable
 
+  attr_accessor :overtime, :unit_price, :unit
+
   belongs_to :customer, optional: true
   belongs_to :project, optional: true
   belongs_to :product, optional: true

@@ -39,6 +39,7 @@ da:
   ago: siden
   last_update: sidst opdateret for
   collected at: indsamlet kl
+  no records were found: Ingen poster fundet
 
   weekdays: Ugedage
   monday: Mandag
@@ -563,6 +564,7 @@ da:
         product_id: Produkt
         date: Dato
         time: Tid
+        overtime: Overtid
         material: Materiale
         description: Beskrivelse
         about: Beskrivelse

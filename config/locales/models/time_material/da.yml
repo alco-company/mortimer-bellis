@@ -25,6 +25,8 @@ da:
       lbl: "Dato"
     time:
       lbl: "Tid"
+      overtime: Overtid?
+      overtime_check: ja
     about:
       lbl: "Beskrivelse"
       help: "Beskriv hvad opgaven går ud på"
@@ -44,6 +46,12 @@ da:
     rate:
       hourly: "Timepris"
       unit_price: "Enhedspris"
+    quantity:
+      lbl: "Antal"
+      placeholder: "fx '3'" 
+    unit:
+      lbl: "Enhed"
+      placeholder: "fx 'stk'"
     discount:
       lbl: "Rabat"
       placeholder: "fx '10%'"

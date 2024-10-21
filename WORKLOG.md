@@ -49,6 +49,10 @@ If Solid Queue bites me again, look here: https://github.com/rails/solid_queue/i
 
 ## CHANGELOG
 
+### 21/10/2024
+
+* add lookup for customers, projects, and products
+
 ### 18/10/2024
 
 * now lookup works (at least for customers)

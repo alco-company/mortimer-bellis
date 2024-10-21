@@ -1,6 +1,6 @@
 class TimeMaterials::Form < ApplicationForm
   def view_template(&)
-    div(data: { controller: "tabs", tabs_index: "0" }) do
+    div(data: { controller: "time-material tabs", tabs_index: "0" }) do
       date_field
       #
       div do
@@ -104,7 +104,7 @@ class TimeMaterials::Form < ApplicationForm
             #
             about_field
             #
-            div(class: "col-span-2") do
+            div(class: "col-span-1") do
               label(for: "time", class: "block text-sm font-medium leading-6 text-gray-900") { I18n.t("time_material.time.lbl") }
               div(class: "mt-2") do
                 div(
@@ -119,7 +119,7 @@ class TimeMaterials::Form < ApplicationForm
                     value: @resource.time,
                     class:
                       "block flex-1 border-0 bg-transparent py-1.5 pl-2 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6",
-                    placeholder: "1,25 or 1.15 or 10:00-11:15"
+                    placeholder: "0,25"
                   )
                 end
               end
@@ -127,6 +127,9 @@ class TimeMaterials::Form < ApplicationForm
             #
             rate_field I18n.t("time_material.rate.hourly")
             #
+            div(class: "col-span-1 my-0") do
+              naked_row field(:overtime).boolean(class: "pt-4")
+            end
           end
         end
       end
@@ -140,7 +143,13 @@ class TimeMaterials::Form < ApplicationForm
           div(class: "mt-2 grid grid-cols-4 gap-x-4 gap-y-4") do
             div(class: "col-span-4") do
               row field(:product_id).lookup(class: "mort-form-text",
-                lookup_path: "/products/lookup",
+                data: {
+                  url: "/products/lookup",
+                  div_id: "time_material_product_id",
+                  lookup_target: "input",
+                  action: "keydown->lookup#keyDown blur->time-material#productChange"
+                },
+                role: "time_material",
                 display_value: @resource.product_name) # Customer.all.select(:id, :name).take(9)
             end
             # div(class: "col-span-4") do
@@ -189,11 +198,11 @@ class TimeMaterials::Form < ApplicationForm
               end
             end
             div(class: "col-span-4 grid gap-x-2 grid-cols-6") do
-              div(class: "col-span-2") do
+              div(class: "col-span-1") do
                 label(
                   for: "quantity",
                   class: "block text-sm font-medium leading-6 text-gray-900"
-                ) { "Antal" }
+                ) { I18n.t("time_material.quantity.lbl") }
                 div(class: "mt-2") do
                   div(
                     class:
@@ -210,8 +219,29 @@ class TimeMaterials::Form < ApplicationForm
                   end
                 end
               end
+              div(class: "col-span-1") do
+                label(
+                  for: "unit",
+                  class: "block text-sm font-medium leading-6 text-gray-900"
+                ) { I18n.t("time_material.unit.lbl") }
+                div(class: "mt-2") do
+                  div(
+                    class:
+                      "flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-1 focus-within:ring-inset focus-within:ring-sky-600 sm:max-w-md"
+                  ) do
+                    input(
+                      name: "time_material[unit]",
+                      id: "time_material_unit",
+                      value: @resource.unit,
+                      class:
+                        "block flex-1 border-0 bg-transparent py-1.5 pl-2 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6",
+                      placeholder: "900"
+                    )
+                  end
+                end
+              end
               #
-              rate_field I18n.t("time_material.rate.unit_price")
+              rate_field I18n.t("time_material.rate.unit_price"), "col-span-2", "unit_price"
               #
               div(class: "col-span-2") do
                 label(
@@ -260,24 +290,23 @@ class TimeMaterials::Form < ApplicationForm
           plain @resource.about
         end
       end
-      p(class: "mt-3 text-sm leading-6 text-gray-600") do
-        I18n.t("time_material.about.help")
-      end
+      # p(class: "mt-3 text-sm leading-6 text-gray-600") do
+      #   I18n.t("time_material.about.help")
+      # end
     end
   end
 
   def customer_field
     row field(:customer_id).lookup(class: "mort-form-text",
-      lookup_path: "/customers/lookup",
+      data: {
+        url: "/customers/lookup",
+        div_id: "time_material_customer_id",
+        lookup_target: "input",
+        action: "keydown->lookup#keyDown blur->time-material#customerChange"
+      },
       display_value: @resource.customer_name) # Customer.all.select(:id, :name).take(9)
-  end
-
-  def project_field
-    row field(:project_id).lookup(class: "mort-form-text",
-      lookup_path: "/projects/lookup",
-      display_value: @resource.project_name) # Customer.all.select(:id, :name).take(9)
     # div(class: "mt-4 col-span-4") do
-    #   label(for: "time_material_project", class: "block text-sm font-medium leading-6 text-gray-900") { I18n.t("time_material.project.lbl") }
+    #   label(for: "time_material_customer_id", class: "block text-sm font-medium leading-6 text-gray-900") { I18n.t("time_material.customer.lbl") }
     #   div(class: "mt-2") do
     #     div(class: "flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-1 focus-within:ring-inset focus-within:ring-sky-600 sm:max-w-md") do
     #       input(
@@ -294,18 +323,31 @@ class TimeMaterials::Form < ApplicationForm
     # end
   end
 
-  def rate_field(lbl)
-    div(class: "col-span-2") do
-      label(for: "time_material_rate", class: "block text-sm font-medium leading-6 text-gray-900") { lbl }
+  def project_field
+    row field(:project_id).lookup(class: "mort-form-text",
+      data: {
+        url: "/projects/lookup",
+        div_id: "time_material_project_id",
+        lookup_target: "input",
+        lookup_association: "customer_id",
+        lookup_association_div_id: "time_material_customer_id",
+        action: "keydown->lookup#keyDown blur->time-material#projectChange"
+      },
+      display_value: @resource.project_name) # Customer.all.select(:id, :name).take(9)
+  end
+
+  def rate_field(lbl, css = "col-span-2", fld_name = "rate")
+    div(class: css) do
+      label(for: "time_material_#{fld_name}", class: "block text-sm font-medium leading-6 text-gray-900") { lbl }
       div(class: "mt-2") do
         div(
           class:
             "flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-1 focus-within:ring-inset focus-within:ring-sky-600 sm:max-w-md"
         ) do
           input(
-            name: "time_material[rate]",
-            id: "time_material_rate",
-            value: @resource.rate,
+            name: "time_material[#{fld_name}]",
+            id: "time_material_#{fld_name}",
+            value: @resource.send(fld_name),
             class:
               "block flex-1 border-0 bg-transparent py-1.5 pl-2 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6",
             placeholder: "900"
@@ -326,6 +368,7 @@ class TimeMaterials::Form < ApplicationForm
                 input(
                   id: "time_material_is_invoice",
                   name: "time_material[is_invoice]",
+                  data: { time_material_target: "invoice" },
                   type: "checkbox",
                   checked: @resource.is_invoice?,
                   class: "h-4 w-4 rounded border-gray-300 text-sky-600 focus:ring-sky-600"

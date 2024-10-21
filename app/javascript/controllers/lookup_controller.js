@@ -14,6 +14,10 @@ export default class extends Controller {
 
   items_connected = false;
 
+  snakeCase = string => string
+    .replace(/([a-z])([A-Z])/g, "$1_$2")
+    .toLowerCase();
+
   connect() {
     console.log("Connected to lookup controller")
     this.inputTarget.addEventListener("input", this.change.bind(this));
@@ -29,31 +33,35 @@ export default class extends Controller {
     }
   }
 
-  key_down(e) {
+  keyDown(e) {
     switch(e.key) {
       case "Escape": e.stopPropagation(); this.toggleOptions(e); break;
+      case "Enter": e.stopPropagation(); this.search(e); break; //this.searchIconTarget.click(); break;
       case "ArrowDown": e.stopPropagation(); this.searchIconTarget.click(); break;
-      default: console.log(`you pressed ${e.key}`);
+      default: console.log(`[lookup_controller key_down] you pressed ${e.key}`);
     }
   }
 
-  optionsKeydown(e) {
+  optionKeydown(e) {
     e.stopPropagation();
-    // console.log(`you pressed ${e.key} on a li item`);
     switch(e.key) {
       case "Escape": this.toggleOptions(e); this.inputTarget.focus(); break;
       case "ArrowDown": this.focusNextItem(e); break;
       case "ArrowUp": this.focusPreviousItem(e); break;
-      case "Enter": this.toggleOptions(e); this.select_option(e); break;
-      case " ": this.toggleOptions(e); this.select_option(e); break;
-      default: console.log(`you pressed ${e.key}`);
+      case "Enter": this.toggleOptions(e); this.selectOption(e); break;
+      case " ": this.toggleOptions(e); this.selectOption(e); break;
+      default: console.log(`[lookup_controller optionsKeydown] you pressed ${e.key}`);
     }
   }
 
-  select_option(e) {
-    let el = e.target;
-    while ('LI' !== el.nodeName) {
-      el = el.parentElement;
+  selectOption({ currentTarget, params}) {
+    let el = currentTarget
+    if (Object.entries(params).length > 0) {
+      let role = this.inputTarget.getAttribute("role");
+      Object.entries(params).forEach(([key, value]) => {
+        let keystr = this.snakeCase(key);
+        document.getElementById(`${role}_${keystr}`).value = value;
+      })
     }
     this.inputTarget.value = el.dataset.displayValue;
     this.selectIdTarget.value = el.dataset.value;
@@ -67,6 +75,7 @@ export default class extends Controller {
       e.parentElement.classList.remove("hidden");
     })
     el.closest("DIV").classList.add("hidden");
+    this.inputTarget.focus();
   }
 
   change(e) {
@@ -90,6 +99,13 @@ export default class extends Controller {
   }
 
   search(e) {
+    let association = "";
+    if (e.target.dataset.lookupAssociationDivId) {
+      association = document.querySelector(
+        `#${e.target.dataset.lookupAssociationDivId}`
+      );
+      association = `&${e.target.dataset.lookupAssociation}=${association.value}`;
+    }
     let el = e.target
     this.items_connected = false;
     if (el.nodeName != "INPUT") {
@@ -105,7 +121,7 @@ export default class extends Controller {
     const value = input.value.toLowerCase();
     let div_id = input.getAttribute("data-div-id");
     let url = input.getAttribute("data-url");
-    url += `?q=${value}&div_id=${div_id}`;
+    url += `?q=${value}${association}&div_id=${div_id}`;
 
     fetch(url)
     .then((r) => r.text())

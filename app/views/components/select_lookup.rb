@@ -5,15 +5,16 @@ class SelectLookup < ApplicationComponent
   # div_id is the id of the div that will contain the lookup options
   # field_value is the value of the field
   #
-  def initialize(collection:, div_id:, field_value: nil)
+  def initialize(collection:, div_id:, role: nil, field_value: nil)
     @collection = collection
     @div_id = div_id
     @field_value = field_value
+    @role = role
     # debugger
   end
 
   def view_template(&block)
-    div(id: "%s_lookup_options" % div_id, data: { lookup_target: "lookupOptions", action: "focus->lookup#focusFirstItem keydown->lookup#optionsKeydown" }) do
+    div(id: "%s_lookup_options" % div_id, data: { lookup_target: "lookupOptions", action: "focus->lookup#focusFirstItem" }) do
       if !collection.nil? and collection.any?
         #
         # options
@@ -24,7 +25,7 @@ class SelectLookup < ApplicationComponent
           role: "listbox"
         ) do
           collection.each do |post|
-            render SelectOption.new(field_value: field_value, post: post)
+            render SelectOption.new(field_value: field_value, post: post, role: @role)
           end
         end
       end

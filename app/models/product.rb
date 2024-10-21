@@ -36,6 +36,19 @@ class Product < ApplicationRecord
     Products::Form.new resource: resource, editable: editable
   end
 
+  def select_data_attributes(role: self.class.table_name.singularize)
+    {
+      lookup_target: "item",
+      role: role,
+      lookup_quantity_param: quantity,
+      lookup_unit_price_param: base_amount_value,
+      lookup_unit_param: unit,
+      value: id,
+      display_value: name,
+      action: "keydown->lookup#optionKeydown click->lookup#selectOption"
+    }
+  end
+
   def self.add_from_erp(item)
     return false unless item["Name"].present?
     product = Product.find_or_create_by(tenant: Current.tenant, erp_guid: item["ProductGuid"])

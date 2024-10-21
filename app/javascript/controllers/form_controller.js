@@ -37,7 +37,7 @@ export default class extends Controller {
       //   this.closeForm(e);
       //   break;
       default:
-        console.log(`you pressed ${e.key}`);
+        console.log(`[form_controller] you pressed ${e.key}`);
     }
   }
 
@@ -69,26 +69,5 @@ export default class extends Controller {
   closeForm(e) {
    document.getElementById("form").innerHTML="";
   }
-
-  //
-  // looking for a way to handle the redirect after a form submission
-  //
-  // next(event) {
-  //   if (event.detail.success) {
-  //     const fetchResponse = event.detail.fetchResponse;
-  //     const url = fetchResponse.response.url;
-
-  //     if (fetchResponse.response.redirected) {
-  //       window.history.pushState(
-  //         { turbo_frame_history: true },
-  //         "",
-  //         url
-  //       );
-
-  //       window.Turbo.visit(url);
-  //     }
-  //   }
-  // }
-
 
 }
