@@ -9,11 +9,19 @@ class SelectLookup < ApplicationComponent
     @collection = collection
     @div_id = div_id
     @field_value = field_value
+    @controller_name = collection.first.id==0 ? "notice" : "" rescue ""
     # debugger
   end
 
   def view_template(&block)
-    div(id: "%s_lookup_options" % div_id, data: { lookup_target: "lookupOptions", action: "focus->lookup#focusFirstItem" }) do
+    div(
+      id: "%s_lookup_options" % div_id,
+      data: {
+        lookup_target: "lookupOptions",
+        action: "focus->lookup#focusFirstItem",
+        controller: @controller_name
+      }
+    ) do
       if !collection.nil? and collection.any?
         #
         # options

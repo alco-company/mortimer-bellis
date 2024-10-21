@@ -213,7 +213,7 @@ class ApplicationForm < Superform::Rails::Form
           type: "button",
           data: { action: (attributes[:disabled] ? "" : "click->boolean#toggle"), boolean_target: "button" },
           class:
-            "group relative inline-flex h-5 w-10 flex-shrink-0 cursor-pointer items-center justify-center rounded-full focus:outline-none focus:ring-1 focus:ring-sky-200 focus:ring-offset-1",
+            "group relative inline-flex h-6 w-10 flex-shrink-0 cursor-pointer items-center justify-center rounded-full focus:outline-none focus:ring-1 focus:ring-sky-200 focus:ring-offset-1",
           role: "switch",
           aria_checked: "false"
         ) do
@@ -369,8 +369,8 @@ class ApplicationForm < Superform::Rails::Form
     end
   end
 
-  def row(component)
-    div(class: "mort-field") do
+  def row(component, outer_class = "mort-field")
+    div(class: outer_class) do
       render(component.field.label) do
         span(class: "text-sm font-light") do
           plain I18n.t("activerecord.attributes.#{component.field.parent.key}.#{component.field.key}")

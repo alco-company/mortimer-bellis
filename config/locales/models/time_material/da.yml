@@ -75,6 +75,7 @@ da:
   time_materials:
     create:
       post: Tid/Materiale blev oprettet
+      validation_errors: Der er fejl i de indtastede oplysninger
     update:
       post: Tid/Materiale blev opdateret
     destroy:

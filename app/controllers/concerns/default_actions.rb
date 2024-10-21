@@ -87,7 +87,7 @@ module DefaultActions
           format.html { redirect_to resources_url, success: t(".post") }
           format.json { render :show, status: :created, location: @resource }
         else
-          flash[:warning] = t(".validation_errors")
+          flash.now[:warning] = t(".validation_errors")
           format.turbo_stream { render turbo_stream: [ turbo_stream.update("form", partial: "new"), turbo_stream.replace("flash_container", partial: "application/flash_message") ] }
           format.html { render :new, status: :unprocessable_entity, warning: t(".warning") }
           format.json { render json: @resource.errors, status: :unprocessable_entity }

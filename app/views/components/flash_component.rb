@@ -11,7 +11,7 @@ class FlashComponent < ApplicationComponent
     div(
       id: "flash_container",
       aria_live: "assertive",
-      class: "z-40 pointer-events-none fixed inset-0 flex items-end mb-6 px-4 py-6 sm:items-start sm:p-6"
+      class: "z-[99] pointer-events-none fixed inset-x-0 bottom-0 flex items-center mb-6 px-4 py-6 sm:items-start sm:p-6"
         ) do
       # in honor of Tailwind not being able to know 'tags' in advance
       span(class: "hidden mort-flash-info mort-flash-error mort-flash-success mort-flash-warning mort-flash-notice mort-flash-timedout mort-flash-alert")

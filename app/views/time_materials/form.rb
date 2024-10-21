@@ -363,71 +363,75 @@ class TimeMaterials::Form < ApplicationForm
         fieldset do
           legend(class: "text-sm font-semibold leading-6 text-gray-900") { I18n.t("time_material.invoicing.lead") }
           div(class: "mt-6 space-y-3") do
-            div(class: "relative flex gap-x-3") do
-              div(class: "flex h-6 items-center") do
-                input(
-                  id: "time_material_is_invoice",
-                  name: "time_material[is_invoice]",
-                  data: { time_material_target: "invoice" },
-                  type: "checkbox",
-                  checked: @resource.is_invoice?,
-                  class: "h-4 w-4 rounded border-gray-300 text-sky-600 focus:ring-sky-600"
-                )
-              end
-              div(class: "text-sm leading-6") do
-                label(for: "time_material_is_invoice", class: "font-medium text-gray-900") { I18n.t("time_material.invoicing.invoice.lbl") }
-                p(class: "text-gray-500") { I18n.t("time_material.invoicing.invoice.help") }
-              end
-            end
-            div(class: "relative flex gap-x-3") do
-              div(class: "flex h-6 items-center") do
-                input(
-                  id: "time_material_is_free",
-                  name: "time_material[is_free]",
-                  type: "checkbox",
-                  checked: @resource.is_free?,
-                  class: "h-4 w-4 rounded border-gray-300 text-sky-600 focus:ring-sky-600"
-                )
-              end
-              div(class: "text-sm leading-6") do
-                label(for: "time_material_is_free", class: "font-medium text-gray-900") { I18n.t("time_material.invoicing.free.lbl") }
-                p(class: "text-gray-500") { I18n.t("time_material.invoicing.free.help") }
-              end
-            end
-            div(class: "relative flex gap-x-3") do
-              div(class: "flex h-6 items-center") do
-                input(
-                  id: "time_material_is_offer",
-                  name: "time_material[is_offer]",
-                  type: "checkbox",
-                  disabled: "disabled",
-                  class: "h-4 w-4 rounded border-gray-300 text-sky-600 focus:ring-sky-600"
-                )
-              end
-              div(class: "text-sm leading-6") do
-                label(for: "time_material_is_offer", class: "font-medium text-gray-900") { I18n.t("time_material.invoicing.offer.lbl") }
-                p(class: "text-gray-500") { I18n.t("time_material.invoicing.offer.help") }
-              end
-            end
+            row field(:is_invoice).boolean(class: "my-auto mort-form-bool"), "flex justify-end flex-row-reverse items-center"
+            # div(class: "relative flex gap-x-3") do
+            #   div(class: "flex h-6 items-center") do
+            #     input(
+            #       id: "time_material_is_invoice",
+            #       name: "time_material[is_invoice]",
+            #       data: { time_material_target: "invoice" },
+            #       type: "checkbox",
+            #       checked: @resource.is_invoice?,
+            #       class: "h-4 w-4 rounded border-gray-300 text-sky-600 focus:ring-sky-600"
+            #     )
+            #   end
+            #   div(class: "text-sm leading-6") do
+            #     label(for: "time_material_is_invoice", class: "font-medium text-gray-900") { I18n.t("time_material.invoicing.invoice.lbl") }
+            #     p(class: "text-gray-500") { I18n.t("time_material.invoicing.invoice.help") }
+            #   end
+            # end
+            row field(:is_free).boolean(class: "my-auto mort-form-bool"), "flex justify-end flex-row-reverse items-center"
+            # div(class: "relative flex gap-x-3") do
+            #   div(class: "flex h-6 items-center") do
+            #     input(
+            #       id: "time_material_is_free",
+            #       name: "time_material[is_free]",
+            #       type: "checkbox",
+            #       checked: @resource.is_free?,
+            #       class: "h-4 w-4 rounded border-gray-300 text-sky-600 focus:ring-sky-600"
+            #     )
+            #   end
+            #   div(class: "text-sm leading-6") do
+            #     label(for: "time_material_is_free", class: "font-medium text-gray-900") { I18n.t("time_material.invoicing.free.lbl") }
+            #     p(class: "text-gray-500") { I18n.t("time_material.invoicing.free.help") }
+            #   end
+            # end
+            # div(class: "relative flex gap-x-3") do
+            #   div(class: "flex h-6 items-center") do
+            #     input(
+            #       id: "time_material_is_offer",
+            #       name: "time_material[is_offer]",
+            #       type: "checkbox",
+            #       disabled: "disabled",
+            #       class: "h-4 w-4 rounded border-gray-300 text-sky-600 focus:ring-sky-600"
+            #     )
+            #   end
+            #   div(class: "text-sm leading-6") do
+            #     label(for: "time_material_is_offer", class: "font-medium text-gray-900") { I18n.t("time_material.invoicing.offer.lbl") }
+            #     p(class: "text-gray-500") { I18n.t("time_material.invoicing.offer.help") }
+            #   end
+            # end
           end
         end
         fieldset do
           legend(class: "text-sm font-semibold leading-6 text-gray-900") { I18n.t("time_material.invoicing.batch.lbl") }
           div(class: "mt-6 space-y-6") do
             div(class: "relative flex gap-x-3") do
-              div(class: "flex h-6 items-center") do
-                input(
-                  id: "time_material_is_separate",
-                  name: "time_material[is_separate]",
-                  type: "checkbox",
-                  checked: @resource.is_separate?,
-                  class: "h-4 w-4 rounded border-gray-300 text-sky-600 focus:ring-sky-600"
-                )
-              end
-              div(class: "text-sm leading-6") do
-                label(for: "time_material_is_separate", class: "font-medium text-gray-900") { I18n.t("time_material.invoicing.separate.lbl") }
-                p(class: "text-gray-500") { I18n.t("time_material.invoicing.separate.help") }
-              end
+              row field(:is_separate).boolean(class: "my-auto mort-form-bool"), "flex justify-end flex-row-reverse items-center"
+
+              # div(class: "flex h-6 items-center") do
+              #   input(
+              #     id: "time_material_is_separate",
+              #     name: "time_material[is_separate]",
+              #     type: "checkbox",
+              #     checked: @resource.is_separate?,
+              #     class: "h-4 w-4 rounded border-gray-300 text-sky-600 focus:ring-sky-600"
+              #   )
+              # end
+              # div(class: "text-sm leading-6") do
+              #   label(for: "time_material_is_separate", class: "font-medium text-gray-900") { I18n.t("time_material.invoicing.separate.lbl") }
+              #   p(class: "text-gray-500") { I18n.t("time_material.invoicing.separate.help") }
+              # end
             end
           end
         end
