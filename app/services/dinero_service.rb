@@ -62,7 +62,10 @@ class DineroService < SaasService
       query[:fields] = fields
     end
     list = get "/v1/#{organizationId}/#{tbl}?#{query.to_query}"
-    return false unless list.parsed_response.present?
+    unless list.parsed_response.present?
+      debugger
+      return false
+    end
     list.parsed_response["Collection"].each do |item|
       resource_class.add_from_erp item
     end
@@ -70,16 +73,22 @@ class DineroService < SaasService
       pull resource_class: resource_class, organizationId: organizationId, all: all, page: query[:page].to_i + 1, pageSize: query[:pageSize].to_i, fields: fields, start_date: start_date, end_date: end_date
     end
     true
-  rescue #=> e
-    debugger
+  rescue => err
+    UserMailer.error_report(err.to_s, "SyncERP - DineroService.pull").deliver_later
     false
   end
 
   def pull_invoice(guid:, organizationId: 118244)
     get "/v1/#{organizationId}/invoices/#{guid}"
-  rescue #=> e
-    debugger
+  rescue => err
+    UserMailer.error_report(err.to_s, "SyncERP - DineroService.pull_invoice").deliver_later
     {}
+  end
+
+  def push_invoice(params, organizationId: 118244)
+    post "/v1/#{organizationId}/invoices", params.to_json
+  rescue => err
+    UserMailer.error_report(err.to_s, "SyncERP - DineroService.push_invoice").deliver_later
   end
 
   private
@@ -116,8 +125,17 @@ class DineroService < SaasService
       refresh_token if token_expired?
       headers["Authorization"] = "Bearer %s" % settings["access_token"]
       HTTParty.get("https://api.dinero.dk#{path}", headers: headers)
-    rescue #=> e
-      debugger
+    rescue => err
+      UserMailer.error_report(err.to_s, "SyncERP - DineroService.get").deliver_later
+    end
+
+    def post(path, body, headers = {})
+      refresh_token if token_expired?
+      headers["Authorization"] = "Bearer %s" % settings["access_token"]
+      headers["Content-Type"] = "application/json"
+      HTTParty.post("https://api.dinero.dk#{path}", body: body, headers: headers)
+    rescue => err
+      UserMailer.error_report(err.to_s, "SyncERP - DineroService.post").deliver_later
     end
 
     def token_expired?
@@ -142,8 +160,8 @@ class DineroService < SaasService
       res = HTTParty.post(host, body: params, headers: { "Content-Type" => "application/x-www-form-urlencoded" })
       provided_service.update service_params: res
       @settings = provided_service.service_params_hash
-    rescue #=> e
-      debugger
+    rescue => err
+      UserMailer.error_report(err.to_s, "SyncERP - DineroService.refresh_token").deliver_later
     end
 
     def mocked_run(code)

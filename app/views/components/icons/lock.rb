@@ -1,4 +1,4 @@
-class Icons::Add < Phlex::HTML
+class Icons::Lock < Phlex::HTML
   def initialize(cls: "h-5 mr-2")
     @cls = cls
   end

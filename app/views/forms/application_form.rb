@@ -83,6 +83,14 @@ class ApplicationForm < Superform::Rails::Form
       end
     end
 
+    def value_value_list(arr)
+      Enumerator.new do |collection|
+        arr.each do |k|
+          collection << [ k, v ]
+        end
+      end
+    end
+
     def active_record_relation_options_enumerable(relation)
       Enumerator.new do |collection|
         relation.each do |object|
@@ -207,8 +215,9 @@ class ApplicationForm < Superform::Rails::Form
       super.merge(type: "boolean")
     end
     def view_template(&)
+      data_attr = attributes[:data] || {}
       div(class: attributes[:class], data: { controller: "boolean" }) do
-        input(name: dom.name, data: { boolean_target: "input" }, type: :hidden, value: setValue)
+        input(name: dom.name, data: data_attr.merge({ boolean_target: "input" }), type: :hidden, value: setValue)
         button(
           type: "button",
           data: { action: (attributes[:disabled] ? "" : "click->boolean#toggle"), boolean_target: "button" },

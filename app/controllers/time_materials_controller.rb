@@ -21,7 +21,7 @@ class TimeMaterialsController < MortimerController
         :tenant_id,
         :date,
         :time,
-        :over_time,
+        :overtime,
         :about,
         :user_id,
         :customer_name,

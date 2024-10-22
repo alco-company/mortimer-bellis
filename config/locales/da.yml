@@ -304,14 +304,27 @@ da:
         name: Navn
       customer:
         name: Navn
-        street: Adresse
-        city: By
+        external_reference: Ekstern reference
+        is_person: Er en person
+        is_member: Er det et medlem (af Dinero)
+        is_debitor: Er debitor
+        is_creditor: Er kreditor
+        street: Gade/vej
         zipcode: Postnr
-        country: Land
-        email: Emailadresse
+        city: By
+        country_key: Land
         phone: Telefon
+        email: Email
+        webpage: Hjemmeside
+        att_person: Kontaktperson
         vat_number: CVR nummer
         ean_number: EAN nummer
+        payment_condition_type: Betalingsbetingelse
+        payment_condition_number_of_days: Betalingsbetingelse i dage
+        member_number: Medlemsnummer
+        company_status: Selskabsform
+        vat_region_key: Momsområde
+        invoice_mail_out_option_key: Faktura udsendelse
         contact_person: Kontaktperson
         description: Beskrivelse
       dashboard:
@@ -567,6 +580,10 @@ da:
         overtime: Overtid
         material: Materiale
         description: Beskrivelse
+        quantity: Antal
+        unit: Enhed
+        unit_price: Enhedspris
+        discount: Rabat
         about: Beskrivelse
         customer: Kunde
         project: Projekt

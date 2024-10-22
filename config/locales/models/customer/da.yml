@@ -11,6 +11,8 @@ da:
 
   customers:
     default_customer: Kunden
+    erp_pull:
+      erp_pull: Henter kunder fra Dinero i baggrunden - dette kan tage lidt tid; opdatér siden om lidt
 
     create:
       post: Kunden blev oprettet

@@ -28,6 +28,7 @@ class ModalController < BaseController
     when "employee"; process_employee_create
     when "punch_card"; process_punch_card_create
     when "event"; process_event_create
+    when "time_material"; process_time_material_create
     else; process_other_create
     end
   end
@@ -174,6 +175,10 @@ class ModalController < BaseController
     end
 
     def process_other_create
+    end
+
+    def process_time_material_create
+      DineroUploadJob.perform_now tenant: Current.tenant, user: Current.user, date: Date.current
     end
 
     #

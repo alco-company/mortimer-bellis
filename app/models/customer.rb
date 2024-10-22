@@ -3,6 +3,7 @@ class Customer  < ApplicationRecord
 
   has_many :projects, dependent: :destroy
   has_many :invoices, dependent: :destroy
+  has_many :time_materials, dependent: :destroy
 
   scope :by_name, ->(name) { where("name LIKE ?", "%#{name}%") if name.present? }
   scope :by_street, ->(street) { where("street LIKE ?", "%#{street}%") if street.present? }
@@ -33,6 +34,10 @@ class Customer  < ApplicationRecord
     all
   end
 
+  def address
+    "%s, %s  %s" % [ street, zipcode, city ]
+  end
+
   def self.form(resource:, editable: true)
     Customers::Form.new resource: resource, editable: editable
   end
@@ -41,14 +46,27 @@ class Customer  < ApplicationRecord
     return false unless item["Name"].present?
     customer = Customer.find_or_create_by(tenant: Current.tenant, erp_guid: item["ContactGuid"])
     customer.name = item["Name"]
-    customer.phone = item["Phone"]
-    customer.email = item["Email"]
+    customer.external_reference = item["ExternalReference"]
+    customer.is_person = item["IsPerson"]
+    customer.is_member = item["IsMember"]
+    customer.is_debitor = item["IsDebitor"]
+    customer.is_creditor = item["IsCreditor"]
     customer.street = item["Street"]
     customer.zipcode = item["ZipCode"]
     customer.city = item["City"]
-    # customer.country = item["Country"]
+    customer.country_key = item["CountryKey"]
+    customer.phone = item["Phone"]
+    customer.email = item["Email"]
+    customer.webpage = item["Webpage"]
+    customer.att_person = item["AttPerson"]
     customer.vat_number = item["VatNumber"]
     customer.ean_number = item["EanNumber"]
+    customer.payment_condition_type = item["PaymentConditionType"]
+    customer.payment_condition_number_of_days = item["PaymentConditionNumberOfDays"]
+    customer.member_number = item["MemberNumber"]
+    customer.company_status = item["CompanyStatus"]
+    customer.vat_region_key = item["VatRegionKey"]
+    customer.invoice_mail_out_option_key = item["InvoiceMailOutOptionKey"]
     if customer.save
        Broadcasters::Resource.new(customer).create
     end

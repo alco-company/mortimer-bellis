@@ -1,6 +1,20 @@
 class TimeMaterials::Form < ApplicationForm
   def view_template(&)
     div(data: { controller: "time-material tabs", tabs_index: "0" }) do
+      if model.cannot_be_pushed?
+        div(class: "text-sm mt-2 bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded relative") do
+          ul() do
+            li() { "customer missing" } if @resource.is_invoice? and @resource.customer_id.blank?
+            li() { "product missing" } if @resource.product_id.nil? and @resource.is_invoice? and @resource.quantity != 0
+            li() { "time not correct" } if (@resource.time =~ /^\d*[,.]?\d*$/).nil?
+            li() { "rate not correct" } if (@resource.rate =~ /^\d*[,.]?\d*$/).nil?
+            li() { "project not found" } if !@resource.project_name.blank? && @resource.project_id.blank?
+            li() { "quantity not correct" } if !@resource.quantity.blank? && (@resource.quantity =~ /^\d*[,.]?\d*$/).nil?
+            li() { "unit_price not correct" } if !@resource.unit_price.blank? && (@resource.unit_price =~ /^\d*[,.]?\d*$/).nil?
+            li() { "discount not correct" } if (@resource.discount =~ /^\d*[,.]?\d*[ ]*%?$/).nil?
+          end
+        end
+      end
       date_field
       #
       div do
@@ -197,73 +211,85 @@ class TimeMaterials::Form < ApplicationForm
                 end
               end
             end
-            div(class: "col-span-4 grid gap-x-2 grid-cols-6") do
-              div(class: "col-span-1") do
-                label(
-                  for: "quantity",
-                  class: "block text-sm font-medium leading-6 text-gray-900"
-                ) { I18n.t("time_material.quantity.lbl") }
-                div(class: "mt-2") do
-                  div(
-                    class:
-                      "flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-1 focus-within:ring-inset focus-within:ring-sky-600 sm:max-w-md"
-                  ) do
-                    input(
-                      name: "time_material[quantity]",
-                      id: "time_material_quantity",
-                      value: @resource.quantity,
-                      class:
-                        "block flex-1 border-0 bg-transparent py-1.5 pl-2 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6",
-                      placeholder: "900"
-                    )
-                  end
-                end
+            div(class: "col-span-4 grid gap-x-2 grid-cols-9") do
+              # div(class: "col-span-1") do
+              #   label(
+              #     for: "quantity",
+              #     class: "block text-sm font-medium leading-6 text-gray-900"
+              #   ) { I18n.t("time_material.quantity.lbl") }
+              #   div(class: "mt-2") do
+              #     div(
+              #       class:
+              #         "flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-1 focus-within:ring-inset focus-within:ring-sky-600 sm:max-w-md"
+              #     ) do
+              #       input(
+              #         name: "time_material[quantity]",
+              #         id: "time_material_quantity",
+              #         value: @resource.quantity,
+              #         class:
+              #           "block flex-1 border-0 bg-transparent py-1.5 pl-2 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6",
+              #         placeholder: "900"
+              #       )
+              #     end
+              #   end
+              # end
+              div(class: "col-span-2") do
+                row field(:quantity).input(class: "mort-form-text"), ""
               end
-              div(class: "col-span-1") do
-                label(
-                  for: "unit",
-                  class: "block text-sm font-medium leading-6 text-gray-900"
-                ) { I18n.t("time_material.unit.lbl") }
-                div(class: "mt-2") do
-                  div(
-                    class:
-                      "flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-1 focus-within:ring-inset focus-within:ring-sky-600 sm:max-w-md"
-                  ) do
-                    input(
-                      name: "time_material[unit]",
-                      id: "time_material_unit",
-                      value: @resource.unit,
-                      class:
-                        "block flex-1 border-0 bg-transparent py-1.5 pl-2 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6",
-                      placeholder: "900"
-                    )
-                  end
-                end
+              div(class: "col-span-2") do
+                row field(:unit).select(@resource.units, class: "mort-form-text text-sm"), ""
               end
+              # div(class: "col-span-1") do
+              #   label(
+              #     for: "unit",
+              #     class: "block text-sm font-medium leading-6 text-gray-900"
+              #   ) { I18n.t("time_material.unit.lbl") }
+              #   div(class: "mt-2") do
+              #     div(
+              #       class:
+              #         "flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-1 focus-within:ring-inset focus-within:ring-sky-600 sm:max-w-md"
+              #     ) do
+              #       input(
+              #         name: "time_material[unit]",
+              #         id: "time_material_unit",
+              #         value: @resource.unit,
+              #         class:
+              #           "block flex-1 border-0 bg-transparent py-1.5 pl-2 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6",
+              #         placeholder: "900"
+              #       )
+              #     end
+              #   end
+              # end
               #
-              rate_field I18n.t("time_material.rate.unit_price"), "col-span-2", "unit_price"
+              div(class: "col-span-3") do
+                row field(:unit_price).input(class: "mort-form-text"), ""
+              end
+              # rate_field I18n.t("time_material.rate.unit_price"), "col-span-2", "unit_price"
               #
               div(class: "col-span-2") do
-                label(
-                  for: "discount",
-                  class: "block text-sm font-medium leading-6 text-gray-900"
-                ) { I18n.t("time_material.discount.lbl") }
-                div(class: "mt-2") do
-                  div(
-                    class:
-                      "flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-1 focus-within:ring-inset focus-within:ring-sky-600 sm:max-w-md"
-                  ) do
-                    input(
-                      name: "time_material[discount]",
-                      id: "time_material_discount",
-                      value: @resource.discount,
-                      class:
-                        "block flex-1 border-0 bg-transparent py-1.5 pl-2 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6",
-                      placeholder: I18n.t("time_material.discount.placeholder")
-                    )
-                  end
-                end
+                row field(:discount).input(class: "mort-form-text", placeholder: I18n.t("time_material.discount.placeholder")), ""
               end
+              # div(class: "col-span-2") do
+              #   label(
+              #     for: "discount",
+              #     class: "block text-sm font-medium leading-6 text-gray-900"
+              #   ) { I18n.t("time_material.discount.lbl") }
+              #   div(class: "mt-2") do
+              #     div(
+              #       class:
+              #         "flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-1 focus-within:ring-inset focus-within:ring-sky-600 sm:max-w-md"
+              #     ) do
+              #       input(
+              #         name: "time_material[discount]",
+              #         id: "time_material_discount",
+              #         value: @resource.discount,
+              #         class:
+              #           "block flex-1 border-0 bg-transparent py-1.5 pl-2 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6",
+              #         placeholder: I18n.t("time_material.discount.placeholder")
+              #       )
+              #     end
+              #   end
+              # end
             end
           end
         end
@@ -350,7 +376,7 @@ class TimeMaterials::Form < ApplicationForm
             value: @resource.send(fld_name),
             class:
               "block flex-1 border-0 bg-transparent py-1.5 pl-2 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6",
-            placeholder: "900"
+            placeholder: "90,25"
           )
         end
       end
@@ -363,7 +389,7 @@ class TimeMaterials::Form < ApplicationForm
         fieldset do
           legend(class: "text-sm font-semibold leading-6 text-gray-900") { I18n.t("time_material.invoicing.lead") }
           div(class: "mt-6 space-y-3") do
-            row field(:is_invoice).boolean(class: "my-auto mort-form-bool"), "flex justify-end flex-row-reverse items-center"
+            row field(:is_invoice).boolean(data: { time_material_target: "invoice" }, class: "my-auto mort-form-bool"), "flex justify-end flex-row-reverse items-center"
             # div(class: "relative flex gap-x-3") do
             #   div(class: "flex h-6 items-center") do
             #     input(

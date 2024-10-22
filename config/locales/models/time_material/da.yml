@@ -1,6 +1,26 @@
 da:
   upload to ERP: Upload til Dinero
   time_material:
+    units:
+      hours: Timer
+      parts: Stk
+      km: Km
+      day: Dag
+      week: Uge
+      month: Måned
+      kilogram: Kg
+      cubicMetre: M3
+      set: Sæt
+      litre: Liter
+      box: Pakke
+      case: Kasse
+      carton: Karton
+      metre: Meter
+      package: Pakke
+      shipment: Forsendelse
+      squareMetre: M2
+      session: Session
+      tonne: Ton
     modal:
       delete_all: 
         title: Slet alle tid/materialer
@@ -54,7 +74,7 @@ da:
       placeholder: "fx 'stk'"
     discount:
       lbl: "Rabat"
-      placeholder: "fx '10%'"
+      placeholder: "fx 5%"
     invoicing:
       lead: "Fakturering"
       invoice:

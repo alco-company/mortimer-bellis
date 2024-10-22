@@ -10,7 +10,7 @@ class TimeMaterialItem < ApplicationComponent
   end
 
   def view_template
-    li(id: (dom_id resource), class: "flex justify-between bg-gray-50 mt-1 rounded-md px-2 gap-x-4 gap-y-2 py-3") do
+    li(id: (dom_id resource), class: "relative flex justify-between mt-1 rounded-md px-2 #{background} gap-x-4 gap-y-2 py-3") do
       div(class: "w-3/4 flex grow flex-col") do
         # comment do
         #   %(TODO add mugshots for time_materials <img class="h-12 w-12 flex-none rounded-full bg-gray-50" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="">)
@@ -20,9 +20,9 @@ class TimeMaterialItem < ApplicationComponent
         end
         p(class: "grow mort-tm-line-product leading-5 truncate") do
           helpers.show_time_material_resource_link(resource: resource)
-          if helpers.global_queries? Current.user
-            span(class: "text-xs") { helpers.show_resource_link(resource: resource.tenant) }
-          end
+          # if helpers.global_queries? Current.user
+          #   span(class: "text-xs") { helpers.show_resource_link(resource: resource.tenant) }
+          # end
         end
       end
       div(class: "w-1/4 flex grow-0 flex-col items-end text-right") do
@@ -31,7 +31,7 @@ class TimeMaterialItem < ApplicationComponent
             p(class: "mort-tm-line-customer leading-6 h-7") do
               span(
                 class:
-                  %(#{resource.is_invoice? ? "" : "hidden"} w-fit inline-flex items-center rounded-md bg-green-50 px-1 xs:px-2 py-0 xs:py-0.5 text-2xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20 truncate)
+                  %(#{resource.is_invoice? ? "" : "hidden"} w-fit inline-flex items-center rounded-md bg-green-50 mr-1 px-1 xs:px-2 py-0 xs:py-0.5 text-2xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20 truncate)
               ) do
                 plain " f "
                 span(class: "hidden sm:inline") { "akturérbar" }
@@ -48,7 +48,7 @@ class TimeMaterialItem < ApplicationComponent
               end
             end
           end
-          helpers.render_contextmenu resource: resource,
+          render Contextmenu.new resource: resource,
             cls: "relative flex-none",
             turbo_frame: "form",
             resource_class: TimeMaterial,
@@ -56,6 +56,22 @@ class TimeMaterialItem < ApplicationComponent
             links: [ edit_time_material_url(resource), time_material_url(resource) ]
         end
       end
+      if resource.pushed_to_erp?
+        div(class: "absolute inset-0 bg-gray-500/40 rounded-md") do
+          plain ""
+        end
+      end
+      if resource.cannot_be_pushed?
+        link_to(edit_time_material_url(resource), data: { turbo_action: "advance", turbo_frame: "form" }, class: "absolute inset-0 bg-yellow-400/50 rounded-md") do
+          plain ""
+        end
+      end
+    end
+  end
+
+  def background
+    if !resource.pushed_to_erp? and !resource.cannot_be_pushed?
+      "bg-gray-50"
     end
   end
 end

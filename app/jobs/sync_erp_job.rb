@@ -14,7 +14,7 @@ class SyncErpJob < ApplicationJob
     user_time_zone(user.time_zone) do
       ds = DineroService.new
       case resource_class.to_s
-      when "Customer"; fields="Name,ContactGuid,Street,ZipCode,City,Phone,Email,VatNumber,EanNumber"
+      when "Customer"; fields="Name,ContactGuid,ExternalReference,IsPerson,Street,ZipCode,City,CountryKey,Phone,Email,Webpage,AttPerson,VatNumber,EanNumber,PaymentConditionType,PaymentConditionNumberOfDays,IsMember,MemberNumber,CompanyStatus,VatRegionKey,IsDebitor,IsCreditor,InvoiceMailOutOptionKey"
       when "Product"; fields="Name,ProductGuid,ProductNumber,Quantity,Unit,AccountNumber,BaseAmountValue,BaseAmountValueInclVat,TotalAmount,TotalAmountInclVat,ExternalReference"
       when "Invoice"; startDate=set_start(args); endDate=set_end(args); fields="Number,Guid,ExternalReference,ContactName,ContactGuid,Date,PaymentDate,Description,Currency,Status,MailOutStatus,LatestMailOutType,TotalExclVatInDkk,TotalInclVatInDkk,TotalExclVat,TotalInclVat"
       end

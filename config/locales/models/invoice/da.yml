@@ -1,5 +1,18 @@
 da:
+  invoice:
+    modal:
+      delete_all: 
+        title: Slet alle fakturaer
+        instruction: Er du sikker på, at du vil slette alle fakturaer?
+      delete:
+        title: Slet denne faktura
+        instruction: Er du sikker på, at du vil slette fakturaen %{number}?
+        button: Slet
+        
   invoices:
+    erp_pull:
+      erp_pull: Henter fakturaer fra Dinero i baggrunden - dette kan tage lidt tid; opdatér siden om lidt
+
     invoice_id: Faktura
     project_id: Projekt
     product_id: Produkt

@@ -20,6 +20,7 @@ module TimeMaterialStateable
       paused:               2,
       done:                 3,
       pushed_to_erp:        4,
+      cannot_be_pushed:     5,
       archived:           99
     }
     scope :by_state, ->(state) { where("state = ?", state) if state.present? }

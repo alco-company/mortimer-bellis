@@ -13,9 +13,11 @@ export default class extends Controller {
   customerChange(e) {
     if (e.currentTarget.value === "") {
       e.target.previousSibling.value = "";
-      this.invoiceTarget.checked = false;
+      if (this.invoiceTarget.value == 1)
+        this.invoiceTarget.nextElementSibling.click();
     } else {
-      this.invoiceTarget.checked = true;
+      if (this.invoiceTarget.value == 0)
+        this.invoiceTarget.nextElementSibling.click();
     }
   }
 

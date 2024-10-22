@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_10_15_220911) do
+ActiveRecord::Schema[8.0].define(version: 2024_10_22_192441) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -78,6 +78,20 @@ ActiveRecord::Schema[8.0].define(version: 2024_10_15_220911) do
     t.string "ean_number"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "external_reference"
+    t.boolean "is_person"
+    t.boolean "is_member"
+    t.boolean "is_debitor"
+    t.boolean "is_creditor"
+    t.string "country_key"
+    t.string "webpage"
+    t.string "att_person"
+    t.string "payment_condition_type"
+    t.string "payment_condition_number_of_days"
+    t.string "member_number"
+    t.string "company_status"
+    t.string "vat_region_key"
+    t.string "invoice_mail_out_option_key"
     t.index ["tenant_id"], name: "index_customers_on_tenant_id"
   end
 
@@ -549,6 +563,11 @@ ActiveRecord::Schema[8.0].define(version: 2024_10_15_220911) do
     t.datetime "updated_at", null: false
     t.integer "user_id", null: false
     t.text "comment"
+    t.boolean "overtime"
+    t.string "unit_price"
+    t.string "unit"
+    t.string "pushed_erp_timestamp"
+    t.string "erp_guid"
     t.index ["tenant_id"], name: "index_time_materials_on_tenant_id"
     t.index ["user_id"], name: "index_time_materials_on_user_id"
   end
