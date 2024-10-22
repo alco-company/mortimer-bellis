@@ -49,6 +49,10 @@ If Solid Queue bites me again, look here: https://github.com/rails/solid_queue/i
 
 ## CHANGELOG
 
+### 22/10/2024
+
+* make each line on /time_materials a component
+
 ### 21/10/2024
 
 * add lookup for customers, projects, and products
