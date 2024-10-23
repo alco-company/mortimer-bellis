@@ -3,7 +3,7 @@
 <%= turbo_frame_tag "form" %>
 <!-- List -->
 <%= turbo_stream_from @resources_stream %>
-<%= render List.new @records %>
+<%= render List.new records: @records %>
 <%= render partial: "pagination" if @pagy.pages > 1 %>
 
 <%= time_material_button(user: current_user) %>

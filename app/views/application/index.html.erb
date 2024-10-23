@@ -3,6 +3,6 @@
 <%= turbo_frame_tag "form" %>
 <!-- List -->
 <%= turbo_stream_from @resources_stream %>
-<%= render List.new @records %>
+<%= render List.new records: @records, grouped_by: nil %>
 
 <%= render partial: "pagination" if @pagy.pages > 1 %>
