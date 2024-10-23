@@ -57,7 +57,7 @@ class TimeMaterialItem < ApplicationComponent
         end
       end
       if resource.pushed_to_erp?
-        div(class: "absolute inset-0 bg-gray-500/40 rounded-md") do
+        link_to(time_material_url(resource), data: { turbo_action: "advance", turbo_frame: "form" }, class: "absolute inset-0 bg-gray-500/20 rounded-md") do
           plain ""
         end
       end

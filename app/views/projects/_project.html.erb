@@ -18,6 +18,6 @@
         <p class="text-sm leading-6 text-gray-900"><%= project.hourly_rate %> </p>
         <p class="mt-1 text-xs leading-5 text-gray-500"><%= I18n.t("last_update")%> <time datetime="<%= project.updated_at %>"><%= time_ago_in_words project.updated_at %> <%= I18n.t("ago") %></time></p>
       </div>
-      <%= render_contextmenu resource: project, cls: "relative flex-none", turbo_frame: "form", resource_class: project, alter: true, links: [ edit_project_url(project), project_url(project) ] %>
+      <%= render_contextmenu resource: project, cls: "relative flex-none", turbo_frame: "form", resource_class: Project, alter: true, links: [ edit_project_url(project), project_url(project) ] %>
     </div>
   </li>

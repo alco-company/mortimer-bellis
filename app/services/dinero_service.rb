@@ -4,6 +4,7 @@ class DineroService < SaasService
   def initialize(provided_service: nil, settings: nil)
     @provided_service = provided_service || Current.tenant.provided_services.by_name("Dinero").first
     @settings = settings || @provided_service.service_params_hash
+    @settings["organizationId"] = @provided_service.organizationID
   end
 
   def auth_url(path)
@@ -18,6 +19,13 @@ class DineroService < SaasService
       redirect_uri: ENV["DINERO_APP_CALLBACK"]
     }
     "%s?%s" % [ host, params.to_query ]
+  end
+
+  def get_invoice_settings
+    get "/v1/#{settings["organizationId"]}/sales/settings"
+  rescue => err
+    UserMailer.error_report(err.to_s, "DineroUpload - DineroService.get_invoice_settings").deliver_later
+    {}
   end
 
   def get_creds(creds: {})
@@ -41,7 +49,7 @@ class DineroService < SaasService
   # changesSince = 2015-08-18T06:36:22Z (UTC)
   # pageSize = 100 (max 1000)
   #
-  def pull(resource_class:, all: false, page: 0, pageSize: 100, fields: nil, start_date: nil, end_date: nil, organizationId: 118244)
+  def pull(resource_class:, all: false, page: 0, pageSize: 100, fields: nil, start_date: nil, end_date: nil)
     case resource_class.to_s
     when "Customer"; tbl = "contacts"
     when "Product"; tbl = "products"
@@ -61,7 +69,7 @@ class DineroService < SaasService
     if fields
       query[:fields] = fields
     end
-    list = get "/v1/#{organizationId}/#{tbl}?#{query.to_query}"
+    list = get "/v1/#{settings["organizationId"]}/#{tbl}?#{query.to_query}"
     unless list.parsed_response.present?
       debugger
       return false
@@ -78,17 +86,17 @@ class DineroService < SaasService
     false
   end
 
-  def pull_invoice(guid:, organizationId: 118244)
-    get "/v1/#{organizationId}/invoices/#{guid}"
+  def pull_invoice(guid:)
+    get "/v1/#{settings["organizationId"]}/invoices/#{guid}"
   rescue => err
     UserMailer.error_report(err.to_s, "SyncERP - DineroService.pull_invoice").deliver_later
     {}
   end
 
-  def push_invoice(params, organizationId: 118244)
-    post "/v1/#{organizationId}/invoices", params.to_json
+  def push_invoice(params)
+    post "/v1/#{settings["organizationId"]}/invoices", params.to_json
   rescue => err
-    UserMailer.error_report(err.to_s, "SyncERP - DineroService.push_invoice").deliver_later
+    UserMailer.error_report(err.to_s, "DineroUpload - DineroService.push_invoice").deliver_later
   end
 
   private
@@ -126,7 +134,7 @@ class DineroService < SaasService
       headers["Authorization"] = "Bearer %s" % settings["access_token"]
       HTTParty.get("https://api.dinero.dk#{path}", headers: headers)
     rescue => err
-      UserMailer.error_report(err.to_s, "SyncERP - DineroService.get").deliver_later
+      UserMailer.error_report(err.to_s, "DineroService.get").deliver_later
     end
 
     def post(path, body, headers = {})
@@ -135,7 +143,7 @@ class DineroService < SaasService
       headers["Content-Type"] = "application/json"
       HTTParty.post("https://api.dinero.dk#{path}", body: body, headers: headers)
     rescue => err
-      UserMailer.error_report(err.to_s, "SyncERP - DineroService.post").deliver_later
+      UserMailer.error_report(err.to_s, "DineroService.post").deliver_later
     end
 
     def token_expired?
@@ -160,8 +168,9 @@ class DineroService < SaasService
       res = HTTParty.post(host, body: params, headers: { "Content-Type" => "application/x-www-form-urlencoded" })
       provided_service.update service_params: res
       @settings = provided_service.service_params_hash
+      @settings["organizationId"] = provided_service.organizationID
     rescue => err
-      UserMailer.error_report(err.to_s, "SyncERP - DineroService.refresh_token").deliver_later
+      UserMailer.error_report(err.to_s, "DineroService.refresh_token").deliver_later
     end
 
     def mocked_run(code)

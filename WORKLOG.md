@@ -52,6 +52,8 @@ If Solid Queue bites me again, look here: https://github.com/rails/solid_queue/i
 ### 23/10/2024
 
 * make group_by customizable on #index
+* add settings to provided_services
+* finish dinero_upload
 
 ### 22/10/2024
 

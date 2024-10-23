@@ -466,6 +466,10 @@ da:
       provided_service:
         name: Navn
         service: Service klasse
+        organizationID: Hvilket regnskab skal integreres med Mortimer?
+        account_for_one_off: Konto for diverse salg
+        product_for_time: Produkt for salg af timer
+        product_for_overtime: Produkt for salg af timer (overtid)
         service_params: Service indstillinger
 
       punch:
@@ -575,6 +579,7 @@ da:
         customer_id: Kunde
         project_id: Projekt
         product_id: Produkt
+        comment: Kommentar
         date: Dato
         time: Tid
         overtime: Overtid

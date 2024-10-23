@@ -49,6 +49,7 @@ class CancelSaveForm < ApplicationComponent
 
   def edit_button
     div(class: "ml-3 flex h-6 items-center") do
+      edit_url == "-1" ? plain(" ") :
       link_to(
         edit_url,
         class:

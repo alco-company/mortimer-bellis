@@ -164,7 +164,7 @@ class TimeMaterials::Form < ApplicationForm
                   action: "keydown->lookup#keyDown blur->time-material#productChange"
                 },
                 role: "time_material",
-                display_value: @resource.product_name) # Customer.all.select(:id, :name).take(9)
+                display_value: @resource.product_name), "" # Customer.all.select(:id, :name).take(9)
             end
             # div(class: "col-span-4") do
             #   label(
@@ -188,28 +188,29 @@ class TimeMaterials::Form < ApplicationForm
             #   end
             # end
             div(class: "col-span-4") do
-              label(
-                for: "comment",
-                class: "block text-sm font-medium leading-6 text-gray-900"
-              ) { I18n.t("time_material.comment.lbl")  }
-              div(class: "mt-2") do
-                div(
-                  class:
-                    "flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-1 focus-within:ring-inset focus-within:ring-sky-600 sm:max-w-md"
-                ) do
-                  textarea(
-                    id: "time_material_comment",
-                    name: "time_material[comment]",
-                    rows: "3",
-                    autofocus: true,
-                    class:
-                      "block w-full rounded-md border-0 py-1.5 px-2.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-sky-600 sm:text-sm sm:leading-6",
-                    placeholder: I18n.t("time_material.comment.placeholder")
-                  ) do
-                    plain @resource.comment
-                  end
-                end
-              end
+              row field(:comment).textarea(class: "mort-form-text"), ""
+              # label(
+              #   for: "comment",
+              #   class: "block text-sm font-medium leading-6 text-gray-900"
+              # ) { I18n.t("time_material.comment.lbl")  }
+              # div(class: "mt-2") do
+              #   div(
+              #     class:
+              #       "flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-1 focus-within:ring-inset focus-within:ring-sky-600 sm:max-w-md"
+              #   ) do
+              #     textarea(
+              #       id: "time_material_comment",
+              #       name: "time_material[comment]",
+              #       rows: "3",
+              #       autofocus: true,
+              #       class:
+              #         "block w-full rounded-md border-0 py-1.5 px-2.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-sky-600 sm:text-sm sm:leading-6",
+              #       placeholder: I18n.t("time_material.comment.placeholder")
+              #     ) do
+              #       plain @resource.comment
+              #     end
+              #   end
+              # end
             end
             div(class: "col-span-4 grid gap-x-2 grid-cols-9") do
               # div(class: "col-span-1") do
@@ -299,23 +300,24 @@ class TimeMaterials::Form < ApplicationForm
 
   def about_field
     div(class: "col-span-full") do
-      label(
-        for: "time_material_about",
-        class: "block text-sm font-light leading-6 text-gray-900"
-      ) { I18n.t("time_material.about.lbl") }
-      div(class: "mt-2") do
-        textarea(
-          id: "time_material_about",
-          name: "time_material[about]",
-          rows: "3",
-          autofocus: true,
-          class:
-            "block w-full rounded-md border-0 py-1.5 px-2.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-sky-600 sm:text-sm sm:leading-6",
-          placeholder: I18n.t("time_material.about.placeholder")
-        ) do
-          plain @resource.about
-        end
-      end
+      row field(:about).textarea(class: "mort-form-text"), ""
+      # label(
+      #   for: "time_material_about",
+      #   class: "block text-sm font-light leading-6 text-gray-900"
+      # ) { I18n.t("time_material.about.lbl") }
+      # div(class: "mt-2") do
+      #   textarea(
+      #     id: "time_material_about",
+      #     name: "time_material[about]",
+      #     rows: "3",
+      #     autofocus: true,
+      #     class:
+      #       "block w-full rounded-md border-0 py-1.5 px-2.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-sky-600 sm:text-sm sm:leading-6",
+      #     placeholder: I18n.t("time_material.about.placeholder")
+      #   ) do
+      #     plain @resource.about
+      #   end
+      # end
       # p(class: "mt-3 text-sm leading-6 text-gray-600") do
       #   I18n.t("time_material.about.help")
       # end

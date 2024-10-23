@@ -113,6 +113,7 @@ class ApplicationForm < Superform::Rails::Form
       div(class: "relative mt-2", data: { controller: "lookup" }) do
         input(type: "hidden", id: dom.id, name: dom.name, value: field.value, data: { lookup_target: "selectId" })
         data = attributes[:data] || { url: attributes[:lookup_path], div_id: field.dom.id, lookup_target: "input", action: "keydown->lookup#keyDown" }
+        css = attributes[:class] || "mort-form-text"
         input(
           data: data,
           type: "text",
@@ -120,8 +121,7 @@ class ApplicationForm < Superform::Rails::Form
           value: attributes[:display_value],
           id: dom.id.gsub(/_id$/, "_name"),
           name: dom.name.gsub(/_id\]/, "_name]"),
-          class:
-            "w-full rounded-md border-0 bg-white py-1.5 pl-3 pr-12 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-1 focus:ring-inset focus:ring-sky-200 sm:text-sm sm:leading-6",
+          class: css, # "w-full rounded-md border-0 bg-white py-1.5 pl-3 pr-12 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-1 focus:ring-inset focus:ring-sky-200 sm:text-sm sm:leading-6",
           role: attributes[:role] || "combobox",
           autocomplete: "off",
           aria_controls: "options",
@@ -365,14 +365,14 @@ class ApplicationForm < Superform::Rails::Form
     end
   end
 
-  def view_only(component)
+  def view_only(component, outer_class = "mort-field")
     div do
       render(component.field.label) do
         span(class: "font-bold") do
           plain I18n.t("activerecord.attributes.#{component.field.parent.key}.#{component.field.key}")
         end
       end
-      div(class: "mort-field") do
+      div(class: outer_class) do
         display_field(component.field)
       end
     end
