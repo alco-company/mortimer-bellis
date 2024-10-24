@@ -215,7 +215,7 @@ class Dinero::Service < SaasService
       if params[:error]
         { error: "invalid client" }
       else
-        { "Guid"=>"5856516f-5127-4dfc-98a7-52ab7d09e1df", "TimeStamp"=>"0000000080C81AC0" }
+        { "Guid"=> SecureRandom.uuid, "TimeStamp"=> Time.current.iso8601 }
       end
     end
 end

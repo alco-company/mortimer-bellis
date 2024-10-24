@@ -54,6 +54,7 @@ If Solid Queue bites me again, look here: https://github.com/rails/solid_queue/i
 * debugging dinero_upload
 * projects -> separate invoice
 * address -> multiple lines
+* quantity/time -> not both
 
 ### 23/10/2024
 
