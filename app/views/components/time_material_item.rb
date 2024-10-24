@@ -33,12 +33,11 @@ class TimeMaterialItem < ApplicationComponent
                 class:
                   %(#{resource.is_invoice? ? "" : "hidden"} w-fit inline-flex items-center rounded-md bg-green-50 mr-1 px-1 xs:px-2 py-0 xs:py-0.5 text-2xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20 truncate)
               ) do
-                plain " f "
-                span(class: "hidden sm:inline") { "akturérbar" }
+                render Icons::Money.new(cls: "text-green-500 h-4 w-4")
+                span(class: "hidden ml-2 md:inline") { I18n.t("time_material.billable") }
               end
-              span(class: (resource.is_free? ? "text-red-500" : "")) do
-                plain resource.time
-                plain " t"
+              span(class: (resource.is_free? ? "text-red-500 inline-flex" : "inline-flex")) do
+                say_how_much
               end
             end
             p(class: "mort-tm-line-product float-right leading-5 flex items-center") do
@@ -66,6 +65,15 @@ class TimeMaterialItem < ApplicationComponent
           plain ""
         end
       end
+    end
+  end
+
+  def say_how_much
+    u = resource.unit.blank? ? "" : unsafe_raw(I18n.t("time_material.responsive_units.#{resource.unit}"))
+    if resource.quantity.blank?
+      resource.time.blank? ? "" : span(class: "truncate") { "%s %s" % [ resource.time, u ] }
+    else
+      span(class: "truncate") { "%s %s" % [ resource.quantity, u ] }
     end
   end
 

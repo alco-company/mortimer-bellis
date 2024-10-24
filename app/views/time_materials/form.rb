@@ -14,6 +14,8 @@ class TimeMaterials::Form < ApplicationForm
             li() { "rate not correct" } if (@resource.rate =~ /^\d*[,.]?\d*$/).nil?
             li() { "quantity not correct" } if !@resource.quantity.blank? and
               (@resource.quantity =~ /^\d*[,.]?\d*$/).nil?
+            li() { "time and quantity both set" } if !@resource.quantity.blank? and
+              !@resource.time.blank?
             li() { "unit_price not correct" } if !@resource.unit_price.blank? and
               (@resource.unit_price =~ /^\d*[,.]?\d*$/).nil?
             li() { "discount not correct" } if !@resource.discount.blank? and

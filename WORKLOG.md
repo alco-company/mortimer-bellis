@@ -55,6 +55,7 @@ If Solid Queue bites me again, look here: https://github.com/rails/solid_queue/i
 * projects -> separate invoice
 * address -> multiple lines
 * quantity/time -> not both
+* icon on invoice_items
 
 ### 23/10/2024
 

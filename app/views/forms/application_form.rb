@@ -415,12 +415,12 @@ class ApplicationForm < Superform::Rails::Form
   def display_field(field)
     case field.key
     when /tenant_id$/; plain(model&.tenant&.name)
-    when /team_id$/; div(class: "flex") { link_to(model&.team.name, team_url(model&.team), class: "flex place-items-center truncate mort-btn-secondary") } # plain(model&.team.name)
-    when /user_id$/; plain(model&.user.name)
-    when /customer_id$/; field.value.blank? ? model.customer_name : plain(model&.customer.name)
-    when /project_id$/; field.value.blank? ? model.project_name : plain(model&.project.name)
-    when /product_id$/; field.value.blank? ? model.product_name : plain(model&.product.name)
-    when /punch_clock_id$/; plain(model&.punch_clock.name) rescue I18n.t("punches.form.punched_on_app")
+    when /team_id$/; div(class: "flex") { link_to(model&.team&.name, team_url(model&.team), class: "flex place-items-center truncate mort-btn-secondary") } # plain(model&.team.name)
+    when /user_id$/; plain(model&.user&.name)
+    when /customer_id$/; field.value.blank? ? model.customer_name : plain(model&.customer&.name)
+    when /project_id$/; field.value.blank? ? model.project_name : plain(model&.project&.name)
+    when /product_id$/; field.value.blank? ? model.product_name : plain(model&.product&.name)
+    when /punch_clock_id$/; plain(model&.punch_clock&.name) rescue I18n.t("punches.form.punched_on_app")
     else; plain(fformat(model, field.key))
     end
   end
