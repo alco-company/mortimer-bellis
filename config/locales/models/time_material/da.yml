@@ -1,8 +1,29 @@
 da:
   upload to ERP: Upload til Dinero
   time_material:
+    billable: fakturérbar
     units:
       hours: Timer
+      parts: Stk
+      km: Km
+      day: Dag
+      week: Uge
+      month: Måned
+      kilogram: Kg
+      cubicMetre: M3
+      set: Sæt
+      litre: Liter
+      box: Pakke
+      case: Kasse
+      carton: Karton
+      metre: Meter
+      package: Pakke
+      shipment: Forsendelse
+      squareMetre: M2
+      session: Session
+      tonne: Ton
+    responsive_units:
+      hours: t<span class:"hidden sm:inline">imer</span>
       parts: Stk
       km: Km
       day: Dag

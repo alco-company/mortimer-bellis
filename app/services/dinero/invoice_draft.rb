@@ -17,6 +17,7 @@ class Dinero::InvoiceDraft
       # loop through all time_materials, picking elligible ones
       time_materials.each do |resource|
         next unless resource.valid?
+        next if resource.pushed_to_erp?
         can_resource_be_pushed? resource
         pack_resource_for_push(resource) if resource.is_invoice? && resource.done?
       end
@@ -48,8 +49,11 @@ class Dinero::InvoiceDraft
     resource.customer.name                            # check if customer exists/association set correctly
     if resource.quantity.blank?
       raise "quantity not correct format" if (resource.time =~ /^\d*[,.]?\d*$/).nil? and resource.comment.blank?
-      raise "rate not correct format" if (!resource.rate.blank? and resource.rate =~ /^\d*[,.]?\d*$/).nil? and resource.comment.blank?
+      raise "rate not correct format" if !resource.rate.blank? and (resource.rate =~ /^\d*[,.]?\d*$/).nil? and resource.comment.blank?
+      raise "time and quantity cannot both be blank" if resource.time.blank? and resource.comment.blank?
+      raise "time not correct format" if !resource.time.blank? and (resource.time =~ /^\d*[,.]?\d*$/).nil?
     else
+      raise "time and quantity cannot both be set" if !resource.time.blank?
       raise "rate cannot be set if product and quantity is set!" if !resource.rate.blank? && !resource.product_id.blank?
       raise "product_name cannot be blank if quantity is not blank!" if resource.product_name.blank?          # with one off's we use the product text as description! No need to check resource.product.name   # check if product exists/association set correctly
       raise "quantity not correct format" if (resource.quantity =~ /^\d*[,.]?\d*$/).nil?
@@ -67,12 +71,23 @@ class Dinero::InvoiceDraft
     UserMailer.error_report(err.to_s, "DineroUpload.can_resource_be_pushed?").deliver_later
   end
 
+  #
+  # here we pack invoice items for each customer
+  # either by customer_id or by customer_id + project_name or
+  # separately b/c the item is marked as separate
+  #
   def pack_resource_for_push(resource)
     if resource.is_separate?
       cid_array[resource.customer_id.to_s + DateTime.current.to_s] = [ resource ]
     else
-      cid_array[resource.customer_id] = [] unless cid_array[resource.customer_id]
-      cid_array[resource.customer_id] << resource
+      pn = resource.project&.name || resource.project_name || ""
+      if !pn.blank?
+        cid_array[resource.customer_id.to_s + pn] = [] unless cid_array[resource.customer_id.to_s + pn]
+        cid_array[resource.customer_id.to_s + pn] << resource
+      else
+        cid_array[resource.customer_id] = [] unless cid_array[resource.customer_id]
+        cid_array[resource.customer_id] << resource
+      end
     end
   end
 

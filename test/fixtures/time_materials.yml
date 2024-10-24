@@ -257,6 +257,35 @@ one_9:
   erp_guid:
   push_log: 
 
+# time and quantity both set
+one_10:
+  tenant: one 
+  date: <%= Date.today - 3.days %>
+  time:  1.25
+  about: some text
+  customer_name:
+  customer: one
+  project_name:
+  project: 
+  product_name: a-product-number
+  product: one
+  quantity: 1,25
+  rate: 
+  discount: 
+  state:
+  is_invoice: true
+  is_free:
+  is_offer:
+  is_separate:
+  user: one
+  comment:
+  overtime:
+  unit_price: a
+  unit:
+  pushed_erp_timestamp:
+  erp_guid:
+  push_log: 
+
 # a product
 two:
   tenant: two
@@ -520,6 +549,90 @@ nine:
   customer: one
   project_name: 
   project:
+  product_name:
+  product:
+  quantity:
+  rate: 43.33
+  discount:
+  state:
+  is_invoice: true
+  is_free:
+  is_offer:
+  is_separate:
+  user: one
+  comment:
+  overtime: 
+  unit_price: ""
+  unit: ""
+  pushed_erp_timestamp:
+  erp_guid:
+  push_log: 
+#
+# three items, two items - on the same project - and the same invoice
+#
+ten:
+  tenant: six
+  date: <%= Date.today - 3.days %>
+  time: 0,25
+  about: well something 1
+  customer_name:
+  customer: one
+  project_name: 
+  project:
+  product_name:
+  product:
+  quantity:
+  rate: 43.33
+  discount:
+  state:
+  is_invoice: true
+  is_free:
+  is_offer:
+  is_separate:
+  user: one
+  comment:
+  overtime: 
+  unit_price: ""
+  unit: ""
+  pushed_erp_timestamp:
+  erp_guid:
+  push_log: 
+ten_project:
+  tenant: six
+  date: <%= Date.today - 3.days %>
+  time: 0,25
+  about: well something 2
+  customer_name:
+  customer: one
+  project_name: project one 
+  project:
+  product_name:
+  product:
+  quantity:
+  rate: 43.33
+  discount:
+  state:
+  is_invoice: true
+  is_free:
+  is_offer:
+  is_separate:
+  user: one
+  comment:
+  overtime: 
+  unit_price: ""
+  unit: ""
+  pushed_erp_timestamp:
+  erp_guid:
+  push_log: 
+ten_project_2:
+  tenant: six
+  date: <%= Date.today - 3.days %>
+  time: 0,25
+  about: well something 3
+  customer_name:
+  customer: one
+  project_name: 
+  project: one
   product_name:
   product:
   quantity:

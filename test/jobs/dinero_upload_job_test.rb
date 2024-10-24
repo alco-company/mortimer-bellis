@@ -9,9 +9,9 @@ class DineroUploadJobTest < ActiveJob::TestCase
   test "should mark tm as 'cannot_be_pushed'" do
     t = tenants(:one)
     d = Date.current
-    assert_equal 9, TimeMaterial.where(tenant: t, date: ..d).count
+    assert_equal 10, TimeMaterial.where(tenant: t, date: ..d).count
     DineroUploadJob.perform_now tenant: t, user: users(:one), date: d, provided_service: "Dinero"
-    assert_equal 9, TimeMaterial.where(tenant: t, date: ..d, state: 5).count
+    assert_equal 10, TimeMaterial.where(tenant: t, date: ..d, state: 5).count
   end
 
   test "prepare a line with a product that should mark tm as 'pushed_to_erp'" do
@@ -102,5 +102,14 @@ class DineroUploadJobTest < ActiveJob::TestCase
     assert_equal 3, TimeMaterial.where(tenant: t, date: ..d).count
     DineroUploadJob.perform_now tenant: t, user: users(:one), date: d, provided_service: "Dinero"
     assert time_material.reload.pushed_to_erp?
+  end
+
+  test "prepare an invoice with one line, and one invoice with two lines tm as 'pushed_to_erp'" do
+    t = tenants(:six)
+    d = Date.current
+    assert_equal 3, TimeMaterial.where(tenant: t, date: ..d).count
+    DineroUploadJob.perform_now tenant: t, user: users(:one), date: d, provided_service: "Dinero"
+    assert_equal 3, TimeMaterial.where(tenant: t, date: ..d, state: 4).count
+    assert_equal 2, TimeMaterial.where(tenant: t, date: ..d, state: 4).distinct.pluck(:erp_guid).count
   end
 end

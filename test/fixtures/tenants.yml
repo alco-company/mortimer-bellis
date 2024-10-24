@@ -45,6 +45,15 @@ five:
   time_zone: Europe/Copenhagen
   access_token: "87654321"
 
+six:
+  name: Danish Company III - project
+  email: MyString
+  pp_identification: 101
+  locale: da
+  color: indigo
+  time_zone: Europe/Copenhagen
+  access_token: "87654321"
+
 no_dinero_authorization:
   name: using Dinero
   email: MyString
