@@ -597,6 +597,8 @@ da:
         is_free: per kulance
         is_offer: Tilbud
         is_separate: Separat faktura
+        push_log: Log over fejl ifm upload til Dinero
+        pushed_erp_timestamp: Overført til ERP
 
 
       uri_scheme: 

@@ -8,7 +8,6 @@ one:
   external_reference: MyString
   description: MyString
   comment: MyString
-  date: 2024-10-08 17:11:54
   address: MyString
   erp_guid: MyString
   show_lines_incl_vat: false
@@ -20,24 +19,14 @@ one:
   reminder_interest_rate: 9.99
   is_mobile_pay_invoice_enabled: false
   is_penso_pay_enabled: false
-
-two:
-  tenant: two
-  customer: two
-  currency: MyString
-  locale: MyString
-  external_reference: MyString
-  description: MyString
-  comment: MyString
-  date: 2024-10-08 17:11:54
-  address: MyString
-  erp_guid: MyString
-  show_lines_incl_vat: false
-  invoice_template_id: MyString
-  contact_guid: MyString
-  payment_condition_number_of_days: 1
-  payment_condition_type: MyString
-  reminder_fee: 9.99
-  reminder_interest_rate: 9.99
-  is_mobile_pay_invoice_enabled: false
-  is_penso_pay_enabled: false
+  project: one
+  invoice_number: "1"
+  state: 0
+  mail_out_state: 0
+  latest_mail_out_type: "Einvoice"
+  invoice_date: Date.today - 2.days
+  payment_date: Date.today + 14.days
+  total_excl_vat_in_dkk: 100.00
+  total_excl_vat: 100.00
+  total_incl_vat_in_dkk: 125.00
+  total_incl_vat: 125.00

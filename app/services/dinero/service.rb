@@ -1,10 +1,16 @@
-class DineroService < SaasService
+class Dinero::Service < SaasService
   attr_accessor :settings, :provided_service
 
   def initialize(provided_service: nil, settings: nil)
     @provided_service = provided_service || Current.tenant.provided_services.by_name("Dinero").first
     @settings = settings || @provided_service.service_params_hash
     @settings["organizationId"] = @provided_service.organizationID
+  end
+
+  def process(type:, data:)
+    case type
+    in :invoice_draft; Dinero::InvoiceDraft.new(self).process(data)
+    end
   end
 
   def auth_url(path)
@@ -21,7 +27,9 @@ class DineroService < SaasService
     "%s?%s" % [ host, params.to_query ]
   end
 
-  def get_invoice_settings
+  def get_invoice_settings(code = nil)
+    return mocked_settings(code) if Rails.env.test?
+
     get "/v1/#{settings["organizationId"]}/sales/settings"
   rescue => err
     UserMailer.error_report(err.to_s, "DineroUpload - DineroService.get_invoice_settings").deliver_later
@@ -94,6 +102,7 @@ class DineroService < SaasService
   end
 
   def push_invoice(params)
+    return mocked_push_invoice(params) if Rails.env.test?
     post "/v1/#{settings["organizationId"]}/invoices", params.to_json
   rescue => err
     UserMailer.error_report(err.to_s, "DineroUpload - DineroService.push_invoice").deliver_later
@@ -184,6 +193,29 @@ class DineroService < SaasService
           "refresh_token"=>"B5B6AF198B3D7C535D46A4D22F334796E3DA3DE3D62C77FBB67D9CDF04A25AE8",
           "scope"=>"dineropublicapi:write dineropublicapi:read offline_access"
         }
+      end
+    end
+
+    def mocked_settings(code)
+      if code == "error"
+        { error: "invalid client" }
+      else
+      {
+        "linesInclVat": false,
+        "defaultAccountNumber": 1000,
+        "invoiceTemplateId": "0e2218cf-2209-4a99-926b-e096382f8ef3",
+        "reminderFee": 0,
+        "reminderInterestRate": 0,
+        "trustPilotEmail": "string"
+      }
+      end
+    end
+
+    def mocked_push_invoice(params)
+      if params[:error]
+        { error: "invalid client" }
+      else
+        { "Guid"=>"5856516f-5127-4dfc-98a7-52ab7d09e1df", "TimeStamp"=>"0000000080C81AC0" }
       end
     end
 end

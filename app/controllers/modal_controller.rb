@@ -178,7 +178,8 @@ class ModalController < BaseController
     end
 
     def process_time_material_create
-      DineroUploadJob.perform_now tenant: Current.tenant, user: Current.user, date: Date.current
+      DineroUploadJob.perform_later tenant: Current.tenant, user: Current.user, date: Date.current, provided_service: "Dinero"
+      redirect_to resources_url, status: 303, success: t("uploading_to_erp")
     end
 
     #

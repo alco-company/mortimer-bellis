@@ -3,9 +3,19 @@
 one:
   tenant: one
   authorized_by: one
-  name: MyString
-  service: MyString
-  params: MyText
+  name: Dinero
+  service: Dinero::Service
+  params:  
+    access_token: nil
+    refresh_token: nil
+    token_type: nil
+    scope: nil
+    expires_at: nil
+    expires_in: nil
+  organizationID: 118244
+  account_for_one_off: 1000
+  product_for_time: hours
+  product_for_overtime: overhours
 
 two:
   tenant: two

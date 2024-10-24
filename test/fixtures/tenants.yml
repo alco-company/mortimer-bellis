@@ -27,6 +27,24 @@ three:
   time_zone: Berlin
   access_token: "12345678"
 
+four:
+  name: German Company II
+  email: MyString
+  pp_identification: abc
+  locale: en
+  color: green
+  time_zone: Frankfurt
+  access_token: "12345679"
+
+five:
+  name: Danish Company II
+  email: MyString
+  pp_identification: 101
+  locale: da
+  color: indigo
+  time_zone: Europe/Copenhagen
+  access_token: "87654321"
+
 no_dinero_authorization:
   name: using Dinero
   email: MyString

@@ -45,7 +45,7 @@
 
   .mort-form-text {
     /* @apply block shadow rounded-md border border-gray-200 focus:outline-none px-3 py-2 mt-2 w-full focus-visible:border-sky-200; */
-    @apply w-full rounded-md border-0 bg-white py-1.5 pl-3 pr-12 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-1 focus:ring-inset focus:ring-sky-200 sm:text-sm sm:leading-6;
+    @apply w-full rounded-md border-0 bg-white py-1.5 pl-3  text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-1 focus:ring-inset focus:ring-sky-200 sm:text-sm sm:leading-6;
   }
 
   .mort-form-select {

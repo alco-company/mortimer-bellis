@@ -8,9 +8,9 @@ class TimeMaterialsController < MortimerController
   end
 
   def edit
-    @resource.customer_name = @resource.customer.name unless @resource.customer_id.blank?
-    @resource.project_name = @resource.project.name unless @resource.project_id.blank?
-    @resource.product_name = @resource.product.name unless @resource.product_id.blank?
+    @resource.customer_name = @resource.customer&.name unless @resource.customer_id.blank?
+    @resource.project_name = @resource.project&.name unless @resource.project_id.blank?
+    @resource.product_name = @resource.product&.name unless @resource.product_id.blank?
   end
 
   private
