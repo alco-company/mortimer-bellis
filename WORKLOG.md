@@ -31,13 +31,6 @@ If Solid Queue bites me again, look here: https://github.com/rails/solid_queue/i
 
 ## Ideas
 
-### Guide for new users
-
-1. build a list of necessary guide tips
-2. add tips_progress on the user
-3. allow user to skip further tips => set tips_progress to 1000
-4. on every 5th request, show a tip until user tips_progress is 10, then 10ths until 100, then 20ths until 200, then 50ths until 500, then 100ths until 1000
-5. allow sign_up in multiple languages
 6. build a native app - <https://blog.corsego.com/navigating-turbo-native> / <https://www.youtube.com/watch?v=TDQ2wtmgeKw>
 
 ## BUGS
@@ -52,6 +45,7 @@ If Solid Queue bites me again, look here: https://github.com/rails/solid_queue/i
 ### 25/10/2024
 
 * add link to mortimer.pro/help
+* add translation for uploading invoices
 
 ### 24/10/2024
 
