@@ -26,6 +26,7 @@ NATIVE: https://blog.corsego.com/navigating-turbo-native, https://www.youtube.co
 * add link to mortimer.pro/help
 * add translation for uploading invoices
 * don't repeat project name on invoice header
+* infinity scroll on mobile - all over actually
 
 ### 24/10/2024
 

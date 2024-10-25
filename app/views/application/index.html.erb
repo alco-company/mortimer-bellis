@@ -3,6 +3,11 @@
 <%= turbo_frame_tag "form" %>
 <!-- List -->
 <%= turbo_stream_from @resources_stream %>
-<%= render List.new records: @records, grouped_by: nil %>
+<ul id="list" role="list" class="">
+  <%= turbo_frame_tag "record_list", src: resources_url(format: :turbo_stream, rewrite: true), loading: :lazy %>
+  <% if @pagy.next %>
+    <%= turbo_frame_tag "record_list_paginated", src: resources_url(page: @pagy.next, format: :turbo_stream, rewrite: true), loading: :lazy %>
+  <% end %>
+</ul>
 
-<%= render partial: "pagination" if @pagy.pages > 1 %>
+<%#= render partial: "pagination" if @pagy.pages > 1 %>

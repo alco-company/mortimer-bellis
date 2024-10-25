@@ -264,6 +264,7 @@ class ModalController < BaseController
     end
 
     def resources_url(**options)
+      return url_for(controller: resource_class.to_s.underscore.pluralize, action: :index, **options) if options.delete(:rewrite).present?
       @resources_url ||= url_for(controller: resource_class.to_s.underscore.pluralize, action: :index, **options)
     end
 

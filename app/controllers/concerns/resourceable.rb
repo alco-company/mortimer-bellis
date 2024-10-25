@@ -95,7 +95,12 @@ module Resourceable
       url_for(resource)
     end
 
+    #
+    # add rewrite: true
+    # to skip using the memoized url
+    #
     def resources_url(**options)
+      return url_for(controller: params_ctrl, action: :index, **options) if options.delete(:rewrite).present?
       @resources_url ||= url_for(controller: params_ctrl, action: :index, **options)
     end
 
