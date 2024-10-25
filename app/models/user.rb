@@ -11,6 +11,7 @@ class User < ApplicationRecord
   devise :invitable, :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable,
          :omniauthable, :confirmable, :trackable, :timeoutable, :lockable
+  #  :two_factor_authenticatable, :two_factor_backupable, otp_secret_encryption_key: ENV["OTP_KEY"]
 
   has_many :user_invitations, class_name: "User", as: :invited_by
 

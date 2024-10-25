@@ -28,6 +28,7 @@ NATIVE: https://blog.corsego.com/navigating-turbo-native, https://www.youtube.co
 * don't repeat project name on invoice header
 * infinity scroll on mobile - all over actually
 * fulltext search on all models - NOT across all models
+* tiny stab at 2FA - failed b/c Devise Two Factor Authentication is not compatible with Rails 8.0!
 
 ### 24/10/2024
 

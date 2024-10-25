@@ -10,6 +10,11 @@ Rails.application.routes.draw do
     unlocks: "users/unlocks",
     omniauth_callbacks: "users/omniauth_callbacks"
   }
+  # get "enable_otp_show_qr", to: "users/registrations#enable_otp_show_qr", as: "enable_otp_show_qr"
+  # post "enable_otp_verify", to: "users/registrations#enable_otp_verify", as: "enable_otp_verify"
+  # get "users/otp", to: "users#show_otp", as: "user_otp"
+  # post "users/otp", to: "users#verify_otp", as: "verify_user_otp"
+  # post "verify_otp", to: "users/sessions#verify_otp"
 
   post "dinero/callback" => "dinero#callback", as: :dinero_callback
 
