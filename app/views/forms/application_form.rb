@@ -27,8 +27,8 @@ class ApplicationForm < Superform::Rails::Form
       when "NilClass"; ""
       else; object
       end
-    rescue => e
-      debugger
+    rescue => err
+      UserMailer.error_report(err.to_s, "Phlex::SGML format_object error with object #{ object.class }").deliver_later
     end
   end
 

@@ -35,7 +35,7 @@ class Customer  < ApplicationRecord
   end
 
   def address
-    "%s, \n%s  %s" % [ street, zipcode, city ]
+    "%s\n%s  %s" % [ street, zipcode, city ]
   end
 
   def self.form(resource:, editable: true)

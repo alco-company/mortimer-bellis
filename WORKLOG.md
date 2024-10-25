@@ -5,33 +5,12 @@
 
 ## Rescue tools
 
-BACKUP: Litestream
-PWA: https://onrails.blog/2021/03/02/rails-pwas-using-turbo-hhnpwa-7/
-
-* How to rescue your SQLite database - https://support.storj.io/hc/en-us/articles/360029309111-How-to-fix-a-database-disk-image-is-malformed
-
-```bash
-?1 storage % sqlite3 development.sqlite3   
-SQLite version 3.43.2 2023-10-10 13:08:14
-Enter ".help" for usage hints.
-sqlite> .mode insert
-sqlite> .output dump_all.sql
-sqlite> .dump
-sqlite> .exit
-√ storage % sqlite3 development.sqlite3 ".mode insert; .output dump_all.sql; .dump;"
-√ storage % { echo "PRAGMA synchronous = OFF ;"; cat dump_all.sql; } | grep -v -e TRANSACTION -e ROLLBACK -e COMMIT >dump_all_notrans.sql 
-√ storage % mv development.sqlite3 corrupted_23_8_2024.development.sqlite3
-√ storage % sqlite3 development.sqlite3 ".read dump_all_notrans.sql"
-√ storage % sqlite3 development.sqlite3 "PRAGMA integrity_check;"                                                                        
-ok
-
-```
-
-If Solid Queue bites me again, look here: https://github.com/rails/solid_queue/issues/309:
 
 ## Ideas
 
-6. build a native app - <https://blog.corsego.com/navigating-turbo-native> / <https://www.youtube.com/watch?v=TDQ2wtmgeKw>
+BACKUP: Litestream
+PWA: https://onrails.blog/2021/03/02/rails-pwas-using-turbo-hhnpwa-7/
+NATIVE: https://blog.corsego.com/navigating-turbo-native, https://www.youtube.com/watch?v=TDQ2wtmgeKw
 
 ## BUGS
 
@@ -46,6 +25,7 @@ If Solid Queue bites me again, look here: https://github.com/rails/solid_queue/i
 
 * add link to mortimer.pro/help
 * add translation for uploading invoices
+* don't repeat project name on invoice header
 
 ### 24/10/2024
 

@@ -100,11 +100,12 @@ class Dinero::InvoiceDraft
         lines.each do |line|
           # Struct.new("Line", :productGuid, :description, :comments, :quantity, :accountNumber, :unit, :discount, :lineType, :baseAmountValue).new(
           dinero_lines << product_line(line)
-          project_description << line.project_name || ""
+          project_description << set_project_description(project_description, line)
           refs << line.product&.external_reference || ""
         end
         line = lines.first
-        dinero_invoice = invoice_header(line, dinero_lines, refs.join(", "), project_description.join(", "))
+        dinero_invoice = invoice_header(line, dinero_lines, refs.join(", "), project_description.compact.join(", "))
+        persist_invoice_for_testing(cid, dinero_invoice, lines) if Rails.env.test?
 
         # happy path = {"Guid"=>"5856516f-5127-4dfc-98a7-52ab7d09e1df", "TimeStamp"=>"0000000080C81AC0"}
         # result = ds.push_invoice test_invoice
@@ -266,6 +267,19 @@ class Dinero::InvoiceDraft
     }
   end
 
+  def set_project_description(project_description, line)
+    return nil if line.project_name.blank?
+    return nil if project_description.include?(line.project_name)
+    line.project_name
+  end
+
+  def persist_invoice_for_testing(cid, dinero_invoice, lines)
+    File.open("tmp/testing/dinero_invoice_#{cid}.json", "w") do |f|
+      f.write(dinero_invoice.to_json)
+      f.write("\n")
+      f.write(lines.to_json)
+    end
+  end
 
 
   # used for testing the Dinero service initially
