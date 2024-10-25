@@ -6,6 +6,7 @@ class PunchClock < ApplicationRecord
 
   has_secure_token :access_token
 
+  scope :by_fulltext, ->(query) { where("name LIKE :query OR ip_addr LIKE :query OR locale LIKE :query OR time_zone LIKE :query", query: "%#{query}%") if query.present? }
   scope :by_name, ->(name) { where("name LIKE ?", "%#{name}%") if name.present? }
   scope :by_location, ->(location) { joins(:location).where("locations.name LIKE ?", "%#{location}%") if location.present? }
   scope :by_ip_addr, ->(ip_addr) { where("ip_addr LIKE ?", "%#{ip_addr}%") if ip_addr.present? }

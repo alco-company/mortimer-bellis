@@ -16,6 +16,7 @@ class Event < ApplicationRecord
     super || I18n.t("events.default_name")
   end
 
+  scope :by_fulltext, ->(query) { where("name LIKE :query OR description LIKE :query", query: "%#{query}%") if query.present? }
   scope :by_name, ->(name) { where("name LIKE ?", "%#{name}%") if name.present? }
 
   def self.filtered(filter)

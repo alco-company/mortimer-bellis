@@ -2,6 +2,7 @@ class Setting < ApplicationRecord
   include Tenantable
   belongs_to :setable, polymorphic: true, optional: true
 
+  scope :by_fulltext, ->(query) { where("key LIKE :query OR value LIKE :query", query: "%#{query}%") if query.present? }
   scope :by_key, ->(key) { where("key LIKE ?", "%#{key}%") if key.present? }
   scope :by_priority, ->(priority) { where("priority LIKE ?", "%#{priority}%") if priority.present? }
   scope :by_value, ->(value) { where("value LIKE ?", "%#{value}%") if value.present? }

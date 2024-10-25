@@ -6,7 +6,8 @@ class Punch < ApplicationRecord
   belongs_to :punch_clock, optional: true
   belongs_to :punch_card, optional: true
 
-  scope :by_name, ->(name) { joins(:user).where("users.name LIKE ? or users.pincode LIKE ? or users.job_title LIKE ? or users.cell_phone LIKE ? or users.email LIKE ?", "%#{name}%", "%#{name}%", "%#{name}%", "%#{name}%", "%#{name}%") if name.present? }
+  scope :by_fulltext, ->(q) { joins(:user).where("users.name LIKE :q or users.pincode LIKE :q or users.job_title LIKE :q or users.cell_phone LIKE :q or users.email LIKE :q", q: "%#{q}%") if q.present? }
+  scope :by_name, ->(name) { joins(:user).where("users.name LIKE :q or users.pincode LIKE ? or users.job_title LIKE ? or users.cell_phone LIKE ? or users.email LIKE ?", "%#{name}%", "%#{name}%", "%#{name}%", "%#{name}%", "%#{name}%") if name.present? }
   scope :by_punch_clock, ->(punch_clock) { joins(:punch_clock).where("punch_clocks.name LIKE ?", "%#{punch_clock}%") if punch_clock.present? }
   scope :by_punched_at, ->(punched_at) { where(punched_at: punched_at..) if punched_at.present? }
   scope :by_payroll_period, ->(payroll_period) { where(punch: payroll_period..) if payroll_period.present? }

@@ -4,6 +4,7 @@ class InvoiceItem < ApplicationRecord
   belongs_to :product
   belongs_to :project, optional: true
 
+  scope :by_fulltext, ->(query) { where("description LIKE :query OR unit LIKE :query OR line_type LIKE :query", query: "%#{query}%") if query.present? }
   scope :by_invoice_number, ->(invoice_number) { joins(:invoice).where("invoices.invoice_number LIKE ?", "%#{invoice_number}%") if invoice_number.present? }
   scope :by_product_name, ->(product_name) { joins(:product).where("products.name LIKE ? OR products.product_number LIKE ?", "%#{product_name}%", "%#{product_name}%") if product_name.present? }
   scope :by_description, ->(description) { where("description LIKE ?", "%#{description}%") if description.present? }

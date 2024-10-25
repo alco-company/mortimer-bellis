@@ -9,6 +9,7 @@ class Team < ApplicationRecord
   has_many :punch_cards, through: :users
   # has_and_belongs_to_many :users
 
+  scope :by_fulltext, ->(query) { where("name LIKE :query OR color LIKE :query OR locale LIKE :query OR time_zone LIKE :query", query: "%#{query}%") if query.present? }
   scope :by_name, ->(name) { where("name LIKE ?", "%#{name}%") if name.present? }
   scope :by_team_color, ->(team_color) { where("color LIKE ?", "%#{team_color}%") if team_color.present? }
   scope :by_locale, ->(locale) { where("locale LIKE ?", "%#{locale}%") if locale.present? }

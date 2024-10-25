@@ -28,6 +28,7 @@ class BackgroundJob < ApplicationRecord
 
   belongs_to :user, optional: true
 
+  scopy :by_fulltext, ->(q) { where("job_klass LIKE ? or params LIKE ?", "%#{q}%", "%#{q}%") if q.present? }
   scope :by_job_klass, ->(job_klass) { where("job_klass LIKE ? or params LIKE ?", "%#{job_klass}%", "%#{job_klass}%") if job_klass.present? }
 
   validates :job_klass, presence: true

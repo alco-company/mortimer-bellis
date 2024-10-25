@@ -6,6 +6,7 @@ class Invoice < ApplicationRecord
   belongs_to :project, optional: true
   has_many :invoice_items, dependent: :destroy
 
+  scope :by_fulltext, ->(query) { where("invoice_number LIKE :query OR description LIKE :query", query: "%#{query}%") if query.present? }
   scope :by_invoice_number, ->(invoice_number) { where("invoice_number LIKE ?", "%#{invoice_number}%") if invoice_number.present? }
 
   # validates :name, presence: true, uniqueness: { scope: :tenant_id, message: I18n.t("invoices.errors.messages.name_exist") }

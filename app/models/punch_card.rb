@@ -10,6 +10,7 @@ class PunchCard < ApplicationRecord
   #   summands = keys.collect { |k| arel_table[k].sum.as(k.to_s) }
   #   select(*summands)
   # }
+  scope :by_fulltext, ->(query) { joins(:user).where("users.name LIKE :query or users.pincode LIKE :query or users.job_title LIKE :query or users.cell_phone LIKE :query or users.email LIKE :query", query: "%#{query}%") if query.present? }
   scope :by_name, ->(name) { joins(:user).where("users.name LIKE ? or users.pincode LIKE ? or users.job_title LIKE ? or users.cell_phone LIKE ? or users.email LIKE ?", "%#{name}%", "%#{name}%", "%#{name}%", "%#{name}%", "%#{name}%") if name.present? }
   scope :by_work_date, ->(work_date) { where(work_date: Date.parse(work_date)) if work_date.present? }
   scope :by_work_minutes, ->(work_minutes) { where(work_minutes: work_minutes..) if work_minutes.present? }

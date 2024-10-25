@@ -38,7 +38,11 @@ module Resourceable
     end
 
     def parent_or_class
-      parent? ? parent_resources : resource_class.by_tenant() rescue nil
+      parent? ? parent_resources : resource_resources rescue nil
+    end
+
+    def resource_resources
+      params.permit![:search].present? ? resource_class.by_tenant().by_fulltext(params.permit![:search]) : resource_class.by_tenant()
     end
 
     # "/teams/37/calendars"
@@ -100,6 +104,7 @@ module Resourceable
     # to skip using the memoized url
     #
     def resources_url(**options)
+      options[:search] = params.permit![:search] if params.permit![:search].present?
       return url_for(controller: params_ctrl, action: :index, **options) if options.delete(:rewrite).present?
       @resources_url ||= url_for(controller: params_ctrl, action: :index, **options)
     end

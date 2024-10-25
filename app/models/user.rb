@@ -36,6 +36,7 @@ class User < ApplicationRecord
     end
   }
 
+  scope :by_fulltext, ->(query) { where("email LIKE :query or role LIKE :query or locale  LIKE :query or time_zone LIKE :query", query: "%#{query}%") if query.present? }
   scope :by_email, ->(email) { where("email LIKE ?", "%#{email}%") if email.present? }
   scope :by_role, ->(role) { where(role: role) if role.present? }
   scope :by_locale, ->(locale) { where("locale LIKE ?", "%#{locale}%") if locale.present? }

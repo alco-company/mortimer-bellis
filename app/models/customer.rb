@@ -5,6 +5,7 @@ class Customer  < ApplicationRecord
   has_many :invoices, dependent: :destroy
   has_many :time_materials, dependent: :destroy
 
+  scope :by_fulltext, ->(query) { where("name LIKE :query OR street LIKE :query OR city LIKE :query OR phone LIKE :query OR email LIKE :query OR vat_number LIKE :query OR ean_number LIKE :query", query: "%#{query}%") if query.present? }
   scope :by_name, ->(name) { where("name LIKE ?", "%#{name}%") if name.present? }
   scope :by_street, ->(street) { where("street LIKE ?", "%#{street}%") if street.present? }
   scope :by_city, ->(city) { where("city LIKE ?", "%#{city}%") if city.present? }

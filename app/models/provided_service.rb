@@ -3,6 +3,7 @@ class ProvidedService < ApplicationRecord
 
   belongs_to :authorized_by, class_name: "User", optional: true, foreign_key: "authorized_by_id"
 
+  scope :by_fulltext, ->(query) { where("name LIKE :query OR service LIKE :query OR params LIKE :query", query: "%#{query}%") if query.present? }
   scope :by_name, ->(name) { where("name LIKE ?", "%#{name}%") if name.present? }
   scope :by_service, ->(service) { where("service LIKE ?", "%#{service}%") if service.present? }
   scope :by_params, ->(params) { where("params LIKE ?", "%#{params}%") if params.present? }

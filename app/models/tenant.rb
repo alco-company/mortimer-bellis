@@ -28,6 +28,7 @@ class Tenant < ApplicationRecord
 
   scope :by_tenant, ->() { Current.user.global_queries? ? all : where(id: Current.tenant.id) }
 
+  scope :by_fulltext, ->(query) { where("name LIKE :query or email LIKE :query", query: "%#{query}%") if query.present? }
   scope :by_name, ->(name) { where("name LIKE ? or email LIKE ?", "%#{name}%", "%#{name}%") if name.present? }
   scope :by_locale, ->(locale) { where("locale LIKE ?", "%#{locale}%") if locale.present? }
   scope :by_time_zone, ->(time_zone) { where("time_zone LIKE ?", "%#{time_zone}%") if time_zone.present? }

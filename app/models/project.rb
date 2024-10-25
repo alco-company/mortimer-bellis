@@ -3,6 +3,7 @@ class Project < ApplicationRecord
 
   belongs_to :customer
 
+  scope :by_fulltext, ->(query) { where("name LIKE :query OR description LIKE :query", query: "%#{query}%") if query.present? }
   scope :by_name, ->(name) { where("name LIKE ?", "%#{name}%") if name.present? }
   scope :by_customer, ->(customer) { where("customer LIKE ?", "%#{customer}%") if customer.present? }
   scope :by_description, ->(description) { where("description LIKE ?", "%#{description}%") if description.present? }

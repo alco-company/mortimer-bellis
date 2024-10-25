@@ -4,6 +4,7 @@ class Location < ApplicationRecord
 
   has_many :punch_clocks, dependent: :destroy
 
+  scope :by_fulltext, ->(query) { where("name LIKE :query or color LIKE :query", query: "%#{query}%") if query.present? }
   scope :by_name, ->(name) { where("name LIKE ?", "%#{name}%") if name.present? }
   scope :by_location_color, ->(location_color) { where("color LIKE ?", "%#{location_color}%") if location_color.present? }
 

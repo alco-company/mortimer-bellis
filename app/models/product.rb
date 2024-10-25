@@ -1,6 +1,7 @@
 class Product < ApplicationRecord
   include Tenantable
 
+  scope :by_fulltext, ->(query) { where("name LIKE :query OR product_number LIKE :query OR quantity LIKE :query OR unit LIKE :query OR base_amount_value LIKE :query OR account_number LIKE :query OR external_reference LIKE :query", query: "%#{query}%") if query.present? }
   scope :by_name, ->(name) { where("name LIKE ?", "%#{name}%") if name.present? }
   scope :by_product_number, ->(product_number) { where("product_number LIKE ?", "%#{product_number}%") if product_number.present? }
   scope :by_quantity, ->(quantity) { where("quantity LIKE ?", "%#{quantity}%") if quantity.present? }
