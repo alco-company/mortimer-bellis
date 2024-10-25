@@ -49,6 +49,10 @@ If Solid Queue bites me again, look here: https://github.com/rails/solid_queue/i
 
 ## CHANGELOG
 
+### 25/10/2024
+
+* add link to mortimer.pro/help
+
 ### 24/10/2024
 
 * debugging dinero_upload
