@@ -3,24 +3,7 @@ class TimeMaterials::Form < ApplicationForm
     div(data: { controller: "time-material tabs", tabs_index: "0" }) do
       if model.cannot_be_pushed?
         div(class: "text-sm mt-2 bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded relative") do
-          ul() do
-            li() { "customer missing" } if @resource.is_invoice? and
-              @resource.customer_id.blank?
-            li() { "product missing" } if @resource.product_id.nil? and
-              @resource.is_invoice? and
-              @resource.product_name.blank? and
-              @resource.quantity != 0
-            li() { "time not correct" } if (@resource.time =~ /^\d*[,.]?\d*$/).nil?
-            li() { "rate not correct" } if (@resource.rate =~ /^\d*[,.]?\d*$/).nil?
-            li() { "quantity not correct" } if !@resource.quantity.blank? and
-              (@resource.quantity =~ /^\d*[,.]?\d*$/).nil?
-            li() { "time and quantity both set" } if !@resource.quantity.blank? and
-              !@resource.time.blank?
-            li() { "unit_price not correct" } if !@resource.unit_price.blank? and
-              (@resource.unit_price =~ /^\d*[,.]?\d*$/).nil?
-            li() { "discount not correct" } if !@resource.discount.blank? and
-              (@resource.discount =~ /^\d*[,.]?\d*[ ]*%?$/).nil?
-          end
+          show_possible_issues
         end
       end
       # date_field
@@ -37,10 +20,10 @@ class TimeMaterials::Form < ApplicationForm
             end
           end
         end
+        show_time_tab
+        show_material_tab
       end
       #
-      show_time_tab
-      show_material_tab
       #
       customer_field
       #
@@ -357,19 +340,39 @@ class TimeMaterials::Form < ApplicationForm
     end
   end
 
-  def error_messages
-    if @resource.errors.any?
-      div(id: "error_explanation", class: "mt-4 p-4 sm: p-1") do
-        h2(class: "mort-err-resume") { I18n.t(:form_errors_prohibited, errors: @resource.errors.count) }
-        ul do
-          @resource.errors.each do |error|
-            li { error.full_message }
-          end
-        end
-      end
+  # def error_messages
+  #   if @resource.errors.any?
+  #     div(id: "error_explanation", class: "mt-4 p-4 sm: p-1") do
+  #       h2(class: "mort-err-resume") { I18n.t(:form_errors_prohibited, errors: @resource.errors.count) }
+  #       ul do
+  #         @resource.errors.each do |error|
+  #           li { error.full_message }
+  #         end
+  #       end
+  #     end
+  #   end
+  # end
+
+  def show_possible_issues
+    ul() do
+      li() { "customer missing" } if @resource.is_invoice? and
+        @resource.customer_id.blank?
+      li() { "product missing" } if @resource.product_id.nil? and
+        @resource.is_invoice? and
+        @resource.product_name.blank? and
+        @resource.quantity != 0
+      li() { "time not correct" } if (@resource.time =~ /^\d*[,.]?\d*$/).nil?
+      li() { "rate not correct" } if (@resource.rate =~ /^\d*[,.]?\d*$/).nil?
+      li() { "quantity not correct" } if !@resource.quantity.blank? and
+        (@resource.quantity =~ /^\d*[,.]?\d*$/).nil?
+      li() { "time and quantity both set" } if !@resource.quantity.blank? and
+        !@resource.time.blank?
+      li() { "unit_price not correct" } if !@resource.unit_price.blank? and
+        (@resource.unit_price =~ /^\d*[,.]?\d*$/).nil?
+      li() { "discount not correct" } if !@resource.discount.blank? and
+        (@resource.discount =~ /^\d*[,.]?\d*[ ]*%?$/).nil?
     end
   end
-
   # def date_field
   #   div(class: "mt-2 sm:col-span-4") do
   #     label(for: "date", class: "block text-sm font-medium leading-6 text-gray-900") { I18n.t("time_material.date.lbl") }

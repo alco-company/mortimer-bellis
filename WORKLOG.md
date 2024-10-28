@@ -31,6 +31,7 @@ NATIVE: https://blog.corsego.com/navigating-turbo-native, https://www.youtube.co
 * show association name when available
 * by default show only user's own records (where applicable)
 * fix bug in link to show_time_material
+* fix layout in time_material form
 
 ### 25/10/2024
 

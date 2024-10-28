@@ -1,6 +1,6 @@
 class List < ApplicationComponent
-  include Phlex::Rails::Helpers::LinkTo
-  include Phlex::Rails::Helpers::TurboFrameTag
+  # include Phlex::Rails::Helpers::LinkTo
+  # include Phlex::Rails::Helpers::TurboFrameTag
 
   attr_reader :records
 
@@ -16,8 +16,7 @@ class List < ApplicationComponent
         date = record.send(@grouped_by).to_date
         render partial: "date", locals: { date: date }
       end if @grouped_by
-      render record # "list_item", locals: { record: record }
-      # render ListItem.new resource: record
+      render record
     end
   end
 end
