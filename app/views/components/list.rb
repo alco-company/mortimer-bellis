@@ -16,7 +16,8 @@ class List < ApplicationComponent
         date = record.send(@grouped_by).to_date
         render partial: "date", locals: { date: date }
       end if @grouped_by
-      render record
+      render record # "list_item", locals: { record: record }
+      # render ListItem.new resource: record
     end
   end
 end

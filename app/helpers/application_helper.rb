@@ -2,6 +2,38 @@ module ApplicationHelper
   include Pagy::Frontend
 
 
+  #
+  # helpers for List and ListItem
+  #
+  # show_resource_mugshot is placed in the left side of the ListItem
+  def show_resource_mugshot(resource:, css: "hidden sm:block h-12 w-12 flex-none rounded-full bg-gray-50")
+    case resource.class.name
+    when "TimeMaterial"; user_mugshot(resource.user, css: css)
+    end
+  end
+  #
+  # show_secondary_info is placed in the upper right corner of the ListItem
+  #
+  def show_secondary_info(resource:)
+    case resource.class.name
+    when "User"
+    when "TimeMaterial"; show_time_material_quantative resource: resource
+    else; ""
+    end
+  end
+  # end helpers for List and ListItem
+  #
+
+
+
+  def archive_resource_url(resource)
+    case resource.class.name
+    when "User"; archive_user_url(resource)
+    when "TimeMaterial"; archive_time_material_url(resource)
+    else; ""
+    end
+  end
+
   def prev_page_link(url, page)
     if url =~ /page=/
       url.sub(/page=\d+/, "page=#{page || 1}")

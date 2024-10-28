@@ -1,0 +1,9 @@
+<%= turbo_stream.append "record_list" do %>
+  <%= render List.new records: @records %>
+<% end %>
+
+<% if @pagy.next %>
+  <%= turbo_stream.replace "record_list_paginated" do %>
+    <%= turbo_frame_tag "record_list_paginated", src: resources_url(page: @pagy.next, format: :turbo_stream, rewrite: true), loading: :lazy %>
+  <% end %>
+<% end %>

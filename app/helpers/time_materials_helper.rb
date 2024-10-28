@@ -9,6 +9,15 @@ module TimeMaterialsHelper
       resource.customer&.name || resource.customer_name rescue "-"
     end
   end
+
+  def show_time_material_quantative(resource:)
+    u = resource.unit.blank? ? "" : I18n.t("time_material.units.#{resource.unit}")
+    case resource.time.blank?
+    when false; "#{ resource.time}t á #{ resource.rate}"
+    when true; "%s %s á %s" % [ resource.quantity, u, resource.unit_price ]
+    end
+  end
+
   def show_time_material_resource_link(resource:, url: nil, turbo_frame: "form")
     return "" unless resource
     link_to((url || url_for(resource)),
