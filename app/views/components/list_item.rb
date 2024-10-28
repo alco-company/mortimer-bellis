@@ -1,18 +1,21 @@
 class ListItem < ApplicationComponent
   include Phlex::Rails::Helpers::LinkTo
   include Phlex::Rails::Helpers::DOMID
+  include Phlex::Rails::Helpers::ImageTag
   # include Phlex::Rails::Helpers::Routes
 
-  attr_reader :resource
+  attr_reader :resource, :links
 
-  def initialize(resource:)
+  # links is an array of links to be rendered in the contextmenu - edit, delete/show
+  def initialize(resource:, links: [])
     @resource = resource
+    @links = links
   end
 
   def view_template
     div(id: (dom_id resource), class: "flex justify-between gap-x-6 mb-1 px-2 py-5 bg-gray-50 #{ background }") do
       div(class: "flex min-w-0 gap-x-4") do
-        span { helpers.show_resource_mugshot(resource: resource) }
+        mugshot(resource.user, css: "hidden sm:block h-12 w-12 flex-none rounded-full bg-gray-50")
         div(class: "min-w-0 flex-auto") do
           p(class: "text-sm font-semibold leading-6 text-gray-900 truncate") do
             show_recipient_link
@@ -36,7 +39,7 @@ class ListItem < ApplicationComponent
           turbo_frame: "form",
           resource_class: TimeMaterial,
           alter: true,
-          links: [ edit_time_material_url(resource), time_material_url(resource) ]
+          links: [ links[0], links[1] ]
       end
     end
   end
@@ -66,12 +69,17 @@ class ListItem < ApplicationComponent
   def show_matter_link
     case resource.class.name
     when "TimeMaterial"
-      span { helpers.user_mugshot(resource.user, css: "sm:hidden mr-2 h-5 w-5 flex-none rounded-full bg-gray-50") }
+      mugshot(resource.user, css: "sm:hidden mr-2 h-5 w-5 flex-none rounded-full bg-gray-50")
       if helpers.global_queries? Current.user
-        span(class: "hidden md:inline text-xs") { helpers.show_resource_link(resource: resource.tenant) }
+        span(class: "hidden md:inline text-xs mr-2") { helpers.show_resource_link(resource: resource.tenant) }
       end
-      span(class: "2xs:hidden") { helpers.show_time_material_quantative resource: resource }
-      span { helpers.show_time_material_resource_link(resource: resource) }
+      link_to(links[1],
+        class: "truncate hover:underline",
+        data: { turbo_action: "advance", turbo_frame: "form" },
+        tabindex: -1) do
+        span(class: "2xs:hidden") { helpers.show_time_material_quantative resource: resource }
+        plain resource.name
+      end
     end
   end
 
@@ -92,5 +100,18 @@ class ListItem < ApplicationComponent
         plain I18n.l resource.created_at, format: :date
       end
     end
+  end
+
+  def mugshot(item, size: nil, css: "h-6 w-6 rounded-full bg-gray-50")
+    size = size.blank? ? "40x40!" : size
+    if (item.mugshot.attached? rescue false)
+      image_tag(url_for(item.mugshot), class: css)
+    else
+      # size.gsub!("x", "/") if size =~ /x/
+      # size.gsub!("!", "") if size =~ /!/
+      image_tag("icons8-customer-64.png", class: css)
+    end
+  rescue
+    image_tag("icons8-customer-64.png", class: css)
   end
 end
