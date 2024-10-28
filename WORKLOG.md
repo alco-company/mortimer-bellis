@@ -26,6 +26,8 @@ NATIVE: https://blog.corsego.com/navigating-turbo-native, https://www.youtube.co
 * make sure redirects to signin reloads the page (issue with Turbo)
 * allow for archive of time_materials
 * start redesign list_items on lists - from LI to DIV
+* add translations for missing elements
+* by default show only user's own records (where applicable)
 
 ### 25/10/2024
 

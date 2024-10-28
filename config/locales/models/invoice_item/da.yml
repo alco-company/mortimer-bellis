@@ -1,4 +1,13 @@
 da:
+  invoice_items:
+
+    list:
+      new: Ny fakturalinje
+    form:
+      new: Ny fakturalinje
+      edit: Rediger fakturalinje
+      show: Vis fakturalinje
+
   invoice_item:
     invoice_id: Faktura
     project_id: Projekt

@@ -21,6 +21,7 @@ da:
     form:
       new: Nyt produkt
       edit: Rediger produkt
+      show: Vis produktet
 
     new:
       title: Nyt produkt

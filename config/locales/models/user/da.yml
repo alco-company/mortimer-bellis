@@ -42,6 +42,7 @@ da:
     form:
       new: Ny bruger
       edit: Rediger bruger
+      show: Vis bruger
 
     confirmations:
       new:

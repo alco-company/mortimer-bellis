@@ -20,6 +20,11 @@ da:
     destroy:
       post: Stempeluret blev slettet
 
+    form:
+      new: Nyt stempelur
+      edit: Rediger stempelur
+      show: Vis stempelur
+
     show:
       pos_punch_clock: Stempelur
     list:

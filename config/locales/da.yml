@@ -89,6 +89,7 @@ da:
     form:
       new: Nyt overblik
       edit: Rediger overblik
+      show: Vis overblik
 
     new:
       title: Nyt overblik
@@ -253,6 +254,11 @@ da:
     planned_vacation_days: Planlagte feriedage
     sick_days_week: Sygedage i denne uge
 
+  tenants:
+    form:
+      new: Ny konto
+      edit: Rediger konto
+      show: Vis konto
 # Standard localization ------------------------------
 
   activerecord:
@@ -444,6 +450,7 @@ da:
         account_number: Salgskonto nummer
         external_reference: Ekstern reference
       project:
+        customer_id: Kunde
         name: Navn
         description: Beskrivelse
         start_date: Start dato

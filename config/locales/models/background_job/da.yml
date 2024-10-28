@@ -23,7 +23,8 @@ da:
     form:
       new: Nyt baggrundsjob
       edit: Rediger baggrundsjob
-
+      show: Vis baggrundsjob
+      
     new:
       title: Nyt baggrundsjob
       create: Opret

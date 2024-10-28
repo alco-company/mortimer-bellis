@@ -38,6 +38,7 @@ da:
     form:
       new: Nyt arbejdssted
       edit: Rediger arbejdssted
+      show: Vis arbejdssted
 
     new:
       title: Nyt arbejdssted

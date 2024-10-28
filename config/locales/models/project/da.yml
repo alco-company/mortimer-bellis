@@ -8,7 +8,7 @@ da:
         title: Slet dette projekt
         instruction: Er du sikker på, at du vil slette projektet %{name}?
         button: Slet
-        
+
   projects:
     create:
       post: Projektet blev oprettet
@@ -30,7 +30,7 @@ da:
     form:
       new: Nyt projekt
       edit: Rediger projekt
-
+      show: Vis projektet
     new:
       title: Nyt projekt
       create: Opret
