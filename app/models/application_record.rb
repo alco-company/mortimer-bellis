@@ -4,6 +4,8 @@ class ApplicationRecord < ActiveRecord::Base
   include ExportCsv
   include ExportPdf
 
+  scope :by_user, ->() { model.new.attributes.keys.include?("user_id") ? where(user_id: Current.user.id) : all }
+
   #
   # extend this method on the model to define the field formats
   # its a callback from the superform when rendering the form

@@ -33,7 +33,7 @@ module Resourceable
     end
 
     def set_resources
-      @resources = any_filters? ? resource_class.filtered(@filter) : parent_or_class
+      @resources = any_filters? ? resource_class.by_user().filtered(@filter) : parent_or_class.by_user()
       @resources = any_sorts? ? resource_class.ordered(@resources, params_s, params_d) : @resources.order(created_at: :desc) rescue nil
     end
 
