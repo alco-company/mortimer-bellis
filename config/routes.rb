@@ -18,7 +18,11 @@ Rails.application.routes.draw do
 
   post "dinero/callback" => "dinero#callback", as: :dinero_callback
 
-  resources :time_materials
+  resources :time_materials do
+    member do
+      post :archive
+    end
+  end
 
   resources :invoice_items
 

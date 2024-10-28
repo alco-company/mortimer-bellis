@@ -24,6 +24,7 @@ NATIVE: https://blog.corsego.com/navigating-turbo-native, https://www.youtube.co
 ### 28/10/2024
 
 * make sure redirects to signin reloads the page (issue with Turbo)
+* allow for archive of time_materials
 
 ### 25/10/2024
 

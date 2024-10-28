@@ -221,8 +221,8 @@ class Contextmenu < Phlex::HTML
     ) do
       comment { %(Active: "bg-gray-50", Not Active: "") }
       # archive employee
-      if resource_class.to_s == "User"
-        button_to((helpers.archive_user_url(resource)),
+      if resource_class.to_s == "User" || (resource_class.to_s == "TimeMaterial" && (resource.pushed_to_erp? || resource.archived?))
+        button_to((helpers.archive_resource_url(resource)),
           class: "flex justify-between px-4 py-2 text-sm text-gray-700",
           role: "menuitem",
           data: { turbo_action: "advance", turbo_frame: "_top" },
@@ -247,7 +247,7 @@ class Contextmenu < Phlex::HTML
           plain ", "
           plain resource.name rescue ""
         end
-      end
+      end unless resource_class.to_s == "TimeMaterial" && resource.pushed_to_erp?
       # delete resource
       delete_record
     end
@@ -255,7 +255,8 @@ class Contextmenu < Phlex::HTML
 
   def delete_record
     if (resource_class.to_s == "User" && resource == Current.user) ||
-      resource_class.to_s == "Tenant" && Current.tenant == resource
+      (resource_class.to_s == "Tenant" && Current.tenant == resource) ||
+      (resource_class.to_s == "TimeMaterial" && resource.pushed_to_erp?)
       span(class: "block px-3 py-1 text-sm leading-6 text-gray-400") do
         plain I18n.t(".delete")
       end

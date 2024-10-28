@@ -4,6 +4,20 @@ class UsersController < MortimerController
   skip_before_action :ensure_tenanted_user, only: [ :sign_in_success ]
   skip_before_action :authorize, only: [ :sign_in_success ]
 
+  # POST /users/:id/archive
+  def archive
+    @resource = User.find(params[:id])
+    if @resource
+      @resource.archived? ?
+        (@resource.update(state: :out) && notice = t("users.unarchived")) :
+        (@resource.archived! && notice = t("users.archived"))
+      redirect_back(fallback_location: root_path, notice: notice)
+      Broadcasters::Resource.new(@resource).replace
+    else
+      redirect_back(fallback_location: root_path, warning: t("users.not_found"))
+    end
+  end
+
   def sign_in_success
   end
 

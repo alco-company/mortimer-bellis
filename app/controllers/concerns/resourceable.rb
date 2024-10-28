@@ -133,7 +133,7 @@ module Resourceable
 
   private
     def rc_params
-      params.permit(:id, :s, :d, :_method, :commit, :authenticity_token, :controller)
+      params.permit(:id, :s, :d, :page, :format, :_method, :commit, :authenticity_token, :controller)
     end
 
     def params_ctrl
