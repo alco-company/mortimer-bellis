@@ -416,13 +416,15 @@ class ApplicationForm < Superform::Rails::Form
     case field.key
     when /tenant_id$/; plain(model&.tenant&.name)
     when /team_id$/; div(class: "flex") { link_to(model&.team&.name, team_url(model&.team), class: "flex place-items-center truncate mort-btn-secondary") } # plain(model&.team.name)
-    when /user_id$/; plain(model&.user&.name)
-    when /customer_id$/; field.value.blank? ? model.customer_name : plain(model&.customer&.name)
-    when /project_id$/; field.value.blank? ? model.project_name : plain(model&.project&.name)
-    when /product_id$/; field.value.blank? ? model.product_name : plain(model&.product&.name)
-    when /punch_clock_id$/; plain(model&.punch_clock&.name) rescue I18n.t("punches.form.punched_on_app")
+    when /user_id$/;  div(class: "flex") { link_to(model&.user&.name, user_url(model&.user), class: "flex place-items-center truncate mort-btn-secondary") } # plain(model&.user&.name)
+    when /customer_id$/; div(class: "flex") { link_to(model&.customer&.name, customer_url(model&.customer), class: "flex place-items-center truncate mort-btn-secondary") }
+    when /project_id$/;  div(class: "flex") { link_to(model&.project&.name, project_url(model&.project), class: "flex place-items-center truncate mort-btn-secondary") }
+    when /product_id$/; div(class: "flex") { link_to(model&.product&.name, product_url(model&.product), class: "flex place-items-center truncate mort-btn-secondary") }
+    when /punch_clock_id$/; div(class: "flex") { link_to(model&.punch_clock&.name, punch_clock_url(model&.punch_clock), class: "flex place-items-center truncate mort-btn-secondary") } # plain(model&.punch_clock&.name) rescue I18n.t("punches.form.punched_on_app")
     else; plain(fformat(model, field.key))
     end
+  rescue
+    " fejl #{field.key} - #{model.class} "
   end
 
   def display_image(field)

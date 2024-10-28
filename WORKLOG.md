@@ -28,6 +28,7 @@ NATIVE: https://blog.corsego.com/navigating-turbo-native, https://www.youtube.co
 * start redesign list_items on lists - from LI to DIV
 * add translations for missing elements
 * fix wrong class name on Dinero::Service
+* show association name when available
 * by default show only user's own records (where applicable)
 
 ### 25/10/2024
