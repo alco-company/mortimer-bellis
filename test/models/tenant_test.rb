@@ -5,7 +5,7 @@ class TenantTest < ActiveSupport::TestCase
     Current.user = users :one
 
     assert_not Current.tenant.has_service("Dinero")
-    dinero_service = DineroService.new
+    dinero_service = Dinero::Service.new
     creds = { code: "test", access_token: Current.user.pos_token }
     res = dinero_service.get_creds(creds: creds)
     dinero_service.add_service("Dinero", res[:service_params])

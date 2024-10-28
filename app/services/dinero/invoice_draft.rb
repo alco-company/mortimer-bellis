@@ -3,7 +3,7 @@ class Dinero::InvoiceDraft
 
   def initialize(ds)
     @ds = ds
-    # @ds = DineroService.new provided_service: ProvidedService.new(service: "Dinero")
+    # @ds = Dinero::Service.new provided_service: ProvidedService.new(service: "Dinero")
   end
 
   def process(time_materials, invoice_date = Date.current)

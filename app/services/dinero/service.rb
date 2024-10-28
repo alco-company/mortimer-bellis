@@ -32,7 +32,7 @@ class Dinero::Service < SaasService
 
     get "/v1/#{settings["organizationId"]}/sales/settings"
   rescue => err
-    UserMailer.error_report(err.to_s, "DineroUpload - DineroService.get_invoice_settings").deliver_later
+    UserMailer.error_report(err.to_s, "DineroUpload - Dinero::Service.get_invoice_settings").deliver_later
     {}
   end
 
@@ -90,14 +90,14 @@ class Dinero::Service < SaasService
     end
     true
   rescue => err
-    UserMailer.error_report(err.to_s, "SyncERP - DineroService.pull").deliver_later
+    UserMailer.error_report(err.to_s, "SyncERP - Dinero::Service.pull").deliver_later
     false
   end
 
   def pull_invoice(guid:)
     get "/v1/#{settings["organizationId"]}/invoices/#{guid}"
   rescue => err
-    UserMailer.error_report(err.to_s, "SyncERP - DineroService.pull_invoice").deliver_later
+    UserMailer.error_report(err.to_s, "SyncERP - Dinero::Service.pull_invoice").deliver_later
     {}
   end
 
@@ -105,7 +105,7 @@ class Dinero::Service < SaasService
     return mocked_push_invoice(params) if Rails.env.test?
     post "/v1/#{settings["organizationId"]}/invoices", params.to_json
   rescue => err
-    UserMailer.error_report(err.to_s, "DineroUpload - DineroService.push_invoice").deliver_later
+    UserMailer.error_report(err.to_s, "DineroUpload - Dinero::Service.push_invoice").deliver_later
   end
 
   private
@@ -143,7 +143,7 @@ class Dinero::Service < SaasService
       headers["Authorization"] = "Bearer %s" % settings["access_token"]
       HTTParty.get("https://api.dinero.dk#{path}", headers: headers)
     rescue => err
-      UserMailer.error_report(err.to_s, "DineroService.get").deliver_later
+      UserMailer.error_report(err.to_s, "Dinero::Service.get").deliver_later
     end
 
     def post(path, body, headers = {})
@@ -152,7 +152,7 @@ class Dinero::Service < SaasService
       headers["Content-Type"] = "application/json"
       HTTParty.post("https://api.dinero.dk#{path}", body: body, headers: headers)
     rescue => err
-      UserMailer.error_report(err.to_s, "DineroService.post").deliver_later
+      UserMailer.error_report(err.to_s, "Dinero::Service.post").deliver_later
     end
 
     def token_expired?
@@ -179,7 +179,7 @@ class Dinero::Service < SaasService
       @settings = provided_service.service_params_hash
       @settings["organizationId"] = provided_service.organizationID
     rescue => err
-      UserMailer.error_report(err.to_s, "DineroService.refresh_token").deliver_later
+      UserMailer.error_report(err.to_s, "Dinero::Service.refresh_token").deliver_later
     end
 
     def mocked_run(code)

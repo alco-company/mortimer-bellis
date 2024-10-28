@@ -4,7 +4,7 @@ class DineroServiceTest < ActiveSupport::TestCase
   test "should return auth_url" do
     Current.user = users :no_dinero_authorization
 
-    dinero_service = DineroService.new
+    dinero_service = Dinero::Service.new
     host = "https://connect.visma.com/connect/authorize"
     params = {
       client_id: ENV["DINERO_APP_ID"],
@@ -22,7 +22,7 @@ class DineroServiceTest < ActiveSupport::TestCase
   test "should return false when tenant is wrong" do
     Current.user = users :no_dinero_authorization
 
-    dinero_service = DineroService.new
+    dinero_service = Dinero::Service.new
     creds = { code: "DA4", pos_token: "wrong!" }
     assert_not dinero_service.get_creds(creds: creds)
   end
@@ -30,7 +30,7 @@ class DineroServiceTest < ActiveSupport::TestCase
   test "should return {} when get_creds is successful" do
     Current.user = users :no_dinero_authorization
 
-    dinero_service = DineroService.new
+    dinero_service = Dinero::Service.new
     creds = { code: "test", pos_token: Current.user.pos_token }
     res = dinero_service.get_creds(creds: creds)
     assert res[:result]
@@ -39,7 +39,7 @@ class DineroServiceTest < ActiveSupport::TestCase
   test "should return false when get_creds is unsuccessful" do
     Current.user = users :no_dinero_authorization
 
-    dinero_service = DineroService.new
+    dinero_service = Dinero::Service.new
     creds = { code: "error", pos_token: Current.user.pos_token }
     res = dinero_service.get_creds(creds: creds)
     assert_not res[:result]
@@ -51,7 +51,7 @@ class DineroServiceTest < ActiveSupport::TestCase
 
     assert Current.tenant == Current.user.tenant
     assert Current.tenant.has_service("Dinero") == false
-    dinero_service = DineroService.new
+    dinero_service = Dinero::Service.new
     creds = { code: "test", pos_token: Current.user.pos_token }
     res = dinero_service.get_creds(creds: creds)
     assert_difference "ProvidedService.count", 1 do

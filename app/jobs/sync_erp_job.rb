@@ -12,7 +12,7 @@ class SyncErpJob < ApplicationJob
     user = args[:user]
     resource_class = args[:resource_class]
     user_time_zone(user.time_zone) do
-      ds = DineroService.new
+      ds = Dinero::Service.new
       case resource_class.to_s
       when "Customer"; fields="Name,ContactGuid,ExternalReference,IsPerson,Street,ZipCode,City,CountryKey,Phone,Email,Webpage,AttPerson,VatNumber,EanNumber,PaymentConditionType,PaymentConditionNumberOfDays,IsMember,MemberNumber,CompanyStatus,VatRegionKey,IsDebitor,IsCreditor,InvoiceMailOutOptionKey"
       when "Product"; fields="Name,ProductGuid,ProductNumber,Quantity,Unit,AccountNumber,BaseAmountValue,BaseAmountValueInclVat,TotalAmount,TotalAmountInclVat,ExternalReference"
