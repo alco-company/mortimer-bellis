@@ -21,6 +21,10 @@ NATIVE: https://blog.corsego.com/navigating-turbo-native, https://www.youtube.co
 
 ## CHANGELOG
 
+### 28/10/2024
+
+* make sure redirects to signin reloads the page (issue with Turbo)
+
 ### 25/10/2024
 
 * add link to mortimer.pro/help
