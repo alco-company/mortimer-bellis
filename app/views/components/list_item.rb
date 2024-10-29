@@ -92,9 +92,11 @@ class ListItem < ApplicationComponent
   def show_time_info
     case resource.class.name
     when "TimeMaterial"
-      span(class: "hidden 2xs:inline-flex w-fit items-center rounded-md bg-green-50 mr-1 px-1 xs:px-2 py-0 xs:py-0.5 text-2xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20 truncate") do
-        render Icons::Money.new(cls: "text-green-500 h-4 w-4")
-        span(class: "hidden ml-2 md:inline") { I18n.t("time_material.billable") }
+      if resource.is_invoice?
+        span(class: "hidden 2xs:inline-flex w-fit items-center rounded-md bg-green-50 mr-1 px-1 xs:px-2 py-0 xs:py-0.5 text-2xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20 truncate") do
+          render Icons::Money.new(cls: "text-green-500 h-4 w-4")
+          span(class: "hidden ml-2 md:inline") { I18n.t("time_material.billable") }
+        end
       end
       span(class: "truncate") do
         plain I18n.l resource.created_at, format: :date

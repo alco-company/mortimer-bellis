@@ -21,6 +21,10 @@ NATIVE: https://blog.corsego.com/navigating-turbo-native, https://www.youtube.co
 
 ## CHANGELOG
 
+### 29/10/2024
+
+* fix showing invoiceable SVG/text when not invoiceable
+
 ### 28/10/2024
 
 * make sure redirects to signin reloads the page (issue with Turbo)
