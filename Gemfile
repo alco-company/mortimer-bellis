@@ -107,3 +107,7 @@ gem "noticed", "~> 2.4"
 gem "x", "~> 0.14.1"
 
 gem "omniauth", "~> 2.1"
+
+gem "omniauth-azure-activedirectory-v2", "~> 2.4"
+
+gem "omniauth-rails_csrf_protection", "~> 1.0"

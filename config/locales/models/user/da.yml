@@ -101,6 +101,7 @@ da:
     login: "Log ind"
     sign_up: "Opret konto"
     forgot_password: "Glemt adgangskode?"
+    sign_in_with: "Log ind med %{provider}"
     remember_me: "Husk mig"
     missing_confirmation_email: "Fik du ikke en email med bekræftelseslink?"
     missing_unlock_email: "Fik du ikke en email med instruktioner om at låse din konto op?"

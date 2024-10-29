@@ -24,6 +24,7 @@ NATIVE: https://blog.corsego.com/navigating-turbo-native, https://www.youtube.co
 ### 29/10/2024
 
 * fix showing invoiceable SVG/text when not invoiceable
+* add omniauthable to sign_in - Microsoft Azure is first
 
 ### 28/10/2024
 
