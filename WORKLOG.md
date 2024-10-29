@@ -28,6 +28,7 @@ NATIVE: https://blog.corsego.com/navigating-turbo-native, https://www.youtube.co
 * change layout for list_items on background_jobs, punch_clock
 * show QR code on punch_clocks, state on background_jobs forms
 * change layout on customers, dashboards, invoices, invoice_items, locations, products, projects, provided_services, punches, settings, teams, tenants, users
+* hiding AD secrets
 
 ### 28/10/2024
 

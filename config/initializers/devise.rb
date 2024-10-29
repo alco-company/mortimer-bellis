@@ -325,6 +325,9 @@ Devise.setup do |config|
   # ==> OmniAuth
   # Add a new OmniAuth provider. Check the wiki for more information on setting
   # up on your models and hooks.
+  APP_ID = "#{Rails.application.credentials.dig(:microsoft, :ad_id)}"
+  APP_SECRET = "#{Rails.application.credentials.dig(:microsoft, :ad_secret)}"
+  config.omniauth :azure_activedirectory_v2, client_id: APP_ID, client_secret: APP_SECRET
 
   # ==> Warden configuration
   # If you want to use other strategies, that are not supported by Devise, or
