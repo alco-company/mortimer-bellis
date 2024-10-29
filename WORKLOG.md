@@ -26,7 +26,7 @@ NATIVE: https://blog.corsego.com/navigating-turbo-native, https://www.youtube.co
 * fix showing invoiceable SVG/text when not invoiceable
 * add omniauthable to sign_in - Microsoft Azure is first
 * change layout for list_items on background_jobs, punch_clock
-* show QR code on punch_clocks
+* show QR code on punch_clocks, state on background_jobs forms
 
 ### 28/10/2024
 
