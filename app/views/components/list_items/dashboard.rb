@@ -1,7 +1,14 @@
-class ListItems::PunchClock < ListItems::ListItem
+class ListItems::Dashboard < ListItems::ListItem
+  # tenant_id
+  # feed
+  # last_feed
+  # last_feed_at
+  # created_at
+  # updated_at
+
   def show_recipient_link
-    link_to pos_punch_clock_url(resource, api_key: resource.access_token), class: "hover:underline" do
-      plain "Kiosk link for %s" % resource.name
+    link_to resource_url, class: "hover:underline" do
+      plain resource.feed
     end
   end
 
@@ -14,6 +21,6 @@ class ListItems::PunchClock < ListItems::ListItem
   end
 
   def show_secondary_info
-    plain "%s %s" % [ resource.location.name, resource.ip_addr ]
+    plain "%s %s" % [ resource.feed, resource.last_feed_at ]
   end
 end

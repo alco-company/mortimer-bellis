@@ -1,8 +1,4 @@
 class ListItems::BackgroundJob < ListItems::ListItem
-  include Phlex::Rails::Helpers::LinkTo
-  include Phlex::Rails::Helpers::DOMID
-  include Phlex::Rails::Helpers::ImageTag
-
   # :user_id
   # :state
   # :job_klass

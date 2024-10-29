@@ -27,6 +27,7 @@ NATIVE: https://blog.corsego.com/navigating-turbo-native, https://www.youtube.co
 * add omniauthable to sign_in - Microsoft Azure is first
 * change layout for list_items on background_jobs, punch_clock
 * show QR code on punch_clocks, state on background_jobs forms
+* change layout on customers, dashboards, invoices, invoice_items, locations, products, projects, provided_services, punches, settings, teams, tenants, users
 
 ### 28/10/2024
 

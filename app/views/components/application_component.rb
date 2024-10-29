@@ -27,7 +27,7 @@ class ApplicationComponent < Phlex::HTML
       data: { turbo_action: "advance", turbo_frame: "form" },
       tabindex: "-1") do
       resource.name
-    end
+    end if item
   end
 
   def new_resource_url
