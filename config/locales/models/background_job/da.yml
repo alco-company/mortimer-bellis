@@ -10,6 +10,14 @@ da:
         instruction: Er du sikker på, at du vil slette baggrundsjobbet %{name}?
         button: Slet
 
+    states:
+      in_active: Inaktiv
+      un_planned: Uplanlagt
+      planned: Planlagt
+      running: Kører
+      failed: Fejlet
+      finished: Færdig
+
   background_jobs:
     list:
       title: Baggrundsjobs
@@ -24,7 +32,7 @@ da:
       new: Nyt baggrundsjob
       edit: Rediger baggrundsjob
       show: Vis baggrundsjob
-      
+
     new:
       title: Nyt baggrundsjob
       create: Opret

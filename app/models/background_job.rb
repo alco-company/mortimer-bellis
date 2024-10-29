@@ -26,6 +26,15 @@ class BackgroundJob < ApplicationRecord
     finished:         5
   }
 
+  def self.BACKGROUND_STATES = [
+    [ "in_active",        I18n.t("background_job.states.in_active") ],
+    [ "un_planned",       I18n.t("background_job.states.un_planned") ],
+    [ "planned",          I18n.t("background_job.states.planned") ],
+    [ "running",          I18n.t("background_job.states.running") ],
+    [ "failed",           I18n.t("background_job.states.failed") ],
+    [ "finished",         I18n.t("background_job.states.finished") ]
+  ]
+
   belongs_to :user, optional: true
 
   scope :by_fulltext, ->(q) { where("job_klass LIKE ? or params LIKE ?", "%#{q}%", "%#{q}%") if q.present? }

@@ -4,11 +4,9 @@
 <!-- List -->
 <%= turbo_stream_from @resources_stream %>
 <div id="list" role="list" class="mb-16">
-  <%= turbo_frame_tag "record_list", src: resources_url(format: :turbo_stream, rewrite: true), loading: :lazy %>
-  <% if @pagy.next %>
-    <%= turbo_frame_tag "record_list_paginated", src: resources_url(page: @pagy.next, format: :turbo_stream, rewrite: true), loading: :lazy %>
-  <% end %>
+  <%= render List.new records: @records, pagy: @pagy, initial: true, params: params, grouped_by: :created_at %>
 </div>
+
 <%#= render partial: "pagination" if @pagy.pages > 1 %>
 
 <%= time_material_button(user: current_user) %>

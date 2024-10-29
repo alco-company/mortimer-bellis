@@ -1,22 +1,38 @@
 class List < ApplicationComponent
-  # include Phlex::Rails::Helpers::LinkTo
-  # include Phlex::Rails::Helpers::TurboFrameTag
+  include Phlex::Rails::Helpers::TurboFrameTag
+  include Phlex::Rails::Helpers::TurboStream
 
-  attr_reader :records
+  attr_reader :records, :pagy, :grouped_by, :initial, :params
 
-  def initialize(records:, grouped_by: :created_at, &block)
+  def initialize(records:, pagy:, initial: false, params: {}, grouped_by: nil, &block)
     @records = records
     @grouped_by = grouped_by
+    @initial = initial
+    @pagy = pagy
+    @params = params
   end
 
   def view_template(&block)
-    date = nil
-    records.each do |record|
-      if record.send(@grouped_by).to_date != date
-        date = record.send(@grouped_by).to_date
-        render partial: "date", locals: { date: date }
-      end if @grouped_by
-      render record
+    if initial
+      turbo_frame_tag "record_list", src: resources_url(format: :turbo_stream, rewrite: true), loading: :lazy
+      turbo_frame_tag("record_list_paginated", src: resources_url(page: @pagy.next, format: :turbo_stream, rewrite: true), loading: :lazy) if pagy.next
+    else
+      turbo_stream.append "record_list" do
+        date = nil
+        records.each do |record|
+          if record.send(grouped_by).to_date != date
+            date = record.send(grouped_by).to_date
+            render partial: "date", locals: { date: date }
+          end if grouped_by
+          render "ListItems::#{resource_class}".classify.constantize.new resource: record, params: params
+        end
+      end
+    end
+
+    if pagy.next
+      turbo_stream.replace "record_list_paginated" do
+        turbo_frame_tag "record_list_paginated", src: resources_url(page: @pagy.next, format: :turbo_stream, rewrite: true), loading: :lazy
+      end
     end
   end
 end

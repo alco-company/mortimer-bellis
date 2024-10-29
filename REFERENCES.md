@@ -130,6 +130,7 @@ https://orbit.love/blog/building-a-component-library-in-rails-with-storybook
 ### Authentication, User sign in/up
 
 https://stevepolito.design/blog/rails-authentication-from-scratch/
+[Alexandre Ruban](https://www.rubanonrails.com/2/cookie-based-authentication-with-rails)
 
 ### Using esbuild with Stimulus
 
