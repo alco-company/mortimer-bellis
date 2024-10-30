@@ -48,10 +48,10 @@ class ViewNotificationsComponent < ApplicationComponent
   def notification_button
     button(
       type: "button",
-      class: "-m-2.5 p-2.5 text-gray-200 hover:text-sky-600"
+      class: "-m-2.5 p-2.5 text-sky-200 hover:text-sky-600"
     ) do
       span(class: "sr-only") { "View notifications" }
-      render Icons::Bell.new
+      render Icons::Bell.new cls: "h-6 text-sky-300 hover:text-sky-600"
     end
   end
 end

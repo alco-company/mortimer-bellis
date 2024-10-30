@@ -24,6 +24,7 @@ NATIVE: https://blog.corsego.com/navigating-turbo-native, https://www.youtube.co
 ### 30/10/2024
 
 * add icons to sidebar (navigation)
+* allow sidebar to collapse + danish menu translation
 
 ### 29/10/2024
 

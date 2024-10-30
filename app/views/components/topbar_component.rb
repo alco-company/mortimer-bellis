@@ -27,7 +27,7 @@ class TopbarComponent < ApplicationComponent
     def mobile_menu_button
       button(type: "button", class: "-m-2.5 p-2.5 text-gray-700 lg:hidden", data: { action: "click->menu#openMobileSidebar" }) do
         span(class: "sr-only") { "Open sidebar" }
-        render Icons::Hamburger.new
+        render Icons::Hamburger.new cls: "h-6 w-6 text-sky-900 hover:text-sky-400"
       end
     end
 end

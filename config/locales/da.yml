@@ -149,14 +149,26 @@ da:
     pages: Sider
     holidays: Helligdage
     tenant: Konto
-    tenants: Konti
-    users: Medarbejdere
-    teams: Hold
-    locations: Arbejdssteder
     punch_clocks: Stempelure
     punch_cards: Stempelkort
-    punches: Stemplinger
     motds: Dagens beskeder
+    dashboard: Overblik
+    time_material: Tid/Materialer
+    calendar: Kalender
+    manage: Administration
+    background_jobs: Baggrundsopgaver
+    customers: Kunder
+    dashboards: Overblik
+    invoices: Fakturaer
+    invoice_items: Fakturalinjer
+    kiosks: Kiosker
+    locations: Arbejdssteder
+    products: Produkter
+    projects: Projekter
+    punches: Stemplinger
+    teams: Hold
+    tenants: Konti
+    users: Medarbejdere
 
     pos:
       profile: Profil
