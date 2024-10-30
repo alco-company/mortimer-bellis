@@ -1,7 +1,7 @@
 class Icons::Checkmark < Phlex::HTML
   attr_accessor :cls
 
-  def initialize(cls: "h-5 w-5")
+  def initialize(cls: "h-6 text-gray-900 hover:text-gray-50")
     @cls = cls
   end
 

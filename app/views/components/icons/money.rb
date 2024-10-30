@@ -1,11 +1,13 @@
 class Icons::Money < Phlex::HTML
-  def initialize(cls: "h-12 w-12")
+  attr_accessor :cls
+
+  def initialize(cls: "h-12")
     @cls = cls
   end
 
   def view_template
     svg(
-      class: @cls,
+      class: cls,
       xmlns: "http://www.w3.org/2000/svg",
       viewbox: "0 -960 960 960",
       fill: "currentColor",

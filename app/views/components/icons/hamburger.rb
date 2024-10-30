@@ -1,11 +1,13 @@
 class Icons::Hamburger < Phlex::HTML
+  attr_accessor :cls
+
   def initialize(cls: "h-12 w-12")
     @cls = cls
   end
 
   def view_template
     svg(
-      class: "h-6 w-6",
+      class: cls,
       fill: "none",
       viewbox: "0 0 24 24",
       stroke_width: "1.5",

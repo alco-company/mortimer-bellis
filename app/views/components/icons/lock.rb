@@ -1,16 +1,16 @@
 class Icons::Lock < Phlex::HTML
+  attr_accessor :cls
+
   def initialize(cls: "h-5 mr-2")
     @cls = cls
   end
 
   def view_template
     svg(
-      class: @cls,
+      class: cls,
       xmlns: "http://www.w3.org/2000/svg",
-      height: "24px",
       viewbox: "0 -960 960 960",
-      width: "14px",
-      fill: "#5f6368"
+      fill: "currentColor",
     ) do |s|
       s.path(
         d:

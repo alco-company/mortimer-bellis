@@ -1,11 +1,13 @@
 class Icons::Home < Phlex::HTML
-  def initialize(cls: "h-12 w-12")
+  attr_accessor :cls
+
+  def initialize(cls: "h-6 text-gray-900 hover:text-gray-50")
     @cls = cls
   end
 
   def view_template
       svg(
-        class: "h-6 w-6 shrink-0 text-gray-200",
+        class: cls,
         fill: "none",
         viewbox: "0 0 24 24",
         stroke_width: "1.5",

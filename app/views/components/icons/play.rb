@@ -1,9 +1,15 @@
 class Icons::Play < Phlex::HTML
+  attr_accessor :cls
+
+  def initialize(cls: "h-12")
+    @cls = cls
+  end
+
   def view_template
     svg(
+      class: cls,
       xmlns: "http://www.w3.org/2000/svg",
       viewbox: "0 -960 960 960",
-      class: "h-12 w-12",
       fill: "currentColor",
       stoke: "currentColor"
     ) do |s|

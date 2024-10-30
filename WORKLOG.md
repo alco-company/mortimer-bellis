@@ -21,6 +21,10 @@ NATIVE: https://blog.corsego.com/navigating-turbo-native, https://www.youtube.co
 
 ## CHANGELOG
 
+### 30/10/2024
+
+* add icons to sidebar (navigation)
+
 ### 29/10/2024
 
 * fix showing invoiceable SVG/text when not invoiceable

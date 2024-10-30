@@ -1,7 +1,13 @@
 class Icons::More < Phlex::HTML
+  attr_accessor :cls
+
+  def initialize(cls: "h-5 w-5")
+    @cls = cls
+  end
+
   def view_template
     svg(
-      class: "h-5 w-5",
+      class: cls,
       viewbox: "0 0 20 20",
       fill: "currentColor",
       aria_hidden: "true"

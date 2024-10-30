@@ -1,15 +1,15 @@
 class Icons::Edit < Phlex::HTML
-  def initialize(cls: "h-12 w-12")
+  attr_accessor :cls
+
+  def initialize(cls: "h-12 text-gray-900 hover:text-gray-50")
     @cls = cls
   end
 
   def view_template
     svg(
+      class: cls,
       xmlns: "http://www.w3.org/2000/svg",
-      height: "24px",
-      class: @cls,
       viewbox: "0 -960 960 960",
-      width: "24px",
       fill: "currentColor",
     ) do |s|
       s.path(
