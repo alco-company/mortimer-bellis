@@ -12,33 +12,46 @@ export default class extends Controller {
   ];
 
   connect() {
+    let i = 0;
     if (localStorage.getItem("collapsed") === "true") {
       this.topmainTarget.classList.remove("lg:pl-72");
-      this.settingTarget.classList.remove("px-6");
+      try { this.settingTargets.forEach((e) => e.classList.remove("px-6") ) } catch (e) {}
       this.topmainTarget.classList.add("lg:pl-32");
       this.sidebarTarget.classList.add("w-32", "max-w-32");
       this.menuitemTargets.forEach((e) => { e.classList.add("lg:hidden"); });
-      this.tsbTarget.getElementsByTagName("svg").item(0).classList.toggle("rotate-180");
+      for (i of document.getElementsByClassName("collapse-sidebar")) {
+        i.classList.add("rotate-180");
+      }
     }
   }
 
   toggleSidebar(e) {
-    if (this.sidebarTarget.classList.contains("w-32")) {
-      this.sidebarTarget.classList.remove("w-32", "max-w-32");
+    let i = 0;
+    if (localStorage.getItem("collapsed") === "true") {
       this.topmainTarget.classList.remove("lg:pl-32");
       this.topmainTarget.classList.add("lg:pl-72");
-      this.settingTarget.classList.add("px-6");
-      this.menuitemTargets.forEach( (e) => { e.classList.remove("lg:hidden"); });
+      this.sidebarTarget.classList.remove("w-32", "max-w-32");
+      for (i of document.getElementsByClassName("collapse-sidebar")) {
+        i.classList.remove("rotate-180");
+      }
+      try {
+        this.settingTargets.forEach((e) => e.classList.add("px-6"));
+      } catch (e) {}
+      this.menuitemTargets.forEach((e) => { e.classList.remove("lg:hidden"); });
       localStorage.setItem("collapsed", "false");
     } else {
       this.topmainTarget.classList.remove("lg:pl-72");
-      this.settingTarget.classList.remove("px-6");
       this.topmainTarget.classList.add("lg:pl-32");
       this.sidebarTarget.classList.add("w-32", "max-w-32");
+      for (i of document.getElementsByClassName("collapse-sidebar")) {
+        i.classList.add("rotate-180");
+      }
+      try {
+        this.settingTargets.forEach((e) => e.classList.remove("px-6"));
+      } catch (e) {}
+      this.menuitemTargets.forEach((e) => { e.classList.add("lg:hidden"); });
       localStorage.setItem("collapsed", "true");
-      this.menuitemTargets.forEach( (e) => { e.classList.add("lg:hidden"); });
     }
-    this.tsbTarget.getElementsByTagName("svg").item(0).classList.toggle("rotate-180");
   }
 
   toggleFlyout(e) {

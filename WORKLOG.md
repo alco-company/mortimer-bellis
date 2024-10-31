@@ -24,6 +24,7 @@ NATIVE: https://blog.corsego.com/navigating-turbo-native, https://www.youtube.co
 ### 31/10/2024
 
 * upgraded omniauthable to entra-id
+* handling collapsible sidebar better
   
 ### 30/10/2024
 
