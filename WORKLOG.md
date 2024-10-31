@@ -25,6 +25,7 @@ NATIVE: https://blog.corsego.com/navigating-turbo-native, https://www.youtube.co
 
 * upgraded omniauthable to entra-id
 * handling collapsible sidebar better
+* stop/go knap til opsamling af forbrugt tid - WIP
   
 ### 30/10/2024
 

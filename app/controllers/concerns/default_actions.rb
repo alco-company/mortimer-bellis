@@ -84,7 +84,11 @@ module DefaultActions
           create_callback @resource
           Broadcasters::Resource.new(@resource).create
           flash[:success] = t(".post")
-          format.turbo_stream { render turbo_stream: [ turbo_stream.update("form", ""), turbo_stream.replace("flash_container", partial: "application/flash_message") ] }
+          format.turbo_stream { render turbo_stream: [
+            turbo_stream.update("form", ""),
+            turbo_stream.replace("flash_container", partial: "application/flash_message")
+            # special
+          ] }
           format.html { redirect_to resources_url, success: t(".post") }
           format.json { render :show, status: :created, location: @resource }
         else
@@ -94,6 +98,10 @@ module DefaultActions
           format.json { render json: @resource.errors, status: :unprocessable_entity }
         end
       end
+    end
+
+    def special
+      turbo_stream.replace("time_material_buttons", partial: "time_materials/buttons", locals: { time_material: TimeMaterial.new }) if params[:played].present?
     end
 
     # PATCH/PUT /users/1 or /users/1.json

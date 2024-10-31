@@ -3,8 +3,8 @@ module ViewComponentsHelper
     render PunchButtonComponent.new user: user, punch_clock: punch_clock
   end
 
-  def time_material_button(user:)
-    render TimeMaterialButtonComponent.new user: user
+  def time_material_button(user:, play: true)
+    render TimeMaterialButtonComponent.new user: user, play: play
   end
 
   def time_material_form(**attribs, &block)

@@ -13,6 +13,19 @@ class TimeMaterialsController < MortimerController
     @resource.product_name = @resource.product&.name unless @resource.product_id.blank?
   end
 
+  # pick up the play button from the time_material#index view
+  #
+  def create
+    params[:play].present? ? create_play : super
+  end
+
+  def create_play
+    params[:time_material] = { time: "0,25", user_id: Current.user.id, date: Time.current.to_date, about: "current_task" }
+    params.delete(:play)
+    params[:played] = true
+    create
+  end
+
   # POST /users/:id/archive
   def archive
     @resource = TimeMaterial.find(params[:id])
