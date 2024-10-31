@@ -47,7 +47,8 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
   # "xms_st"=>{"sub"=>"k31fRTGwA_CPQgCa0po_2n4lfe-N-026ddXfSyPLUtU"},
   # "xms_tcdt"=>1400834163,
   # "xms_tdbr"=>"EU"}
-  def azure_activedirectory_v2
+  def entra_id
+    debugger
     user = User.find_by(email: request.env["omniauth.auth"]["extra"]["raw_info"]["email"])
     if user
       user.update(confirmed_at: Time.current) if user.confirmed_at.nil?

@@ -327,7 +327,7 @@ Devise.setup do |config|
   # up on your models and hooks.
   APP_ID = "#{Rails.application.credentials.dig(:microsoft, :ad_id)}"
   APP_SECRET = "#{Rails.application.credentials.dig(:microsoft, :ad_secret)}"
-  config.omniauth :azure_activedirectory_v2, client_id: APP_ID, client_secret: APP_SECRET
+  config.omniauth :entra_id, client_id: APP_ID, client_secret: APP_SECRET
 
   # ==> Warden configuration
   # If you want to use other strategies, that are not supported by Devise, or

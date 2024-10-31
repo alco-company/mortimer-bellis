@@ -271,7 +271,7 @@ GEM
       hashie (>= 3.4.6)
       rack (>= 2.2.3)
       rack-protection
-    omniauth-azure-activedirectory-v2 (2.4.0)
+    omniauth-entra-id (3.0.0)
       omniauth-oauth2 (~> 1.8)
     omniauth-oauth2 (1.8.0)
       oauth2 (>= 1.4, < 3)
@@ -486,7 +486,7 @@ DEPENDENCIES
   mission_control-jobs (~> 0.3.1)
   noticed (~> 2.4)
   omniauth (~> 2.1)
-  omniauth-azure-activedirectory-v2 (~> 2.4)
+  omniauth-entra-id (~> 3.0)
   omniauth-rails_csrf_protection (~> 1.0)
   pagy (~> 8.6)
   phlex-rails

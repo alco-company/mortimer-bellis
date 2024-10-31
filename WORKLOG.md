@@ -21,6 +21,10 @@ NATIVE: https://blog.corsego.com/navigating-turbo-native, https://www.youtube.co
 
 ## CHANGELOG
 
+### 31/10/2024
+
+* upgraded omniauthable to entra-id
+  
 ### 30/10/2024
 
 * add icons to sidebar (navigation)

@@ -11,7 +11,7 @@ class User < ApplicationRecord
   devise :invitable, :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable,
          :confirmable, :trackable, :timeoutable, :lockable,
-         :omniauthable, omniauth_providers: %i[ azure_activedirectory_v2 ]
+         :omniauthable, omniauth_providers: %i[ entra_id ]
   #  :two_factor_authenticatable, :two_factor_backupable, otp_secret_encryption_key: ENV["OTP_KEY"]
 
   has_many :user_invitations, class_name: "User", as: :invited_by
