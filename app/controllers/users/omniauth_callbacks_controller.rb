@@ -48,7 +48,6 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
   # "xms_tcdt"=>1400834163,
   # "xms_tdbr"=>"EU"}
   def entra_id
-    debugger
     user = User.find_by(email: request.env["omniauth.auth"]["extra"]["raw_info"]["email"])
     if user
       user.update(confirmed_at: Time.current) if user.confirmed_at.nil?
