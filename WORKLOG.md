@@ -21,6 +21,11 @@ NATIVE: https://blog.corsego.com/navigating-turbo-native, https://www.youtube.co
 
 ## CHANGELOG
 
+### 01/11/2024
+
+* testing better staging script
+* add settings to allow users to see all t/m's
+
 ### 31/10/2024
 
 * upgraded omniauthable to entra-id
