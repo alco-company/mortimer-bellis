@@ -33,7 +33,11 @@ module Resourceable
     end
 
     def set_resources
-      @resources = any_filters? ? resource_class.by_user().filtered(@filter) : parent_or_class.by_user()
+      @resources = any_filters? ? resource_class.filtered(@filter) : parent_or_class
+      @resources = case resource_class.to_s
+      when "TimeMaterial"; Current.user.can?(:show_all_time_material_posts) ? @resources : @resources.by_user()
+      else; @resources.by_user()
+      end
       @resources = any_sorts? ? resource_class.ordered(@resources, params_s, params_d) : @resources.order(created_at: :desc) rescue nil
     end
 

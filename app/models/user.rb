@@ -15,6 +15,8 @@ class User < ApplicationRecord
   #  :two_factor_authenticatable, :two_factor_backupable, otp_secret_encryption_key: ENV["OTP_KEY"]
 
   has_many :user_invitations, class_name: "User", as: :invited_by
+  has_many :settings, as: :setable
+  has_many :time_materials
 
   has_many :notifications, as: :recipient, class_name: "Noticed::Notification"
   has_many :provided_services, foreign_key: "authorized_by_id", inverse_of: :authorized_by
@@ -43,7 +45,12 @@ class User < ApplicationRecord
   scope :by_role, ->(role) { where(role: role) if role.present? }
   scope :by_locale, ->(locale) { where("locale LIKE ?", "%#{locale}%") if locale.present? }
   scope :by_time_zone, ->(time_zone) { where("time_zone LIKE ?", "%#{time_zone}%") if time_zone.present? }
+  scope :can, ->(action) { where("settings.key = ? AND settings.value = ?", action.to_s, "true").joins(:settings) }
 
+  def can?(action)
+    settings.where(key: action.to_s, value: "true").count.positive? or
+    Setting.where(setable_type: "User", setable_id: nil, key: action.to_s, value: "true").count.positive?
+  end
   # used by eg delete
   def name
     "#{email}"

@@ -9,8 +9,8 @@ class Setting < ApplicationRecord
 
   validates :key, presence: true, uniqueness: { scope: :tenant_id, message: I18n.t("settings.errors.messages.key_exist") }
   validates :value, presence: true
-  validates :setable_type, presence: true
-  validates :setable_id, numericality: { only_integer: true }
+  # validates :setable_type, presence: true
+  # validates :setable_id, numericality: { only_integer: true }
 
   def self.filtered(filter)
     flt = filter.filter
