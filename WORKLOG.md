@@ -24,6 +24,7 @@ NATIVE: https://blog.corsego.com/navigating-turbo-native, https://www.youtube.co
 ### 01/11/2024
 
 * testing better staging script
+* add class[] and class.where_op(op, params) sugars
 * add settings to allow users to see all t/m's
 
 ### 31/10/2024
