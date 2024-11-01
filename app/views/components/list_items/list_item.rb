@@ -3,12 +3,13 @@ class ListItems::ListItem < ApplicationComponent
   include Phlex::Rails::Helpers::DOMID
   include Phlex::Rails::Helpers::ImageTag
 
-  attr_reader :resource, :params
+  attr_reader :resource, :params, :user
 
   # links is an array of links to be rendered in the contextmenu - edit, delete/show
-  def initialize(resource:, params:)
+  def initialize(resource:, params:, user: nil)
     @resource = resource
     @params = params
+    @user = user
   end
 
   def view_template
@@ -44,7 +45,7 @@ class ListItems::ListItem < ApplicationComponent
 
   def show_matter_link
     show_matter_mugshot
-    if Current.user.global_queries?
+    if user.global_queries?
       span(class: "hidden md:inline text-xs mr-2") { show_resource_link(resource.tenant) }
     end unless resource_class == Tenant
     link_to(resource_url,

@@ -26,6 +26,7 @@ NATIVE: https://blog.corsego.com/navigating-turbo-native, https://www.youtube.co
 * testing better staging script
 * add class[] and class.where_op(op, params) sugars
 * add settings to allow users to see all t/m's
+* fix bug on index.turbo_stream.erb - missing params and user
 
 ### 31/10/2024
 

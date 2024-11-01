@@ -54,7 +54,7 @@ class ListItems::TimeMaterial < ListItems::ListItem
 
   def show_matter_link
     mugshot(resource.user, css: "sm:hidden mr-2 h-5 w-5 flex-none rounded-full bg-gray-50")
-    if Current.user.global_queries?
+    if user.global_queries?
       span(class: "hidden md:inline text-xs mr-2") { show_resource_link(resource.tenant) }
     end
     link_to(edit_resource_url,

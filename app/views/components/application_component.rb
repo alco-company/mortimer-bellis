@@ -63,7 +63,8 @@ class ApplicationComponent < Phlex::HTML
   end
 
   def rc_params
-    params.permit(:id, :s, :d, :page, :format, :_method, :commit, :authenticity_token, :controller)
+    params.respond_to?(:permit) ? params.permit! : params
+    # params.permit(:id, :s, :d, :page, :format, :_method, :commit, :authenticity_token, :controller)
   end
 
   def params_ctrl
