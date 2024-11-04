@@ -21,6 +21,10 @@ NATIVE: https://blog.corsego.com/navigating-turbo-native, https://www.youtube.co
 
 ## CHANGELOG
 
+### 04/11/2024
+
+* show user img on list
+
 ### 01/11/2024
 
 * testing better staging script
