@@ -1,6 +1,7 @@
 class List < ApplicationComponent
   include Phlex::Rails::Helpers::TurboFrameTag
   include Phlex::Rails::Helpers::TurboStream
+  include Phlex::Rails::Helpers::ButtonTo
 
   attr_reader :records, :pagy, :grouped_by, :initial, :params, :user
 
@@ -15,8 +16,8 @@ class List < ApplicationComponent
 
   def view_template(&block)
     if initial
-      turbo_frame_tag "record_list", src: resources_url(format: :turbo_stream, rewrite: true), loading: :lazy
-      turbo_frame_tag("record_list_paginated", src: resources_url(page: @pagy.next, format: :turbo_stream, rewrite: true), loading: :lazy) if pagy.next
+      div(id: "record_list") { }
+      turbo_frame_tag "pagination", src: resources_url(format: :turbo_stream), loading: :lazy
     else
       turbo_stream.append "record_list" do
         if grouped_by
@@ -31,11 +32,11 @@ class List < ApplicationComponent
           render "ListItems::#{resource_class}".classify.constantize.new resource: record, params: params, user: user
         end
       end
-    end
 
-    if pagy.next
-      turbo_stream.replace "record_list_paginated" do
-        turbo_frame_tag "record_list_paginated", src: resources_url(page: @pagy.next, format: :turbo_stream, rewrite: true), loading: :lazy
+      if pagy.next
+        turbo_stream.replace "pagination" do
+          turbo_frame_tag "pagination", src: resources_url(page: @pagy.next, format: :turbo_stream), loading: :lazy
+        end
       end
     end
   end

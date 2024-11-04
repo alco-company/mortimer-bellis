@@ -24,6 +24,7 @@ NATIVE: https://blog.corsego.com/navigating-turbo-native, https://www.youtube.co
 ### 04/11/2024
 
 * show user img on list
+* bug in listing grouped_by on index
 
 ### 01/11/2024
 
