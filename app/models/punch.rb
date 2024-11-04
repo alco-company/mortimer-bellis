@@ -14,9 +14,14 @@ class Punch < ApplicationRecord
   scope :by_state, ->(state) { where(state: state) if state.present? }
   scope :this_week, ->() { where(punched_at: Time.now.beginning_of_week..) }
   scope :sick_absence, ->() { where(state: [ :sick, :iam_sick, :child_sick, :nursing_sick, :lost_work_sick, :p56_sick ]) }
+
   # used by eg delete
   def name
     "#{user.name} #{punched_at}"
+  end
+
+  def self.set_order(resources, field = :created_at, direction = :desc)
+    resources.ordered(field, direction)
   end
 
   def self.filtered(filter)
@@ -29,14 +34,14 @@ class Punch < ApplicationRecord
       .by_punched_at(flt["punched_at"])
       .by_state(flt["state"])
 
-    rescue
+  rescue
     filter.destroy if filter
     all
   end
 
-  def self.ordered(resources, field, direction = :desc)
-    resources.joins(:user).joins(:punch_clock).order(field => direction)
-  end
+  # def self.ordered(resources, field, direction = :desc)
+  #   resources.joins(:user).joins(:punch_clock).order(field => direction)
+  # end
 
   def self.form(resource:, editable: true)
     Punches::Form.new resource: resource, editable: editable

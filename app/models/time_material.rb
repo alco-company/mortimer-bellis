@@ -15,6 +15,10 @@ class TimeMaterial < ApplicationRecord
 
   validates :about, presence: true, if: [ Proc.new { |c| c.comment.blank? && c.product_name.blank? } ]
 
+  def self.set_order(resources, field = :created_at, direction = :desc)
+    resources.ordered(field, direction)
+  end
+
   def list_item(links: [], context:)
     TimeMaterialDetailItem.new(item: self, links: links, id: context.dom_id(self))
   end

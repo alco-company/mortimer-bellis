@@ -5,7 +5,7 @@ class ApplicationRecord < ActiveRecord::Base
   include ExportPdf
 
   scope :by_user, ->() { model.new.attributes.keys.include?("user_id") ? where(user_id: Current.user.id) : all }
-
+  scope :ordered, ->(s, d) { order(s => d) }
 
   #
   # update_row is a helper method to update a row in the database
@@ -89,8 +89,12 @@ class ApplicationRecord < ActiveRecord::Base
     raise "implement this method on the model in order to show/edit post!"
   end
 
-  def self.ordered(resources, field, direction = :desc)
-    resources.order(field => direction)
+  # def self.ordered(resources, field, direction = :desc)
+  #   resources.order(field => direction)
+  # end
+
+  def self.set_order(resources, field = :name, direction = :asc)
+    resources.ordered(field, direction)
   end
 
   def select_data_attributes

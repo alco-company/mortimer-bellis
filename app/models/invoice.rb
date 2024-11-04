@@ -11,6 +11,10 @@ class Invoice < ApplicationRecord
 
   # validates :name, presence: true, uniqueness: { scope: :tenant_id, message: I18n.t("invoices.errors.messages.name_exist") }
 
+  def self.set_order(resources, field = :created_at, direction = :desc)
+    resources.ordered(field, direction)
+  end
+
   def self.filtered(filter)
     flt = filter.filter
 

@@ -11,6 +11,10 @@ class InvoiceItem < ApplicationRecord
   scope :by_unit, ->(unit) { where("unit LIKE ?", "%#{unit}%") if unit.present? }
   scope :by_line_type, ->(line_type) { where("line_type LIKE ?", "%#{line_type}%") if line_type.present? }
 
+  def self.set_order(resources, field = :created_at, direction = :desc)
+    resources.ordered(field, direction)
+  end
+
   def self.filtered(filter)
     flt = filter.filter
 

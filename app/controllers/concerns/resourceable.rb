@@ -38,7 +38,7 @@ module Resourceable
       when "TimeMaterial"; Current.user.can?(:show_all_time_material_posts) ? @resources : @resources.by_user()
       else; @resources.by_user()
       end
-      @resources = any_sorts? ? @resources.ordered(@resources, params_s, params_d) : @resources.order(created_at: :desc) rescue nil
+      @resources = any_sorts? ? @resources.ordered(params_s, params_d) : resource_class.set_order(@resources) rescue @resources
     end
 
     def parent_or_class

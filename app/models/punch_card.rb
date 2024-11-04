@@ -19,6 +19,7 @@ class PunchCard < ApplicationRecord
   scope :today, ->(date) { where(work_date: date) }
   scope :this_week, ->() { where(work_date: Time.now.beginning_of_week..) }
   scope :windowed, ->(window) { where(work_date: window[:from]..window[:to]) }
+
   # used by eg delete
   def name
     "#{user.name} #{work_date}"
@@ -39,9 +40,9 @@ class PunchCard < ApplicationRecord
     all
   end
 
-  def self.ordered(resources, field, direction = :desc)
-    resources.joins(:user).order(field => direction)
-  end
+  # def self.ordered(resources, field, direction = :desc)
+  #   resources.joins(:user).order(field => direction)
+  # end
 
   def self.form(resource:, editable: true)
     PunchCards::Form.new resource: resource, editable: editable
