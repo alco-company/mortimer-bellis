@@ -19,9 +19,6 @@ Rails.application.routes.draw do
   post "dinero/callback" => "dinero#callback", as: :dinero_callback
 
   resources :time_materials do
-    collection do
-      post :index
-    end
     member do
       post :archive
     end

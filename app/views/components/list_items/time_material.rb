@@ -1,7 +1,7 @@
 class ListItems::TimeMaterial < ListItems::ListItem
   def view_template
     div(id: (dom_id resource), class: "flex justify-between gap-x-6 mb-1 px-2 py-5 bg-gray-50 #{ background }") do
-      div(class: "flex min-w-0 gap-x-4") do
+      div(class: "flex min-w-0 gap-x-4", data: time_material_controller?) do
         show_left_mugshot
         div(class: "min-w-0 flex-auto") do
           p(class: "text-sm font-semibold leading-6 text-gray-900 truncate") do
@@ -26,6 +26,10 @@ class ListItems::TimeMaterial < ListItems::ListItem
     end
   end
 
+  def time_material_controller?
+    resource.about == "current_task" ? { controller: "time-material" } : {}
+  end
+
   # def say_how_much
   #   u = resource.unit.blank? ? "" : unsafe_raw(I18n.t("time_material.responsive_units.#{resource.unit}"))
   #   if resource.quantity.blank?
@@ -36,6 +40,7 @@ class ListItems::TimeMaterial < ListItems::ListItem
   # end
 
   def background
+    return "bg-green-500" if resource.about == "current_task"
     return "bg-gray-50" if !resource.pushed_to_erp? and !resource.cannot_be_pushed?
     return "bg-gray-500/20" if resource.pushed_to_erp?
     return "bg-yellow-400/50" if resource.cannot_be_pushed?
@@ -57,12 +62,16 @@ class ListItems::TimeMaterial < ListItems::ListItem
     if user.global_queries?
       span(class: "hidden md:inline text-xs mr-2") { show_resource_link(resource.tenant) }
     end
-    link_to(edit_resource_url,
-      class: "truncate hover:underline",
-      data: { turbo_action: "advance", turbo_frame: "form" },
-      tabindex: -1) do
-      span(class: "2xs:hidden") { show_time_material_quantative }
-      plain resource.name
+    if resource.about == "current_task"
+      div(class: "time_counter", data: { time_material_target: "counter" }) { "0" }
+    else
+      link_to(edit_resource_url,
+        class: "truncate hover:underline",
+        data: { turbo_action: "advance", turbo_frame: "form" },
+        tabindex: -1) do
+        span(class: "2xs:hidden") { show_time_material_quantative }
+        plain resource.name
+      end
     end
   end
 

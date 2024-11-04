@@ -28,6 +28,7 @@ NATIVE: https://blog.corsego.com/navigating-turbo-native, https://www.youtube.co
 * prepare sorting on resource_class - default by :name
 * list punched_at
 * notice how not to add time and material on one registration
+* second stab at start/go button for time/material
 
 ### 01/11/2024
 

@@ -67,7 +67,8 @@ class TimeMaterials::Form < ApplicationForm
           viewbox: "0 0 20 20",
           fill: "currentColor",
           aria_hidden: "true",
-          data_slot: "icon"
+          data_slot: "icon",
+          data: { time_material_target: "timetab" }
         ) do |s|
           s.path(
             d:
@@ -98,7 +99,8 @@ class TimeMaterials::Form < ApplicationForm
           viewbox: "0 0 20 20",
           fill: "currentColor",
           aria_hidden: "true",
-          data_slot: "icon"
+          data_slot: "icon",
+          data: { time_material_target: "materialtab" }
         ) do |s|
           s.path(
             fill_rule: "evenodd",
@@ -282,7 +284,9 @@ class TimeMaterials::Form < ApplicationForm
             #     p(class: "text-gray-500") { I18n.t("time_material.invoicing.invoice.help") }
             #   end
             # end
-            row field(:is_free).boolean(class: "my-auto mort-form-bool"), "flex justify-end flex-row-reverse items-center"
+
+            # row field(:is_free).boolean(class: "my-auto mort-form-bool"), "flex justify-end flex-row-reverse items-center"
+
             # div(class: "relative flex gap-x-3") do
             #   div(class: "flex h-6 items-center") do
             #     input(
@@ -316,8 +320,8 @@ class TimeMaterials::Form < ApplicationForm
           end
         end
         fieldset do
-          legend(class: "text-sm font-semibold leading-6 text-gray-900") { I18n.t("time_material.invoicing.batch.lbl") }
-          div(class: "mt-6 space-y-6") do
+          # legend(class: "text-sm font-semibold leading-6 text-gray-900") { I18n.t("time_material.invoicing.batch.lbl") }
+          div(class: "mt-0 space-y-6") do
             div(class: "relative flex gap-x-3") do
               row field(:is_separate).boolean(class: "my-auto mort-form-bool"), "flex justify-end flex-row-reverse items-center"
 

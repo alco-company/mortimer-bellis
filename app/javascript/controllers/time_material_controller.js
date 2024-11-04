@@ -3,11 +3,27 @@ import { Controller } from "@hotwired/stimulus"
 // Connects to data-controller="time-material"
 export default class extends Controller {
   static targets = [
-    "invoice"
+    "invoice",
+    "timetab",
+    "materialtab",
+    "counter"
   ]
 
   connect() {
-    console.log("Connected to time-material controller")
+    try {      
+      if (this.counterTarget) {
+        this.startTimer();
+      }
+    } catch (error) {
+      
+    }
+  }
+
+  startTimer() {
+    this.counterTarget.innerText = 0;
+    setInterval(() => {
+      this.counterTarget.innerText = parseInt(this.counterTarget.innerText) + 1;
+    }, 1000);
   }
 
   customerChange(e) {

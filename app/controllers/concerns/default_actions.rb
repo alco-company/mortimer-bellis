@@ -82,7 +82,7 @@ module DefaultActions
       respond_to do |format|
         if @resource.save
           create_callback @resource
-          Broadcasters::Resource.new(@resource, params).create
+          Broadcasters::Resource.new(@resource, params.permit!).create
           flash[:success] = t(".post")
           format.turbo_stream { render turbo_stream: [
             turbo_stream.update("form", ""),
