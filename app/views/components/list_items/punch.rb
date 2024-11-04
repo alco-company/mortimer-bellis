@@ -12,7 +12,7 @@ class ListItems::Punch < ListItems::ListItem
 
   def show_recipient_link
     link_to resource_url, class: "hover:underline" do
-      plain resource.punched_at
+      I18n.l(resource.punched_at, format: :short)
     end
   end
 

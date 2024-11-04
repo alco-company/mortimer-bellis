@@ -26,6 +26,7 @@ NATIVE: https://blog.corsego.com/navigating-turbo-native, https://www.youtube.co
 * show user img on list
 * bug in listing grouped_by on index
 * prepare sorting on resource_class - default by :name
+* list punched_at
 
 ### 01/11/2024
 
