@@ -63,6 +63,7 @@ da:
     type:
       time: "Tid"
       material: "Materiale"
+      warning: "Bemærk! Du kan ikke tilføje både tid og materialer; vælg enten tid eller materialer"
     date:
       lbl: "Dato"
     time:

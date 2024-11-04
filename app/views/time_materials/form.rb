@@ -13,6 +13,7 @@ class TimeMaterials::Form < ApplicationForm
       #
       div do
         div(class: "") do
+          p(class: "text-xs text-gray-400") { I18n.t("time_material.type.warning") }
           div(class: "") do
             nav(class: "-mb-px flex space-x-8", aria_label: "Tabs") do
               time_tab
