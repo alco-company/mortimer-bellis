@@ -109,14 +109,21 @@ module DefaultActions
       respond_to do |format|
         if @resource.update(resource_params)
           update_callback @resource
-          Broadcasters::Resource.new(@resource, params).replace
+          Broadcasters::Resource.new(@resource, params.permit!).replace
           flash[:success] = t(".post")
-          format.turbo_stream { render turbo_stream: [ turbo_stream.update("form", ""), turbo_stream.action(:full_page_redirect, resources_url), turbo_stream.replace("flash_container", partial: "application/flash_message") ] }
+          format.turbo_stream { render turbo_stream: [
+            turbo_stream.update("form", ""),
+            turbo_stream.action(:full_page_redirect, resources_url),
+            turbo_stream.replace("flash_container", partial: "application/flash_message")
+          ] }
           format.html { redirect_to resources_url, success: t(".post") }
           format.json { render :show, status: :ok, location: @resource }
         else
           flash[:warning] = t(".validation_errors")
-          format.turbo_stream { render turbo_stream: [ turbo_stream.update("form", partial: "edit"), turbo_stream.replace("flash_container", partial: "application/flash_message") ] }
+          format.turbo_stream { render turbo_stream: [
+            turbo_stream.update("form", partial: "edit"),
+            turbo_stream.replace("flash_container", partial: "application/flash_message")
+          ] }
           format.html { render :edit, status: :unprocessable_entity, warning: t(".warning") }
           format.json { render json: @resource.errors, status: :unprocessable_entity }
         end

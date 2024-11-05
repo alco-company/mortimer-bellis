@@ -207,7 +207,7 @@ class TimeMaterials::Form < ApplicationForm
         lookup_target: "input",
         action: "keydown->lookup#keyDown blur->time-material#customerChange"
       },
-      display_value: @resource.customer_name) # Customer.all.select(:id, :name).take(9)
+      display_value: @resource.customer_name), "" # Customer.all.select(:id, :name).take(9)
     # div(class: "mt-4 col-span-4") do
     #   label(for: "time_material_customer_id", class: "block text-sm font-medium leading-6 text-gray-900") { I18n.t("time_material.customer.lbl") }
     #   div(class: "mt-2") do
@@ -236,7 +236,7 @@ class TimeMaterials::Form < ApplicationForm
         lookup_association_div_id: "time_material_customer_id",
         action: "keydown->lookup#keyDown blur->time-material#projectChange"
       },
-      display_value: @resource.project_name) # Customer.all.select(:id, :name).take(9)
+      display_value: @resource.project_name), "" # Customer.all.select(:id, :name).take(9)
   end
 
   def rate_field(lbl, css = "col-span-2", fld_name = "rate")
@@ -263,11 +263,13 @@ class TimeMaterials::Form < ApplicationForm
 
   def invoicing
     div(class: "pb-12") do
-      div(class: "mt-2 space-y-4") do
+      div(class: "mt-2 space-y-1") do
+        row field(:state).select(TimeMaterial.states_array, class: "my-auto mort-form-select") # , "flex justify-end flex-row-reverse items-center"
         fieldset do
           legend(class: "text-sm font-semibold leading-6 text-gray-900") { I18n.t("time_material.invoicing.lead") }
-          div(class: "mt-6 space-y-3") do
+          div(class: "mt-6 space-y-1") do
             row field(:is_invoice).boolean(data: { time_material_target: "invoice" }, class: "my-auto mort-form-bool"), "flex justify-end flex-row-reverse items-center"
+            row field(:is_separate).boolean(class: "my-auto mort-form-bool"), "flex justify-end flex-row-reverse items-center"
             # div(class: "relative flex gap-x-3") do
             #   div(class: "flex h-6 items-center") do
             #     input(
@@ -319,28 +321,28 @@ class TimeMaterials::Form < ApplicationForm
             # end
           end
         end
-        fieldset do
-          # legend(class: "text-sm font-semibold leading-6 text-gray-900") { I18n.t("time_material.invoicing.batch.lbl") }
-          div(class: "mt-0 space-y-6") do
-            div(class: "relative flex gap-x-3") do
-              row field(:is_separate).boolean(class: "my-auto mort-form-bool"), "flex justify-end flex-row-reverse items-center"
+        # fieldset do
+        #   # legend(class: "text-sm font-semibold leading-6 text-gray-900") { I18n.t("time_material.invoicing.batch.lbl") }
+        #   div(class: "mt-0 space-y-6") do
+        #     div(class: "relative flex gap-x-3") do
+        #       row field(:is_separate).boolean(class: "my-auto mort-form-bool"), "flex justify-end flex-row-reverse items-center"
 
-              # div(class: "flex h-6 items-center") do
-              #   input(
-              #     id: "time_material_is_separate",
-              #     name: "time_material[is_separate]",
-              #     type: "checkbox",
-              #     checked: @resource.is_separate?,
-              #     class: "h-4 w-4 rounded border-gray-300 text-sky-600 focus:ring-sky-600"
-              #   )
-              # end
-              # div(class: "text-sm leading-6") do
-              #   label(for: "time_material_is_separate", class: "font-medium text-gray-900") { I18n.t("time_material.invoicing.separate.lbl") }
-              #   p(class: "text-gray-500") { I18n.t("time_material.invoicing.separate.help") }
-              # end
-            end
-          end
-        end
+        #       # div(class: "flex h-6 items-center") do
+        #       #   input(
+        #       #     id: "time_material_is_separate",
+        #       #     name: "time_material[is_separate]",
+        #       #     type: "checkbox",
+        #       #     checked: @resource.is_separate?,
+        #       #     class: "h-4 w-4 rounded border-gray-300 text-sky-600 focus:ring-sky-600"
+        #       #   )
+        #       # end
+        #       # div(class: "text-sm leading-6") do
+        #       #   label(for: "time_material_is_separate", class: "font-medium text-gray-900") { I18n.t("time_material.invoicing.separate.lbl") }
+        #       #   p(class: "text-gray-500") { I18n.t("time_material.invoicing.separate.help") }
+        #       # end
+        #     end
+        #   end
+        # end
       end
     end
   end

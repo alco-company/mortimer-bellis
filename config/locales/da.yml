@@ -601,6 +601,7 @@ da:
         comment: Kommentar
         date: Dato
         time: Tid
+        state: Status
         overtime: Overtid
         material: Materiale
         description: Beskrivelse
@@ -612,6 +613,10 @@ da:
         customer: Kunde
         project: Projekt
         rate: Timepris
+        started_at: Startet kl
+        paused_at: Parkeret kl
+        time_spent: Forbrugt tid
+        is_done: færdig?
         is_invoice: Opgaven skal faktureres
         is_free: per kulance
         is_offer: Tilbud

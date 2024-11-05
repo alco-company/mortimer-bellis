@@ -14,7 +14,7 @@ class ListItems::ListItem < ApplicationComponent
 
   def view_template
     div(id: (dom_id resource), class: "flex justify-between gap-x-6 mb-1 px-2 py-5 bg-gray-50") do
-      div(class: "flex min-w-0 gap-x-4") do
+      div(class: "flex grow min-w-0 gap-x-4") do
         show_left_mugshot
         div(class: "min-w-0 flex-auto") do
           p(class: "text-sm font-semibold leading-6 text-gray-900 truncate") do
@@ -96,5 +96,14 @@ class ListItems::ListItem < ApplicationComponent
       resource_class: resource_class,
       alter: true,
       links: [ edit_resource_url, resource_url ]
+  end
+
+  #
+  # if this update goes to a channel subscriber
+  # who has this user_id
+  # - otherwise return false
+  def this_user?(user_id)
+    return false if Current.user.blank?
+    resource.user_id == user_id && user_id == user.id
   end
 end

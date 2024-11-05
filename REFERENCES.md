@@ -203,7 +203,7 @@ https://www.honeybadger.io/blog/oauth2-ruby/
 https://boringrails.com/articles/self-destructing-stimulus-controllers/
 
 ### Infinite scrolls - room for improvement
-
+the best! https://cycode.com/blog/infinite-scrolling-pagination-hotwire/
 https://www.bearer.com/blog/infinite-scrolling-pagination-hotwire ***
 https://stevepolito.design/blog/rails-infinite-scrolling-blog-roll/
 https://medium.com/wolox/infinite-scrolling-ruby-on-rails-3fcd3bac0f75

@@ -3,6 +3,18 @@ da:
   time_material:
     billable: fakturérbar
     uploading_to_erp: Overfører fakturalinjer til Dinero
+    current_task: Igangværende opgave
+    paused: Opgaven blev parkeret
+    done: Afsluttet
+    resumed: Opgaven blev genoptaget
+    states:
+      draft: Kladde
+      active: Aktiv
+      paused: Parkeret
+      done: Afsluttet
+      pushed_to_erp: Overført til Dinero
+      cannot_be_pushed: Kan ikke overføres
+      archived: Arkiveret
     units:
       hours: Timer
       parts: Stk

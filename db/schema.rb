@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_10_25_132618) do
+ActiveRecord::Schema[8.0].define(version: 2024_11_05_092330) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -445,7 +445,6 @@ ActiveRecord::Schema[8.0].define(version: 2024_10_25_132618) do
     t.string "queue_name", null: false
     t.integer "priority", default: 0, null: false
     t.datetime "created_at", null: false
-    t.index ["job_id"], name: "index_solid_queue_ready_executions_on_job_id", unique: true
     t.index ["priority", "job_id"], name: "index_solid_queue_poll_all"
     t.index ["queue_name", "priority", "job_id"], name: "index_solid_queue_poll_by_queue"
   end
@@ -573,6 +572,9 @@ ActiveRecord::Schema[8.0].define(version: 2024_10_25_132618) do
     t.string "pushed_erp_timestamp"
     t.string "erp_guid"
     t.text "push_log"
+    t.datetime "paused_at"
+    t.datetime "started_at"
+    t.integer "time_spent"
     t.index ["tenant_id"], name: "index_time_materials_on_tenant_id"
     t.index ["user_id"], name: "index_time_materials_on_user_id"
   end

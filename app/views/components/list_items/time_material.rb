@@ -1,7 +1,7 @@
 class ListItems::TimeMaterial < ListItems::ListItem
   def view_template
-    div(id: (dom_id resource), class: "flex justify-between gap-x-6 mb-1 px-2 py-5 bg-gray-50 #{ background }") do
-      div(class: "flex min-w-0 gap-x-4", data: time_material_controller?) do
+    div(id: (dom_id resource), class: "flex justify-between gap-x-6 mb-1 px-2 py-5 rounded-sm #{ background }") do
+      div(class: "flex grow min-w-0 gap-x-4") do
         show_left_mugshot
         div(class: "min-w-0 flex-auto") do
           p(class: "text-sm font-semibold leading-6 text-gray-900 truncate") do
@@ -13,7 +13,7 @@ class ListItems::TimeMaterial < ListItems::ListItem
         end
       end
       div(class: "flex shrink-0 items-center gap-x-6") do
-        div(class: "hidden 2xs:flex 2xs:flex-col 2xs:items-end") do
+        div(class: "hidden 2xs:flex 2xs:flex-col 2xs:items-end", data: time_material_controller?) do
           p(class: "text-sm leading-6 text-gray-900") do
             show_secondary_info
           end
@@ -27,7 +27,7 @@ class ListItems::TimeMaterial < ListItems::ListItem
   end
 
   def time_material_controller?
-    resource.about == "current_task" ? { controller: "time-material" } : {}
+    resource.active? ? { controller: "time-material" } : {}
   end
 
   # def say_how_much
@@ -40,11 +40,12 @@ class ListItems::TimeMaterial < ListItems::ListItem
   # end
 
   def background
-    return "bg-green-500" if resource.about == "current_task"
+    return "bg-green-200" if resource.active?
+    return "bg-yellow-200" if resource.paused?
     return "bg-gray-50" if !resource.pushed_to_erp? and !resource.cannot_be_pushed?
     return "bg-gray-500/20" if resource.pushed_to_erp?
     return "bg-yellow-400/50" if resource.cannot_be_pushed?
-    ""
+    "bg-gray-50"
   end
 
   def show_recipient_link
@@ -62,16 +63,12 @@ class ListItems::TimeMaterial < ListItems::ListItem
     if user.global_queries?
       span(class: "hidden md:inline text-xs mr-2") { show_resource_link(resource.tenant) }
     end
-    if resource.about == "current_task"
-      div(class: "time_counter", data: { time_material_target: "counter" }) { "0" }
-    else
-      link_to(edit_resource_url,
-        class: "truncate hover:underline",
-        data: { turbo_action: "advance", turbo_frame: "form" },
-        tabindex: -1) do
-        span(class: "2xs:hidden") { show_time_material_quantative }
-        plain resource.name
-      end
+    link_to(edit_resource_url,
+      class: "truncate hover:underline",
+      data: { turbo_action: "advance", turbo_frame: "form" },
+      tabindex: -1) do
+      span(class: "2xs:hidden") { show_time_material_quantative unless resource.active? }
+      plain resource.name
     end
   end
 
@@ -80,22 +77,47 @@ class ListItems::TimeMaterial < ListItems::ListItem
   end
 
   def show_time_info
-    if resource.is_invoice?
-      span(class: "hidden 2xs:inline-flex w-fit items-center rounded-md bg-green-50 mr-1 px-1 xs:px-2 py-0 xs:py-0.5 text-2xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20 truncate") do
-        render Icons::Money.new(cls: "text-green-500 h-4 w-4")
-        span(class: "hidden ml-2 md:inline") { I18n.t("time_material.billable") }
+    if (resource.active? or resource.paused?) and this_user?(resource.user_id)
+      link_to(resource_url(pause: (resource.paused? ? "resume" : "pause")), data: { turbo_prefetch: "false", turbo_stream: "true" }) do
+        resource.paused? ?
+          paused_info :
+          render(Icons::Pause.new(cls: "text-gray-700 h-5 w-5 justify-self-end"))
       end
-    end
-    span(class: "truncate") do
-      plain I18n.l resource.created_at, format: :date
+    else
+      if resource.is_invoice?
+        span(class: "hidden 2xs:inline-flex w-fit items-center rounded-md bg-green-50 mr-1 px-1 xs:px-2 py-0 xs:py-0.5 text-2xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20 truncate") do
+          render Icons::Money.new(cls: "text-green-500 h-4 w-4")
+          span(class: "hidden ml-2 md:inline") { I18n.t("time_material.billable") }
+        end
+      end
+      span(class: "truncate") do
+        plain I18n.l resource.created_at, format: :date
+      end
     end
   end
 
+  def paused_info
+    span(class: "flex") do
+      plain I18n.l(resource.paused_at.to_datetime, format: :short)
+      render(Icons::Play.new(cls: "text-gray-700 pt-1 h-5 w-5 justify-self-end"))
+    end
+  rescue
+    {}
+  end
+
   def show_time_material_quantative
-    u = resource.unit.blank? ? "" : I18n.t("time_material.units.#{resource.unit}")
-    case resource.time.blank?
-    when false; "#{ resource.time}t á #{ resource.rate}"
-    when true; "%s %s á %s" % [ resource.quantity, u, resource.unit_price ]
+    if resource.active? or resource.paused?
+      counter = resource.time_spent # resource.paused? ? resource.time_spent : (Time.current.to_i - resource.started_at.to_i)
+      hours, minuts = counter.to_f.divmod 3600
+      minuts, seconds = minuts.to_f.divmod 60
+      timestring = "%02d:%02d:%02d" % [ hours, minuts, seconds ]
+      span(class: "grow mr-2 time_counter", data: { counter: counter, time_material_target: "counter" }) { timestring }
+    else
+      u = resource.unit.blank? ? "" : I18n.t("time_material.units.#{resource.unit}")
+      case resource.time.blank?
+      when false; "#{ resource.time}t á #{ resource.rate}"
+      when true; "%s %s á %s" % [ resource.quantity, u, resource.unit_price ]
+      end
     end
   end
 end

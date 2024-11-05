@@ -6,7 +6,23 @@ class TimeMaterialsController < MortimerController
     @resource.user_id = Current.user.id
   end
 
+  def show
+    params.permit![:pause].present? ? pause_resume : super
+  end
+
+  def pause_resume
+    params.permit![:pause] == "pause" ? pause : resume
+    respond_to do |format|
+      Broadcasters::Resource.new(@resource, params).replace
+      format.turbo_stream { render turbo_stream: [
+        turbo_stream.action(:full_page_redirect, resources_url),
+        turbo_stream.replace("flash_container", partial: "application/flash_message")
+      ] }
+    end
+  end
+
   def edit
+    @resource.update time_spent: @resource.time_spent + (Time.current.to_i - @resource.started_at.to_i) if @resource.active?
     @resource.customer_name = @resource.customer&.name unless @resource.customer_id.blank?
     @resource.project_name = @resource.project&.name unless @resource.project_id.blank?
     @resource.product_name = @resource.product&.name unless @resource.product_id.blank?
@@ -18,8 +34,21 @@ class TimeMaterialsController < MortimerController
     params[:play].present? ? create_play : super
   end
 
+  def update
+    params.permit![:time_material][:time_spent] = @resource.time_spent + (Time.current.to_i - @resource.started_at.to_i) if @resource.active?
+    super
+  end
+
   def create_play
-    params[:time_material] = { time: "0,25", user_id: Current.user.id, date: Time.current.to_date, about: "current_task" }
+    params[:time_material] = {
+      time: "0,25",
+      state: 1,
+      user_id: Current.user.id,
+      started_at: Time.current,
+      time_spent: 0,
+      date: Time.current.to_date,
+      about: t("time_material.current_task")
+    }
     params.delete(:play)
     params[:played] = true
     create
@@ -63,10 +92,25 @@ class TimeMaterialsController < MortimerController
         :discount,
         :comment,
         :state,
+        :time_spent,
+        :started_at,
+        :paused_at,
         :is_invoice,
         :is_free,
         :is_offer,
         :is_separate
       )
+    end
+
+    def pause
+      time_spent = @resource.time_spent + (Time.current.to_i - @resource.started_at.to_i)
+      paused_at = Time.current
+      @resource.update state: 2, time_spent: time_spent, paused_at: paused_at
+      flash[:success] = t("time_material.paused")
+    end
+
+    def resume
+      @resource.update state: 1, started_at: Time.current, paused_at: nil
+      flash[:success] = t("time_material.resumed")
     end
 end
