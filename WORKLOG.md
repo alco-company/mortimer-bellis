@@ -24,6 +24,7 @@ NATIVE: https://blog.corsego.com/navigating-turbo-native, https://www.youtube.co
 
 * add flash messages to omniauthable sign-ins
 * add punching to dashboard view
+* add user initials to invoiceable items
 
 ### 05/11/2024
 

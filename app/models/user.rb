@@ -51,10 +51,6 @@ class User < ApplicationRecord
     settings.where(key: action.to_s, value: "true").count.positive? or
     Setting.where(setable_type: "User", setable_id: nil, key: action.to_s, value: "true").count.positive?
   end
-  # used by eg delete
-  def name
-    "#{email}"
-  end
 
   def self.filtered(filter)
     flt = filter.filter
@@ -68,6 +64,10 @@ class User < ApplicationRecord
   rescue
     filter.destroy if filter
     all
+  end
+
+  def initials
+    name.split(" ").map { |n| n[0] }.join.upcase
   end
 
   def self.form(resource:, editable: true)

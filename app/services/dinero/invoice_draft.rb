@@ -175,7 +175,7 @@ class Dinero::InvoiceDraft
 
     {
       "productGuid" => (line.product.erp_guid rescue raise "Product not found - productGuid"),     #   "102eb2e1-d732-4915-96f7-dac83512f16d",
-      "comments" =>    line.comment,
+      "comments" =>    "%s: %s" % [ user&.initials, line.comment ],
       "quantity" =>    q,
       "accountNumber" => (line.product.account_number.to_i rescue raise "Product not found - accountNumber"),
       "unit" =>        (line.product.unit rescue raise "Product not found - unit"),
@@ -203,7 +203,7 @@ class Dinero::InvoiceDraft
     {
       "productGuid" => nil,
       "description" => line.product_name,
-      "comments" =>    line.comment,
+      "comments" =>    "%s: %s" % [ user&.initials, line.comment ],
       "quantity" =>   q,
       "accountNumber" => settings["defaultAccountNumber"].to_i,
       "unit" =>        "parts",
@@ -225,7 +225,7 @@ class Dinero::InvoiceDraft
   def a_text(line)
     {
       "productGuid" => nil,
-      "description" => line.comment,
+      "description" => "%s: %s" % [ user&.initials, line.comment ],
       "lineType" =>    "Text"
     }
   rescue => err
@@ -248,7 +248,7 @@ class Dinero::InvoiceDraft
 
     {
       "productGuid" => prod.erp_guid,             #   "102eb2e1-d732-4915-96f7-dac83512f16d",
-      "comments" =>    line.about,
+      "comments" =>    "%s: %s" % [ user&.initials, line.about ],
       "quantity" =>    q,
       "accountNumber" => prod.account_number.to_i,
       "unit" =>        prod.unit,
