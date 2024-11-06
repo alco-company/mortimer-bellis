@@ -17,6 +17,10 @@ class Dashboard < ApplicationRecord
     all
   end
 
+  def self.set_order(resources, field = :feed, direction = :asc)
+    resources.ordered(field, direction)
+  end
+
   def name
     feed
   end

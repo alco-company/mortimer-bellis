@@ -61,6 +61,10 @@ class BackgroundJob < ApplicationRecord
     all
   end
 
+  def self.set_order(resources, field = :job_klass, direction = :asc)
+    resources.ordered(field, direction)
+  end
+
   def self.job_klasses
     [
       [ "DatalonPreparationJob", "DatalonPreparationJob" ],

@@ -81,7 +81,7 @@ module Resourceable
     def set_filter
       @filter_form = params_ctrl.split("/").last
       @url = resources_url
-      @filter = Filter.where(tenant: Current.tenant).where(view: params_ctrl.split("/").last).take || Filter.new
+      @filter = Filter.where(tenant: Current.tenant).where(view: @filter_form).take || Filter.new
       @filter.filter ||= {}
     end
 
@@ -137,7 +137,7 @@ module Resourceable
 
   private
     def rc_params
-      params.permit(:id, :s, :d, :page, :format, :_method, :commit, :authenticity_token, :controller)
+      params.permit! # (:id, :s, :d, :page, :format, :_method, :commit, :authenticity_token, :controller)
     end
 
     def params_ctrl
