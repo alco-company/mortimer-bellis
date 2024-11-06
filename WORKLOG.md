@@ -30,6 +30,7 @@ NATIVE: https://blog.corsego.com/navigating-turbo-native, https://www.youtube.co
 * add pincode to users (and manage it)
 * bug fixes on user and user_mailer
 * trying to fix migration error in production
+* trying to fix migration error in production II
 
 ### 05/11/2024
 
