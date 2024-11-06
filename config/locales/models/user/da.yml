@@ -121,6 +121,19 @@ da:
       unauthenticated: "Du skal logge ind eller oprette en konto for at fortsætte."
       unconfirmed: "Du skal bekræfte din email-adresse for at fortsætte."
     mailer:
+      invitation_instructions:
+        page_title: "Invitation til at oprette en brugerprofil på Mortimer"
+        subject: "Invitation til at oprette en brugerprofil på  M O R T I M E R"
+        preheader: "Invitation til at oprette en brugerprofil på Mortimer"
+        hi: "Hej"
+        title: "Er %{email} din email adresse?"
+        introduction: "%{sender} hos %{tenant} har inviteret dig til at færdiggøre oprettelsen af en brugerprofil på %{url}. Du kan acceptere invitationen ved at trykke på knappen her nedenfor."
+        accept: "Ja det er min email adresse"
+        action: "Jeg accepterer invitationen"
+        accept_until: "Invitationen er gyldig indtil %{due_date}."
+        ignore: "Ønsker du ikke at acceptere invitationen, behøver du intet at gøre (måske bortset fra evt at smide email'en bort). <br /><br />Din bruger konto bliver først oprettet i det øjeblik, du klikker på link'et her ovenfor, og derefter angiver din adgangskode."
+        regards: "Med venlig hilsen"
+
       confirmation_instructions:
         title: "Instruktion"
         preheader: "Instruktioner til at bekræfte din email-adresse på Mortimer"
@@ -170,8 +183,9 @@ da:
         regards: "Med venlig hilsen"
 
     omniauth_callbacks:
-      failure: "Kunne ikke godkende dig fra %{kind} fordi \"%{reason}\"."
-      success: "Godkendte dig fra %{kind} kontoen."
+      user_not_found: "vi ikke kunne finde en bruger med den email adresse (%{email}), som du har brugt til at logge ind med."
+      failure: "Kunne ikke godkende dig fra %{kind} fordi %{reason}."
+      success: "Godkendte dig fra %{kind} kontoen %{email}."
     passwords:
       no_token: "Du kan ikke tilgå denne side uden at komme fra en email med instruktioner til at nulstille din adgangskode. Hvis du kommer fra en email med instruktioner til at nulstille din adgangskode, så sørg for at du brugte den fulde URL."
       send_instructions: "Du vil modtage en email med instruktioner om hvordan du nulstiller din adgangskode om et par minutter."

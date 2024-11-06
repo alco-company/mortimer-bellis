@@ -102,21 +102,6 @@ da:
     show:
       title: Overblik
 
-  devise:
-    mailer:
-      invitation_instructions:
-        page_title: "Invitation til at oprette en brugerprofil på Mortimer"
-        subject: "Invitation til at oprette en brugerprofil på  M O R T I M E R"
-        preheader: "Invitation til at oprette en brugerprofil på Mortimer"
-        hi: "Hej"
-        title: "Er %{email} din email adresse?"
-        introduction: "%{sender} hos %{tenant} har inviteret dig til at færdiggøre oprettelsen af en brugerprofil på %{url}. Du kan acceptere invitationen ved at trykke på knappen her nedenfor."
-        accept: "Ja det er min email adresse"
-        action: "Jeg accepterer invitationen"
-        accept_until: "Invitationen er gyldig indtil %{due_date}."
-        ignore: "Ønsker du ikke at acceptere invitationen, behøver du intet at gøre (måske bortset fra evt at smide email'en bort). <br /><br />Din bruger konto bliver først oprettet i det øjeblik, du klikker på link'et her ovenfor, og derefter angiver din adgangskode."
-        regards: "Med venlig hilsen"
-
   landing:
     recent_activity: Seneste aktiviteter
     activity_description: "%{name} brugte %{punch_clock}"

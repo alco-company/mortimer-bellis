@@ -48,12 +48,16 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
   # "xms_tcdt"=>1400834163,
   # "xms_tdbr"=>"EU"}
   def entra_id
-    user = User.find_by(email: request.env["omniauth.auth"]["extra"]["raw_info"]["email"])
+    email = request.env["omniauth.auth"]["extra"]["raw_info"]["email"]
+    user = User.find_by(email: email)
     if user
       user.update(confirmed_at: Time.current) if user.confirmed_at.nil?
       User.accept_invitation!(invitation_token: user.invitation_token) if user.invitation_accepted_at.nil?
+      flash[:notice] = t("devise.omniauth_callbacks.success", kind: "Microsoft Entra ID", email: email)
       sign_in_and_redirect user, event: :authentication
     else
+      reason = t("devise.omniauth_callbacks.user_not_found", email: email)
+      flash[:warning] = t("devise.omniauth_callbacks.failure", kind: "Microsoft Entra ID", reason: reason)
       redirect_to new_user_session_url
     end
   end

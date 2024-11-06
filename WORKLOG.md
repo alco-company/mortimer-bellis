@@ -5,7 +5,6 @@
 
 ## Rescue tools
 
-
 ## Ideas
 
 BACKUP: Litestream
@@ -20,6 +19,14 @@ NATIVE: https://blog.corsego.com/navigating-turbo-native, https://www.youtube.co
 * <https://railsdesigner.com/preview-images-with-hotwire>
 
 ## CHANGELOG
+
+### 06/11/2024
+
+* add flash messages to omniauthable sign-ins
+
+### 05/11/2024
+
+* refine stop/go button for time/material
 
 ### 04/11/2024
 
