@@ -23,29 +23,29 @@ class PunchButtonComponent < ApplicationComponent
   end
 
   def punch_break
-    button_to(punches_url, class: "mort-btn-punch-break rounded-full w-14 h-14", data: { turbo_frame: :_top }) do
+    button_to(punches_url, class: "mort-btn-punch-break rounded-full w-14 h-14 flex items-center", data: { turbo_frame: :_top }) do
       input(type: "hidden", name: "punch[punch_clock_id]", value: punch_clock_id)
       input(type: "hidden", name: "punch[state]", value: "break")
       input(type: "hidden", name: "punch[user_id]", value: user&.id)
-      plain "break"
+      render Icons::Pause.new cls: "h-8 w-8 text-white"
     end
   end
 
   def punch_out
-    button_to(punches_url, class: "mort-btn-punch-out rounded-full w-14 h-14", data: { turbo_frame: :_top }) do
+    button_to(punches_url, class: "mort-btn-punch-out rounded-full w-14 h-14 flex items-center", data: { turbo_frame: :_top }) do
       input(type: "hidden", name: "punch[punch_clock_id]", value: punch_clock_id)
       input(type: "hidden", name: "punch[state]", value: "out")
       input(type: "hidden", name: "punch[user_id]", value: user&.id)
-      plain "out"
+      render Icons::Stop.new cls: "h-8 w-8 text-white"
     end
   end
 
   def punch_in
-    button_to(punches_url, class: "mort-btn-punch-in rounded-full w-14 h-14", data: { turbo_frame: :_top }) do
+    button_to(punches_url, class: "mort-btn-punch-in rounded-full w-14 h-14 flex items-center", data: { turbo_frame: :_top }) do
       input(type: "hidden", name: "punch[punch_clock_id]", value: punch_clock_id)
       input(type: "hidden", name: "punch[state]", value: "in")
       input(type: "hidden", name: "punch[user_id]", value: user&.id)
-      plain "in"
+      render Icons::Play.new cls: "h-8 w-8 text-white"
     end
   end
 end

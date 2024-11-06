@@ -23,6 +23,7 @@ NATIVE: https://blog.corsego.com/navigating-turbo-native, https://www.youtube.co
 ### 06/11/2024
 
 * add flash messages to omniauthable sign-ins
+* add punching to dashboard view
 
 ### 05/11/2024
 

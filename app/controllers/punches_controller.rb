@@ -23,19 +23,20 @@ class PunchesController < MortimerController
     punch_clock = PunchClock.find(resource_params[:punch_clock_id]) || PunchClock.where(tenant: Current.tenant).first
     # from dashboard?
     if resource_params[:punched_at].blank?
-      Current.user.punch(punch_clock, resource_params[:state], request.remote_ip)
+      @resource = Current.user.punch(punch_clock, resource_params[:state], request.remote_ip)
       flash[:success] = t(".post")
       @activity_list = Current.user.tenant.punches.order(punched_at: :desc).take(10)
+      Broadcasters::Resource.new(@resource, { controller: "punches" }, "activity_list").create
       render turbo_stream: [
         turbo_stream.replace("punch_button", partial: "punches/punch_button", locals: { user: Current.user, punch_clock: punch_clock }, alert: I18n.t("punch.create.failed")),
-        turbo_stream.replace("flash_container", partial: "application/flash_message"),
-        turbo_stream.replace("activity_list", partial: "punches/dashboard_punches", locals: { activity_list: @activity_list, user: Current.user })
+        turbo_stream.replace("flash_container", partial: "application/flash_message") # ,
+        # turbo_stream.replace("activity_list", partial: "punches/dashboard_punches", locals: { activity_list: @activity_list, user: Current.user })
       ]
     else
       user = User.find(resource_params[:user_id])
       respond_to do |format|
         if @resource = user.punch(punch_clock, resource_params[:state], request.remote_ip)
-          Broadcasters::Resource.new(@resource).create
+          Broadcasters::Resource.new(@resource, { controller: "punches" }, "activity_list").create
           flash[:success] = t(".post")
           format.turbo_stream { render turbo_stream: [ turbo_stream.update("form", ""), turbo_stream.replace("flash_container", partial: "application/flash_message") ] }
           format.html { redirect_to resources_url, success: t(".post") }

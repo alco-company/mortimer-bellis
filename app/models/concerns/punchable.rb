@@ -127,14 +127,16 @@ module Punchable
     def punch(punch_clock, state, ip, punched_at = DateTime.current)
       begin
         UserMailer.with(user: self).confetti_first_punch.deliver_later if punches.count == 0
-        Punch.create! tenant: self.tenant, user: self, punch_clock: punch_clock, punched_at: punched_at, state: state, remote_ip: ip
+        p = Punch.create! tenant: self.tenant, user: self, punch_clock: punch_clock, punched_at: punched_at, state: state, remote_ip: ip
       rescue => e
         say "Punchable#punch failed: #{e.message}"
       end
       update last_punched_at: punched_at, state: state
       # PunchCardJob.perform_later tenant: self.tenant, user: self
+      p
     rescue => e
       say "Punchable#punch (outer) failed: #{e.message}"
+      false
     end
 
     # # punch_params[:reason], request.remote_ip, punch_params[:from_at], punch_params[:to_at], punch_params[:comment], punch_params[:days]

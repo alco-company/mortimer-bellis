@@ -2,11 +2,12 @@ class Broadcasters::Resource
   include Turbo::StreamsHelper
   include ActionView::RecordIdentifier
 
-  attr_reader :tenant, :resource, :resource_class, :resources_stream, :params
+  attr_reader :tenant, :resource, :resource_class, :resources_stream, :params, :target
 
-  def initialize(resource, params = {})
+  def initialize(resource, params = {}, target = "record_list")
     @resource = resource
     @params = params
+    @target = target
     @resource_class = resource.class rescue nil
     @tenant = resource.respond_to?(:tenant) ? resource.tenant : Current.tenant rescue nil
     @resources_stream = "%s_%s" % [ tenant&.id, @resource_class.to_s.underscore.pluralize ] rescue nil
@@ -17,7 +18,7 @@ class Broadcasters::Resource
     return unless resource.persisted?
     Turbo::StreamsChannel.broadcast_action_later_to(
       resources_stream,
-      target: "record_list",
+      target: target,
       action: :prepend,
       partial: resource,
       locals: { resource_class.to_s.underscore => resource, params: params, user: Current.user }
