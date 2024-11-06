@@ -782,6 +782,11 @@ da:
     errors:
       messages:
         record_invalid: "Posten findes ikke"
+      models:
+        user:
+          attributes:
+            pincode:
+              in: "Pinkoden skal være et tal mellem 1000 og 9999"
 
   date:
     single_day_names:
@@ -910,6 +915,7 @@ da:
     format: "%{attribute} %{message}"
     messages:
       user_registration_failed: "Bruger registreringen mislykkedes - fejl: %{error}"
+      user_role_cannot_be_assigned: "Rollen kan ikke tildeles"
       already_confirmed: "er allerede bekræftet, prøv venligst at logge ind"
       confirmation_period_expired: "skal bekræftes inden %{period}, forespørg venligst om en ny"
       expired: "er udløbet, venligst anmod om en ny"

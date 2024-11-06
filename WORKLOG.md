@@ -27,6 +27,7 @@ NATIVE: https://blog.corsego.com/navigating-turbo-native, https://www.youtube.co
 * add user initials to invoiceable items
 * handle set_order on missing models
 * add kiosk link to form
+* add pincode to users (and manage it)
 
 ### 05/11/2024
 

@@ -20,6 +20,7 @@ da:
       post: Bruger blev oprettet
     update:
       post: Bruger blev opdateret
+      validation_errors: "Der opstod fejl under opdateringen af brugeren."
     destroy:
       post: Bruger blev slettet
         
@@ -88,6 +89,9 @@ da:
         unhappy: Er du utilfreds med vores service, eller har du bare ikke brug for det længere? Trykker du på [slet] knappen her nedenfor, vil din konto blive slettet. Vi vil være kede af at skulle sige farvel, men respekterer naturligvis dit valg.
         action: Slet!
 
+    errors:
+      messages:
+        pincode_exist_for_tenant: "Pinkoden er allerede i brug af en anden bruger."
   user_mailer:
     welcome:
       title: "ding ding!"

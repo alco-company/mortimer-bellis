@@ -23,6 +23,11 @@
     </div>
 
     <div class="mort-field">
+      <%= f.label :pincode %><br />
+      <%= f.text_field :pincode, autofocus: true, autocomplete: "off", class: "mort-form-text" %>
+    </div>
+
+    <div class="mort-field">
       <%= f.label :mugshot %><br />
       <%= f.file_field :mugshot, class: "mort-form-file" %>
       <% if resource.mugshot.attached? %>
@@ -80,13 +85,13 @@
         <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "mort-form-text" %>
       </div>
 
+      <div class="mort-field">
+        <%= f.label :current_password %><br />
+        <%= f.password_field :current_password, autocomplete: "current-password", class: "mort-form-text" %>
+        <i class="text-xs">(we need your current password to confirm your change of password)</i>
+      </div>
     </div>
 
-    <div class="mort-field">
-      <%= f.label :current_password %><br />
-      <%= f.password_field :current_password, autocomplete: "current-password", class: "mort-form-text" %>
-      <i class="text-xs">(we need your current password to confirm your changes)</i>
-    </div>
 
     <div class="actions mort-field">
       <%= f.submit t(:save), class: "mort-btn-primary" %>

@@ -42,9 +42,19 @@ class Users::RegistrationsController < Devise::RegistrationsController
     if params[:user][:role].present? &&
       !Current.user.superadmin? &&
       [ 0, "0", "superadmin", "Superadmin", "SUPERADMIN" ].include?(params[:user][:role])
-      redirect_to edit_user_registration_path, alert: "You are not authorized to change the role to superadmin." and return
+      redirect_to edit_user_registration_path, alert: I18n.t("errors.messages.user_role_cannot_be_assigned") and return
     end
+    # params[:user][:password].blank? && params[:user][:password_confirmation].blank? ? update_now : super
     super
+  end
+
+  def update_now(resource, params)
+    # account_update_params.delete(:current_password)
+    resource.update name: params[:name],
+      mugshot: params[:mugshot],
+      pincode: params[:pincode],
+      locale: params[:locale],
+      time_zone: params[:time_zone]
   end
 
   # DELETE /resource
@@ -63,6 +73,10 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   protected
 
+  def update_resource(resource, params)
+    params[:password].blank? && params[:password_confirmation].blank? ? update_now(resource, params) : super
+  end
+
   # If you have extra params to permit, append them to the sanitizer.
   def configure_sign_up_params
     devise_parameter_sanitizer.permit(:sign_up, keys: [ :tenant_id, :team_id, :role ])
@@ -80,7 +94,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   # If you have extra params to permit, append them to the sanitizer.
   def configure_account_update_params
-    devise_parameter_sanitizer.permit(:account_update, keys: [ :tenant_id, :team_id, :global_queries, :name, :mugshot, :locale, :time_zone ])
+    devise_parameter_sanitizer.permit(:account_update, keys: [ :tenant_id, :team_id, :global_queries, :name, :pincode, :mugshot, :locale, :time_zone ])
   end
 
   # The path used after sign up.
