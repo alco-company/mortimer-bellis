@@ -29,6 +29,7 @@ NATIVE: https://blog.corsego.com/navigating-turbo-native, https://www.youtube.co
 * add kiosk link to form
 * add pincode to users (and manage it)
 * bug fixes on user and user_mailer
+* trying to fix migration error in production
 
 ### 05/11/2024
 
