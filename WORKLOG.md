@@ -25,6 +25,7 @@ NATIVE: https://blog.corsego.com/navigating-turbo-native, https://www.youtube.co
 * implementing naiive backup solution (scp to my desk)
 * allow for stop/go to pause/resume easier
 * inform about errors on input
+* allow users to delegate jobs
 
 ### 06/11/2024
 

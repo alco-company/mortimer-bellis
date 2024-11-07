@@ -10,6 +10,12 @@ class TimeMaterials::Form < ApplicationForm
       div(class: "mt-2 sm:col-span-4") do
         row field(:date).date(class: "mort-form-text")
       end
+      # user
+      if Current.user.can?(:delegate_time_materials)
+        div(class: "mt-2 sm:col-span-4") do
+          row field(:user_id).select(User.all.order(name: :asc).select(:id, :name), class: "mort-form-select")
+        end
+      end
       #
       div do
         div(class: "") do
