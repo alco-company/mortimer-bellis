@@ -24,5 +24,6 @@
 
   </div>
 
+  <%= turbo_stream_from "%s_%s_%s" % [ Current.tenant.id, "punch_buttons", Current.user.id ] %>
   <%= punch_button user: Current.user, punch_clock: @punch_clock %>
 </div>

@@ -45,7 +45,7 @@ class PunchClockButtons < ApplicationComponent
         @punch_clock ?
           hidden_field(:punch_clock, :api_key, value: @punch_clock.access_token) :
           hidden_field(:user, :api_key, value: user.access_token)
-        hidden_field :user, :state, value: :in
+        hidden_field :user, :state, value: 1
         hidden_field :user, :id, value: user.id
       end
     end
@@ -59,7 +59,7 @@ class PunchClockButtons < ApplicationComponent
         @punch_clock ?
           hidden_field(:punch_clock, :api_key, value: @punch_clock.access_token) :
           hidden_field(:user, :api_key, value: user.access_token)
-        hidden_field :user, :state, value: :break
+        hidden_field :user, :state, value: 2
         hidden_field :user, :id, value: user.id
       end
     end
@@ -73,7 +73,7 @@ class PunchClockButtons < ApplicationComponent
         @punch_clock ?
           hidden_field(:punch_clock, :api_key, value: @punch_clock.access_token) :
           hidden_field(:user, :api_key, value: user.access_token)
-        hidden_field :user, :state, value: :out
+        hidden_field :user, :state, value: 0
         hidden_field :user, :id, value: user.id
       end
     end

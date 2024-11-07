@@ -38,7 +38,7 @@ class PunchClockBase < ApplicationComponent
         { title: helpers.t(".worktime"), value: helpers.display_hours_minutes(counters[:work]) },
         { title: helpers.t(".breaks"), value: helpers.display_hours_minutes(counters[:break]) }
       ]
-    end if employee
+    end if user
   end
 
   def show_payroll

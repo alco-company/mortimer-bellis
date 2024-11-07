@@ -26,6 +26,7 @@ NATIVE: https://blog.corsego.com/navigating-turbo-native, https://www.youtube.co
 * allow for stop/go to pause/resume easier
 * inform about errors on input
 * allow users to delegate jobs
+* allow user to punch in/out on kiosks (punch_clocks)
 
 ### 06/11/2024
 

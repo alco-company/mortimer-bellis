@@ -20,7 +20,7 @@ class PunchesController < MortimerController
   #     "commit"=>"Opret"
   # }
   def create
-    punch_clock = PunchClock.find(resource_params[:punch_clock_id]) || PunchClock.where(tenant: Current.tenant).first
+    punch_clock = PunchClock.find(resource_params[:punch_clock_id]) rescue PunchClock.where(tenant: Current.tenant).first
     # from dashboard?
     if resource_params[:punched_at].blank?
       @resource = Current.user.punch(punch_clock, resource_params[:state], request.remote_ip)

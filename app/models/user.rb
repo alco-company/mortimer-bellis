@@ -95,7 +95,16 @@ class User < ApplicationRecord
     "border-white"
   end
 
-  def in?
-    true
+  # -----
+  def minutes_today_up_to_now
+    { work: 0, break: 0 }
+  end
+
+  def todays_punches
+    []
+  end
+
+  def punches_settled_at
+    Time.now
   end
 end

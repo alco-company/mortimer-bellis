@@ -1,6 +1,6 @@
 class Pos::PunchesController < Pos::PosController
   around_action :punch_clock_time_zone
-  # before_action :verify_employee, only: :index
+  # before_action :verify_user, only: :index
   layout false
 
   def index
@@ -17,7 +17,7 @@ class Pos::PunchesController < Pos::PosController
   end
 
   private
-    def verify_employee
+    def verify_user
       @user = case true
       when params[:user_id].present?; User.by_tenant.find(params.delete(:user_id))
       when params[:user].present?; User.by_tenant.find(params[:user][:id])
