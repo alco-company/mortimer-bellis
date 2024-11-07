@@ -129,6 +129,8 @@ da:
         help: "Opgaven skal faktureres separat"
 
   time_materials:
+    validation_errors: Der er fejl i det indtastede
+
     create:
       post: Tid/Materiale blev oprettet
       validation_errors: Der er fejl i de indtastede oplysninger

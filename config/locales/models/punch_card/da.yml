@@ -10,6 +10,8 @@ da:
         button: Slet
 
   punch_cards:
+    validation_errors: Der er fejl i det indtastede
+
     create:
       post: Stempelkortet blev oprettet
     update:

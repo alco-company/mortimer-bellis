@@ -15,6 +15,7 @@ da:
     resend_invitation: Send invitation igen
     next_step: "Hvis du ikke har modtaget emailen, kan du få den sendt igen."
     email_missing: Check din 'junk'/'reklame' postmappe - måske ligger email'en der?
+    validation_errors: Der er fejl i det indtastede
     
     create:
       post: Bruger blev oprettet

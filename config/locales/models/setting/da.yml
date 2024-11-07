@@ -11,6 +11,7 @@ da:
 
   settings:
     employee_device_punch_clock: Medarbejder indstilling
+    validation_errors: Der er fejl i det indtastede
     default_punch_clock: Ur
     
     create:

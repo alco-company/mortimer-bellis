@@ -11,6 +11,7 @@ da:
 
   customers:
     default_customer: Kunden
+    validation_errors: Der er fejl i det indtastede
     erp_pull:
       erp_pull: Henter kunder fra Dinero i baggrunden - dette kan tage lidt tid; opdatér siden om lidt
 

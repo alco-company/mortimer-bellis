@@ -12,6 +12,7 @@ da:
   punch_clocks:
     employee_device_punch_clock: Medarbejder stempelur
     default_punch_clock: Ur
+    validation_errors: Der er fejl i det indtastede
     
     create:
       post: Stempeluret blev oprettet

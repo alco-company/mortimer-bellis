@@ -10,6 +10,8 @@ da:
         button: Slet
 
   projects:
+    validation_errors: Der er fejl i det indtastede
+
     create:
       post: Projektet blev oprettet
     update:

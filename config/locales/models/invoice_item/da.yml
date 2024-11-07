@@ -1,5 +1,6 @@
 da:
   invoice_items:
+    validation_errors: Der er fejl i det indtastede
 
     list:
       new: Ny fakturalinje

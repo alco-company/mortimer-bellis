@@ -1,6 +1,8 @@
 da:
 
   products:
+    validation_errors: Der er fejl i det indtastede
+
     create:
       post: Produktet blev oprettet
     update:

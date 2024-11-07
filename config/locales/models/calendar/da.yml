@@ -98,6 +98,7 @@ da:
         button: Slet
 
   calendars:
+    validation_errors: Der er fejl i det indtastede
     link: "Kalendere"
     create:
       post: Kalenderen blev oprettet

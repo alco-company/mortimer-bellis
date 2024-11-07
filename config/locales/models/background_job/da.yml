@@ -19,6 +19,7 @@ da:
       finished: Færdig
 
   background_jobs:
+    validation_errors: Der er fejl i det indtastede
     list:
       title: Baggrundsjobs
       new: Nyt baggrundsjob

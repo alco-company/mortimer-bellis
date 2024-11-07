@@ -11,6 +11,7 @@ da:
 
   locations:
     default_location: Arbejdssted
+    validation_errors: Der er fejl i det indtastede
 
     create:
       post: Arbejdsstedet blev oprettet

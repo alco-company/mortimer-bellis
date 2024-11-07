@@ -20,6 +20,8 @@ da:
         regards: Med venlig hilsen,
 
   tenants:
+    validation_errors: Der er fejl i det indtastede
+
     create:
       post: Kontoen blev oprettet
     update:

@@ -11,6 +11,7 @@ da:
     organizationID_placeholder: "6 cifre"
   provided_services:
     default_provided_service: Udvidelse/integration
+    validation_errors: Der er fejl i det indtastede
 
     create:
       post: Udvidelsen/integrationen blev oprettet

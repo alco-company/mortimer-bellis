@@ -583,6 +583,7 @@ da:
         customer_id: Kunde
         project_id: Projekt
         product_id: Produkt
+        user_id: Medarbejder
         comment: Kommentar
         date: Dato
         time: Tid
