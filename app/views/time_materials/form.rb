@@ -8,7 +8,7 @@ class TimeMaterials::Form < ApplicationForm
       end
       # date_field
       div(class: "mt-2 sm:col-span-4") do
-        row field(:date).date(class: "mort-form-text").focus
+        row field(:date).date(class: "mort-form-text")
       end
       #
       div do
@@ -195,7 +195,7 @@ class TimeMaterials::Form < ApplicationForm
 
   def about_field
     div(class: "col-span-full") do
-      row field(:about).textarea(class: "mort-form-text"), ""
+      row field(:about).textarea(class: "mort-form-text").focus, ""
     end
   end
 

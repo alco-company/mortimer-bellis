@@ -2,6 +2,7 @@ class TimeMaterialsController < MortimerController
   def new
     super
     @resource.customer_name = TimeMaterial.by_exact_user(Current.user).last&.customer_name
+    @resource.state = 3
     @resource.date = Time.current.to_date
     @resource.user_id = Current.user.id
   end
@@ -11,13 +12,22 @@ class TimeMaterialsController < MortimerController
   end
 
   def pause_resume
-    params.permit![:pause] == "pause" ? pause : resume
-    respond_to do |format|
-      Broadcasters::Resource.new(@resource, params).replace
-      format.turbo_stream { render turbo_stream: [
-        turbo_stream.action(:full_page_redirect, resources_url),
-        turbo_stream.replace("flash_container", partial: "application/flash_message")
-      ] }
+    if @resource.user == Current.user or Current.user.admin? or Current.user.superadmin?
+      params.permit![:pause] == "pause" ? pause : resume
+      respond_to do |format|
+        Broadcasters::Resource.new(@resource, params).replace
+        format.turbo_stream { render turbo_stream: [
+          # turbo_stream.action(:full_page_redirect, resources_url),
+          turbo_stream.replace("flash_container", partial: "application/flash_message")
+        ] }
+      end
+    else
+      respond_to do |format|
+        format.turbo_stream { render turbo_stream: [
+          flash.now[:warning] = t("time_material.not_your_time_material"),
+          turbo_stream.replace("flash_container", partial: "application/flash_message")
+        ] }
+      end
     end
   end
 
@@ -106,11 +116,11 @@ class TimeMaterialsController < MortimerController
       time_spent = @resource.time_spent + (Time.current.to_i - @resource.started_at.to_i)
       paused_at = Time.current
       @resource.update state: 2, time_spent: time_spent, paused_at: paused_at
-      flash[:success] = t("time_material.paused")
+      flash.now[:success] = t("time_material.paused")
     end
 
     def resume
       @resource.update state: 1, started_at: Time.current, paused_at: nil
-      flash[:success] = t("time_material.resumed")
+      flash.now[:success] = t("time_material.resumed")
     end
 end

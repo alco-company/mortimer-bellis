@@ -89,9 +89,9 @@ class ListItems::ListItem < ApplicationComponent
     image_tag("icons8-customer-64.png", class: css)
   end
 
-  def render_context_menu
+  def render_context_menu(cls = "relative flex-none")
     render Contextmenu.new resource: resource,
-      cls: "relative flex-none",
+      cls: cls,
       turbo_frame: "form",
       resource_class: resource_class,
       alter: true,

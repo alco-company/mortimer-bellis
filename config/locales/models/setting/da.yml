@@ -20,6 +20,11 @@ da:
     destroy:
       post: Indstillingen blev slettet
 
+    form:
+      new: Ny indstilling
+      edit: Rediger indstillingen
+      show: Vis indstillingen
+
     errors:
       messages:
         key_exist: Nøglen findes allerede

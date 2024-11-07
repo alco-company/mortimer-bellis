@@ -12,7 +12,7 @@ class ListItems::TimeMaterial < ListItems::ListItem
           end
         end
       end
-      div(class: "flex shrink-0 items-center gap-x-6") do
+      div(class: "flex shrink-0 items-center gap-x-6 ") do
         div(class: "hidden 2xs:flex 2xs:flex-col 2xs:items-end", data: time_material_controller?) do
           p(class: "text-sm leading-6 text-gray-900") do
             show_secondary_info
@@ -21,13 +21,26 @@ class ListItems::TimeMaterial < ListItems::ListItem
             show_time_info
           end
         end
-        render_context_menu
+        div(class: "flex-col justify-center") do
+          render_context_menu "relative justify-self-center"
+          render_play_pause
+        end
       end
     end
   end
 
   def time_material_controller?
     resource.active? ? { controller: "time-material" } : {}
+  end
+
+  def render_play_pause
+    if resource.active? or resource.paused? # and this_user?(resource.user_id)
+      link_to(resource_url(pause: (resource.paused? ? "resume" : "pause")), data: { turbo_prefetch: "false", turbo_stream: "true" }) do
+        resource.paused? ?
+          render(Icons::Play.new(cls: "text-gray-500 pt-1 h-8 w-8 ")) :
+          render(Icons::Pause.new(cls: "text-gray-500 h-8 w-8 "))
+      end
+    end
   end
 
   # def say_how_much
@@ -77,12 +90,8 @@ class ListItems::TimeMaterial < ListItems::ListItem
   end
 
   def show_time_info
-    if (resource.active? or resource.paused?) and this_user?(resource.user_id)
-      link_to(resource_url(pause: (resource.paused? ? "resume" : "pause")), data: { turbo_prefetch: "false", turbo_stream: "true" }) do
-        resource.paused? ?
-          paused_info :
-          render(Icons::Pause.new(cls: "text-gray-700 h-5 w-5 justify-self-end"))
-      end
+    if resource.active? or resource.paused? # and this_user?(resource.user_id)
+      paused_info if resource.paused?
     else
       if resource.is_invoice?
         span(class: "hidden 2xs:inline-flex w-fit items-center rounded-md bg-green-50 mr-1 px-1 xs:px-2 py-0 xs:py-0.5 text-2xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20 truncate") do
@@ -99,7 +108,6 @@ class ListItems::TimeMaterial < ListItems::ListItem
   def paused_info
     span(class: "flex") do
       plain I18n.l(resource.paused_at.to_datetime, format: :short)
-      render(Icons::Play.new(cls: "text-gray-700 pt-1 h-5 w-5 justify-self-end"))
     end
   rescue
     {}

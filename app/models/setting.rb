@@ -25,6 +25,10 @@ class Setting < ApplicationRecord
     all
   end
 
+  def self.set_order(resources, field = :key, direction = :asc)
+    resources.ordered(field, direction)
+  end
+
   def self.form(resource:, editable: true)
     Settings::Form.new resource: resource, editable: editable, enctype: "multipart/form-data"
   end
