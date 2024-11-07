@@ -20,6 +20,10 @@ NATIVE: https://blog.corsego.com/navigating-turbo-native, https://www.youtube.co
 
 ## CHANGELOG
 
+### 07/11/2024
+
+* implementing naiive backup solution (scp to my desk)
+
 ### 06/11/2024
 
 * add flash messages to omniauthable sign-ins

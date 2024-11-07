@@ -1,5 +1,6 @@
 # prepare the SSH port
 ssh docker5 ls
+backup_dev
 kamal env push --destination=staging
 kamal deploy --destination=staging
 echo Cleaning SSH local: `ps aux | grep 'ConnectTimeout' | wc -l` remote: `ssh docker5 -lroot "ps aux | grep 'ConnectTimeout' | wc -l"`

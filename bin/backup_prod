@@ -1,0 +1,4 @@
+mkdir -p ../../backups/prod/$(date +%Y-%m-%d)
+pushd ../../backups/prod/$(date +%Y-%m-%d)
+scp docker6:'/var/lib/docker/volumes/storage/_data/mort*' ./
+popd
