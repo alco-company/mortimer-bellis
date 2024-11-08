@@ -1,6 +1,9 @@
 # prepare the SSH port
 ssh docker6 ls
-backup_prod
+if [ -n "$1" ]; then
+  # Argument is provided, do something
+  backup_prod
+fi
 git checkout main
 git pull
 kamal env push 

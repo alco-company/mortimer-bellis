@@ -20,6 +20,11 @@ NATIVE: https://blog.corsego.com/navigating-turbo-native, https://www.youtube.co
 
 ## CHANGELOG
 
+### 08/11/2024
+
+* allow argument on stage and prod scripts to backup databases
+* 
+
 ### 07/11/2024
 
 * implementing naiive backup solution (scp to my desk)
