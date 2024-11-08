@@ -41,6 +41,7 @@ class Dinero::InvoiceDraft
     @settings["defaultAccountNumber"] = ds.provided_service&.account_for_one_off.to_i || @settings["defaultAccountNumber"]
     @settings["productForTime"] = ds.provided_service&.product_for_time || ""
     @settings["productForOverTime"] = ds.provided_service&.product_for_overtime || ""
+    # @settings["productForHardware"] = ds.provided_service&.product_for_hardware || ""
   end
 
   def can_resource_be_pushed?(resource)

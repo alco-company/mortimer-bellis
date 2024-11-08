@@ -13,7 +13,7 @@ class ListItems::ProvidedService < ListItems::ListItem
 
 
   def show_recipient_link
-    link_to setting_url(resource), data: { turbo_action: "advance", turbo_frame: "form", tabindex: "-1" }, class: "hover:underline" do
+    link_to resource_url(), data: { turbo_action: "advance", turbo_frame: "form", tabindex: "-1" }, class: "hover:underline" do
       plain resource.name
     end
   end
