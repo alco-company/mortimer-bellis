@@ -29,6 +29,7 @@ NATIVE: https://blog.corsego.com/navigating-turbo-native, https://www.youtube.co
 * allow invoice_items with a_one_off item to be added to invoices - with defaultAccountNumber
 * handle time_material_state on time_materials
 * handle project_states on projects
+* bug on invoice_draft - Dinero::Service
 
 ### 07/11/2024
 

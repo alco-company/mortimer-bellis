@@ -67,7 +67,7 @@ class Dinero::InvoiceDraft
     resource.done!
 
   rescue => err
-    resource.update push_log: "%s\n%s" % [ resource.push_log, err.message ]
+    resource.update push_log: "%s\n- - - \n%s\%s" % [ resource.push_log, Time.current.to_s, err.message ]
     resource.cannot_be_pushed!
     UserMailer.error_report(err.to_s, "DineroUpload.can_resource_be_pushed?").deliver_later
   end
@@ -173,10 +173,10 @@ class Dinero::InvoiceDraft
     q = ("%.2f" % line.quantity.gsub(",", ".")).to_f rescue 0.0
     d = ("%.2f" % line.discount.gsub(",", ".")).to_f rescue 0.0
     p = line.unit_price.blank? ? line.product.base_amount_value : ("%.2f" % line.unit_price.gsub(",", ".")).to_f
-
+    initials = line.user&.initials rescue "-"
     {
       "productGuid" => (line.product.erp_guid rescue raise "Product not found - productGuid"),     #   "102eb2e1-d732-4915-96f7-dac83512f16d",
-      "comments" =>    "%s: %s" % [ user&.initials, line.comment ],
+      "comments" =>    "%s: %s" % [ initials, line.comment ],
       "quantity" =>    q,
       "accountNumber" => (line.product.account_number.to_i rescue raise "Product not found - accountNumber"),
       "unit" =>        (line.product.unit rescue raise "Product not found - unit"),
@@ -200,11 +200,12 @@ class Dinero::InvoiceDraft
     q = ("%.2f" % line.quantity.gsub(",", ".")).to_f rescue 0.0
     d = ("%.2f" % line.discount.gsub(",", ".")).to_f rescue 0.0
     p = line.unit_price.blank? ? 0.0 : ("%.2f" % line.unit_price.gsub(",", ".")).to_f
+    initials = line.user&.initials rescue "-"
 
     {
       "productGuid" => nil,
       "description" => line.product_name,
-      "comments" =>    "%s: %s" % [ user&.initials, line.comment ],
+      "comments" =>    "%s: %s" % [ initials, line.comment ],
       "quantity" =>   q,
       "accountNumber" => settings["defaultAccountNumber"].to_i,
       "unit" =>        "parts",
@@ -224,9 +225,11 @@ class Dinero::InvoiceDraft
   end
 
   def a_text(line)
+    initials = line.user&.initials rescue "-"
+
     {
       "productGuid" => nil,
-      "description" => "%s: %s" % [ user&.initials, line.comment ],
+      "description" => "%s: %s" % [ initials, line.comment ],
       "lineType" =>    "Text"
     }
   rescue => err
@@ -246,10 +249,10 @@ class Dinero::InvoiceDraft
     raise "Product not found %s - set products in Dinero Service" % nbr unless prod
     q = line.time.blank? ? 0.25 : ("%.2f" % line.time.gsub(",", ".")).to_f rescue 0.0
     p = line.rate.blank? ? prod.base_amount_value : ("%.2f" % line.rate.gsub(",", ".")).to_f
-
+    initials = line.user&.initials rescue "-"
     {
       "productGuid" => prod.erp_guid,             #   "102eb2e1-d732-4915-96f7-dac83512f16d",
-      "comments" =>    "%s: %s" % [ user&.initials, line.about ],
+      "comments" =>    "%s: %s" % [ initials, line.about ],
       "quantity" =>    q,
       "accountNumber" => prod.account_number.to_i,
       "unit" =>        prod.unit,
