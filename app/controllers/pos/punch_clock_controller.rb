@@ -23,7 +23,7 @@ class Pos::PunchClockController < Pos::PosController
     end
     punch = @user.punch @resource, params[:user][:state].to_i, request.remote_ip
     stream_punch(punch, @user)
-    redirect_to pos_punch_clock_url(api_key: @resource.access_token)
+    redirect_to pos_punch_clock_url(api_key: @resource.access_token), success: t("punches.create.post") and return
   end
 
   private

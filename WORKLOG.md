@@ -13,6 +13,7 @@ NATIVE: https://blog.corsego.com/navigating-turbo-native, https://www.youtube.co
 
 ## BUGS
 
+*  Post-install message from solid_queue: Upgrading to Solid Queue 0.4.x? There are some breaking changes about how Solid Queue is started. Check https://github.com/rails/solid_queue/blob/main/UPGRADING.md for upgrade instructions.
 * [ ] add breaks and included_in_duration to payroll_period#manual_punch
 * [ ] redesign punch and add work_schedule to payroll_period#manual_punch
 * fix error on employee_invitation#create -> returns turbo_frame in clear text - not HTML - at least on iPad
@@ -24,6 +25,7 @@ NATIVE: https://blog.corsego.com/navigating-turbo-native, https://www.youtube.co
 
 * allow argument on stage and prod scripts to backup databases
 * bug on user/profile
+* The kiosk provides visual confirmation (e.g., a success message) after a successful sign-in or sign-out.
 
 ### 07/11/2024
 
