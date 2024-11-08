@@ -1,5 +1,11 @@
 da:
   project:
+    states:
+      draft: Udkast
+      active: Aktiv
+      paused: Parkeret
+      done: Afsluttet
+      archived: Arkiveret
     modal:
       delete_all: 
         title: Slet alle projekter

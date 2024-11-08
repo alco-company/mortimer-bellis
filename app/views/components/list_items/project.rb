@@ -15,7 +15,10 @@ class ListItems::Project < ListItems::ListItem
   # actual_minutes
 
   def show_recipient_link
-    link_to resource_url, class: "hover:underline" do
+    link_to(resource_url,
+      class: "truncate hover:underline",
+      data: { turbo_action: "advance", turbo_frame: "form" },
+      tabindex: -1) do
       plain resource.name
     end
   end

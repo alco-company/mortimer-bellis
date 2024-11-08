@@ -5,7 +5,7 @@ class Projects::Form < ApplicationForm
     row field(:description).input(class: "mort-form-text")
     row field(:start_date).datetime(class: "mort-form-text", required: true)
     row field(:end_date).datetime(class: "mort-form-text", required: true)
-    row field(:state).input(class: "mort-form-text")
+    row field(:state).select(Project.project_states, class: "mort-form-text")
     row field(:budget).input(class: "mort-form-text")
     row field(:is_billable).boolean(class: "mort-form-bool")
     row field(:is_separate_invoice).boolean(class: "mort-form-bool")

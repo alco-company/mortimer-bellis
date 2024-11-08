@@ -26,6 +26,9 @@ NATIVE: https://blog.corsego.com/navigating-turbo-native, https://www.youtube.co
 * allow argument on stage and prod scripts to backup databases
 * bug on user/profile
 * The kiosk provides visual confirmation (e.g., a success message) after a successful sign-in or sign-out.
+* allow invoice_items with a_one_off item to be added to invoices - with defaultAccountNumber
+* handle time_material_state on time_materials
+* handle project_states on projects
 
 ### 07/11/2024
 
