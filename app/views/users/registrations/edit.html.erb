@@ -30,7 +30,7 @@
     <div class="mort-field">
       <%= f.label :mugshot %><br />
       <%= f.file_field :mugshot, class: "mort-form-file" %>
-      <% if resource.mugshot.attached? %>
+      <% if resource.mugshot.attached? && resource.mugshot.persisted? %>
         <div class="w-auto max-w-32 relative border rounded-md shadow px-3 mt-4">
           <%= image_tag resource.mugshot %>          
           <%= link_to(

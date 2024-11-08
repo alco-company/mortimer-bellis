@@ -23,7 +23,7 @@ NATIVE: https://blog.corsego.com/navigating-turbo-native, https://www.youtube.co
 ### 08/11/2024
 
 * allow argument on stage and prod scripts to backup databases
-* 
+* bug on user/profile
 
 ### 07/11/2024
 

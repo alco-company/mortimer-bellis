@@ -45,7 +45,6 @@ class User < ApplicationRecord
   scope :by_role, ->(role) { where(role: role) if role.present? }
   scope :by_locale, ->(locale) { where("locale LIKE ?", "%#{locale}%") if locale.present? }
   scope :by_time_zone, ->(time_zone) { where("time_zone LIKE ?", "%#{time_zone}%") if time_zone.present? }
-  scope :can, ->(action) { where("settings.key = ? AND settings.value = ?", action.to_s, "true").joins(:settings) }
 
   validates :pincode,
     numericality: { only_integer: true, in: 1000..9999 },
