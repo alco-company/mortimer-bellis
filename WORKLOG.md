@@ -30,6 +30,7 @@ NATIVE: https://blog.corsego.com/navigating-turbo-native, https://www.youtube.co
 * handle time_material_state on time_materials
 * handle project_states on projects
 * bug on invoice_draft - Dinero::Service
+* bug in provided_services/dinero/service/_authorize
 
 ### 07/11/2024
 
