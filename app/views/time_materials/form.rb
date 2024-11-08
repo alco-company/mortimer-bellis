@@ -270,7 +270,7 @@ class TimeMaterials::Form < ApplicationForm
   def invoicing
     div(class: "pb-12") do
       div(class: "mt-2 space-y-1") do
-        row field(:state).select(TimeMaterial.states_array, class: "my-auto mort-form-select") # , "flex justify-end flex-row-reverse items-center"
+        row field(:state).select(TimeMaterial.time_material_states, class: "my-auto mort-form-select") # , "flex justify-end flex-row-reverse items-center"
         fieldset do
           legend(class: "text-sm font-semibold leading-6 text-gray-900") { I18n.t("time_material.invoicing.lead") }
           div(class: "mt-6 space-y-1") do

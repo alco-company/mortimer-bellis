@@ -32,20 +32,6 @@ class TimeMaterial < ApplicationRecord
     end
   end
 
-  class State
-    attr_accessor :id, :value
-    def initialize(id:, value:)
-      @id = id
-      @value = I18n.t("time_material.states.#{id}")
-    end
-  end
-
-  def self.states_array
-    arr = []
-    TimeMaterial.states.each { |k, v| arr << State.new(id: k, value: v) }
-    arr
-  end
-
   def self.filtered(filter)
     flt = filter.filter
 

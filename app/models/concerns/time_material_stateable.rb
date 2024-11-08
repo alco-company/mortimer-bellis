@@ -1,15 +1,3 @@
-# WORK_STATES = [
-#   [ "out",  I18n.t("punch.out") ],
-# ...
-#   [ "archived", I18n.t("punch.archived") ]
-# ]
-
-# WORK_STATE_H = {
-#   "out" =>  I18n.t("punch.out"),
-# ...
-#   "archived" => I18n.t("punch.archived")
-# }
-
 module TimeMaterialStateable
   extend ActiveSupport::Concern
 
@@ -28,5 +16,8 @@ module TimeMaterialStateable
   end
 
   class_methods do
+    def time_material_states
+      states.keys.collect { |k| [ k, I18n.t("time_material.states.#{k}") ] }
+    end
   end
 end

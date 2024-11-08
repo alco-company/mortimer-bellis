@@ -41,8 +41,8 @@ class ApplicationForm < Superform::Rails::Form
         case item
         in ActiveRecord::Relation => relation
           active_record_relation_options_enumerable(relation).each(&options)
-        in [TimeMaterial::State, *] => colr
-          enumerable_list(colr).each(&options)
+        # in [TimeMaterial::State, *] => colr
+        #   enumerable_list(colr).each(&options)
         in [Colorable::Color, *] => colr
           enumerable_list(colr).each(&options)
         in [Localeable::Locale, *] => locl
