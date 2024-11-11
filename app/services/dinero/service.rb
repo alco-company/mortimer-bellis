@@ -57,7 +57,7 @@ class Dinero::Service < SaasService
   # changesSince = 2015-08-18T06:36:22Z (UTC)
   # pageSize = 100 (max 1000)
   #
-  def pull(resource_class:, all: false, page: 0, pageSize: 100, fields: nil, start_date: nil, end_date: nil)
+  def pull(resource_class:, all: false, page: 0, pageSize: 100, fields: nil, status_filter: nil, start_date: nil, end_date: nil)
     case resource_class.to_s
     when "Customer"; tbl = "contacts"
     when "Product"; tbl = "products"
@@ -77,9 +77,17 @@ class Dinero::Service < SaasService
     if fields
       query[:fields] = fields
     end
+    if status_filter
+      query[:statusFilter] = status_filter
+    end
     list = get "/v1/#{settings["organizationId"]}/#{tbl}?#{query.to_query}"
+    # debugger
     unless list.parsed_response.present?
-      debugger
+      if list.response.class == Net::HTTPUnauthorized
+        UserMailer.error_report("", "SyncERP - Dinero::Service.pull").deliver_later
+        return false
+      end
+      UserMailer.error_report(list.to_s, "SyncERP - Dinero::Service.pull").deliver_later
       return false
     end
     list.parsed_response["Collection"].each do |item|
@@ -135,22 +143,34 @@ class Dinero::Service < SaasService
         client_secret: ENV["DINERO_APP_SECRET"]
       }
 
-      HTTParty.post(host, body: params, headers: { "Content-Type" => "application/x-www-form-urlencoded" })
+      res = HTTParty.post(host, body: params, headers: { "Content-Type" => "application/x-www-form-urlencoded" })
+      if res["error"].present?
+        raise "Dinero::Service.code_to_token: %s" % res["error"].to_s
+      end
+      res
     end
 
     def get(path, headers = {})
-      refresh_token if token_expired?
+      refresh_token if token_expired? || settings["access_token"].nil?
       headers["Authorization"] = "Bearer %s" % settings["access_token"]
-      HTTParty.get("https://api.dinero.dk#{path}", headers: headers)
+      res = HTTParty.get("https://api.dinero.dk#{path}", headers: headers)
+      if res["error"].present?
+        raise "Dinero::Service.get: %s" % res["error"].to_s
+      end
+      res
     rescue => err
       UserMailer.error_report(err.to_s, "Dinero::Service.get").deliver_later
     end
 
     def post(path, body, headers = {})
-      refresh_token if token_expired?
+      refresh_token if token_expired? || settings["access_token"].nil?
       headers["Authorization"] = "Bearer %s" % settings["access_token"]
       headers["Content-Type"] = "application/json"
-      HTTParty.post("https://api.dinero.dk#{path}", body: body, headers: headers)
+      res = HTTParty.post("https://api.dinero.dk#{path}", body: body, headers: headers)
+      if res["error"].present?
+        raise "Dinero::Service.post: %s" % res["error"].to_s
+      end
+      res
     rescue => err
       UserMailer.error_report(err.to_s, "Dinero::Service.post").deliver_later
     end
@@ -173,8 +193,11 @@ class Dinero::Service < SaasService
         grant_type: "refresh_token",
         refresh_token: settings["refresh_token"]
       }
-
       res = HTTParty.post(host, body: params, headers: { "Content-Type" => "application/x-www-form-urlencoded" })
+      if res["error"].present?
+        provided_service.update service_params: {}
+        raise "Dinero::Service.refresh_token: %s" % res["error"].to_s
+      end
       provided_service.update service_params: res
       @settings = provided_service.service_params_hash
       @settings["organizationId"] = provided_service.organizationID

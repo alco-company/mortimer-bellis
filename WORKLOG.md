@@ -21,10 +21,14 @@ NATIVE: https://blog.corsego.com/navigating-turbo-native, https://www.youtube.co
 
 ## CHANGELOG
 
+* add 50%/100% overtime
+* add customer has balance marker
+* add date on invoice_item comment - when work done
+
 ### 11/11/2024
 
 * fix mugshot image size on uploads
-* 
+* check service authentication on dinero - or reset it and tell!
 
 ### 08/11/2024
 
