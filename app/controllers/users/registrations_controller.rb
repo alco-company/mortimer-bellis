@@ -48,15 +48,6 @@ class Users::RegistrationsController < Devise::RegistrationsController
     super
   end
 
-  def update_now(resource, params)
-    # account_update_params.delete(:current_password)
-    resource.update name: params[:name],
-      mugshot: params[:mugshot],
-      pincode: params[:pincode],
-      locale: params[:locale],
-      time_zone: params[:time_zone]
-  end
-
   # DELETE /resource
   # def destroy
   #   super
@@ -75,6 +66,16 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   def update_resource(resource, params)
     params[:password].blank? && params[:password_confirmation].blank? ? update_now(resource, params) : super
+  end
+
+  def update_now(resource, params)
+    # account_update_params.delete(:current_password)
+    resize_before_save(params[:mugshot], 100, 100)
+    resource.update name: params[:name],
+      mugshot: params[:mugshot],
+      pincode: params[:pincode],
+      locale: params[:locale],
+      time_zone: params[:time_zone]
   end
 
   # If you have extra params to permit, append them to the sanitizer.
@@ -107,5 +108,20 @@ class Users::RegistrationsController < Devise::RegistrationsController
   def after_inactive_sign_up_path_for(resource)
     # super(resource)
     "/users/sign_in_success"
+  end
+
+  def resize_before_save(image_param, width, height)
+    return unless image_param
+
+    begin
+      ImageProcessing::MiniMagick
+        .source(image_param)
+        .resize_to_fit(width, height)
+        .call(destination: image_param.tempfile.path)
+    rescue StandardError => _e
+      # Do nothing. If this is catching, it probably means the
+      # file type is incorrect, which can be caught later by
+      # model validations.
+    end
   end
 end

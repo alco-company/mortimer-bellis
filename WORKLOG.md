@@ -21,6 +21,11 @@ NATIVE: https://blog.corsego.com/navigating-turbo-native, https://www.youtube.co
 
 ## CHANGELOG
 
+### 11/11/2024
+
+* fix mugshot image size on uploads
+* 
+
 ### 08/11/2024
 
 * allow argument on stage and prod scripts to backup databases
