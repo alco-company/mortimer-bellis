@@ -82,4 +82,12 @@ class TimeMaterial < ApplicationRecord
       [ 2, I18n.t("time_material.overtimes.100percent") ]
     ]
   end
+
+  def self.trip_purposes
+    [
+      [ "service", I18n.t("time_material.trip_purposes.service") ],
+      [ "delivery", I18n.t("time_material.trip_purposes.delivery") ],
+      [ "pickup", I18n.t("time_material.trip_purposes.pickup") ]
+    ]
+  end
 end

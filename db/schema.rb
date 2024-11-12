@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_11_12_070446) do
+ActiveRecord::Schema[8.0].define(version: 2024_11_12_101430) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -316,6 +316,7 @@ ActiveRecord::Schema[8.0].define(version: 2024_11_12_070446) do
     t.string "product_for_overtime"
     t.string "product_for_hardware"
     t.string "product_for_overtime_100"
+    t.string "product_for_mileage"
     t.index ["authorized_by_id"], name: "index_provided_services_on_authorized_by_id"
     t.index ["tenant_id"], name: "index_provided_services_on_tenant_id"
   end
@@ -577,6 +578,12 @@ ActiveRecord::Schema[8.0].define(version: 2024_11_12_070446) do
     t.datetime "started_at"
     t.integer "time_spent"
     t.integer "overtime", default: 0
+    t.integer "odo_from"
+    t.integer "odo_to"
+    t.integer "kilometers"
+    t.string "trip_purpose"
+    t.datetime "odo_from_time"
+    t.datetime "odo_to_time"
     t.index ["tenant_id"], name: "index_time_materials_on_tenant_id"
     t.index ["user_id"], name: "index_time_materials_on_user_id"
   end

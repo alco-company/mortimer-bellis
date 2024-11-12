@@ -475,6 +475,7 @@ da:
         product_for_time: Produkt for salg af timer
         product_for_overtime: Produkt for salg af timer (50% overtid)
         product_for_overtime_100: Produkt for salg af timer (100% overtid)
+        product_for_mileage: Produkt for salg af kørsel
         product_for_hardware: Finans konto for salg af materialer (fx 1020)
         service_params: Service indstillinger
 
@@ -611,7 +612,12 @@ da:
         is_separate: Separat faktura
         push_log: Log over fejl ifm upload til Dinero
         pushed_erp_timestamp: Overført til ERP
-
+        odo_from: fra
+        odo_to: til
+        kilometers: Km
+        trip_purpose: Formål
+        odo_from_time: Kørsel start
+        odo_to_time: Kørsel stoppet
 
       uri_scheme: 
         scheme: skema

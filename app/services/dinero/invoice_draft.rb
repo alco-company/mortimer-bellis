@@ -42,6 +42,7 @@ class Dinero::InvoiceDraft
     @settings["productForTime"] = ds.provided_service&.product_for_time || ""
     @settings["productForOverTime"] = ds.provided_service&.product_for_overtime || ""
     @settings["productForOverTime100"] = ds.provided_service&.product_for_overtime_100 || ""
+    @settings["productForMileage"] = ds.provided_service&.product_for_mileage || ""
     # @settings["productForHardware"] = ds.provided_service&.product_for_hardware || ""
   end
 
@@ -50,12 +51,13 @@ class Dinero::InvoiceDraft
 
     resource.customer.name                            # check if customer exists/association set correctly
     if resource.quantity.blank?
+      raise "mileage_wrong" if resource.is_invoice? and !resource.kilometers.blank? and is_mileage_wrong?(resource)
       raise "quantity not correct format" if (resource.time =~ /^\d*[,.]?\d*$/).nil? and resource.comment.blank?
       raise "rate not correct format" if !resource.rate.blank? and (resource.rate =~ /^\d*[,.]?\d*$/).nil? and resource.comment.blank?
-      raise "time and quantity cannot both be blank" if resource.time.blank? and resource.comment.blank?
+      raise "time and quantity and mileage cannot all be blank" if resource.time.blank? and resource.comment.blank? and resource.kilometers.blank?
       raise "time not correct format" if !resource.time.blank? and (resource.time =~ /^\d*[,.]?\d*$/).nil?
     else
-      raise "time and quantity cannot both be set" if !resource.time.blank?
+      raise "time, quantity, kilometers - only one can be set" if !resource.time.blank? or !resource.kilometers.blank?
       raise "rate cannot be set if product and quantity is set!" if !resource.rate.blank? && !resource.product_id.blank?
       raise "product_name cannot be blank if quantity is not blank!" if resource.product_name.blank?          # with one off's we use the product text as description! No need to check resource.product.name   # check if product exists/association set correctly
       raise "quantity not correct format" if (resource.quantity =~ /^\d*[,.]?\d*$/).nil?
@@ -71,6 +73,15 @@ class Dinero::InvoiceDraft
     resource.update push_log: "%s\n- - - \n%s\%s" % [ resource.push_log, Time.current.to_s, err.message ]
     resource.cannot_be_pushed!
     UserMailer.error_report(err.to_s, "DineroUpload.can_resource_be_pushed?").deliver_later
+  end
+
+  def is_mileage_wrong?(resource)
+    (resource.kilometers != resource.odo_to - resource.odo_from) or
+    (resource.kilometers < 0) or
+    (resource.odo_to < resource.odo_from) or
+    (resource.odo_from_time > resource.odo_to_time) or
+    (resource.odo_from_time.blank?) or
+    (resource.odo_to_time.blank?)
   end
 
   #
@@ -118,7 +129,7 @@ class Dinero::InvoiceDraft
         lines.each do |line|
           line.pushed_to_erp!
           line.update erp_guid: result["Guid"], pushed_erp_timestamp: result["TimeStamp"]
-          Broadcasters::Resource.new(line).replace
+          Broadcasters::Resource.new(line, { controller: "time_materials" }).replace
         end
 
       rescue => err
@@ -139,6 +150,7 @@ class Dinero::InvoiceDraft
   def product_line(line, date)
     return a_product(line, date) unless line.product_id.blank?
     return a_one_off(line, date) unless line.quantity.blank?
+    return a_mileage(line, date) unless line.kilometers.blank?
     return a_text(line, date) unless line.comment.blank?
     service_line(line, date)
   end
@@ -238,6 +250,34 @@ class Dinero::InvoiceDraft
     line.update push_log: "%s\n%s" % [ line.push_log, err.message ]
     line.cannot_be_pushed!
     UserMailer.error_report(err.to_s, "DineroUpload.a_text").deliver_later
+    {
+      "productGuid" => nil,
+      "description" => err.message,
+      "lineType" =>    "Text"
+    }
+  end
+
+  def a_mileage(line, date)
+    nbr = settings["productForMileage"]
+    prod = Product.where("product_number like ?", nbr).first
+    raise "Product not found %s - set products in Dinero Service" % nbr unless prod
+    q = line.kilometers.to_f rescue 0.0
+    p = prod.base_amount_value
+    initials = line.user&.initials rescue "-"
+    {
+      "productGuid" => prod.erp_guid,             #   "102eb2e1-d732-4915-96f7-dac83512f16d",
+      "comments" =>    "%s, %s: %s" % [ date, initials, line.about ],
+      "quantity" =>    q,
+      "accountNumber" => prod.account_number.to_i,
+      "unit" =>        prod.unit,
+      "discount" =>    0.0,                       # "%.2f" % line.discount.gsub("%", "").to_f,
+      "lineType" =>    "Product",                 # or Text - in which case only description should be set
+      "baseAmountValue" => p
+    }
+  rescue => err
+    line.update push_log: "%s\n%s" % [ line.push_log, err.message ]
+    line.cannot_be_pushed!
+    UserMailer.error_report(err.to_s, "DineroUpload.mileage_line").deliver_later
     {
       "productGuid" => nil,
       "description" => err.message,

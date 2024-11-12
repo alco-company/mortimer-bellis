@@ -6,7 +6,10 @@ export default class extends Controller {
     "invoice",
     "timetab",
     "materialtab",
-    "counter"
+    "counter",
+    "odofrom",
+    "odoto",
+    "mileage"
   ]
 
   connect() {
@@ -62,6 +65,11 @@ export default class extends Controller {
       options.classList.add("hidden");
       this.items_connected = false;
     }
+  }
+
+  setMileage(e) {
+    this.mileageTarget.value =
+      this.odotoTarget.value - this.odofromTarget.value;
   }
 
 

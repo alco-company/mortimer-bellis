@@ -6,6 +6,7 @@ class ProvidedServices::Form < ApplicationForm
     row field(:product_for_time).input(class: "mort-form-text")
     row field(:product_for_overtime).input(class: "mort-form-text")
     row field(:product_for_overtime_100).input(class: "mort-form-text")
+    row field(:product_for_mileage).input(class: "mort-form-text")
     row field(:account_for_one_off).input(class: "mort-form-text")
     # row field(:product_for_hardware).input(class: "mort-form-text")
     hr

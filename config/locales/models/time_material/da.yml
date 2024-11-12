@@ -80,7 +80,14 @@ da:
     type:
       time: "Tid"
       material: "Materiale"
+      mileage: "Kørsel"
       warning: "Bemærk! Du kan ikke tilføje både tid og materialer; vælg enten tid eller materialer"
+    mileage:
+      lead: Kilometertæller
+    trip_purposes:
+      service: "Service"
+      delivery: "Levering"
+      pickup: "Afhentning"
     date:
       lbl: "Dato"
     time:
