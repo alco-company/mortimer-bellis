@@ -32,6 +32,8 @@ NATIVE: https://blog.corsego.com/navigating-turbo-native, https://www.youtube.co
 * drop execute statements in migration
 * dropped the entire thing - just added over_time
 * big troubles - only getting 404's
+* write "km" on list_items time_material when mileage
+* fix name on list_item TimeMaterial - more
 
 ### 11/11/2024
 

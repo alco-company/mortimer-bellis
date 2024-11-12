@@ -67,7 +67,7 @@ class ListItems::TimeMaterial < ListItems::ListItem
       role: "menuitem",
       data: { turbo_action: "advance", turbo_frame: "form" },
       tabindex: "-1") do
-      resource.customer&.name || resource.customer_name rescue "-"
+      name_resource
     end
   end
 
@@ -113,6 +113,13 @@ class ListItems::TimeMaterial < ListItems::ListItem
     {}
   end
 
+  def name_resource
+    return resource.customer&.name if resource.customer.present? or !resource.customer_name.blank?
+    return resource.project&.name if resource.project.present? or !resource.project_name.blank?
+    I18n.t("time_material.internal_or_private")
+  rescue "-"
+  end
+
   def show_time_material_quantative
     if resource.active? or resource.paused?
       counter = resource.time_spent # resource.paused? ? resource.time_spent : (Time.current.to_i - resource.started_at.to_i)
@@ -122,9 +129,10 @@ class ListItems::TimeMaterial < ListItems::ListItem
       span(class: "grow mr-2 time_counter", data: { counter: counter, time_material_target: "counter" }) { timestring }
     else
       u = resource.unit.blank? ? "" : I18n.t("time_material.units.#{resource.unit}")
-      case resource.time.blank?
-      when false; "#{ resource.time}t á #{ resource.rate}"
-      when true; "%s %s á %s" % [ resource.quantity, u, resource.unit_price ]
+      case true
+      when resource.kilometers != 0; "#{ resource.kilometers}km"
+      when resource.quantity.blank?; "#{ resource.time}t á #{ resource.rate}"
+      else; "%s %s á %s" % [ resource.quantity, u, resource.unit_price ]
       end
     end
   end

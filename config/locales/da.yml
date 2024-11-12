@@ -591,7 +591,7 @@ da:
         date: Dato
         time: Tid
         state: Status
-        overtime: Overtid
+        over_time: Overtid
         material: Materiale
         description: Beskrivelse
         quantity: Antal

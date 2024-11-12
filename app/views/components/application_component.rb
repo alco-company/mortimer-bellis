@@ -26,7 +26,7 @@ class ApplicationComponent < Phlex::HTML
       role: "menuitem",
       data: { turbo_action: "advance", turbo_frame: "form" },
       tabindex: "-1") do
-      resource.name
+      item.name
     end if item
   end
 

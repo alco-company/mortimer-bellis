@@ -8,6 +8,7 @@ da:
     done: Afsluttet
     resumed: Opgaven blev genoptaget
     not_your_time_material: Du kan kun starte/stoppe dine egne tid/materialer
+    internal_or_private: Intern eller privat
     states:
       draft: Kladde
       active: Aktiv
