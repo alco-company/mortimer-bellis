@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_11_12_101430) do
+ActiveRecord::Schema[8.0].define(version: 2024_11_12_115432) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -332,8 +332,6 @@ ActiveRecord::Schema[8.0].define(version: 2024_11_12_101430) do
     t.datetime "punches_settled_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["tenant_id"], name: "index_punch_cards_on_tenant_id"
-    t.index ["user_id"], name: "index_punch_cards_on_user_id"
   end
 
   create_table "punch_clocks", force: :cascade do |t|
@@ -362,8 +360,6 @@ ActiveRecord::Schema[8.0].define(version: 2024_11_12_101430) do
     t.datetime "updated_at", null: false
     t.integer "punch_card_id"
     t.string "comment"
-    t.index ["tenant_id"], name: "index_punches_on_tenant_id"
-    t.index ["user_id"], name: "index_punches_on_user_id"
   end
 
   create_table "settings", force: :cascade do |t|
@@ -448,6 +444,7 @@ ActiveRecord::Schema[8.0].define(version: 2024_11_12_101430) do
     t.string "queue_name", null: false
     t.integer "priority", default: 0, null: false
     t.datetime "created_at", null: false
+    t.index ["job_id"], name: "index_solid_queue_ready_executions_on_job_id", unique: true
     t.index ["priority", "job_id"], name: "index_solid_queue_poll_all"
     t.index ["queue_name", "priority", "job_id"], name: "index_solid_queue_poll_by_queue"
   end
@@ -569,6 +566,7 @@ ActiveRecord::Schema[8.0].define(version: 2024_11_12_101430) do
     t.datetime "updated_at", null: false
     t.integer "user_id", null: false
     t.text "comment"
+    t.boolean "overtime"
     t.string "unit_price"
     t.string "unit"
     t.string "pushed_erp_timestamp"
@@ -577,7 +575,6 @@ ActiveRecord::Schema[8.0].define(version: 2024_11_12_101430) do
     t.datetime "paused_at"
     t.datetime "started_at"
     t.integer "time_spent"
-    t.integer "overtime", default: 0
     t.integer "over_time"
     t.integer "odo_from"
     t.integer "odo_to"
@@ -679,7 +676,6 @@ ActiveRecord::Schema[8.0].define(version: 2024_11_12_101430) do
   add_foreign_key "punch_cards", "tenants", on_delete: :cascade
   add_foreign_key "punch_clocks", "locations", on_delete: :cascade
   add_foreign_key "punch_clocks", "tenants", on_delete: :cascade
-  add_foreign_key "punches", "punch_cards", on_delete: :cascade
   add_foreign_key "punches", "tenants"
   add_foreign_key "punches", "tenants", on_delete: :cascade
   add_foreign_key "settings", "tenants"

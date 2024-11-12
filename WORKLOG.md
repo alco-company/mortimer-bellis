@@ -31,6 +31,7 @@ NATIVE: https://blog.corsego.com/navigating-turbo-native, https://www.youtube.co
 * rename migrations to please Kamal!
 * drop execute statements in migration
 * dropped the entire thing - just added over_time
+* big troubles - only getting 404's
 
 ### 11/11/2024
 
