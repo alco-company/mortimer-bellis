@@ -41,10 +41,12 @@ class TimeMaterialsController < MortimerController
   # pick up the play button from the time_material#index view
   #
   def create
+    set_mileage
     params[:play].present? ? create_play : super
   end
 
   def update
+    set_mileage
     params.permit![:time_material][:time_spent] = @resource.time_spent + (Time.current.to_i - @resource.started_at.to_i) if @resource.active?
     super
   end
@@ -80,6 +82,16 @@ class TimeMaterialsController < MortimerController
 
   private
 
+    def set_mileage
+      if params[:time_material][:odo_from_time].present? &&
+         params[:time_material][:odo_to_time].present? &&
+         params[:time_material][:odo_from].present? &&
+         params[:time_material][:odo_to].present? &&
+         params[:time_material][:kilometers].present?
+         params[:time_material][:about] = I18n.t("time_material.type.mileage")
+      end
+    end
+
     # Only allow a list of trusted parameters through.
     def resource_params
       params.require(:time_material).permit(
@@ -108,7 +120,13 @@ class TimeMaterialsController < MortimerController
         :is_invoice,
         :is_free,
         :is_offer,
-        :is_separate
+        :is_separate,
+        :odo_from,
+        :odo_to,
+        :kilometers,
+        :trip_purpose,
+        :odo_from_time,
+        :odo_to_time
       )
     end
 
