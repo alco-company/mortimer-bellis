@@ -21,8 +21,12 @@ NATIVE: https://blog.corsego.com/navigating-turbo-native, https://www.youtube.co
 
 ## CHANGELOG
 
+* add milage accounting
 * add 50%/100% overtime
 * add customer has balance marker
+
+### 12/11/2024
+
 * add date on invoice_item comment - when work done
 
 ### 11/11/2024

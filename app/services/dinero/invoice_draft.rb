@@ -98,14 +98,15 @@ class Dinero::InvoiceDraft
         dinero_lines = []
         project_description = []
         refs = []
+        date = I18n.l(invoice_date, format: :short_iso)
         lines.each do |line|
           # Struct.new("Line", :productGuid, :description, :comments, :quantity, :accountNumber, :unit, :discount, :lineType, :baseAmountValue).new(
-          dinero_lines << product_line(line)
+          dinero_lines << product_line(line, date)
           project_description << set_project_description(project_description, line)
           refs << line.product&.external_reference || ""
         end
         line = lines.first
-        dinero_invoice = invoice_header(line, dinero_lines, refs.join(", "), project_description.compact.join(", "))
+        dinero_invoice = invoice_header(line, date, dinero_lines, refs.join(", "), project_description.compact.join(", "))
         persist_invoice_for_testing(cid, dinero_invoice, lines) if Rails.env.test?
 
         # happy path = {"Guid"=>"5856516f-5127-4dfc-98a7-52ab7d09e1df", "TimeStamp"=>"0000000080C81AC0"}
@@ -134,21 +135,21 @@ class Dinero::InvoiceDraft
   # 3. Product (one offs)
   # 4. Text
   #
-  def product_line(line)
-    return a_product(line) unless line.product_id.blank?
-    return a_one_off(line) unless line.quantity.blank?
-    return a_text(line) unless line.comment.blank?
-    service_line(line)
+  def product_line(line, date)
+    return a_product(line, date) unless line.product_id.blank?
+    return a_one_off(line, date) unless line.quantity.blank?
+    return a_text(line, date) unless line.comment.blank?
+    service_line(line, date)
   end
 
-  def invoice_header(line, lines, refs, comment)
+  def invoice_header(line, date, lines, refs, comment)
     {
       "currency" => "DKK",
       "language" => "da-DK",
       "externalReference" => refs,
       "description" => "Faktura",
       "comment" => comment,
-      "date" => I18n.l(invoice_date, format: :short_iso),
+      "date" => date,
       "productLines" => lines,
       "address" => line.customer.address,
       "guid" => nil,                                  # "3a315ad3-ddcc-419d-9fc5-219280ae4816",
@@ -169,14 +170,14 @@ class Dinero::InvoiceDraft
     {}
   end
 
-  def a_product(line)
+  def a_product(line, date)
     q = ("%.2f" % line.quantity.gsub(",", ".")).to_f rescue 0.0
     d = ("%.2f" % line.discount.gsub(",", ".")).to_f rescue 0.0
     p = line.unit_price.blank? ? line.product.base_amount_value : ("%.2f" % line.unit_price.gsub(",", ".")).to_f
     initials = line.user&.initials rescue "-"
     {
       "productGuid" => (line.product.erp_guid rescue raise "Product not found - productGuid"),     #   "102eb2e1-d732-4915-96f7-dac83512f16d",
-      "comments" =>    "%s: %s" % [ initials, line.comment ],
+      "comments" =>    "%s, %s: %s" % [ date, initials, line.comment ],
       "quantity" =>    q,
       "accountNumber" => (line.product.account_number.to_i rescue raise "Product not found - accountNumber"),
       "unit" =>        (line.product.unit rescue raise "Product not found - unit"),
@@ -196,7 +197,7 @@ class Dinero::InvoiceDraft
   end
 
   # a product we just invented - no data exists in the system
-  def a_one_off(line)
+  def a_one_off(line, date)
     q = ("%.2f" % line.quantity.gsub(",", ".")).to_f rescue 0.0
     d = ("%.2f" % line.discount.gsub(",", ".")).to_f rescue 0.0
     p = line.unit_price.blank? ? 0.0 : ("%.2f" % line.unit_price.gsub(",", ".")).to_f
@@ -205,7 +206,7 @@ class Dinero::InvoiceDraft
     {
       "productGuid" => nil,
       "description" => line.product_name,
-      "comments" =>    "%s: %s" % [ initials, line.comment ],
+      "comments" =>    "%s, %s: %s" % [ date, initials, line.comment ],
       "quantity" =>   q,
       "accountNumber" => settings["defaultAccountNumber"].to_i,
       "unit" =>        "parts",
@@ -224,12 +225,12 @@ class Dinero::InvoiceDraft
     }
   end
 
-  def a_text(line)
+  def a_text(line, date)
     initials = line.user&.initials rescue "-"
 
     {
       "productGuid" => nil,
-      "description" => "%s: %s" % [ initials, line.comment ],
+      "description" => "%s, %s: %s" % [ date, initials, line.comment ],
       "lineType" =>    "Text"
     }
   rescue => err
@@ -243,7 +244,7 @@ class Dinero::InvoiceDraft
     }
   end
 
-  def service_line(line)
+  def service_line(line, date)
     nbr = line.overtime? ? settings["productForOverTime"] : settings["productForTime"]
     prod = Product.where("product_number like ?", nbr).first
     raise "Product not found %s - set products in Dinero Service" % nbr unless prod
@@ -252,7 +253,7 @@ class Dinero::InvoiceDraft
     initials = line.user&.initials rescue "-"
     {
       "productGuid" => prod.erp_guid,             #   "102eb2e1-d732-4915-96f7-dac83512f16d",
-      "comments" =>    "%s: %s" % [ initials, line.about ],
+      "comments" =>    "%s, %s: %s" % [ date, initials, line.about ],
       "quantity" =>    q,
       "accountNumber" => prod.account_number.to_i,
       "unit" =>        prod.unit,
