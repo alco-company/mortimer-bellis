@@ -36,6 +36,10 @@ da:
       squareMetre: M2
       session: Session
       tonne: Ton
+    overtimes:
+      none: Ingen
+      50percent: 50%
+      100percent: 100%
     responsive_units:
       hours: t<span class:"hidden sm:inline">imer</span>
       parts: Stk

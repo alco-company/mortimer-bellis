@@ -39,8 +39,6 @@ class TimeMaterials::Form < ApplicationForm
 
       #
       invoicing
-      #
-      # form_actions
 
       # url = @resource.id.nil? ? time_materials_url : time_material_url(@resource)
       # render TimeMaterialForm.new time_material: @resource, url: url
@@ -67,20 +65,7 @@ class TimeMaterials::Form < ApplicationForm
         # comment do
         #   %(Current: "text-sky-500", Default: "text-gray-400 group-hover:text-gray-500")
         # end
-        svg(
-          class:
-            "-ml-0.5 mr-2 h-5 w-5 text-sky-500 group-hover:text-sky-500 pointer-events-none",
-          viewbox: "0 0 20 20",
-          fill: "currentColor",
-          aria_hidden: "true",
-          data_slot: "icon",
-          data: { time_material_target: "timetab" }
-        ) do |s|
-          s.path(
-            d:
-              "M10 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM3.465 14.493a1.23 1.23 0 0 0 .41 1.412A9.957 9.957 0 0 0 10 18c2.31 0 4.438-.784 6.131-2.1.43-.333.604-.903.408-1.41a7.002 7.002 0 0 0-13.074.003Z"
-          )
-        end
+        render Icons::Person.new(cls: "-ml-0.5 mr-2 h-5 w-5 text-sky-500 group-hover:text-sky-500 pointer-events-none", data: { time_material_target: "timetab" })
         span(class: "pointer-events-none") { I18n.t("time_material.type.time") }
     end
   end
@@ -99,22 +84,7 @@ class TimeMaterials::Form < ApplicationForm
         # comment do
         #   %(Current: "text-sky-500", Default: "text-gray-400 group-hover:text-gray-500")
         # end
-        svg(
-          class:
-            "-ml-0.5 mr-2 h-5 w-5 text-gray-400 group-hover:text-gray-500 pointer-events-none",
-          viewbox: "0 0 20 20",
-          fill: "currentColor",
-          aria_hidden: "true",
-          data_slot: "icon",
-          data: { time_material_target: "materialtab" }
-        ) do |s|
-          s.path(
-            fill_rule: "evenodd",
-            d:
-              "M4 16.5v-13h-.25a.75.75 0 0 1 0-1.5h12.5a.75.75 0 0 1 0 1.5H16v13h.25a.75.75 0 0 1 0 1.5h-3.5a.75.75 0 0 1-.75-.75v-2.5a.75.75 0 0 0-.75-.75h-2.5a.75.75 0 0 0-.75.75v2.5a.75.75 0 0 1-.75.75h-3.5a.75.75 0 0 1 0-1.5H4Zm3-11a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1ZM7.5 9a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1ZM11 5.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1Zm.5 3.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1Z",
-            clip_rule: "evenodd"
-          )
-        end
+        render Icons::Building.new(cls: "-ml-0.5 mr-2 h-5 w-5 text-gray-400 group-hover:text-gray-500 pointer-events-none", data: { time_material_target: "materialtab" })
         span(class: "pointer-events-none") { I18n.t("time_material.type.material") }
     end
   end
@@ -129,30 +99,12 @@ class TimeMaterials::Form < ApplicationForm
             #
             div(class: "col-span-1") do
               row field(:time).input(class: "mort-form-text"), ""
-              # label(for: "time", class: "block text-sm font-medium leading-6 text-gray-900") { I18n.t("time_material.time.lbl") }
-              # div(class: "mt-2") do
-              #   div(
-              #     class:
-              #       "flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-1 focus-within:ring-inset focus-within:ring-sky-600 sm:max-w-md"
-              #   ) do
-              #     input(
-              #       type: "tel",  # hack to allow iOS to show numeric keyboard
-              #       name: "time_material[time]",
-              #       id: "time_material_time",
-              #       pattern: "[0-9,.]*",
-              #       value: @resource.time,
-              #       class:
-              #         "block flex-1 border-0 bg-transparent py-1.5 pl-2 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6",
-              #       placeholder: "0,25"
-              #     )
-              #   end
-              # end
             end
             #
             rate_field I18n.t("time_material.rate.hourly")
             #
-            div(class: "col-span-1") do
-              row field(:overtime).boolean(class: "flex h-8 items-center"), ""
+            div(class: "col-span-2") do
+              row field(:overtime).select(TimeMaterial.overtimes, class: "mort-form-select"), ""
             end
           end
         end
@@ -214,22 +166,6 @@ class TimeMaterials::Form < ApplicationForm
         action: "keydown->lookup#keyDown blur->time-material#customerChange"
       },
       display_value: @resource.customer_name), "" # Customer.all.select(:id, :name).take(9)
-    # div(class: "mt-4 col-span-4") do
-    #   label(for: "time_material_customer_id", class: "block text-sm font-medium leading-6 text-gray-900") { I18n.t("time_material.customer.lbl") }
-    #   div(class: "mt-2") do
-    #     div(class: "flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-1 focus-within:ring-inset focus-within:ring-sky-600 sm:max-w-md") do
-    #       input(
-    #         name: "time_material[project_name]",
-    #         id: "time_material_project_name",
-    #         autocomplete: "project",
-    #         value: @resource.project_name,
-    #         class:
-    #           "block flex-1 border-0 bg-transparent py-1.5 pl-2 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6",
-    #         placeholder: I18n.t("time_material.project.placeholder")
-    #       )
-    #     end
-    #   end
-    # end
   end
 
   def project_field
@@ -245,25 +181,9 @@ class TimeMaterials::Form < ApplicationForm
       display_value: @resource.project_name), "" # Customer.all.select(:id, :name).take(9)
   end
 
-  def rate_field(lbl, css = "col-span-2", fld_name = "rate")
+  def rate_field(lbl, css = "col-span-1", fld_name = "rate")
     div(class: css) do
       row field(fld_name.to_sym).input(class: "mort-form-text"), ""
-      # label(for: "time_material_#{fld_name}", class: "block text-sm font-medium leading-6 text-gray-900") { lbl }
-      # div(class: "mt-2") do
-      #   div(
-      #     class:
-      #       "flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-1 focus-within:ring-inset focus-within:ring-sky-600 sm:max-w-md"
-      #   ) do
-      #     input(
-      #       name: "time_material[#{fld_name}]",
-      #       id: "time_material_#{fld_name}",
-      #       value: @resource.send(fld_name),
-      #       class:
-      #         "block flex-1 border-0 bg-transparent py-1.5 pl-2 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6",
-      #       placeholder: "90,25"
-      #     )
-      #   end
-      # end
     end
   end
 
@@ -276,142 +196,22 @@ class TimeMaterials::Form < ApplicationForm
           div(class: "mt-6 space-y-1") do
             row field(:is_invoice).boolean(data: { time_material_target: "invoice" }, class: "my-auto mort-form-bool"), "flex justify-end flex-row-reverse items-center"
             row field(:is_separate).boolean(class: "my-auto mort-form-bool"), "flex justify-end flex-row-reverse items-center"
-            # div(class: "relative flex gap-x-3") do
-            #   div(class: "flex h-6 items-center") do
-            #     input(
-            #       id: "time_material_is_invoice",
-            #       name: "time_material[is_invoice]",
-            #       data: { time_material_target: "invoice" },
-            #       type: "checkbox",
-            #       checked: @resource.is_invoice?,
-            #       class: "h-4 w-4 rounded border-gray-300 text-sky-600 focus:ring-sky-600"
-            #     )
-            #   end
-            #   div(class: "text-sm leading-6") do
-            #     label(for: "time_material_is_invoice", class: "font-medium text-gray-900") { I18n.t("time_material.invoicing.invoice.lbl") }
-            #     p(class: "text-gray-500") { I18n.t("time_material.invoicing.invoice.help") }
-            #   end
-            # end
-
-            # row field(:is_free).boolean(class: "my-auto mort-form-bool"), "flex justify-end flex-row-reverse items-center"
-
-            # div(class: "relative flex gap-x-3") do
-            #   div(class: "flex h-6 items-center") do
-            #     input(
-            #       id: "time_material_is_free",
-            #       name: "time_material[is_free]",
-            #       type: "checkbox",
-            #       checked: @resource.is_free?,
-            #       class: "h-4 w-4 rounded border-gray-300 text-sky-600 focus:ring-sky-600"
-            #     )
-            #   end
-            #   div(class: "text-sm leading-6") do
-            #     label(for: "time_material_is_free", class: "font-medium text-gray-900") { I18n.t("time_material.invoicing.free.lbl") }
-            #     p(class: "text-gray-500") { I18n.t("time_material.invoicing.free.help") }
-            #   end
-            # end
-            # div(class: "relative flex gap-x-3") do
-            #   div(class: "flex h-6 items-center") do
-            #     input(
-            #       id: "time_material_is_offer",
-            #       name: "time_material[is_offer]",
-            #       type: "checkbox",
-            #       disabled: "disabled",
-            #       class: "h-4 w-4 rounded border-gray-300 text-sky-600 focus:ring-sky-600"
-            #     )
-            #   end
-            #   div(class: "text-sm leading-6") do
-            #     label(for: "time_material_is_offer", class: "font-medium text-gray-900") { I18n.t("time_material.invoicing.offer.lbl") }
-            #     p(class: "text-gray-500") { I18n.t("time_material.invoicing.offer.help") }
-            #   end
-            # end
           end
         end
-        # fieldset do
-        #   # legend(class: "text-sm font-semibold leading-6 text-gray-900") { I18n.t("time_material.invoicing.batch.lbl") }
-        #   div(class: "mt-0 space-y-6") do
-        #     div(class: "relative flex gap-x-3") do
-        #       row field(:is_separate).boolean(class: "my-auto mort-form-bool"), "flex justify-end flex-row-reverse items-center"
-
-        #       # div(class: "flex h-6 items-center") do
-        #       #   input(
-        #       #     id: "time_material_is_separate",
-        #       #     name: "time_material[is_separate]",
-        #       #     type: "checkbox",
-        #       #     checked: @resource.is_separate?,
-        #       #     class: "h-4 w-4 rounded border-gray-300 text-sky-600 focus:ring-sky-600"
-        #       #   )
-        #       # end
-        #       # div(class: "text-sm leading-6") do
-        #       #   label(for: "time_material_is_separate", class: "font-medium text-gray-900") { I18n.t("time_material.invoicing.separate.lbl") }
-        #       #   p(class: "text-gray-500") { I18n.t("time_material.invoicing.separate.help") }
-        #       # end
-        #     end
-        #   end
-        # end
       end
     end
   end
 
-  # def error_messages
-  #   if @resource.errors.any?
-  #     div(id: "error_explanation", class: "mt-4 p-4 sm: p-1") do
-  #       h2(class: "mort-err-resume") { I18n.t(:form_errors_prohibited, errors: @resource.errors.count) }
-  #       ul do
-  #         @resource.errors.each do |error|
-  #           li { error.full_message }
-  #         end
-  #       end
-  #     end
-  #   end
-  # end
-
   def show_possible_issues
     ul() do
-      li() { "customer missing" } if @resource.is_invoice? and
-        @resource.customer_id.blank?
-      li() { "product missing" } if @resource.product_id.nil? and
-        @resource.is_invoice? and
-        @resource.product_name.blank? and
-        @resource.quantity != 0
-      li() { "time not correct" } if (@resource.time =~ /^\d*[,.]?\d*$/).nil?
-      li() { "rate not correct" } if (@resource.rate =~ /^\d*[,.]?\d*$/).nil?
-      li() { "quantity not correct" } if !@resource.quantity.blank? and
-        (@resource.quantity =~ /^\d*[,.]?\d*$/).nil?
-      li() { "time and quantity both set" } if !@resource.quantity.blank? and
-        !@resource.time.blank?
-      li() { "unit_price not correct" } if !@resource.unit_price.blank? and
-        (@resource.unit_price =~ /^\d*[,.]?\d*$/).nil?
-      li() { "discount not correct" } if !@resource.discount.blank? and
-        (@resource.discount =~ /^\d*[,.]?\d*[ ]*%?$/).nil?
-    end
-  end
-  # def date_field
-  #   div(class: "mt-2 sm:col-span-4") do
-  #     label(for: "date", class: "block text-sm font-medium leading-6 text-gray-900") { I18n.t("time_material.date.lbl") }
-  #     div(class: "mt-2") do
-  #       div(
-  #         class:
-  #           "flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-1 focus-within:ring-inset focus-within:ring-sky-600 sm:max-w-md"
-  #       ) do
-  #         input(
-  #           type: "date",
-  #           name: "time_material[date]",
-  #           id: "time_material_date",
-  #           value: @resource.date,
-  #           class:
-  #             "block flex-1 border-0 bg-transparent py-1.5 pl-2 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
-  #         )
-  #       end
-  #     end
-  #   end
-  # end
-
-  def form_actions
-    div(class: "my-6 flex items-center justify-end gap-x-6") do
-      render CancelSaveForm.new cancel_url: @resources_url, title: I18n.t("%s.form.new" % @resource.class.table_name)
-      # link_to(time_materials_url, class: "mort-btn-cancel") { "Fortryd" }
-      # button(type: "submit", class: "mort-btn-save") { "Gem" }
+      li() { I18n.t("invoice_item.issues.customer_missing") }                   if @resource.is_invoice? and @resource.customer_id.blank?
+      li() { I18n.t("invoice_item.issues.product_missing") }                    if @resource.product_id.nil? and @resource.is_invoice? and @resource.product_name.blank? and @resource.quantity != 0
+      li() { I18n.t("invoice_item.issues.time_not_correct") }                   if (@resource.time =~ /^\d*[,.]?\d*$/).nil?
+      li() { I18n.t("invoice_item.issues.rate_not_correct") }                   if (@resource.rate =~ /^\d*[,.]?\d*$/).nil?
+      li() { I18n.t("invoice_item.issues.quantity_not_correct") }               if !@resource.quantity.blank? and (@resource.quantity =~ /^\d*[,.]?\d*$/).nil?
+      li() { I18n.t("invoice_item.issues.time_and_quantity_both_set") }         if !@resource.quantity.blank? and !@resource.time.blank?
+      li() { I18n.t("invoice_item.issues.unit_price_not_correct") }             if !@resource.unit_price.blank? and (@resource.unit_price =~ /^\d*[,.]?\d*$/).nil?
+      li() { I18n.t("invoice_item.issues.discount_not_correct") }               if !@resource.discount.blank? and (@resource.discount =~ /^\d*[,.]?\d*[ ]*%?$/).nil?
     end
   end
 end

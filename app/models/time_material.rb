@@ -74,4 +74,12 @@ class TimeMaterial < ApplicationRecord
       [ "tonne", I18n.t("time_material.units.tonne") ]
     ]
   end
+
+  def self.overtimes
+    [
+      [ 0, I18n.t("time_material.overtimes.none") ],
+      [ 1, I18n.t("time_material.overtimes.50percent") ],
+      [ 2, I18n.t("time_material.overtimes.100percent") ]
+    ]
+  end
 end

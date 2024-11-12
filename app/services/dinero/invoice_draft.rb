@@ -41,6 +41,7 @@ class Dinero::InvoiceDraft
     @settings["defaultAccountNumber"] = ds.provided_service&.account_for_one_off.to_i || @settings["defaultAccountNumber"]
     @settings["productForTime"] = ds.provided_service&.product_for_time || ""
     @settings["productForOverTime"] = ds.provided_service&.product_for_overtime || ""
+    @settings["productForOverTime100"] = ds.provided_service&.product_for_overtime_100 || ""
     # @settings["productForHardware"] = ds.provided_service&.product_for_hardware || ""
   end
 
@@ -245,7 +246,11 @@ class Dinero::InvoiceDraft
   end
 
   def service_line(line, date)
-    nbr = line.overtime? ? settings["productForOverTime"] : settings["productForTime"]
+    nbr = case line.overtime.to_s
+    when "0"; settings["productForTime"]
+    when "1"; settings["productForOverTime"]
+    when "2"; settings["productForOverTime100"]
+    end
     prod = Product.where("product_number like ?", nbr).first
     raise "Product not found %s - set products in Dinero Service" % nbr unless prod
     q = line.time.blank? ? 0.25 : ("%.2f" % line.time.gsub(",", ".")).to_f rescue 0.0

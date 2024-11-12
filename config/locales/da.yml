@@ -473,7 +473,8 @@ da:
         organizationID: Hvilket regnskab skal integreres med Mortimer?
         account_for_one_off: Konto for diverse salg
         product_for_time: Produkt for salg af timer
-        product_for_overtime: Produkt for salg af timer (overtid)
+        product_for_overtime: Produkt for salg af timer (50% overtid)
+        product_for_overtime_100: Produkt for salg af timer (100% overtid)
         product_for_hardware: Finans konto for salg af materialer (fx 1020)
         service_params: Service indstillinger
 

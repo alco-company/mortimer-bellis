@@ -27,3 +27,13 @@ da:
     total_amount_incl_vat: Total ialt inkl. moms
     invoice_item_for: faktureret for %{quantity} til %{price} kr. pr. %{unit}
     invoice_meta: "Fakturanr %{number}"
+
+    issues:
+      customer_missing: Der er ikke valgt en kunde
+      product_missing: Der er ikke valgt et produkt
+      time_not_correct: Tidspunktet er ikke korrekt
+      rate_not_correct: Satsen er ikke korrekt
+      quantity_not_correct: Antallet er ikke korrekt
+      time_and_quantity_both_set: Både tid og antal er angivet
+      unit_price_not_correct: Enhedsprisen er ikke korrekt
+      discount_not_correct: Rabatten er ikke korrekt

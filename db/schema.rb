@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_11_08_144203) do
+ActiveRecord::Schema[8.0].define(version: 2024_11_12_070446) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -315,6 +315,7 @@ ActiveRecord::Schema[8.0].define(version: 2024_11_08_144203) do
     t.string "product_for_time"
     t.string "product_for_overtime"
     t.string "product_for_hardware"
+    t.string "product_for_overtime_100"
     t.index ["authorized_by_id"], name: "index_provided_services_on_authorized_by_id"
     t.index ["tenant_id"], name: "index_provided_services_on_tenant_id"
   end
@@ -567,7 +568,6 @@ ActiveRecord::Schema[8.0].define(version: 2024_11_08_144203) do
     t.datetime "updated_at", null: false
     t.integer "user_id", null: false
     t.text "comment"
-    t.boolean "overtime"
     t.string "unit_price"
     t.string "unit"
     t.string "pushed_erp_timestamp"
@@ -576,6 +576,7 @@ ActiveRecord::Schema[8.0].define(version: 2024_11_08_144203) do
     t.datetime "paused_at"
     t.datetime "started_at"
     t.integer "time_spent"
+    t.integer "overtime", default: 0
     t.index ["tenant_id"], name: "index_time_materials_on_tenant_id"
     t.index ["user_id"], name: "index_time_materials_on_user_id"
   end

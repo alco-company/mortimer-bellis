@@ -51,6 +51,8 @@ class ApplicationForm < Superform::Rails::Form
           timezone_list(arr).each(&options)
         in [[ String, String ], *] => arr
           id_value_list(arr).each(&options)
+        in [[ Integer, String ], *] => arr
+          id_value_list(arr).each(&options)
         in [[ Symbol, String ], *] => arr
           id_value_list(arr).each(&options)
         in id, value
