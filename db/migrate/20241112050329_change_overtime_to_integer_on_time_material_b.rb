@@ -1,4 +1,4 @@
-class ChangeOvertimeToIntegerOnTimeMaterial < ActiveRecord::Migration[8.0]
+class ChangeOvertimeToIntegerOnTimeMaterialB < ActiveRecord::Migration[8.0]
   def self.up
     # backfill the column with the correct data
     execute "UPDATE time_materials SET over_time = 0 WHERE overtime = false"

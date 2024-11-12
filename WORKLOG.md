@@ -21,7 +21,6 @@ NATIVE: https://blog.corsego.com/navigating-turbo-native, https://www.youtube.co
 
 ## CHANGELOG
 
-* add milage accounting
 * add customer has balance marker
 
 ### 12/11/2024
@@ -29,6 +28,7 @@ NATIVE: https://blog.corsego.com/navigating-turbo-native, https://www.youtube.co
 * add date on invoice_item comment - when work done
 * add 50%/100% overtime
 * add mileage accounting - at least invoicing mileage
+* rename migrations to please Kamal!
 
 ### 11/11/2024
 
