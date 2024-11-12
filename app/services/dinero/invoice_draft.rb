@@ -286,7 +286,7 @@ class Dinero::InvoiceDraft
   end
 
   def service_line(line, date)
-    nbr = case line.overtime.to_s
+    nbr = case line.over_time.to_s
     when "0"; settings["productForTime"]
     when "1"; settings["productForOverTime"]
     when "2"; settings["productForOverTime100"]

@@ -578,6 +578,7 @@ ActiveRecord::Schema[8.0].define(version: 2024_11_12_101430) do
     t.datetime "started_at"
     t.integer "time_spent"
     t.integer "overtime", default: 0
+    t.integer "over_time"
     t.integer "odo_from"
     t.integer "odo_to"
     t.integer "kilometers"

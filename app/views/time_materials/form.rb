@@ -125,7 +125,7 @@ class TimeMaterials::Form < ApplicationForm
             rate_field I18n.t("time_material.rate.hourly")
             #
             div(class: "col-span-2") do
-              row field(:overtime).select(TimeMaterial.overtimes, class: "mort-form-select"), ""
+              row field(:over_time).select(TimeMaterial.overtimes, class: "mort-form-select"), ""
             end
           end
         end

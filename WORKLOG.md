@@ -30,6 +30,7 @@ NATIVE: https://blog.corsego.com/navigating-turbo-native, https://www.youtube.co
 * add mileage accounting - at least invoicing mileage
 * rename migrations to please Kamal!
 * drop execute statements in migration
+* dropped the entire thing - just added over_time
 
 ### 11/11/2024
 
