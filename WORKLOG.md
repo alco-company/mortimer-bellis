@@ -29,6 +29,7 @@ NATIVE: https://blog.corsego.com/navigating-turbo-native, https://www.youtube.co
 * add 50%/100% overtime
 * add mileage accounting - at least invoicing mileage
 * rename migrations to please Kamal!
+* drop execute statements in migration
 
 ### 11/11/2024
 

@@ -1,8 +1,8 @@
 class ChangeOvertimeToIntegerOnTimeMaterialB < ActiveRecord::Migration[8.0]
   def self.up
     # backfill the column with the correct data
-    execute "UPDATE time_materials SET over_time = 0 WHERE overtime = false"
-    execute "UPDATE time_materials SET over_time = 2 WHERE overtime = true"
+    # execute "UPDATE time_materials SET over_time = 0 WHERE overtime = false"
+    # execute "UPDATE time_materials SET over_time = 2 WHERE overtime = true"
 
     # apply appropriate constraints and defaults once it's backfilled
     change_column_default :time_materials, :over_time, 0
