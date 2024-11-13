@@ -17,7 +17,7 @@ class TimeMaterials::Form < ApplicationForm
         end
       end
       #
-      div do
+      div(class: "border border-gray-900/10 rounded-md bg-slate-50 p-2") do
         div(class: "") do
           p(class: "text-xs text-gray-400") { I18n.t("time_material.type.warning") }
           div(class: "") do
@@ -113,7 +113,7 @@ class TimeMaterials::Form < ApplicationForm
   def show_time_tab
     div(id: "time", data: { tabs_target: "tabPanel" }, class: "time-material-type time tab ") do
       div(class: "space-y-2 ") do
-        div(class: "border-b border-gray-900/10 pb-2") do
+        div(class: "pb-2") do
           div(class: "mt-2 grid grid-cols-4 gap-x-4 gap-y-4 ") do
             #
             about_field
@@ -136,7 +136,7 @@ class TimeMaterials::Form < ApplicationForm
   def show_material_tab
     div(id: "material", data: { tabs_target: "tabPanel" }, class: "time-material-type material tab hidden") do
       div(class: "space-y-2") do
-        div(class: "border-b border-gray-900/10 pb-2") do
+        div(class: " pb-2") do
           div(class: "mt-2 grid grid-cols-4 gap-x-4 gap-y-4") do
             div(class: "col-span-4") do
               row field(:product_id).lookup(class: "mort-form-text",
@@ -152,13 +152,15 @@ class TimeMaterials::Form < ApplicationForm
             div(class: "col-span-4") do
               row field(:comment).textarea(class: "mort-form-text"), ""
             end
-            div(class: "col-span-4 grid gap-x-2 grid-cols-9") do
+            div(class: "col-span-4 grid gap-x-2 grid-cols-4") do
               div(class: "col-span-2") do
                 row field(:quantity).input(class: "mort-form-text"), ""
               end
               div(class: "col-span-2") do
                 row field(:unit).select(@resource.units, class: "mort-form-text text-sm"), ""
               end
+            end
+            div(class: "col-span-4 grid gap-x-2 grid-cols-5") do
               div(class: "col-span-3") do
                 row field(:unit_price).input(class: "mort-form-text"), ""
               end
@@ -175,26 +177,27 @@ class TimeMaterials::Form < ApplicationForm
   def show_mileage_tab
     div(id: "material", data: { tabs_target: "tabPanel" }, class: "time-material-type material tab hidden") do
       div(class: "space-y-2") do
-        div(class: "border-b border-gray-900/10 pb-2") do
+        div(class: "pb-2") do
           div(class: "mt-2 grid grid-cols-4 gap-x-4 gap-y-4") do
-            div(class: "col-span-4 grid gap-x-2 grid-cols-9") do
-              label(class: "block text-sm font-medium text-gray-700") { I18n.t("time_material.mileage.lead") }
-            end
-            div(class: "col-span-4 grid gap-x-2 grid-cols-10") do
+            label(class: "col-span-4 block text-sm font-medium text-gray-700") { I18n.t("time_material.mileage.lead") }
+            h3(class: "col-span-4 text-sm font-thin leading-6 text-gray-400") { unsafe_raw I18n.t("time_material.mileage.accounting_info") }
+            div(class: "col-span-4 grid gap-x-2 grid-cols-4") do
               div(class: "col-span-2") do
                 row field(:odo_from).input(type: "text", class: "mort-form-text", data: { time_material_target: "odofrom" }), ""
               end
               div(class: "col-span-2") do
                 row field(:odo_to).input(type: "text", class: "mort-form-text", data: {  time_material_target: "odoto", action: "blur->time-material#setMileage" }), ""
               end
-              div(class: "col-span-2") do
+            end
+            div(class: "col-span-4 grid gap-x-2 grid-cols-10") do
+              div(class: "col-span-4") do
                 row field(:kilometers).input(class: "mort-form-text", data: { time_material_target: "mileage" }), ""
               end
-              div(class: "col-span-4") do
+              div(class: "col-span-6") do
                 row field(:trip_purpose).select(TimeMaterial.trip_purposes, class: "mort-form-select"), ""
               end
             end
-            div(class: "col-span-4 grid gap-x-2 grid-cols-8") do
+            div(class: "col-span-4 grid gap-x-2 grid-cols-4") do
               div(class: "col-span-4") do
                 row field(:odo_from_time).datetime(class: "mort-form-text"), ""
               end

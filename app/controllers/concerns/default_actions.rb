@@ -77,7 +77,7 @@ module DefaultActions
     def create
       @resource = resource_class.new(resource_params)
       @resource.tenant_id = Current.tenant.id if resource_class.has_attribute? :tenant_id
-      @resource.user_id = Current.user.id if resource_class.has_attribute? :user_id
+      @resource.user_id = Current.user.id if resource_class.has_attribute?(:user_id) && !resource_params[:user_id].present?
       before_create_callback @resource
       respond_to do |format|
         if @resource.save

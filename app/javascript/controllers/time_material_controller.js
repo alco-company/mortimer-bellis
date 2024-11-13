@@ -12,24 +12,71 @@ export default class extends Controller {
     "mileage"
   ]
 
+  static values = {
+    time: Number,
+    interval: 1000
+  }
+
+  initialize() {
+    this.interval = null;
+  }
+
   connect() {
     try {      
-      if (this.counterTarget) {
+      if (this.counterTarget.dataset.state == "active") {
         this.startTimer();
       }
     } catch (error) {
       
     }
+    this.token = document.querySelector(
+      'meta[name="csrf-token"]'
+    ).content;    
+  }
+
+  disconnect() {
+    this.stopTimer();
+  }
+  
+  toggleActive(e){
+    this.stopTimer()
+    fetch(e.currentTarget.dataset.url, {
+      method: "GET",
+      headers: {
+        "X-CSRF-Token": this.token,
+        "Content-Type": "text/vnd.turbo.stream.html",
+      },
+    });
+    // if (this.interval) {
+    //   this.stopTimer();
+    //   e.currentTarget.classList.remove("bg-green-200");
+    //   e.currentTarget.classList.add("bg-yellow-200");
+    // } else {
+    //   this.startTimer();
+    //   e.currentTarget.classList.remove("bg-yellow-200");
+    //   e.currentTarget.classList.add("bg-green-200");
+    // }
   }
 
   startTimer() {
-    setInterval(() => {
-      this.counterTarget.dataset.counter = parseInt(this.counterTarget.dataset.counter) + 1;
-      let hours = Math.floor(this.counterTarget.dataset.counter / 3600);
-      let minuts = Math.floor((this.counterTarget.dataset.counter - (hours * 3600)) / 60);
-      let sec = Math.floor(this.counterTarget.dataset.counter - (hours * 3600) - (minuts * 60));
+    this.interval = setInterval(() => {
+      // if (this.counterTarget.dataset.state == "active") {
+      // }
+      console.log(this.counterTarget.dataset.state);
+      this.timeValue = (parseInt(this.counterTarget.dataset.counter) || this.timeValue) + 1;
+      this.counterTarget.dataset.counter = this.timeValue
+      let hours = Math.floor(this.timeValue / 3600);
+      let minuts = Math.floor((this.timeValue - (hours * 3600)) / 60);
+      let sec = Math.floor(this.timeValue - (hours * 3600) - (minuts * 60));
       this.counterTarget.innerText = hours.toString().padStart(2, "0") + ":" + minuts.toString().padStart(2, "0") + ":" + sec.toString().padStart(2, "0");
-    }, 1000);
+    }, this.intervalValue);
+  }
+
+  stopTimer() {
+    if (this.interval) {
+      clearInterval(this.interval);
+      this.interval = null;
+    }
   }
 
   customerChange(e) {

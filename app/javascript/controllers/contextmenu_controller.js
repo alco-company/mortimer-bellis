@@ -16,6 +16,7 @@ export default class extends Controller {
 
   tap(event) {
       // removed event.stopPropagation() to continue the bubbling for others dropdowns
+    event.stopPropagation();
     event.preventDefault();
 
     if (this.buttonTarget.getAttribute('aria-expanded') == "false") {
