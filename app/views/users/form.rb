@@ -13,7 +13,7 @@ class Users::Form < ApplicationForm
       row field(:pincode).input(class: "mort-form-text")
       row field(:mugshot).file(class: "mort-form-file")
       row field(:locale).select(User.locales, prompt: I18n.t(".select_user_locale"), class: "mort-form-text")
-      row field(:time_zone).select(ActiveSupport::TimeZone.all.collect { |tz| [ "(GMT#{ActiveSupport::TimeZone.seconds_to_utc_offset(tz.utc_offset)}) #{tz.name}", tz.tzinfo.name ] }, class: "mort-form-text")
+      row field(:time_zone).select(User.time_zones_for_phlex, class: "mort-form-text")
     end
     role_select
     if Current.user.superadmin?

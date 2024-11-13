@@ -1,5 +1,6 @@
 class PunchClock < ApplicationRecord
   include Tenantable
+  include TimeZoned
   include Localeable
   belongs_to :location
   has_many :punches, dependent: :destroy

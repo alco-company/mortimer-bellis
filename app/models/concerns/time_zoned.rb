@@ -30,5 +30,13 @@ module TimeZoned
     def time_zone_values(cls)
       TZInfo::Timezone.all_identifiers.collect { |k| { id: k, cls: cls, name: k } }
     end
+
+    def time_zones_for_select
+      ActiveSupport::TimeZone.all.collect { |tz| [ "(#{ActiveSupport::TimeZone.seconds_to_utc_offset(tz.utc_offset)}) #{tz.name[0..20]}", tz.tzinfo.name ] }
+    end
+
+    def time_zones_for_phlex
+      ActiveSupport::TimeZone.all.collect { |tz| [  tz.tzinfo.name, "(#{ActiveSupport::TimeZone.seconds_to_utc_offset(tz.utc_offset)})" ] }
+    end
   end
 end

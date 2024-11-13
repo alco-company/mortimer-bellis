@@ -44,6 +44,7 @@ NATIVE: https://blog.corsego.com/navigating-turbo-native, https://www.youtube.co
 
 * place entra id login better
 * identify search better + danish translations
+* tighten up profile - in particular timezone select
 
 ### 12/11/2024
 

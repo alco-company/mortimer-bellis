@@ -98,31 +98,6 @@ en:
         name: Navn
         layout: Skabelon
         body: Indhold
-      user:
-        name: Navn
-        import: Indlæs CSV fil med medarbejdere
-        access_token: nøgle
-        flex_balance_minutes: flex minutter
-        mug_shot: profil billede
-        blocked: tidsregistrering spærret
-        time_zone: Tidszone
-        locale: Sprog
-        hired_at: ansat den
-        birthday: fødselsdag
-        pincode: pinkode
-        state: status
-        employee_number: medarbejder nummer
-        pbx_extension: omstillingsnr
-        job_title: job titel
-        base_salary: grundløn
-        ot1_hr_pay: OT1 tillæg
-        ot2_hr_pay: OT2 tillæg
-        norm_time_minutes: timer:min i et rul
-        roll_days: antal dage i et rul
-        week_workdays: arbejdsdage/uge
-        ot1_minutes: Overtid 1
-        next_roll_at: næste rul starter
-        teams: Hold/grupper
 
       event:
         minutes: Minutter
@@ -259,6 +234,30 @@ en:
         version: version 
         sub_scheme: Under skema
       user:
+        name: Navn
+        import: Indlæs CSV fil med medarbejdere
+        access_token: nøgle
+        flex_balance_minutes: flex minutter
+        mug_shot: profil billede
+        blocked: tidsregistrering spærret
+        time_zone: Tidszone
+        locale: Sprog
+        hired_at: ansat den
+        birthday: fødselsdag
+        pincode: pinkode
+        state: status
+        employee_number: medarbejder nummer
+        pbx_extension: omstillingsnr
+        job_title: job titel
+        base_salary: grundløn
+        ot1_hr_pay: OT1 tillæg
+        ot2_hr_pay: OT2 tillæg
+        norm_time_minutes: timer:min i et rul
+        roll_days: antal dage i et rul
+        week_workdays: arbejdsdage/uge
+        ot1_minutes: Overtid 1
+        next_roll_at: næste rul starter
+        teams: Hold/grupper
         user_name: Brugernavn
         password: Adgangskode
         password_confirmation: Bekræft adgangskode
@@ -284,9 +283,6 @@ en:
       dashboard:
         one: Overblik 
         other: Overblik
-      user:
-        one: medarbejder
-        other: medarbejdere
       equipment:
         one: materiel 
         other: materiel 

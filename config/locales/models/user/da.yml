@@ -9,6 +9,9 @@ da:
         instruction: Er du sikker på, at du vil slette brugeren %{name}?
         button: Slet
 
+    pincode:
+      placeholder: 4 tal - unik i din virksomhed
+
   users:
     thank_you_for_signing_up: Tak fordi du har oprettet en konto hos os. 
     action: Vi har sendt dig en email med instruktioner om hvordan du bekræfter din email-adresse.

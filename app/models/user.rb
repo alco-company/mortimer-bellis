@@ -3,6 +3,7 @@ class User < ApplicationRecord
   include Localeable
   include Punchable
   include Stateable
+  include TimeZoned
 
   belongs_to :team
 

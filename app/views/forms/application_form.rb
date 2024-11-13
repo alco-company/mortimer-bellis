@@ -47,7 +47,7 @@ class ApplicationForm < Superform::Rails::Form
           enumerable_list(colr).each(&options)
         in [Localeable::Locale, *] => locl
           enumerable_list(locl).each(&options)
-        in [[ /GMT/, String ], *] => arr
+        in [[ String, /^\([+-]\d{1,2}\:\d\d\)$/ ], *] => arr
           timezone_list(arr).each(&options)
         in [[ String, String ], *] => arr
           id_value_list(arr).each(&options)
@@ -74,7 +74,7 @@ class ApplicationForm < Superform::Rails::Form
     def timezone_list(tz)
       Enumerator.new do |collection|
         tz.each do |k, v|
-          collection << [ v, "%s - %s" % [ v, k ] ]
+          collection << [ k, "%s - %s" % [ v, k ] ]
         end
       end
     end
