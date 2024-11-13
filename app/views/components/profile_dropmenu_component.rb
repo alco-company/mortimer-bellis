@@ -62,9 +62,9 @@ class ProfileDropmenuComponent < ApplicationComponent
         comment { %(Active: "bg-gray-50", Not Active: "") }
         p(class: "text-sm font-medium px-4 py-2") { Current.user&.name }
         hr
-        link_to("Your Profile", edit_user_registration_path, class: "block px-3 py-1 text-sm leading-6 text-gray-900", role: "menuitem", tabindex: "-1", id: "user-menu-item-0")
+        link_to(I18n.t("topbar.profile.your_profile"), edit_user_registration_path, class: "block px-3 py-1 text-sm leading-6 text-gray-900", role: "menuitem", tabindex: "-1", id: "user-menu-item-0")
         # link_to( "Settings", "#", class: "block px-3 py-1 text-sm leading-6 text-gray-900", role: "menuitem", tabindex: "-1", id: "user-menu-item-1")
-        link_to("Sign out", destroy_user_session_path(), class: "block px-3 py-1 text-sm leading-6 text-gray-900", method: :delete, data: { turbo_method: :delete }, role: "menuitem", tabindex: "-1", id: "user-menu-item-2")
+        link_to(I18n.t("topbar.profile.sign_out"), destroy_user_session_path(), class: "block px-3 py-1 text-sm leading-6 text-gray-900", method: :delete, data: { turbo_method: :delete }, role: "menuitem", tabindex: "-1", id: "user-menu-item-2")
       end
     end
   end

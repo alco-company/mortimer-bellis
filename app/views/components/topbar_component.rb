@@ -19,7 +19,7 @@ class TopbarComponent < ApplicationComponent
           div(class: "hidden lg:block lg:h-6 lg:w-px lg:bg-gray-900/10")
           render ProfileDropmenuComponent.new
         end
-      end
+      end if Current.user
     end
   end
 

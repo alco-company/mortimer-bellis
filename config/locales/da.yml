@@ -115,6 +115,13 @@ da:
     en: Engelsk
     de: Tysk
 
+  topbar:
+    search: 
+      placeholder: Søg...
+    profile:
+      your_profile: Din profil
+      sign_out: Log ud
+
   modal:
     destroy:
       attachment_deleted: Den vedhæftede fil blev slettet

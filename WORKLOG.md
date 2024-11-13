@@ -43,6 +43,7 @@ NATIVE: https://blog.corsego.com/navigating-turbo-native, https://www.youtube.co
 ### 13/11/2024
 
 * place entra id login better
+* identify search better + danish translations
 
 ### 12/11/2024
 
