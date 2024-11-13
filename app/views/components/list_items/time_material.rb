@@ -1,6 +1,7 @@
 class ListItems::TimeMaterial < ListItems::ListItem
   def view_template
-    div(id: (dom_id resource), class: "flex justify-between gap-x-6 mb-1 px-2 py-5 rounded-sm #{ background }") do
+    comment { "bg-green-200 bg-yellow-200" }
+    div(id: (dom_id resource), class: "flex justify-between gap-x-6 mb-1 px-2 py-5 rounded-sm #{ background }", data: time_material_controller?) do
       div(class: "flex grow min-w-0 gap-x-4") do
         show_left_mugshot
         div(class: "min-w-0 flex-auto") do
@@ -13,7 +14,7 @@ class ListItems::TimeMaterial < ListItems::ListItem
         end
       end
       div(class: "flex shrink-0 items-center gap-x-6 ") do
-        div(class: "hidden 2xs:flex 2xs:flex-col 2xs:items-end", data: time_material_controller?) do
+        div(class: "hidden 2xs:flex 2xs:flex-col 2xs:items-end") do
           p(class: "text-sm leading-6 text-gray-900") do
             show_secondary_info
           end
@@ -30,16 +31,21 @@ class ListItems::TimeMaterial < ListItems::ListItem
   end
 
   def time_material_controller?
-    resource.active? ? { controller: "time-material" } : {}
+    (resource.active? or resource.paused?) ?
+      {
+        controller: "time-material",
+        url: resource_url(pause: (resource.paused? ? "resume" : "pause")),
+        action: "click->time-material#toggleActive"
+      } : {}
   end
 
   def render_play_pause
     if resource.active? or resource.paused? # and this_user?(resource.user_id)
-      link_to(resource_url(pause: (resource.paused? ? "resume" : "pause")), data: { turbo_prefetch: "false", turbo_stream: "true" }) do
-        resource.paused? ?
-          render(Icons::Play.new(cls: "text-gray-500 pt-1 h-8 w-8 ")) :
-          render(Icons::Pause.new(cls: "text-gray-500 h-8 w-8 "))
-      end
+      resource.paused? ?
+        render(Icons::Play.new(cls: "text-gray-500 pt-1 h-8 w-8 ")) :
+        render(Icons::Pause.new(cls: "text-gray-500 h-8 w-8 "))
+      # link_to(resource_url(pause: (resource.paused? ? "resume" : "pause")), data: { turbo_prefetch: "false", turbo_stream: "true" }) do
+      # end
     end
   end
 
@@ -126,11 +132,11 @@ class ListItems::TimeMaterial < ListItems::ListItem
       hours, minuts = counter.to_f.divmod 3600
       minuts, seconds = minuts.to_f.divmod 60
       timestring = "%02d:%02d:%02d" % [ hours, minuts, seconds ]
-      span(class: "grow mr-2 time_counter", data: { counter: counter, time_material_target: "counter" }) { timestring }
+      span(class: "grow mr-2 time_counter", data: { counter: counter, state: resource.state, time_material_target: "counter" }) { timestring }
     else
       u = resource.unit.blank? ? "" : I18n.t("time_material.units.#{resource.unit}")
       case true
-      when resource.kilometers != 0; "#{ resource.kilometers}km"
+      when (!resource.kilometers.blank? and resource.kilometers != 0); "#{ resource.kilometers}km"
       when resource.quantity.blank?; "#{ resource.time}t á #{ resource.rate}"
       else; "%s %s á %s" % [ resource.quantity, u, resource.unit_price ]
       end

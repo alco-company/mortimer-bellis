@@ -14,12 +14,10 @@ class TimeMaterialsController < MortimerController
   def pause_resume
     if @resource.user == Current.user or Current.user.admin? or Current.user.superadmin?
       params.permit![:pause] == "pause" ? pause : resume
+      Broadcasters::Resource.new(@resource, params).replace
       respond_to do |format|
-        Broadcasters::Resource.new(@resource, params).replace
-        format.turbo_stream { render turbo_stream: [
-          # turbo_stream.action(:full_page_redirect, resources_url),
-          turbo_stream.replace("flash_container", partial: "application/flash_message")
-        ] }
+        format.html { render turbo_stream: [ turbo_stream.replace("flash_container", partial: "application/flash_message") ] }
+        format.turbo_stream { render turbo_stream: [ turbo_stream.replace("flash_container", partial: "application/flash_message") ] }
       end
     else
       respond_to do |format|
@@ -83,11 +81,12 @@ class TimeMaterialsController < MortimerController
   private
 
     def set_mileage
-      if params[:time_material][:odo_from_time].present? &&
-         params[:time_material][:odo_to_time].present? &&
-         params[:time_material][:odo_from].present? &&
-         params[:time_material][:odo_to].present? &&
-         params[:time_material][:kilometers].present?
+      return unless params[:time_material].present?
+      if resource_params[:odo_from_time].present? &&
+         resource_params[:odo_to_time].present? &&
+         resource_params[:odo_from].present? &&
+         resource_params[:odo_to].present? &&
+         resource_params[:kilometers].present?
          params[:time_material][:about] = I18n.t("time_material.type.mileage")
       end
     end
