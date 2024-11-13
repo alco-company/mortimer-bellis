@@ -28,8 +28,7 @@
 #       enabled: "ON"
 
 en:
-  danish: "Danish"
-  english: "English"
+  danish: "Foretrækker du dansk?"
 
   menu:
     home: Home

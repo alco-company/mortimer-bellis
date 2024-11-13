@@ -1,6 +1,5 @@
 da:
-  danish: "Dansk"
-  english: "Engelsk"
+  english: "Do you prefer english?"
   hours_minutes: "%{hours}t %{minutes}m"
   something_went_wrong: "Der opstod en fejl: %{error}"
   select_team: Vælg hold

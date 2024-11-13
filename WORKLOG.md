@@ -22,6 +22,27 @@ NATIVE: https://blog.corsego.com/navigating-turbo-native, https://www.youtube.co
 ## CHANGELOG
 
 * add customer has balance marker
+{
+  "Collection"=> [
+   {"Number"=>22099, "ContactName"=>"SOPHUS FUGLSANG. EXPORT-MALTFABRIK A/S", "ContactGuid"=>"2e7bd2c1-761b-44e2-94be-d93151a45e13", "Date"=>"2024-11-01", "TotalExclVatInDkk"=>9494.4},
+   {"Number"=>22098, "ContactName"=>"SILKEBORG SOGN MENIGHEDSRÅD", "ContactGuid"=>"f2f84fd5-853d-4420-9a8a-1531795a4adf", "Date"=>"2024-11-01", "TotalExclVatInDkk"=>450.0},
+   {"Number"=>22097, "ContactName"=>"Nordthy A/S", "ContactGuid"=>"228f7848-1201-4034-aba9-ed18e3393542", "Date"=>"2024-11-01", "TotalExclVatInDkk"=>78075.0},
+   {"Number"=>22096, "ContactName"=>"Nordthy A/S", "ContactGuid"=>"228f7848-1201-4034-aba9-ed18e3393542", "Date"=>"2024-11-01", "TotalExclVatInDkk"=>5400.0},
+   ...
+   {"Number"=>21936, "ContactName"=>"JON KATBORG ApS", "ContactGuid"=>"d7bc214e-719b-42ba-9125-664a6e2aff20", "Date"=>"2024-08-29", "TotalExclVatInDkk"=>225.0}
+  ],
+  "Pagination"=>{
+    "MaxPageSizeAllowed"=>1000, 
+    "PageSize"=>500, 
+    "Result"=>26, 
+    "ResultWithoutFilter"=>26, 
+    "Page"=>0
+  }
+}
+
+### 13/11/2024
+
+* place entra id login better
 
 ### 12/11/2024
 

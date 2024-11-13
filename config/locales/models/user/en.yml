@@ -91,6 +91,8 @@ en:
     remember_me: "Remember me"
     sign_up: "Sign up"
     forgot_password: "Forgot your password?"
+    sign_in_with: "Sign in using %{provider}"
+
     missing_confirmation_email: "Didn't receive confirmation instructions?"
     missing_unlock_email: "Didn't receive unlock instructions?"
     confirmations:
