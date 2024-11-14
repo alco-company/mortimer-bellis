@@ -4,6 +4,7 @@ class Team < ApplicationRecord
   include Localeable
   include Stateable
   include Calendarable
+  include TimeZoned
 
   has_many :users, dependent: :destroy
   has_many :punch_cards, through: :users

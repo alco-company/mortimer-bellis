@@ -39,7 +39,7 @@ class Employees::Form < ApplicationForm
         row field(:ot2_add_hour_pay).input(class: "mort-form-text")
         row field(:eu_state).input(class: "mort-form-text")
         row field(:locale).select(User.locales, prompt: I18n.t(".select_employee_locale"), class: "mort-form-text")
-        row field(:time_zone).select(ActiveSupport::TimeZone.all.collect { |tz| [ "(GMT#{ActiveSupport::TimeZone.seconds_to_utc_offset(tz.utc_offset)}) #{tz.name}", tz.tzinfo.name ] }, class: "mort-form-text")
+        row field(:time_zone).select(Employee.time_zones_for_phlex, class: "mort-form-text")
       end
     end
   end

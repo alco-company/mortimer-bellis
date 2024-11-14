@@ -5,7 +5,7 @@ class Teams::Form < ApplicationForm
       row field(:color).select(Team.colors, prompt: I18n.t(".select_team_color"), class: "mort-form-text")
       view_only field(:punches_settled_at).date(class: "mort-form-text")
       row field(:locale).select(Team.locales, prompt: I18n.t(".select_team_locale"), class: "mort-form-text")
-      row field(:time_zone).select(ActiveSupport::TimeZone.all.collect { |tz| [ "(GMT#{ActiveSupport::TimeZone.seconds_to_utc_offset(tz.utc_offset)}) #{tz.name}", tz.tzinfo.name ] }, class: "mort-form-text")
+      row field(:time_zone).select(Team.time_zones_for_phlex, class: "mort-form-text")
       row field(:blocked).boolean(class: "mort-form-bool")
       div do
         div(class: "mort-btn-secondary", data: { action: "click->employee#toggleAdvanced" }) { I18n.t("users.advanced_configuration") }

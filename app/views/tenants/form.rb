@@ -8,7 +8,7 @@ class Tenants::Form < ApplicationForm
     row field(:tax_number).input(class: "mort-form-text")
     row field(:locale).select(Tenant.locales, prompt: I18n.t(".select_tenant_locale"), class: "mort-form-text")
     row field(:country).input(class: "mort-form-text")
-    row field(:time_zone).select(ActiveSupport::TimeZone.all.collect { |tz| [ "(GMT#{ActiveSupport::TimeZone.seconds_to_utc_offset(tz.utc_offset)}) #{tz.name}", tz.tzinfo.name ] }, class: "mort-form-text")
+    row field(:time_zone).select(Tenant.time_zones_for_phlex, class: "mort-form-text")
     # qr_code field(:tenant).input, helpers.resource_url
   end
 end
