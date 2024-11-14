@@ -50,6 +50,8 @@ NATIVE: https://blog.corsego.com/navigating-turbo-native, https://www.youtube.co
 * try to fix add button on time_materials
 * add web notifications - take III (web push)
 
+* notification bell blocking >:(
+
 ### 13/11/2024
 
 * place entra id login better

@@ -5,7 +5,7 @@ class ViewNotificationsComponent < ApplicationComponent
 
   def view_template
     return unless Current.user
-    notification_button
+    # notification_button
     div do
       div(
         class:
