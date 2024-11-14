@@ -4,10 +4,6 @@ class UsersController < MortimerController
   skip_before_action :ensure_tenanted_user, only: [ :sign_in_success ]
   skip_before_action :authorize, only: [ :sign_in_success ]
 
-  # before_action lambda {
-  #   resize_before_save(resource_params[:mugshot], 100, 100)
-  # }, only: [ :update ]
-
   # POST /users/:id/archive
   def archive
     @resource = User.find(params[:id])
@@ -23,6 +19,11 @@ class UsersController < MortimerController
   end
 
   def sign_in_success
+  end
+
+  def create
+    resize_before_save(params[:user][:mugshot], 100, 100)
+    super
   end
 
   def update
@@ -56,26 +57,15 @@ class UsersController < MortimerController
       params.require(:user).permit(:tenant_id, :name, :pincode, :email, :role, :mugshot, :locale, :time_zone)
     end
 
+    def create_callback(resource)
+      params[:user].delete(:mugshot)
+    end
+
     def update_callback(_u)
       params[:user].delete(:mugshot)
     end
 
     def authorize
       redirect_to(root_path, alert: t(:unauthorized)) if current_user.user?
-    end
-
-    def resize_before_save(image_param, width, height)
-      return unless image_param
-
-      begin
-        ImageProcessing::MiniMagick
-          .source(image_param)
-          .resize_to_fit(width, height)
-          .call(destination: image_param.tempfile.path)
-      rescue StandardError => _e
-        # Do nothing. If this is catching, it probably means the
-        # file type is incorrect, which can be caught later by
-        # model validations.
-      end
     end
 end
