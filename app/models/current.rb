@@ -11,6 +11,10 @@ class Current < ActiveSupport::CurrentAttributes
     tenant
   end
 
+  def notification_stream
+    "#{Current.user.id}_noticed/notifications"
+  end
+
   def find_user(user_pos_token)
     Current.user ||= User.find_by(pos_token: user_pos_token) rescue nil
   end

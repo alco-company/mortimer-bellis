@@ -2,11 +2,12 @@ module Noticed::NotificationExtensions
   extend ActiveSupport::Concern
 
   included do
-    after_save_commit :broadcast_changes
+    # after_save_commit :broadcast_changes
 
     def broadcast_changes
       broadcast_update_to_bell
       broadcast_replace_notifications
+      broadcast_flash_notice
     end
   end
 
@@ -28,9 +29,19 @@ module Noticed::NotificationExtensions
     )
   end
 
+  def broadcast_flash_notice
+    flash = { notice: params[:message] }
+    broadcast_replace_later_to(
+      "#{recipient.id}_noticed/notifications",
+      target: "flash_container",
+      partial: "application/flash_message",
+      locals: { recipient: recipient, flash: flash }
+    )
+  end
+
   def broadcast_replace_to_index_count
     # broadcast_replace_to(
-    #   "notifications_index_#{recipient.id}",
+    #   "#{recipient.id}_noticed/notifications",
     #   target: "notification_index_count",
     #   partial: "notifications/notifications_count",
     #   locals: { count: recipient.reload.notifications_count, unread: recipient.reload.unread_notifications_count }

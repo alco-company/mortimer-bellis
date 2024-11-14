@@ -1,9 +1,9 @@
 <h1 class="text-xl mb-4">
-  <%= t("notifications", name: Current.user.name) %>
+  <%= t("notifications", name: Current.user.name, count: @resources.count) %>
 </h1>
 <div data-turbo-prefetch="false">
   <%= turbo_frame_tag "notifications" do %>
-    <% @notifications.each do |notification| %>
+    <% @resources.each do |notification| %>
       <%= render partial: "notifications/notification", locals: {notification: notification}%>
     <% end %>
   <% end %>

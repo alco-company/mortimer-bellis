@@ -1,20 +1,29 @@
 # To deliver this notification:
 #
-# CompletedUserNotifier.with(record: @post, message: "New post").deliver(User.all)
+# TimeMaterialNotifier.with(record: @post, message: "New post").deliver(User.all)
 
-class CompletedEmployeeNotifier < ApplicationNotifier
+class TimeMaterialNotifier < ApplicationNotifier
   # Add your delivery methods
+  #
   deliver_by :turbo_stream, class: "DeliveryMethods::TurboStream"
+
+  notification_methods do
+    def message
+      "the message to #{recipient.name}"
+    end
+  end
   # deliver_by :action_cable do |config|
-  #   config.channel = "Noticed::NotificationsChannel"
-  #   config.stream = -> { recipient }
+  #   config.channel = "NotificationsChannel" # "Noticed::NotificationsChannel"
+  #   config.stream = Current.notification_stream
   #   config.message = -> { params.merge(user_id: recipient.id) }
   # end
+
   #
   # deliver_by :email do |config|
   #   config.mailer = "UserMailer"
   #   config.method = "new_post"
-  #   config.params = ->(recipient) { { user: recipient } }
+  #   config.wait = 15.minutes
+  #   config.unless = -> { read? }
   # end
   #
   # bulk_deliver_by :slack do |config|

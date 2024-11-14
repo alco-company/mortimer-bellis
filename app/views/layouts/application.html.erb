@@ -9,7 +9,7 @@
     <%= turbo_frame_tag "tooltip", class: "absolute", target: "_top" %>
 
     <!-- streams for notifications, menu, profile -->
-    <%= turbo_stream_from "#{Current.user.id}_noticed/notifications" if Current.user %>
+    <%= turbo_stream_from Current.notification_stream if Current.user %>
 
     <!-- view -->
     <div data-controller="menu page">

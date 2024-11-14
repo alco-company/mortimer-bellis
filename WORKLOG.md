@@ -41,12 +41,12 @@ NATIVE: https://blog.corsego.com/navigating-turbo-native, https://www.youtube.co
 }
 
 * this is probably not necessary: format.turbo_stream { render turbo_stream: turbo_stream.remove(dom_id(@resource)) }
-* add web notifications
 
 ### 14/11/2024
 
 * fix mugshot bug on user and tenant
 * fix time_zone bug on teams and employees and punch_clocks
+* add web notifications - take II
 
 ### 13/11/2024
 

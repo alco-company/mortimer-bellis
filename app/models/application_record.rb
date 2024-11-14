@@ -4,6 +4,8 @@ class ApplicationRecord < ActiveRecord::Base
   include ExportCsv
   include ExportPdf
 
+  has_many :noticed_events, as: :record, dependent: :destroy, class_name: "Noticed::Event"
+
   scope :by_user, ->() { model.new.attributes.keys.include?("user_id") ? where(user_id: Current.user.id) : all }
   scope :ordered, ->(s, d) { order(s => d) }
 
@@ -50,6 +52,9 @@ class ApplicationRecord < ActiveRecord::Base
     end
   end
 
+  def notify(msg: nil, rcp: nil, priority: 0)
+    #
+  end
 
   #
   # extend this method on the model to define the field formats
@@ -69,14 +74,14 @@ class ApplicationRecord < ActiveRecord::Base
   end
 
   # implement this method on model that has mugshots
-  def has_mugshot?
-    false
-  end
+  # def has_mugshot?
+  #   false
+  # end
 
-  # implement this method on model that has one/more photos
-  def mugshot
-    raise "implement this method on the model if mugshot exist!" if has_mugshot?
-  end
+  # # implement this method on model that has one/more photos
+  # def mugshot
+  #   raise "implement this method on the model if mugshot exist!" if has_mugshot?
+  # end
 
 
   def list_item(links: [])

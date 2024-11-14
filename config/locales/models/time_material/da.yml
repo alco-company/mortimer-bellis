@@ -4,6 +4,7 @@ da:
     billable: fakturérbar
     uploading_to_erp: Overfører fakturalinjer til Dinero
     current_task: Igangværende opgave
+    new_assigned_task: "%{delegator} har tildelt dig en ny opgave"
     not_your_time_material: Du kan kun starte/stoppe dine egne tid/materialer
     internal_or_private: Intern eller privat
     draft: Kladde

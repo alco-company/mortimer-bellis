@@ -23,6 +23,12 @@ class TimeMaterial < ApplicationRecord
     TimeMaterialDetailItem.new(item: self, links: links, id: context.dom_id(self))
   end
 
+  def notify(msg: nil, rcp: nil, priority: 0)
+    if user_id != Current.user.id
+      TimeMaterialNotifier.with(record: self, message: I18n.t("time_material.new_assigned_task", delegator: Current.user.name)).deliver(user)
+    end
+  end
+
   def name
     about[..50]
     case false

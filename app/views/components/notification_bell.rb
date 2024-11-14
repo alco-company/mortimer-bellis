@@ -6,7 +6,7 @@ class NotificationBell < ApplicationComponent
 
   def view_template
     div(id: "notification_bell") do
-      bell_svg
+      render Icons::Bell.new cls: "h-6 text-sky-300 hover:text-sky-600  #{@swing}"
     end
   end
 

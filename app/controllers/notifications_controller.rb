@@ -5,7 +5,7 @@ class NotificationsController < MortimerController
   end
 
   def index
-    @notifications = Current.user.notifications.unread.newest_first
+    # @notifications = Current.user.notifications.unread.includes(event: :record).newest_first
     ActiveRecord::Base.connected_to(role: :writing) { Current.user.notifications.unseen.mark_as_seen }
   end
 
@@ -13,7 +13,7 @@ class NotificationsController < MortimerController
 
     # override resourceable concern b/c this stream has to be unique to the user
     def set_resources_stream
-      @resources_stream = "%s_%s" % [ Current.user.id, "noticed/notifications" ]
+      @resources_stream = Current.notification_stream
     end
 
     def mark_unread

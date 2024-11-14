@@ -36,6 +36,7 @@ module Resourceable
       @resources = any_filters? ? resource_class.filtered(@filter) : parent_or_class
       @resources = case resource_class.to_s
       when "TimeMaterial"; Current.user.can?(:show_all_time_material_posts) ? @resources : @resources.by_user()
+      when "Noticed::Notification"; Current.user.notifications.unread.includes(event: :record)
       else; @resources.by_user()
       end
       @resources = any_sorts? ? @resources.ordered(params_s, params_d) : resource_class.set_order(@resources) rescue @resources
