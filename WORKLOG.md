@@ -48,6 +48,7 @@ NATIVE: https://blog.corsego.com/navigating-turbo-native, https://www.youtube.co
 * fix time_zone bug on teams and employees and punch_clocks
 * add web notifications - take II
 * try to fix add button on time_materials
+* add web notifications - take III (web push)
 
 ### 13/11/2024
 

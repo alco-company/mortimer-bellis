@@ -20,6 +20,7 @@ class User < ApplicationRecord
   has_many :time_materials
 
   has_many :notifications, as: :recipient, dependent: :destroy, class_name: "Noticed::Notification"
+  has_many :web_push_subscriptions, class_name: "Noticed::WebPush::Subscription", as: :user, dependent: :destroy
   has_many :provided_services, foreign_key: "authorized_by_id", inverse_of: :authorized_by
 
   enum :role, { user: 0, admin: 1, superadmin: 2 }

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_11_12_115432) do
+ActiveRecord::Schema[8.0].define(version: 2024_11_14_180304) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -253,6 +253,17 @@ ActiveRecord::Schema[8.0].define(version: 2024_11_12_115432) do
     t.datetime "updated_at", null: false
     t.index ["event_id"], name: "index_noticed_notifications_on_event_id"
     t.index ["recipient_type", "recipient_id"], name: "index_noticed_notifications_on_recipient"
+  end
+
+  create_table "noticed_web_push_subs", force: :cascade do |t|
+    t.string "user_type", null: false
+    t.integer "user_id", null: false
+    t.string "endpoint", null: false
+    t.string "auth_key", null: false
+    t.string "p256dh_key", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_type", "user_id"], name: "index_noticed_web_push_subs_on_user"
   end
 
   create_table "pages", force: :cascade do |t|

@@ -110,3 +110,5 @@ gem "omniauth", "~> 2.1"
 
 gem "omniauth-entra-id", "~> 3.0"
 gem "omniauth-rails_csrf_protection", "~> 1.0"
+
+gem "web-push", "~> 3.0"

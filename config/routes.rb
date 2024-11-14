@@ -16,6 +16,8 @@ Rails.application.routes.draw do
   # post "users/otp", to: "users#verify_otp", as: "verify_user_otp"
   # post "verify_otp", to: "users/sessions#verify_otp"
 
+  post "/web_push_subscriptions" => "noticed/web_push/subscriptions#create", as: :web_push_subscriptions
+
   post "dinero/callback" => "dinero#callback", as: :dinero_callback
 
   resources :time_materials do

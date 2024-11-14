@@ -6,10 +6,19 @@ class TimeMaterialNotifier < ApplicationNotifier
   # Add your delivery methods
   #
   deliver_by :turbo_stream, class: "DeliveryMethods::TurboStream"
+  deliver_by :web_push, class: "DeliveryMethods::WebPush"
 
   notification_methods do
     def message
       "the message to #{recipient.name}"
+    end
+
+    def data
+      {
+        message: message,
+        record_id: record.id,
+        record_type: record.class.name
+      }
     end
   end
   # deliver_by :action_cable do |config|
