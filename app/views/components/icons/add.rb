@@ -1,7 +1,7 @@
 class Icons::Add < Phlex::HTML
   attr_accessor :cls
 
-  def initialize(cls: "h-6 text-gray-900 hover:text-gray-500")
+  def initialize(cls: "h-6")
     @cls = cls
   end
 
