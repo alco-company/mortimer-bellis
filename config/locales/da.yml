@@ -29,7 +29,8 @@ da:
   cannot_change_role: Du kan ikke ændre din egen rolle til super_user!
   form_not_processable: Formularen kunne ikke behandles - prøv igen
   holyday: Helligdag
-  notifications: "%{name}, du har %{count} ulæste beskeder"
+  notifications_salutation: "Hej %{name},"
+  notifications: "du har %{count} ulæste beskeder"
   notification_sent_at: Sendt den
   mark_as_read: Læst
   expected_time_zone: "Vi tror at den tidszone, der passer dig bedst er:"

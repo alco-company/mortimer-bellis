@@ -13,10 +13,11 @@ class TopbarComponent < ApplicationComponent
         render SearchComponent.new
 
         div(class: "flex items-center gap-x-4 lg:gap-x-6") do
-          render ViewNotificationsComponent.new
+          render Notifications::NotificationBell.new recipient: Current.user
 
           # separator
           div(class: "hidden lg:block lg:h-6 lg:w-px lg:bg-gray-900/10")
+
           render ProfileDropmenuComponent.new
         end
       end if Current.user
@@ -24,6 +25,7 @@ class TopbarComponent < ApplicationComponent
   end
 
   private
+
     def mobile_menu_button
       button(type: "button", class: "-m-2.5 p-2.5 text-gray-700 lg:hidden", data: { action: "click->menu#openMobileSidebar" }) do
         span(class: "sr-only") { "Open sidebar" }

@@ -46,6 +46,7 @@ NATIVE: https://blog.corsego.com/navigating-turbo-native, https://www.youtube.co
 ### 15/11/2024
 
 * add web notifications - take IV (web push)
+* notification bell revisited
 
 ### 14/11/2024
 
