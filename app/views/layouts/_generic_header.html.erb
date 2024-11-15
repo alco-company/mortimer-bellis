@@ -7,7 +7,7 @@
 <%= csrf_meta_tags %>
 <%= csp_meta_tag %>
 
-<link rel="manifest" crossorigin="use-credentials" href="/manifest.json?start_url=<%= request.url %>
+<%= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
 
 <%#  https://realfavicongenerator.net %>
 <link rel="icon" href="<%= asset_path('mortimer_transparent_logo.png') %>" sizes="32x32">

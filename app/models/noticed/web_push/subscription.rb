@@ -13,9 +13,13 @@ module Noticed::WebPush
         p256dh: p256dh_key,
         auth: auth_key,
         vapid: {
+          subject: "mailto:monitor@mortimer.pro",
           private_key: Rails.application.credentials.dig(:web_push, :vapid_private_key),
           public_key: Rails.application.credentials.dig(:web_push, :vapid_public_key)
-        }
+        },
+        ssl_timeout: 5,             # optional value for Net::HTTP#ssl_timeout=
+        open_timeout: 5,            # optional value for Net::HTTP#open_timeout=
+        read_timeout: 5             # optional value for Net::HTTP#read_timeout=
       )
     end
   end

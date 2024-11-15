@@ -9,13 +9,10 @@ class TimeMaterialNotifier < ApplicationNotifier
   deliver_by :web_push, class: "DeliveryMethods::WebPush"
 
   notification_methods do
-    def message
-      "the message to #{recipient.name}"
-    end
-
     def data
       {
-        message: message,
+        title: I18n.t("time_material.new_assigned_task_title"),
+        body: params[:message],
         record_id: record.id,
         record_type: record.class.name
       }

@@ -223,6 +223,7 @@ introduction by Cody Norman https://www.youtube.com/watch?v=i-RwxAVMP-k&list=PLb
 
 ### Progressive Web Apps - PWA
 
+How to install your Rails App to the Home Screen - https://joyofrails.com/articles/add-your-rails-app-to-the-home-screen
 introduction by Avi Flombaum https://www.youtube.com/watch?v=g_0OaFreX3U&list=PLbHJudTY1K0chrs_E_XFz2pOJ3d8jCayh&index=40
 
 ### Rails and Native Apps

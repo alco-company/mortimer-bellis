@@ -46,19 +46,25 @@ function showPromptForNotifications(registration) {
   const notificationsButton = document.getElementById("enable_notifications");
   if (!notificationsButton) return;
 
-  notificationsButton.classList.remove("hidden");
-  notificationsButton.addEventListener("click", (event) => {
-    event.preventDefault();
-    Notification.requestPermission()
-      .then((permission) => {
-        if (permission === "granted") {
-          setupSubscription(registration);
-        } else {
-          alert("Notifications declined");
-        }
-      })
-      .catch((error) => console.log("Notifications error", error))
-      .finally(() => notificationsButton.classList.add("hidden"));
+  Notification.requestPermission().then((callback) => {
+    if (callback === "granted") {
+      setupSubscription(registration);
+    } else {
+      notificationsButton.classList.remove("hidden");
+      notificationsButton.addEventListener("click", (event) => {
+        event.preventDefault();
+        Notification.requestPermission()
+          .then((permission) => {
+            if (permission === "granted") {
+              setupSubscription(registration);
+            } else {
+              alert("Notifications declined");
+            }
+          })
+          .catch((error) => console.log("Notifications error", error))
+          .finally(() => notificationsButton.classList.add("hidden"));
+      });
+    }
   });
 }
 

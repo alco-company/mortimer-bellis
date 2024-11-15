@@ -25,7 +25,7 @@ class TimeMaterial < ApplicationRecord
 
   def notify(msg: nil, rcp: nil, priority: 0)
     if user_id != Current.user.id
-      TimeMaterialNotifier.with(record: self, message: I18n.t("time_material.new_assigned_task", delegator: Current.user.name)).deliver(user)
+      TimeMaterialNotifier.with(record: self, current_user: Current.user, message: I18n.t("time_material.new_assigned_task", delegator: Current.user.name)).deliver(user)
     end
   end
 
