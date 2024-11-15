@@ -1,4 +1,4 @@
-class NotificationItem < Phlex::HTML
+class Notifications::NotificationItem < Phlex::HTML
   include Phlex::Rails::Helpers::Routes
   include Phlex::Rails::Helpers::LinkTo
 
@@ -9,7 +9,105 @@ class NotificationItem < Phlex::HTML
   end
 
   def view_template(&block)
-    li(class: "flex items-center justify-between gap-x-6 py-5") do
+    li(class: "") do
+      div(class: "group relative flex items-center px-5 py-6") do
+        a(href: "#", class: "-m-1 block flex-1 p-1") do
+          div(
+            class: "absolute inset-0 group-hover:bg-gray-50",
+            aria_hidden: "true"
+          )
+          div(class: "relative flex min-w-0 flex-1 items-center") do
+            span(class: "relative inline-block shrink-0") do
+              img(
+                class: "size-10 rounded-full",
+                src:
+                  "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
+                alt: ""
+              )
+              comment { %(Online: "bg-green-400", Offline: "bg-gray-300") }
+              span(
+                class:
+                  "absolute right-0 top-0 block size-2.5 rounded-full bg-green-400 ring-2 ring-white",
+                aria_hidden: "true"
+              )
+            end
+            div(class: "ml-4 truncate") do
+              p(class: "truncate text-sm font-medium text-gray-900") do
+                "Leslie Alexander"
+              end
+              p(class: "truncate text-sm text-gray-500") { "@lesliealexander" }
+            end
+          end
+        end
+        div(class: "relative ml-2 inline-block shrink-0 text-left") do
+          button(
+            type: "button",
+            class:
+              "group relative inline-flex size-8 items-center justify-center rounded-full bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2",
+            id: "options-menu-0-button",
+            aria_expanded: "false",
+            aria_haspopup: "true"
+          ) do
+            span(class: "absolute -inset-1.5")
+            span(class: "sr-only") { "Open options menu" }
+            span(
+              class: "flex size-full items-center justify-center rounded-full"
+            ) do
+              svg(
+                class: "size-5 text-gray-400 group-hover:text-gray-500",
+                viewbox: "0 0 20 20",
+                fill: "currentColor",
+                aria_hidden: "true",
+                data_slot: "icon"
+              ) do |s|
+                s.path(
+                  d:
+                    "M10 3a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM10 8.5a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM11.5 15.5a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0Z"
+                )
+              end
+            end
+          end
+          context_menu
+        end
+      end
+    end
+  end
+
+  def context_menu
+    comment do
+      %(Dropdown panel, show/hide based on dropdown state. Entering: "transition ease-out duration-100" From: "transform opacity-0 scale-95" To: "transform opacity-100 scale-100" Leaving: "transition ease-in duration-75" From: "transform opacity-100 scale-100" To: "transform opacity-0 scale-95")
+    end
+    div(
+      class: "hidden absolute right-9 top-0 z-10 w-48 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none",
+      role: "menu",
+      aria_orientation: "vertical",
+      aria_labelledby: "options-menu-0-button",
+      tabindex: "-1"
+    ) do
+      div(class: "py-1", role: "none") do
+        comment do
+          %(Active: "bg-gray-100 text-gray-900 outline-none", Not Active: "text-gray-700")
+        end
+        a(
+          href: "#",
+          class: "block px-4 py-2 text-sm text-gray-700",
+          role: "menuitem",
+          tabindex: "-1",
+          id: "options-menu-0-item-0"
+        ) { "View profile" }
+        a(
+          href: "#",
+          class: "block px-4 py-2 text-sm text-gray-700",
+          role: "menuitem",
+          tabindex: "-1",
+          id: "options-menu-0-item-1"
+        ) { "Send message" }
+      end
+    end
+  end
+
+  def old_view_template(&block)
+    div(class: "flex items-center justify-between gap-x-6 py-5 overflow-y-scroll") do
       div(class: "min-w-0") do
         div(class: "flex items-start gap-x-3") do
           p(class: "text-sm font-semibold leading-6 text-gray-900") do
