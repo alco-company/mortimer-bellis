@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="<%= I18n.locale %>" class="h-full bg-white">
+<html lang="<%= I18n.locale %>" class="h-full bg-white scrollbar-hide">
   <head>
     <%= render partial: "layouts/generic_header" %>
     <%= web_push_public_key_meta_tag %>
@@ -12,7 +12,7 @@
     <%= turbo_stream_from Current.notification_stream if Current.user %>
 
     <!-- view -->
-    <div data-controller="menu page">
+    <div class="" data-controller="menu page">
 
       <!-- Before menu -->
       <div >
@@ -30,7 +30,7 @@
       </div>
       <!-- End menu -->
 
-      <div data-menu-target="topmain" class="lg:pl-72">
+      <div data-controller="notificationcenter" data-menu-target="topmain" class="lg:pl-72">
         <%= render_topbar %>
         <main class="py-4">
           <div class="px-4 sm:px-6 lg:px-8">
@@ -39,6 +39,8 @@
             <!-- Before Sidebar Form -->
             <%= turbo_frame_tag "form" %>
             <!-- End Sidebar Form -->
+
+            <%= render Notifications::NotificationCenter.new(recipient: Current.user)  if Current.user %>
 
           </div>
         </main>

@@ -47,6 +47,7 @@ NATIVE: https://blog.corsego.com/navigating-turbo-native, https://www.youtube.co
 
 * add web notifications - take IV (web push)
 * notification bell revisited
+* hide scrollbars in document
 
 ### 14/11/2024
 
