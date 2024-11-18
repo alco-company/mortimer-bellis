@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_11_14_180304) do
+ActiveRecord::Schema[8.0].define(version: 2024_11_18_222253) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -450,6 +450,7 @@ ActiveRecord::Schema[8.0].define(version: 2024_11_14_180304) do
     t.string "hostname"
     t.text "metadata"
     t.datetime "created_at", null: false
+    t.string "name"
     t.index ["last_heartbeat_at"], name: "index_solid_queue_processes_on_last_heartbeat_at"
     t.index ["supervisor_id"], name: "index_solid_queue_processes_on_supervisor_id"
   end
