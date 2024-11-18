@@ -34,7 +34,7 @@ gem "tzinfo-data", platforms: %i[ windows jruby ]
 gem "bootsnap", require: false
 
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
-gem "image_processing", "~> 1.2"
+gem "image_processing", "~> 1.13"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
@@ -74,15 +74,15 @@ gem "phlex-rails"
 
 gem "superform", "~> 0.4.6"
 
-gem "pagy", "~> 8.6"
+gem "pagy", "~> 9.0"
 
 gem "rqrcode", "~> 2.2"
 
 gem "activerecord-enhancedsqlite3-adapter", "~> 0.8.0"
 
-gem "solid_queue", "~> 0.5.0"
+gem "solid_queue", "~> 0.6.0"
 
-gem "get_process_mem", "~> 0.2.7"
+gem "get_process_mem", "~> 1.0.0"
 
 gem "devise", "~> 4.9"
 
@@ -91,8 +91,6 @@ gem "devise_invitable", "~> 2.0"
 gem "redcarpet", "~> 3.6"
 
 gem "httparty", "~> 0.22.0"
-
-gem "rss", "~> 0.3.0"
 
 gem "psych", "~> 5.1.2"
 
