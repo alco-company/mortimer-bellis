@@ -13,7 +13,6 @@ NATIVE: https://blog.corsego.com/navigating-turbo-native, https://www.youtube.co
 
 ## BUGS
 
-*  Post-install message from solid_queue: Upgrading to Solid Queue 0.4.x? There are some breaking changes about how Solid Queue is started. Check https://github.com/rails/solid_queue/blob/main/UPGRADING.md for upgrade instructions.
 * [ ] add breaks and included_in_duration to payroll_period#manual_punch
 * [ ] redesign punch and add work_schedule to payroll_period#manual_punch
 * fix error on employee_invitation#create -> returns turbo_frame in clear text - not HTML - at least on iPad
@@ -42,6 +41,10 @@ NATIVE: https://blog.corsego.com/navigating-turbo-native, https://www.youtube.co
 
 * this is probably not necessary: format.turbo_stream { render turbo_stream: turbo_stream.remove(dom_id(@resource)) }
 * pwa-installation.js + joy of rails
+
+### 19/11/2024
+
+* upgrading SolidQueue to 0.8.0 - aiming for 1.0.0 further down the road
 
 ### 18/11/2024
 

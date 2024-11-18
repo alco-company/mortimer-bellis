@@ -68,7 +68,7 @@ Rails.application.configure do
 
   # Use a real queuing backend for Active Job (and separate queues per environment).
   config.active_job.queue_adapter = :solid_queue
-  config.solid_queue.connects_to = { database: { writing: :writer, reading: :reader } }
+  config.solid_queue.connects_to = { database: { writing: :queue, reading: :queue } }
 
   # config.action_cable.url = "ws://localhost:3000/cable"
   config.action_cable.allowed_request_origins = [ %r{http://*}, %r{https://*} ]
