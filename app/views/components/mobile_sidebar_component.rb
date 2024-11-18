@@ -2,54 +2,63 @@
 
 class MobileSidebarComponent < ApplicationComponent
   def view_template
-    div(data: { menu_target: "mobileSidebar" }, class: "hidden relative z-50 lg:hidden", role: "dialog", aria_modal: "true") do
-      # <!--
-      #       Off-canvas menu backdrop, show/hide based on off-canvas menu state.
-
-      #       Entering: "transition-opacity ease-linear duration-300"
-      #         From: "opacity-0"
-      #         To: "opacity-100"
-      #       Leaving: "transition-opacity ease-linear duration-300"
-      #         From: "opacity-100"
-      #         To: "opacity-0"
-      #     -->
-      div(class: "fixed inset-0 bg-gray-300/80", aria_hidden: "true")
-      div(class: "fixed inset-0 flex") do
-        # <!--
-        #   Off-canvas menu, show/hide based on off-canvas menu state.
-
-        #   Entering: "transition ease-in-out duration-300 transform"
-        #     From: "-translate-x-full"
-        #     To: "translate-x-0"
-        #   Leaving: "transition ease-in-out duration-300 transform"
-        #     From: "translate-x-0"
-        #     To: "-translate-x-full"
-        # -->
-        div(class: "relative mr-16 flex w-full max-w-xs flex-1") do
-          # <!--
-          #   Close button, show/hide based on off-canvas menu state.
-
-          #   Entering: "ease-in-out duration-300"
-          #     From: "opacity-0"
-          #     To: "opacity-100"
-          #   Leaving: "ease-in-out duration-300"
-          #     From: "opacity-100"
-          #     To: "opacity-0"
-          # -->
-          div(class: "absolute left-full top-0 flex w-16 justify-center pt-5") do
-            button(type: "button", class: "-m-2.5 p-2.5", data: { action: "click->menu#closeMobileSidebar" }) do
+    # Off-canvas menu for mobile, show/hide based on off-canvas menu state.
+    div(data: { mobilesidebar_target: "container" }, class: "hidden relative z-40 lg:hidden", role: "dialog", aria_modal: "true") do
+      # Off-canvas menu backdrop, show/hide based on off-canvas menu state
+      div(class: "fixed inset-0 bg-sky-600/25",
+        data: {
+          mobilesidebar_target: "backdrop",
+          transition_enter: "ease-in-out duration-500",
+          transition_enter_start: "opacity-0",
+          transition_enter_end: "opacity-100",
+          transition_leave: "ease-in-out duration-500",
+          transition_leave_start: "opacity-100",
+          transition_leave_end: "opacity-0"
+        },
+        aria_hidden: "true")
+      div(class: "fixed inset-0 z-40 flex") do
+        # Off-canvas menu, show/hide based on off-canvas menu state.
+        div(class: "relative flex w-full max-w-xs flex-1 flex-col bg-white top-16 pb-4 pt-5",
+          data: {
+            mobilesidebar_target: "panel",
+            transition_enter: "transition ease-in-out duration-300 transform",
+            transition_enter_start: "-translate-x-full",
+            transition_enter_end: "translate-x-0",
+            transition_leave: "transition ease-in-out duration-300 transform",
+            transition_leave_start: "translate-x-0",
+            transition_leave_end: "-translate-x-full"
+          },
+        ) do
+          # Close button, show/hide based on off-canvas menu state.
+          div(class: "absolute right-0 top-0 -mr-12 pt-2",
+            data: {
+              mobilesidebar_target: "closeButton",
+              transition_enter: "ease-in-out duration-500",
+              transition_enter_start: "opacity-0",
+              transition_enter_end: "opacity-100",
+              transition_leave: "ease-in-out duration-500",
+              transition_leave_start: "opacity-100",
+              transition_leave_end: "opacity-0"
+            }
+            ) do
+            button(
+              type: "button",
+              data: { action: "click->mobilesidebar#hide" },
+              class: "relative ml-1 flex size-10 items-center justify-center rounded-full focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
+            ) do
+              span(class: "absolute -inset-0.5")
               span(class: "sr-only") { "Close sidebar" }
               render Icons::Cancel.new
             end
           end
-          #
-          #   "Sidebar component, swap this element with another sidebar if you like"
-          #
-          render SidebarComponent.new
+          render NavigationComponent.new
+        end
+        div(class: "w-14 shrink-0", aria_hidden: "true") do
+          comment do
+            "Dummy element to force sidebar to shrink to fit close icon"
+          end
         end
       end
     end
   end
-
-  private
 end

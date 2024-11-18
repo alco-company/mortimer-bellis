@@ -10,7 +10,7 @@ class LogoComponent < ApplicationComponent
   def initialize(**attribs)
     @logo = attribs[:logo].present? ? attribs[:logo] : "mortimer"
     @root = attribs[:root] || nil
-    @div_css = attribs[:div_css] || "relative left-0 flex-shrink-0 py-5 lg:static"
+    @div_css = attribs[:div_css] || "relative left-0 pl-2 flex-shrink-0 py-5 lg:static"
   end
 
   def view_template

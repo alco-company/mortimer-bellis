@@ -43,6 +43,11 @@ NATIVE: https://blog.corsego.com/navigating-turbo-native, https://www.youtube.co
 * this is probably not necessary: format.turbo_stream { render turbo_stream: turbo_stream.remove(dom_id(@resource)) }
 * pwa-installation.js + joy of rails
 
+### 18/11/2024
+
+* refactor mobilesidebar to animate
+* 
+
 ### 15/11/2024
 
 * add web notifications - take IV (web push)

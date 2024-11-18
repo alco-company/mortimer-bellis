@@ -1,4 +1,5 @@
 import { Controller } from "@hotwired/stimulus"
+import { enter, leave } from "el-transition";
 
 // Connects to data-controller="menu"
 export default class extends Controller {
@@ -14,10 +15,10 @@ export default class extends Controller {
   connect() {
     let i = 0;
     if (localStorage.getItem("collapsed") === "true") {
-      this.topmainTarget.classList.remove("lg:pl-72");
+      this.topmainTarget.classList.remove("lg:pl-64");
       try { this.settingTargets.forEach((e) => e.classList.remove("px-6") ) } catch (e) {}
-      this.topmainTarget.classList.add("lg:pl-32");
-      this.sidebarTarget.classList.add("w-32", "max-w-32");
+      this.topmainTarget.classList.add("lg:pl-24");
+      this.sidebarTarget.classList.add("w-24", "max-w-24");
       this.menuitemTargets.forEach((e) => { e.classList.add("lg:hidden"); });
       for (i of document.getElementsByClassName("collapse-sidebar")) {
         i.classList.add("rotate-180");
@@ -28,9 +29,9 @@ export default class extends Controller {
   toggleSidebar(e) {
     let i = 0;
     if (localStorage.getItem("collapsed") === "true") {
-      this.topmainTarget.classList.remove("lg:pl-32");
-      this.topmainTarget.classList.add("lg:pl-72");
-      this.sidebarTarget.classList.remove("w-32", "max-w-32");
+      this.topmainTarget.classList.remove("lg:pl-24");
+      this.topmainTarget.classList.add("lg:pl-64");
+      this.sidebarTarget.classList.remove("w-24", "max-w-24");
       for (i of document.getElementsByClassName("collapse-sidebar")) {
         i.classList.remove("rotate-180");
       }
@@ -40,9 +41,9 @@ export default class extends Controller {
       this.menuitemTargets.forEach((e) => { e.classList.remove("lg:hidden"); });
       localStorage.setItem("collapsed", "false");
     } else {
-      this.topmainTarget.classList.remove("lg:pl-72");
-      this.topmainTarget.classList.add("lg:pl-32");
-      this.sidebarTarget.classList.add("w-32", "max-w-32");
+      this.topmainTarget.classList.remove("lg:pl-64");
+      this.topmainTarget.classList.add("lg:pl-24");
+      this.sidebarTarget.classList.add("w-24", "max-w-24");
       for (i of document.getElementsByClassName("collapse-sidebar")) {
         i.classList.add("rotate-180");
       }
@@ -54,16 +55,16 @@ export default class extends Controller {
     }
   }
 
-  toggleFlyout(e) {
-    // e.preventDefault()
-    const flyout = e.target.getElementsByClassName("flyout")[0];
-    const collection = document.getElementsByClassName("flyout");
-    for (let i = 0; i < collection.length; i++) {
-      if (collection[i] !== flyout)
-        collection[i].classList.add("hidden");
-    }
-    e.target.getElementsByClassName("flyout")[0].classList.toggle("hidden");
-  }
+  // toggleFlyout(e) {
+  //   // e.preventDefault()
+  //   const flyout = e.target.getElementsByClassName("flyout")[0];
+  //   const collection = document.getElementsByClassName("flyout");
+  //   for (let i = 0; i < collection.length; i++) {
+  //     if (collection[i] !== flyout)
+  //       collection[i].classList.add("hidden");
+  //   }
+  //   e.target.getElementsByClassName("flyout")[0].classList.toggle("hidden");
+  // }
 
   toggleSubmenu(e) {
     e.preventDefault()
@@ -79,12 +80,12 @@ export default class extends Controller {
     submenu.classList.toggle("hidden");
   }
 
-  openMobileSidebar(e) {
-    console.log("openMobileSidebar")
-    this.mobileSidebarTarget.classList.remove("hidden");
-  }
+  // openMobileSidebar(e) {
+  //   this.toggleTransition();
+  //   // this.mobileSidebarTarget.classList.remove("hidden");
+  // }
 
-  closeMobileSidebar(e) {
-    this.mobileSidebarTarget.classList.add("hidden");
-  }
+  // closeMobileSidebar(e) {
+  //   this.mobileSidebarTarget.classList.add("hidden");
+  // }
 }

@@ -1,28 +1,40 @@
+<!DOCTYPE html>
 <html lang="<%= I18n.locale %>" class="h-full bg-white scrollbar-hide">
   <head>
     <%= render partial: "layouts/generic_header" %>
     <%= web_push_public_key_meta_tag %>
   </head>
   <body class="h-full">
-    <div class="min-h-full" data-controller="mobilesidebar menu page">
-      <%= render MobileSidebarComponent.new %>
+    <!-- tooltip -->
+    <%= turbo_frame_tag "tooltip", class: "absolute", target: "_top" %>
 
-      <%= render SidebarComponent.new %>
+    <!-- streams for notifications, menu, profile -->
+    <%= turbo_stream_from Current.notification_stream if Current.user %>
 
-      <div data-controller="notificationcenter" data-menu-target="topmain" class="flex flex-1 flex-col lg:pl-64">
+    <!-- view -->
+    <div class="min-h-full" data-controller="sidebar menu page">
+
+      <!-- Before menu -->
+      <div >
+
+        <!-- Off-canvas menu for mobile, show/hide based on off-canvas menu state. -->
+        <%= render_mobile_sidebar %>
+
+        <!-- Static sidebar for desktop -->
+        <!-- mention rotate-180 b/c tailwind cannot pick it up -->
+        <div data-menu-target="sidebar" class="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-72 lg:flex-col">
+          <!-- Sidebar component, swap this element with another sidebar if you like -->
+          <%= render SidebarComponent.new params: params %>
+        </div>
+
+      </div>
+      <!-- End menu -->
+
+      <div data-controller="notificationcenter" data-menu-target="topmain" class="lg:pl-72">
         <%= render_topbar %>
-        <main class="flex-1 pb-8">
-          <%#= render user_top_profile %>
-
-          <div class="md:px-4 mt-8">
-            <%#= render page_overview %>
-
-            <%#= render page_title %>
-
+        <main class="py-4">
+          <div class="px-4 sm:px-6 lg:px-8">
             <%= yield %>
-
-            <%#= render activity_list_smallest_breakpoint_only %>
-            <%#= render activity_list_small_and_up %>
 
             <!-- Before Sidebar Form -->
             <%= turbo_frame_tag "form" %>
@@ -45,5 +57,6 @@
     <!-- Before ModalContainer -->
     <remote-modal-container></remote-modal-container>
     <!-- End ModalContainer -->
+
   </body>
 </html>
