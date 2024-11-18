@@ -19,7 +19,7 @@ gem "tailwindcss-rails"
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem "jbuilder"
 # Use Redis adapter to run Action Cable in production
-# gem "redis", ">= 4.0.1"
+gem "redis", ">= 4.0.1"
 
 # Use Kredis to get higher-level data types in Redis [https://github.com/rails/kredis]
 # gem "kredis"
@@ -66,7 +66,8 @@ end
 group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
   gem "capybara"
-  gem "selenium-webdriver"
+  # gem "selenium-webdriver"
+  gem "cuprite", "~> 0.15.1"
 end
 
 gem "phlex-rails"
@@ -85,12 +86,27 @@ gem "get_process_mem", "~> 1.0.0"
 
 gem "devise", "~> 4.9"
 
-gem "omniauth", "~> 2.1"
-
 gem "devise_invitable", "~> 2.0"
 
 gem "redcarpet", "~> 3.6"
 
 gem "httparty", "~> 0.22.0"
 
-gem "rss", "~> 0.3.1"
+gem "psych", "~> 5.1.2"
+
+gem "rrule", "~> 0.6.0"
+
+gem "httpx", "~> 1.3"
+
+gem "mission_control-jobs", "~> 0.3.1"
+
+gem "noticed", "~> 2.4"
+
+gem "x", "~> 0.14.1"
+
+gem "omniauth", "~> 2.1"
+
+gem "omniauth-entra-id", "~> 3.0"
+gem "omniauth-rails_csrf_protection", "~> 1.0"
+
+gem "web-push", "~> 3.0"

@@ -1,0 +1,13 @@
+<div class="min-w-0 w-full columns-2 md:columns-4 lg:columns-6 xl:columns-10">
+  <%= render_text_column value: t('.name'), sort: params, field: :name, css: "font-bold truncate" %>
+  <%= render_text_column value: t(".start_date"), css: "hidden xl:block font-bold " %>
+  <%= render_text_column value: t(".end_date"), css: "hidden lg:block font-bold " %>
+  <%= render_text_column value: t(".state"), sort: params, field: :state, css: "font-bold truncate" %>
+  <%= render_text_column value: t(".is_billable"), css: "hidden md:block font-bold " %>
+  <%= render_text_column value: t(".priority"), css: "hidden lg:block font-bold " %>
+  <%= render_text_column value: t(".hourly_rate"), css: "hidden xl:block font-bold " %>
+  <%= render_text_column value: t(".estimated_minutes"), css: "hidden xl:block font-bold " %>
+  <%= render_text_column value: t(".actual_minutes"), css: "hidden xl:block font-bold " %>
+  <%= render_text_column value: t(".updated_at"), css: "hidden md:block font-bold " %>
+</div>
+

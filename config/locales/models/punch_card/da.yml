@@ -10,6 +10,8 @@ da:
         button: Slet
 
   punch_cards:
+    validation_errors: Der er fejl i det indtastede
+
     create:
       post: Stempelkortet blev oprettet
     update:
@@ -41,7 +43,7 @@ da:
         today: I dag 
         this_payroll: Denne lønperiode
         todays_punches: Stemplinger idag 
-        for_employee: for %{name}
+        for_ user: for %{name}
 
         add_time: Tilføj tid
         this_payroll_punches: Stemplinger i denne lønperiode

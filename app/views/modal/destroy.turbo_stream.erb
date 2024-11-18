@@ -1,0 +1,4 @@
+<%= turbo_stream.close_remote_modal do %>
+<% end %>
+<%= turbo_stream.replace("flash_container", partial: "application/flash_message") %>
+<%= turbo_stream.remove(dom_id(@resource)) %>

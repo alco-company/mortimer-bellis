@@ -1,5 +1,16 @@
+# prepare the SSH port
+ssh docker6 ls
+if [ -n "$1" ]; then
+  # Argument is provided, do something
+  backup_prod
+fi
 git checkout main
 git pull
 kamal env push 
 kamal deploy 
 git checkout development
+#
+# clean up ssh's
+echo Cleaning SSH local: `ps aux | grep 'ConnectTimeout' | wc -l` remote: `ssh docker6 -lroot "ps aux | grep 'ConnectTimeout' | wc -l"`
+clean_ssh 2>&1 > /dev/null
+echo Cleaned SSH local: `ps aux | grep 'ConnectTimeout' | wc -l` remote: `ssh docker6 -lroot "ps aux | grep 'ConnectTimeout' | wc -l"`

@@ -1,9 +1,9 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  account: one
+  tenant: one
   feed: MyString
 
 two:
-  account: two
+  tenant: two
   feed: MyString

@@ -14,8 +14,7 @@ servers:
   web:
     hosts:
       - 135.181.202.106
-    options:
-      # "add-host": host.docker.internal:host-gateway
+    options: {}
       # network: "mortimer"    
     labels:
       traefik.enable: true
@@ -83,6 +82,7 @@ env:
   clear:
     PDF_HOST: 135.181.202.106 
     DB_HOST: 135.181.202.106
+    REDIS_URL: 'redis://135.181.202.106:6379/1'
     SMTP_USER_NAME: 'info@mortimer.pro'
     SMTP_DOMAIN: 'mortimer.pro'
     SMTP_HOST: 'hosting.alco.company'
@@ -92,8 +92,11 @@ env:
     SSL_DOMAIN: 'anemone.mortimer.pro'
     WEB_HOST: 'anemone.mortimer.pro'
     MORTIMER_VERSION: '0.8.1'
+    DINERO_APP_CALLBACK: 'https://anemone.mortimer.pro/dinero/callback'
   secret:
     - RAILS_MASTER_KEY
+    - DINERO_APP_ID
+    - DINERO_APP_SECRET
     - SMTP_PASSWORD
     - WAVIX_APP_ID
 
@@ -116,6 +119,12 @@ accessories:
     image: 4teamwork/weasyprint
     host: 135.181.202.106
     port: 8080
+  redis:
+    image: redis:7.0
+    host: 135.181.202.106
+    port: 6379
+    directories:
+      - data:/data
 # Use accessory services (secrets come from .env).
 # accessories:
 #   db:

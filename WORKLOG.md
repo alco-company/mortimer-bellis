@@ -1,11 +1,501 @@
 # WORKLOG
 
+# fonts to use: Inter, Helvetica, Futura, Garamond, Times New Roman, Bodoni, Baskerville, Century Expanded
+# <https://www.somanycode.com/awesome/awesome-ruby/> listing for many projects and gems
+
+## Rescue tools
+
+## Ideas
+
+BACKUP: Litestream
+PWA: https://onrails.blog/2021/03/02/rails-pwas-using-turbo-hhnpwa-7/
+NATIVE: https://blog.corsego.com/navigating-turbo-native, https://www.youtube.com/watch?v=TDQ2wtmgeKw
+
 ## BUGS
 
+*  Post-install message from solid_queue: Upgrading to Solid Queue 0.4.x? There are some breaking changes about how Solid Queue is started. Check https://github.com/rails/solid_queue/blob/main/UPGRADING.md for upgrade instructions.
 * [ ] add breaks and included_in_duration to payroll_period#manual_punch
 * [ ] redesign punch and add work_schedule to payroll_period#manual_punch
+* fix error on employee_invitation#create -> returns turbo_frame in clear text - not HTML - at least on iPad
+* <https://railsdesigner.com/preview-images-with-hotwire>
 
 ## CHANGELOG
+
+* add customer has balance marker
+{
+  "Collection"=> [
+   {"Number"=>22099, "ContactName"=>"SOPHUS FUGLSANG. EXPORT-MALTFABRIK A/S", "ContactGuid"=>"2e7bd2c1-761b-44e2-94be-d93151a45e13", "Date"=>"2024-11-01", "TotalExclVatInDkk"=>9494.4},
+   {"Number"=>22098, "ContactName"=>"SILKEBORG SOGN MENIGHEDSRÅD", "ContactGuid"=>"f2f84fd5-853d-4420-9a8a-1531795a4adf", "Date"=>"2024-11-01", "TotalExclVatInDkk"=>450.0},
+   {"Number"=>22097, "ContactName"=>"Nordthy A/S", "ContactGuid"=>"228f7848-1201-4034-aba9-ed18e3393542", "Date"=>"2024-11-01", "TotalExclVatInDkk"=>78075.0},
+   {"Number"=>22096, "ContactName"=>"Nordthy A/S", "ContactGuid"=>"228f7848-1201-4034-aba9-ed18e3393542", "Date"=>"2024-11-01", "TotalExclVatInDkk"=>5400.0},
+   ...
+   {"Number"=>21936, "ContactName"=>"JON KATBORG ApS", "ContactGuid"=>"d7bc214e-719b-42ba-9125-664a6e2aff20", "Date"=>"2024-08-29", "TotalExclVatInDkk"=>225.0}
+  ],
+  "Pagination"=>{
+    "MaxPageSizeAllowed"=>1000, 
+    "PageSize"=>500, 
+    "Result"=>26, 
+    "ResultWithoutFilter"=>26, 
+    "Page"=>0
+  }
+}
+
+* this is probably not necessary: format.turbo_stream { render turbo_stream: turbo_stream.remove(dom_id(@resource)) }
+* pwa-installation.js + joy of rails
+
+### 18/11/2024
+
+* refactor mobilesidebar to animate
+* refactor contextmenu & profilemenu to animate
+
+### 15/11/2024
+
+* add web notifications - take IV (web push)
+* notification bell revisited
+* hide scrollbars in document
+* refactor notifications to use stimulus-use for animations
+
+### 14/11/2024
+
+* fix mugshot bug on user and tenant
+* fix time_zone bug on teams and employees and punch_clocks
+* add web notifications - take II
+* try to fix add button on time_materials
+* add web notifications - take III (web push)
+
+* notification bell blocking >:(
+
+### 13/11/2024
+
+* place entra id login better
+* identify search better + danish translations
+* tighten up profile - in particular timezone select
+* fix new time_material attributes bug
+* fix km bug
+
+### 12/11/2024
+
+* add date on invoice_item comment - when work done
+* add 50%/100% overtime
+* add mileage accounting - at least invoicing mileage
+* rename migrations to please Kamal!
+* drop execute statements in migration
+* dropped the entire thing - just added over_time
+* big troubles - only getting 404's
+* write "km" on list_items time_material when mileage
+* fix name on list_item TimeMaterial - more
+
+### 11/11/2024
+
+* fix mugshot image size on uploads
+* check service authentication on dinero - or reset it and tell!
+
+### 08/11/2024
+
+* allow argument on stage and prod scripts to backup databases
+* bug on user/profile
+* The kiosk provides visual confirmation (e.g., a success message) after a successful sign-in or sign-out.
+* allow invoice_items with a_one_off item to be added to invoices - with defaultAccountNumber
+* handle time_material_state on time_materials
+* handle project_states on projects
+* bug on invoice_draft - Dinero::Service
+* bug in provided_services/dinero/service/_authorize
+
+### 07/11/2024
+
+* implementing naiive backup solution (scp to my desk)
+* allow for stop/go to pause/resume easier
+* inform about errors on input
+* allow users to delegate jobs
+* allow user to punch in/out on kiosks (punch_clocks)
+
+### 06/11/2024
+
+* add flash messages to omniauthable sign-ins
+* add punching to dashboard view
+* add user initials to invoiceable items
+* handle set_order on missing models
+* add kiosk link to form
+* add pincode to users (and manage it)
+* bug fixes on user and user_mailer
+* trying to fix migration error in production
+* trying to fix migration error in production II
+
+### 05/11/2024
+
+* refine stop/go button for time/material
+
+### 04/11/2024
+
+* show user img on list
+* bug in listing grouped_by on index
+* prepare sorting on resource_class - default by :name
+* list punched_at
+* notice how not to add time and material on one registration
+* second stab at start/go button for time/material
+
+### 01/11/2024
+
+* testing better staging script
+* add class[] and class.where_op(op, params) sugars
+* add settings to allow users to see all t/m's
+* fix bug on index.turbo_stream.erb - missing params and user
+
+### 31/10/2024
+
+* upgraded omniauthable to entra-id
+* handling collapsible sidebar better
+* stop/go knap til opsamling af forbrugt tid - WIP
+* bug on omniauthable - dangling debugger statement
+  
+### 30/10/2024
+
+* add icons to sidebar (navigation)
+* allow sidebar to collapse + danish menu translation
+
+### 29/10/2024
+
+* fix showing invoiceable SVG/text when not invoiceable
+* add omniauthable to sign_in - Microsoft Azure is first
+* change layout for list_items on background_jobs, punch_clock
+* show QR code on punch_clocks, state on background_jobs forms
+* change layout on customers, dashboards, invoices, invoice_items, locations, products, projects, provided_services, punches, settings, teams, tenants, users
+* hiding AD secrets
+
+### 28/10/2024
+
+* make sure redirects to signin reloads the page (issue with Turbo)
+* allow for archive of time_materials
+* start redesign list_items on lists - from LI to DIV
+* add translations for missing elements
+* fix wrong class name on Dinero::Service
+* show association name when available
+* by default show only user's own records (where applicable)
+* fix bug in link to show_time_material
+* fix layout in time_material form
+
+### 25/10/2024
+
+* add link to mortimer.pro/help
+* add translation for uploading invoices
+* don't repeat project name on invoice header
+* infinity scroll on mobile - all over actually
+* fulltext search on all models - NOT across all models
+* tiny stab at 2FA - failed b/c Devise Two Factor Authentication is not compatible with Rails 8.0!
+
+### 24/10/2024
+
+* debugging dinero_upload
+* projects -> separate invoice
+* address -> multiple lines
+* quantity/time -> not both
+* icon on invoice_items
+
+### 23/10/2024
+
+* make group_by customizable on #index
+* add settings to provided_services
+* finish dinero_upload
+
+### 22/10/2024
+
+* make each line on /time_materials a component
+* work on the dinero_upload (creating invoices)
+
+### 21/10/2024
+
+* add lookup for customers, projects, and products
+* fix bug in lookup
+* format t/m lines
+* more bug fixing on t/m
+* list t/m on /time_materials with day headers
+
+### 18/10/2024
+
+* now lookup works (at least for customers)
+* testing numbers on ios
+* continue working on the time_material form
+* make color scheme and markup uniform
+* set x v in bottom - like in top
+* fix bug in views - t/m
+* add upload button in t/m
+* test how to create invoices
+
+### 17/10/2024
+
+* start with keyboard events on t/m
+* fix bug on broadcastable/resource - drop broadcasting when resource is not persisted
+* tell the world (or at least those listening) about the sync'ed resources (customers, products, invoices/invoice_items)
+* build a lookup component for associations
+
+### 16/10/2024
+
+* the rest of forms - from background_jobs
+* then customers
+* forgot about the pdf's :o
+* don't let t/m form 'skate'
+* dashboards up next
+* then invoice_items and invoices
+* fast forward with kiosks (punch_clocks)
+* and products and projects
+* punches,
+* and finally, provided_services, settings, teams, tenants, and users
+
+### 15/10/2024
+
+* fix bug on application layout - missing format on mobile
+* make forms work with new drawer-style layout - and broadcasts
+* locations first - next up: time & material - wip
+
+### 14/10/2024
+
+* list time_material on /time_materials
+* bug on mobile topbar - not showing properly
+
+### 10/10/2024
+
+* add time_material model for persisting time and material draft input
+
+### 9/10/2024
+
+* EPIC 3 - manage invoices
+* EPIC 3 - manage invoice_items
+* missing filters on invoice and invoice_items
+* EPIC 3 - time & material input
+
+### 8/10/2024
+
+* EPIC 3 - sync products from Dinero to Mortimer
+* EPIC 3 - manage projects
+
+### 7/10/2024
+
+* EPIC 3 - sync customers from Dinero to Mortimer
+
+### 1-3/10/2024
+
+* adding Dinero API to Mortimer - affording integration with Dinero accounting system
+* added provided_services
+* bugfixing on provided_services
+* setting ENV for staging on DINERO API
+* fixing small errors all around after removing employees, more
+* move entity show to right side - like edit
+* missing authorize link on provided_services
+
+### 30/9/2024
+
+* keep going - making system tests green
+
+### 26/9/2024
+
+* more work on making tests green - now system tests work too, (or getting there)
+
+### 25/9/2024
+
+* rename employee to user
+* remove around_action on ActionCable connection
+* trying to get rename employee to user to work on migrations
+* access Mortimer from iWatch - small test
+* getting tests to work after last table and field adjustments - wip
+
+### 23/9/2024
+
+* make top menu extend to borders
+* tell if no activity on dashboard
+* make notifications h1 text-sm
+* weaponize SidebarComponent - like render SidebarComponent.new(menu: {})
+* make menu items on SidebarComponent visibly collapsible
+* rotate sub_menu items on SidebarComponent - chevron-down
+* move employee fields to user
+
+### 22/9/2024
+
+* add settings table
+* add punch to the dashboard - wip
+* rename account to tenant
+
+### 21/9/2024
+
+* add vertical menu in sidebar
+* keep pagination to the right
+* Kamal config validation has an issue with 'servers/web/options - should be a hash'
+
+### 20/9/2024
+
+* add locale pick to sign_up, sign_in, more
+* first shot at work_schedule_templates UI
+* force SSL in development and allow box.mortimer:3000
+* show punch_button on user's dashboard
+
+### 19/9/2024
+
+* designing all views
+
+--- intermezzo on bluebox ---
+
+### 11/9/2024
+
+* persist work_schedule_templates
+* show work-template - wip II
+
+### 10/9/2024
+
+* show calendar name
+* show work-template - wip
+
+### 9/9/2024
+
+* color calendars on account, team, employee
+
+### 5/9/2024
+
+* small typo fixed on dividing with 60
+
+### 3/9/2024
+
+* stats on landing page - wip
+* fix small error on processing punches
+* finish landing page - v1
+
+### 2/9/2024
+
+* allow free and sick punches for the day
+* move invite to users
+* fresh landing page - welcoming new users - wip
+
+### 30/8/2024
+
+* fix yet another Current.account issue - set_resources_stream
+* overscroll-contain on edit.html and new.html
+* fix layout on main and index and new/edit/show
+
+### 29/8/2024
+
+* add bin/fixsql to fix SQLite database
+* mark notifications as read
+* send notification to (super)admin when new employee signs up
+* show notifications as dropdown
+* fix bug on application.html.erb - missing check for Current.user
+* fix bug on set_resources_stream - missing check for Current.account
+
+### 27/8/2024
+
+* first stab at system testing with login
+* reduce object generation when logging
+
+### 26/8/2024
+
+* work on general turbo_stream model CRUD methods
+
+### 23/8/2024
+
+* fix error on holidays filter
+
+### 22/8/2024
+
+* add noticed gem for sending notifications - wip
+
+### 21/8/2024
+
+* fix background_jobs - solid queue issues
+* put punch methods in their place
+
+### 20/8/2024
+
+* work on background jobs - solid queue issues - wip
+
+### 19/8/2024
+
+* fix show events when none present
+* fix misssing add button on day_summary
+* drop header on calendars/:id
+* fix non-working menuitems on 'more' on calendars/:id in mobile view
+* show events spanning multiple days
+* show [whimsical](https://whimsical.com/pos-RGjYYm84RR3pbF4fL5XUzU) POS punch options
+
+### 16/8/2024
+
+* list punches on calendar views
+  
+### 15/8/2024
+
+* fix regression on delete/delete_all II
+* disable delete_all when no records
+* link to list of calendars on team and employees and accounts
+
+### 14/8/2024
+
+* fix regression on delete/delete_all
+* edit events on day and week view
+* finish day_summary - wip
+
+### 13/8/2024
+
+* show events on week view
+* show events on day view - wip
+
+### 12/8/2024
+
+* show events on month view II
+* prepare for HTTP/2 - add httpx
+
+### 9/8/2024
+
+* persist most of event and event_metum
+* show events on month view
+
+### 8/8/2024
+
+* remove log error `Unpermitted parameter: :url.`
+
+### 7/8/2024
+
+* send mail after completing sign_up (employee)
+* persist most recurring event meta data
+
+### 6/8/2024
+
+* add ?lang=da to sign_up path
+
+### 20/7/2024
+
+* working on event save
+
+### 15-20/7/2024
+
+* add event model
+
+### 9-14/7/2024
+
+* add input form for events
+
+### 8/7/2024
+
+* work on week view on calendar - wip
+
+### 6/7/2024
+
+* show week view on calendar
+  
+### 4/7/2024
+
+* build on events_list component - wip
+* add month view on calendar
+* show events on calendar - below month view
+
+### 3/7/2024
+
+* build day summary
+* add holiday scaffold
+* [ ] add country to account, team, employee - to show proper holidays
+
+### 2/7/2024
+
+* link to day view on year calendar
+
+### 1/7/2024
+
+* add a calendar table to account, team, and employee
 
 ### 28/6/2024
 
@@ -52,7 +542,6 @@
 * prepare for hotwired flash messages (and later notifications)
 * prepare for tooltips - wip: turbo_frame not loading!
 
-
 ### 21/6/2024
 
 * archive employees once they off-board (or only work as temps)
@@ -63,12 +552,12 @@
 ### 20/6/2024
 
 * mail format on password_change & email_changed touch up
-* advice on new 'lead' on accounts to walther@alco.dk
+* advice on new 'lead' on accounts to <walther@alco.dk>
 
 ### 19/6/2024
 
 * change ringcolor to ring-sky-600 on input fields
-* trying to signup with user@existing.domain does not work - if no users exist!
+* trying to signup with <user@existing.domain> does not work - if no users exist!
 * show ID on accounts, and add tax_number
 * css error 700-400
 * fix mail formats - prettier mails and views for Devise
@@ -176,7 +665,7 @@
 * set time_zone = creators on create employee
 * show h:m on updated_at on punch
 * 'ret' = 'gem' when saving edit on punch
-* fix <ActiveRecord::ReadOnlyError: Write query attempted while in readonly mode: UPDATE..> - perhaps use: https://blog.saeloun.com/2023/12/06/rails-dual-database-setup/
+* fix <ActiveRecord::ReadOnlyError: Write query attempted while in readonly mode: UPDATE..> - perhaps use: <https://blog.saeloun.com/2023/12/06/rails-dual-database-setup/>
 * link on punch err's
 
 ### 28/5/2024
@@ -435,7 +924,7 @@
 
 ### 23/4/2024
 
-* https://guillaumebriday.fr/how-to-deploy-rails-with-kamal-and-ssl-certificate-on-vps to the rescue on setting up Letsencrypt
+* <https://guillaumebriday.fr/how-to-deploy-rails-with-kamal-and-ssl-certificate-on-vps> to the rescue on setting up Letsencrypt
 * add account
 * add superform and lay foundation for views using Phlex
 * make account tests green

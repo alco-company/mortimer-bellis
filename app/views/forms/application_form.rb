@@ -1,44 +1,57 @@
 class ApplicationForm < Superform::Rails::Form
   include Phlex::Rails::Helpers::Pluralize
+  include Phlex::Rails::Helpers::LinkTo
 
-  attr_accessor :editable, :api_key
+  attr_accessor :resource, :cancel_url, :title, :edit_url,  :editable, :api_key, :model
 
-  def initialize(model, **options)
-    super(model, **options)
-    @editable = options[:editable]
+  def initialize(resource:, editable: nil, **options)
+    options[:data] = { form_target: "form" }
+    options[:class] = "mort-form"
+    super(resource, **options)
+    @resource = @model = resource
+    @editable = editable
     @api_key = options[:api_key] || ""
   end
 
   class Phlex::SGML
     def format_object(object)
-      case object
-      when ActiveSupport::TimeWithZone; object.strftime("%d-%m-%y")
-      when Date; object.strftime("%Y-%m-%d")
-      when DateTime; object.strftime("%Y-%m-%d %H:%M:%S")
-      when Float, Integer; object.to_s
-      when FalseClass; I18n.t(:no)
-      when TrueClass; I18n.t(:yes)
-      when NilClass; ""
-      else
-        # debugger
-        object
+      case object.class.to_s
+      when "ActiveSupport::TimeWithZone"; object.strftime("%d-%m-%y")
+      when "Array"; object.map { |o| format_object(o) }.join(", ")
+      when "Date"; object.strftime("%Y-%m-%d")
+      when "DateTime"; object.strftime("%Y-%m-%d %H:%M:%S")
+      when "Decimal", "BigDecimal", "Float", "Integer"; object.to_s
+      when "Phlex::SGML::Decimal"; object.to_s
+      when "FalseClass"; I18n.t(:no)
+      when "TrueClass"; I18n.t(:yes)
+      when "NilClass"; ""
+      else; object
       end
+    rescue => err
+      UserMailer.error_report(err.to_s, "Phlex::SGML format_object error with object #{ object.class }").deliver_later
     end
   end
 
+  #
+  # Option Mapper
+  #
   class OptionMapper < Superform::Rails::OptionMapper
     def each(&options)
       @collection.each do |item|
         case item
         in ActiveRecord::Relation => relation
           active_record_relation_options_enumerable(relation).each(&options)
+        # in [TimeMaterial::State, *] => colr
+        #   enumerable_list(colr).each(&options)
         in [Colorable::Color, *] => colr
           enumerable_list(colr).each(&options)
         in [Localeable::Locale, *] => locl
           enumerable_list(locl).each(&options)
-        in [[ /GMT/, String ], *] => arr
+        in [[ String, /^\([+-]\d{1,2}\:\d\d\)$/ ], *] => arr
           timezone_list(arr).each(&options)
         in [[ String, String ], *] => arr
+          id_value_list(arr).each(&options)
+        in [[ Integer, String ], *] => arr
           id_value_list(arr).each(&options)
         in [[ Symbol, String ], *] => arr
           id_value_list(arr).each(&options)
@@ -61,7 +74,7 @@ class ApplicationForm < Superform::Rails::Form
     def timezone_list(tz)
       Enumerator.new do |collection|
         tz.each do |k, v|
-          collection << [ v, "%s - %s" % [ v, k ] ]
+          collection << [ k, "%s - %s" % [ v, k ] ]
         end
       end
     end
@@ -69,6 +82,14 @@ class ApplicationForm < Superform::Rails::Form
     def id_value_list(arr)
       Enumerator.new do |collection|
         arr.each do |k, v|
+          collection << [ k, v ]
+        end
+      end
+    end
+
+    def value_value_list(arr)
+      Enumerator.new do |collection|
+        arr.each do |k|
           collection << [ k, v ]
         end
       end
@@ -84,6 +105,49 @@ class ApplicationForm < Superform::Rails::Form
         end
       end
     end
+  end
+
+  #
+  # *Field Components
+  #
+  class LookupField < Superform::Rails::Components::SelectField
+    # include Phlex::Rails::Helpers::Request
+    #
+    def view_template(&)
+      div(class: "relative mt-2", data: { controller: "lookup" }) do
+        input(type: "hidden", id: dom.id, name: dom.name, value: field.value, data: { lookup_target: "selectId" })
+        data = attributes[:data] || { url: attributes[:lookup_path], div_id: field.dom.id, lookup_target: "input", action: "keydown->lookup#keyDown" }
+        css = attributes[:class] || "mort-form-text"
+        input(
+          data: data,
+          type: "text",
+          list:  "%s_lookup_options" % field.dom.id,
+          value: attributes[:display_value],
+          id: dom.id.gsub(/_id$/, "_name"),
+          name: dom.name.gsub(/_id\]/, "_name]"),
+          class: css, # "w-full rounded-md border-0 bg-white py-1.5 pl-3 pr-12 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-1 focus:ring-inset focus:ring-sky-200 sm:text-sm sm:leading-6",
+          role: attributes[:role] || "combobox",
+          autocomplete: "off",
+          aria_controls: "options",
+          aria_expanded: "false"
+        )
+        hide = @collection.any? ? "" : "hidden"
+        button(type: "button", data: { lookup_target: "optionsIcon", action: "click->lookup#toggleOptions" }, class: "#{hide} absolute w-10 inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:ring-1 focus:ring-inset focus:ring-sky-200 focus:outline-none") do
+          render Icons::ChevronUpDown.new cls: "h-5 w-5 text-gray-400"
+        end
+        hide = (!hide.blank? && field.value.nil?) ? "" : "hidden"
+        button(type: "button", data: { lookup_target: "searchIcon", action: "click->lookup#search" }, class: "#{hide} absolute w-10 inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:ring-1 focus:ring-inset focus:ring-sky-200 focus:outline-none") do
+          render Icons::Search.new cls: "text-gray-400 right-2 top-0 h-full w-5 absolute pointer-events-none"
+        end
+        collection = @collection[0] rescue []
+        render SelectLookup.new(collection: collection, div_id: field.dom.id, field_value: field.value)
+      end
+    end
+
+    protected
+      def map_options(collection)
+        OptionMapper.new(collection)
+      end
   end
 
   class SelectField < Superform::Rails::Components::SelectField
@@ -120,9 +184,10 @@ class ApplicationForm < Superform::Rails::Form
     include Phlex::Rails::Helpers::LinkTo
 
     def field_attributes
-      super.merge(type: "file", accept: "image/*")
+      @attributes.keys.include?(:multiple) ? super.merge(type: "file", accept: "image/*", multiple: true) : super.merge(type: "file", accept: "image/*")
     end
-    def template(&)
+
+    def view_template(&)
       div(class: "mort-field") do
         input(**attributes)
         if field.value.attached?
@@ -130,7 +195,7 @@ class ApplicationForm < Superform::Rails::Form
             img(src: url_for(field.value), class: "mort-img m-2")
             div(class: "absolute top-0 right-0 w-8 h-8 rounded-lg bg-white/75") do
               link_to(
-                helpers.modal_new_url(modal_form: "delete", id: field.parent.object.id, attachment: field.value.name, api_key: @_parent.api_key, resource_class: field.parent.object.class.to_s.underscore, modal_next_step: "accept"),
+                helpers.new_modal_url(modal_form: "delete", id: field.parent.object.id, attachment: field.value.name, api_key: @_parent.api_key, resource_class: field.parent.object.class.to_s.underscore, modal_next_step: "accept"),
                 data: { turbo_stream: true },
                 # link_to((@links[1] || resource),
                 class: "absolute top-1 right-1",
@@ -153,36 +218,31 @@ class ApplicationForm < Superform::Rails::Form
     def field_attributes
       super.merge(type: "boolean")
     end
-    def template(&)
+    def view_template(&)
+      data_attr = attributes[:data] || {}
       div(class: attributes[:class], data: { controller: "boolean" }) do
-        input(name: dom.name, data: { boolean_target: "input" }, type: :hidden, value: field.value ? "1" : "0")
+        input(name: dom.name, data: data_attr.merge({ boolean_target: "input" }), type: :hidden, value: setValue)
         button(
           type: "button",
           data: { action: (attributes[:disabled] ? "" : "click->boolean#toggle"), boolean_target: "button" },
           class:
-            "group relative inline-flex h-5 w-10 flex-shrink-0 cursor-pointer items-center justify-center rounded-full focus:outline-none focus:ring-2 focus:ring-sky-600 focus:ring-offset-2",
+            "group relative inline-flex h-6 w-10 flex-shrink-0 cursor-pointer items-center justify-center rounded-full focus:outline-none focus:ring-1 focus:ring-sky-200 focus:ring-offset-1",
           role: "switch",
           aria_checked: "false"
         ) do
-          whitespace
           span(class: "sr-only") { "Use setting" }
-          whitespace
           span(
             aria_hidden: "true",
             class: "pointer-events-none absolute h-full w-full rounded-md bg-white"
           )
-          whitespace
           comment { %(Enabled: "bg-sky-600", Not Enabled: "bg-gray-200") }
-          whitespace
           span(
             aria_hidden: "true",
             data: { boolean_target: "indicator" },
             class:
               "#{setIndicator} pointer-events-none absolute mx-auto h-4 w-9 rounded-full transition-colors duration-200 ease-in-out"
           )
-          whitespace
           comment { %(Enabled: "translate-x-5", Not Enabled: "translate-x-0") }
-          whitespace
           span(
             aria_hidden: "true",
             data: { boolean_target: "handle" },
@@ -192,11 +252,43 @@ class ApplicationForm < Superform::Rails::Form
         end
       end
     end
+    def setValue
+      (field.value == true || field.value.to_s == "1") ? "1" : "0"
+    end
     def setIndicator
-      field.value ? "bg-sky-600" : "bg-gray-200"
+      (field.value == true || field.value.to_s == "1") ? "bg-sky-600" : "bg-gray-200"
     end
     def setHandle
-      field.value ? "translate-x-5" : "translate-x-0"
+      (field.value == true || field.value.to_s == "1") ? "translate-x-5" : "translate-x-0"
+    end
+  end
+
+  #
+  # Work In Progress - 2024-07-16
+  #
+  # class PillField < BooleanField
+  #   include Phlex::Rails::Helpers::CollectionRadioButtons
+  #   include Phlex::Rails::Helpers::RadioButton
+
+  #   def template(&)
+  #     fieldset(class: "inline-block whitespace-nowrap p-px border-2 rounded-full focus-within:outline focus-within:outline-blue-400") do
+  #       # plain collection_radio_buttons(**attributes) do |builder|
+  #       plain collection_radio_buttons(:user, :punching_absence, [ true, "Option 1", false, "option 2" ]) do |builder|
+  #         span(class: "relative inline-block") do
+  #           plain builder.radio_button class: "sr-only peer"
+  #           plain builder.label(class: "border-2 border-transparent rounded-full block py-1 px-2 peer-checked:bg-blue-500 peer-checked:text-white hover:bg-blue-200 hover:border-sky-200")
+  #         end
+  #       end
+  #     end
+  #   end
+  # end
+
+  class HiddenField < Superform::Rails::Components::InputComponent
+    def field_attributes
+      super.merge(type: "hidden")
+    end
+    def view_template(&)
+      input(**attributes, value: field.value)
     end
   end
 
@@ -204,7 +296,7 @@ class ApplicationForm < Superform::Rails::Form
     def field_attributes
       super.merge(type: "time")
     end
-    def template(&)
+    def view_template(&)
       input(**attributes, value: field.value&.strftime("%H:%M"))
     end
   end
@@ -213,20 +305,24 @@ class ApplicationForm < Superform::Rails::Form
     def field_attributes
       super.merge(type: "date")
     end
-    def template(&)
-      input(**attributes, value: field.value&.strftime("%Y-%m-%d"))
+    def view_template(&)
+      fld = field.value.class == String ? field.value : field.value&.strftime("%Y-%m-%d") rescue nil
+      input(**attributes, value: fld)
     end
   end
   class DateTimeField < Superform::Rails::Components::InputComponent
     def field_attributes
       super.merge(type: "datetime-local")
     end
-    def template(&)
+    def view_template(&)
       input(**attributes, value: field.value&.strftime("%Y-%m-%dT%H:%M"))
     end
   end
 
   class Field < Field
+    def lookup(*collection, **attributes, &)
+      LookupField.new(self, attributes: attributes, collection: collection, &)
+    end
     def select(*collection, **attributes, &)
       SelectField.new(self, attributes: attributes, collection: collection, &)
     end
@@ -242,6 +338,11 @@ class ApplicationForm < Superform::Rails::Form
     def boolean(**attributes)
       BooleanField.new(self, attributes: attributes)
     end
+    def hidden(**attributes)
+      HiddenField.new(self, attributes: attributes)
+    end
+    #   PillField.new(self, attributes: attributes)
+    # end
     def week(**attributes)
       WeekField.new(self, attributes: attributes)
     end
@@ -268,26 +369,43 @@ class ApplicationForm < Superform::Rails::Form
     end
   end
 
-  def view_only(component)
+  def view_only(component, outer_class = "mort-field")
     div do
       render(component.field.label) do
         span(class: "font-bold") do
           plain I18n.t("activerecord.attributes.#{component.field.parent.key}.#{component.field.key}")
         end
       end
-      div(class: "mort-field") do
+      div(class: outer_class) do
         display_field(component.field)
       end
     end
   end
 
-  def row(component)
-    div(class: "mort-field") do
+  def row(component, outer_class = "mort-field")
+    div(class: outer_class) do
       render(component.field.label) do
-        span(class: "font-bold") do
+        span(class: "text-sm font-light") do
           plain I18n.t("activerecord.attributes.#{component.field.parent.key}.#{component.field.key}")
         end
-      end
+      end unless component.class == ApplicationForm::HiddenField
+      @editable ?
+        render(component) :
+        div(class: "mr-5") do
+          model.field_formats(component.field.key) == :file ?
+          display_image(component.field) :
+          display_field(component.field)
+        end
+    end
+  end
+
+  def naked_row(component)
+    div() do
+      render(component.field.label) do
+        span(class: "text-sm font-light") do
+          plain I18n.t("activerecord.attributes.#{component.field.parent.key}.#{component.field.key}")
+        end
+      end unless component.class == ApplicationForm::HiddenField
       @editable ?
         render(component) :
         div(class: "mr-5") do
@@ -300,13 +418,17 @@ class ApplicationForm < Superform::Rails::Form
 
   def display_field(field)
     case field.key
-    when /account_id$/; plain(model&.account.name)
-    when /team_id$/; plain(model&.team.name)
-    when /user_id$/; plain(model&.user.name)
-    when /employee_id$/; plain(model&.employee.name)
-    when /punch_clock_id$/; plain(model&.punch_clock.name) rescue I18n.t("punches.form.punched_on_app")
+    when /tenant_id$/; plain(model&.tenant&.name)
+    when /team_id$/; div(class: "flex") { link_to(model&.team&.name, team_url(model&.team), class: "flex place-items-center truncate mort-btn-secondary") } # plain(model&.team.name)
+    when /user_id$/;  div(class: "flex") { link_to(model&.user&.name, user_url(model&.user), class: "flex place-items-center truncate mort-btn-secondary") } # plain(model&.user&.name)
+    when /customer_id$/; div(class: "flex") { link_to(model&.customer&.name, customer_url(model&.customer), class: "flex place-items-center truncate mort-btn-secondary") }
+    when /project_id$/;  div(class: "flex") { link_to(model&.project&.name, project_url(model&.project), class: "flex place-items-center truncate mort-btn-secondary") }
+    when /product_id$/; div(class: "flex") { link_to(model&.product&.name, product_url(model&.product), class: "flex place-items-center truncate mort-btn-secondary") }
+    when /punch_clock_id$/; div(class: "flex") { link_to(model&.punch_clock&.name, punch_clock_url(model&.punch_clock), class: "flex place-items-center truncate mort-btn-secondary") } # plain(model&.punch_clock&.name) rescue I18n.t("punches.form.punched_on_app")
     else; plain(fformat(model, field.key))
     end
+  rescue
+    " fejl #{field.key} - #{model.class} "
   end
 
   def display_image(field)
@@ -331,20 +453,9 @@ class ApplicationForm < Superform::Rails::Form
 
   def around_template(&)
     super do
-      div(class: "", data: { controller: "form" }) do
+      div(class: "") do
         error_messages
         yield
-        div(class: "flex flex-row flex-row-reverse m-5 gap-4") do
-          submit(submit_string, tabindex: "0", class: "mort-btn-primary") if @editable
-          input(
-            type: "reset",
-            tabindex: "0",
-            class: "mort-btn-cancel"
-          ) { helpers.t("cancel") }
-        end
-        div(class: "h-10") do
-          plain "&nbsp;".html_safe
-        end
       end
     end
   end

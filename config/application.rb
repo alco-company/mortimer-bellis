@@ -15,6 +15,11 @@ module Mortimer
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 7.2
 
+    # DEPRECATION WARNING: `to_time` will always preserve the full timezone
+    # rather than offset of the receiver in Rails 8.0.
+    # To opt in to the new behavior, set `config.active_support.to_time_preserves_timezone = :zone`.
+    config.active_support.to_time_preserves_timezone = :zone
+
     # Please, add to the `ignore` list any other `lib` subdirectories that do
     # not contain `.rb` files, or that should not be reloaded or eager loaded.
     # Common ones are `templates`, `generators`, or `middleware`, for example.
@@ -34,5 +39,11 @@ module Mortimer
     #   Rails::ConsoleMethods.send :include, Alco::Console
     #   TOPLEVEL_BINDING.eval("self").extend Alco::Console # PRY
     # end
+
+    # Noticed notifications configuration
+    config.to_prepare do
+      Noticed::Event.include Noticed::EventExtensions
+      Noticed::Notification.include Noticed::NotificationExtensions
+    end
   end
 end

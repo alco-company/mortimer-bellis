@@ -4,9 +4,9 @@ class BackgroundManagerJob < ApplicationJob
   #
   # step 1 background jobs will be running 3 jobs
   #
-  #   1: employee_state_job
-  #   2: employee_eu_state_job
-  #   3: employee_auto_punch_job
+  #   1: user_state_job
+  #   2: user_eu_state_job
+  #   3: user_auto_punch_job
   #
   def perform
     dt = DateTime.current
@@ -18,23 +18,28 @@ class BackgroundManagerJob < ApplicationJob
   end
 
   def prepare_state_job
-    Account.all.each do |account|
-      EmployeeStateJob.perform_later account: account
+    Tenant.all.each do |tenant|
+      if tenant.users.any?
+        UserStateJob.perform_later tenant: tenant
+      end
     end
   end
 
   def prepare_eu_state_job
-    Account.all.each do |account|
-      EmployeeEuStateJob.perform_later account: account
+    Tenant.all.each do |tenant|
+      if tenant.users.any?
+        UserEuStateJob.perform_later tenant: tenant
+      end
     end
   end
 
   def prepare_auto_punch_job
-    Account.all.each do |account|
-      if account.employees.any?
-        EmployeeAutoPunchJob.perform_later account: account
+    Tenant.all.each do |tenant|
+      if tenant.users.any?
+        UserAutoPunchJob.perform_now tenant: tenant
       end
     end
+    true
   end
   #
   # from the solid_queue.yml

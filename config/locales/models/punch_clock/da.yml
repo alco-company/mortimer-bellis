@@ -12,6 +12,7 @@ da:
   punch_clocks:
     employee_device_punch_clock: Medarbejder stempelur
     default_punch_clock: Ur
+    validation_errors: Der er fejl i det indtastede
     
     create:
       post: Stempeluret blev oprettet
@@ -19,6 +20,11 @@ da:
       post: Stempeluret blev opdateret
     destroy:
       post: Stempeluret blev slettet
+
+    form:
+      new: Nyt stempelur
+      edit: Rediger stempelur
+      show: Vis stempelur
 
     show:
       pos_punch_clock: Stempelur
@@ -38,7 +44,7 @@ da:
         today: I dag 
         this_payroll: Denne lønperiode
         todays_punches: Stemplinger idag 
-        for_employee: for %{name}
+        for_ user: for %{name}
 
         add_time: Tilføj tid
         this_payroll_punches: Stemplinger i denne lønperiode

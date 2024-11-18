@@ -7,3 +7,16 @@
 #   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
+tenant = Tenant.find_or_create_by!(name: "Mortimer", email: "info@mortimer.pro", locale: "da", time_zone: "Europe/Copenhagen", color: "bg-blue-200", tax_number: "N/A")
+team = Team.find_or_create_by!(tenant: tenant, name: "Mortimer", email: "info@mortimer.pro", color: "bg-blue-200", locale: "en", time_zone: "UTC")
+user = User.new(
+  email: 'info@mortimer.pro',
+  tenant: tenant,
+  global_queries: true,
+  team: team,
+  role: 2,
+  password: 'mortimer',
+  password_confirmation: 'mortimer'
+)
+user.skip_confirmation!
+user.save!

@@ -4,7 +4,7 @@ class EmployeesController < MortimerController
   def new
     @resource.locale = Current.user.locale
     @resource.time_zone = Current.user.time_zone
-    @resource.team = Team.by_account.first
+    @resource.team = Team.by_tenant.first
     super
   end
 
@@ -13,26 +13,27 @@ class EmployeesController < MortimerController
     super
   end
 
-  # POST /employees/:id/archive
+  # POST /users/:id/archive
   def archive
-    @resource = Employee.find(params[:id])
+    @resource = User.find(params[:id])
     if @resource
       @resource.archived? ?
-        (@resource.update(state: :out) && notice = t("employees.unarchived")) :
-        (@resource.archived! && notice = t("employees.archived"))
+        (@resource.update(state: :out) && notice = t("users.unarchived")) :
+        (@resource.archived! && notice = t("users.archived"))
       redirect_back(fallback_location: root_path, notice: notice)
+      Broadcasters::Resource.new(@resource).replace
     else
-      redirect_back(fallback_location: root_path, warning: t("employees.not_found"))
+      redirect_back(fallback_location: root_path, warning: t("users.not_found"))
     end
   end
 
   def signup
-    if params[:employee][:api_key].present?
-      api_key = params[:employee].delete :api_key
-      @invite = EmployeeInvitation.find_by(access_token: api_key)
+    if params[:user][:api_key].present?
+      api_key = params[:user].delete :api_key
+      @invite = UserInvitation.find_by(access_token: api_key)
       process_signup if @invite.present?
     else
-      redirect_back(fallback_location: root_path, warning: t("employee_invitation.wrong_invitation"))
+      redirect_back(fallback_location: root_path, warning: t("user_invitation.wrong_invitation"))
     end
   end
 
@@ -40,14 +41,17 @@ class EmployeesController < MortimerController
 
     # Only allow a list of trusted parameters through.
     def resource_params
-      params[:employee][:pincode] = Employee.next_pincode(params[:employee][:pincode]) if params[:employee][:pincode].blank?
-      params[:employee][:payroll_employee_ident] = Employee.next_payroll_employee_ident(params[:employee][:payroll_employee_ident]) if params[:employee][:payroll_employee_ident].blank?
-      params.require(:employee).permit(
-        :account_id,
+      rp = params.require(:user).permit(:pincode, :payroll_employee_ident)
+      params[:user][:pincode] = User.next_pincode(rp[:pincode]) if rp[:pincode].blank?
+      params[:user][:payroll_employee_ident] = User.next_payroll_employee_ident(rp[:payroll_employee_ident]) if rp[:payroll_employee_ident].blank?
+      params.require(:user).permit(
+        :tenant_id,
         :team_id,
         :name,
         :mugshot,
+        :country,
         :pincode,
+        :user_color,
         :payroll_employee_ident,
         :punching_absence,
         :access_token,
@@ -80,19 +84,22 @@ class EmployeesController < MortimerController
     end
 
     def process_signup
-      @resource = Employee.new(resource_params)
-      @resource.pincode = Employee.next_pincode()
+      @resource = User.new(resource_params)
+      @resource.pincode = User.next_pincode()
       if @invite.completed?
-        redirect_back(fallback_location: root_path, warning: t("employee_invitation.already_completed"))
+        redirect_back(fallback_location: root_path, warning: t("user_invitation.already_completed"))
       else
         if @resource.save
           @invite.update state: :completed, completed_at: DateTime.current
+          Broadcasters::Resource.new(@invite).replace
+          UserMailer.with(user: @resource, sender: @invite.sender).pos_link.deliver_later unless @resource.email.blank?
+          CompletedUserNotifier.with(record: @resource, message: "User Filled Out Their Form!").deliver(User.by_role [ :admin, :superadmin ])
           render turbo_stream: turbo_stream.replace("employee_signup", partial: "/pos/employee/signup_success")
         else
           @invite.update state: :error
           @employee = @resource
           @employee.access_token = @invite.access_token
-          render "employee_invitations/employee_sign_up", status: :unprocessable_entity, warning: t("employee_invitation.could_not_create_employee")
+          render "employee_invitations/employee_sign_up", status: :unprocessable_entity, warning: t("user_invitation.could_not_create_employee")
         end
       end
     end
@@ -103,6 +110,6 @@ class EmployeesController < MortimerController
     # in order to not having to extend the create method on this concern
     #
     def create_callback(obj)
-      EmployeeMailer.with(employee: obj, sender: current_user.name).welcome.deliver_later unless obj.email.blank?
+      UserMailer.with(user: obj, sender: current_user.name).welcome.deliver_later unless obj.email.blank?
     end
 end

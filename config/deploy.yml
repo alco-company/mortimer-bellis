@@ -96,6 +96,8 @@ env:
     MORTIMER_VERSION: '0.8.1'
   secret:
     - RAILS_MASTER_KEY
+    - DINERO_APP_ID
+    - DINERO_APP_SECRET
     - SMTP_PASSWORD
     - WAVIX_APP_ID
 

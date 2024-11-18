@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="<%= I18n.locale %>" class="h-full bg-white">
+  <head>
+    <%= render partial: "layouts/generic_header" %>
+  </head>
+  <body class="flex flex-row h-screen w-full">
+    <main class="grow-0 w-full p-4 pt-0">
+      <%#= render_menu user: Current.user %>
+      <%= yield %>
+    </main>
+    <%# 
+    in honor of Tailwind not being able to know 'tags' in advance
+    span(class: "hidden mort-flash-info mort-flash-error mort-flash-success mort-flash-warning mort-flash-notice mort-flash-timedout mort-flash-alert") 
+    span(class: "hidden border-gray-500 border-red-500 border-fuchsia-500 border-sky-200 border-green-500 border-yellow-500 border-sky-500 border-orange-500 border-lime-500 border-cyan-500 border-pink-500 border-amber-500 border-stone-500")
+    %>
+  </body>
+</html>

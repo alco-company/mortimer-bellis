@@ -29,7 +29,7 @@ class Employees::Profile < ApplicationForm
         row field(:email).input(class: "mort-form-text")
         row field(:cell_phone).input(class: "mort-form-text")
         row field(:birthday).date(class: "mort-form-text")
-        row field(:locale).select(Employee.locales, prompt: I18n.t(".select_employee_locale"), class: "mort-form-text")
+        row field(:locale).select(User.locales, prompt: I18n.t(".select_user_locale"), class: "mort-form-text")
         row field(:time_zone).select(ActiveSupport::TimeZone.all.collect { |tz| [ "(GMT#{ActiveSupport::TimeZone.seconds_to_utc_offset(tz.utc_offset)}) #{tz.name}", tz.tzinfo.name ] }, class: "mort-form-text")
       end
     end

@@ -1,0 +1,20 @@
+<div class="w-full" data-controller="toggle-button">
+  <div class=" flex justify-between items-center">
+    <div>
+      <h1 class="font-bold text-4xl"> <%= @resource.name %> </h1>
+    </div>
+    <div class="grid gap-2 grid-cols-1 lg:grid-cols-2 items-center place-content-end">
+    <% if params[:view] == "month" or !params[:view].present? %>
+      <%  params[:template] = toggle_template_view(params.permit!)
+          url = calendar_url @resource, params.permit! %>
+      <div class="flex items-center lg:col-span-2">
+        <%= render ToggleButton.new(resource: @resource, label: "Arbejdsskabelon", url: url, params: params) %>
+      </div>
+    <% end %>
+    </div>
+  </div>
+  <div class="" data-controller="calendar">
+    <div class="ID mb-2 hidden"><strong>ID</strong><br/><%= @resource.id %></div>
+    <%= render CalendarComponent.new(id: @resource.id, url: resource_url, date: @date, calendars: [@resource], view: params[:view]) %> 
+  </div>
+</div>

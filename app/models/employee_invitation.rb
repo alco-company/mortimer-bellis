@@ -7,9 +7,9 @@ INVITATION_STATES = [
 ]
 
 class EmployeeInvitation < ApplicationRecord
-  include Accountable
+  include Tenantable
 
-  belongs_to :account
+  belongs_to :tenant
   belongs_to :user
   belongs_to :team
 
@@ -33,11 +33,17 @@ class EmployeeInvitation < ApplicationRecord
     address.truncate(20)
   end
 
+  def sender
+    user.name
+  rescue
+    "unknown"
+  end
+
   def self.filtered(filter)
     flt = filter.filter
 
     all
-      .by_account()
+      .by_tenant()
       .by_state(flt["state"])
       .by_address(flt["address"])
   rescue
@@ -45,7 +51,7 @@ class EmployeeInvitation < ApplicationRecord
     all
   end
 
-  def self.form(resource, editable = true)
-    EmployeeInvitations::Form.new resource, editable: editable, enctype: "multipart/form-data"
+  def self.form(resource:, editable: true)
+    UserInvitations::Form.new resource: resource, editable: editable, enctype: "multipart/form-data"
   end
 end

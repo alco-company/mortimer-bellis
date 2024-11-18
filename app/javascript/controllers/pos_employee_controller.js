@@ -18,10 +18,22 @@ export default class extends Controller {
     "weekDays",
     "downArrow",
     "upArrow",
+    "moreOptions",
+    "evenMoreOptions"
   ]
 
   connect() {
     console.log("ding");
+  }
+
+  toggleMoreOptions() {
+    this.moreOptionsTarget.classList.toggle("hidden");
+    // this.evenMoreOptionsTarget.classList.toggle("hidden");
+  }
+
+  toggleEvenMoreOptions() {
+    this.evenMoreOptionsTarget.classList.toggle("hidden");
+    // this.evenMoreOptionsTarget.classList.toggle("hidden");
   }
 
   clearForm() {

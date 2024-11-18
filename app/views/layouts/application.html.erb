@@ -1,23 +1,49 @@
-<!DOCTYPE html>
-<html lang="<%= I18n.locale %>" class="h-full bg-white">
+<html lang="<%= I18n.locale %>" class="h-full bg-white scrollbar-hide">
   <head>
     <%= render partial: "layouts/generic_header" %>
-
-    <%# <link rel="manifest" crossorigin="use-credentials" href="/manifest.json?start_url=<%= request.url %>
-    <%#= tag :meta, name: :vapid_public_key, content: Rails.application.credentials.vapid.public_key %>
-
+    <%= web_push_public_key_meta_tag %>
   </head>
-  <body class="h-full w-full">
-    <%= render NavigationComponent.new items: menu_items %>
-    <main class="m-4 mt-20">
-      <%= yield %>
-      <%= turbo_frame_tag "tooltip", class: "absolute", target: "_top" %>
+  <body class="h-full">
+    <div class="min-h-full" data-controller="mobilesidebar menu page">
+      <%= render MobileSidebarComponent.new %>
 
-    </main>
+      <%= render SidebarComponent.new %>
+
+      <div data-controller="notificationcenter" data-menu-target="topmain" class="flex flex-1 flex-col lg:pl-64">
+        <%= render_topbar %>
+        <main class="flex-1 pb-8">
+          <%#= render user_top_profile %>
+
+          <div class="md:px-4 mt-8">
+            <%#= render page_overview %>
+
+            <%#= render page_title %>
+
+            <%= yield %>
+
+            <%#= render activity_list_smallest_breakpoint_only %>
+            <%#= render activity_list_small_and_up %>
+
+            <!-- Before Sidebar Form -->
+            <%= turbo_frame_tag "form" %>
+            <!-- End Sidebar Form -->
+
+            <%= render Notifications::NotificationCenter.new(recipient: Current.user)  if Current.user %>
+
+          </div>
+        </main>
+      </div>
+    </div>
+
     <%# 
     in honor of Tailwind not being able to know 'tags' in advance
-    span(class: "hidden mort-flash-info mort-flash-error mort-flash-success mort-flash-warning mort-flash-notice mort-flash-timedout mort-flash-alert") %>
+    span(class: "hidden mort-flash-info mort-flash-error mort-flash-success mort-flash-warning mort-flash-notice mort-flash-timedout mort-flash-alert") 
+    span(class: "hidden border-gray-500 border-red-500 border-fuchsia-500 border-sky-200 border-green-500 border-yellow-500 border-sky-500 border-orange-500 border-lime-500 border-cyan-500 border-pink-500 border-amber-500 border-stone-500")
+    %>
     <%= render FlashComponent.new flash: flash %>
+
+    <!-- Before ModalContainer -->
     <remote-modal-container></remote-modal-container>
+    <!-- End ModalContainer -->
   </body>
 </html>

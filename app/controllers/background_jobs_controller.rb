@@ -5,7 +5,7 @@ class BackgroundJobsController < MortimerController
 
     # Only allow a list of trusted parameters through.
     def resource_params
-      params.require(:background_job).permit(:id, :account_id, :user_id, :state, :job_klass, :params, :schedule, :next_run_at, :job_id)
+      params.require(:background_job).permit(:id, :tenant_id, :user_id, :state, :job_klass, :params, :schedule, :next_run_at, :job_id)
     end
 
     def authorize
@@ -79,5 +79,5 @@ end
 
 #   # Only allow a list of trusted parameters through.
 #   def background_job_params
-#     params.require(:background_job).permit(:account_id, :user_id, :state, :job_klass, :params, :schedule, :next_run_at, :job_id)
+#     params.require(:background_job).permit(:tenant_id, :user_id, :state, :job_klass, :params, :schedule, :next_run_at, :job_id)
 #   end

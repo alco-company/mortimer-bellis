@@ -10,6 +10,7 @@ class LogoComponent < ApplicationComponent
   def initialize(**attribs)
     @logo = attribs[:logo].present? ? attribs[:logo] : "mortimer"
     @root = attribs[:root] || nil
+    @div_css = attribs[:div_css] || "relative left-0 pl-2 flex-shrink-0 py-5 lg:static"
   end
 
   def view_template
@@ -21,9 +22,9 @@ class LogoComponent < ApplicationComponent
     unless @logo
       div { }
     else
-      div(class: "relative left-0 flex-shrink-0 py-5 lg:static") do
+      div(class: @div_css) do
         a(href: @root || helpers.root_path) do
-          span(class: "sr-only") { "Mortimer Employee App" }
+          span(class: "sr-only") { "Mortimer User App" }
           if @logo == "mortimer"
             mortimer_svg
           else
