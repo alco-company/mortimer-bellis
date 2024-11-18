@@ -41,7 +41,10 @@ test:
 # Similarly, if you deploy your application as a Docker container, you must
 # ensure the database is located in a persisted volume.
 production:
-  primary:
+  writer:
+    <<: *default
+    database: storage/mortimer-bellis.sqlite3
+  reader:
     <<: *default
     database: storage/mortimer-bellis.sqlite3
   # database: path/to/persistent/storage/production.sqlite3

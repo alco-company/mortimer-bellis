@@ -45,6 +45,7 @@ NATIVE: https://blog.corsego.com/navigating-turbo-native, https://www.youtube.co
 ### 19/11/2024
 
 * upgrading SolidQueue to 0.8.0 - aiming for 1.0.0 further down the road
+* trying to make config work for enhancedsqlite3-adapter
 
 ### 18/11/2024
 
