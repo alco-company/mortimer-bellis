@@ -9,7 +9,7 @@ class Notifications::NotificationItem < Phlex::HTML
   end
 
   def view_template(&block)
-    li(class: "") do
+    li(class: "", data_controller: "contextmenu") do
       div(class: "group relative flex items-center px-5 py-6") do
         a(href: "#", class: "-m-1 block flex-1 p-1") do
           div(
@@ -42,30 +42,19 @@ class Notifications::NotificationItem < Phlex::HTML
         div(class: "relative ml-2 inline-block shrink-0 text-left") do
           button(
             type: "button",
+            data_contextmenu_target: "button",
+            data_action:
+              " touchstart->contextmenu#tap click->contextmenu#tap click@window->contextmenu#hide",
             class:
-              "group relative inline-flex size-8 items-center justify-center rounded-full bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2",
+              # "flex items-center p-1 text-gray-400 rounded-md hover:text-gray-900 border h-7 -mr-0.5 pl-3",
+              "flex items-center rounded-md ring-1 ring-gray-100 bg-white px-2 py-1 text-gray-400 hover:text-gray-600 focus:outline-none focus:ring-1 focus:ring-sky-500",
             id: "options-menu-0-button",
             aria_expanded: "false",
             aria_haspopup: "true"
           ) do
-            span(class: "absolute -inset-1.5")
-            span(class: "sr-only") { "Open options menu" }
-            span(
-              class: "flex size-full items-center justify-center rounded-full"
-            ) do
-              svg(
-                class: "size-5 text-gray-400 group-hover:text-gray-500",
-                viewbox: "0 0 20 20",
-                fill: "currentColor",
-                aria_hidden: "true",
-                data_slot: "icon"
-              ) do |s|
-                s.path(
-                  d:
-                    "M10 3a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM10 8.5a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM11.5 15.5a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0Z"
-                )
-              end
-            end
+            span(class: "sr-only") { "Open list options" }
+            # span(class: "text-2xs hidden sm:inline") { I18n.t("more") }
+            render Icons::More.new
           end
           context_menu
         end
@@ -78,6 +67,15 @@ class Notifications::NotificationItem < Phlex::HTML
       %(Dropdown panel, show/hide based on dropdown state. Entering: "transition ease-out duration-100" From: "transform opacity-0 scale-95" To: "transform opacity-100 scale-100" Leaving: "transition ease-in duration-75" From: "transform opacity-100 scale-100" To: "transform opacity-0 scale-95")
     end
     div(
+      data: {
+        contextmenu_target: "popup",
+        transition_enter: "transition ease-out duration-300",
+        transition_enter_start: "transform opacity-0 scale-95",
+        transition_enter_end: "transform opacity-100 scale-100",
+        transition_leave: "transition ease-in duration-75",
+        transition_leave_start: "transform opacity-100 scale-100",
+        transition_leave_end: "transform opacity-0 scale-95"
+      },
       class: "hidden absolute right-9 top-0 z-10 w-48 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none",
       role: "menu",
       aria_orientation: "vertical",
@@ -90,9 +88,10 @@ class Notifications::NotificationItem < Phlex::HTML
         end
         a(
           href: "#",
-          class: "block px-4 py-2 text-sm text-gray-700",
+          class: "block px-4 py-2 text-sm text-gray-200",
           role: "menuitem",
           tabindex: "-1",
+          disabled: "disabled",
           id: "options-menu-0-item-0"
         ) { "View profile" }
         a(
@@ -101,7 +100,7 @@ class Notifications::NotificationItem < Phlex::HTML
           role: "menuitem",
           tabindex: "-1",
           id: "options-menu-0-item-1"
-        ) { "Send message" }
+        ) { I18n.t("notification.read_message") }
       end
     end
   end

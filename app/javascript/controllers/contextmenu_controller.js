@@ -1,5 +1,6 @@
 import { Controller } from "@hotwired/stimulus"
 import { get } from "@rails/request.js";
+import { enter, leave } from "el-transition";
 
 // Connects to data-controller="contextmenu"
 export default class extends Controller {
@@ -22,14 +23,15 @@ export default class extends Controller {
     if (this.buttonTarget.getAttribute('aria-expanded') == "false") {
         this.show();
     } else {
-        this.hide(null);
+        this.hide(event);
     }
   }
 
   show() {
     this.buttonTarget.setAttribute('aria-expanded', 'true');
     this.buttonTarget.classList.add('active');
-    this.popupTarget.classList.remove('hidden');
+    enter(this.popupTarget);
+    // this.popupTarget.classList.remove('hidden');
   }
 
   hide(event) {
@@ -47,7 +49,8 @@ export default class extends Controller {
 
       this.buttonTarget.setAttribute("aria-expanded", "false");
       this.buttonTarget.classList.remove("active");
-      this.popupTarget.classList.add("hidden");
+      // this.popupTarget.classList.add("hidden");
+      leave(this.popupTarget);
     } catch (error) {
       console.error("Error in hide function: ", error);
       return

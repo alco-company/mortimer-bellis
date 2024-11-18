@@ -1,28 +1,38 @@
 import { Controller } from "@hotwired/stimulus"
-import { useTransition } from "stimulus-use";
+import { enter, leave } from "el-transition";
 
 // Connects to data-controller="notificationcenter"
 export default class extends Controller {
   static targets = [ 
     "notificationCenter",
+    "backdrop",
     "slideoverpanel",
     "notificationBell",
     "notificationBellButton"
   ]
 
   connect() {
-    useTransition(this, {
-      element: this.slideoverpanelTarget,
-      enterActive: "transform transition ease-in-out duration-500 sm:duration-1000",
-      enterFrom: "translate-x-full",
-      enterTo: "translate-x-0",
-      leaveActive: "transform transition ease-in-out duration-500 sm:duration-1000",
-      leaveFrom: "translate-x-0",
-      leaveTo: "translate-x-full",
-      hiddenClass: "hidden",
-    });
-    this.leave()
+    this.backdropTarget.classList.add("bg-black", "bg-opacity-50");
+    this.backdropTarget.classList.remove("hidden");
+    console.log(this.backdropTarget);
   }
+
+
+  show() {
+    this.notificationCenterTarget.classList.remove("hidden");
+    enter(this.backdropTarget);
+    enter(this.slideoverpanelTarget);
+  }
+
+  hide() {
+    Promise.all([
+      leave(this.backdropTarget),
+      leave(this.slideoverpanelTarget),
+    ]).then(() => {
+      this.notificationCenterTarget.classList.add("hidden");
+    });
+  }
+
 
   toggle() {
 
@@ -30,13 +40,9 @@ export default class extends Controller {
       this.notificationBellButtonTarget.getAttribute("aria-expanded") == "false"
     ) {
       this.notificationBellButtonTarget.setAttribute("aria-expanded", "true");
-      this.notificationCenterTarget.classList.remove("hidden");
-      this.toggleTransition();
+      this.show()
     } else {
-      this.toggleTransition()
-      this.timeout = setTimeout(() => {
-        this.notificationCenterTarget.classList.add("hidden");      
-      }, 1200);
+      this.hide()
 
       this.notificationBellButtonTarget.setAttribute("aria-expanded", "false");
     }
@@ -59,8 +65,8 @@ export default class extends Controller {
         if (event.target.tagName != "A") return;
       }
 
-      this.notificationBellButtonTarget.setAttribute("aria-expanded", "false");
-      this.leave();
+      // this.notificationBellButtonTarget.setAttribute("aria-expanded", "false");
+      this.hide();
     } catch (error) {
       console.error("Error in hide function: ", error);
       return

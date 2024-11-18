@@ -6,12 +6,13 @@ class ProfileDropmenuComponent < ApplicationComponent
 
   def view_template
     comment { "Profile dropdown" }
-    div(class: "relative") do
+    div(class: "relative", data: { controller: "contextmenu" }) do
       button(
         type: "button",
          data: {
             navigation_target: "profileMenuButton",
-            action: "touchstart->navigation#tapDrop click->navigation#tapDrop click@window->navigation#hideDrop"
+            contextmenu_target: "button",
+            action: "touchstart->contextmenu#tap click@window->contextmenu#hide click->contextmenu#tap"
           },
          class: "-m-1.5 flex items-center p-1.5",
         id: "user-menu-button",
@@ -54,7 +55,16 @@ class ProfileDropmenuComponent < ApplicationComponent
         class:
           "hidden absolute right-0 z-10 mt-2.5 w-44 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none",
         role: "menu",
-        data: { navigation_target: "profileMenu" },
+        data: {
+          navigation_target: "profileMenu",
+          contextmenu_target: "popup",
+          transition_enter: "transition ease-out duration-300",
+          transition_enter_start: "transform opacity-0 scale-95",
+          transition_enter_end: "transform opacity-100 scale-100",
+          transition_leave: "transition ease-in duration-75",
+          transition_leave_start: "transform opacity-100 scale-100",
+          transition_leave_end: "transform opacity-0 scale-95"
+        },
         aria_orientation: "vertical",
         aria_labelledby: "user-menu-button",
         tabindex: "-1"

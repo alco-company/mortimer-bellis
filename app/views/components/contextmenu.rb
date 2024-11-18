@@ -94,9 +94,16 @@ class Contextmenu < Phlex::HTML
     #    From: "transform opacity-100 scale-100"
     #    To: "transform opacity-0 scale-95"
     div(
-      data_contextmenu_target: "popup",
-      class:
-        "hidden absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none",
+      data: {
+        contextmenu_target: "popup",
+        transition_enter: "transition ease-out duration-300",
+        transition_enter_start: "transform opacity-0 scale-95",
+        transition_enter_end: "transform opacity-100 scale-100",
+        transition_leave: "transition ease-in duration-75",
+        transition_leave_start: "transform opacity-100 scale-100",
+        transition_leave_end: "transform opacity-0 scale-95"
+      },
+      class: "hidden absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none",
       role: "menu",
       aria_orientation: "vertical",
       aria_labelledby: "options-menu-0-button",
@@ -211,7 +218,15 @@ class Contextmenu < Phlex::HTML
       %(Dropdown menu, show/hide based on menu state. Entering: "transition ease-out duration-100" From: "transform opacity-0 scale-95" To: "transform opacity-100 scale-100" Leaving: "transition ease-in duration-75" From: "transform opacity-100 scale-100" To: "transform opacity-0 scale-95")
     end
     div(
-      data_contextmenu_target: "popup",
+      data: {
+        contextmenu_target: "popup",
+        transition_enter: "transition ease-out duration-300",
+        transition_enter_start: "transform opacity-0 scale-95",
+        transition_enter_end: "transform opacity-100 scale-100",
+        transition_leave: "transition ease-in duration-75",
+        transition_leave_start: "transform opacity-100 scale-100",
+        transition_leave_end: "transform opacity-0 scale-95"
+      },
       class:
         "hidden absolute right-0 z-10 mt-2 w-auto min-w-18 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none",
       role: "menu",

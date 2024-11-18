@@ -46,7 +46,7 @@ NATIVE: https://blog.corsego.com/navigating-turbo-native, https://www.youtube.co
 ### 18/11/2024
 
 * refactor mobilesidebar to animate
-* 
+* refactor contextmenu & profilemenu to animate
 
 ### 15/11/2024
 

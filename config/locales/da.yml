@@ -117,6 +117,9 @@ da:
     en: Engelsk
     de: Tysk
 
+  notification:
+    read_message: Læs beskeden
+
   topbar:
     search: 
       placeholder: Søg...

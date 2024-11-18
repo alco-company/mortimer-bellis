@@ -18,11 +18,32 @@ class Notifications::NotificationCenter < ApplicationComponent
       role: "dialog",
       aria_modal: "true"
     ) do
-      div(class: "fixed bg-sky-100/10 inset-0")
+      div(
+        aria_hidden: "true",
+        data: {
+          notificationcenter_target: "backdrop",
+          transition_enter: "ease-in-out duration-500",
+          transition_enter_start: "opacity-0",
+          transition_enter_end: "opacity-100",
+          transition_leave: "ease-in-out duration-500",
+          transition_leave_start: "opacity-100",
+          transition_leave_end: "opacity-0"
+        },
+        class: "fixed inset-0 bg-sky-100/10 ") { "" }
       div(class: "fixed inset-0 overflow-hidden") do
         div(class: "absolute inset-0 overflow-hidden") do
           div(class: "pointer-events-none fixed inset-y-0 top-16 right-0 flex max-w-full pl-10 sm:pl-16") do
-            div(data_notificationcenter_target: "slideoverpanel", class: "pointer-events-auto w-screen max-w-md") do
+            div(
+              data: {
+                notificationcenter_target: "slideoverpanel",
+                transition_enter: "transform transition ease-in-out duration-500 sm:duration-1000",
+                transition_enter_start: "translate-x-full",
+                transition_enter_end: "translate-x-0",
+                transition_leave: "transform transition ease-in-out duration-500 sm:duration-1000",
+                transition_leave_start: "translate-x-0",
+                transition_leave_end: "translate-x-full"
+              },
+              class: "pointer-events-auto w-screen max-w-md") do
               div(class: "flex h-full flex-col overflow-y-scroll bg-white shadow-xl") do
                 div(class: "p-6") do
                   div(class: "flex items-start justify-between") do
