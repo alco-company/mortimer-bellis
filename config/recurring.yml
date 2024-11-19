@@ -1,7 +1,7 @@
-production:
-  background_job_scheduler:
-    class: BackgroundManagerJob
-    queue: background
-    # args: [ 1000, { batch_size: 500 } ]
-    enabled: true
-    schedule: every 60.seconds
+# production:
+#   background_job_scheduler:
+#     class: BackgroundManagerJob
+#     queue: background
+#     # args: [ 1000, { batch_size: 500 } ]
+#     enabled: true
+#     schedule: every 60.seconds
