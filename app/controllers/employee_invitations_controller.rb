@@ -22,7 +22,7 @@ class EmployeeInvitationsController < MortimerController
 
     # Only allow a list of trusted parameters through.
     def resource_params
-      params.require(:user_invitation).permit(
+      params.expect(user_invitation: [
         :tenant_id,
         :user_id,
         :team_id,
@@ -31,7 +31,7 @@ class EmployeeInvitationsController < MortimerController
         :invited_at,
         :seen_at,
         :completed_at
-      )
+      ])
     end
 
     #

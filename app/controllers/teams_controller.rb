@@ -3,7 +3,7 @@ class TeamsController < MortimerController
 
     # Only allow a list of trusted parameters through.
     def resource_params
-      params.require(:team).permit(:tenant_id,
+      params.expect(team: [ :tenant_id,
       :name,
       :color,
       :country,
@@ -25,6 +25,6 @@ class TeamsController < MortimerController
       :tmp_overtime_allowed,
       :eu_state,
       :allowed_ot_minutes
-      )
+      ])
     end
 end

@@ -1,25 +1,28 @@
+
 # Name of your application. Used to uniquely configure containers.
 service: mortimer-bellis
 
 # Name of the container image.
 image: wdiechmann/mortimer-bellis
 
-builder:
-  remote:
-    arch: arm64
-    host: ssh://root@135.181.202.106
-
 # Deploy to these servers.
 servers:
   web:
+    - 65.108.89.110
+  job:
     hosts:
       - 65.108.89.110
-    options:
-      # "add-host": host.docker.internal:host-gateway
-      # network: "mortimer"    
+    cmd: bin/jobs
 
-volumes:
-  - "storage:/rails/storage"
+# Enable SSL auto certification via Let's Encrypt and allow for multiple apps on a single web server.
+# Remove this section when using multiple web servers and ensure you terminate SSL at your load balancer.
+#
+# Note: If using Cloudflare, set encryption mode in SSL/TLS setting to "Full" to enable CF-to-app encryption. 
+proxy: 
+  ssl: true
+  host: app.mortimer.pro
+  # Proxy connects to your container on port 80 by default.
+  # app_port: 3000
 
 # Credentials for your image host.
 registry:
@@ -27,52 +30,56 @@ registry:
   # server: registry.digitalocean.com / ghcr.io / ...
   username: wdiechmann
 
-  # Always use an access token rather than real password when possible.
+  # Always use an access token rather than real password (pulled from .kamal/secrets).
   password:
     - KAMAL_REGISTRY_PASSWORD
 
-# Inject ENV variables into containers (secrets come from .env).
-# Remember to run `kamal env push` after making changes!
+# Configure builder setup.
+builder:
+  remote: ssh://root@135.181.202.106
+  arch: arm64
+
+# Inject ENV variables into containers (secrets come from .kamal/secrets).
+#
 env:
-  clear:
-    PDF_HOST: 65.108.89.110
-    DB_HOST: 65.108.89.110
-    SMTP_USER_NAME: 'info@mortimer.pro'
-    SMTP_DOMAIN: 'mortimer.pro'
-    SMTP_HOST: 'hosting.alco.company'
-    SMTP_PORT: '587'
-    SMTP_AUTHENTICATION: 'plain'
-    SMTP_ENABLE_STARTTLS_AUTO: 'false'
-    SSL_DOMAIN: 'app.mortimer.pro'
-    WEB_HOST: 'app.mortimer.pro'
-    MORTIMER_VERSION: '0.8.1'
   secret:
     - RAILS_MASTER_KEY
-    - DINERO_APP_ID
-    - DINERO_APP_SECRET
-    - SMTP_PASSWORD
-    - WAVIX_APP_ID
+  clear:
+    # Run the Solid Queue Supervisor inside the web server's Puma process to do jobs.
+    # When you start using multiple servers, you should split out job processing to a dedicated machine.
+    SOLID_QUEUE_IN_PUMA: true
+    WEB_HOST: app.mortimer.pro
+
+# Aliases are triggered with "bin/kamal <alias>". You can overwrite arguments on invocation:
+# "bin/kamal logs -r job" will tail logs from the first server in the job section.
+#
+# aliases:
+#   shell: app exec --interactive --reuse "bash"
 
 # Use a different ssh user than root
-ssh:
-  user: root
+#
+# ssh:
+#   user: app
 
-# Configure builder setup.
-# builder:
-#   args:
-#     RUBY_VERSION: 3.2.0
-#   secrets:
-#     - GITHUB_TOKEN
-#   remote:
-#     arch: amd64
-#     host: ssh://app@192.168.0.1
+# Use a persistent storage volume.
+#
+volumes:
+  - "storage:/rails/storage"
 
-accessories:
-  pdf:
-    image: 4teamwork/weasyprint
-    host: 65.108.89.110
-    port: 8080
-# Use accessory services (secrets come from .env).
+# Bridge fingerprinted assets, like JS and CSS, between versions to avoid
+# hitting 404 on in-flight requests. Combines all files from new and old
+# version inside the asset_path.
+#
+# asset_path: /app/public/assets
+
+# Configure rolling deploys by setting a wait time between batches of restarts.
+#
+# boot:
+#   limit: 10 # Can also specify as a percentage of total hosts, such as "25%"
+#   wait: 2
+
+# Use accessory services (secrets come from .kamal/secrets).
+#
 # accessories:
 #   db:
 #     image: mysql:8.0
@@ -89,41 +96,8 @@ accessories:
 #     directories:
 #       - data:/var/lib/mysql
 #   redis:
-#     image: redis:7.0
+#     image: valkey/valkey:8
 #     host: 192.168.0.2
 #     port: 6379
 #     directories:
 #       - data:/data
-
-# Configure custom arguments for Traefik
-# traefik:
-#   args:
-#     accesslog: true
-#     accesslog.format: json
-
-# Configure a custom healthcheck (default is /up on port 3000)
-# healthcheck:
-#   path: /healthz
-#   port: 4000
-
-# Bridge fingerprinted assets, like JS and CSS, between versions to avoid
-# hitting 404 on in-flight requests. Combines all files from new and old
-# version inside the asset_path.
-# asset_path: /rails/public/assets
-
-# Configure rolling deploys by setting a wait time between batches of restarts.
-# boot:
-#   limit: 10 # Can also specify as a percentage of total hosts, such as "25%"
-#   wait: 2
-
-# Configure the role used to determine the primary_host. This host takes
-# deploy locks, runs health checks during the deploy, and follow logs, etc.
-#
-# Caution: there's no support for role renaming yet, so be careful to cleanup
-#          the previous role on the deployed hosts.
-# primary_role: web
-
-# Controls if we abort when see a role with no hosts. Disabling this may be
-# useful for more complex deploy configurations.
-#
-# allow_empty_roles: false

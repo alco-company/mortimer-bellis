@@ -35,7 +35,7 @@ class FiltersController < BaseController
   end
 
   def redirect_url
-    params.require(:filter).permit(:url)[:url].split("?").first
+    params.expect(filter: [ :url ])[:url].split("?").first
   end
 
   #
@@ -44,10 +44,10 @@ class FiltersController < BaseController
   #     "filter"=>{"url"=>"https://localhost:3000/teams", "filter_form"=>"teams", "tenant_id"=>"1", "name"=>"", "team_color"=>"", "locale"=>"en", "time_zone"=>"", "submit"=>""},
   #     "controller"=>"filters", "action"=>"create"} }
   def filter_params
-    params.require(:filter).permit(:url, :filter_form, :tenant_id, :name)
+    params.expect(filter: [ :url, :filter_form, :tenant_id, :name ])
   end
 
   def create_params
-    params.require(:filter).permit!
+    params.require(filter).permit!
   end
 end

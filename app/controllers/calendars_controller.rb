@@ -25,7 +25,7 @@ class CalendarsController < MortimerController
 
     # Only allow a list of trusted parameters through.
     def resource_params
-      params.require(:calendar).permit(:tenant_id, :calendarable_id, :calendarable_type, :name)
+      params.expect(calendar: [ :tenant_id, :calendarable_id, :calendarable_type, :name ])
     end
 end
 

@@ -14,7 +14,7 @@ class PagesController < MortimerController
 
     # Only allow a list of trusted parameters through.
     def resource_params
-      params.require(:page).permit(:slug, :title, :content)
+      params.expect(page: [ :slug, :title, :content ])
     end
 
     def authorize

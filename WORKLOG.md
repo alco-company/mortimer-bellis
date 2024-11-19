@@ -7,9 +7,22 @@
 
 ## Ideas
 
-BACKUP: Litestream
+setup CI deployment with Kamal - https://www.rickpeyton.com/posts/step-by-step-guide-to-deploying-rails-8-with-kamal-and-github-actions-2
 PWA: https://onrails.blog/2021/03/02/rails-pwas-using-turbo-hhnpwa-7/
 NATIVE: https://blog.corsego.com/navigating-turbo-native, https://www.youtube.com/watch?v=TDQ2wtmgeKw
+
+osascript = <<END
+tell application "Messages"
+  set targetBuddy to "#{phone_number}"
+  set targetService to id of 1st account whose service whose service type = iMessage
+  set theBuddy to participant targetBuddy of account id targetService
+  set message to "#{message}"
+  send message to theBuddy
+end tell
+END
+`osascript -e '#{osascript}'`
+
+
 
 ## BUGS
 
@@ -46,6 +59,7 @@ NATIVE: https://blog.corsego.com/navigating-turbo-native, https://www.youtube.co
 
 * upgrading SolidQueue to 0.8.0 - aiming for 1.0.0 further down the road
 * trying to make config work for enhancedsqlite3-adapter
+* going full Monty on upgrading Rails to 8.0.0 - and all gems
 
 ### 18/11/2024
 

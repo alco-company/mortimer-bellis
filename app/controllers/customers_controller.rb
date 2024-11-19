@@ -2,7 +2,8 @@ class CustomersController < MortimerController
   private
     # Only allow a list of trusted parameters through.
     def resource_params
-      params.require(:customer).permit(:tenant_id,
+      params.expect(customer: [
+        :tenant_id,
         :name,
         :external_reference,
         :is_person,
@@ -24,7 +25,7 @@ class CustomersController < MortimerController
         :member_number,
         :company_status,
         :vat_region_key,
-        :invoice_mail_out_option_key,
-      )
+        :invoice_mail_out_option_key
+      ])
     end
 end

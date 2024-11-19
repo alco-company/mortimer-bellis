@@ -60,6 +60,6 @@ class PunchCardsController < MortimerController
   private
     # Only allow a list of trusted parameters through.
     def resource_params
-      params.require(:punch_card).permit(:tenant_id, :user_id, :work_date, :work_minutes, :ot1_minutes, :ot2_minutes, :break_minutes, :punches_settled_at)
+      params.expect(punch_card: [ :tenant_id, :user_id, :work_date, :work_minutes, :ot1_minutes, :ot2_minutes, :break_minutes, :punches_settled_at ])
     end
 end
