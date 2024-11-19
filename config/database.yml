@@ -41,7 +41,10 @@ test:
 # Similarly, if you deploy your application as a Docker container, you must
 # ensure the database is located in a persisted volume.
 production:
-  primary:
+  writer:
+    <<: *default
+    database: storage/production.sqlite3
+  reader:
     <<: *default
     database: storage/production.sqlite3
   cache:
