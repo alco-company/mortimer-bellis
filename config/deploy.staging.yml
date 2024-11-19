@@ -10,7 +10,7 @@ image: wdiechmann/mortimer-anemone
 builder:
   remote: ssh://root@135.181.202.106
   arch: arm64
-    # local: false
+  local: false
     # remote: ssh://root@135.181.202.106
 
 # Deploy to these servers.

@@ -1,5 +1,8 @@
 source "https://rubygems.org"
 
+# in Ruby 3.3.3 net-pop is broken
+gem "net-pop", github: "ruby/net-pop"
+
 # Use main development branch of Rails
 gem "rails", github: "rails/rails", branch: "main"
 # The modern asset pipeline for Rails [https://github.com/rails/propshaft]
