@@ -56,13 +56,13 @@ env:
     PORT: 3000
     RAILS_ENV: production
     PDF_HOST: 135.181.202.106 
-    SMTP_USER_NAME: 'info@mortimer.pro'
-    SMTP_DOMAIN: 'mortimer.pro'
-    SMTP_HOST: 'hosting.alco.company'
-    SMTP_PORT: '587'
-    SMTP_AUTHENTICATION: 'plain'
+    SMTP_USER_NAME: info@mortimer.pro
+    SMTP_DOMAIN: mortimer.pro
+    SMTP_HOST: hosting.alco.company
+    SMTP_PORT: 587
+    SMTP_AUTHENTICATION: plain
     SMTP_ENABLE_STARTTLS_AUTO: 'false'
-    SSL_DOMAIN: 'app.mortimer.pro'
+    SSL_DOMAIN: app.mortimer.pro
     MORTIMER_VERSION: '1.0.1'
     DINERO_APP_CALLBACK: 'https://anemone.mortimer.pro/dinero/callback'
 
