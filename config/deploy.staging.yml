@@ -1,13 +1,17 @@
+
 # Name of your application. Used to uniquely configure containers.
 service: mortimer-anemone
+
+#<% require "dotenv"; Dotenv.load(".env") %>
 
 # Name of the container image.
 image: wdiechmann/mortimer-anemone
 
 builder:
-  remote:
-    arch: arm64
-    host: ssh://root@135.181.202.106
+  remote: ssh://root@135.181.202.106
+  arch: arm64
+    # local: false
+    # remote: ssh://root@135.181.202.106
 
 # Deploy to these servers.
 servers:
@@ -16,52 +20,11 @@ servers:
       - 135.181.202.106
     options: {}
       # network: "mortimer"    
-    labels:
-      traefik.enable: true
-      traefik.http.routers.mortimer.entrypoints: websecure
-      traefik.http.routers.mortimer.rule: Host(`anemone.mortimer.pro`)
-      traefik.http.routers.mortimer.tls.certresolver: letsencrypt
-      traefik.http.routers.mortimer.tls.domains[0].main: anemone.mortimer.pro
-      traefik.http.routers.mortimer.tls.domains[0].sans: anemone.mortimer.pro
 
-traefik:
-  options:
-    publish:
-      - "443:443"
-    volume:
-      - "/root/letsencrypt/acme.json:/letsencrypt/acme.json"
-    # network: "mortimer"
-  args:
-    api.dashboard: true
-    log.level: INFO
-    accesslog.format: json
-    accesslog.filters.statusCodes: "400-599"
-    accesslog.filters.retryAttempts: true
-    accesslog.filters.minDuration: 101ms
-
-    entryPoints.web.address: ":80"
-    entryPoints.websecure.address: ":443"
-
-    entryPoints.web.http.redirections.entryPoint.to: websecure
-    entryPoints.web.http.redirections.entryPoint.scheme: https
-    entryPoints.web.http.redirections.entrypoint.permanent: true
-
-    certificatesResolvers.letsencrypt.acme.email: "walther@alco.dk"
-    certificatesResolvers.letsencrypt.acme.storage: "/letsencrypt/acme.json"
-    certificatesResolvers.letsencrypt.acme.httpchallenge: true
-    certificatesResolvers.letsencrypt.acme.httpchallenge.entrypoint: web
-    # certificatesResolvers.letsencrypt.acme.tlschallenge: true
-    # certificatesResolvers.letsencrypt.acme.caserver: https://acme-staging-v02.api.letsencrypt.org/directory
-
-  labels:
-    traefik.enable: true
-    # traefik.http.routers.dashboard.rule: Host(`traefik.mortimer.pro`)
-    # traefik.http.routers.dashboard.service: api@internal
-    # traefik.http.routers.dashboard.middlewares: redirect-to-https, auth
-    # traefik.http.routers.dashboard.tls: true
-    # traefik.http.middlewares.redirect-to-https.redirectscheme.scheme: https
-    # traefik.http.middlewares.auth.basicauth.users: test:what_a_password
-
+proxy:
+  healthcheck:
+    interval: 10
+    timeout: 5
 
 volumes:
   - "storage:/rails/storage"
@@ -148,11 +111,6 @@ accessories:
 #     directories:
 #       - data:/data
 
-# Configure custom arguments for Traefik
-# traefik:
-#   args:
-#     accesslog: true
-#     accesslog.format: json
 
 # Configure a custom healthcheck (default is /up on port 3000)
 # healthcheck:
