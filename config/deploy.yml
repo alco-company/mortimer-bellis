@@ -49,7 +49,7 @@ env:
     # When you start using multiple servers, you should split out job processing to a dedicated machine.
     SOLID_QUEUE_IN_PUMA: true
     WEB_HOST: app.mortimer.pro
-    PORT: 80
+    PORT: 3000
     RAILS_ENV: production
 
 # Aliases are triggered with "bin/kamal <alias>". You can overwrite arguments on invocation:
