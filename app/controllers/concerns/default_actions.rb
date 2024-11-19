@@ -151,7 +151,10 @@ module DefaultActions
         else
           cb = destroy_callback @resource
           begin
-            eval(cb) && @resource.notify && Broadcasters::Resource.new(@resource).destroy if @resource.destroy!
+            ActiveRecord::Base.connected_to(role: :writing) do
+              # All code in this block will be connected to the reading role.
+              eval(cb) && @resource.notify && Broadcasters::Resource.new(@resource).destroy if @resource.destroy!
+            end
           rescue => error
             say error
           end
