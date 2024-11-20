@@ -53,7 +53,7 @@ class PunchesController < MortimerController
 
     # Only allow a list of trusted parameters through.
     def resource_params
-      params.require(:punch).permit(:tenant_id, :user_id, :punch_clock_id, :punched_at, :state, :remote_ip, :comment)
+      params.expect(punch: [ :tenant_id, :user_id, :punch_clock_id, :punched_at, :state, :remote_ip, :comment ])
     end
 
     #

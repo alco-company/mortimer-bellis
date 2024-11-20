@@ -73,7 +73,7 @@ class DashboardsController < MortimerController
 
     # Only allow a list of trusted parameters through.
     def resource_params
-      params.require(:dashboard).permit(:tenant_id, :feed, :last_feed, :last_feed_at)
+      params.expect(dashboard: [ :tenant_id, :feed, :last_feed, :last_feed_at ])
     end
 
     def get_feed

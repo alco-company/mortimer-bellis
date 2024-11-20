@@ -4,7 +4,7 @@ if [ -n "$1" ]; then
     # Argument is provided, do something
     backup_dev
 fi
-kamal env push --destination=staging
+# kamal env push --destination=staging
 kamal deploy --destination=staging
 echo Cleaning SSH local: `ps aux | grep 'ConnectTimeout' | wc -l` remote: `ssh docker5 -lroot "ps aux | grep 'ConnectTimeout' | wc -l"`
 clean_ssh 2>&1 > /dev/null

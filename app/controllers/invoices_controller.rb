@@ -119,7 +119,7 @@ class InvoicesController < MortimerController
   private
     # Only allow a list of trusted parameters through.
     def resource_params
-      params.require(:invoice).permit(:tenant_id,
+      params.expect(invoice: [ :tenant_id,
         :customer_id,
         :project_id,
         :currency,
@@ -149,6 +149,6 @@ class InvoicesController < MortimerController
         :total_incl_vat,
         :is_mobile_pay_invoice_enabled,
         :is_penso_pay_enabled
-      )
+      ])
     end
 end

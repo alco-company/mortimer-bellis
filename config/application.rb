@@ -13,7 +13,7 @@ module Mortimer
     config.autoload_paths << "#{root}/app/views/components"
     config.autoload_paths << "#{root}/app/views/forms"
     # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 7.2
+    config.load_defaults 8.1
 
     # DEPRECATION WARNING: `to_time` will always preserve the full timezone
     # rather than offset of the receiver in Rails 8.0.
@@ -32,13 +32,6 @@ module Mortimer
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
-
-    # require "alco/console" if Rails.env.local? - not working ATM 29/5/2024
-    # deprecated solution as of 8.0
-    # console do
-    #   Rails::ConsoleMethods.send :include, Alco::Console
-    #   TOPLEVEL_BINDING.eval("self").extend Alco::Console # PRY
-    # end
 
     # Noticed notifications configuration
     config.to_prepare do

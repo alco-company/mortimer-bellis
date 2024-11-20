@@ -41,10 +41,10 @@ class EmployeesController < MortimerController
 
     # Only allow a list of trusted parameters through.
     def resource_params
-      rp = params.require(:user).permit(:pincode, :payroll_employee_ident)
+      rp = params.expect(user: [ :pincode, :payroll_employee_ident ])
       params[:user][:pincode] = User.next_pincode(rp[:pincode]) if rp[:pincode].blank?
       params[:user][:payroll_employee_ident] = User.next_payroll_employee_ident(rp[:payroll_employee_ident]) if rp[:payroll_employee_ident].blank?
-      params.require(:user).permit(
+      params.expect(user: [
         :tenant_id,
         :team_id,
         :name,
@@ -80,7 +80,7 @@ class EmployeesController < MortimerController
         :blocked,
         :locale,
         :time_zone
-      )
+      ])
     end
 
     def process_signup

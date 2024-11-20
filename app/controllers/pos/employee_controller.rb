@@ -99,11 +99,11 @@ class Pos::EmployeeController < Pos::PosController
 
   private
     def employee_params
-      params.require(:user).permit(:state, :name, :description, :email, :cell_phone, :locale, :time_zone, :birthday, :mugshot)
+      params.expect(user: [ :state, :name, :description, :email, :cell_phone, :locale, :time_zone, :birthday, :mugshot ])
     end
 
     def punch_params
-      params.require(:punch).permit(:reason, :from_date, :from_time, :to_date, :to_time, :duration, :punched_at, :comment, :excluded_days, days: [])
+      params.expect(punch: [ :reason, :from_date, :from_time, :to_date, :to_time, :duration, :punched_at, :comment, :excluded_days, days: [ [] ] ])
     end
 
     def verify_employee

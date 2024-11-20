@@ -54,7 +54,7 @@ class UsersController < MortimerController
 
     # Only allow a list of trusted parameters through.
     def resource_params
-      params.require(:user).permit(:tenant_id, :name, :pincode, :email, :role, :mugshot, :locale, :time_zone)
+      params.expect(user: [ :tenant_id, :name, :pincode, :email, :role, :mugshot, :locale, :time_zone ])
     end
 
     def create_callback(resource)

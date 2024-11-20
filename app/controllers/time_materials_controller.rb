@@ -93,7 +93,7 @@ class TimeMaterialsController < MortimerController
 
     # Only allow a list of trusted parameters through.
     def resource_params
-      params.require(:time_material).permit(
+      params.expect(time_material: [
         :tenant_id,
         :date,
         :time,
@@ -126,7 +126,7 @@ class TimeMaterialsController < MortimerController
         :trip_purpose,
         :odo_from_time,
         :odo_to_time
-      )
+      ])
     end
 
     def pause

@@ -89,7 +89,7 @@ class EventsController < MortimerController
 
     # Only allow a list of trusted parameters through.
     def resource_params
-      params.require(:event).permit(
+      params.expect(event: [
         :tenant_id,
         :calendar_id,
         :id,
@@ -108,7 +108,7 @@ class EventsController < MortimerController
         :reason,
         :comment,
         :files,
-        event_metum_attributes: [
+        event_metum_attributes: [ [
           :daily_interval,
           :days_count,
           :weekly_interval,
@@ -124,7 +124,7 @@ class EventsController < MortimerController
           :yearly_days,
           :years_count,
           :yearly_weeks,
-          weekly_weekdays: [
+          weekly_weekdays: [ [
             :monday,
             :tuesday,
             :wednesday,
@@ -132,8 +132,8 @@ class EventsController < MortimerController
             :friday,
             :saturday,
             :sunday
-          ],
-          monthly_weekdays: [
+          ] ],
+          monthly_weekdays: [ [
             :monday,
             :tuesday,
             :wednesday,
@@ -141,8 +141,8 @@ class EventsController < MortimerController
             :friday,
             :saturday,
             :sunday
-          ],
-          yearly_weekdays: [
+          ] ],
+          yearly_weekdays: [ [
             :monday,
             :tuesday,
             :wednesday,
@@ -150,8 +150,8 @@ class EventsController < MortimerController
             :friday,
             :saturday,
             :sunday
-          ],
-          yearly_months: [
+          ] ],
+          yearly_months: [ [
             :january,
             :february,
             :march,
@@ -164,15 +164,15 @@ class EventsController < MortimerController
             :october,
             :november,
             :december
-          ]
-        ]
-      )
+          ] ]
+        ] ]
+      ])
     end
 
     def prepare_resource
       # is this a work related event?
       if resource_params[:auto_punch] == "0"
-        params.require(:event).extract!(:work_type, :breaks_included, :break_minutes, :reason)
+        params.require(event).extract!(:work_type, :breaks_included, :break_minutes, :reason)
       else
         # if this is not about 'scheduling' a work event, ie. it's about setting a set of punch in/out's
         if no_schedule_set?
