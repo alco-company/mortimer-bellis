@@ -1,10 +1,11 @@
 class Employee < ApplicationRecord
-  include Accountable
+  include Tenantable
   include TimeZoned
   include Punchable
   include Localeable
   include Stateable
   include EUCompliance
+  include Calendarable
 
   belongs_to :team
   has_many :punch_cards, dependent: :destroy
@@ -22,17 +23,22 @@ class Employee < ApplicationRecord
   scope :by_time_zone, ->(time_zone) { where("time_zone LIKE ?", "%#{time_zone}%") if time_zone.present? }
   scope :by_pincode, ->(pincode) { where("pincode LIKE ?", "%#{pincode}%").order(pincode: :asc) if pincode.present? }
   scope :punching_absence, -> { where(punching_absence: true) }
+  scope :working, -> { where(state: :in) }
   scope :order_by_number, ->(field) { order("length(#{field}) DESC, #{field} DESC") }
 
-  validates :name, presence: true, uniqueness: { scope: [ :account_id, :team_id ], message: I18n.t("employees.errors.messages.name_exist_for_team") }
-  validates :pincode, presence: true, uniqueness: { scope: :account_id, message: I18n.t("employees.errors.messages.pincode_exist_for_account") }
-  validates :payroll_employee_ident, presence: true, uniqueness: { scope: :account_id, message: I18n.t("employees.errors.messages.payroll_employee_ident_exist_for_account") }
+  validates :name, presence: true, uniqueness: { scope: [ :tenant_id, :team_id ], message: I18n.t("users.errors.messages.name_exist_for_team") }
+  validates :pincode, presence: true, uniqueness: { scope: :tenant_id, message: I18n.t("users.errors.messages.pincode_exist_for_tenant") }
+  validates :payroll_employee_ident, presence: true, uniqueness: { scope: :tenant_id, message: I18n.t("users.errors.messages.payroll_employee_ident_exist_for_tenant") }
+
+  def color
+    employee_color
+  end
 
   def self.filtered(filter)
     flt = filter.filter
 
     all
-      .by_account()
+      .by_tenant()
       .by_name(flt["name"])
       .by_team(flt["team"])
       .by_locale(flt["locale"])
@@ -46,16 +52,20 @@ class Employee < ApplicationRecord
     resources.joins(:team).order(field => direction)
   end
 
-  def self.form(resource, editable = true)
-    Employees::Form.new resource, editable: editable, enctype: "multipart/form-data"
+  def all_calendars
+    team.all_calendars + calendars
   end
 
-  def self.profile(resource, url, editable = true)
-    Employees::Profile.new resource, action: url, api_key: resource.access_token, editable: editable, enctype: "multipart/form-data"
+  def self.form(resource:, editable: true)
+    Users::Form.new resource: resource, editable: editable, enctype: "multipart/form-data"
   end
 
-  def self.signup(resource, url, editable = true)
-    Employees::Signup.new resource, action: url, editable: editable, enctype: "multipart/form-data"
+  def self.profile(resource, url, editable: true)
+    Users::Profile.new resource, action: url, api_key: resource.access_token, editable: editable, enctype: "multipart/form-data"
+  end
+
+  def self.signup(resource, url, editable: true)
+    Users::Signup.new resource, action: url, editable: editable, enctype: "multipart/form-data"
   end
 
   #
@@ -72,7 +82,7 @@ class Employee < ApplicationRecord
   end
 
   def self.next_pincode(pin = "")
-    pins = Employee.by_account.order_by_number("pincode").pluck(:pincode)
+    pins = User.by_tenant.order_by_number("pincode").pluck(:pincode)
     pin = "1000" if pin.blank?
     return pin if pins.empty?
     pin = pins.first.to_i + 1 if pin.to_i < pins.first.to_i
@@ -84,7 +94,7 @@ class Employee < ApplicationRecord
   end
 
   def self.next_payroll_employee_ident(pin)
-    pins = Employee.by_account.order_by_number("payroll_employee_ident").pluck(:payroll_employee_ident)
+    pins = User.by_tenant.order_by_number("payroll_employee_ident").pluck(:payroll_employee_ident)
     pin = "1" if pin.blank?
     return pin if pins.empty?
     pin = pins.first.to_i + 1 if pin.to_i < pins.first.to_i

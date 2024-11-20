@@ -1,3 +1,4 @@
+Rails.application.routes.default_url_options[:protocol] = "https"
 if Rails.env.development?
   Rails.application.routes.default_url_options = {
     host: ENV["WEB_HOST"] || Rails.configuration.action_mailer.default_url_options[:host],
@@ -12,4 +13,9 @@ if Rails.env.production?
     protocol: "https"
   }
 end
-Rails.application.routes.default_url_options[:protocol] = "https"
+if Rails.env.test?
+  Rails.application.routes.default_url_options = {
+    host: ENV["WEB_HOST"] || Rails.configuration.action_mailer.default_url_options[:host],
+    protocol: "http"
+  }
+end

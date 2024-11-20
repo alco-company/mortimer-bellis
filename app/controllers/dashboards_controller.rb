@@ -1,5 +1,6 @@
 class DashboardsController < MortimerController
   before_action :set_dashboard, only: %i[ show ]
+
   # before_action :set_dashboard, only: %i[ show edit update destroy ]
 
   # # GET /dashboards or /dashboards.json
@@ -7,9 +8,11 @@ class DashboardsController < MortimerController
   #   @dashboards = Dashboard.all
   # end
 
-  # # GET /dashboards/1 or /dashboards/1.json
-  # def show
-  # end
+  # # GET /dashboards/show_dashboard or /dashboards/show_dashboard.json
+  def show_dashboard
+    @activity_list = Current.user.tenant.punches.order(punched_at: :desc).take(10)
+    @punch_clock = PunchClock.where(tenant: Current.user.tenant).first rescue nil
+  end
 
   # # GET /dashboards/new
   # def new
@@ -61,16 +64,16 @@ class DashboardsController < MortimerController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_dashboard
-      @dashboard = Dashboard.find_by(account: Current.account)
+      @dashboard = Dashboard.find_by(tenant: Current.tenant)
       unless @dashboard
-        @dashboard = Dashboard.create(account: Current.account, feed: "https://www.dr.dk/nyheder/service/feeds/penge")
+        @dashboard = Dashboard.create(tenant: Current.tenant, feed: "https://www.dr.dk/nyheder/service/feeds/penge")
       end
-      get_feed if @dashboard
+      # get_feed if @dashboard
     end
 
     # Only allow a list of trusted parameters through.
-    def dashboard_params
-      params.require(:dashboard).permit(:account_id, :feed)
+    def resource_params
+      params.expect(dashboard: [ :tenant_id, :feed, :last_feed, :last_feed_at ])
     end
 
     def get_feed

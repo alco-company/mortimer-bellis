@@ -1,5 +1,5 @@
 class Filter < ApplicationRecord
-  include Accountable
+  include Tenantable
 
   scope :by_view, ->(view) { where("view LIKE ?", "%#{view}%") if view.present? }
 
@@ -7,14 +7,14 @@ class Filter < ApplicationRecord
     flt = filter.filter
 
     all
-      # .by_account()
+      # .by_tenant()
       .by_view(flt["view"])
   rescue
     filter.destroy if filter
     all
   end
 
-  def self.form(resource, editable = true)
+  def self.form(resource:, editable: true)
     Filters::Form.new resource
   end
 end

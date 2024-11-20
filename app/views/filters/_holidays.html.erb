@@ -1,0 +1,14 @@
+<div class="min-w-0 w-full columns-3 md:columns-5">
+  <div class="flex justify-start">
+    <%= form.text_field :name, value: (filter["name"] rescue ''), class: "mort-filter-field" %>
+  </div>
+  <div class="flex justify-end">
+    <%= form.text_field :from_date, value: (filter["from_date"] rescue ''), class: "mort-filter-field" %>
+  </div>
+  <div class="flex justify-end">
+    <%= form.text_field :to_date, value: (filter["to_date"] rescue ''), class: "mort-filter-field" %>
+  </div>
+  <div class="flex justify-start">
+    <%= form.text_field :countries, value: (filter["countries"] rescue ''), class: "mort-filter-field" %>
+  </div>
+</div>

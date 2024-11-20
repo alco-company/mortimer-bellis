@@ -1,6 +1,6 @@
 module Pos::EmployeeHelper
-  def set_border_color(employee)
-    employee.get_team_color
+  def set_border_color(user)
+    user.get_team_color
   end
 
   def set_bg_color_on_state(state)
@@ -24,13 +24,13 @@ module Pos::EmployeeHelper
   end
 
   def display_todays_work(employee)
-    "%s" % display_hours_minutes(employee.minutes_today_up_to_now[:work])
+    "%s" % display_hours_minutes(user.minutes_today_up_to_now[:work])
   rescue
     "0"
   end
 
   def display_todays_break(employee)
-    "(%s)" % display_hours_minutes(employee.minutes_today_up_to_now[:break])
+    "(%s)" % display_hours_minutes(user.minutes_today_up_to_now[:break])
   rescue
     "(0)"
   end

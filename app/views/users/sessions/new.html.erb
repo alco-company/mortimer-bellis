@@ -1,8 +1,12 @@
+<% content_for :head do %>
+<%= turbo_page_requires_reload %>
+<% end %>
+
 <div class="mx-auto w-72 sm:w-96">
-  <div class="flex flex-shrink-0 items-center">
+  <div class="flex flex-shrink-0 items-center justify-between">
   <%= render_logo %>
+  <h1 class="font-thin text-sky-200 text-2xl"> <%= t("#{ resource_class.table_name}.sign_in.title") %> </h1>
   </div>
-  <h1 class="font-bold text-4xl"> <%= t("#{ resource_class.table_name}.sign_in.title") %> </h1>
 
   <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
     <div class="mort-field">
@@ -27,7 +31,6 @@
     </div>
   <% end %>
 
-  <hr>
   <div class="actions mort-field">
     <%= render "users/shared/links" %>
   </div>

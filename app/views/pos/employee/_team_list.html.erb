@@ -1,11 +1,11 @@
-<% Team.by_account.all.order(:name).each do |t|
-  next if t.employees.empty?
+<% Team.by_tenant.all.order(:name).each do |t|
+  next if t.users.empty?
   next unless ((t.name =~ /#{params[:t]}/) or (params[:t].downcase == 'all')) %>
   <div class="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
     <span class="text-xs col-span-6"><%= t.name %></span>
-    <%   t.employees.order('name').each do |employee|
-      next if employee.archived? %>
-      <%= render partial: "pos/employee/list_employee", locals: { employee: employee } %>
+    <%   t.users.order('name').each do |user|
+      next if user.archived? %>
+      <%= render partial: "pos/user/list_user", locals: { user: user } %>
       <% end %>
   </div>
 <% end; %>

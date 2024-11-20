@@ -1,6 +1,6 @@
 <tr class="gap-x-6 py-5">
   <%= render_text_column value: link_to(team.name, team_url(team)), table: :row, css: "truncate" %>
-  <%= render_text_column value: team.team_color, table: :row, css: "truncate" %>
+  <%= render_text_column value: team.color, table: :row, css: "truncate" %>
   <%= render_text_column value: team.locale, table: :row, css: "truncate" %>
   <%= render_text_column value: team.time_zone, table: :row, css: "truncate" %>
   <%= render_datetime_column value: team.updated_at, table: :row, css: "" %>

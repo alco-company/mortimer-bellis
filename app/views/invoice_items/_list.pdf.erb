@@ -1,0 +1,14 @@
+<div class="min-w-0 w-full columns-3 md:columns-5 lg:columns-7 xl:columns-8 3xl:columns-11">
+  <%= render_text_column value: t(".invoice_id"), sort: params, field: :invoice_id, css: "hidden 3xl:block font-bold truncate" %>
+  <%= render_text_column value: t(".project_id"), sort: params, field: :project_id, css: "hidden 3xl:block font-bold truncate" %>
+  <%= render_text_column value: t(".product_id"), sort: params, field: :product_id, css: "hidden 3xl:block font-bold truncate" %>
+  <%= render_text_column value: t(".description"), sort: params, field: :description, css: "font-bold truncate" %>
+  <%= render_text_column value: t(".quantity"), sort: params, field: :quantity, css: "font-bold truncate" %>
+  <%= render_text_column value: t(".unit"), sort: params, field: :unit, css: "font-bold truncate" %>
+  <%= render_text_column value: t(".account_number"), sort: params, field: :account_number, css: "hidden xl:block font-bold truncate" %>
+  <%= render_text_column value: t(".discount"), sort: params, field: :discount, css: "hidden lg:block font-bold truncate" %>
+  <%= render_text_column value: t(".line_type"), sort: params, field: :line_type, css: "hidden lg:block font-bold truncate" %>
+  <%= render_text_column value: t(".base_amount_value"), sort: params, field: :base_amount_value, css: "hidden md:block font-bold truncate" %>
+  <%= render_text_column value: t(".updated_at"), css: "hidden md:block font-bold truncate" %>
+</div>
+

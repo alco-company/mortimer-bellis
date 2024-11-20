@@ -2,7 +2,7 @@ require "application_system_test_case"
 
 class LocationsTest < ApplicationSystemTestCase
   # setup do
-  #   Current.account = accounts(:one)
+  #   Current.tenant = tenants(:one)
   #   @location = locations(:one)
   # end
 
@@ -15,7 +15,7 @@ class LocationsTest < ApplicationSystemTestCase
   #   visit locations_url
   #   click_on "New location"
 
-  #   fill_in "Account", with: @location.account_id
+  #   fill_in "Tenant", with: @location.tenant_id
   #   fill_in "Location color", with: @location.location_color
   #   fill_in "Name", with: @location.name
   #   click_on "Create Location"
@@ -28,7 +28,7 @@ class LocationsTest < ApplicationSystemTestCase
   #   visit location_url(@location)
   #   click_on "Edit this location", match: :first
 
-  #   fill_in "Account", with: @location.account_id
+  #   fill_in "Tenant", with: @location.tenant_id
   #   fill_in "Location color", with: @location.location_color
   #   fill_in "Name", with: @location.name
   #   click_on "Update Location"

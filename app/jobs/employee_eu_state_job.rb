@@ -4,7 +4,7 @@ class EmployeeEuStateJob < ApplicationJob
   def perform(**args)
     super(**args)
     switch_locale do
-      EmployeeMailer.with(account: Current.account).report_eu_state.deliver_later
+      UserMailer.with(tenant: Current.tenant).report_eu_state.deliver_later
     end
     # Do something later
   end

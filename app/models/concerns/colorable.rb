@@ -14,7 +14,7 @@ module Colorable
   # border-gray-500
   # border-red-500
   # border-fuchsia-500
-  # border-blue-500
+  # border-sky-200
   # border-green-500
   # border-yellow-500
   # border-sky-500

@@ -1,0 +1,59 @@
+da:
+  customer:
+    modal:
+      delete_all: 
+        title: Slet alle kunder
+        instruction: Er du sikker på, at du vil slette alle kunder?
+      delete:
+        title: Slet denne kunde
+        instruction: Er du sikker på, at du vil slette kunde %{name}?
+        button: Slet
+
+  customers:
+    default_customer: Kunden
+    validation_errors: Der er fejl i det indtastede
+    erp_pull:
+      erp_pull: Henter kunder fra Dinero i baggrunden - dette kan tage lidt tid; opdatér siden om lidt
+
+    create:
+      post: Kunden blev oprettet
+    update:
+      post: Kunden blev opdateret
+    destroy:
+      post: Kunden blev slettet
+
+    list:
+      title: Kunder
+      new: Ny kunde
+      edit: Rediger
+      delete: Slet
+      show: Vis
+      name: Navn
+      street: Adresse
+      zipcode: Postnr
+      city: By
+      email: Email
+      phone: Telefon
+      updated_at: Opdateret den
+
+    form:
+      new: Ny kunde
+      edit: Rediger kunden
+      show: Vis kunden
+
+    new:
+      title: Ny kunde
+      create: Opret
+
+    edit:
+      title: Rediger kunden
+      update: Opdater
+
+    show:
+      title: Kunden
+      back: Tilbage
+
+    errors:
+      messages:
+        name_exist: "Kunden findes allerede"
+        vat_number_exist: "CVR nummer findes allerede"

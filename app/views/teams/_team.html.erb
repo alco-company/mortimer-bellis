@@ -1,18 +1,23 @@
-<li id="<%= dom_id team %>" class="flex items-center justify-between gap-x-6 py-5">
-  <div class="min-w-0 w-full columns-2 md:columns-4 lg:columns-5">
-    <%= render_text_column value: link_to(team.name, team_url(team)), css: "truncate mort-link-primary" do |value| %>
-      <%= value %>
-      <% if current_user.global_queries? %>
-        <p class="text-xs"><%=  link_to team.account.name, team.account %> </p>
-      <% end %>
-    <% end %>
-    <%= render_text_column value: Team.colors(team.team_color), css: "truncate" %>
-    <%= render_text_column value: Team.locales(team.locale), css: "hidden md:block truncate" %>
-    <%= render_text_column value: team.time_zone, css: "hidden lg:block truncate" %>
-    <%= render_datetime_column value: team.updated_at, css: "hidden lg:block" %>
+<li id="<%= dom_id team %>"  class="flex justify-between gap-x-6 py-5">
+  <div class="flex min-w-0 gap-x-4">
+    <!-- TODO add mugshots for teams <img class="h-12 w-12 flex-none rounded-full bg-gray-50" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt=""> -->
+    <div class="min-w-0 flex">
+      <p class="text-sm font-semibold leading-6 text-gray-900">
+        <%= show_resource_link(resource: team) %> 
+        <% if global_queries? Current.user %>
+          <span class="text-xs"><%= show_resource_link(resource: team.tenant) %> </span>
+        <% end %>
+      </p>
+      <p class="flex text-xs leading-5 text-gray-500">
+        <%= Team.colors(team.color) %>
+      </p>
+    </div>
   </div>
-  <div class="flex flex-none items-center gap-x-4 ">
-<!--    <a href="<%#= product_stock_items_url(product) %>" class=" rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:block">Lokationer<span class="sr-only">, GraphQL API</span></a>-->
-    <%= render_contextmenu resource: team, resource_class: Team, alter: true, links: [ edit_team_url(team), team_url(team) ] %>
+  <div class="flex shrink-0 items-center gap-x-6">
+    <div class="hidden sm:flex sm:flex-col sm:items-end">
+      <p class="text-sm leading-6 text-gray-900"><%= Team.locales(team.locale) %> </p>
+      <p class="mt-1 text-xs leading-5 text-gray-500"><%= I18n.t("last_update")%> <time datetime="<%= team.updated_at %>"><%= time_ago_in_words team.updated_at %> <%= I18n.t("ago") %></time></p>
+    </div>
+    <%= render_contextmenu resource: team, cls: "relative flex-none", turbo_frame: "form", resource_class: Team, alter: true, links: [ edit_team_url(team), team_url(team) ] %>
   </div>
 </li>

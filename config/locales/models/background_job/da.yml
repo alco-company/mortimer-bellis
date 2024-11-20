@@ -1,5 +1,6 @@
 da:
   background_job:
+    in_active: "Inaktiv"
     modal:
       delete_all: 
         title: Slet alle baggrundsjob
@@ -8,3 +9,38 @@ da:
         title: Slet dette baggrundsjob
         instruction: Er du sikker på, at du vil slette baggrundsjobbet %{name}?
         button: Slet
+
+    states:
+      in_active: Inaktiv
+      un_planned: Uplanlagt
+      planned: Planlagt
+      running: Kører
+      failed: Fejlet
+      finished: Færdig
+
+  background_jobs:
+    validation_errors: Der er fejl i det indtastede
+    list:
+      title: Baggrundsjobs
+      new: Nyt baggrundsjob
+      edit: Rediger
+      delete: Slet
+      show: Vis
+      state: Status
+      updated_at: Opdateret den
+
+    form:
+      new: Nyt baggrundsjob
+      edit: Rediger baggrundsjob
+      show: Vis baggrundsjob
+
+    new:
+      title: Nyt baggrundsjob
+      create: Opret
+
+    edit:
+      title: Rediger baggrundsjob
+      update: Opdater
+
+    show:
+      title: Baggrundsjob

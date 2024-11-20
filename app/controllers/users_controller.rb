@@ -1,10 +1,29 @@
 class UsersController < MortimerController
   before_action :authorize
   skip_before_action :authenticate_user!, only: [ :sign_in_success ]
-  skip_before_action :ensure_accounted_user, only: [ :sign_in_success ]
+  skip_before_action :ensure_tenanted_user, only: [ :sign_in_success ]
   skip_before_action :authorize, only: [ :sign_in_success ]
 
+  # POST /users/:id/archive
+  def archive
+    @resource = User.find(params[:id])
+    if @resource
+      @resource.archived? ?
+        (@resource.update(state: :out) && notice = t("users.unarchived")) :
+        (@resource.archived! && notice = t("users.archived"))
+      redirect_back(fallback_location: root_path, notice: notice)
+      Broadcasters::Resource.new(@resource).replace
+    else
+      redirect_back(fallback_location: root_path, warning: t("users.not_found"))
+    end
+  end
+
   def sign_in_success
+  end
+
+  def create
+    resize_before_save(params[:user][:mugshot], 100, 100)
+    super
   end
 
   def update
@@ -13,13 +32,37 @@ class UsersController < MortimerController
       [ 0, "0", "superadmin", "Superadmin", "SUPERADMIN" ].include?(params[:user][:role])
       redirect_to edit_resource_url, error: t(:cannot_change_role) and return
     end
+    resize_before_save(params[:user][:mugshot], 100, 100)
     super
   end
+
+  # POST /users/:id/archive
+  def archive
+    @resource = User.find(params[:id])
+    if @resource
+      @resource.archived? ?
+        (@resource.update(state: :out) && notice = t("users.unarchived")) :
+        (@resource.archived! && notice = t("users.archived"))
+      redirect_back(fallback_location: root_path, notice: notice)
+      Broadcasters::Resource.new(@resource).replace
+    else
+      redirect_back(fallback_location: root_path, warning: t("users.not_found"))
+    end
+  end
+
   private
 
     # Only allow a list of trusted parameters through.
     def resource_params
-      params.require(:user).permit(:account_id, :email, :role, :mugshot, :locale, :time_zone)
+      params.expect(user: [ :tenant_id, :name, :pincode, :email, :role, :mugshot, :locale, :time_zone ])
+    end
+
+    def create_callback(resource)
+      params[:user].delete(:mugshot)
+    end
+
+    def update_callback(_u)
+      params[:user].delete(:mugshot)
     end
 
     def authorize

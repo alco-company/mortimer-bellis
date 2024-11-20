@@ -3,8 +3,24 @@
 @tailwind utilities;
 
 @layer components {
+  .mort-btn-punch-in {
+    @apply flex justify-center rounded-md bg-green-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-green-500 hover:cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600;
+  }
+
+  .mort-btn-punch-break {
+    @apply flex justify-center rounded-md bg-yellow-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-yellow-500 hover:cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-600;
+  }
+
+  .mort-btn-punch-out {
+    @apply flex justify-center rounded-md bg-red-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-red-500 hover:cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600;
+  }
+
+  .mort-btn-start-time-material {
+    @apply flex justify-center rounded-md items-center bg-sky-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-sky-500 hover:cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-200;
+  }
+
   .mort-btn-primary {
-    @apply flex justify-center rounded-md bg-sky-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-sky-500 hover:cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600;
+    @apply flex justify-center rounded-md bg-sky-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-sky-500 hover:cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-200;
   }
 
   .mort-btn-save {
@@ -12,7 +28,7 @@
   }
 
   .mort-btn-secondary {
-    @apply flex justify-center rounded-md bg-sky-400 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-sky-500 hover:cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600;
+    @apply flex justify-center rounded-md bg-sky-400 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-sky-500 hover:cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-200;
   }
 
   .mort-btn-cancel {
@@ -23,8 +39,17 @@
     @apply flex justify-center rounded-md bg-red-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-red-500 hover:cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600;
   }
 
+  .mort-form {
+    @apply pb-20;
+  }
+
   .mort-form-text {
-    @apply block shadow rounded-md border border-gray-200 focus:outline-none px-3 py-2 mt-2 w-full focus-visible:border-sky-600;
+    /* @apply block shadow rounded-md border border-gray-200 focus:outline-none px-3 py-2 mt-2 w-full focus-visible:border-sky-200; */
+    @apply w-full rounded-md border-0 bg-white py-1.5 pl-3  text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-1 focus:ring-inset focus:ring-sky-200 sm:text-sm sm:leading-6;
+  }
+
+  .mort-form-select {
+    @apply block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-1 focus:ring-sky-200 sm:text-sm sm:leading-6;
   }
 
   .mort-form-file {
@@ -32,7 +57,7 @@
   }
 
   .mort-form-bool {
-    @apply block  px-3 py-2 mt-2;
+    @apply block px-3 py-2 mt-2;
   }
 
   .mort-filter-field {
@@ -70,43 +95,108 @@
   }
 
   .mort-flash-error {
-    @apply inline-block bg-red-100  text-red-700;
+    @apply inline-block bg-red-100 text-red-700;
   }
+
   .mort-flash-border-error {
     @apply border border-red-400;
   }
 
-  .mort-flash-warning, .mort-flash-alert {
-    @apply inline-block bg-yellow-100  text-yellow-700;
+  .mort-flash-warning,
+  .mort-flash-alert {
+    @apply inline-block bg-yellow-100 text-yellow-700;
   }
-  .mort-flash-border-warning, .mort-flash-border-alert {
+
+  .mort-flash-border-warning,
+  .mort-flash-border-alert {
     @apply border border-yellow-400;
   }
 
-  .mort-flash-info, .mort-flash-timedout {
-    @apply inline-block bg-sky-100  text-sky-700;
+  .mort-flash-info,
+  .mort-flash-timedout {
+    @apply inline-block bg-sky-100 text-sky-700;
   }
-  .mort-flash-border-info, .mort-flash-border-timedout {
+
+  .mort-flash-border-info,
+  .mort-flash-border-timedout {
     @apply border border-sky-400;
   }
 
   .mort-flash-notice {
-    @apply inline-block bg-blue-100  text-blue-700;
+    @apply inline-block bg-sky-100 text-sky-700;
   }
+
   .mort-flash-border-notice {
-    @apply border border-blue-400;
+    @apply border border-sky-200;
   }
 
   .mort-flash-success {
-    @apply inline-block bg-green-50  text-green-500;
+    @apply inline-block bg-green-50 text-green-500;
   }
+
   .mort-flash-border-success {
     @apply border border-green-400;
   }
 
+  .mort-state-in {
+    @apply bg-green-100 text-green-800;
+  }
+
+  .mort-state-out {
+    @apply bg-red-100 text-red-800;
+  }
+
+  .mort-state-break {
+    @apply bg-yellow-100 text-yellow-800;
+  }
+
+  .mort-state-sick,
+  .mort-state-iam_sick,
+  .mort-state-child_sick,
+  .mort-state-nursing_sick,
+  .mort-state-lost_work_sick,
+  .mort-state-p56_sick {
+    @apply bg-red-100 text-red-800;
+  }
+
+  .mort-state-free,
+  .mort-state-rr_free,
+  .mort-state-senior_free,
+  .mort-state-unpaid_free,
+  .mort-state-maternity_free,
+  .mort-state-leave_free {
+    @apply bg-sky-100 text-sky-800;
+  }
+
+  .mort-state-archived {
+    @apply bg-gray-100 text-gray-800;
+  }
+
+  .mort-tm-line-customer {
+    @apply text-sm font-semibold text-gray-900;
+  }
+
+  .mort-tm-line-product {
+    @apply text-xs font-semibold text-gray-700;
+  }
 }
 
-
+@layer utilities {
+  
+  /* Hide scrollbar for IE, Edge and Firefox */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
+  }
+  
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+    /* Chrome, Safari and Opera */
+  }
+}
 
 /* https: //github.com/tailwindlabs/tailwindcss/discussions/10909 */
 html {

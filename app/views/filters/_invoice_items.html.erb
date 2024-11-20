@@ -1,0 +1,32 @@
+<div class="min-w-0 w-full columns-3 md:columns-5 lg:columns-7 xl:columns-8 3xl:columns-11">
+  <div class="flex justify-start">
+    <%= form.text_field :invoice_id, value: (filter["invoice_id"] rescue ''), class: "hidden 3xl:block mort-filter-field" %>
+  </div>
+  <div class="flex justify-start">
+    <%= form.text_field :project_id, value: (filter["project_id"] rescue ''), class: "hidden 3xl:block mort-filter-field" %>
+  </div>
+  <div class="flex justify-start">
+    <%= form.text_field :product_id, value: (filter["product_id"] rescue ''), class: "hidden 3xl:block mort-filter-field" %>
+  </div>
+  <div class="flex justify-start">
+    <%= form.text_field :description, value: (filter["description"] rescue ''), class: "mort-filter-field" %>
+  </div>
+  <div class="flex justify-start">
+    <%= form.text_field :quantity, value: (filter["quantity"] rescue ''), class: "mort-filter-field" %>
+  </div>
+  <div class="flex justify-start">
+    <%= form.text_field :unit, value: (filter["unit"] rescue ''), class: "mort-filter-field" %>
+  </div>
+  <div class="flex justify-start">
+    <%= form.text_field :account_number, value: (filter["account_number"] rescue ''), class: "hidden xl:block mort-filter-field" %>
+  </div>
+  <div class="flex justify-start">
+    <%= form.text_field :discount, value: (filter["discount"] rescue ''), class: "hidden lg:block mort-filter-field" %>
+  </div>
+  <div class="flex justify-start">
+    <%= form.text_field :line_type, value: (filter["line_type"] rescue ''), class: "hidden lg:block mort-filter-field" %>
+  </div>
+  <div class="flex justify-start">
+    <%= form.text_field :base_amount_value, value: (filter["base_amount_value"] rescue ''), class: "hidden md:block mort-filter-field" %>
+  </div>
+</div>

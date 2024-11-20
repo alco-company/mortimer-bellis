@@ -1,24 +1,53 @@
-<div class="mt-20 flex justify-between items-start">
-  <div>
-    <h1 class="font-bold text-2xl md:text-4xl"> <%= t("#{resource_class.table_name}.list.title") %> </h1>
-    <% case @filter_form %>
-    <% when 'punch_cards' %>
-      <%= link_to t(:payroll_order), modal_new_url(modal_form: 'payroll', resource_class: 'punch_card'), class: "inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10", data: { turbo_stream: true } %>
-      <%= link_to t(:state_order), modal_new_url(modal_form: 'state', resource_class: 'punch_card'), class: "inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10", data: { turbo_stream: true } %>
-    <% when 'employees' %>
-      <%= link_to_employee_status %>
-      <%= link_to t("employee_invitations.link"), employee_invitations_url, class: "inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10", data: { turbo_stream: true } %>
-    <% when 'teams' %>
-      <%= link_to_team_employees_status('all') %>
-    <% end %>
-  </div>
-  <div class="grid gap-2 grid-cols-1 lg:grid-cols-2 items-center">
-    <%#= render partial: 'search', locals: { klass: :employee }  %>
-    <div class="hidden md:block">
-      <%== pagy_nav(@pagy) if @pagy.pages > 1 %>
-    </div>
-    <div class="flex gap-2 justify-end">
-      <%= link_to t("#{ resource_class.table_name}.list.new"), new_resource_url, class: "mort-btn-primary" unless params[:controller] == "users" %>
-    </div>
-  </div>
-</div>
+        <!-- Page Header -->
+        <div class="border-b border-gray-200 pb-5">
+          <div class="flex items-center sm:justify-between">
+            <div class="sm:w-0 flex-1">
+              <h1 id="message-heading" class="text-base font-semibold leading-6 pl-2 text-gray-900"><%= t("#{ resource_class.table_name}.list.title") %></h1>
+              <p class=" mt-1 truncate pl-2 text-sm text-gray-500">
+                <% case @filter_form %>
+                <% when 'customers' %>
+                  <%= link_to t(".sync_with_ERP"), erp_pull_customers_url, class: "mort-link-primary", data: { turbo_prefetch: "false" } %>
+                <% when 'products' %>
+                  <%= link_to t(".sync_with_ERP"), erp_pull_products_url, class: "mort-link-primary", data: { turbo_prefetch: "false" } %>
+                <% when 'invoices' %>
+                  <%= link_to t(".sync_with_ERP"), erp_pull_invoices_url, class: "mort-link-primary", data: { turbo_prefetch: "false" } %>
+                <% when 'punch_cards' %>
+                  <%= link_to t(:payroll_order), new_modal_url(modal_form: 'payroll', resource_class: 'punch_card'), class: "inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10", data: { turbo_stream: true } %>
+                  <%= link_to t(:state_order), new_modal_url(modal_form: 'state', resource_class: 'punch_card'), class: "inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10", data: { turbo_stream: true } %>
+                <% when 'users' %>
+                  <%= link_to_user_status %>
+                  <%#= link_to t("user_invitations.link"), user_invitations_url, class: "inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10", data: { turbo_stream: true } %>
+                <% when 'teams' %>
+                  <%= link_to_team_users_status('all') %>
+                <% end %>
+                <span class="hidden inline-flex items-center rounded-md bg-gray-50 px-1.5 py-0.5 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10">
+                  filtered
+                  <button type="button" class="group relative -mr-1 h-3.5 w-3.5 rounded-sm hover:bg-gray-500/20">
+                    <span class="sr-only">Remove</span>
+                    <svg viewBox="0 0 14 14" class="h-3.5 w-3.5 stroke-gray-700/50 group-hover:stroke-gray-700/75">
+                      <path d="M4 4l6 6m0-6l-6 6" />
+                    </svg>
+                    <span class="absolute -inset-1"></span>
+                  </button>
+                </span>
+              </p>
+            </div>
+
+            <div class="mt-0 flex items-center sm:ml-6 sm:flex-shrink-0 sm:justify-start">
+              <% case params[:controller]
+                when "users"; %><%= link_to("Invite New User", new_user_invitation_path, class: "mort-btn-primary", role: "menuitem", tabindex: "-1", id: "user-menu-item-0") unless Current.user.user?  %>
+              <% else; %>
+              <%= link_to(new_resource_url, class: "-my-2 flex items-center rounded-md p-2 text-gray-400 hover:text-gray-600 focus:outline-none focus:ring-1 focus:ring-sky-200", data: { turbo_frame: "form" }) do %>
+                  <span class="sr-only">Add new</span>
+                  <span class="inline-flex items-center rounded-md bg-white px-1.5 py-0.5 text-xs font-medium text-gray-600 sm:ring-1 ring-inset ring-gray-500/10">
+                    <%= render Icons::Add.new cls: "h-6 text-gray-400" %>
+                    <span class="hidden pl-2 sm:inline text-gray-400 text-2xs"><%= t("#{ resource_class.table_name}.list.new") %></span>
+                  </span>
+                <% end %>
+              <% end %>
+              <div class="relative ml-3 inline-block text-left">
+                <%= render_contextmenu list: @resources, resource_class: resource_class %>
+              </div>
+            </div>
+          </div>
+        </div>

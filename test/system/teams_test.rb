@@ -1,49 +1,69 @@
 require "application_system_test_case"
 
 class TeamsTest < ApplicationSystemTestCase
-  # setup do
-  #   @team = teams(:one)
-  # end
+  setup do
+    @team = teams(:one)
+    user = users(:superadmin)
+    sign_in user
+  end
 
-  # test "visiting the index" do
-  #   visit teams_url
-  #   assert_selector "h1", text: "Teams"
-  # end
+  test "visiting the index" do
+    visit teams_url
+    assert_selector "h1", text: "Hold/grupper"
+  end
 
-  # test "should create team" do
-  #   visit teams_url
-  #   click_on "New team"
+  test "should not create team with same name" do
+    visit teams_url
+    click_on "Nyt hold"
 
-  #   fill_in "Account", with: @team.account_id
-  #   fill_in "Locale", with: @team.locale
-  #   fill_in "Name", with: @team.name
-  #   fill_in "Team color", with: @team.team_color
-  #   fill_in "Time zone", with: @team.time_zone
-  #   click_on "Create Team"
+    fill_in "team_name", with: @team.name
+    select "Dansk", from: "team_locale"
+    select "Grå", from: "team_color"
+    select "Europe/Copenhagen - (GMT+01:00) Copenhagen", from: "team_time_zone"
+    click_on "Opret"
 
-  #   assert_text "Team was successfully created"
-  #   click_on "Back"
-  # end
+    assert_text "Hold navn already exists"
+  end
 
-  # test "should update Team" do
-  #   visit team_url(@team)
-  #   click_on "Edit this team", match: :first
+  test "should create team" do
+    visit teams_url
+    click_on "Nyt hold"
 
-  #   fill_in "Account", with: @team.account_id
-  #   fill_in "Locale", with: @team.locale
-  #   fill_in "Name", with: @team.name
-  #   fill_in "Team color", with: @team.team_color
-  #   fill_in "Time zone", with: @team.time_zone
-  #   click_on "Update Team"
+    fill_in "team_name", with: "nyt hold"
+    select "Dansk", from: "team_locale"
+    select "Grå", from: "team_color"
+    select "Europe/Copenhagen - (GMT+01:00) Copenhagen", from: "team_time_zone"
+    click_on "Opret"
 
-  #   assert_text "Team was successfully updated"
-  #   click_on "Back"
-  # end
+    assert_text "Holdet blev oprettet"
+  end
 
-  # test "should destroy Team" do
-  #   visit team_url(@team)
-  #   click_on "Destroy this team", match: :first
+  test "should update Team" do
+    visit edit_team_url(@team)
 
-  #   assert_text "Team was successfully destroyed"
-  # end
+    fill_in "team_name", with: "nyt hold"
+    select "Dansk", from: "team_locale"
+    select "Grå", from: "team_color"
+    select "Europe/Copenhagen - (GMT+01:00) Copenhagen", from: "team_time_zone"
+    click_on "Opdatér"
+
+    assert_text "Holdet blev opdateret"
+  end
+
+  test "should destroy Team" do
+    visit teams_url
+    team_name = teams(:two).name
+    team_li = find("li", text: team_name)
+    within(team_li) do
+      click_on "Open item options", match: :first
+      click_on "Slet"
+    end
+    within("dialog#new_form_modal") do
+      assert_text "Slet dette hold"
+      save_screenshot("test.png")
+      click_on "Slet"
+    end
+
+    assert_text "Posten blev slettet korrekt"
+  end
 end

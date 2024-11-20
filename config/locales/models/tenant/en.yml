@@ -1,0 +1,35 @@
+en:
+  tenants:
+    create:
+      post: The tenant was created
+    update:
+      post: The tenant was updated
+    destroy:
+      post: The tenant was deleted
+
+    list:
+      title: Tenants
+      new: New tenant
+      edit: Edit
+      delete: Delete
+      show: Show
+      name: Name
+      locale: Locale
+      time_zone: Time zone
+      updated_at: Updated on
+
+    form:
+      new: New tenant
+      edit: Edit tenant
+
+    new:
+      title: New tenant
+      create: Create
+
+    edit:
+      title: Edit tenant
+      update: Update
+
+    show:
+      title: Tenant
+      back: Back

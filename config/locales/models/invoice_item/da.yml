@@ -1,0 +1,39 @@
+da:
+  invoice_items:
+    validation_errors: Der er fejl i det indtastede
+
+    list:
+      new: Ny fakturalinje
+    form:
+      new: Ny fakturalinje
+      edit: Rediger fakturalinje
+      show: Vis fakturalinje
+
+  invoice_item:
+    invoice_id: Faktura
+    project_id: Projekt
+    product_id: Produkt
+    product_guid: Produkt GUID
+    description: Beskrivelse
+    comments: Kommentar
+    quantity: Antal
+    account_number: Salgskonto nummer
+    unit: Enhed
+    discount: Rabat
+    line_type: Linje type
+    base_amount_value: Pris ialt
+    base_amount_value_incl_vat: Pris ialt inkl. moms
+    total_amount: Total ialt
+    total_amount_incl_vat: Total ialt inkl. moms
+    invoice_item_for: faktureret for %{quantity} til %{price} kr. pr. %{unit}
+    invoice_meta: "Fakturanr %{number}"
+
+    issues:
+      customer_missing: Der er ikke valgt en kunde
+      product_missing: Der er ikke valgt et produkt
+      time_not_correct: Tidspunktet er ikke korrekt
+      rate_not_correct: Satsen er ikke korrekt
+      quantity_not_correct: Antallet er ikke korrekt
+      time_and_quantity_both_set: Både tid og antal er angivet
+      unit_price_not_correct: Enhedsprisen er ikke korrekt
+      discount_not_correct: Rabatten er ikke korrekt

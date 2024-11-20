@@ -1,11 +1,16 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  account: one
-  view: accounts
-  filter: {"name":"nish"}
+  tenant: one
+  view: users
+  filter: {"name":"joe"}
 
 two:
-  account: two
+  tenant: two
   view: MyString
-  filter: 
+  # filter:
+
+filtered:
+  tenant: three
+  view: tenants
+  filter: {"name":"tish"}

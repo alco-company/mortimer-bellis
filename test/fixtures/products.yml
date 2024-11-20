@@ -1,0 +1,57 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  tenant: two
+  erp_guid: MyString
+  name: A Product Number
+  product_number: a-product-number
+  quantity: 9.99
+  unit: parts
+  account_number: 1000
+  base_amount_value: 9.99
+  base_amount_value_incl_vat: 9.99
+  total_amount: 9.99
+  total_amount_incl_vat: 9.99
+  external_reference: MyString
+
+two:
+  tenant: two
+  erp_guid: MyString
+  name: MyString
+  product_number: MyString
+  quantity: 9.99
+  unit: MyString
+  account_number: 1
+  base_amount_value: 9.99
+  base_amount_value_incl_vat: 9.99
+  total_amount: 9.99
+  total_amount_incl_vat: 9.99
+  external_reference: MyString
+
+three:
+  tenant: three
+  erp_guid: MyString
+  name: MyString
+  product_number: hours
+  quantity: 1.0
+  unit: parts
+  account_number: 1001
+  base_amount_value: 29.99
+  base_amount_value_incl_vat: 9.99
+  total_amount: 9.99
+  total_amount_incl_vat: 9.99
+  external_reference: MyString
+
+four:
+  tenant: three
+  erp_guid: MyString
+  name: MyString
+  product_number: overhours
+  quantity: 1.0
+  unit: parts
+  account_number: 1001
+  base_amount_value: 39.99
+  base_amount_value_incl_vat: 9.99
+  total_amount: 9.99
+  total_amount_incl_vat: 9.99
+  external_reference: MyString

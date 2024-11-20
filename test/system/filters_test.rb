@@ -14,7 +14,7 @@ class FiltersTest < ApplicationSystemTestCase
   #   visit filters_url
   #   click_on "New filter"
 
-  #   fill_in "Account", with: @filter.account_id
+  #   fill_in "Tenant", with: @filter.tenant_id
   #   fill_in "Filter", with: @filter.filter
   #   fill_in "View", with: @filter.view
   #   click_on "Create Filter"
@@ -27,7 +27,7 @@ class FiltersTest < ApplicationSystemTestCase
   #   visit filter_url(@filter)
   #   click_on "Edit this filter", match: :first
 
-  #   fill_in "Account", with: @filter.account_id
+  #   fill_in "Tenant", with: @filter.tenant_id
   #   fill_in "Filter", with: @filter.filter
   #   fill_in "View", with: @filter.view
   #   click_on "Update Filter"

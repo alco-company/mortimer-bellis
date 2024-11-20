@@ -1,0 +1,7 @@
+<div class="min-w-0 w-full columns-3 md:columns-5">
+  <%= render_text_column value: t('.name'), sort: params, field: :name, css: "font-bold truncate" %>
+  <%= render_text_column value: t(".from_date"), sort: params, field: :from_date, css: "hidden md:block font-bold text-right" %>
+  <%= render_text_column value: t(".to_date"), sort: params, field: :to_date, css: "hidden md:block font-bold text-right" %>
+  <%= render_text_column value: t(".countries"), sort: params, field: :countries, css: "font-bold truncate" %>
+  <%= render_text_column value: t(".updated_at"), css: "hidden md:block font-bold " %>
+</div>

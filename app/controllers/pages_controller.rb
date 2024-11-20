@@ -1,19 +1,20 @@
 class PagesController < MortimerController
   before_action :authorize, except: :show
   skip_before_action :authenticate_user!, only: :show
-  skip_before_action :ensure_accounted_user, only: :show
+  skip_before_action :ensure_tenanted_user, only: :show
 
   def show
     user_signed_in? ?
       @resource = Page.find(params[:id]) :
       @resource = Page.find_by(slug: params[:id])
+    # render :show, layout: "apple_watch" if request.subdomain == "watch"
   end
 
   private
 
     # Only allow a list of trusted parameters through.
     def resource_params
-      params.require(:page).permit(:slug, :title, :content)
+      params.expect(page: [ :slug, :title, :content ])
     end
 
     def authorize

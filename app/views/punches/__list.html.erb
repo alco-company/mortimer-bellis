@@ -1,0 +1,7 @@
+<div class="min-w-0 w-full columns-3 md:columns-4 lg:columns-5">
+  <%= render_text_column value: t('.name'), sort: params, field: "users.name", css: "font-bold truncate" %>
+  <%= render_text_column value: t(".punched_at"), sort: params, field: :punched_at, css: "font-bold text-right" %>
+  <%= render_text_column value: t(".state"), sort: params, field: :state, css: "font-bold truncate" %>
+  <%= render_text_column value: t(".punch_clock"), sort: params, field: "punch_clocks.name", css: "hidden md:block font-bold truncate" %>
+  <%= render_text_column value: t(".updated_at"), css: "hidden lg:block font-bold " %>
+</div>
