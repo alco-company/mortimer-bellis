@@ -2,32 +2,27 @@
 # Name of your application. Used to uniquely configure containers.
 service: mortimer-anemone
 
-#<% require "dotenv"; Dotenv.load(".env") %>
-
 # Name of the container image.
 image: wdiechmann/mortimer-anemone
-
-builder:
-  remote: ssh://root@135.181.202.106
-  arch: arm64
-  local: false
-    # remote: ssh://root@135.181.202.106
 
 # Deploy to these servers.
 servers:
   web:
-    hosts:
-      - 135.181.202.106
-    options: {}
-      # network: "mortimer"    
+    - 135.181.202.106
 
-proxy:
-  healthcheck:
-    interval: 10
-    timeout: 5
 
-volumes:
-  - "storage:/rails/storage"
+
+
+
+# Enable SSL auto certification via Let's Encrypt and allow for multiple apps on a single web server.
+# Remove this section when using multiple web servers and ensure you terminate SSL at your load balancer.
+#
+# Note: If using Cloudflare, set encryption mode in SSL/TLS setting to "Full" to enable CF-to-app encryption. 
+proxy: 
+  ssl: true
+  host: anemone.mortimer.pro
+  # Proxy connects to your container on port 80 by default.
+  # app_port: 3000
 
 # Credentials for your image host.
 registry:
@@ -35,37 +30,56 @@ registry:
   # server: registry.digitalocean.com / ghcr.io / ...
   username: wdiechmann
 
-  # Always use an access token rather than real password when possible.
+  # Always use an access token rather than real password (pulled from .kamal/secrets).
   password:
     - KAMAL_REGISTRY_PASSWORD
+
+# Configure builder setup.
+builder:
+  remote: ssh://root@135.181.202.106
+  arch: arm64
 
 # Inject ENV variables into containers (secrets come from .env).
 # Remember to run `kamal env push` after making changes!
 env:
-  clear:
-    PDF_HOST: 135.181.202.106 
-    DB_HOST: 135.181.202.106
-    REDIS_URL: 'redis://135.181.202.106:6379/1'
-    SMTP_USER_NAME: 'info@mortimer.pro'
-    SMTP_DOMAIN: 'mortimer.pro'
-    SMTP_HOST: 'hosting.alco.company'
-    SMTP_PORT: '587'
-    SMTP_AUTHENTICATION: 'plain'
-    SMTP_ENABLE_STARTTLS_AUTO: 'false'
-    SSL_DOMAIN: 'anemone.mortimer.pro'
-    WEB_HOST: 'anemone.mortimer.pro'
-    MORTIMER_VERSION: '0.8.1'
-    DINERO_APP_CALLBACK: 'https://anemone.mortimer.pro/dinero/callback'
   secret:
     - RAILS_MASTER_KEY
     - DINERO_APP_ID
     - DINERO_APP_SECRET
     - SMTP_PASSWORD
     - WAVIX_APP_ID
+  clear:
+    SOLID_QUEUE_IN_PUMA: true
+    WEB_HOST: anemone.mortimer.pro
+    PORT: 3000
+    RAILS_ENV: production
+    PDF_HOST: 135.181.202.106 
+    SMTP_USER_NAME: info@mortimer.pro
+    SMTP_DOMAIN: mortimer.pro
+    SMTP_HOST: hosting.alco.company
+    SMTP_PORT: 587
+    SMTP_AUTHENTICATION: plain
+    SMTP_ENABLE_STARTTLS_AUTO: 'false'
+    SSL_DOMAIN: anemone.mortimer.pro
+    MORTIMER_VERSION: '1.0.1'
+    DINERO_APP_CALLBACK: 'https://anemone.mortimer.pro/dinero/callback'
+
+# Aliases are triggered with "bin/kamal <alias>". You can overwrite arguments on invocation:
+# "bin/kamal logs -r job" will tail logs from the first server in the job section.
+aliases:
+  console: app exec --interactive --reuse "bin/rails console"
+  shell: app exec --interactive  --reuse "bash"
+  logs: app logs -f
+  dbc: app exec --interactive --reuse "bin/rails dbconsole"
 
 # Use a different ssh user than root
-ssh:
-  user: root
+# ssh:
+#   user: root
+
+# Use a persistent storage volume.
+#
+volumes:
+  - "storage:/rails/storage"
 
 # Configure builder setup.
 # builder:
@@ -82,12 +96,6 @@ accessories:
     image: 4teamwork/weasyprint
     host: 135.181.202.106
     port: 8080
-  redis:
-    image: redis:7.0
-    host: 135.181.202.106
-    port: 6379
-    directories:
-      - data:/data
 # Use accessory services (secrets come from .env).
 # accessories:
 #   db:
