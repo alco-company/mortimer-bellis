@@ -58,6 +58,7 @@ END
 ### 20/11/2024
 
 * add link affording escape from 400's & 500 error views
+* make staging deployable too
 
 ### 19/11/2024
 
