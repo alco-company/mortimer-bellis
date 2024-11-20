@@ -55,6 +55,10 @@ END
 * this is probably not necessary: format.turbo_stream { render turbo_stream: turbo_stream.remove(dom_id(@resource)) }
 * pwa-installation.js + joy of rails
 
+### 20/11/2024
+
+* add link affording escape from 400's & 500 error views
+
 ### 19/11/2024
 
 * upgrading SolidQueue to 0.8.0 - aiming for 1.0.0 further down the road
