@@ -49,8 +49,8 @@ class User < ApplicationRecord
   scope :by_time_zone, ->(time_zone) { where("time_zone LIKE ?", "%#{time_zone}%") if time_zone.present? }
 
   validates :pincode,
-    numericality: { only_integer: true, in: 1000..9999 },
-    uniqueness: { scope: :tenant_id, message: I18n.t("users.errors.messages.pincode_exist_for_tenant") }
+    numericality: { only_integer: true, in: 1000..9999, unless: ->(u) { u.pincode.blank? } },
+    uniqueness: { scope: :tenant_id, message: I18n.t("users.errors.messages.pincode_exist_for_tenant"), unless: ->(u) { u.pincode.blank? } }
 
   def can?(action)
     settings.where(key: action.to_s, value: "true").count.positive? or

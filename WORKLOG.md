@@ -60,6 +60,7 @@ END
 * add link affording escape from 400's & 500 error views
 * make staging deployable too - might not be enough
 * upgrade solid_queue to 1.0.2
+* don't care about user pincode until confirmed
 
 ### 19/11/2024
 
