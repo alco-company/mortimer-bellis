@@ -67,6 +67,7 @@ END
 * we need to instantiate the pulltorefresh on the page-controller
 * try to get icons back on mobile
 * tested svg's and the dinero callback revisited
+* one more test on the buttons
 
 ### 19/11/2024
 
