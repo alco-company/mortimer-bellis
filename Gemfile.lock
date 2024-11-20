@@ -106,7 +106,7 @@ GIT
 
 GIT
   remote: https://github.com/wdiechmann/solid_cable.git
-  revision: 6b481ad820e285f94de9af24d74497d165c802e4
+  revision: cc5360aa53adda8400c3f5b2b39fc350352716a5
   specs:
     solid_cable (3.0.2)
       actioncable (>= 7.2)
