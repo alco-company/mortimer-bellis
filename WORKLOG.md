@@ -63,6 +63,7 @@ END
 * upgrade solid_queue to 1.0.2
 * don't care about user pincode until confirmed
 * lost the favicon - bring it back
+* pulltorefreshjs - for mobile
 
 ### 19/11/2024
 
