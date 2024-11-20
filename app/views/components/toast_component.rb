@@ -42,7 +42,7 @@ class ToastComponent < ApplicationComponent
               type: "button",
               data: { action: "click->notice#close" },
               class:
-                "inline-flex rounded-md mort-flash-#{type} hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-sky-600 focus:ring-offset-2"
+                "inline-flex rounded-md mort-flash-#{type} hover:text-gray-500 focus:outline-none focus:ring-1 focus:ring-sky-600 focus:ring-offset-1"
             ) do
               span(class: "sr-only") { "Close" }
               icon("close")

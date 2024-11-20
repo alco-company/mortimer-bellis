@@ -1,0 +1,9 @@
+<div class="min-w-0 w-full columns-2 lg:columns-3">
+  <%= render_text_column value: t('.key'), sort: params, field: :key, css: "font-bold truncate" %>
+  <%= render_text_column value: t(".setable_type"), sort: params, field: :setable_type, css: "font-bold truncate" %>
+  <%= render_text_column value: t(".setable_id"), sort: params, field: :setable_id, css: "font-bold truncate" %>
+  <%= render_text_column value: t(".priority"), sort: params, field: :priority, css: "font-bold truncate" %>
+  <%= render_text_column value: t(".format"), sort: params, field: :format, css: "font-bold truncate" %>
+  <%= render_text_column value: t(".value"), sort: params, field: :value, css: "font-bold truncate" %>
+  <%= render_text_column value: t(".updated_at"), css: "hidden lg:block font-bold " %>
+</div>

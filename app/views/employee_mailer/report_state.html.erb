@@ -1,18 +1,18 @@
-<h1><%= I18n.t("employees.reports.state.title") %></h1>
+<h1><%= I18n.t("users.reports.state.title") %></h1>
 <p>
-  <%= I18n.t("employees.reports.state.introduction") %>
+  <%= I18n.t("users.reports.state.introduction") %>
 </p>
 
 <table>
   <thead>
-    <th><%= I18n.t("employees.reports.state.name") %></th>
-    <th><%= I18n.t("employees.reports.state.work_minutes") %></th>
-    <th><%= I18n.t("employees.reports.state.break_minutes") %></th>
+    <th><%= I18n.t("users.reports.state.name") %></th>
+    <th><%= I18n.t("users.reports.state.work_minutes") %></th>
+    <th><%= I18n.t("users.reports.state.break_minutes") %></th>
   </thead>
   <tbody>
     <% PunchCard.where(work_date: Date.yesterday).each do |punch_card| %>
       <tr>
-        <td><%= punch_card.employee.name %></td>
+        <td><%= punch_card.user.name %></td>
         <td><%= punch_card.work_minutes %></td>
         <td><%= punch_card.break_minutes %></td>
       </tr>

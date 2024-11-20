@@ -1,11 +1,14 @@
 source "https://rubygems.org"
 
+# in Ruby 3.3.3 net-pop is broken
+gem "net-pop", github: "ruby/net-pop"
+
 # Use main development branch of Rails
 gem "rails", github: "rails/rails", branch: "main"
 # The modern asset pipeline for Rails [https://github.com/rails/propshaft]
 gem "propshaft"
 # Use sqlite3 as the database for Active Record
-gem "sqlite3", ">= 1.4"
+gem "sqlite3", ">= 2.1"
 # Use the Puma web server [https://github.com/puma/puma]
 gem "puma", ">= 5.0"
 # Use JavaScript with ESM import maps [https://github.com/rails/importmap-rails]
@@ -30,8 +33,19 @@ gem "jbuilder"
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "tzinfo-data", platforms: %i[ windows jruby ]
 
+# Use the database-backed adapters for Rails.cache, Active Job, and Action Cable
+gem "solid_cache"
+gem "solid_queue", "~> 0.8.0"
+gem "solid_cable", github: "wdiechmann/solid_cable"
+
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", require: false
+
+# Deploy this application anywhere as a Docker container [https://kamal-deploy.org]
+gem "kamal", require: false
+
+# Add HTTP asset caching/compression and X-Sendfile acceleration to Puma [https://github.com/basecamp/thruster/]
+gem "thruster", require: false
 
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 gem "image_processing", "~> 1.13"
@@ -66,7 +80,8 @@ end
 group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
   gem "capybara"
-  gem "selenium-webdriver"
+  # gem "selenium-webdriver"
+  gem "cuprite", "~> 0.15.1"
 end
 
 gem "phlex-rails"
@@ -79,13 +94,10 @@ gem "rqrcode", "~> 2.2"
 
 gem "activerecord-enhancedsqlite3-adapter", "~> 0.8.0"
 
-gem "solid_queue", "~> 0.6.0"
 
 gem "get_process_mem", "~> 1.0.0"
 
 gem "devise", "~> 4.9"
-
-gem "omniauth", "~> 2.1"
 
 gem "devise_invitable", "~> 2.0"
 
@@ -93,4 +105,21 @@ gem "redcarpet", "~> 3.6"
 
 gem "httparty", "~> 0.22.0"
 
-gem "rss", "~> 0.3.1"
+gem "psych", "~> 5.1.2"
+
+gem "rrule", "~> 0.6.0"
+
+gem "httpx", "~> 1.3"
+
+gem "mission_control-jobs", "~> 0.3.1"
+
+gem "noticed", "~> 2.4"
+
+gem "x", "~> 0.14.1"
+
+gem "omniauth", "~> 2.1"
+
+gem "omniauth-entra-id", "~> 3.0"
+gem "omniauth-rails_csrf_protection", "~> 1.0"
+
+gem "web-push", "~> 3.0"

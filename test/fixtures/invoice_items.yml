@@ -1,0 +1,19 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  tenant: one
+  invoice: one
+  project: one
+  product: one
+  product_guid: MyString
+  description: MyString
+  comments: MyText
+  quantity: 9.99
+  account_number: MyString
+  unit: MyString
+  discount: 9.99
+  line_type: MyString
+  base_amount_value: 9.99
+  base_amount_value_incl_vat: 9.99
+  total_amount: 9.99
+  total_amount_incl_vat: 9.99

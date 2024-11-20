@@ -1,7 +1,7 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  account: one
+  tenant: one
   user: one
   state: 1
   job_klass: MyString
@@ -11,7 +11,7 @@ one:
   job_id: MyString
 
 two:
-  account: two
+  tenant: two
   user: two
   state: 1
   job_klass: MyString

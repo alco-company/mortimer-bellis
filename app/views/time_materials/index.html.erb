@@ -1,0 +1,12 @@
+<%= render partial: "header" %>
+<%= render partial: "filtering" unless @filter.new_record? %>
+<%= turbo_frame_tag "form" %>
+<!-- List -->
+<%= turbo_stream_from @resources_stream %>
+<div id="list" role="list" class="mb-16">
+  <%= render List.new records: @records, pagy: @pagy, initial: true, params: params, grouped_by: :created_at, user: Current.user %>
+</div>
+
+<%#= render partial: "pagination" if @pagy.pages > 1 %>
+
+<%= time_material_button(user: current_user) %>

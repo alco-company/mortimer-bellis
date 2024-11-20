@@ -1,6 +1,10 @@
 <tr class="min-w-0 w-full columns-2 md:columns-3 lg:columns-4">
-  <%= render_text_column    value: t('.job_klass'), table: :head, css: "font-bold truncate" %>
+  <%= render_text_column    value: t('.name'), table: :head, css: "font-bold truncate" %>
+  <%= render_text_column    value: t('.tenant'), table: :head, css: "font-bold truncate" %>
   <%= render_text_column    value: t(".state"), table: :head, css: "font-bold text-right" %>
+  <%= render_text_column    value: t('.job_klass'), table: :head, css: "font-bold truncate" %>
+  <%= render_text_column    value: t('.schedule'), table: :head, css: "font-bold truncate" %>
   <%= render_text_column    value: t(".next_run_at"), table: :head, css: "font-bold " %>
+  <%= render_text_column    value: t(".job_id"), table: :head, css: "font-bold " %>
   <%= render_text_column    value: t(".updated_at"), table: :head, css: "font-bold " %>
 </tr>

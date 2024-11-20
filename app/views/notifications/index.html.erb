@@ -1,0 +1,10 @@
+<h1 class="text-xl mb-4">
+  <%= t("notifications", name: Current.user.name, count: @resources.count) %>
+</h1>
+<div data-turbo-prefetch="false">
+  <%= turbo_frame_tag "notifications" do %>
+    <% @resources.each do |notification| %>
+      <%= render partial: "notifications/notification", locals: {notification: notification}%>
+    <% end %>
+  <% end %>
+</div>

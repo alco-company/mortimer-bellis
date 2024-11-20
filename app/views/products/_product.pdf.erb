@@ -1,0 +1,10 @@
+<tr class="flex gap-x-6 py-5">
+  <%= render_text_column value: link_to(product.name, product_url(product)), table: :row, css: "truncate mort-link-primary" %>
+  <%= render_text_column value: product.product_number, table: :row, css: "truncate" %>
+  <%= render_text_column value: product.quantity, table: :row, css: "truncate" %>
+  <%= render_text_column value: product.unit, table: :row, css: "truncate" %>
+  <%= render_text_column value: product.base_amount_value, table: :row, css: "truncate" %>
+  <%= render_text_column value: product.account_number, table: :row, css: "truncate" %>
+  <%= render_text_column value: product.external_reference, table: :row, css: "truncate" %>
+  <%= render_datetime_column value: product.updated_at, table: :row, css: "" %>
+</tr>

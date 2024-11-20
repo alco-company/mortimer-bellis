@@ -2,7 +2,7 @@ require "test_helper"
 
 class EmployeeMailerTest < ActionMailer::TestCase
   # test "report_state" do
-  #   mail = EmployeeMailer.report_state
+  #   mail = UserMailer.report_state
   #   assert_equal "Report state", mail.subject
   #   assert_equal [ "to@example.org" ], mail.to
   #   assert_equal [ "from@example.com" ], mail.from

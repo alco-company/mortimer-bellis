@@ -1,0 +1,23 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  event: one
+  days: MyString
+  weeks: MyString
+  weekdays: MyString
+  months: MyString
+  years: MyString
+  rrule: MyText
+  ice_cube: MyText
+  ui_values: MyText
+
+two:
+  event: two
+  days: MyString
+  weeks: MyString
+  weekdays: MyString
+  months: MyString
+  years: MyString
+  rrule: MyText
+  ice_cube: MyText
+  ui_values: MyText

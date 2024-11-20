@@ -1,0 +1,13 @@
+<%= I18n.t("tenant.mailer.welcome.hello", name: @tenant.name) %>
+
+<%== t("tenant.mailer.welcome.we_created_an_tenant", url: @url) %>
+
+<%== t("tenant.mailer.welcome.confirmation_instruction", email: @resource.email, pw: @pw) %>
+
+<%= t("tenant.mailer.welcome.ignore") %>
+
+
+
+<%= I18n.t("tenant.mailer.welcome.regards") %>
+M O R T I M E R
+<%= @resource.invited_by.name %>

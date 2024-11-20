@@ -1,0 +1,10 @@
+<tr class="flex gap-x-6 py-5">
+  <%= render_text_column value: link_to(customer.name, customer_url(customer)), table: :row, css: "truncate mort-link-primary" %>
+  <%= render_text_column value: customer.street, table: :row, css: "truncate" %>
+  <%= render_text_column value: customer.zipcode, table: :row, css: "truncate" %>
+  <%= render_text_column value: customer.city, table: :row, css: "truncate" %>
+  <%= render_text_column value: customer.email, table: :row, css: "truncate" %>
+  <%= render_text_column value: customer.phone, table: :row, css: "truncate" %>
+  <%= render_text_column value: customer.vat_number, table: :row, css: "truncate" %>
+  <%= render_datetime_column value: customer.updated_at, table: :row, css: "" %>
+</tr>

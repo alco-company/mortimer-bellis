@@ -1,0 +1,44 @@
+da:
+  setting:
+    modal:
+      delete_all: 
+        title: Slet alle Indstillinger
+        instruction: Er du sikker på, at du vil slette alle indstillinger?
+      delete:
+        title: Slet denne indstilling
+        instruction: Er du sikker på, at du vil slette indstillingen %{name}?
+        button: Slet
+
+  settings:
+    employee_device_punch_clock: Medarbejder indstilling
+    validation_errors: Der er fejl i det indtastede
+    default_punch_clock: Ur
+    
+    create:
+      post: Indstillingen blev oprettet
+    update:
+      post: Indstillingen blev opdateret
+    destroy:
+      post: Indstillingen blev slettet
+
+    form:
+      new: Ny indstilling
+      edit: Rediger indstillingen
+      show: Vis indstillingen
+
+    errors:
+      messages:
+        key_exist: Nøglen findes allerede
+
+    show:
+      pos_punch_clock: indstilling
+    list:
+      title: Indstillinger
+      new: Ny indstilling
+      key: Nøgle
+      setable_type: Tabel
+      priority: Orden
+      format: Format
+      value: Værdi
+      updated_at: Opdateret den
+

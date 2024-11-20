@@ -150,7 +150,7 @@ export default class PunchClockController extends Controller {
     //     e.srcElement.innerText;
     //   this.digitKeys.push(e.srcElement.innerText);
     //   if (this.digitKeys.length == 4) {
-    //     this.getEmployee();
+    //     this.getUser();
     //   }
     // } else {
     //   alert("Du skal kun indtaste 4 cifre");
@@ -163,7 +163,7 @@ export default class PunchClockController extends Controller {
       this.digitboxTargets[this.digitCount++].innerText = i;
       this.digitKeys.push(i);
       if (this.digitKeys.length == 4) {
-        this.getEmployee();
+        this.getUser();
       }
     } else {
       alert("Du skal kun indtaste 4 cifre");
@@ -199,7 +199,7 @@ export default class PunchClockController extends Controller {
       asset_work_transaction: {
         punched_at: new Date().toISOString(),
         state: 'in',
-        employee_id: e.currentTarget.dataset.employeeId,
+        user_id: e.currentTarget.dataset.userId,
       },
     };
 
@@ -213,7 +213,7 @@ export default class PunchClockController extends Controller {
       asset_work_transaction: {
         punched_at: new Date().toISOString(),
         state: 'break',
-        employee_id: e.currentTarget.dataset.employeeId,
+        user_id: e.currentTarget.dataset.userId,
       },
     };
 
@@ -227,7 +227,7 @@ export default class PunchClockController extends Controller {
       asset_work_transaction: {
         punched_at: new Date().toISOString(),
         state: 'out',
-        employee_id: e.currentTarget.dataset.employeeId,
+        user_id: e.currentTarget.dataset.userId,
       },
     };
 
@@ -264,7 +264,7 @@ export default class PunchClockController extends Controller {
     // );
   }
 
-  getEmployee(url = "") {
+  getUser(url = "") {
     this.searchTarget.value = this.digitKeys.join("");
     Turbo.navigator.submitForm(this.formTarget);
   }
@@ -318,7 +318,7 @@ export default class PunchClockController extends Controller {
   // { "asset_work_transaction"=> {
   //   "punched_at"=>"2022-09-29 12:05:12",
   //   "state"=>"OUT",
-  //   "employee_id"=>"#{ @emp_one.id }",
+  //   "user_id"=>"#{ @emp_one.id }",
   //   "punch_asset_id"=>"#{ @punch_asset.id }",
   //   "ip_addr"=>"10.4.3.170"
   //   },

@@ -1,11 +1,13 @@
 <!-- generic_header.html -------------------------------------------------------------->
 <title>M O R T I M E R <%= " - D E V " if Rails.env.local? %></title>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
 <%= csrf_meta_tags %>
 <%= csp_meta_tag %>
+
+<%= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
 
 <%#  https://realfavicongenerator.net %>
 <link rel="icon" href="<%= asset_path('mortimer_transparent_logo.png') %>" sizes="32x32">

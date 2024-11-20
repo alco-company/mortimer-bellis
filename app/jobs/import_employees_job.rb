@@ -3,26 +3,26 @@ class ImportEmployeesJob < ApplicationJob
   queue_as :default
 
   #
-  # args: account, import_file
+  # args: tenant, import_file
   #
   def perform(**args)
     super(**args)
     switch_locale do
-      importable_employees = CSV.parse(File.read(args[:import_file]), headers: true, col_sep: ";")
-      attributes = Employee.new.attributes.keys.reject { |key| %( id, access_token, state ).include? key }
-      importable_employees.each do |employee|
+      importable_users = CSV.parse(File.read(args[:import_file]), headers: true, col_sep: ";")
+      attributes = User.new.attributes.keys.reject { |key| %( id, access_token, state ).include? key }
+      importable_users.each do |user|
         begin
-          record = Employee.new state: :out
+          record = User.new state: :out
           attributes.each do |key|
-            record = field(record, employee, key)
+            record = field(record, user, key)
           end
-          record.account_id = Current.account.id
-          record = set_team(record, employee)
+          record.tenant_id = Current.tenant.id
+          record = set_team(record, user)
           record.save
-          EmployeeMailer.with(employee: record).welcome.deliver_later
+          UserMailer.with(user: record).welcome.deliver_later
         rescue => exception
-          say "ImportEmployeesJob reached an error on: #{exception.message}"
-          say "employee: #{employee}"
+          say "ImportUsersJob reached an error on: #{exception.message}"
+          say "user: #{user}"
         end
       end
       File.delete(args[:import_file])
@@ -33,8 +33,8 @@ class ImportEmployeesJob < ApplicationJob
   #
   def field(record, emp, field)
     case field
-    when "pincode"; record[field] = Employee.next_pincode(emp[field])
-    when "payroll_employee_ident"; record[field] = Employee.next_payroll_employee_ident(emp[field])
+    when "pincode"; record[field] = User.next_pincode(emp[field])
+    when "payroll_user_ident"; record[field] = User.next_payroll_user_ident(emp[field])
     else
       record[field] = emp[field].present? ? emp[field] : nil
     end
@@ -43,7 +43,7 @@ class ImportEmployeesJob < ApplicationJob
 
   def set_team(record, emp)
     emp["team"] = "empty" if emp["team"].blank?
-    record.team_id = Team.find_or_create_by(account: Current.account, name: emp["team"]).id
+    record.team_id = Team.find_or_create_by(tenant: Current.tenant, name: emp["team"]).id
     record
   end
 end

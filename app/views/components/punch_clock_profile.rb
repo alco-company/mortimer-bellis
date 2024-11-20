@@ -3,15 +3,15 @@ class PunchClockProfile < ApplicationComponent
   include Phlex::Rails::Helpers::FormWith
   include Phlex::Rails::Helpers::HiddenField
 
-  attr_accessor :employee
+  attr_accessor :user
 
-  def initialize(employee: nil)
-    @employee = employee || false
+  def initialize(user: nil)
+    @user = user || false
   end
 
   def view_template(&block)
     div(id: "mortimer_form") do
-      render Employee.profile(employee, helpers.pos_employee_url(api_key: employee.access_token))
+      render User.profile(user, helpers.pos_user_url(api_key: user.access_token))
     end
   end
 

@@ -1,11 +1,24 @@
 {
   "name": "Mortimer",
+  "id": "Mortimer",
   "icons": [
-    { "src": "/icon-192.png", "type": "image/png", "sizes": "192x192" },
-    { "src": "/icon-512.png", "type": "image/png", "sizes": "512x512", "purpose": "maskable" }
+    { "src": "<%= image_url("logo-192.png") %>", "type": "image/png", "sizes": "192x192" },
+    { "src": "<%= image_url("logo-512.png") %>", "type": "image/png", "sizes": "512x512", "purpose": "maskable" }
   ],
-  "start_url": "/",
+  "start_url": "<%= root_url %>",
   "display": "standalone",
+  "orientation": "portrait",
+  "author": "Walther H Diechman",
+  "developer": {
+    "name": "ALCO Company ApS",
+    "url": "https://alco.dk"
+  },  
+  "related_applications": [
+    {
+      "platform": "webapp",
+      "url": "<%= root_url + "manifest.json" %>"
+    }
+  ],  
   "scope": "/",
   "description": "Mortimer - a simple, fast, and afforable time and attendance service",
   "theme_color": "#0284c7",

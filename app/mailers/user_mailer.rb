@@ -17,6 +17,14 @@ class UserMailer < ApplicationMailer
     end
   end
 
+  def confetti_first_punch
+    @user = params[:user]
+    @name = @user.name
+    @company = @user.tenant.name
+    @sender = "info@mortimer.pro"
+    mail to: @user.email, subject: I18n.t("user_mailer.confetti.subject")
+  end
+
   def error_report(error, klass_method)
     @error = error
     @klass_method = klass_method

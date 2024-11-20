@@ -1,6 +1,6 @@
 <tr id="<%= dom_id user %>" class="flex items-center border-bottom border-gray-400">
   <%= render_text_column value: link_to(user.email, user), table: :row, css: "truncate" do %>
-    <p class="text-xs"><%=  link_to user.account.name, user.account %> </p>
+    <p class="text-xs"><%=  link_to user.tenant.name, user.tenant %> </p>
   <% end %>
   <%= render_text_column value: user.role, table: :row, css: "truncate" do %> <p>&nbsp;</p> <% end %>
   <%= render_text_column value: user.locale, table: :row, css: " truncate" do %> <p>&nbsp;</p> <% end %>

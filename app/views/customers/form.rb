@@ -1,0 +1,26 @@
+class Customers::Form < ApplicationForm
+  def view_template(&)
+    row field(:name).input(class: "mort-form-text").focus
+    row field(:external_reference).input(class: "mort-form-text")
+    row field(:is_person).boolean(class: "mort-form-bool")
+    row field(:is_member).boolean(class: "mort-form-bool")
+    row field(:is_debitor).boolean(class: "mort-form-bool")
+    row field(:is_creditor).boolean(class: "mort-form-bool")
+    row field(:street).input(class: "mort-form-text")
+    row field(:zipcode).input(class: "mort-form-text")
+    row field(:city).input(class: "mort-form-text")
+    row field(:country_key).input(class: "mort-form-text")
+    row field(:phone).input(class: "mort-form-text")
+    row field(:email).input(class: "mort-form-text")
+    row field(:webpage).input(class: "mort-form-text")
+    row field(:att_person).input(class: "mort-form-text")
+    row field(:vat_number).input(class: "mort-form-text")
+    row field(:ean_number).input(class: "mort-form-text")
+    row field(:payment_condition_type).input(class: "mort-form-text")
+    row field(:payment_condition_number_of_days).input(class: "mort-form-text")
+    row field(:member_number).input(class: "mort-form-text")
+    row field(:company_status).input(class: "mort-form-text")
+    row field(:vat_region_key).input(class: "mort-form-text")
+    row field(:invoice_mail_out_option_key,).input(class: "mort-form-text")
+  end
+end

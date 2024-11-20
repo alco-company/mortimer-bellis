@@ -7,12 +7,12 @@ class ApplicationJob < ActiveJob::Base
   # discard_on ActiveJob::DeserializationError
 
   #
-  # most jobs will need to know what account and user they are working with
+  # most jobs will need to know what tenant and user they are working with
   # - so jobs inheriting from this will call super(args)
   #
   def perform **args
-    account = args[:account] || Account.find(args[:account_id]) rescue Account.first
-    Current.account = account
+    tenant = args[:tenant] || Tenant.find(args[:tenant_id]) rescue Tenant.first
+    Current.tenant = tenant
     # Current.user = args[:user] || User.unscoped.find( args[:user_id] ) rescue User.first
   rescue => exception
     say exception
@@ -21,9 +21,9 @@ class ApplicationJob < ActiveJob::Base
   # allow jobs to say what they need to say
   #
   def say(msg)
-    Rails.logger.info "----------------------------------------------------------------------"
-    Rails.logger.info msg
-    Rails.logger.info "----------------------------------------------------------------------"
+    Rails.logger.info { "----------------------------------------------------------------------" }
+    Rails.logger.info { msg }
+    Rails.logger.info { "----------------------------------------------------------------------" }
   end
 
   def switch_locale(locale = nil, &action)
@@ -33,7 +33,7 @@ class ApplicationJob < ActiveJob::Base
   end
 
   def user_time_zone(tz = nil, &block)
-    timezone = tz || Current.user.time_zone || Current.account.time_zone rescue nil
+    timezone = tz || Current.user.time_zone || Current.tenant.time_zone rescue nil
     timezone.blank? ?
       Time.use_zone("Europe/Copenhagen", &block) :
       Time.use_zone(timezone, &block)

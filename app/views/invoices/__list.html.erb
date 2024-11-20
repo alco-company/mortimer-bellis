@@ -1,0 +1,14 @@
+<div class="min-w-0 w-full columns-3 md:columns-5 lg:columns-7 xl:columns-8 3xl:columns-12">
+  <%= render_text_column value: t('.invoice_number'), sort: params, field: :invoice_number, css: "font-bold truncate" %>
+  <%= render_text_column value: t('.invoice_date'), sort: params, field: :invoice_date, css: "hidden lg:block font-bold truncate" %>
+  <%= render_text_column value: t('.customer'), sort: params, field: :customer_id, css: "font-bold truncate" %>
+  <%= render_text_column value: t('.project'), sort: params, field: :project_id, css: "hidden md:block font-bold truncate" %>
+  <%= render_text_column value: t(".state"), sort: params, field: :state, css: "font-bold truncate" %>
+  <%= render_text_column value: t(".external_reference"), sort: params, field: :external_reference, css: "hidden 3xl:block font-bold truncate" %>
+  <%= render_text_column value: t(".description"), sort: params, field: :description, css: "hidden lg:block font-bold truncate" %>
+  <%= render_text_column value: t(".total_excl_vat_in_dkk"), sort: params, field: :total_excl_vat_in_dkk, css: "hidden md:block font-bold truncate" %>
+  <%= render_text_column value: t(".total_incl_vat_in_dkk"), sort: params, field: :total_incl_vat_in_dkk, css: "hidden 3xl:block font-bold truncate" %>
+  <%= render_text_column value: t(".payment_date"), sort: params, field: :payment_date, css: "hidden 3xl:block font-bold truncate" %>
+  <%= render_text_column value: t(".currency"), sort: params, field: :currency, css: "hidden 3xl:block font-bold truncate" %>
+  <%= render_text_column value: t(".updated_at"), css: "hidden xl:block font-bold truncate" %>
+</div>

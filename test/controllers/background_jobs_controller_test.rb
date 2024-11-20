@@ -17,7 +17,7 @@ class BackgroundJobsControllerTest < ActionDispatch::IntegrationTest
 
   # test "should create background_job" do
   #   assert_difference("BackgroundJob.count") do
-  #     post background_jobs_url, params: { background_job: { account_id: @background_job.account_id, job_id: @background_job.job_id, job_klass: @background_job.job_klass, next_run_at: @background_job.next_run_at, params: @background_job.params, schedule: @background_job.schedule, state: @background_job.state, user_id: @background_job.user_id } }
+  #     post background_jobs_url, params: { background_job: { tenant_id: @background_job.tenant_id, job_id: @background_job.job_id, job_klass: @background_job.job_klass, next_run_at: @background_job.next_run_at, params: @background_job.params, schedule: @background_job.schedule, state: @background_job.state, user_id: @background_job.user_id } }
   #   end
 
   #   assert_redirected_to background_job_url(BackgroundJob.last)
@@ -34,7 +34,7 @@ class BackgroundJobsControllerTest < ActionDispatch::IntegrationTest
   # end
 
   # test "should update background_job" do
-  #   patch background_job_url(@background_job), params: { background_job: { account_id: @background_job.account_id, job_id: @background_job.job_id, job_klass: @background_job.job_klass, next_run_at: @background_job.next_run_at, params: @background_job.params, schedule: @background_job.schedule, state: @background_job.state, user_id: @background_job.user_id } }
+  #   patch background_job_url(@background_job), params: { background_job: { tenant_id: @background_job.tenant_id, job_id: @background_job.job_id, job_klass: @background_job.job_klass, next_run_at: @background_job.next_run_at, params: @background_job.params, schedule: @background_job.schedule, state: @background_job.state, user_id: @background_job.user_id } }
   #   assert_redirected_to background_job_url(@background_job)
   # end
 
