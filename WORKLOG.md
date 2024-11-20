@@ -64,6 +64,7 @@ END
 * don't care about user pincode until confirmed
 * lost the favicon - bring it back
 * pulltorefreshjs - for mobile
+* we need to instantiate the pulltorefresh on the page-controller
 
 ### 19/11/2024
 
