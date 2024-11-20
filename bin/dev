@@ -1,16 +1,17 @@
-#!/usr/bin/env sh
+#!/usr/bin/env ruby
+# exec "./bin/rails", "server", *ARGV
 
-if ! gem list foreman -i --silent; then
-  echo "Installing foreman..."
-  gem install foreman
-fi
+if ! `gem list foreman -i --silent`;
+  puts "Installing foreman..."
+  `gem install foreman`
+end
 
 # Default to port 3000 if not specified
-export PORT="${PORT:-3000}"
+ENV["PORT"] ||= "3000"
 
 # Let the debug gem allow remote connections,
 # but avoid loading until `debugger` is called
-export RUBY_DEBUG_OPEN="true"
-export RUBY_DEBUG_LAZY="true"
+ENV["RUBY_DEBUG_OPEN"]="true"
+ENV["RUBY_DEBUG_LAZY"]="true"
 
-exec foreman start -f Procfile.dev "$@"
+exec 'foreman start -f Procfile.dev "$@"'

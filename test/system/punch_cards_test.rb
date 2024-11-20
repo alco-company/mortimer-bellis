@@ -14,9 +14,9 @@ class PunchCardsTest < ApplicationSystemTestCase
   #   visit punch_cards_url
   #   click_on "New punch card"
 
-  #   fill_in "Account", with: @punch_card.account_id
+  #   fill_in "Tenant", with: @punch_card.tenant_id
   #   fill_in "Break minutes", with: @punch_card.break_minutes
-  #   fill_in "Employee", with: @punch_card.employee_id
+  #   fill_in "User", with: @punch_card.user_id
   #   fill_in "Ot1 minutes", with: @punch_card.ot1_minutes
   #   fill_in "Ot2 minutes", with: @punch_card.ot2_minutes
   #   fill_in "Punches settled at", with: @punch_card.punches_settled_at
@@ -32,9 +32,9 @@ class PunchCardsTest < ApplicationSystemTestCase
   #   visit punch_card_url(@punch_card)
   #   click_on "Edit this punch card", match: :first
 
-  #   fill_in "Account", with: @punch_card.account_id
+  #   fill_in "Tenant", with: @punch_card.tenant_id
   #   fill_in "Break minutes", with: @punch_card.break_minutes
-  #   fill_in "Employee", with: @punch_card.employee_id
+  #   fill_in "User", with: @punch_card.user_id
   #   fill_in "Ot1 minutes", with: @punch_card.ot1_minutes
   #   fill_in "Ot2 minutes", with: @punch_card.ot2_minutes
   #   fill_in "Punches settled at", with: @punch_card.punches_settled_at.to_s

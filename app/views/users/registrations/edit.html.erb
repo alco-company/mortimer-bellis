@@ -1,15 +1,17 @@
 <div class="mx-auto w-72 sm:w-96">
-  <h1 class="font-bold text-4xl"> <%= t("users.edit_profile.name") %> </h1>
-  <h3>Mortimer version:</h3>
-  <p class="text-xs font-thin"><%= ENV["MORTIMER_VERSION"] %></p>
+  <h1 class="font-bold text-3xl"> <%= t("users.edit_profile.name") %> </h1>
+  <h3>Mortimer version:
+    <span class="text-xs font-thin"><%= ENV["MORTIMER_VERSION"] %></span>
+  </h3>
+  
 
-  <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
+  <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { class: "mort-form", method: :put }) do |f| %>
     <%= render "devise/shared/error_messages", resource: resource %>
 
     <% if Current.user.superadmin? %>
       <div class="mort-field">
-        <%= f.label :account %><br />
-        <%= f.select :account_id, Account.all.order(name: :asc).pluck([:name, :id]), autofocus: true, class: "mort-form-text" %>
+        <%= f.label :tenant %><br />
+        <%= f.select :tenant_id, Tenant.all.order(name: :asc).pluck([:name, :id]), {autofocus: true}, class: "mort-form-select" %>
       </div>
       <div class="mort-field">
         <%= f.label :global_queries %><br />
@@ -23,16 +25,21 @@
     </div>
 
     <div class="mort-field">
+      <%= f.label :pincode %><br />
+      <%= f.text_field :pincode, autofocus: true, autocomplete: "off", class: "mort-form-text", placeholder: I18n.t("user.pincode.placeholder") %>
+    </div>
+
+    <div class="mort-field">
       <%= f.label :mugshot %><br />
       <%= f.file_field :mugshot, class: "mort-form-file" %>
-      <% if resource.mugshot.attached? %>
-        <div class="w-auto max-w-32 relative border rounded-md shadow px-3 mt-4">
+      <% if resource.mugshot.attached? && resource.mugshot.persisted? %>
+        <div class="w-auto max-w-32 relative border rounded-md shadow px-3 mt-4 flex">
           <%= image_tag resource.mugshot %>          
           <%= link_to(
-              modal_new_url(modal_form: "delete", id: resource.id, attachment: "mugshot", resource_class: "user", modal_next_step: "accept"),
+              new_modal_url(modal_form: "delete", id: resource.id, attachment: "mugshot", resource_class: "user", modal_next_step: "accept"),
               data: { turbo_stream: true },
               # link_to((@links[1] || resource),
-              class: "absolute top-0 right-0 ",
+              class: "ml-5",
               role: "menuitem",
               tabindex: "-1") do %>
                 <div class= "text-red-500">
@@ -50,17 +57,19 @@
       <%= f.email_field :email, autocomplete: "email", class: "mort-form-text" %>
     </div>
 
-    <%# = row field(:locale).select(Employee.locales, prompt: I18n.t(".select_employee_locale"), class: "mort-form-text") %>
-    <%#= row field(:time_zone).select(ActiveSupport::TimeZone.all.collect { |tz| [ "(GMT#{ActiveSupport::TimeZone.seconds_to_utc_offset(tz.utc_offset)}) #{tz.name}", tz.tzinfo.name ] }, class: "mort-form-text") %>
+    <div class="mort-field">
+     <button id="enable_notifications" class="xhidden mort-btn-primary">Enable Notifications</button>
+    </div>
+
         
     <div class="mort-field">
       <%= f.label :locale %><br />
-      <%= f.select :locale, Employee.locales.collect { |loc| [loc.value, loc.id] }, class: "mort-form-text" %>
+      <%= f.select :locale, User.locales.collect { |loc| [loc.value, loc.id] }, {}, class: "mort-form-select" %>
     </div>
 
     <div class="mort-field">
       <%= f.label :time_zone %><br />
-      <%= f.select :time_zone, ActiveSupport::TimeZone.all.collect { |tz| [ "(GMT#{ActiveSupport::TimeZone.seconds_to_utc_offset(tz.utc_offset)}) #{tz.name}", tz.tzinfo.name ] }, class: "mort-form-text" %>
+      <%= f.select :time_zone, User.time_zones_for_select, {}, class: "mort-form-select text-sm" %>
     </div>
 
     <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
@@ -83,32 +92,33 @@
         <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "mort-form-text" %>
       </div>
 
+      <div class="mort-field">
+        <%= f.label :current_password %><br />
+        <%= f.password_field :current_password, autocomplete: "current-password", class: "mort-form-text" %>
+        <i class="text-xs">(we need your current password to confirm your change of password)</i>
+      </div>
     </div>
 
-    <div class="mort-field">
-      <%= f.label :current_password %><br />
-      <%= f.password_field :current_password, autocomplete: "current-password", class: "mort-form-text" %>
-      <i class="text-xs">(we need your current password to confirm your changes)</i>
-    </div>
 
     <div class="actions mort-field">
       <%= f.submit t(:save), class: "mort-btn-primary" %>
     </div>
   <% end %>
 
-  <h2 class="font-bold text-2xl"><%= t("users.edit_profile.cancel.title") %></h2>
-
-  <div>
-    <p class="text-sm">
-      <%= t("users.edit_profile.cancel.unhappy") %>
-    </p> 
-    <p>
-      <%= button_to t("users.edit_profile.cancel.action"), 
-      registration_path(resource_name), 
-      data: { confirm: "Are you sure?", turbo_confirm: "Are you sure?" }, 
-      method: :delete, 
-      class: "mort-btn-alert mort-field" %>
-    </p>
-  </div>
+  <% if Current.user.admin? or Current.user.superadmin? %>
+    <h2 class="font-bold text-2xl"><%= t("users.edit_profile.cancel.title") %></h2>
+    <div>
+      <p class="text-sm">
+        <%= t("users.edit_profile.cancel.unhappy") %>
+      </p> 
+      <p>
+        <%= button_to t("users.edit_profile.cancel.action"), 
+        registration_path(resource_name), 
+        data: { confirm: "Are you sure?", turbo_confirm: "Are you sure?" }, 
+        method: :delete, 
+        class: "mort-btn-alert mort-field" %>
+      </p>
+    </div>
+  <% end %>
 
 </div>

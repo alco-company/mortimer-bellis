@@ -1,0 +1,23 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  tenant: one
+  name: MyString
+  street: MyString
+  zipcode: MyString
+  city: MyString
+  phone: MyString
+  email: MyString
+  vat_number: MyString
+  ean_number: MyString
+
+two:
+  tenant: two
+  name: MyString
+  street: MyString
+  zipcode: MyString
+  city: MyString
+  phone: MyString
+  email: MyString
+  vat_number: MyString
+  ean_number: MyString

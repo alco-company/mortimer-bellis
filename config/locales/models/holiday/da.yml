@@ -1,0 +1,30 @@
+da:
+  # holyday:
+  #   name: 'Helligdag'
+    # name_plural: 'Helligdage'
+    # attributes:
+    #   name: 'Navn'
+    #   date: 'Dato'
+    #   description: 'Beskrivelse'
+    #   country: 'Land'
+    #   region: 'Region'
+    #   active: 'Aktiv'
+    #   created_at: 'Oprettet'
+    #   updated_at: 'Opdateret'
+    # errors:
+    #   name:
+    #     blank: 'Navn kan ikke være blank'
+    #     taken: 'Navn er allerede taget'
+    #   date:
+    #     blank: 'Dato kan ikke være blank'
+    #     invalid: 'Dato er ugyldig'
+    #   country:
+    #     blank: 'Land kan ikke være blank'
+    #   region:
+    #     blank: 'Region kan ikke være blank'
+    #   active:
+    #     blank: 'Aktiv kan ikke være blank'
+    #   created_at:
+    #     blank: 'Oprettet kan ikke være blank'
+    #   updated_at:
+    #     blank: 'Opdateret kan ikke være blank'

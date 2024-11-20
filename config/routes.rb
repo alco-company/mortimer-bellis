@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
-  get "tooltips/show"
+  mount MissionControl::Jobs::Engine, at: "/solid_queue_jobs"
+
   devise_for :users, controllers: {
     invitations: "users/invitations",
     registrations: "users/registrations",
@@ -9,13 +10,70 @@ Rails.application.routes.draw do
     unlocks: "users/unlocks",
     omniauth_callbacks: "users/omniauth_callbacks"
   }
+  # get "enable_otp_show_qr", to: "users/registrations#enable_otp_show_qr", as: "enable_otp_show_qr"
+  # post "enable_otp_verify", to: "users/registrations#enable_otp_verify", as: "enable_otp_verify"
+  # get "users/otp", to: "users#show_otp", as: "user_otp"
+  # post "users/otp", to: "users#verify_otp", as: "verify_user_otp"
+  # post "verify_otp", to: "users/sessions#verify_otp"
+
+  post "/web_push_subscriptions" => "noticed/web_push/subscriptions#create", as: :web_push_subscriptions
+
+  post "dinero/callback" => "dinero#callback", as: :dinero_callback
+
+  resources :time_materials do
+    member do
+      post :archive
+    end
+  end
+
+  resources :invoice_items
+
+  resources :products do
+    collection do
+      get "erp_pull"
+      get "lookup"
+    end
+  end
+  resources :customers do
+    collection do
+      get "erp_pull"
+      get "lookup"
+    end
+  end
+  resources :invoices do
+    collection do
+      get "erp_pull"
+    end
+  end
+
+  resources :projects do
+    collection do
+      get "lookup"
+    end
+  end
+
+
+  resources :provided_services
+  resources :settings
+  resources :events
+  resources :notifications
+  resources :holidays
+  resources :calendars do
+    resources :events
+  end
+
+  get "tooltips/show"
 
   resources :dashboards
   resources :background_jobs
   resources :pages
   resources :users do
+    resources :calendars
     collection do
       get "sign_in_success"
+    end
+    member do
+      post :archive
     end
   end
   resources :punches do
@@ -24,37 +82,41 @@ Rails.application.routes.draw do
   resources :punch_cards do
     resources :punches
   end
-  resources :employees do
-    member do
-      post :archive
-    end
-    collection do
-      post :signup
-    end
+  # resources :employees do
+  #   resources :calendars
+  #   member do
+  #     post :archive
+  #   end
+  #   collection do
+  #     post :signup
+  #   end
+  # end
+  resources :teams do
+    resources :calendars
   end
-  resources :employee_invitations
-  resources :teams
   resources :punch_clocks
   resources :locations do
     resources :punch_clocks
   end
   resources :filters
-  resources :accounts
+  resources :tenants do
+    resources :calendars
+  end
 
   scope "pos" do
     get "punch_clock" => "pos/punch_clock#show", as: :pos_punch_clock
     get "punch_clock/edit" => "pos/punch_clock#edit", as: :pos_punch_clock_edit
     post "punch_clock" => "pos/punch_clock#create", as: :pos_punch_clock_create
 
-    get "employee" => "pos/employee#show", as: :pos_employee
-    get "employees" => "pos/employee#index", as: :pos_employees
-    get "employee/punches" => "pos/employee#punches", as: :pos_employee_punches
-    get "employee/edit" => "pos/employee#edit", as: :pos_employee_edit
-    get "employee/signup_success" => "pos/employee#signup_success", as: :pos_employee_signup_success
-    post "employee" => "pos/employee#create", as: :pos_employee_create
-    # put "employee" => "pos/employee#update", as: :pos_employee_update
-    patch "employee" => "pos/employee#update", as: :pos_employee_update
-    delete "employee" => "pos/employee#destroy", as: :pos_employee_delete
+    get "user" => "pos/user#show", as: :pos_user
+    get "users" => "pos/user#index", as: :pos_users
+    get "user/punches" => "pos/user#punches", as: :pos_user_punches
+    get "user/edit" => "pos/user#edit", as: :pos_user_edit
+    get "user/signup_success" => "pos/user#signup_success", as: :pos_user_signup_success
+    post "user" => "pos/user#create", as: :pos_user_create
+    # put "user" => "pos/user#update", as: :pos_user_update
+    patch "user" => "pos/user#update", as: :pos_user_update
+    delete "user" => "pos/user#destroy", as: :pos_user_delete
   end
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
@@ -63,15 +125,12 @@ Rails.application.routes.draw do
   # Can be used by load balancers and uptime monitors to verify that the app is live.
   get "up" => "rails/health#show", as: :rails_health_check
 
-  get "modal/new"
-  get "modal/show"
-  post "modal/destroy"
-  post "modal/create"
+  resources :modal, controller: "modal"
 
   # Render dynamic PWA files from app/views/pwa/*
   get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
   get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
 
   # Defines the root path route ("/")
-  root "dashboards#show"
+  root "dashboards#show_dashboard"
 end

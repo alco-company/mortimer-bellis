@@ -1,68 +1,70 @@
 en:
 
+  2FA: 2 Factor Authentication
+
   users:
 
     create:
-      post: Bruger blev oprettet
+      post: The user was created
     update:
-      post: Bruger blev opdateret
+      post: The user was updated
     destroy:
-      post: Bruger blev slettet
+      post: The user was deleted
         
     list:
-      title: Brugere
+      title: Users
       new: Ny bruger
-      edit: Rediger
-      delete: Slet
-      show: Vis
-      name: Navn
-      role: Rolle
-      locale: Sprog
-      time_zone: Tidszone
+      edit: Edit
+      delete: Delete
+      show: Show
+      name: Name
+      role: Role
+      locale: Language
+      time_zone: Time zone
       email: Email
-      phone: Telefon
-      pincode: Pinkode
+      phone: Phone number
+      pincode: Pin code
       state: Status
-      updated_at: Opdateret den
+      updated_at: Opdated on
 
     form:
-      new: Ny bruger
-      edit: Rediger bruger
+      new: New user
+      edit: Edit user
 
     confirmations:
       new:
-        resend: Send igen
+        resend: Send again
         resend_confirmation: 
-          title: Bekræftelses email
-          action: Send igen
+          title: Confirmation email
+          action: Send again
 
     sessions:
       new: 
-        sign_in: Log ind
+        sign_in: Login
 
     sign_in:
-      title: Log ind
+      title: Login
       email: Email
-      password: Adgangskode
-      remember_me: Husk mig
-      forgot_password: Glemt adgangskode?
-      sign_in: Log ind
-      sign_up: Opret en ny konto
+      password: Password
+      remember_me: Remember me
+      forgot_password: Forgot your password?
+      sign_in: Login
+      sign_up: Setup a new tenant
 
     registrations:
       new:
-        create: Opret kontoen
+        create: Create the user
         sign_up:
-          title: Opret en ny konto
+          title: Create a new user tenant
         
     passwords:
       new: 
-        reset_password: Nulstil adgangskoden
+        reset_password: Reset password
       edit:
-        change_password: Skift din adgangskode
-        password: Adgangskode
-        password_confirmation: Bekræft/Gentag adgangskoden
-        change_password_action: Skift adgangskoden
+        change_password: Change your password
+        password: Password
+        password_confirmation: Confirm/Repeat password
+        change_password_action: Change password
 
     edit_profile:
       title: Rediger profil
@@ -85,16 +87,24 @@ en:
         M O R T I M E R
         
   devise:
+    login: "Log in"
+    remember_me: "Remember me"
+    sign_up: "Sign up"
+    forgot_password: "Forgot your password?"
+    sign_in_with: "Sign in using %{provider}"
+
+    missing_confirmation_email: "Didn't receive confirmation instructions?"
+    missing_unlock_email: "Didn't receive unlock instructions?"
     confirmations:
       confirmed: "Your email address has been successfully confirmed."
       send_instructions: "You will receive an email with instructions for how to confirm your email address in a few minutes."
       send_paranoid_instructions: "If your email address exists in our database, you will receive an email with instructions for how to confirm your email address in a few minutes."
     failure:
       already_authenticated: "You are already signed in."
-      inactive: "Your account is not activated yet."
+      inactive: "Your tenant is not activated yet."
       invalid: "Invalid %{authentication_keys} or password."
-      locked: "Your account is locked."
-      last_attempt: "You have one more attempt before your account is locked."
+      locked: "Your tenant is locked."
+      last_attempt: "You have one more attempt before your tenant is locked."
       not_found_in_database: "Invalid %{authentication_keys} or password."
       timeout: "Your session expired. Please sign in again to continue."
       unauthenticated: "You need to sign in or sign up before continuing."
@@ -112,7 +122,7 @@ en:
         subject: "Password Changed"
     omniauth_callbacks:
       failure: "Could not authenticate you from %{kind} because \"%{reason}\"."
-      success: "Successfully authenticated from %{kind} account."
+      success: "Successfully authenticated from %{kind} tenant."
     passwords:
       no_token: "You can't access this page without coming from a password reset email. If you do come from a password reset email, please make sure you used the full URL provided."
       send_instructions: "You will receive an email with instructions on how to reset your password in a few minutes."
@@ -120,19 +130,24 @@ en:
       updated: "Your password has been changed successfully. You are now signed in."
       updated_not_active: "Your password has been changed successfully."
     registrations:
-      destroyed: "Bye! Your account has been successfully cancelled. We hope to see you again soon."
+      destroyed: "Bye! Your tenant has been successfully cancelled. We hope to see you again soon."
       signed_up: "Welcome! You have signed up successfully."
-      signed_up_but_inactive: "You have signed up successfully. However, we could not sign you in because your account is not yet activated."
-      signed_up_but_locked: "You have signed up successfully. However, we could not sign you in because your account is locked."
-      signed_up_but_unconfirmed: "A message with a confirmation link has been sent to your email address. Please follow the link to activate your account."
-      update_needs_confirmation: "You updated your account successfully, but we need to verify your new email address. Please check your email and follow the confirmation link to confirm your new email address."
-      updated: "Your account has been updated successfully."
-      updated_but_not_signed_in: "Your account has been updated successfully, but since your password was changed, you need to sign in again."
+      signed_up_but_inactive: "You have signed up successfully. However, we could not sign you in because your tenant is not yet activated."
+      signed_up_but_locked: "You have signed up successfully. However, we could not sign you in because your tenant is locked."
+      signed_up_but_unconfirmed: "A message with a confirmation link has been sent to your email address. Please follow the link to activate your tenant."
+      update_needs_confirmation: "You updated your tenant successfully, but we need to verify your new email address. Please check your email and follow the confirmation link to confirm your new email address."
+      updated: "Your tenant has been updated successfully."
+      updated_but_not_signed_in: "Your tenant has been updated successfully, but since your password was changed, you need to sign in again."
     sessions:
       signed_in: "Signed in successfully."
       signed_out: "Signed out successfully."
       already_signed_out: "Signed out successfully."
     unlocks:
-      send_instructions: "You will receive an email with instructions for how to unlock your account in a few minutes."
-      send_paranoid_instructions: "If your account exists, you will receive an email with instructions for how to unlock it in a few minutes."
-      unlocked: "Your account has been unlocked successfully. Please sign in to continue."
+      new:
+        resend: "Resend unlock instructions"
+        resend_unlock: 
+          title: "Unlock instructions"
+          action: "Resend unlock instructions"
+      send_instructions: "You will receive an email with instructions for how to unlock your tenant in a few minutes."
+      send_paranoid_instructions: "If your tenant exists, you will receive an email with instructions for how to unlock it in a few minutes."
+      unlocked: "Your tenant has been unlocked successfully. Please sign in to continue."

@@ -1,0 +1,64 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: Danish Company
+  email: MyString
+  pp_identification: 100
+  locale: da
+  color: green
+  time_zone: Europe/Copenhagen
+  access_token: "12345678"
+
+two:
+  name: British Company
+  email: MyString
+  pp_identification: abc
+  locale: en
+  color: blue
+  time_zone: London
+  access_token: "12345678"
+
+three:
+  name: German Company
+  email: MyString
+  pp_identification: abc
+  locale: de
+  color: blue
+  time_zone: Berlin
+  access_token: "12345678"
+
+four:
+  name: German Company II
+  email: MyString
+  pp_identification: abc
+  locale: en
+  color: green
+  time_zone: Frankfurt
+  access_token: "12345679"
+
+five:
+  name: Danish Company II
+  email: MyString
+  pp_identification: 101
+  locale: da
+  color: indigo
+  time_zone: Europe/Copenhagen
+  access_token: "87654321"
+
+six:
+  name: Danish Company III - project
+  email: MyString
+  pp_identification: 101
+  locale: da
+  color: indigo
+  time_zone: Europe/Copenhagen
+  access_token: "87654321"
+
+no_dinero_authorization:
+  name: using Dinero
+  email: MyString
+  pp_identification: abc
+  locale: da
+  color: blue
+  time_zone: Europe/Copenhagen
+  access_token: "12345678"

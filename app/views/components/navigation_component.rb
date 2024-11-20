@@ -3,45 +3,31 @@
 class NavigationComponent < ApplicationComponent
   include Phlex::Rails::Helpers::LinkTo
   include Phlex::Rails::Helpers::ImageTag
+  include Phlex::Rails::Helpers::TurboFrameTag
+  include Phlex::Rails::Helpers::Request
 
   attr_accessor :items
 
-  def initialize(items: [], root: nil, locale: nil, time_zone: nil)
+  def initialize(items: [], root: nil, locale: nil, time_zone: nil, menu: nil)
     @items = items
     @root = root
     @locale = locale
     @time_zone = time_zone
+    @menu = menu || default_menu
   end
 
   def view_template
-    nav(class: "w-full fixed top-0 z-40 bg-gradient-to-r from-cyan-200 to-sky-600", data: { controller: "navigation" }) do
-      div(class: "mx-auto  px-2 sm:px-6 lg:px-8") do
-        div(class: "relative flex h-16 items-center justify-between") do
-          div(class: "absolute inset-y-0 left-0 flex items-center lg:hidden") do
-            mobile_menu_button
-          end
-          div(
-            class:
-              "flex flex-1 items-center justify-center sm:items-stretch sm:justify-start"
-          ) do
-            div(class: "flex flex-shrink-0 items-center hidden lg:block") do
-              if Current.account && Current.account.logo.attached?
-                helpers.render_logo logo: Current.account.logo, root: @root
-              else
-                helpers.render_logo root: @root
-              end
+    nav(class: "flex flex-1 flex-col") do
+      ul(role: "list", class: "flex flex-1 flex-col gap-y-7 px-2") do
+        li do
+          ul(role: "list", class: "-mx-2 space-y-1") do
+            @menu.each do |key, item|
+              item[:submenu] ? sub_menu(key, item) : menu_item(item: item[:title], url: item[:url], icon: item[:icon])
             end
-            div(class: "sm:ml-6 hidden lg:block") do
-              desktop_menu
-            end
-          end
-          div(class: " absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0") do
-            # view_notifications
-            profile_dropdown if Current.user.present?
           end
         end
+        settings_and_integrations unless Current.user&.user?
       end
-      mobile_menu
     end
   end
 
@@ -51,7 +37,7 @@ class NavigationComponent < ApplicationComponent
       type: "button",
       data: { action: "click->navigation#toggleMenu" },
       class:
-        "relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-sky-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-cyan-300",
+        "relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-sky-700 hover:text-white focus:outline-none focus:ring-1 focus:ring-inset focus:ring-cyan-300",
       aria_controls: "mobile-menu",
       aria_expanded: "false"
     ) do
@@ -141,86 +127,193 @@ class NavigationComponent < ApplicationComponent
   end
 
   def view_notifications
-    comment { "View notifications" }
-    button(
-      type: "button",
-      class:
-        " relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
-    ) do
-      span(class: "absolute -inset-1.5")
-      span(class: "sr-only") { "View notifications" }
-      svg(
-        class: "h-6 w-6",
-        fill: "none",
-        viewbox: "0 0 24 24",
-        stroke_width: "1.5",
-        stroke: "currentColor",
-        aria_hidden: "true"
-      ) do |s|
-        s.path(
-          stroke_linecap: "round",
-          stroke_linejoin: "round",
-          d:
-            "M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0"
-        )
-      end
-    end
+    return unless Current.user
+    render Notifications::NotificationBell.new recipient: Current.user
+
+    # div do
+    #   button(
+    #     type: "button",
+    #     data: {
+    #       navigation_target: "viewNotificationsButton",
+    #       action: "touchstart->navigation#tapNotificationDrop click->navigation#tapNotificationDrop click@window->navigation#hideNotificationDrop"
+    #     },
+    #     class:
+    #       "relative rounded-full bg-transparent p-1 text-blue-300 hover:text-white focus:outline-none focus:ring-1 focus:ring-white focus:ring-offset-1 focus:ring-offset-gray-800",
+    #     id: "user-notifications-button",
+    #     aria_expanded: "false",
+    #     aria_haspopup: "true"
+    #   ) do
+    #     span(class: "absolute -inset-1.5")
+    #     span(class: "sr-only") { "View notifications" }
+    #     render NotificationBell.new(recipient: Current.user)
+    #   end
+    #   div(
+    #     class:
+    #       "hidden absolute right-8 z-10 mt-2 w-96 text-sm px-2 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none",
+    #     role: "menu",
+    #     data: { navigation_target: "viewNotifications" },
+    #     aria_orientation: "vertical",
+    #     aria_labelledby: "user-notifications-button",
+    #     tabindex: "-1"
+    #   ) do
+    #     nots = Current.user.notifications.unread
+    #     h1(class: "text-xl mb-4") { helpers.t("notifications", name: Current.user.name, count: nots.count) }
+    #     div(class: "h-1/2 max-h-64 overflow-y-auto overflow-x-hidden", data: { turbo_prefetch: "false" }) do
+    #       turbo_frame_tag("notifications") do
+    #         ul(role: "notification_list", class: "divide-y divide-gray-100") do
+    #           nots.newest_first.each do |notification|
+    #             # render partial: "notifications/notification", locals: { notification: notification }
+    #             render NotificationItem.new(notification: notification)
+    #           end
+    #         end
+    #       end
+    #     end
+    #   end
+    # end
   end
 
   def profile_dropdown
-    comment { "Profile dropdown" }
-    div(class: " relative ml-3") do
-      div do
-        button(
-          type: "button",
-          data: {
-            navigation_target: "profileMenuButton",
-            action: "touchstart->navigation#tapDrop click->navigation#tapDrop click@window->navigation#hideDrop"
-          },
-          class:
-            "relative flex rounded-full bg-sky-200 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800",
-          id: "user-menu-button",
-          aria_expanded: "false",
-          aria_haspopup: "true"
-        ) do
-          span(class: "absolute -inset-1.5")
-          span(class: "sr-only") { "Open user menu" }
-          if Current.user
-            if Current.user.mugshot.attached?
-              image_tag(Current.user.mugshot, class: "h-8 w-8 rounded-full")
-            else
-              image_tag("icons8-customer-64.png", class: "h-8 w-8 rounded-full")
-            end
-          end
-          # helpers.user_mugshot(Current.user.mugshot, css: "h-8 w-8 rounded-full")
-          # img(
-          #   class: "h-8 w-8 rounded-full",
-          #   src:
-          #     "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-          #   alt: ""
-          # )
+    render ProfileDropmenuComponent.new
+  end
+
+
+  private
+
+    def default_menu
+      {
+        dashboard: { title: "dashboard", url: "/", icon: "home" },
+        time_material: { title: "time_material", url: "/time_materials", icon: "time_material" },
+        calendar: { title: "calendar", url: "/calendars", icon: "calendar" },
+        # reports: { title: "Reports", url: "/pages", icon: "home" },
+        manage: { title: "manage",
+          submenu: {
+            background_jobs: { title: "background_jobs", url: "/background_jobs", icon: "background_job" },
+            customers: { title: "customers", url: "/customers", icon: "customer" },
+            dashboards: { title: "dashboards", url: "/dashboards", icon: "home" },
+            invoices: { title: "invoices", url: "/invoices", icon: "invoice" },
+            invoice_items: { title: "invoice_items", url: "/invoice_items", icon: "invoice_item" },
+            kiosks: { title: "kiosks", url: "/punch_clocks", icon: "punch_clock" },
+            locations: { title: "locations", url: "/locations", icon: "location" },
+            products: { title: "products", url: "/products", icon: "product" },
+            projects: { title: "projects", url: "/projects", icon: "project" },
+            punches: { title: "punches", url: "/punches", icon: "punch" },
+            # reports: { title: "Reports", url: "/reports", icon: "home" },
+            teams: { title: "teams", url: "/teams", icon: "team" },
+            tenants: { title: "tenants", url: "/tenants", icon: "tenant" },
+            users: { title: "users", url: "/users", icon: "user" }
+          }
+        }
+      }
+    end
+
+    def current_item?(url)
+      return request.path.split("?")[0] == "/" ? "bg-gray-50" : "" if url == "/"
+      request.path.split("?")[0].include?(url) ? "bg-gray-50" : ""
+    end
+
+    def menu_item(item:, url:, css: "group flex gap-x-3 rounded-md bg-white p-2 text-sm font-semibold leading-6 text-gray-700  hover:bg-gray-50", icon: nil)
+      # %(Current: "bg-gray-50", Default: "hover:bg-gray-50")
+      css = "#{css} #{current_item?(url)}"
+      li do
+        a(href: url, class: css, data: { action: "click->mobilesidebar#hide" }) do
+          render_icon(icon) if icon
+          span(class: "", data: { menu_target: "menuitem" }) { I18n.t("menu.#{item}") }
         end
       end
-      comment do
-        %(Dropdown menu, show/hide based on menu state. Entering: "transition ease-out duration-100" From: "transform opacity-0 scale-95" To: "transform opacity-100 scale-100" Leaving: "transition ease-in duration-75" From: "transform opacity-100 scale-100" To: "transform opacity-0 scale-95")
+    end
+
+    def expanded_sub?(item)
+      item[:submenu].each do |key, i|
+        return "rotate-90 text-gray-500" if request.path.split("?")[0].include?(i[:url])
       end
-      div(
-        class:
-          "hidden absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none",
-        role: "menu",
-        data: { navigation_target: "profileMenu" },
-        aria_orientation: "vertical",
-        aria_labelledby: "user-menu-button",
-        tabindex: "-1"
-      ) do
-        comment { %(Active: "bg-gray-100", Not Active: "") }
-        p(class: "text-sm font-medium px-4 py-2") { Current.user.name }
-        hr
-        link_to("Your Profile", edit_user_registration_path, class: "block px-4 py-2 text-sm text-gray-700", role: "menuitem", tabindex: "-1", id: "user-menu-item-0")
-        link_to("Invite New User", new_user_invitation_path, class: "block px-4 py-2 text-sm text-gray-700", role: "menuitem", tabindex: "-1", id: "user-menu-item-0") unless Current.user.user?
-        # link_to( "Settings", "#", class: "block px-4 py-2 text-sm text-gray-700", role: "menuitem", tabindex: "-1", id: "user-menu-item-1")
-        link_to("Sign out", destroy_user_session_path(), class: "block px-4 py-2 text-sm text-gray-700", method: :delete, data: { turbo_method: :delete }, role: "menuitem", tabindex: "-1", id: "user-menu-item-2")
+      "text-gray-400"
+    end
+
+    def hidden_sub?(item)
+      item[:submenu].each do |key, i|
+        return "block" if request.path.split("?")[0].include?(i[:url])
+      end
+      "hidden"
+    end
+
+    def sub_menu(text, item)
+      return if Current.user.user?
+      li do
+        div do
+          button(
+            type: "button",
+            data: { action: "click->menu#toggleSubmenu" },
+            class:
+              "flex w-full items-center gap-x-3 rounded-md p-2 text-left text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50",
+            aria_controls: "sub-menu-1",
+            aria_expanded: "false"
+          ) do
+            # comment do
+            #   %(Expanded: "rotate-90 text-gray-500", Collapsed: "text-gray-400")
+            # end
+            svg(
+              class: "pointer-events-none h-5 w-5 shrink-0 #{expanded_sub?(item)}",
+              viewbox: "0 0 20 20",
+              fill: "currentColor",
+              aria_hidden: "true"
+            ) do |s|
+              s.path(
+                fill_rule: "evenodd",
+                d:
+                  "M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z",
+                clip_rule: "evenodd"
+              )
+            end
+            span(class: "", data: { menu_target: "menuitem" }) { I18n.t("menu.#{text}") }
+          end
+          # comment do
+          #   "Expandable link section, show/hide based on state."
+          # end
+          ul(class: "submenu #{hidden_sub?(item)} mt-1 px-0", id: "sub-menu-1") do
+            item[:submenu].each do |key, i|
+              next if key == :tenants && !Current.user.superadmin?
+              menu_item(item: i[:title], url: i[:url], css: "group flex gap-x-3 rounded-md bg-white p-2 text-sm font-semibold leading-6 text-gray-700  hover:bg-gray-50", icon: i[:icon])
+            end
+          end
+        end
+      end
+    rescue
+    end
+
+    def settings_and_integrations
+      li(class: "mt-auto", data: { menu_target: "setting" }) do
+        div(class: "flex items-center gap-x-0 ") do
+          a(
+            href: settings_url,
+            class:
+              "flex items-center gap-x-1 pr-3 py-3 text-sm font-semibold leading-6 text-gray-900 hover:bg-gray-50"
+          ) do
+            render_icon("setting")
+            # render Icons::Setting.new
+          end
+          a(
+            href: provided_services_url,
+            class:
+              "flex items-center gap-x-1 p-3 text-sm font-semibold leading-6 text-gray-900 hover:bg-gray-50"
+          ) do
+            render_icon("extension")
+            # render Icons::Extension.new
+          end
+          a(
+            href: "https://mortimer.pro/help",
+            target: "_blank",
+            class:
+              "flex items-center gap-x-1 p-3 text-sm font-semibold leading-6 text-gray-900 hover:bg-gray-50"
+          ) do
+            render_icon("help", "h-6 text-red-500")
+            # render Icons::Help.new cls: "h-6 text-red-500"
+          end
+        end
       end
     end
-  end
+
+    def render_icon(icon, cls = nil)
+      cls ||= "h-6 text-gray-900 hover:text-gray-500"
+      render "Icons::#{icon.camelcase}".constantize.new cls: cls
+    end
 end

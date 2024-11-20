@@ -1,6 +1,6 @@
 class Users::Form < ApplicationForm
   def view_template(&)
-    view_only field("account.name").input(class: "mort-form-text")
+    view_only field("tenant.name").input(class: "mort-form-text")
     if model.superadmin? and not Current.user.superadmin?
       view_only field(:name).input(class: "mort-form-text")
       view_only field(:email).input(class: "mort-form-text")
@@ -10,9 +10,10 @@ class Users::Form < ApplicationForm
     else
       row field(:name).input(class: "mort-form-text")
       row field(:email).input(class: "mort-form-text")
+      row field(:pincode).input(class: "mort-form-text")
       row field(:mugshot).file(class: "mort-form-file")
       row field(:locale).select(User.locales, prompt: I18n.t(".select_user_locale"), class: "mort-form-text")
-      row field(:time_zone).select(ActiveSupport::TimeZone.all.collect { |tz| [ "(GMT#{ActiveSupport::TimeZone.seconds_to_utc_offset(tz.utc_offset)}) #{tz.name}", tz.tzinfo.name ] }, class: "mort-form-text")
+      row field(:time_zone).select(User.time_zones_for_phlex, class: "mort-form-text")
     end
     role_select
     if Current.user.superadmin?

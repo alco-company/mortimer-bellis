@@ -1,7 +1,7 @@
 # README
 
 Mortimer Time & Attendance (MTA) is a lean take on the centuries old 'punch clock'. You get a back office
-with accounts, users, locations, punch_clocks, teams, employees, and you get a front office with
+with tenants, users, locations, punch_clocks, teams, employees, and you get a front office with
 punch_cards, and punches.
 
 MTA will email you a summary every morning at 05:00 highlighting what is important - employees working more than what has been

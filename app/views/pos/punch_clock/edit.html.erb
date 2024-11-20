@@ -6,8 +6,8 @@
 
   content_for :nav do 
     render NavigationComponent.new( items: [
-      # { title: I18n.t('menu.pos.profile'), url: pos_punch_cards_url( api_key: @resource.access_token, employee: {id: @employee.id} ) },
-      # { title: I18n.t('menu.pos.payroll_period'), url: pos_punch_cards_url( api_key: @resource.access_token, employee: {id: @employee.id} ) }
+      # { title: I18n.t('menu.pos.profile'), url: pos_punch_cards_url( api_key: @resource.access_token, user: {id: @user.id} ) },
+      # { title: I18n.t('menu.pos.payroll_period'), url: pos_punch_cards_url( api_key: @resource.access_token, user: {id: @user.id} ) }
     ], locale: @resource.locale, time_zone: @resource.time_zone)
   end 
 
@@ -28,6 +28,6 @@
   data-punch-clock-url-value="<%= pos_punch_clock_url %>"
   data-action="keydown@window->punch-clock#keydownHandler"
   class="h-screen w-full divide-y divide-gray-200 overflow-hidden bg-white">
-  <%= render_punch_clock_header(resource: @resource, employee: @employee) %>
-  <%= render PunchClockPunch.new resource: @resource, employee: @employee, tab: params[:tab] %>
+  <%= render_punch_clock_header(resource: @resource, user: @user) %>
+  <%= render PunchClockPunch.new resource: @resource, user: @user, tab: params[:tab] %>
 </div>

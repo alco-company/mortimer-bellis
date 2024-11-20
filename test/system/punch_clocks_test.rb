@@ -15,7 +15,7 @@ class PunchClocksTest < ApplicationSystemTestCase
   #   click_on "New punch clock"
 
   #   fill_in "Access token", with: @punch_clock.access_token
-  #   fill_in "Account", with: @punch_clock.account_id
+  #   fill_in "Tenant", with: @punch_clock.tenant_id
   #   fill_in "Ip addr", with: @punch_clock.ip_addr
   #   fill_in "Last punched at", with: @punch_clock.last_punched_at
   #   fill_in "Locale", with: @punch_clock.locale
@@ -33,7 +33,7 @@ class PunchClocksTest < ApplicationSystemTestCase
   #   click_on "Edit this punch clock", match: :first
 
   #   fill_in "Access token", with: @punch_clock.access_token
-  #   fill_in "Account", with: @punch_clock.account_id
+  #   fill_in "Tenant", with: @punch_clock.tenant_id
   #   fill_in "Ip addr", with: @punch_clock.ip_addr
   #   fill_in "Last punched at", with: @punch_clock.last_punched_at.to_s
   #   fill_in "Locale", with: @punch_clock.locale

@@ -1,9 +1,9 @@
 class PunchClockPunch < PunchClockBase
-  attr_accessor :resource, :employee, :pane, :tab, :punch_clock
+  attr_accessor :resource, :user, :pane, :tab, :punch_clock
 
-  def initialize(resource:, employee: nil, tab: "today")
+  def initialize(resource:, user: nil, tab: "today")
     @resource = @punch_clock = resource
-    @employee = employee || false
+    @user = user || false
     @tab = tab
   end
 
@@ -14,10 +14,10 @@ class PunchClockPunch < PunchClockBase
         todays_minutes
         div(class: "grid grid-cols-2 gap-5") do
           div() do
-            list_punches ".todays_punches", employee.todays_punches
+            list_punches ".todays_punches", user.todays_punches
           end
           div(class: "h-full ") do
-            list_punches ".payroll_punches", employee.punches.by_payroll_period(employee.punches_settled_at).order(punched_at: :desc), false, true, "payroll"
+            # list_punches ".payroll_punches", user.punches.by_payroll_period(user.punches_settled_at).order(punched_at: :desc), false, true, "payroll"
           end
         end
       end
@@ -26,9 +26,9 @@ class PunchClockPunch < PunchClockBase
 
   def punch_buttons
     div(class: "flex grow-0 items-center justify-center w-full p-5 font-medium rtl:text-right text-gray-500 gap-3") do
-      employee.archived? ?
-        I18n.t("employee.archived") :
-        render(PunchClockButtons.new(punch_clock: resource, employee: employee, tab: tab, url:  pos_punch_clock_url))
+      user.archived? ?
+        I18n.t("user.archived") :
+        render(PunchClockButtons.new(punch_clock: resource, user: user, tab: tab, url:  pos_punch_clock_url))
     end
   end
 end

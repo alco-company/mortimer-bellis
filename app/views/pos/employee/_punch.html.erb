@@ -11,6 +11,6 @@
       </div>
     </div>
     <div class="flex flex-none items-center gap-x-4">
-      <%= render PosContextmenu.new resource: punch, turbo_frame: dom_id(punch), alter: true, links: [ pos_employee_edit_url(api_key: punch.employee.access_token, id: punch.id), pos_employee_delete_url(api_key: punch.employee.access_token, id: punch.id)] %>
+      <%= render PosContextmenu.new resource: punch, turbo_frame: dom_id(punch), alter: true, links: [ pos_employee_edit_url(api_key: punch.user.access_token, id: punch.id), pos_employee_delete_url(api_key: punch.user.access_token, id: punch.id)] %>
     </div>
 </li>

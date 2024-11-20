@@ -2,7 +2,7 @@ require "test_helper"
 
 class PunchClocksControllerTest < ActionDispatch::IntegrationTest
   # setup do
-  #   Current.account = accounts(:one)
+  #   Current.tenant = tenants(:one)
   #   @punch_clock = punch_clocks(:one)
   # end
 
@@ -18,7 +18,7 @@ class PunchClocksControllerTest < ActionDispatch::IntegrationTest
 
   # test "should create punch_clock" do
   #   assert_difference("PunchClock.count") do
-  #     post punch_clocks_url, params: { punch_clock: { access_token: @punch_clock.access_token, account_id: @punch_clock.account_id, ip_addr: @punch_clock.ip_addr, last_punched_at: @punch_clock.last_punched_at, locale: @punch_clock.locale, location_id: @punch_clock.location_id, name: @punch_clock.name, time_zone: @punch_clock.time_zone } }
+  #     post punch_clocks_url, params: { punch_clock: { access_token: @punch_clock.access_token, tenant_id: @punch_clock.tenant_id, ip_addr: @punch_clock.ip_addr, last_punched_at: @punch_clock.last_punched_at, locale: @punch_clock.locale, location_id: @punch_clock.location_id, name: @punch_clock.name, time_zone: @punch_clock.time_zone } }
   #   end
 
   #   assert_redirected_to punch_clocks_url
@@ -35,7 +35,7 @@ class PunchClocksControllerTest < ActionDispatch::IntegrationTest
   # end
 
   # test "should update punch_clock" do
-  #   patch punch_clock_url(@punch_clock), params: { punch_clock: { access_token: @punch_clock.access_token, account_id: @punch_clock.account_id, ip_addr: @punch_clock.ip_addr, last_punched_at: @punch_clock.last_punched_at, locale: @punch_clock.locale, location_id: @punch_clock.location_id, name: @punch_clock.name, time_zone: @punch_clock.time_zone } }
+  #   patch punch_clock_url(@punch_clock), params: { punch_clock: { access_token: @punch_clock.access_token, tenant_id: @punch_clock.tenant_id, ip_addr: @punch_clock.ip_addr, last_punched_at: @punch_clock.last_punched_at, locale: @punch_clock.locale, location_id: @punch_clock.location_id, name: @punch_clock.name, time_zone: @punch_clock.time_zone } }
   #   assert_redirected_to punch_clocks_url
   # end
 

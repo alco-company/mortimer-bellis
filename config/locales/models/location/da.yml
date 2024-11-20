@@ -11,6 +11,7 @@ da:
 
   locations:
     default_location: Arbejdssted
+    validation_errors: Der er fejl i det indtastede
 
     create:
       post: Arbejdsstedet blev oprettet
@@ -29,7 +30,7 @@ da:
       show: Vis
       name: Navn
       email: Email
-      location_color: Farve
+      color: Farve
       phone: Telefon
       pincode: Pinkode
       state: Status
@@ -38,6 +39,7 @@ da:
     form:
       new: Nyt arbejdssted
       edit: Rediger arbejdssted
+      show: Vis arbejdssted
 
     new:
       title: Nyt arbejdssted

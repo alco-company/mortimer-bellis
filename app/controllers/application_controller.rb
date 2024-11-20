@@ -17,9 +17,9 @@ class ApplicationController < ActionController::Base
   include ErrorHandling
 
   def say(msg)
-    Rails.logger.info "==============================="
-    Rails.logger.info msg
-    Rails.logger.info "==============================="
+    Rails.logger.info { "===============================" }
+    Rails.logger.info { msg }
+    Rails.logger.info { "===============================" }
   end
 
   private

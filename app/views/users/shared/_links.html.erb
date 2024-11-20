@@ -1,28 +1,37 @@
-<%- if controller_name != 'sessions' %>
-  <%= link_to I18n.t("devise.login"), new_session_path(resource_name), class: "mort-link-primary" %><br />
-<% end %>
-
-<%- if devise_mapping.registerable? && controller_name != 'registrations' %>
-  <%= link_to I18n.t("devise.sign_up"), new_registration_path(resource_name), class: "mort-link-primary" %><br />
-<% end %>
-
-<%- if devise_mapping.recoverable? && controller_name != 'passwords' && controller_name != 'registrations' %>
-  <%= link_to I18n.t("devise.forgot_password"), new_password_path(resource_name), class: "mort-link-primary" %><br />
-<% end %>
-
-<%- if devise_mapping.confirmable? && controller_name != 'confirmations' %>
-  <%= link_to I18n.t("devise.missing_confirmation_email"), new_confirmation_path(resource_name), class: "mort-link-primary" %><br />
-<% end %>
-
-<%- if devise_mapping.lockable? && resource_class.unlock_strategy_enabled?(:email) && controller_name != 'unlocks' %>
-  <%= link_to I18n.t("devise.missing_unlock_email"), new_unlock_path(resource_name), class: "mort-link-primary" %><br />
-<% end %>
-
 <%- if devise_mapping.omniauthable? %>
   <%- resource_class.omniauth_providers.each do |provider| %>
-    <%= button_to "Sign in with #{OmniAuth::Utils.camelize(provider)}", 
+    <%= button_to I18n.t("devise.sign_in_with", provider: OmniAuth::Utils.camelize(provider)), 
       omniauth_authorize_path(resource_name, provider), 
       data: { turbo: false }, 
       class: "mort-btn-primary" %><br />
   <% end %>
+  <hr class="my-2">
 <% end %>
+
+<%- if controller_name != 'sessions' %>
+  <%= link_to I18n.t("devise.login"), new_session_path(resource_name, locale: I18n.locale), class: "mort-link-primary" %><br />
+<% end %>
+
+<%- if devise_mapping.registerable? && controller_name != 'registrations' %>
+  <%= link_to I18n.t("devise.sign_up"), new_registration_path(resource_name, locale: I18n.locale), class: "mort-link-primary" %><br />
+<% end %>
+
+<%- if devise_mapping.recoverable? && controller_name != 'passwords' && controller_name != 'registrations' %>
+  <%= link_to I18n.t("devise.forgot_password"), new_password_path(resource_name, locale: I18n.locale), class: "mort-link-primary" %><br />
+<% end %>
+
+<%- if devise_mapping.confirmable? && controller_name != 'confirmations' %>
+  <%= link_to I18n.t("devise.missing_confirmation_email"), new_confirmation_path(resource_name, locale: I18n.locale), class: "mort-link-primary" %><br />
+<% end %>
+
+<%- if devise_mapping.lockable? && resource_class.unlock_strategy_enabled?(:email) && controller_name != 'unlocks' %>
+  <%= link_to I18n.t("devise.missing_unlock_email"), new_unlock_path(resource_name, locale: I18n.locale), class: "mort-link-primary" %><br />
+<% end %>
+
+<hr class="my-2">
+<% params[:locale]="da" %>
+<%= link_to I18n.t('danish'), url_for(params.permit!), class: "mort-link-primary" , data: { turbo_frame: "_top"} if I18n.locale != :da %>
+<% params[:locale]="en" %>
+<%= link_to I18n.t('english'), url_for(params.permit!), class: "mort-link-primary" , data: { turbo_frame: "_top"} if I18n.locale != :en %>
+<% params[:locale]=I18n.locale %>
+<br>

@@ -1,6 +1,8 @@
 da:
 
   products:
+    validation_errors: Der er fejl i det indtastede
+
     create:
       post: Produktet blev oprettet
     update:
@@ -19,17 +21,18 @@ da:
       updated_at: Opdateret den
 
     form:
-      new: Ny medarbejder
-      edit: Rediger medarbejder
+      new: Nyt produkt
+      edit: Rediger produkt
+      show: Vis produktet
 
     new:
-      title: Ny medarbejder
+      title: Nyt produkt
       create: Opret
 
     edit:
-      title: Rediger medarbejder
+      title: Rediger produkt
       update: Opdater
 
     show:
-      title: Medarbejder
+      title: Produkt
       back: Tilbage

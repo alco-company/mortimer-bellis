@@ -14,6 +14,6 @@ class CreatePunchCards < ActiveRecord::Migration[7.2]
     end
 
     add_foreign_key "punch_cards", "accounts", on_delete: :cascade
-    add_foreign_key "punch_cards", "employees", on_delete: :cascade
+    # add_foreign_key "punch_cards", "employees", on_delete: :cascade
   end
 end

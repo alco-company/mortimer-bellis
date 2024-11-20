@@ -1,9 +1,10 @@
 da:
+  english: "Do you prefer english?"
   hours_minutes: "%{hours}t %{minutes}m"
+  something_went_wrong: "Der opstod en fejl: %{error}"
   select_team: Vælg hold
   last_payroll_at: Lønperiode til og med
-  import_employee: Videre
-  import_employees: Indlæs medarbejder stamdata
+  import_users: Indlæs medarbejder stamdata
   form_errors_prohibited: "%{errors} fejl forhindrede denne post i at blive gemt"
   "yes": Ja
   "no": Nej
@@ -15,6 +16,8 @@ da:
   save: Gem
   create: Opret 
   filter: Filtrér
+  sort: Sortér
+  select: Vælg (poster)
   delete: Slet
   delete_all: Slet alle
   import: Importér
@@ -25,8 +28,19 @@ da:
   unauthorized: Du har ikke rettigheder til at gennemføre denne handling
   cannot_change_role: Du kan ikke ændre din egen rolle til super_user!
   form_not_processable: Formularen kunne ikke behandles - prøv igen
-
+  holyday: Helligdag
+  notifications_salutation: "Hej %{name},"
+  notifications: "du har %{count} ulæste beskeder"
+  notification_sent_at: Sendt den
+  mark_as_read: Læst
   expected_time_zone: "Vi tror at den tidszone, der passer dig bedst er:"
+  view_all: Se alle
+  more: mere
+  ago: siden
+  last_update: sidst opdateret for
+  collected at: indsamlet kl
+  no records were found: Ingen poster fundet
+  enable_notifications: Aktivér notifikationer
 
   weekdays: Ugedage
   monday: Mandag
@@ -37,56 +51,10 @@ da:
   saturday: Lørdag
   sunday: Søndag
 
-  devise:
-    mailer:
-      invitation_instructions:
-        page_title: "Invitation til at oprette en brugerprofil på Mortimer"
-        subject: "Invitation til at oprette en brugerprofil på  M O R T I M E R"
-        preheader: "Invitation til at oprette en brugerprofil på Mortimer"
-        hi: "Hej"
-        title: "Er %{email} din email adresse?"
-        introduction: "%{sender} hos %{account} har inviteret dig til at færdiggøre oprettelsen af en brugerprofil på %{url}. Du kan acceptere invitationen ved at trykke på knappen her nedenfor."
-        accept: "Ja det er min email adresse"
-        action: "Jeg accepterer invitationen"
-        accept_until: "Invitationen er gyldig indtil %{due_date}."
-        ignore: "Ønsker du ikke at acceptere invitationen, behøver du intet at gøre (måske bortset fra evt at smide email'en bort). <br /><br />Din bruger konto bliver først oprettet i det øjeblik, du klikker på link'et her ovenfor, og derefter angiver din adgangskode."
-        regards: "Med venlig hilsen"
-
-  modal:
-    destroy:
-      attachment_deleted: Den vedhæftede fil blev slettet
-      post: Posten blev slettet korrekt.
-      logo:
-        title: Slet logo
-        instruction: Er du sikker på at du vil slette logoet?
-      mugshot:
-        title: Slet profilbilledet
-        instruction: Er du sikker på at du vil slette profilbilledet?
-
-  menu:
-    login: Log ind
-    home: Hjem
-    pages: Sider
-    account: Konto
-    accounts: Konti
-    users: Brugere
-    teams: Hold
-    locations: Arbejdssteder
-    punch_clocks: Stempelure
-    employees: Medarbejdere
-    punch_cards: Stempelkort
-    punches: Stemplinger
-    motds: Dagens beskeder
-
-    pos:
-      profile: Profil
-      today: I dag
-      payroll_period: Lønperiode
-    
-  locale:
-    da: Dansk
-    en: Engelsk
-    de: Tysk
+  application:
+    header:
+      sync_with_ERP: Synkroniser med ERP
+  
   colors:
     red: Rød
     fuchsia: Fuchsia
@@ -107,6 +75,102 @@ da:
     black: Sort
     white: Hvid
 
+  dashboards:
+    list:
+      title: Overblik
+      new: Nyt overblik
+      edit: Rediger
+      delete: Slet
+      show: Vis
+      name: Navn
+      layout: Skabelon
+      body: Indhold
+      updated_at: Opdateret den
+
+    form:
+      new: Nyt overblik
+      edit: Rediger overblik
+      show: Vis overblik
+
+    new:
+      title: Nyt overblik
+      create: Opret
+
+    edit:
+      title: Rediger overblik
+      update: Opdater
+
+    show:
+      title: Overblik
+
+  landing:
+    recent_activity: Seneste aktiviteter
+    activity_description: "%{name} brugte %{punch_clock}"
+    no_activity_description: "Du har ikke stemplet endnu"
+    activity_list:
+      transaction: transaktion
+      time: klokken
+      state: status
+      date: dato
+  locale:
+    da: Dansk
+    en: Engelsk
+    de: Tysk
+
+  notification:
+    read_message: Læs beskeden
+
+  topbar:
+    search: 
+      placeholder: Søg...
+    profile:
+      your_profile: Din profil
+      sign_out: Log ud
+
+  modal:
+    destroy:
+      attachment_deleted: Den vedhæftede fil blev slettet
+      post: Posten blev slettet korrekt.
+      logo:
+        title: Slet logo
+        instruction: Er du sikker på at du vil slette logoet?
+      mugshot:
+        title: Slet profilbilledet
+        instruction: Er du sikker på at du vil slette profilbilledet?
+
+  menu:
+    login: Log ind
+    home: Hjem
+    calendars: Kalendere
+    pages: Sider
+    holidays: Helligdage
+    tenant: Konto
+    punch_clocks: Stempelure
+    punch_cards: Stempelkort
+    motds: Dagens beskeder
+    dashboard: Overblik
+    time_material: Tid/Materialer
+    calendar: Kalender
+    manage: Administration
+    background_jobs: Baggrundsopgaver
+    customers: Kunder
+    dashboards: Overblik
+    invoices: Fakturaer
+    invoice_items: Fakturalinjer
+    kiosks: Kiosker
+    locations: Arbejdssteder
+    products: Produkter
+    projects: Projekter
+    punches: Stemplinger
+    teams: Hold
+    tenants: Konti
+    users: Medarbejdere
+
+    pos:
+      profile: Profil
+      today: I dag
+      payroll_period: Lønperiode
+
   pages:
     list:
       slug: URL
@@ -114,9 +178,30 @@ da:
       body: Indhold
       updated_at: Opdateret den
       created_at: Oprettet den
+
+  pagy:
+    # showing: Viser %{from} til %{to}, af %{count} %{entry_name}
+    showing: Viser
+    from: fra
+    to: til
+    of: af
+    results: poster
+    page: Side
+    previous: Forrige
+    next: Næste
+    gap: "..."
+    truncate: "..."
+    more: "mere"
+  profile:
+    overview: Oversigt
+    invite_new_user: Invitér ny bruger
+    invite_new_ user: Invitér ny medarbejder
+
   pos:
-    employee:
+    user:
       show:
+        more_options: mere
+        even_more_options: endnu mere
         today: I dag
         payroll_period: Lønperiode
         profile: Profil
@@ -142,7 +227,7 @@ da:
         free_reason: Årsag til fravær
         sick_reason: Sygdomsårsag
         free: Fri
-        rr_free: Ferie
+        rr_free: Frivalg
         senior_free: Senior
         unpaid_free: Selvbetalt
         maternity_free: Barsel
@@ -163,12 +248,30 @@ da:
       show:
         network_not_available: Netværket er ikke tilgængeligt
 
+  salutations:
+    good_morning: Godmorgen, %{name}
+    good_afternoon: God eftermiddag, %{name}
+    good_evening: God aften, %{name}
+    good_night: Godnat, %{name}
 
+  stats:
+    workers_present: Indstemplede
+    hours_worked_this_week: Arbejdstimer denne uge
+    extra_hours_worked_this_week: Overtid denne uge
+    billable_hours: Fakturerbare timer
+    planned_vacation_days: Planlagte feriedage
+    sick_days_week: Sygedage i denne uge
+
+  tenants:
+    form:
+      new: Ny konto
+      edit: Rediger konto
+      show: Vis konto
 # Standard localization ------------------------------
 
   activerecord:
     attributes:
-      account:
+      tenant:
         name: Kontonavn
         email: Email adresse - konto ansvarlig
         pp_identification: Lønbureau ID
@@ -176,8 +279,9 @@ da:
         tax_number: CVR nummer
         time_zone: Tidszone
         locale: Sprog
+        country: Land - for at få vist korrekte nationale helligdage
         logo: Logo (80 x 40)
-        account_color: Farve
+        color: Farve
       asset:
         name: 'Navn'
         asset_teams: 'Hold/grupper'
@@ -186,7 +290,7 @@ da:
         user: admin bruger 
         state: Status
       asset_work_session:
-        employee_id: Medarbejder
+        user_id: Medarbejder
         start_at: Startet den 
         stop_at: Stoppet den
         session_type: Type 
@@ -201,7 +305,7 @@ da:
         comment: Beskrivelse - især ved overarbejde, vikariat, evt sygdom og mere
         reason: Årsag - '15MIN', og 'XTRA' ved aftalte særlige indstemplinger
       background_job:
-        account_id: Konto
+        tenant_id: Konto
         user_id: Bruger
         state: Status
         job_klass: Klasse/Model
@@ -210,66 +314,112 @@ da:
         schedule: Plan 
         next_run_at: Næste kørsel
         params: Argumenter
+      calendar:
+        name: Navn
+      customer:
+        name: Navn
+        external_reference: Ekstern reference
+        is_person: Er en person
+        is_member: Er det et medlem (af Dinero)
+        is_debitor: Er debitor
+        is_creditor: Er kreditor
+        street: Gade/vej
+        zipcode: Postnr
+        city: By
+        country_key: Land
+        phone: Telefon
+        email: Email
+        webpage: Hjemmeside
+        att_person: Kontaktperson
+        vat_number: CVR nummer
+        ean_number: EAN nummer
+        payment_condition_type: Betalingsbetingelse
+        payment_condition_number_of_days: Betalingsbetingelse i dage
+        member_number: Medlemsnummer
+        company_status: Selskabsform
+        vat_region_key: Momsområde
+        invoice_mail_out_option_key: Faktura udsendelse
+        contact_person: Kontaktperson
+        description: Beskrivelse
       dashboard:
         name: Navn
+        feed: Indholdsstrøm
+        last_feed_at: Indhold sidst opdateret
         layout: Skabelon
         body: Indhold
-      employee:
-        team_id: "Hold/arbejdsgruppe"
-        name: Navn
-        mugshot: Profil billede
-        pincode: Pinkode
-        payroll_employee_ident: Løn nummer
-        punching_absence: Stempler kun fravær
-        access_token: API nøgle
-        last_punched_at: sidst stemplet
-        state: status
-        punches_settled_at: sidst afstemt
-        job_title: job titel
-        birthday: fødselsdag
-        hired_at: ansat den
-        description: beskrivelse
-        email: Email adresse
-        cell_phone: Mobil
-        pbx_extension: lokalnr (omstillingsanlæg)
-        contract_minutes: Aftalt arbejdstid i lønperioden
-        contract_days_per_payroll: Aftalt antal kalenderdage/lønperiode (0=måned)
-        contract_days_per_week: Aftalt antal arbejdsdage/uge
-        flex_balance_minutes: flex minutter
-        hour_pay: time(grund)løn
-        ot1_add_hour_pay: Overtid 1 tillæg (fx 15,25 eller 50%)
-        ot2_add_hour_pay: Overtid 2 tillæg (fx 30,50 eller 100%)
-        hour_rate_cent: time(grund)løn i øre
-        ot1_hour_add_cent: OT1 tillæg time løn i øre
-        ot2_hour_add_cent: OT2 tillæg time løn i øre
-        tmp_overtime_allowed: Overtid midlertidigt tilladt i 24t fra kl
-        eu_state: EU regulativ (2003/88/EC)
-        blocked: tidsregistrering spærret
-        locale: sprog
-        time_zone: tidszone
-        allowed_ot_minutes: Tilladt overtid i minutter (-1=ingen, 0=ubegrænset)
-
       employee_invitation:
         user_id: Inviteret af
         team_id: Hold
         address: Email adresse | Tlfnr (SMS)
         state: Status på invitationen
       event:
+        color: Farve
         minutes: Minutter
-        employee_id: Medarbejder
+        user_id: Medarbejder
       faq:
         endpoint: URL 
         field: felt 
         action: handling 
         title: titel 
         description: beskrivelse
+      holiday:
+        name: Navn
+        from_date: Fra dato
+        to_date: Til dato
+        all_day: En hel (fri/hellig)dag
+        description: Beskrivelse
+        countries: Hvilke lande (sprogområder) gælder helligdagen for
+      invoice:
+        customer_id: Kunde
+        invoice_number: Faktura nummer
+        currency: Valuta
+        state: Status
+        mail_out_state: Status for udsendelse
+        latest_mail_out_type: Sidste udsendelsestype
+        locale: Sprog
+        external_reference: Ekstern reference
+        description: Beskrivelse
+        comment: Kommentar
+        invoice_date: Faktura dato
+        payment_date: Betalingsdato
+        address:  Adresse
+        erp_guid: ERP GUID
+        show_lines_incl_vat: Vis linjer inkl. moms
+        invoice_template_id: Skabelon
+        contact_guid: Kontakt GUID
+        payment_condition_number_of_days: Betalingsbetingelse i dage
+        payment_condition_type: Betalingsbetingelse
+        reminder_fee: Rykkergebyr
+        reminder_interest_rate: Rykkerrente
+        total_excl_vat_in_dkk: Total ekskl. moms i DKK
+        total_excl_vat: Total ekskl. moms
+        total_incl_vat_in_dkk: Total inkl. moms i DKK
+        total_incl_vat: Total inkl. moms
+        is_mobile_pay_invoice_enabled: MobilePay faktura
+        is_penso_pay_enabled: PensoPay faktura
+      invoice_item:
+        invoice_id: Faktura
+        project_id: Projekt
+        product_id: Produkt
+        product_guid: Produkt GUID
+        description: Beskrivelse
+        comments: Kommentar
+        quantity: Antal
+        account_number: Salgskonto nummer
+        unit: Enhed
+        discount: Rabat
+        line_type: Linje type
+        base_amount_value: Pris ialt
+        base_amount_value_incl_vat: Pris ialt inkl. moms
+        total_amount: Total ialt
+        total_amount_incl_vat: Total ialt inkl. moms
       lead:
         email_address: Email adresse
         trial_ends_at: Prøveperioden slutter
         converted_at: Kunde fra    
       location:
         name: Navn/Betegnelse
-        location_color: Farve
+        color: Farve
         long_lat: Position (long,lat)
       message:
         subject: Overskrift
@@ -299,7 +449,28 @@ da:
         mac_addr: MAC adresse 
         port: port 
         state: status 
-
+      product:
+        name: Navn
+        product_number: Produkt nummer
+        quantity: Antal
+        unit: Enhed
+        base_amount_value: Pris
+        account_number: Salgskonto nummer
+        external_reference: Ekstern reference
+      project:
+        customer_id: Kunde
+        name: Navn
+        description: Beskrivelse
+        start_date: Start dato
+        end_date: Slut dato
+        state: Status
+        budget: Budget
+        is_billable: Fakturérbar
+        is_separate_invoice: Særskilt faktura
+        hourly_rate: Timepris
+        priority: Prioritet
+        estimated_minutes: Estimeret tid
+        actual_minutes: Forbrugt tid
       profile: 
         name: Brugernavn
         avatar: Profil billede
@@ -307,19 +478,31 @@ da:
         color: Farve
         locale: Sprog 
 
+      provided_service:
+        name: Navn
+        service: Service klasse
+        organizationID: Hvilket regnskab skal integreres med Mortimer?
+        account_for_one_off: Konto for diverse salg
+        product_for_time: Produkt for salg af timer
+        product_for_overtime: Produkt for salg af timer (50% overtid)
+        product_for_overtime_100: Produkt for salg af timer (100% overtid)
+        product_for_mileage: Produkt for salg af kørsel
+        product_for_hardware: Finans konto for salg af materialer (fx 1020)
+        service_params: Service indstillinger
+
       punch:
         punched_at: "stemplet kl:"
-        employee_id: Medarbejder
+        user_id: Medarbejder
         state: Status
         punch_clock_id: Stempelur
         excluded_days: Undtagen disse dage
         comment: Bemærkning
         
       punch_card:
-        employee:
+        user:
           name: Medarbejder
         punched_at: "stemplet kl:"
-        employee_id: Medarbejder
+        user_id: Medarbejder
         location_id: Arbejdssted
         punch_clock_id: Stempelur
         punch_type: Type
@@ -363,6 +546,13 @@ da:
         service_group: Gruppe 
         service_model: Beregningsmodel
         menu_icon: Icon (html)
+      setting:
+        key: Nøgle
+        setable_type: Tabel
+        setable_id: Post/record ID
+        priority: Orden/rækkefølge
+        format: Format
+        value: Værdi
       stocked_product:
         name: Navn
         stock: Lager
@@ -380,7 +570,8 @@ da:
         name: Hold navn
         punches_settled_at: sidst afstemt
         time_zone: Tidszone
-        team_color: Hold farve
+        color: Hold farve
+        country: Land - for at få vist korrekte nationale helligdage (overstyr konto land)
         locale: Sprog
         roll_days: antal dage i et rul
         week_workdays: arbejdsdage/uge
@@ -402,6 +593,42 @@ da:
         eu_state: EU regulativ (2003/88/EC) status
         blocked: Blokeret for tidsregistrering
         allowed_ot_minutes: Tilladt overtid i minutter (-1=ingen, 0=ubegrænset)
+      time_material:
+        customer_id: Kunde
+        project_id: Projekt
+        product_id: Produkt
+        user_id: Medarbejder
+        comment: Kommentar
+        date: Dato
+        time: Tid
+        state: Status
+        over_time: Overtid
+        material: Materiale
+        description: Beskrivelse
+        quantity: Antal
+        unit: Enhed
+        unit_price: Enhedspris
+        discount: Rabat
+        about: Beskrivelse
+        customer: Kunde
+        project: Projekt
+        rate: Timepris
+        started_at: Startet kl
+        paused_at: Parkeret kl
+        time_spent: Forbrugt tid
+        is_done: færdig?
+        is_invoice: Opgaven skal faktureres
+        is_free: per kulance
+        is_offer: Tilbud
+        is_separate: Separat faktura
+        push_log: Log over fejl ifm upload til Dinero
+        pushed_erp_timestamp: Overført til ERP
+        odo_from: fra
+        odo_to: til
+        kilometers: Km
+        trip_purpose: Formål
+        odo_from_time: Kørsel start
+        odo_to_time: Kørsel stoppet
 
       uri_scheme: 
         scheme: skema
@@ -417,12 +644,12 @@ da:
         sub_scheme: Under skema
       user:
         name: Navn
-        account:
+        tenant:
           one: Konto
           name: Konto
         invited_by: 
           name: Blev inviteret af
-        email: Email adresse
+        email: Emailadresse
         mugshot: Profil billede
         role: Rolle
         user_name: Brugernavn
@@ -443,9 +670,39 @@ da:
         reset_password_sent_at: Nulstilling sendt den
         locale: sprog
         time_zone: tidszone
+        team_id: "Hold/arbejdsgruppe"
+        country: Land - for at få vist korrekte nationale helligdage - (overstyr hold land)
+        pincode: Pinkode
+        color: Farve
+        payroll_user_ident: Løn nummer
+        punching_absence: Stempler kun fravær
+        access_token: API nøgle
+        last_punched_at: sidst stemplet
+        state: status
+        punches_settled_at: sidst afstemt
+        job_title: job titel
+        birthday: fødselsdag
+        hired_at: ansat den
+        description: beskrivelse
+        cell_phone: Mobil
+        pbx_extension: lokalnr (omstillingsanlæg)
+        contract_minutes: Aftalt arbejdstid i lønperioden
+        contract_days_per_payroll: Aftalt antal kalenderdage/lønperiode (0=måned)
+        contract_days_per_week: Aftalt antal arbejdsdage/uge
+        flex_balance_minutes: flex minutter
+        hour_pay: time(grund)løn
+        ot1_add_hour_pay: Overtid 1 tillæg (fx 15,25 eller 50%)
+        ot2_add_hour_pay: Overtid 2 tillæg (fx 30,50 eller 100%)
+        hour_rate_cent: time(grund)løn i øre
+        ot1_hour_add_cent: OT1 tillæg time løn i øre
+        ot2_hour_add_cent: OT2 tillæg time løn i øre
+        tmp_overtime_allowed: Overtid midlertidigt tilladt i 24t fra kl
+        eu_state: EU regulativ (2003/88/EC)
+        blocked: tidsregistrering spærret
+        allowed_ot_minutes: Tilladt overtid i minutter (-1=ingen, 0=ubegrænset)
 
     models:
-      account:
+      tenant:
         one: konto
         other: konti
       asset_work_session:
@@ -463,9 +720,6 @@ da:
       dashboard:
         one: Overblik 
         other: Overblik
-      employee:
-        one: medarbejder
-        other: medarbejdere
       equipment:
         one: materiel 
         other: materiel 
@@ -535,6 +789,9 @@ da:
       team:
         one: hold
         other: hold
+      time_material:
+        one: tid/materiale
+        other: tid/materialer
       uri_scheme:
         one: URI skema 
         other: URI skemaer
@@ -545,6 +802,11 @@ da:
     errors:
       messages:
         record_invalid: "Posten findes ikke"
+      models:
+        user:
+          attributes:
+            pincode:
+              in: "Pinkoden skal være et tal mellem 1000 og 9999"
 
   date:
     single_day_names:
@@ -588,14 +850,21 @@ da:
     formats:
       default: "%d.%m.%Y"
       dm: "%d/%m"
+      day_month: "%d. %B"
       dmy: "%d/%m/%y"
       long: "%e. %B %Y"
       short: "%e. %b %Y"
       short_iso: "%Y-%m-%d"
       week_number: "%W"
       short_week_number: "%w"
+      short_week_year: "%w, '%y"
+      week_year: "%W, %Y"
       week_string: "uge %W"
+      day_name: "%A"
       month_name: "%B"
+      month_name_year: "%B, %Y"
+      year: "%Y"
+      day_summary: "%A d. %e. %B %Y"
     month_names:
     - 
     - januar
@@ -666,6 +935,7 @@ da:
     format: "%{attribute} %{message}"
     messages:
       user_registration_failed: "Bruger registreringen mislykkedes - fejl: %{error}"
+      user_role_cannot_be_assigned: "Rollen kan ikke tildeles"
       already_confirmed: "er allerede bekræftet, prøv venligst at logge ind"
       confirmation_period_expired: "skal bekræftes inden %{period}, forespørg venligst om en ny"
       expired: "er udløbet, venligst anmod om en ny"

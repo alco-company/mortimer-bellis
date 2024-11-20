@@ -1,6 +1,6 @@
 <div id="pos_employee_list" class="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
-  <% @employees.each do |employee| 
-      next if employee.archived? %>
-    <%= render partial: "pos/employee/list_employee", locals: { employee: employee } %>
+  <% @users.each do |user| 
+      next if user.archived? %>
+    <%= render partial: "pos/user/list_user", locals: { user: user } %>
   <% end %>
 </div>

@@ -1,0 +1,119 @@
+da:
+  calendar:
+    create_event: "Opret aftale"
+    update_event: "Ret aftale"
+    go_today: "I dag"
+    previous_month: "Forrige måned"
+    next_month: "Næste måned"
+    previous_week: "Forrige uge"
+    next_week: "Næste uge"
+    previous_day: "Forrige dag"
+    next_day: "Næste dag"
+    day: "dag"
+    week: "uge"
+    month: "måned"
+    year: "år"
+    all_day: "Hele dagen"
+    time: "Tid"
+    event: "Aftale"
+    events: "Aftaler"
+    day_view: "Dag"
+    week_view: "Uge"
+    month_view: "Måned"
+    year_view: "År"
+    employees_has_punched_total_punches: "medarbejdere har stemplet ialt %{count} gange idag"
+    list_all_tenant_calendars: "List kontoens kalendere"
+    list_all_team_calendars: "List holdets kalendere"
+    list_all_employee_calendars: "List medarbejderens kalendere"
+
+    template:
+      event_name: "Skabelon navn"
+      instructions_1: "Du kan give skabelonen et navn, og en farve, og så kan du bruge den, når du opretter aftaler i kalendere."
+      instructions_2: "Udfyld de af felterne, som du vil bruge. Se bort fra datoerne. Tænk på det som fx første mandag i måneden, anden fredag, osv"
+      instructions_3: "Angiv tid som f.eks. 10.15, eller 10,25 (betyder det samme). Angiver du en tid, er det længden i timer/minutter. Angiver du 2 tidspunkter adskilt af mellemrum eller bindestreg, er det fra/til stempeltidspunkterne."
+
+
+    week_labels:
+      abbr: Uge
+      full: Uge
+
+    weekday:
+      sunday: 
+        full: Søndag
+        short: Søn
+        firstletter: S
+        second_thirdletter: øn
+      monday: 
+        full: Mandag
+        short: Man
+        firstletter: M
+        second_thirdletter: an
+      tuesday: 
+        full: Tirsdag
+        short: Tir
+        firstletter: T
+        second_thirdletter: irs
+      wednesday: 
+        full: Onsdag
+        short: Ons
+        firstletter: O
+        second_thirdletter: ns
+      thursday: 
+        full: Torsdag
+        short: Tor
+        firstletter: T
+        second_thirdletter: ors
+      friday: 
+        full: Fredag
+        short: Fre
+        firstletter: F
+        second_thirdletter: re
+      saturday: 
+        full: Lørdag
+        short: Lør
+        firstletter: L
+        second_thirdletter: ør
+    
+    navigation:
+      previous_day: "Forrige dag"
+      next_day: "Næste dag"
+      previous_week: "Forrige uge"
+      next_week: "Næste uge"
+      previous_month: "Forrige måned"
+      next_month: "Næste måned"
+      previous_year: "Forrige år"
+      next_year: "Næste år"
+      day: "Dag"
+      week: "Uge"
+      month: "Måned"
+      year: "År"
+    modal:
+      day_summary: "Dagens aftaler for %{name}"
+      delete_all: 
+        title: Slet alle kalendere
+        instruction: Er du sikker på, at du vil slette alle kalendere?
+      delete:
+        title: Slet denne kalender
+        instruction: Er du sikker på, at du vil slette kalenderen %{name}?
+        button: Slet
+
+  calendars:
+    validation_errors: Der er fejl i det indtastede
+    link: "Kalendere"
+    create:
+      post: Kalenderen blev oprettet
+    update:
+      post: Kalenderen blev opdateret
+    destroy:
+      post: Kalenderen blev slettet
+
+    list:
+      title: Kalendere
+      new: Ny kalender
+      name: Navn
+      time_zone: Tidszone
+      description: Beskrivelse
+      color: Farve
+      created_at: Oprettet den
+      updated_at: Opdateret den
+      actions: Handlinger

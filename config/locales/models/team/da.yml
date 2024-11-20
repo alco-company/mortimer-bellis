@@ -12,6 +12,7 @@ da:
   teams:
     default_team: Hold
     contract_template_details: Kontrakt skabelon detaljer (overstyres af detaljer for den enkelte medarbejder)
+    validation_errors: Der er fejl i det indtastede
     
     create:
       post: Holdet blev oprettet
@@ -28,7 +29,7 @@ da:
       delete: Slet
       show: Vis
       name: Navn
-      team_color: Hold farve
+      color: Hold farve
       locale: Sprog
       time_zone: Tidszone
       email: Email
@@ -42,3 +43,4 @@ da:
     form:
       new: Nyt hold
       edit: Rediger hold
+      show: Vis holdet

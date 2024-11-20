@@ -1,0 +1,52 @@
+da:
+  project:
+    states:
+      draft: Udkast
+      active: Aktiv
+      paused: Parkeret
+      done: Afsluttet
+      archived: Arkiveret
+    modal:
+      delete_all: 
+        title: Slet alle projekter
+        instruction: Er du sikker på, at du vil slette alle projekter?
+      delete:
+        title: Slet dette projekt
+        instruction: Er du sikker på, at du vil slette projektet %{name}?
+        button: Slet
+
+  projects:
+    validation_errors: Der er fejl i det indtastede
+
+    create:
+      post: Projektet blev oprettet
+    update:
+      post: Projektet blev opdateret
+    destroy:
+      post: Projektet blev slettet
+
+    list:
+      title: Projekter
+      new: Nyt projekt
+      edit: Rediger
+      delete: Slet
+      show: Vis
+      name: Navn
+      barcode: Stregkode
+      updated_at: Opdateret den
+
+    form:
+      new: Nyt projekt
+      edit: Rediger projekt
+      show: Vis projektet
+    new:
+      title: Nyt projekt
+      create: Opret
+
+    edit:
+      title: Rediger projekt
+      update: Opdater
+
+    show:
+      title: projekt
+      back: Tilbage

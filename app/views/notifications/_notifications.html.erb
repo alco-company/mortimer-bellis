@@ -1,0 +1,5 @@
+<%= turbo_frame_tag "notifications" do %>
+  <% recipient.notifications.unread.each do |notification| %>
+    <%= render partial: "notifications/notification", locals: {notification: notification}%>
+  <% end %>
+<% end %>

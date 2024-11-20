@@ -23,7 +23,7 @@
   data-punch-clock-url-value="<%= pos_punch_clock_path %>"
   data-action="keydown@window->punch-clock#keydownHandler"
   class="h-screen w-full divide-y divide-gray-200 overflow-hidden bg-white">
-  <%= render_punch_clock_header(resource: @resource, employee: @employee) %>
+  <%= render_punch_clock_header(resource: @resource, user: @user) %>
   <%= render partial: 'register' %>
 
 </div>

@@ -33,6 +33,9 @@ da:
         button: Slet
 
   punches:
+    punches: Stemplinger
+    validation_errors: Der er fejl i det indtastede
+
     create:
       post: Stemplingen blev oprettet
     update:
@@ -44,6 +47,7 @@ da:
       new: Ny stempling
       edit: Redigér stempling
       punched_on_app: Stemplet på app'en
+      show: Vis stemplingen
 
     list:
       new: Ny stempling

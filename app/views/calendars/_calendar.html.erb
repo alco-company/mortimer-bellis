@@ -1,0 +1,16 @@
+<li id="<%= dom_id calendar %>" class="flex items-center justify-between gap-x-6 py-5">
+  <div class="min-w-0 w-full columns-2 md:columns-3">
+    <%= render_text_column value: link_to(calendar.name, calendar_url(calendar)), css: "truncate mort-link-primary" do |value| %>
+      <%= value %>
+      <% if global_queries? Current.user %>
+        <p class="text-xs"><%=  link_to calendar.tenant.name, calendar.tenant %> </p>
+      <% end %>
+    <% end %>
+    <%= render_text_column value: calendar.time_zone, css: "hidden lg:block truncate" %>
+    <%= render_datetime_column value: calendar.updated_at, css: "hidden lg:block" %>
+  </div>
+  <div class="flex flex-none items-center gap-x-4 ">
+    <% links = set_links_for_edit_delete calendar %>
+    <%= render_contextmenu resource: calendar, turbo_frame: "form", resource_class: Calendar, alter: true, links: links %>
+  </div>
+</li>

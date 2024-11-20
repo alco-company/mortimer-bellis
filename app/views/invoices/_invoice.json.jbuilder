@@ -1,0 +1,2 @@
+json.extract! invoice, :id, :tenant_id, :customer_id, :currency, :locale, :external_reference, :description, :comment, :date, :address, :erp_guid, :show_lines_incl_vat, :invoice_template_id, :contact_guid, :payment_condition_number_of_days, :payment_condition_type, :reminder_fee, :reminder_interest_rate, :is_mobile_pay_invoice_enabled, :is_penso_pay_enabled, :created_at, :updated_at
+json.url invoice_url(invoice, format: :json)

@@ -7,6 +7,9 @@
 # Ignore bundler config.
 /.bundle
 
+# Ignore Kamal secrets.
+/.kamal/secrets*
+
 # Ignore all environment files (except templates).
 /.env*
 !/.env*.erb
@@ -42,3 +45,4 @@
 
 /TODO.md
 .DS_Store
+/config/credentials/production.key
