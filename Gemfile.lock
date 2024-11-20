@@ -486,6 +486,7 @@ GEM
       activemodel (>= 6.0.0)
       bindex (>= 0.4.0)
       railties (>= 6.0.0)
+    websocket (1.2.11)
     web-push (3.0.1)
       jwt (~> 2.0)
       openssl (~> 3.0)
