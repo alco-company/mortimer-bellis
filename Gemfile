@@ -105,7 +105,7 @@ gem "redcarpet", "~> 3.6"
 
 gem "httparty", "~> 0.22.0"
 
-gem "psych", "~> 5.1.2"
+gem "psych", "~> 5.2.0"
 
 gem "rrule", "~> 0.6.0"
 
