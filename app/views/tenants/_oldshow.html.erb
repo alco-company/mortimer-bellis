@@ -1,0 +1,33 @@
+<div class="w-full">
+  <div class="flex justify-between items-center">
+    <div>
+      <h1 class="font-bold text-4xl"> <%= @resource.name %> </h1>
+      <%= link_to t(".background_jobs"), background_jobs_url(), class: "inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10", target: "_blank", data: { turbo_frame: '_top', turbo_stream: true } %>
+    </div>
+    <div class="grid gap-2 grid-cols-1 lg:grid-cols-2 items-center">
+      <%= link_to t("#{ resource_class.table_name}.form.edit"), edit_resource_url, class: "mort-btn-primary" %>
+    </div>
+  </div>
+  <div class="">
+    <div class="ID mb-2"><strong>ID</strong><br/><%= @resource.id %></div>
+    <%= render partial: "list_calendars", locals: { header_text: t("calendar.list_all_tenant_calendars"), list_url: tenant_calendars_url(@resource) } %>
+    <%= render resource_class.form resource: @resource, editable: false %>
+  </div>
+  <hr>
+  <div>
+    <h2 class="font-bold text-2xl"> <%= I18n.t("records") %> </h2>
+  </div>
+  <div class="mt-3 w-1/4">
+    <ul>
+      <% %w[ users calendars teams locations punch_clocks punch_cards punches].each do |assoc| %>
+        <li class="even:bg-gray-50 grid grid-cols-2">
+          <div class="justify-start"><%= I18n.t("menu.#{assoc}") %></div>
+          <div class="text-right justify-end"><%= eval_records(assoc) %></div>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+  <div class="mt-3">
+    <%= render @resource.users %>
+  </div>
+</div>

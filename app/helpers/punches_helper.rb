@@ -1,5 +1,6 @@
 module PunchesHelper
   def tell_state(record)
+    return " " if record.state.blank?
     record.comment.blank? ?
       I18n.t("#{record.class.to_s.underscore}.#{record.state}") :
       show_comment_and_state(record).html_safe

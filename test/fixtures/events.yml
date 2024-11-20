@@ -1,0 +1,27 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  tenant: one
+  calendar: one
+  name: MyString
+  from_date: 2024-07-15
+  from_time: 2024-07-15 09:36:24
+  to_date: 2024-07-15
+  to_time: 2024-07-15 09:36:24
+  duration: 1
+  all_day: false
+  color: gb-red-200
+  comment: MyText
+
+two:
+  tenant: two
+  calendar: two
+  name: MyString
+  from_date: 2024-07-15
+  from_time: 2024-07-15 09:36:24
+  to_date: 2024-07-15
+  to_time: 2024-07-15 09:36:24
+  duration: 1
+  all_day: false
+  color: gb-yellow-200
+  comment: MyText

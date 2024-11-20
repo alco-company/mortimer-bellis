@@ -41,9 +41,9 @@ module EUCompliance
     end
 
     def work_yesterday
-      punch_cards.where(work_date: Date.yesterday).first || PunchCard.new(employee: employee, work_minutes: 0, break_minnutes: 0)
+      punch_cards.where(work_date: Date.yesterday).first || PunchCard.new(user: employee, work_minutes: 0, break_minnutes: 0)
     rescue
-      PunchCard.new employee: self, work_minutes: 0, break_minutes: 0
+      PunchCard.new user: self, work_minutes: 0, break_minutes: 0
     end
 
     def last_2_days

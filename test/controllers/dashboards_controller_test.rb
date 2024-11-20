@@ -17,7 +17,7 @@ class DashboardsControllerTest < ActionDispatch::IntegrationTest
 
   # test "should create dashboard" do
   #   assert_difference("Dashboard.count") do
-  #     post dashboards_url, params: { dashboard: { account_id: @dashboard.account_id, feed: @dashboard.feed } }
+  #     post dashboards_url, params: { dashboard: { tenant_id: @dashboard.tenant_id, feed: @dashboard.feed } }
   #   end
 
   #   assert_redirected_to dashboard_url(Dashboard.last)
@@ -34,7 +34,7 @@ class DashboardsControllerTest < ActionDispatch::IntegrationTest
   # end
 
   # test "should update dashboard" do
-  #   patch dashboard_url(@dashboard), params: { dashboard: { account_id: @dashboard.account_id, feed: @dashboard.feed } }
+  #   patch dashboard_url(@dashboard), params: { dashboard: { tenant_id: @dashboard.tenant_id, feed: @dashboard.feed } }
   #   assert_redirected_to dashboard_url(@dashboard)
   # end
 

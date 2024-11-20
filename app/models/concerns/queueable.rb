@@ -83,11 +83,11 @@ module Queueable
     #
     # set the job params if any
     #
-    # define params - "id:1,filter:'max',...,more" - eg: id:self,account_id:3,user_id:me
+    # define params - "id:1,filter:'max',...,more" - eg: id:self,tenant_id:3,user_id:me
     # you can add eval arguments too - eg: date_range:eval(Date.today.beginning_of_month..Date.today.end_of_month)
     #
-    # params are evaluated - so you can use self, account, team, me, and any other variable
-    # and they will be added to the args[0] hash - eg: params="id:me,account:account" => args[0] = { id: 1, account: 3 }
+    # params are evaluated - so you can use self, tenant, team, me, and any other variable
+    # and they will be added to the args[0] hash - eg: params="id:me,tenant:tenant" => args[0] = { id: 1, tenant: 3 }
     #
     def set_parms
       o = {}
@@ -101,7 +101,7 @@ module Queueable
       vs=v.split(":")
       case vs[0]
       when "me"; o[:user] = User.find(vs[1]) rescue Current.user
-      when "account"; o[:account] = Current.account
+      when "tenant"; o[:tenant] = Current.tenant
       when "team"; o[:team] = Team.find(vs[1]) rescue Current.user.team
       when "self"; o[:record] = self
       else o[vs[0].strip.to_sym] =  evaled_params(vs)
@@ -113,7 +113,7 @@ module Queueable
       cls=vs[0].strip.classify.constantize rescue nil
       return eval(parm) if parm =~ /^eval\((.*)\)/
       return cls.unscoped.find(parm) if parm =~ /^\d*$/ && cls
-      return self.account if parm =~ /^account_id$/
+      return self.tenant if parm =~ /^tenant_id$/
       parm
     end
 
@@ -149,8 +149,8 @@ module Queueable
     #
     def persist(job_id, next_run_at)
       update_columns job_id: job_id, next_run_at: next_run_at
-      Current.account ||= self.account
-      broadcast_update
+      Current.tenant ||= self.tenant
+      # broadcast_update
       [ job_id, next_run_at ]
     end
   end

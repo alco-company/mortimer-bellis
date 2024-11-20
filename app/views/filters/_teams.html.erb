@@ -3,7 +3,7 @@
     <%= form.text_field :name, value: (filter["name"] rescue ''), class: "mort-filter-field" %>
   </div>
   <div class="flex justify-start">
-    <%= form.text_field :team_color, value: (filter["team_color"] rescue ''), class: "mort-filter-field" %>
+    <%= form.text_field :color, value: (filter["team_color"] rescue ''), class: "mort-filter-field" %>
   </div>
   <div class="flex justify-start">
     <%= form.text_field :locale, value: (filter["locale"] rescue ''), class: "hidden md:block mort-filter-field" %>

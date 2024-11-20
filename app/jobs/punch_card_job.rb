@@ -2,15 +2,15 @@ class PunchCardJob < ApplicationJob
   queue_as :default
 
   # args:
-  #   account,
-  #   employee:
+  #   tenant,
+  #   user:
   #   from_at:
   #   to_at:
   #
   def perform(**args)
     super(**args)
-    employee = args[:employee]
-    user_time_zone(employee.time_zone) do
+    user = args[:user]
+    user_time_zone(user.time_zone) do
       PunchCard.recalculate(**args)
     end
   end

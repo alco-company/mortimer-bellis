@@ -1,7 +1,7 @@
-Employee#report_state
+User#report_state
 
 In the past 24 hours this is the work/break that has been registered:
 
 <% PunchCard.where(work_date: Date.yesterday).each do |punch_card| %>
-  <%= punch_card.employee.name %>, <%= punch_card.work_minutes %> work_minutes, <%= punch_card.break_minutes %> break_minutes
+  <%= punch_card.user.name %>, <%= punch_card.work_minutes %> work_minutes, <%= punch_card.break_minutes %> break_minutes
 <% end %>

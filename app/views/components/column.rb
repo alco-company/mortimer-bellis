@@ -36,14 +36,16 @@ class Column < Phlex::HTML
 
   def div_value(&block)
     value.blank? ?
-      div { "&nbsp;".html_safe } :
+      div(class: @class) { "&nbsp;".html_safe } :
       div(class: @class) do
         if block_given?
           yield value
         else
-          @sort ? build_link(value) : plain(value)
+          @sort ? build_link(value) : plain(value.to_s)
         end
       end
+    rescue => e
+      debugger
   end
 
   def build_link(val)
@@ -63,6 +65,8 @@ class Column < Phlex::HTML
 
   def sort_url
     helpers.url_for(controller: @sort[:controller], action: :index, s: field, d: direction)
+  rescue
+    "#"
   end
 
   def direction

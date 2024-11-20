@@ -2,9 +2,9 @@ class PunchClockHeader < ApplicationComponent
   include Phlex::Rails::Helpers::LinkTo
   include Phlex::Rails::Helpers::ImageTag
 
-  def initialize(resource:, employee: nil)
+  def initialize(resource:, user: nil)
     @resource = resource
-    @employee = employee || false
+    @user = user || false
   end
 
   def view_template
@@ -27,16 +27,16 @@ class PunchClockHeader < ApplicationComponent
           end
           helpers.t(".close").upcase
         end
-      end if @employee
+      end if @user
       div(class: "pr-2") do
         h2(class: "uppercase text-xl text-nowrap text-gray-300") { @resource.name rescue "" }
       end
       div(class: "pr-2 flex items-center w-full") do
-        if @employee.mugshot.attached?
-          image_tag(@employee.mugshot, class: "h-8 w-8 rounded-full mr-4")
+        if @user.mugshot.attached?
+          image_tag(@user.mugshot, class: "h-8 w-8 rounded-full mr-4")
         end
-        span(class: "text-gray-700 text-nowrap text-xl") { @employee&.name }
-      end if @employee
+        span(class: "text-gray-700 text-nowrap text-xl") { @user&.name }
+      end if @user
       div(class: "hidden text-white mr-10 w-full flex items-center", data: { punch_clock_target: "offlineWarning" }) do
         svg(
           fill: "currentColor",

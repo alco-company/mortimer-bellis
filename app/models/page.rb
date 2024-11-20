@@ -1,11 +1,15 @@
 class Page < ApplicationRecord
-  scope :by_account, -> { all }
+  scope :by_tenant, -> { all }
 
   def name
     title
   end
 
-  def self.form(resource, editable = true)
-    Pages::Form.new resource, editable: editable
+  def tenant
+    false
+  end
+
+  def self.form(resource:, editable: true)
+    Pages::Form.new resource: resource, editable: editable
   end
 end

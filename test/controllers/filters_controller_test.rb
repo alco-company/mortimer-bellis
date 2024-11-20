@@ -3,7 +3,7 @@ require "test_helper"
 class FiltersControllerTest < ActionDispatch::IntegrationTest
   # setup do
   #   @filter = filters(:one)
-  #   @params = { filter: { filter_form: "accounts", url: accounts_url(), account_id: @filter.account.id, filter: @filter.filter, view: @filter.view, submit: "" } }
+  #   @params = { filter: { filter_form: "tenants", url: tenants_url(), tenant_id: @filter.tenant.id, filter: @filter.filter, view: @filter.view, submit: "" } }
   # end
 
   # test "should get index" do
@@ -12,7 +12,7 @@ class FiltersControllerTest < ActionDispatch::IntegrationTest
   # end
 
   # test "should get new" do
-  #   get new_filter_url(url: "/accounts", filter_form: "accounts", format: :turbo_stream, subaction: :refresh)
+  #   get new_filter_url(url: "/tenants", filter_form: "tenants", format: :turbo_stream, subaction: :refresh)
 
   #   assert_response :success
   # end

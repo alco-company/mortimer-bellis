@@ -1,5 +1,20 @@
+# create_table "background_jobs", force: :cascade do |t|
+#   t.integer "tenant_id", null: false
+#   t.integer "user_id"
+#   t.integer "state", default: 0
+#   t.string "job_klass"
+#   t.text "params"
+#   t.text "schedule"
+#   t.datetime "next_run_at"
+#   t.string "job_id"
+#   t.datetime "created_at", null: false
+#   t.datetime "updated_at", null: false
+#   t.index ["tenant_id"], name: "index_background_jobs_on_tenant_id"
+#   t.index ["user_id"], name: "index_background_jobs_on_user_id"
+# end
+#
 class BackgroundJob < ApplicationRecord
-  include Accountable
+  include Tenantable
   include Queueable
 
   enum :state, {
@@ -11,8 +26,18 @@ class BackgroundJob < ApplicationRecord
     finished:         5
   }
 
+  def self.BACKGROUND_STATES = [
+    [ "in_active",        I18n.t("background_job.states.in_active") ],
+    [ "un_planned",       I18n.t("background_job.states.un_planned") ],
+    [ "planned",          I18n.t("background_job.states.planned") ],
+    [ "running",          I18n.t("background_job.states.running") ],
+    [ "failed",           I18n.t("background_job.states.failed") ],
+    [ "finished",         I18n.t("background_job.states.finished") ]
+  ]
+
   belongs_to :user, optional: true
 
+  scope :by_fulltext, ->(q) { where("job_klass LIKE ? or params LIKE ?", "%#{q}%", "%#{q}%") if q.present? }
   scope :by_job_klass, ->(job_klass) { where("job_klass LIKE ? or params LIKE ?", "%#{job_klass}%", "%#{job_klass}%") if job_klass.present? }
 
   validates :job_klass, presence: true
@@ -22,33 +47,37 @@ class BackgroundJob < ApplicationRecord
   end
 
   def active?
-    !not_active?
+    !in_active?
   end
 
   def self.filtered(filter)
     flt = filter.filter
 
     all
-      .by_account()
+      .by_tenant()
       .by_job_klass(flt["job_klass"])
   rescue
     filter.destroy if filter
     all
   end
 
+  def self.set_order(resources, field = :job_klass, direction = :asc)
+    resources.ordered(field, direction)
+  end
+
   def self.job_klasses
     [
       [ "DatalonPreparationJob", "DatalonPreparationJob" ],
-      [ "EmployeeAutoPunchJob", "EmployeeAutoPunchJob" ],
-      [ "EmployeeEuStateJob", "EmployeeEuStateJob" ],
-      [ "EmployeeStateJob", "EmployeeStateJob" ],
-      [ "ImportEmployeesJob", "ImportEmployeesJob" ],
+      [ "UserAutoPunchJob", "UserAutoPunchJob" ],
+      [ "UserEuStateJob", "UserEuStateJob" ],
+      [ "UserStateJob", "UserStateJob" ],
+      [ "ImportUsersJob", "ImportUsersJob" ],
       [ "PunchCardJob", "PunchCardJob" ],
       [ "PunchJob", "PunchJob" ]
     ]
   end
 
-  def self.form(resource, editable = true)
-    BackgroundJobs::Form.new resource, editable: editable
+  def self.form(resource:, editable: true)
+    BackgroundJobs::Form.new resource: resource, editable: editable
   end
 end

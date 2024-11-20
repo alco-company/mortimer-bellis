@@ -1,0 +1,11 @@
+<tr class="flex gap-x-6 py-5">
+    <%= render_text_column value: project.start_date, table: :row, css: "truncate" %>
+    <%= render_text_column value: project.end_date, table: :row, css: "truncate" %>
+    <%= render_text_column value: project.state, table: :row, css: "truncate" %>
+    <%= render_text_column value: project.is_billable, table: :row, css: "truncate" %>
+    <%= render_text_column value: project.priority, table: :row, css: "truncate" %>
+    <%= render_text_column value: project.hourly_rate, table: :row, css: "truncate" %>
+    <%= render_text_column value: project.estimated_minutes, table: :row, css: "truncate" %>
+    <%= render_text_column value: project.actual_minutes, table: :row, css: "truncate" %>
+    <%= render_datetime_column value: project.updated_at, table: :row, css: "truncate" %>
+</tr>

@@ -1,0 +1,196 @@
+da:
+  upload to ERP: Upload til Dinero
+  time_material:
+    billable: fakturérbar
+    uploading_to_erp: Overfører fakturalinjer til Dinero
+    current_task: Igangværende opgave
+    new_assigned_task: "%{delegator} har tildelt dig en ny opgave"
+    new_assigned_task_title: "Du har en ny opgave"
+    not_your_time_material: Du kan kun starte/stoppe dine egne tid/materialer
+    internal_or_private: Intern eller privat
+    draft: Kladde
+    active: Aktiv
+    paused: Opgaven blev parkeret
+    done: Afsluttet
+    resumed: Opgaven blev genoptaget
+    pushed_to_erp: Overført til Dinero
+    cannot_be_pushed: Kan ikke overføres
+    archived: Arkiveret
+    states:
+      draft: Kladde
+      active: Aktiv
+      paused: Parkeret
+      done: Afsluttet
+      pushed_to_erp: Overført til Dinero
+      cannot_be_pushed: Kan ikke overføres
+      archived: Arkiveret
+    units:
+      hours: Timer
+      parts: Stk
+      km: Km
+      day: Dag
+      week: Uge
+      month: Måned
+      kilogram: Kg
+      cubicMetre: M3
+      set: Sæt
+      litre: Liter
+      box: Pakke
+      case: Kasse
+      carton: Karton
+      metre: Meter
+      package: Pakke
+      shipment: Forsendelse
+      squareMetre: M2
+      session: Session
+      tonne: Ton
+    overtimes:
+      none: Ingen
+      50percent: 50%
+      100percent: 100%
+    responsive_units:
+      hours: t<span class:"hidden sm:inline">imer</span>
+      parts: Stk
+      km: Km
+      day: Dag
+      week: Uge
+      month: Måned
+      kilogram: Kg
+      cubicMetre: M3
+      set: Sæt
+      litre: Liter
+      box: Pakke
+      case: Kasse
+      carton: Karton
+      metre: Meter
+      package: Pakke
+      shipment: Forsendelse
+      squareMetre: M2
+      session: Session
+      tonne: Ton
+    modal:
+      delete_all: 
+        title: Slet alle tid/materialer
+        instruction: Er du sikker på, at du vil slette alle tid/materialer?
+      delete:
+        title: Slet denne tid/materiale
+        instruction: Er du sikker på, at du vil slette denne tid/materiale %{name}?
+        button: Slet
+      upload_dinero:
+        title: Dan fakturalinjer i Dinero
+        instruction: Når du trykker upload, vil der blive oprettet fakturalinjer i Dinero for alle tid/materialer, der er markeret til fakturering. Er du sikker på, at du vil fortsætte?
+        label: Fakturalinjer
+        description: Fakturalinjerne dannes i Dinero som kladder, så du skal logge ind i Dinero, og godkende dem, før de bliver til fakturaer, og kan sendes.
+        approved: 
+          title: Import af medarbejdere
+          description: Du har godkendt importen - som nu gennemføres i en baggrundsproces. Når processen er færdig, vil du kunne se resultatet i oversigten over medarbejdere (klik på menupunktet medarbejdere).
+
+    type:
+      time: "Tid"
+      material: "Materiale"
+      mileage: "Kørsel"
+      warning: "Bemærk! Du kan kun tilføje enten tid, materialer, eller kørsel; vælg en af fanerne"
+    mileage:
+      lead: Kilometertæller
+      accounting_info: Fører du kørebog? Så bør du indtaste dine kilometer oplysninger her, også dem, du ikke kan viderefakturere. Det har vi skrevet om <a class="mort-link-primary" href="" target="_blank">her</a>.
+    trip_purposes:
+      service: "Service"
+      delivery: "Levering"
+      pickup: "Afhentning"
+    date:
+      lbl: "Dato"
+    time:
+      lbl: "Tid"
+      overtime: Overtid?
+      overtime_check: ja
+    about:
+      lbl: "Beskrivelse"
+      help: "Beskriv hvad opgaven går ud på"
+      placeholder: "fx 'Opsætning af server'"
+    customer:
+      lbl: "Kunde"
+      placeholder: "fx 'TG'"
+    project:
+      lbl: "Projekt"
+      placeholder: "fx 'Hjemmeside'"
+    product:
+      lbl: "Produkt"
+      placeholder: "fx 'Webshop'"
+    comment:
+      lbl: "Kommentar"
+      placeholder: "fx 'DNS for 3 domæner'"
+    rate:
+      hourly: "Timepris"
+      unit_price: "Enhedspris"
+    quantity:
+      lbl: "Antal"
+      placeholder: "fx '3'" 
+    unit:
+      lbl: "Enhed"
+      placeholder: "fx 'stk'"
+    discount:
+      lbl: "Rabat"
+      placeholder: "fx 5%"
+    invoicing:
+      lead: "Fakturering"
+      invoice:
+        lbl: "Opgaven skal faktureres"
+        help: "Sæt flueben hvis opgaven skal faktureres"
+      free:
+        lbl: "per kulance"
+        help: "Opgaven skal sættes på faktura - med 100% rabat"
+      offer:
+        lbl: "Tilbud"
+        help: "Opgaven er en del af et tilbud"
+      batch:
+        lbl: Samlefakturering
+      separate:
+        lbl: "Separat faktura"
+        help: "Opgaven skal faktureres separat"
+
+  time_materials:
+    validation_errors: Der er fejl i det indtastede
+
+    create:
+      post: Tid/Materiale blev oprettet
+      validation_errors: Der er fejl i de indtastede oplysninger
+    update:
+      post: Tid/Materiale blev opdateret
+    destroy:
+      post: Tid/Materiale blev slettet
+
+    list:
+      title: Tid/materialer
+      new: Ny tid/materiale
+      time_logged: "%{time} logget"
+      edit: Rediger
+      delete: Slet
+      show: Vis
+      name: Navn
+      email: Email
+      color: Farve
+      phone: Telefon
+      pincode: Pinkode
+      state: Status
+      updated_at: Opdateret den
+
+    form:
+      new: Ny tid/materiale
+      edit: Rediger tid/materiale
+      show: Vis tid/materiale
+
+    new:
+      title: Ny tid/materiale
+      create: Opret
+
+    edit:
+      title: Rediger tid/materiale
+      update: Opdater
+
+    show:
+      title: tid/materiale
+      back: Tilbage
+
+    errors:
+      messages:
+        name_exist: "Tid/Materiale findes allerede"

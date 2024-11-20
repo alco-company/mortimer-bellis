@@ -41,14 +41,14 @@ module Datalon
     # return an array of CSV 'files' with the data
     def lon_export_to_csv(punches_settled_at, update_payroll)
       arr = []
-      Current.account.teams.each do |team|
-        ids = team.employees.pluck(:id)
+      Current.tenant.teams.each do |team|
+        ids = team.users.pluck(:id)
         resources = lon_payroll_export team.name, team.punches_settled_at, punches_settled_at, ids
         arr << lon_to_csv(resources, punches_settled_at)
         if update_payroll
           punch_cards_to_update team.punches_settled_at, punches_settled_at, ids
           team.update punches_settled_at: punches_settled_at
-          team.employees.update_all punches_settled_at: punches_settled_at
+          team.users.update_all punches_settled_at: punches_settled_at
         end
       end
       arr
@@ -83,7 +83,7 @@ module Datalon
         "employees"."name" AS emp_name
         FROM "punch_cards" AS "payroll"
         INNER JOIN "employees" ON "payroll"."employee_id" = "employees"."id"
-        WHERE "payroll"."account_id" = #{Current.account.id} AND
+        WHERE "payroll"."tenant_id" = #{Current.tenant.id} AND
         payroll.punches_settled_at IS NULL AND
         payroll.work_date >= '#{fd}' AND
         payroll.work_date <= '#{td}' #{ where_ids }#{' '}
@@ -99,7 +99,7 @@ module Datalon
         "punch_cards"."id"
         FROM "punch_cards"
         INNER JOIN "employees" ON "punch_cards"."employee_id" = "employees"."id"
-        WHERE "punch_cards"."account_id" = #{Current.account.id} AND
+        WHERE "punch_cards"."tenant_id" = #{Current.tenant.id} AND
         punch_cards.punches_settled_at IS NULL AND
         punch_cards.work_date >= '#{fd}' AND
         punch_cards.work_date <= '#{td}' #{ where_ids }
@@ -111,7 +111,7 @@ module Datalon
       CSV.generate(col_sep: ";", encoding: "utf-8") do |csv|
         csv << lon_csv_header
         resources.each do |row|
-          lon_csv_row row, csv, organisation: Current.account.pp_identification, termin: termin.strftime("%y%m"), group: row.group_name
+          lon_csv_row row, csv, organisation: Current.tenant.pp_identification, termin: termin.strftime("%y%m"), group: row.group_name
         end
       end
     end
@@ -150,7 +150,7 @@ module Datalon
       hrs, min = (row.work_minutes + row.ot1_minutes + row.ot2_minutes).to_i.divmod 60
       min = min.to_f/60*100
       hrs = "%i%02i" % [ hrs, min ]
-      emp = Employee.find(row.emp_id)
+      emp = User.find(row.emp_id)
       csv << [ args[:organisation], args[:termin].to_i, row.emp_number, args[:group], "01", hrs ]
       generate_row args, csv, row, row.work_minutes, emp.get_hour_rate_cent, [ "12", "13" ]
       generate_row args, csv, row, row.ot1_minutes,  emp.get_ot1_hour_rate_cent, [ "16", "17" ] if row.ot1_minutes > 0

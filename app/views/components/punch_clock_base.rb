@@ -4,10 +4,10 @@ class PunchClockBase < ApplicationComponent
   include Phlex::Rails::Helpers::HiddenField
   include Phlex::Rails::Helpers::ButtonTag
 
-  attr_accessor :employee, :tab
+  attr_accessor :user, :tab
 
-  def initialize(employee: nil, tab: "today", edit: false)
-    @employee = employee || false
+  def initialize(user: nil, tab: "today", edit: false)
+    @user = user || false
     @tab = tab
     @edit = edit
   end
@@ -21,32 +21,32 @@ class PunchClockBase < ApplicationComponent
         else; show_today
         end
       end
-      render PunchClockButtons.new employee: employee, tab: tab
+      render PunchClockButtons.new user: employee, tab: tab
     end
   end
 
   def show_today
     todays_minutes
-    list_punches ".todays_punches", employee.todays_punches
+    list_punches ".todays_punches", user.todays_punches
     div(class: "mb-32") { " " }
   end
 
   def todays_minutes
     div(class: "flex grow-0 w-full p-5 font-medium text-gray-500 gap-3") do
-      counters = employee.minutes_today_up_to_now
+      counters = user.minutes_today_up_to_now
       render Stats.new title: helpers.t(".stats_title"), stats: [
         { title: helpers.t(".worktime"), value: helpers.display_hours_minutes(counters[:work]) },
         { title: helpers.t(".breaks"), value: helpers.display_hours_minutes(counters[:break]) }
       ]
-    end if employee
+    end if user
   end
 
   def show_payroll
     div(class: "p-4") do
       if @edit
-        render(PunchClockManual.new(employee: employee))
+        render(PunchClockManual.new(user: employee))
       else
-        counters = employee.minutes_this_payroll_period rescue []
+        counters = user.minutes_this_payroll_period rescue []
         counters["work"] ||= 0
         counters["break"] ||= 0
         render Stats.new title: helpers.t(".stats_title"), stats: [
@@ -55,7 +55,7 @@ class PunchClockBase < ApplicationComponent
         ] if counters.any?
       end
 
-      list_punches ".payroll_punches", employee.punches.by_payroll_period(employee.punches_settled_at).order(punched_at: :desc), true, true, "payroll"
+      list_punches ".payroll_punches", user.punches.by_payroll_period(user.punches_settled_at).order(punched_at: :desc), true, true, "payroll"
       div(class: "mb-32") { "&nbsp;".html_safe }
     end
   end
@@ -70,6 +70,6 @@ class PunchClockBase < ApplicationComponent
   end
 
   def show_profile
-    render PunchClockProfile.new employee: employee
+    render PunchClockProfile.new user: employee
   end
 end

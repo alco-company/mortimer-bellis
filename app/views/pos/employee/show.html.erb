@@ -27,7 +27,7 @@
 
 <div
   data-controller="punch-clock">
-  <%= render_punch_clock_header(resource: @resource, employee: nil) %>
-  <%= render PunchClockEmployee.new employee: @resource, tab: params[:tab], edit: params[:edit] %>
+  <%= render_punch_clock_header(resource: @resource, user: nil) %>
+  <%= render PunchClockUser.new user: @resource, tab: params[:tab], edit: params[:edit] %>
   <remote-modal-container></remote-modal-container>
 </div>

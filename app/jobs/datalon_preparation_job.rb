@@ -2,9 +2,9 @@ class DatalonPreparationJob < ApplicationJob
   queue_as :default
 
   #
-  # account:          is the account
+  # tenant:          is the tenant
   # last_payroll_at:  is the last date to include
-  # update_payroll:   is boolean true|false to update the last_payroll_at on account and team
+  # update_payroll:   is boolean true|false to update the last_payroll_at on tenant and team
   #
   def perform(**args)
     begin
@@ -25,7 +25,7 @@ class DatalonPreparationJob < ApplicationJob
 
     output = PunchCard.lon_export_to_csv(last_payroll_at, update_payroll)
     persist tmpfiles, output, "csv"
-    AccountMailer.with(rcpt: Current.account, tmpfiles: tmpfiles).lon_email.deliver_later
+    TenantMailer.with(rcpt: Current.tenant, tmpfiles: tmpfiles).lon_email.deliver_later
   end
 
 

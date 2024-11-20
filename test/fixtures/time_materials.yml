@@ -1,0 +1,653 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+# t/m's that do not qualify
+one:
+  tenant: one 
+  date: <%= Date.today - 3.days %>
+  time: 
+  about: some text
+  customer_name:
+  customer: 
+  project_name:
+  project: 
+  product_name:
+  product: 
+  quantity:
+  rate: 
+  discount: 
+  state:
+  is_invoice: true
+  is_free:
+  is_offer:
+  is_separate:
+  user: one
+  comment:
+  overtime:
+  unit_price:
+  unit:
+  pushed_erp_timestamp:
+  erp_guid:
+  push_log: 
+one_2:
+  tenant: one 
+  date: <%= Date.today - 3.days %>
+  time: a 
+  about: some text
+  customer_name:
+  customer: 
+  project_name:
+  project: 
+  product_name:
+  product:
+  quantity:
+  rate: 
+  discount: 
+  state:
+  is_invoice: true
+  is_free:
+  is_offer:
+  is_separate:
+  user: one
+  comment:
+  overtime:
+  unit_price:
+  unit:
+  pushed_erp_timestamp:
+  erp_guid:
+  push_log: 
+one_3:
+  tenant: one 
+  date: <%= Date.today - 3.days %>
+  time:  
+  about: some text
+  customer_name: unknown
+  customer: 
+  project_name:
+  project: 
+  product_name: a-product-number
+  product: one
+  quantity: 1.0
+  rate: 
+  discount: 
+  state:
+  is_invoice: true
+  is_free:
+  is_offer:
+  is_separate:
+  user: one
+  comment:
+  overtime:
+  unit_price:
+  unit:
+  pushed_erp_timestamp:
+  erp_guid:
+  push_log: 
+
+# a product without a quantity and unit_price
+one_4:
+  tenant: one 
+  date: <%= Date.today - 3.days %>
+  time:  
+  about: some text
+  customer_name:
+  customer: one
+  project_name:
+  project: 
+  product_name: just invented it
+  product: 
+  quantity:
+  rate: 
+  discount: 
+  state:
+  is_invoice: true
+  is_free:
+  is_offer:
+  is_separate:
+  user: one
+  comment:
+  overtime:
+  unit_price:
+  unit:
+  pushed_erp_timestamp:
+  erp_guid:
+  push_log: 
+
+# quantity missing
+one_5:
+  tenant: one 
+  date: <%= Date.today - 3.days %>
+  time:  
+  about: some text
+  customer_name:
+  customer: one
+  project_name:
+  project: 
+  product_name: a-product-number
+  product: one
+  quantity: 
+  rate: 
+  discount: 
+  state:
+  is_invoice: true
+  is_free:
+  is_offer:
+  is_separate:
+  user: one
+  comment:
+  overtime:
+  unit_price:
+  unit:
+  pushed_erp_timestamp:
+  erp_guid:
+  push_log: 
+
+# quantity is a string
+one_6:
+  tenant: one 
+  date: <%= Date.today - 3.days %>
+  time:  
+  about: some text
+  customer_name:
+  customer: one
+  project_name:
+  project: 
+  product_name: a-product-number
+  product: one
+  quantity: a
+  rate: 
+  discount: 
+  state:
+  is_invoice: true
+  is_free:
+  is_offer:
+  is_separate:
+  user: one
+  comment:
+  overtime:
+  unit_price:
+  unit:
+  pushed_erp_timestamp:
+  erp_guid:
+  push_log: 
+
+# quantity AND rate set - rate belongs to a service, quantity to a product
+one_7:
+  tenant: one 
+  date: <%= Date.today - 3.days %>
+  time:  
+  about: some text
+  customer_name:
+  customer: one
+  project_name:
+  project: 
+  product_name: a-product-number
+  product: one
+  quantity: 1,25
+  rate: 1
+  discount: 
+  state:
+  is_invoice: true
+  is_free:
+  is_offer:
+  is_separate:
+  user: one
+  comment:
+  overtime:
+  unit_price:
+  unit:
+  pushed_erp_timestamp:
+  erp_guid:
+  push_log: 
+
+# discount is a string
+one_8:
+  tenant: one 
+  date: <%= Date.today - 3.days %>
+  time:  
+  about: some text
+  customer_name:
+  customer: one
+  project_name:
+  project: 
+  product_name: a-product-number
+  product: one
+  quantity: 1,25
+  rate: 
+  discount: a
+  state:
+  is_invoice: true
+  is_free:
+  is_offer:
+  is_separate:
+  user: one
+  comment:
+  overtime:
+  unit_price:
+  unit:
+  pushed_erp_timestamp:
+  erp_guid:
+  push_log: 
+
+# unit_price is a string
+one_9:
+  tenant: one 
+  date: <%= Date.today - 3.days %>
+  time:  
+  about: some text
+  customer_name:
+  customer: one
+  project_name:
+  project: 
+  product_name: a-product-number
+  product: one
+  quantity: 1,25
+  rate: 
+  discount: 
+  state:
+  is_invoice: true
+  is_free:
+  is_offer:
+  is_separate:
+  user: one
+  comment:
+  overtime:
+  unit_price: a
+  unit:
+  pushed_erp_timestamp:
+  erp_guid:
+  push_log: 
+
+# time and quantity both set
+one_10:
+  tenant: one 
+  date: <%= Date.today - 3.days %>
+  time:  1.25
+  about: some text
+  customer_name:
+  customer: one
+  project_name:
+  project: 
+  product_name: a-product-number
+  product: one
+  quantity: 1,25
+  rate: 
+  discount: 
+  state:
+  is_invoice: true
+  is_free:
+  is_offer:
+  is_separate:
+  user: one
+  comment:
+  overtime:
+  unit_price: a
+  unit:
+  pushed_erp_timestamp:
+  erp_guid:
+  push_log: 
+
+# a product
+two:
+  tenant: two
+  date: <%= Date.today - 3.days %>
+  time: 
+  about: some text
+  customer_name:
+  customer: one
+  project_name:
+  project: 
+  product_name: a-product-number
+  product: one
+  quantity: 1.0
+  rate: 
+  discount: 0.0
+  state:
+  is_invoice: true
+  is_free:
+  is_offer:
+  is_separate:
+  user: one
+  comment: just a comment
+  overtime:
+  unit_price: ""
+  unit: ""
+  pushed_erp_timestamp:
+  erp_guid:
+  push_log:
+
+# a product
+two_a:
+  tenant: two
+  date: <%= Date.today - 3.days %>
+  time: 
+  about: some text
+  customer_name:
+  customer: one
+  project_name:
+  project: 
+  product_name: a-product-number
+  product: one
+  quantity: 1.0
+  rate: 
+  discount: 0.0
+  state:
+  is_invoice: true
+  is_free:
+  is_offer:
+  is_separate:
+  user: one
+  comment: just a comment
+  overtime:
+  unit_price: "12,45"
+  unit: ""
+  pushed_erp_timestamp:
+  erp_guid:
+  push_log:
+
+# a product
+two_b:
+  tenant: two
+  date: <%= Date.today - 3.days %>
+  time: 
+  about: some text
+  customer_name:
+  customer: one
+  project_name:
+  project: 
+  product_name: a-product-number
+  product: one
+  quantity: 1.0
+  rate: 
+  discount: "2,34"
+  state:
+  is_invoice: true
+  is_free:
+  is_offer:
+  is_separate:
+  user: one
+  comment: just a comment
+  overtime:
+  unit_price: "12,45"
+  unit: ""
+  pushed_erp_timestamp:
+  erp_guid:
+  push_log:
+
+# a text line
+three:
+  tenant: three
+  date: <%= Date.today - 3.days %>
+  time:
+  about:
+  customer_name:
+  customer: one
+  project_name:
+  project: 
+  product_name:
+  product:
+  quantity:
+  rate: 
+  discount:
+  state:
+  is_invoice: true
+  is_free:
+  is_offer:
+  is_separate:
+  user: one
+  comment: just a comment
+  overtime:
+  unit_price: ""
+  unit: ""
+  pushed_erp_timestamp:
+  erp_guid:
+  push_log: 
+
+# a service
+four:
+  tenant: three
+  date: <%= Date.today - 3.days %>
+  time: 0,25
+  about: well something
+  customer_name:
+  customer: one
+  project_name:
+  project: 
+  product_name:
+  product:
+  quantity:
+  rate: 
+  discount:
+  state:
+  is_invoice: true
+  is_free:
+  is_offer:
+  is_separate:
+  user: one
+  comment:
+  overtime:
+  unit_price: ""
+  unit: ""
+  pushed_erp_timestamp:
+  erp_guid:
+  push_log: 
+
+# a service on a project - not really - just a comment at the top
+five:
+  tenant: four
+  date: <%= Date.today - 3.days %>
+  time: 0,25
+  about: well something
+  customer_name:
+  customer: one
+  project_name: comment for the top of the invoice
+  project: 
+  product_name:
+  product:
+  quantity:
+  rate: 
+  discount:
+  state:
+  is_invoice: true
+  is_free:
+  is_offer:
+  is_separate:
+  user: one
+  comment:
+  overtime:
+  unit_price: ""
+  unit: ""
+  pushed_erp_timestamp:
+  erp_guid:
+  push_log: 
+six:
+  tenant: four
+  date: <%= Date.today - 3.days %>
+  time: 0,25
+  about: well something
+  customer_name:
+  customer: one
+  project_name: 
+  project: one
+  product_name:
+  product:
+  quantity:
+  rate: 
+  discount:
+  state:
+  is_invoice: true
+  is_free:
+  is_offer:
+  is_separate:
+  user: one
+  comment:
+  overtime:
+  unit_price: ""
+  unit: ""
+  pushed_erp_timestamp:
+  erp_guid:
+  push_log: 
+seven:
+  tenant: five
+  date: <%= Date.today - 3.days %>
+  time: 0,25
+  about: well something
+  customer_name:
+  customer: one
+  project_name: 
+  project:
+  product_name:
+  product:
+  quantity:
+  rate: 
+  discount:
+  state:
+  is_invoice: true
+  is_free:
+  is_offer:
+  is_separate:
+  user: one
+  comment:
+  overtime: true
+  unit_price: ""
+  unit: ""
+  pushed_erp_timestamp:
+  erp_guid:
+  push_log: 
+eight:
+  tenant: five
+  date: <%= Date.today - 3.days %>
+  time: 0,25
+  about: well something
+  customer_name:
+  customer: one
+  project_name: 
+  project:
+  product_name:
+  product:
+  quantity:
+  rate: 
+  discount:
+  state:
+  is_invoice: true
+  is_free:
+  is_offer:
+  is_separate: true
+  user: one
+  comment:
+  overtime:
+  unit_price: ""
+  unit: ""
+  pushed_erp_timestamp:
+  erp_guid:
+  push_log: 
+nine:
+  tenant: five
+  date: <%= Date.today - 3.days %>
+  time: 0,25
+  about: well something
+  customer_name:
+  customer: one
+  project_name: 
+  project:
+  product_name:
+  product:
+  quantity:
+  rate: 43.33
+  discount:
+  state:
+  is_invoice: true
+  is_free:
+  is_offer:
+  is_separate:
+  user: one
+  comment:
+  overtime: 
+  unit_price: ""
+  unit: ""
+  pushed_erp_timestamp:
+  erp_guid:
+  push_log: 
+#
+# three items, two items - on the same project - and the same invoice
+#
+ten:
+  tenant: six
+  date: <%= Date.today - 3.days %>
+  time: 0,25
+  about: well something 1
+  customer_name:
+  customer: one
+  project_name: 
+  project:
+  product_name:
+  product:
+  quantity:
+  rate: 43.33
+  discount:
+  state:
+  is_invoice: true
+  is_free:
+  is_offer:
+  is_separate:
+  user: one
+  comment:
+  overtime: 
+  unit_price: ""
+  unit: ""
+  pushed_erp_timestamp:
+  erp_guid:
+  push_log: 
+ten_project:
+  tenant: six
+  date: <%= Date.today - 3.days %>
+  time: 0,25
+  about: well something 2
+  customer_name:
+  customer: one
+  project_name: project one 
+  project:
+  product_name:
+  product:
+  quantity:
+  rate: 43.33
+  discount:
+  state:
+  is_invoice: true
+  is_free:
+  is_offer:
+  is_separate:
+  user: one
+  comment:
+  overtime: 
+  unit_price: ""
+  unit: ""
+  pushed_erp_timestamp:
+  erp_guid:
+  push_log: 
+ten_project_2:
+  tenant: six
+  date: <%= Date.today - 3.days %>
+  time: 0,25
+  about: well something 3
+  customer_name:
+  customer: one
+  project_name: 
+  project: one
+  product_name:
+  product:
+  quantity:
+  rate: 43.33
+  discount:
+  state:
+  is_invoice: true
+  is_free:
+  is_offer:
+  is_separate:
+  user: one
+  comment:
+  overtime: 
+  unit_price: ""
+  unit: ""
+  pushed_erp_timestamp:
+  erp_guid:
+  push_log: 
