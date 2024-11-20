@@ -59,6 +59,7 @@ END
 
 * add link affording escape from 400's & 500 error views
 * make staging deployable too - might not be enough
+* upgrade solid_queue to 1.0.2
 
 ### 19/11/2024
 
