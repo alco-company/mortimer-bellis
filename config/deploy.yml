@@ -64,7 +64,7 @@ env:
     SMTP_ENABLE_STARTTLS_AUTO: 'false'
     SSL_DOMAIN: app.mortimer.pro
     MORTIMER_VERSION: '1.0.1'
-    DINERO_APP_CALLBACK: 'https://anemone.mortimer.pro/dinero/callback'
+    DINERO_APP_CALLBACK: 'https://app.mortimer.pro/dinero/callback'
 
 
 # Aliases are triggered with "bin/kamal <alias>". You can overwrite arguments on invocation:
