@@ -65,6 +65,7 @@ END
 * lost the favicon - bring it back
 * pulltorefreshjs - for mobile
 * we need to instantiate the pulltorefresh on the page-controller
+* try to get icons back on mobile
 
 ### 19/11/2024
 

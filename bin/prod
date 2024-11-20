@@ -6,7 +6,6 @@ if [ -n "$1" ]; then
 fi
 git checkout main
 git pull
-kamal env push 
 kamal deploy 
 git checkout development
 #
