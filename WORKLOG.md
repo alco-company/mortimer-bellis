@@ -54,6 +54,7 @@ END
 
 * this is probably not necessary: format.turbo_stream { render turbo_stream: turbo_stream.remove(dom_id(@resource)) }
 * pwa-installation.js + joy of rails
+* not broadcasting t/m's
 
 ### 20/11/2024
 
@@ -61,6 +62,7 @@ END
 * make staging deployable too - might not be enough
 * upgrade solid_queue to 1.0.2
 * don't care about user pincode until confirmed
+* lost the favicon - bring it back
 
 ### 19/11/2024
 
