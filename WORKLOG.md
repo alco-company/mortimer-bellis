@@ -54,7 +54,10 @@ END
 
 * this is probably not necessary: format.turbo_stream { render turbo_stream: turbo_stream.remove(dom_id(@resource)) }
 * pwa-installation.js + joy of rails
-* not broadcasting t/m's
+
+### 21/11/2024
+
+* bugs in registration_controller
 
 ### 20/11/2024
 
