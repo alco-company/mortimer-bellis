@@ -14,8 +14,8 @@ module Noticed::WebPush
         auth: auth_key,
         vapid: {
           subject: "mailto:monitor@mortimer.pro",
-          private_key: Rails.application.credentials.dig(:web_push, :vapid_private_key),
-          public_key: Rails.application.credentials.dig(:web_push, :vapid_public_key)
+          private_key: ENV.fetch("VAPID_PRIVATE_KEY"),
+          public_key: ENV.fetch("VAPID_PUBLIC_KEY")
         },
         ssl_timeout: 5,             # optional value for Net::HTTP#ssl_timeout=
         open_timeout: 5,            # optional value for Net::HTTP#open_timeout=

@@ -8,6 +8,8 @@ Bundler.require(*Rails.groups)
 
 module Mortimer
   class Application < Rails::Application
+    config.secret_key_base = ENV.fetch("SECRET_KEY_BASE")
+
     config.autoload_paths << "#{root}/app/views"
     config.autoload_paths << "#{root}/app/views/layouts"
     config.autoload_paths << "#{root}/app/views/components"
@@ -32,6 +34,11 @@ module Mortimer
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
+
+    # encryption
+    config.active_record.encryption.primary_key = ENV["ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY"]
+    config.active_record.encryption.deterministic_key = ENV["ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY"]
+    config.active_record.encryption.key_derivation_salt = ENV["ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT"]
 
     # Noticed notifications configuration
     config.to_prepare do

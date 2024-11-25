@@ -199,6 +199,26 @@ da:
         ignore: "Har du selv gjort det, er alt i orden, men hvis det ikke er dig selv, bør du som minimum kontakte den ansvarlige for jeres brug af  M O R T I M E R."
         regards: "Med venlig hilsen"
 
+    second_factor:
+      otp_code: "2 faktor kode"
+      authenticator_app: "Autentificerings app"
+      enabled: "Din to-faktor autentificering er aktiveret."
+      already_enabled: "Din to-faktor autentificering er allerede aktiveret."
+      disabled: "Din to-faktor autentificering er deaktiveret."
+      disable: "Deaktiver"
+      enable: "Aktiver"
+      title: "Bekræft din identitet"
+      password_placeholder: "Adgangskode"
+      bad_password: "Din adgangskode er forkert"
+      bad_otp_or_password: "Din 2 faktor kode er forkert"
+      confirm: "Bekræft"
+      1_download_the_authenticator_app: "1. Download app'en"
+      2_scan_or_enter_the_code: "2. Scan eller indtast koden"
+      3_enter_the_generated_code: "3. Indtast den genererede kode"
+      one_time_code_placeholder: "fx 231312"
+      one_time_or_backup_code_placeholder: "fx 102192"
+      enter_code: "Indtast kode"
+
     omniauth_callbacks:
       user_not_found: "vi ikke kunne finde en bruger med den email adresse (%{email}), som du har brugt til at logge ind med."
       failure: "Kunne ikke godkende dig fra %{kind} fordi %{reason}."

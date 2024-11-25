@@ -36,19 +36,19 @@ class Users::ConfirmationsController < Devise::ConfirmationsController
   # end
 
   # The path used after confirmation.
-  def after_confirmation_path_for(resource_name, resource)
-    debugger
-    if signed_in?(resource_name)
-      signed_in_root_path(resource)
-    else
-      new_session_path(resource_name)
-    end
-  end
+  # def after_confirmation_path_for(resource_name, resource)
+  #   debugger
+  #   if signed_in?(resource_name)
+  #     signed_in_root_path(resource)
+  #   else
+  #     new_session_path(resource_name)
+  #   end
+  # end
 
-  def not_confirmed_path_for(resource_name, resource)
-    debugger
-    errors = resource.errors.full_messages.join(", ")
-    flash[:alert] = errors
-    root_path
-  end
+  # def not_confirmed_path_for(resource_name, resource)
+  #   debugger
+  #   errors = resource.errors.full_messages.join(", ")
+  #   flash[:alert] = errors
+  #   root_path
+  # end
 end

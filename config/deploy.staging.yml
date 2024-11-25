@@ -48,17 +48,21 @@ env:
     - DINERO_APP_SECRET
     - SMTP_PASSWORD
     - WAVIX_APP_ID
+    - OTP_KEY
+    - ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY
+    - ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY
+    - ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT    
+    - SMTP_USER_NAME
+    - SMTP_PORT
+    - SMTP_AUTHENTICATION
+    - SMTP_HOST
   clear:
     SOLID_QUEUE_IN_PUMA: true
     WEB_HOST: anemone.mortimer.pro
     PORT: 3000
     RAILS_ENV: production
     PDF_HOST: 135.181.202.106 
-    SMTP_USER_NAME: info@mortimer.pro
     SMTP_DOMAIN: mortimer.pro
-    SMTP_HOST: hosting.alco.company
-    SMTP_PORT: 587
-    SMTP_AUTHENTICATION: plain
     SMTP_ENABLE_STARTTLS_AUTO: 'false'
     SSL_DOMAIN: anemone.mortimer.pro
     MORTIMER_VERSION: '1.0.1'
