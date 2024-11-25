@@ -5,10 +5,19 @@
 # are not: uncommented lines are intended to protect your configuration from
 # breaking changes in upgrades (i.e., in the event that future versions of
 # Devise change the default values for those options).
+
+Devise.otp_allowed_drift = 120 # in seconds
+
 #
 # Use this hook to configure devise mailer, warden hooks and so forth.
 # Many of these configuration options can be set straight in your model.
 Devise.setup do |config|
+  config.warden do |manager|
+    manager.default_strategies(scope: :user).unshift :two_factor_authenticatable
+  end
+
+  config.otp_encrypted_attribute_options = { key: ENV["OTP_KEY"] }
+
   # config.warden do |manager|
   #   manager.default_strategies(scope: :user).unshift :two_factor_authenticatable
   #   manager.default_strategies(scope: :user).unshift :two_factor_backupable
@@ -282,7 +291,7 @@ Devise.setup do |config|
 
   # When set to false, does not sign a user in automatically after their password is
   # reset. Defaults to true, so a user is signed in automatically after a reset.
-  # config.sign_in_after_reset_password = true
+  config.sign_in_after_reset_password = false
 
   # ==> Configuration for :encryptable
   # Allow you to use another hashing or encryption algorithm besides bcrypt (default).
@@ -325,8 +334,8 @@ Devise.setup do |config|
   # ==> OmniAuth
   # Add a new OmniAuth provider. Check the wiki for more information on setting
   # up on your models and hooks.
-  APP_ID = "#{Rails.application.credentials.dig(:microsoft, :ad_id)}"
-  APP_SECRET = "#{Rails.application.credentials.dig(:microsoft, :ad_secret)}"
+  APP_ID = ENV.fetch("MS_AD_ID")
+  APP_SECRET = ENV.fetch("MS_AD_SECRET")
   config.omniauth :entra_id, client_id: APP_ID, client_secret: APP_SECRET
 
   # ==> Warden configuration
@@ -366,4 +375,6 @@ Devise.setup do |config|
   # When set to false, does not sign a user in automatically after their password is
   # changed. Defaults to true, so a user is signed in automatically after changing a password.
   # config.sign_in_after_change_password = true
+
+  # Configuration for :two_factor_authenticatable
 end

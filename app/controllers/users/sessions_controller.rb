@@ -2,7 +2,7 @@
 
 class Users::SessionsController < Devise::SessionsController
   include TimezoneLocale
-  # before_action :configure_sign_in_params, only: [:create]
+  before_action :configure_sign_in_params, only: [ :create ]
 
   # GET /resource/sign_in
   # def new
@@ -12,6 +12,17 @@ class Users::SessionsController < Devise::SessionsController
   # POST /resource/sign_in
   def create
     ActiveRecord::Base.connected_to(role: :writing) do
+      if sign_in_params[:otp_attempt].nil?
+        user = attempting_user
+        if user&.otp_required_for_login
+          respond_to do |format|
+            format.turbo_stream do
+              render turbo_stream: turbo_stream.replace("otp_attempt_outlet", partial: "users/sessions/otp_attempt")
+            end
+          end
+          return
+        end
+      end
       super
     end
   end
@@ -21,10 +32,19 @@ class Users::SessionsController < Devise::SessionsController
   #   super
   # end
 
-  # protected
+  protected
+    def attempting_user
+      email = sign_in_params[:email]
+      password = sign_in_params[:password]
+      user = User.find_by(email: email)
+      unless user&.valid_password?(password)
+        return nil
+      end
+      user
+    end
 
-  # If you have extra params to permit, append them to the sanitizer.
-  # def configure_sign_in_params
-  #   devise_parameter_sanitizer.permit(:sign_in, keys: [:attribute])
-  # end
+    # If you have extra params to permit, append them to the sanitizer.
+    def configure_sign_in_params
+      devise_parameter_sanitizer.permit(:sign_in, keys: [ :otp_attempt ])
+    end
 end

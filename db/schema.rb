@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2024_11_19_090348) do
+ActiveRecord::Schema[8.1].define(version: 2024_11_22_155046) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -647,11 +647,11 @@ ActiveRecord::Schema[8.1].define(version: 2024_11_19_090348) do
     t.datetime "last_punched_at"
     t.string "cell_phone"
     t.boolean "blocked_from_punching", default: false
-    t.string "encrypted_otp_secret"
-    t.string "encrypted_otp_secret_iv"
-    t.string "encrypted_otp_secret_salt"
     t.integer "consumed_timestep"
     t.boolean "otp_required_for_login"
+    t.string "otp_secret"
+    t.boolean "two_factor_app_enabled", default: false, null: false
+    t.datetime "two_factor_app_enabled_at"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["invitation_token"], name: "index_users_on_invitation_token", unique: true
     t.index ["invited_by_id"], name: "index_users_on_invited_by_id"

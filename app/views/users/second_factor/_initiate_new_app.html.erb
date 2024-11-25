@@ -1,0 +1,21 @@
+<div id="modal_container">
+  <%= form_with(model: @password_confirmation_form, class: "mt-10 ", url: new_user_two_factor_app_path) do |form| %>
+    <% if @password_confirmation_form.errors.any? %>
+      <div id="error_explanation" class="relative z-1 bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3">
+        <ul>
+          <% @password_confirmation_form.errors.each do |error| %>
+            <li><%= error.full_message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="my-2">
+      <%= form.label :password, t("devise.second_factor.title"), class: "block text-base font-medium text-gray-900" %>
+      <div class="flex gap-3 mt-2">
+      <%= form.password_field :password, id: "password", class: "block shadow rounded-md border border-gray-200 outline-none w-sm", autofocus: true, autocomplete: false, placeholder: t("devise.second_factor.password_placeholder") %>
+      <%= form.submit t("devise.second_factor.confirm"), class: "mort-btn-primary" %>
+      </div>
+    </div>
+  <% end %>
+</div>

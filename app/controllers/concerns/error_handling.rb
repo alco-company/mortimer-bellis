@@ -12,6 +12,7 @@ module ErrorHandling
       rescue_from ActionController::UnknownFormat, with: -> { render_404  }
       rescue_from ActiveRecord::RecordNotFound,        with: -> { render_404 }
       rescue_from ActionController::UrlGenerationError, with: -> { render_404 }
+      rescue_from ActionController::InvalidAuthenticityToken, with: -> { render_404 }
     end
 
     # def blackholed

@@ -55,9 +55,22 @@ END
 * this is probably not necessary: format.turbo_stream { render turbo_stream: turbo_stream.remove(dom_id(@resource)) }
 * pwa-installation.js + joy of rails
 
+### 21/11/2024
+
+* bugs in registration_controller
+
 ### 20/11/2024
 
 * add link affording escape from 400's & 500 error views
+* make staging deployable too - might not be enough
+* upgrade solid_queue to 1.0.2
+* don't care about user pincode until confirmed
+* lost the favicon - bring it back
+* pulltorefreshjs - for mobile
+* we need to instantiate the pulltorefresh on the page-controller
+* try to get icons back on mobile
+* tested svg's and the dinero callback revisited
+* one more test on the buttons
 
 ### 19/11/2024
 

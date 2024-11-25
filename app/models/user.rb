@@ -8,12 +8,13 @@ class User < ApplicationRecord
   belongs_to :team
 
   # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
-  devise :invitable, :database_authenticatable, :registerable,
+  # :database_authenticatable, :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
+  # :two_factor_authenticatable, :two_factor_backupable, otp_secret_encryption_key: ENV["OTP_KEY"]
+  devise :two_factor_authenticatable
+  devise :omniauthable, omniauth_providers: %i[ entra_id ]
+  devise :invitable, :registerable,
          :recoverable, :rememberable, :validatable,
-         :confirmable, :trackable, :timeoutable, :lockable,
-         :omniauthable, omniauth_providers: %i[ entra_id ]
-  #  :two_factor_authenticatable, :two_factor_backupable, otp_secret_encryption_key: ENV["OTP_KEY"]
+         :confirmable, :trackable, :timeoutable, :lockable
 
   has_many :user_invitations, class_name: "User", as: :invited_by
   has_many :settings, as: :setable
@@ -49,8 +50,8 @@ class User < ApplicationRecord
   scope :by_time_zone, ->(time_zone) { where("time_zone LIKE ?", "%#{time_zone}%") if time_zone.present? }
 
   validates :pincode,
-    numericality: { only_integer: true, in: 1000..9999 },
-    uniqueness: { scope: :tenant_id, message: I18n.t("users.errors.messages.pincode_exist_for_tenant") }
+    numericality: { only_integer: true, in: 1000..9999, unless: ->(u) { u.pincode.blank? } },
+    uniqueness: { scope: :tenant_id, message: I18n.t("users.errors.messages.pincode_exist_for_tenant"), unless: ->(u) { u.pincode.blank? } }
 
   def can?(action)
     settings.where(key: action.to_s, value: "true").count.positive? or

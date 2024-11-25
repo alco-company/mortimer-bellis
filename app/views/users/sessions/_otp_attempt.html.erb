@@ -1,0 +1,8 @@
+<div id="otp_attempt_outlet" class="mort-field">
+  <label for=""><%=  t("devise.second_factor.otp_code") %></label>
+  <%= text_field :user, :otp_attempt, id: :otp_attempt,
+    autocomplete: "off",
+    autofocus: true,
+    placeholder: "fx 123456",
+    class: "mort-form-text appearance-none" %>
+</div>

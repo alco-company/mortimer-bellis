@@ -21,9 +21,11 @@ class Users::RegistrationsController < Devise::RegistrationsController
       params[:user][:team_id] = 1   # temporary placeholder - UserRegistrationService will fix!
       # configure_sign_up_params
       super do |resource|
-        resource.add_role
-        usr = resource
-        UserRegistrationService.call(resource)
+        if resource.valid?
+          resource.add_role
+          usr = resource.dup
+          raise "user was not registered correctly" unless UserRegistrationService.call(resource, tenant_name)
+        end
       end
     rescue => e
       UserMailer.error_report(e.to_s, "Users::RegistrationController#create - failed for email #{usr&.email}").deliver_later

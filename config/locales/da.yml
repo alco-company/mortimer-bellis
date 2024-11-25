@@ -655,6 +655,7 @@ da:
         user_name: Brugernavn
         password: Adgangskode
         password_confirmation: Bekræft adgangskode
+        otp_attempt: 2FA kode
         encrypted_password: Krypteret adgangskode
         confirmed_at: Bekræftet den
         confirmation_sent_at: Bekræftelse sendt den

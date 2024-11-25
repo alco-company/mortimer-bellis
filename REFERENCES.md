@@ -39,6 +39,7 @@ contributions to Open Source Software have in each their own way made a crucial 
 * CSV work [Yaroslav Shmarow](https://blog.corsego.com/import-csv-to-rails-database)
 * Working With TimeZones [Elle Meredith](https://thoughtbot.com/blog/its-about-time-zones)
 * (man)handling Turbo Frames [Radan Skoric](https://radanskoric.com/articles/update-full-page-on-form-in-frame-submit)
+* Setting Up TOTP Two-Factor Authentication in Ruby on Rails Application [Mikołaj Bogucki](https://blog.lunarlogic.com/2024/setting-up-totp-two-factor-authentication-in-rails)
 
 ## Resources
 

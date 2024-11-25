@@ -19,6 +19,9 @@
       <%= f.password_field :password, autocomplete: "current-password", class: "mort-form-text" %>
     </div>
 
+    <div id="otp_attempt_outlet" class="mort-field">
+    </div>
+
     <% if devise_mapping.rememberable? %>
       <div class="mort-field">
         <%= f.check_box :remember_me %>

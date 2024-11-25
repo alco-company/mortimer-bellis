@@ -10,11 +10,13 @@ Rails.application.routes.draw do
     unlocks: "users/unlocks",
     omniauth_callbacks: "users/omniauth_callbacks"
   }
-  # get "enable_otp_show_qr", to: "users/registrations#enable_otp_show_qr", as: "enable_otp_show_qr"
-  # post "enable_otp_verify", to: "users/registrations#enable_otp_verify", as: "enable_otp_verify"
-  # get "users/otp", to: "users#show_otp", as: "user_otp"
-  # post "users/otp", to: "users#verify_otp", as: "verify_user_otp"
-  # post "verify_otp", to: "users/sessions#verify_otp"
+  # 2FA routes
+  get "auth/edit/2fa/app/init" => "users/second_factor#initiate_new_app", as: :init_new_user_two_factor_app
+  post "auth/edit/2fa/app/new" => "users/second_factor#new_app", as: :new_user_two_factor_app
+  post "auth/edit/2fa/app" => "users/second_factor#create_app", as: :create_user_two_factor_app
+  get "auth/edit/2fa/app/destroy" => "users/second_factor#new_destroy_app", as: :new_destroy_user_two_factor_app
+  post "auth/edit/2fa/app/destroy" => "users/second_factor#destroy_app", as: :destroy_user_two_factor_app
+
 
   post "/web_push_subscriptions" => "noticed/web_push/subscriptions#create", as: :web_push_subscriptions
 
