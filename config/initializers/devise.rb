@@ -334,8 +334,8 @@ Devise.setup do |config|
   # ==> OmniAuth
   # Add a new OmniAuth provider. Check the wiki for more information on setting
   # up on your models and hooks.
-  APP_ID = ENV.fetch("MS_AD_ID")
-  APP_SECRET = ENV.fetch("MS_AD_SECRET")
+  APP_ID = 1 # ENV.fetch("MS_AD_ID")
+  APP_SECRET = 2# ENV.fetch("MS_AD_SECRET")
   config.omniauth :entra_id, client_id: APP_ID, client_secret: APP_SECRET
 
   # ==> Warden configuration
