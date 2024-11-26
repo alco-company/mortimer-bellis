@@ -37,6 +37,9 @@
                 ) do %>
               <%= form_with(model: @two_factor_app_enablement_form, class: "mt-10", url: create_user_two_factor_app_path) do |form| %>
                 <%= form.hidden_field :password %>
+                <% if @button_only %>
+                  <%= form.hidden_field :button_only, value: true %>
+                <% end %>              
                 <div class="">
                   <h1 class="font-medium"><%= t("second_factor.authenticator_app") %></h1>
                   <div class="flex justify-center items-center w-md flex-col">
