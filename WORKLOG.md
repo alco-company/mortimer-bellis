@@ -55,6 +55,15 @@ END
 * this is probably not necessary: format.turbo_stream { render turbo_stream: turbo_stream.remove(dom_id(@resource)) }
 * pwa-installation.js + joy of rails
 
+### 26/11/2024
+
+* get Kamal to deploy (again) - issues with ENV
+* polish 2FA to work from dashboard view too
+
+### 25/11/2024
+
+* add 2FA to user
+
 ### 21/11/2024
 
 * bugs in registration_controller

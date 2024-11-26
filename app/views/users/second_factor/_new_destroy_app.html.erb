@@ -13,6 +13,9 @@
     <div class="my-2">
       <%= form.label :otp_code, t("devise.second_factor.enter_code"), class: "block text-base font-medium text-gray-900" %>
       <div class="flex gap-3 mt-2">
+        <% if @button_only %>
+        <%= form.hidden_field :button_only, value: true %>
+        <% end %>
       <%= form.text_field :otp_code, id: "otp", class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 w-full", autocomplete: "off", placeholder: t("devise.second_factor.one_time_or_backup_code_placeholder") %>
       <%= form.submit t("devise.second_factor.disable"), class: "mort-btn-primary" %>
       </div>

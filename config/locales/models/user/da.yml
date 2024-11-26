@@ -207,6 +207,8 @@ da:
       disabled: "Din to-faktor autentificering er deaktiveret."
       disable: "Deaktiver"
       enable: "Aktiver"
+      disable_2fa: "Deaktiver 2FA"
+      enable_2fa: "Aktiver 2FA"
       title: "Bekræft din identitet"
       password_placeholder: "Adgangskode"
       bad_password: "Din adgangskode er forkert"

@@ -8,7 +8,7 @@ Bundler.require(*Rails.groups)
 
 module Mortimer
   class Application < Rails::Application
-    config.secret_key_base = ENV.fetch("SECRET_KEY_BASE")
+    # config.secret_key_base = ENV.fetch("SECRET_KEY_BASE")
 
     config.autoload_paths << "#{root}/app/views"
     config.autoload_paths << "#{root}/app/views/layouts"

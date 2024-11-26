@@ -13,6 +13,9 @@
     <div class="my-2">
       <%= form.label :password, t("devise.second_factor.title"), class: "block text-base font-medium text-gray-900" %>
       <div class="flex gap-3 mt-2">
+      <% if @button_only %>
+      <%= form.hidden_field :button_only, value: true %>
+      <% end %>
       <%= form.password_field :password, id: "password", class: "block shadow rounded-md border border-gray-200 outline-none w-sm", autofocus: true, autocomplete: false, placeholder: t("devise.second_factor.password_placeholder") %>
       <%= form.submit t("devise.second_factor.confirm"), class: "mort-btn-primary" %>
       </div>

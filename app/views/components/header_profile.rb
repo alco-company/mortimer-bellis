@@ -93,6 +93,9 @@ class HeaderProfile < Phlex::HTML
           div(class: "mort-field ml-2") do
             button(id: "enable_notifications", class: "hidden mort-btn-primary") { I18n.t("enable_notifications") }
           end
+          div(class: "mort-field ml-2") do
+            render TwoFactorField.new button_only: true
+          end
         end
       end
     end
