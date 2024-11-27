@@ -42,3 +42,26 @@ da:
       value: Værdi
       updated_at: Opdateret den
 
+    keys:
+      delegate_time_materials: Delegér tid og materialer
+      show_all_time_material_posts: Vis alle brugeres t/m poster
+
+    tables:
+      background_jobs: Baggrundsopgaver
+      customers: Kunder
+      dashboards: Oversigter
+      invoices: Fakturaer
+      invoice_items: Faktura linjer
+      locations: Arbejdssteder
+      products: Produkter
+      projects: Projekter
+      punches: Stemplinger
+      punch_clocks: Stempelure
+      settings: Indstillinger
+      teams: Hold
+      tenants: Klienter
+      time_materials: Tid og materialer
+      users: Brugere
+
+
+

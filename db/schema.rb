@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2024_11_22_155046) do
+ActiveRecord::Schema[8.1].define(version: 2024_11_27_111114) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -383,7 +383,7 @@ ActiveRecord::Schema[8.1].define(version: 2024_11_22_155046) do
     t.integer "setable_id"
     t.string "key"
     t.integer "priority"
-    t.string "format"
+    t.string "formating"
     t.string "value"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

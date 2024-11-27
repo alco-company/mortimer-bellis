@@ -4,7 +4,7 @@ module DefaultActions
   included do
     # GET /users or /users.json
     def index
-      params.permit(:url)[:url] = resources_url
+      params.permit![:url] = resources_url
       @pagy, @records = pagy(@resources)
 
       respond_to do |format|
@@ -13,8 +13,10 @@ module DefaultActions
         format.pdf { send_file resource_class.pdf_file(html_content), filename: "#{resource_class.name.pluralize.downcase}-#{Date.today}.pdf" }
         format.csv { send_data resource_class.to_csv(@resources), filename: "#{resource_class.name.pluralize.downcase}-#{Date.today}.csv" }
       end
-    rescue => error
-      redirect_to root_path, warning: error.message
+
+    rescue => e
+      UserMailer.error_report(e.to_s, "DefaultActions#index - failed with params: #{params}").deliver_later
+      redirect_to root_path, alert: I18n.t("errors.messages.something_went_wrong", error: e.message)
     end
 
     def lookup
@@ -50,6 +52,9 @@ module DefaultActions
     # exceptions are fx dashboards/
     #
     def show
+    rescue => e
+      UserMailer.error_report(e.to_s, "DefaultActions#show - failed with params: #{params}").deliver_later
+      redirect_to root_path, alert: I18n.t("errors.messages.something_went_wrong", error: e.message)
     end
 
     # GET /users/new
@@ -60,6 +65,10 @@ module DefaultActions
     def new
       @resource.tenant_id = Current.tenant.id if resource_class.has_attribute? :tenant_id
       @resource.user_id = Current.user.id if resource_class.has_attribute? :user_id
+
+    rescue => e
+      UserMailer.error_report(e.to_s, "DefaultActions#new - failed with params: #{params}").deliver_later
+      redirect_to root_path, alert: I18n.t("errors.messages.something_went_wrong", error: e.message)
     end
 
     # GET /users/1/edit
@@ -68,6 +77,9 @@ module DefaultActions
     # exceptions are fx time_materials/
     #
     def edit
+    rescue => e
+      UserMailer.error_report(e.to_s, "DefaultActions#edit - failed with params: #{params}").deliver_later
+      redirect_to root_path, alert: I18n.t("errors.messages.something_went_wrong", error: e.message)
     end
 
     # POST /users or /users.json
@@ -99,11 +111,16 @@ module DefaultActions
           format.json { render json: @resource.errors, status: :unprocessable_entity }
         end
       end
+
+    rescue => e
+      UserMailer.error_report(e.to_s, "DefaultActions#create - failed with params: #{params}").deliver_later
+      redirect_to root_path, alert: I18n.t("errors.messages.something_went_wrong", error: e.message)
     end
 
-    def special
-      turbo_stream.replace("time_material_buttons", partial: "time_materials/buttons", locals: { time_material: TimeMaterial.new }) if params[:played].present?
-    end
+    # not used ATM
+    # def special
+    #   turbo_stream.replace("time_material_buttons", partial: "time_materials/buttons", locals: { time_material: TimeMaterial.new }) if params[:played].present?
+    # end
 
     # PATCH/PUT /users/1 or /users/1.json
     def update
@@ -130,6 +147,10 @@ module DefaultActions
           format.json { render json: @resource.errors, status: :unprocessable_entity }
         end
       end
+
+    rescue => e
+      UserMailer.error_report(e.to_s, "DefaultActions#update - failed with params: #{params}").deliver_later
+      redirect_to root_path, alert: I18n.t("errors.messages.something_went_wrong", error: e.message)
     end
 
     # DELETE /users/1 or /users/1.json
@@ -165,6 +186,10 @@ module DefaultActions
           end
         end
       end
+
+    rescue => e
+      UserMailer.error_report(e.to_s, "DefaultActions#destroy - failed with params: #{params}").deliver_later
+      redirect_to root_path, alert: I18n.t("errors.messages.something_went_wrong", error: e.message)
     end
 
     #

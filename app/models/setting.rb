@@ -36,4 +36,31 @@ class Setting < ApplicationRecord
   def name
     "#{key}"
   end
+
+  def self.available_keys
+    [
+      [ "delegate_time_materials", I18n.t("settings.keys.delegate_time_materials") ],
+      [ "show_all_time_material_posts", I18n.t("settings.keys.show_all_time_material_posts") ]
+    ]
+  end
+
+  def self.available_tables
+    [
+      [ "BackgroundJob", I18n.t("settings.tables.background_jobs") ],
+      [ "Customer", I18n.t("settings.tables.customers") ],
+      [ "Dashboard", I18n.t("settings.tables.dashboards") ],
+      [ "Invoice", I18n.t("settings.tables.invoices") ],
+      [ "InvoiceItem", I18n.t("settings.tables.invoice_items") ],
+      [ "Location", I18n.t("settings.tables.locations") ],
+      [ "Product", I18n.t("settings.tables.products") ],
+      [ "Project", I18n.t("settings.tables.projects") ],
+      [ "Punche", I18n.t("settings.tables.punches") ],
+      [ "PunchClock", I18n.t("settings.tables.punch_clocks") ],
+      [ "Setting", I18n.t("settings.tables.settings") ],
+      [ "Team", I18n.t("settings.tables.teams") ],
+      [ "Tenant", I18n.t("settings.tables.tenants") ],
+      [ "TimeMaterial", I18n.t("settings.tables.time_materials") ],
+      [ "User", I18n.t("settings.tables.users") ]
+    ]
+  end
 end
