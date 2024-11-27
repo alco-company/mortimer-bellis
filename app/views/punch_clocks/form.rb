@@ -1,6 +1,6 @@
 class PunchClocks::Form < ApplicationForm
   def view_template(&)
-    span(class: "pt-18") do
+    div(class: "mt-2") do
       helpers.svg_qr_code_link(pos_punch_clock_url(model, api_key: model.access_token))
     end
 
