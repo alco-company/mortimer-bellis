@@ -30,12 +30,8 @@ class ToastComponent < ApplicationComponent
             icon(type)
           end
           div(class: "ml-3 w-0 flex-1 pt-0.5") do
-            p(class: "text-sm font-medium mort-flash-#{type} ") do
-              plain title
-            end
-            p(class: "mt-1 text-sm  mort-flash-#{type} ") do
-              plain msg
-            end
+            p(class: "text-sm font-medium mort-flash-#{type} ") { title }
+            p(class: "mt-1 text-sm  mort-flash-#{type} ") { unsafe_raw msg }
           end
           div(class: "ml-4 flex flex-shrink-0") do
             button(
