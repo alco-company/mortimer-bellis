@@ -65,6 +65,7 @@ END
 * add error emails to default actions for better monitoring
 * polish flash messages & toasts
 * prepare for better background jobs - make recurring jobs actually run
+* make running/paused jobs visibly easier on the eyes
 
 ### 25/11/2024
 

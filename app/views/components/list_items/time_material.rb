@@ -1,7 +1,7 @@
 class ListItems::TimeMaterial < ListItems::ListItem
   def view_template
     comment { "bg-green-200 bg-yellow-200" }
-    div(id: (dom_id resource), class: "flex justify-between gap-x-6 mb-1 px-2 py-5 rounded-sm #{ background }", data: time_material_controller?) do
+    div(id: (dom_id resource), class: "relative flex justify-between gap-x-6 mb-1 px-2 py-5 rounded-sm #{ background }", data: time_material_controller?) do
       div(class: "flex grow min-w-0 gap-x-4") do
         show_left_mugshot
         div(class: "min-w-0 flex-auto") do
@@ -24,9 +24,9 @@ class ListItems::TimeMaterial < ListItems::ListItem
         end
         div(class: "flex-col justify-center") do
           render_context_menu "relative justify-self-center"
-          render_play_pause
         end
       end
+      render_play_pause
     end
   end
 
@@ -40,12 +40,14 @@ class ListItems::TimeMaterial < ListItems::ListItem
   end
 
   def render_play_pause
-    if resource.active? or resource.paused? # and this_user?(resource.user_id)
-      resource.paused? ?
-        render(Icons::Play.new(cls: "text-gray-500 pt-1 h-8 w-8 ")) :
-        render(Icons::Pause.new(cls: "text-gray-500 h-8 w-8 "))
-      # link_to(resource_url(pause: (resource.paused? ? "resume" : "pause")), data: { turbo_prefetch: "false", turbo_stream: "true" }) do
-      # end
+    div(class: "absolute inset-0 flex items-center justify-center pointer-events-none") do
+      if resource.active? or resource.paused? # and this_user?(resource.user_id)
+        resource.paused? ?
+          render(Icons::Play.new(cls: "text-gray-500/15 h-1/2 w-1/2 sm:h-22 sm:w-22")) :
+          render(Icons::Pause.new(cls: "text-gray-500/15 h-1/2 w-1/2 sm:h-22 sm:w-22"))
+        # link_to(resource_url(pause: (resource.paused? ? "resume" : "pause")), data: { turbo_prefetch: "false", turbo_stream: "true" }) do
+        # end
+      end
     end
   end
 
