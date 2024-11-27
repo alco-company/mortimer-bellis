@@ -1,5 +1,11 @@
 da:
   english: "Do you prefer english?"
+  success: Succes
+  error: Fejl
+  alert: Fejl
+  warning: Advarsel
+  info: Information
+  notice: Bemærk
   hours_minutes: "%{hours}t %{minutes}m"
   something_went_wrong: "Der opstod en fejl: %{error}"
   select_team: Vælg hold
@@ -935,6 +941,7 @@ da:
   errors:
     format: "%{attribute} %{message}"
     messages:
+      something_went_wrong: "<pre class='text-xs'>%{error}</pre><br/>Noget gik galt - vi er blevet orienteret, men beskriv gerne situationen i en mail til info@mortimer.pro"
       user_registration_failed: "Bruger registreringen mislykkedes - fejl: %{error}"
       user_role_cannot_be_assigned: "Rollen kan ikke tildeles"
       already_confirmed: "er allerede bekræftet, prøv venligst at logge ind"

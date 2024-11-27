@@ -62,6 +62,7 @@ END
 * polish punch_clocks
 * polish settings
 * polish background_jobs - add link to mission_control_jobs
+* add error emails to default actions for better monitoring
 
 ### 25/11/2024
 
