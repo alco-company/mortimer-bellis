@@ -65,6 +65,6 @@ class SettingsController < MortimerController
 
     # Only allow a list of trusted parameters through.
     def resource_params
-      params.expect(setting: [ :tenant_id, :setable_id, :setable_type, :key, :priority, :format, :value ])
+      params.expect(setting: [ :tenant_id, :setable_id, :setable_type, :key, :priority, :formating, :value ])
     end
 end

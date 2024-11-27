@@ -549,9 +549,9 @@ da:
       setting:
         key: Nøgle
         setable_type: Tabel
-        setable_id: Post/record ID
+        setable_id: Post/record ID - blank hvis alle poster berørt
         priority: Orden/rækkefølge
-        format: Format
+        formating: Format - skal værdien formateres særligt
         value: Værdi
       stocked_product:
         name: Navn
