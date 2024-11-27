@@ -60,6 +60,7 @@ END
 * get Kamal to deploy (again) - issues with ENV
 * polish 2FA to work from dashboard view too
 
+
 ### 25/11/2024
 
 * add 2FA to user
