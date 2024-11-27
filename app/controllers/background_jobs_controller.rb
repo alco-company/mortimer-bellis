@@ -1,6 +1,9 @@
 class BackgroundJobsController < MortimerController
   before_action :authorize
 
+  def mission_control
+  end
+
   private
 
     # Only allow a list of trusted parameters through.

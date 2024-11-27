@@ -5,6 +5,8 @@
               <h1 id="message-heading" class="text-base font-semibold leading-6 pl-2 text-gray-900"><%= t("#{ resource_class.table_name}.list.title") %></h1>
               <p class=" mt-1 truncate pl-2 text-sm text-gray-500">
                 <% case @filter_form %>
+                <% when "background_jobs" %>
+                  <%= link_to t("Mission Control Jobs"), "/solid_queue_jobs", class: "mort-link-primary", data: { turbo_prefetch: "false" } %>
                 <% when 'customers' %>
                   <%= link_to t(".sync_with_ERP"), erp_pull_customers_url, class: "mort-link-primary", data: { turbo_prefetch: "false" } %>
                 <% when 'products' %>

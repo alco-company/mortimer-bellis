@@ -61,6 +61,7 @@ END
 * polish 2FA to work from dashboard view too
 * polish punch_clocks
 * polish settings
+* polish background_jobs - add link to mission_control_jobs
 
 ### 25/11/2024
 
