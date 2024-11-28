@@ -55,6 +55,11 @@ END
 * this is probably not necessary: format.turbo_stream { render turbo_stream: turbo_stream.remove(dom_id(@resource)) }
 * pwa-installation.js + joy of rails
 
+## 28/11/2024
+
+* huge issue with @hotwired/stimulus lost in importmap
+
+
 ### 26/11/2024
 
 * get Kamal to deploy (again) - issues with ENV
