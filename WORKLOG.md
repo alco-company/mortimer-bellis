@@ -58,7 +58,7 @@ END
 * update time on active t/m's
 * allow edit on t/m's - they fail when started with play in production
 * customers show up double in lookup?
-* scroll the menu on mobile
+* 
 * 
 
 ## 28/11/2024
@@ -70,6 +70,7 @@ END
 * make sessions last longer - 1 week (until Saturday Night)
 * NoMethodError (undefined method `service_params_hash' SyncErpJob
 * report back when user invited
+* scroll the menu on mobile
 
 ### 26/11/2024
 
