@@ -59,6 +59,7 @@ END
 
 * huge issue with @hotwired/stimulus lost in importmap
 * VAPID* missing in deploy.staging
+* polish flash messages 2
 
 ### 26/11/2024
 
