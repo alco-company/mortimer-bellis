@@ -69,6 +69,7 @@ END
 * turbo_stream(later) virker kun med solid_queue's default async adapter i development!!
 * make sessions last longer - 1 week (until Saturday Night)
 * NoMethodError (undefined method `service_params_hash' SyncErpJob
+* report back when user invited
 
 ### 26/11/2024
 
