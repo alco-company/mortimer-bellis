@@ -229,17 +229,17 @@ module DefaultActions
         @resources = case resource_class.to_s
         when "Project"
           unless params[:customer_id].blank?
-            resource_class
+            resource_class.by_tenant()
               .where("customer_id = ?", params.permit![:customer_id])
               .where(params.permit![:q].blank? ? "1=1" : "name LIKE ?", "%#{params.permit![:q]}%")
               .limit(10)
           else
-            resource_class
+            resource_class.by_tenant()
               .where(params.permit![:q].blank? ? "1=1" : "name LIKE ?", "%#{params.permit![:q]}%")
               .limit(10)
           end
         else
-          resource_class
+          resource_class.by_tenant()
             .where(params.permit![:q].blank? ? "1=1" : "name LIKE ?", "%#{params.permit![:q]}%")
             .limit(10)
         end
