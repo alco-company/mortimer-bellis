@@ -54,6 +54,7 @@ END
 
 * this is probably not necessary: format.turbo_stream { render turbo_stream: turbo_stream.remove(dom_id(@resource)) }
 * pwa-installation.js + joy of rails
+* make allow notifications stick on client - for ever
 
 ## 28/11/2024
 
@@ -61,6 +62,7 @@ END
 * VAPID* missing in deploy.staging
 * polish flash messages 2
 * turbo_stream(later) virker kun med solid_queue's default async adapter i development!!
+* make sessions last longer - 1 week (until Saturday Night)
 
 ### 26/11/2024
 
