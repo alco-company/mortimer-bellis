@@ -55,6 +55,11 @@ END
 * this is probably not necessary: format.turbo_stream { render turbo_stream: turbo_stream.remove(dom_id(@resource)) }
 * pwa-installation.js + joy of rails
 * make allow notifications stick on client - for ever
+* update time on active t/m's
+* allow edit on t/m's - they fail when started with play in production
+* customers show up double in lookup?
+* scroll the menu on mobile
+* 
 
 ## 28/11/2024
 
@@ -63,6 +68,7 @@ END
 * polish flash messages 2
 * turbo_stream(later) virker kun med solid_queue's default async adapter i development!!
 * make sessions last longer - 1 week (until Saturday Night)
+* NoMethodError (undefined method `service_params_hash' SyncErpJob
 
 ### 26/11/2024
 

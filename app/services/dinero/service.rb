@@ -3,7 +3,7 @@ class Dinero::Service < SaasService
 
   def initialize(provided_service: nil, settings: nil)
     @provided_service = provided_service || Current.tenant.provided_services.by_name("Dinero").first
-    @settings = settings || @provided_service.service_params_hash
+    @settings = settings || @provided_service&.service_params_hash
     @settings["organizationId"] = @provided_service.organizationID
   end
 
