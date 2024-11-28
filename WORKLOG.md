@@ -58,7 +58,7 @@ END
 ## 28/11/2024
 
 * huge issue with @hotwired/stimulus lost in importmap
-
+* VAPID* missing in deploy.staging
 
 ### 26/11/2024
 
