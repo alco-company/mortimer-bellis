@@ -72,6 +72,7 @@ END
 * report back when user invited
 * scroll the menu on mobile
 * customers show up double in lookup?
+* allow global_queries and tenant_swap (superuser)
 
 ### 26/11/2024
 

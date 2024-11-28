@@ -71,8 +71,12 @@ class Users::RegistrationsController < Devise::RegistrationsController
   end
 
   def update_now(resource, params)
-    # account_update_params.delete(:current_password)
     resize_before_save(params[:mugshot], 100, 100)
+    unless Current.user.user?
+      resource.update role: params[:role] if params[:role].present?
+      resource.update global_queries: params[:global_queries] if params[:global_queries].present?
+      resource.update tenant_id: params[:tenant_id] if params[:tenant_id].present?
+    end
     resource.update name: params[:name],
       mugshot: params[:mugshot],
       pincode: params[:pincode],
