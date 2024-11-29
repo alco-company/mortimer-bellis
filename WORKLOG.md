@@ -54,11 +54,12 @@ END
 
 * this is probably not necessary: format.turbo_stream { render turbo_stream: turbo_stream.remove(dom_id(@resource)) }
 * pwa-installation.js + joy of rails
-* make allow notifications stick on client - for ever
 * update time on active t/m's
 * allow edit on t/m's - they fail when started with play in production
-* 
-* 
+
+## 29/11/2024
+
+* polish all forms
 * 
 
 ## 28/11/2024

@@ -6,9 +6,9 @@ class Teams::Form < ApplicationForm
       view_only field(:punches_settled_at).date(class: "mort-form-text")
       row field(:locale).select(Team.locales, prompt: I18n.t(".select_team_locale"), class: "mort-form-text")
       row field(:time_zone).select(Team.time_zones_for_phlex, class: "mort-form-text")
-      row field(:blocked).boolean(class: "mort-form-bool")
+      row field(:blocked).boolean(class: "mort-form-bool"), "mort-field flex justify-end flex-row-reverse items-center"
       div do
-        div(class: "mort-btn-secondary", data: { action: "click->employee#toggleAdvanced" }) { I18n.t("users.advanced_configuration") }
+        div(class: "mort-btn-secondary", data: { action: "click->employee#toggleAdvanced" }) { I18n.t("teams.advanced_configuration") }
       end if @editable
       div(data: { employee_target: "advanced" }, class: "#{"hidden" if @editable}") do
         row field(:country).input(class: "mort-form-text")

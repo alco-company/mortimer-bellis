@@ -114,7 +114,7 @@ class ApplicationForm < Superform::Rails::Form
     # include Phlex::Rails::Helpers::Request
     #
     def view_template(&)
-      div(class: "relative mt-2", data: { controller: "lookup" }) do
+      div(class: "relative", data: { controller: "lookup" }) do
         input(type: "hidden", id: dom.id, name: dom.name, value: field.value, data: { lookup_target: "selectId" })
         data = attributes[:data] || { url: attributes[:lookup_path], div_id: field.dom.id, lookup_target: "input", action: "keydown->lookup#keyDown" }
         css = attributes[:class] || "mort-form-text"
@@ -372,9 +372,9 @@ class ApplicationForm < Superform::Rails::Form
   def view_only(component, outer_class = "mort-field")
     div do
       render(component.field.label) do
-        span(class: "font-bold") do
-          plain I18n.t("activerecord.attributes.#{component.field.parent.key}.#{component.field.key}")
-        end
+        plain I18n.t("activerecord.attributes.#{component.field.parent.key}.#{component.field.key}")
+        # span(class: "font-bold") do
+        # end
       end
       div(class: outer_class) do
         display_field(component.field)
@@ -385,9 +385,9 @@ class ApplicationForm < Superform::Rails::Form
   def row(component, outer_class = "mort-field")
     div(class: outer_class) do
       render(component.field.label) do
-        span(class: "text-sm font-light") do
-          plain I18n.t("activerecord.attributes.#{component.field.parent.key}.#{component.field.key}")
-        end
+        plain I18n.t("activerecord.attributes.#{component.field.parent.key}.#{component.field.key}")
+        # span(class: "text-sm font-light") do
+        # end
       end unless component.class == ApplicationForm::HiddenField
       @editable ?
         render(component) :
@@ -402,9 +402,9 @@ class ApplicationForm < Superform::Rails::Form
   def naked_row(component)
     div() do
       render(component.field.label) do
-        span(class: "text-sm font-light") do
-          plain I18n.t("activerecord.attributes.#{component.field.parent.key}.#{component.field.key}")
-        end
+        plain I18n.t("activerecord.attributes.#{component.field.parent.key}.#{component.field.key}")
+        # span(class: "text-sm font-light") do
+        # end
       end unless component.class == ApplicationForm::HiddenField
       @editable ?
         render(component) :
