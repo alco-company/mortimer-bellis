@@ -88,7 +88,7 @@ gem "phlex-rails"
 
 gem "superform", "~> 0.5.0"
 
-gem "pagy", "~> 9.0"
+gem "pagy", "~> 9.3"
 
 gem "rqrcode", "~> 2.2"
 
