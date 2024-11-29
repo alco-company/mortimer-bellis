@@ -1,4 +1,4 @@
-<div class="mx-auto w-72 sm:w-96">
+<div data-controller="profile" class="mx-auto w-72 sm:w-96">
   <h1 class="font-bold text-3xl"> <%= t("users.edit_profile.name") %> </h1>
   <h3>Mortimer version:
     <span class="text-xs font-thin"><%= ENV["MORTIMER_VERSION"] %></span>
@@ -58,7 +58,26 @@
     </div>
 
     <div class="mort-field">
-      <button id="enable_notifications" class="hidden mort-btn-primary"><%= I18n.t("enable_notifications") %></button>
+      <button id="enable_notifications" class="hidden mort-btn-primary" 
+        data-turbo="false" 
+        data-transition-enter="transition ease-in duration-700"
+        data-transition-enter-start="transform opacity-0"
+        data-transition-enter-end="transform opacity-100"
+        data-transition-leave="transition ease-out duration-700"
+        data-transition-leave-start="transform opacity-100"
+        data-transition-leave-end="transform opacity-0"        
+        data-profile-target="enableNotifications" 
+        data-action="click->profile#enable"><%= I18n.t("enable_notifications") %></button>
+      <button id="disable_notifications" class="hidden mort-btn-warning" 
+        data-turbo="false" 
+        data-transition-enter="transition ease-in duration-700"
+        data-transition-enter-start="transform opacity-0"
+        data-transition-enter-end="transform opacity-100"
+        data-transition-leave="transition ease-out duration-700"
+        data-transition-leave-start="transform opacity-100"
+        data-transition-leave-end="transform opacity-0"        
+        data-profile-target="disableNotifications" 
+        data-action="click->profile#disable"><%= I18n.t("disable_notifications") %></button>
     </div>
 
     <div class="mort-field">

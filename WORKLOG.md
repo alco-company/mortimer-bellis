@@ -60,7 +60,7 @@ END
 ## 29/11/2024
 
 * polish all forms
-* 
+* make allow notifications stick on client - for ever
 
 ## 28/11/2024
 
