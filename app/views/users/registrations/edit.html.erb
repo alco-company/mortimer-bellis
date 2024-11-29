@@ -1,11 +1,11 @@
-<div class="mx-auto w-72 sm:w-96">
+<div data-controller="profile" class="mx-auto w-72 sm:w-96">
   <h1 class="font-bold text-3xl"> <%= t("users.edit_profile.name") %> </h1>
   <h3>Mortimer version:
     <span class="text-xs font-thin"><%= ENV["MORTIMER_VERSION"] %></span>
   </h3>
   
 
-  <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { class: "mort-form", method: :put }) do |f| %>
+  <%= form_for(resource, as: resource_name, url: registration_path(resource_name), data: { profile_target: "buttonForm" }, html: { class: "group mort-form", method: :put }) do |f| %>
     <%= render "devise/shared/error_messages", resource: resource %>
 
     <% if Current.user.superadmin? %>
@@ -58,8 +58,26 @@
     </div>
 
     <div class="mort-field">
-     <button id="enable_notifications" class="xhidden mort-btn-primary">Enable Notifications</button>
-    </div>
+      <button id="enable_notifications" class="hidden mort-btn-primary group-aria-busy:bg-white" 
+        data-turbo="false" 
+        data-profile-target="enableNotifications" 
+        data-action="click->profile#enable">
+        <span class="group-aria-busy:hidden block"><%= I18n.t("enable_notifications") %> </span>
+        <div class="group-aria-busy:block hidden">
+          <%= image_tag "motion-blur.svg", class: "size-6 fill-white" %>
+        </div>
+      </button>
+      <button id="disable_notifications" class="hidden mort-btn-warning" 
+        data-turbo="false" 
+        data-transition-enter="transition ease-in duration-700"
+        data-transition-enter-start="transform opacity-0"
+        data-transition-enter-end="transform opacity-100"
+        data-transition-leave="transition ease-out duration-700"
+        data-transition-leave-start="transform opacity-100"
+        data-transition-leave-end="transform opacity-0"        
+        data-profile-target="disableNotifications" 
+        data-action="click->profile#disable"><%= I18n.t("disable_notifications") %></button>
+      </form>
 
     <div class="mort-field">
       <%= render TwoFactorField.new %>

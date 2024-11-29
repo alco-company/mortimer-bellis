@@ -35,6 +35,10 @@
     @apply flex justify-center rounded-md bg-gray-200 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-gray-300 hover:cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600;
   }
 
+  .mort-btn-warning {
+    @apply flex justify-center rounded-md bg-yellow-600 px-3 py-1.5 text-sm font-semibold leading-6 text-yellow-200 shadow-sm hover:bg-yellow-500 hover:cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-600;
+  }
+
   .mort-btn-alert {
     @apply flex justify-center rounded-md bg-red-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-red-500 hover:cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600;
   }
@@ -178,6 +182,10 @@
 
   .mort-tm-line-product {
     @apply text-xs font-semibold text-gray-700;
+  }
+
+  .mort-field label {
+    @apply text-xs font-medium text-gray-400;
   }
 }
 

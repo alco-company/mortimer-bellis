@@ -46,7 +46,8 @@ da:
   last_update: sidst opdateret for
   collected at: indsamlet kl
   no records were found: Ingen poster fundet
-  enable_notifications: Aktivér notifikationer
+  enable_notifications: Abonnér på notifikationer
+  disable_notifications: Abonnér ikke mere på notifikationer
 
   weekdays: Ugedage
   monday: Mandag

@@ -6,6 +6,28 @@ class Users::InvitationsController < Devise::InvitationsController
   skip_before_action :ensure_tenanted_user, only: [ :edit, :update ]
   skip_before_action :authenticate_user!, only: [ :edit, :update ]
 
+  def create
+    self.resource = invite_resource
+    resource_invited = resource.errors.empty?
+
+    yield resource if block_given?
+
+    if resource_invited
+      if is_flashing_format? && self.resource.invitation_sent_at
+        # set_flash_message :notice, :send_instructions, email: self.resource.email
+        flash[:success] = t("devise.invitations.send_instructions", email: self.resource.email)
+      end
+      render turbo_stream: [ turbo_stream.replace("flash_container", partial: "application/flash_message") ]
+      # if self.method(:after_invite_path_for).arity == 1
+      #   respond_with resource, location: after_invite_path_for(current_inviter)
+      # else
+      #   respond_with resource, location: after_invite_path_for(current_inviter, resource)
+      # end
+    else
+      respond_with(resource)
+    end
+  end
+
   private
 
     def configure_permitted_parameters

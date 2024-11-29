@@ -11,9 +11,10 @@ self.addEventListener("push", (event) => {
   }
 
   const data = event.data?.json() ?? {};
-  const title = data.title || "Something Has Happened";
-  const body = data.body || "Here's something you might want to check out.";
+  const title = data.title || "Did not provide a title";
+  const body = data.body || "The body was not provided";
   const icon = data.icon || "/favicon.ico";
+  const url = data.url || "/";
 
   // const notification = new self.Notification(title,
   //   { body: body, 
@@ -24,6 +25,7 @@ self.addEventListener("push", (event) => {
   event.waitUntil(self.registration.showNotification(title, {
     body: body,
     icon: icon,
+    url: url
   }));
   
 

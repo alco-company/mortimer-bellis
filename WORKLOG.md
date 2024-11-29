@@ -54,6 +54,27 @@ END
 
 * this is probably not necessary: format.turbo_stream { render turbo_stream: turbo_stream.remove(dom_id(@resource)) }
 * pwa-installation.js + joy of rails
+* update time on active t/m's
+* allow edit on t/m's - they fail when started with play in production
+
+## 29/11/2024
+
+* polish all forms
+* make allow notifications stick on client - for ever
+* fix bug on enable_notifications on profile
+
+## 28/11/2024
+
+* huge issue with @hotwired/stimulus lost in importmap
+* VAPID* missing in deploy.staging
+* polish flash messages 2
+* turbo_stream(later) virker kun med solid_queue's default async adapter i development!!
+* make sessions last longer - 1 week (until Saturday Night)
+* NoMethodError (undefined method `service_params_hash' SyncErpJob
+* report back when user invited
+* scroll the menu on mobile
+* customers show up double in lookup?
+* allow global_queries and tenant_swap (superuser)
 
 ### 26/11/2024
 

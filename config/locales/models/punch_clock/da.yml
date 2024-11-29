@@ -1,5 +1,6 @@
 da:
   punch_clock:
+    kiosk_ui: Åbn stempeluret
     modal:
       delete_all: 
         title: Slet alle stempelure

@@ -61,7 +61,7 @@ class TimeMaterials::Form < ApplicationForm
       type: "button",
       data: { tabs_target: "tab", action: "tabs#change" },
       value: 0,
-      class: "flex justify-center tab-header w-1/2 border-b-2 border-transparent px-1 py-4 text-center text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700",
+      class: "flex justify-center tab-header w-1/2 border-b-2 border-transparent p-2 pt-4 text-center text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700",
       role: "switch",
       aria_checked: "false") do
         # comment do
@@ -80,7 +80,7 @@ class TimeMaterials::Form < ApplicationForm
       type: "button",
       data: { tabs_target: "tab", action: "tabs#change" },
       value: 1,
-      class: "flex justify-center tab-header w-1/2 border-b-2 border-transparent px-1 py-4 text-center text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700",
+      class: "flex justify-center tab-header w-1/2 border-b-2 border-transparent p-2 pt-4 text-center text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700",
       role: "switch",
       aria_checked: "false") do
         # comment do
@@ -99,7 +99,7 @@ class TimeMaterials::Form < ApplicationForm
       type: "button",
       data: { tabs_target: "tab", action: "tabs#change" },
       value: 2,
-      class: "flex justify-center tab-header w-1/2 border-b-2 border-transparent px-1 py-4 text-center text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700",
+      class: "flex justify-center tab-header w-1/2 border-b-2 border-transparent p-2 pt-4 text-center text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700",
       role: "switch",
       aria_checked: "false") do
         # comment do
@@ -114,18 +114,18 @@ class TimeMaterials::Form < ApplicationForm
     div(id: "time", data: { tabs_target: "tabPanel" }, class: "time-material-type time tab ") do
       div(class: "space-y-2 ") do
         div(class: "pb-2") do
-          div(class: "mt-2 grid grid-cols-4 gap-x-4 gap-y-4 ") do
+          div(class: "mt-2 grid grid-cols-4 gap-x-4 gap-y-1 ") do
             #
             about_field
             #
             div(class: "col-span-1") do
-              row field(:time).input(class: "mort-form-text"), ""
+              row field(:time).input(class: "mort-form-text"), "mort-field my-1"
             end
             #
             rate_field I18n.t("time_material.rate.hourly")
             #
             div(class: "col-span-2") do
-              row field(:over_time).select(TimeMaterial.overtimes, class: "mort-form-select"), ""
+              row field(:over_time).select(TimeMaterial.overtimes, class: "mort-form-select"), "mort-field my-1"
             end
           end
         end
@@ -137,7 +137,7 @@ class TimeMaterials::Form < ApplicationForm
     div(id: "material", data: { tabs_target: "tabPanel" }, class: "time-material-type material tab hidden") do
       div(class: "space-y-2") do
         div(class: " pb-2") do
-          div(class: "mt-2 grid grid-cols-4 gap-x-4 gap-y-4") do
+          div(class: "mt-2 grid grid-cols-4 gap-x-4 gap-y-1") do
             div(class: "col-span-4") do
               row field(:product_id).lookup(class: "mort-form-text",
                 data: {
@@ -147,25 +147,25 @@ class TimeMaterials::Form < ApplicationForm
                   action: "keydown->lookup#keyDown blur->time-material#productChange"
                 },
                 role: "time_material",
-                display_value: @resource.product_name), "" # Customer.all.select(:id, :name).take(9)
+                display_value: @resource.product_name), "mort-field my-1" # Customer.all.select(:id, :name).take(9)
             end
             div(class: "col-span-4") do
-              row field(:comment).textarea(class: "mort-form-text"), ""
+              row field(:comment).textarea(class: "mort-form-text"), "mort-field my-1"
             end
             div(class: "col-span-4 grid gap-x-2 grid-cols-4") do
               div(class: "col-span-2") do
-                row field(:quantity).input(class: "mort-form-text"), ""
+                row field(:quantity).input(class: "mort-form-text"), "mort-field my-1"
               end
               div(class: "col-span-2") do
-                row field(:unit).select(@resource.units, class: "mort-form-text text-sm"), ""
+                row field(:unit).select(@resource.units, class: "mort-form-text text-sm"), "mort-field my-1"
               end
             end
             div(class: "col-span-4 grid gap-x-2 grid-cols-5") do
               div(class: "col-span-3") do
-                row field(:unit_price).input(class: "mort-form-text"), ""
+                row field(:unit_price).input(class: "mort-form-text"), "mort-field my-1"
               end
               div(class: "col-span-2") do
-                row field(:discount).input(class: "mort-form-text", placeholder: I18n.t("time_material.discount.placeholder")), ""
+                row field(:discount).input(class: "mort-form-text", placeholder: I18n.t("time_material.discount.placeholder")), "mort-field my-1"
               end
             end
           end
@@ -178,31 +178,31 @@ class TimeMaterials::Form < ApplicationForm
     div(id: "material", data: { tabs_target: "tabPanel" }, class: "time-material-type material tab hidden") do
       div(class: "space-y-2") do
         div(class: "pb-2") do
-          div(class: "mt-2 grid grid-cols-4 gap-x-4 gap-y-4") do
+          div(class: "mt-2 grid grid-cols-4 gap-x-4 gap-y-1") do
             label(class: "col-span-4 block text-sm font-medium text-gray-700") { I18n.t("time_material.mileage.lead") }
             h3(class: "col-span-4 text-sm font-thin leading-6 text-gray-400") { unsafe_raw I18n.t("time_material.mileage.accounting_info") }
             div(class: "col-span-4 grid gap-x-2 grid-cols-4") do
               div(class: "col-span-2") do
-                row field(:odo_from).input(type: "text", class: "mort-form-text", data: { time_material_target: "odofrom" }), ""
+                row field(:odo_from).input(type: "text", class: "mort-form-text", data: { time_material_target: "odofrom" }), " mort-field my-1"
               end
               div(class: "col-span-2") do
-                row field(:odo_to).input(type: "text", class: "mort-form-text", data: {  time_material_target: "odoto", action: "blur->time-material#setMileage" }), ""
+                row field(:odo_to).input(type: "text", class: "mort-form-text", data: {  time_material_target: "odoto", action: "blur->time-material#setMileage" }), "mort-field my-1"
               end
             end
             div(class: "col-span-4 grid gap-x-2 grid-cols-10") do
               div(class: "col-span-4") do
-                row field(:kilometers).input(class: "mort-form-text", data: { time_material_target: "mileage" }), ""
+                row field(:kilometers).input(class: "mort-form-text", data: { time_material_target: "mileage" }), "mort-field my-1"
               end
               div(class: "col-span-6") do
-                row field(:trip_purpose).select(TimeMaterial.trip_purposes, class: "mort-form-select"), ""
+                row field(:trip_purpose).select(TimeMaterial.trip_purposes, class: "mort-form-select"), "mort-field my-1"
               end
             end
             div(class: "col-span-4 grid gap-x-2 grid-cols-4") do
               div(class: "col-span-4") do
-                row field(:odo_from_time).datetime(class: "mort-form-text"), ""
+                row field(:odo_from_time).datetime(class: "mort-form-text"), "mort-field my-1"
               end
               div(class: "col-span-4") do
-                row field(:odo_to_time).datetime(class: "mort-form-text"), ""
+                row field(:odo_to_time).datetime(class: "mort-form-text"), "mort-field my-1"
               end
             end
           end
@@ -213,7 +213,7 @@ class TimeMaterials::Form < ApplicationForm
 
   def about_field
     div(class: "col-span-full") do
-      row field(:about).textarea(class: "mort-form-text").focus, ""
+      row field(:about).textarea(class: "mort-form-text").focus, "mort-field my-0"
     end
   end
 
@@ -225,7 +225,7 @@ class TimeMaterials::Form < ApplicationForm
         lookup_target: "input",
         action: "keydown->lookup#keyDown blur->time-material#customerChange"
       },
-      display_value: @resource.customer_name), "" # Customer.all.select(:id, :name).take(9)
+      display_value: @resource.customer_name), "mort-field" # Customer.all.select(:id, :name).take(9)
   end
 
   def project_field
@@ -238,24 +238,24 @@ class TimeMaterials::Form < ApplicationForm
         lookup_association_div_id: "time_material_customer_id",
         action: "keydown->lookup#keyDown blur->time-material#projectChange"
       },
-      display_value: @resource.project_name), "" # Customer.all.select(:id, :name).take(9)
+      display_value: @resource.project_name), "mort-field" # Customer.all.select(:id, :name).take(9)
   end
 
   def rate_field(lbl, css = "col-span-1", fld_name = "rate")
     div(class: css) do
-      row field(fld_name.to_sym).input(class: "mort-form-text"), ""
+      row field(fld_name.to_sym).input(class: "mort-form-text"), "mort-field my-1"
     end
   end
 
   def invoicing
     div(class: "pb-12") do
       div(class: "mt-2 space-y-1") do
-        row field(:state).select(TimeMaterial.time_material_states, class: "my-auto mort-form-select") # , "flex justify-end flex-row-reverse items-center"
+        row field(:state).select(TimeMaterial.time_material_states, class: "my-auto mort-form-select"), "mort-field" # , "flex justify-end flex-row-reverse items-center"
         fieldset do
           legend(class: "text-sm font-semibold leading-6 text-gray-900") { I18n.t("time_material.invoicing.lead") }
           div(class: "mt-6 space-y-1") do
-            row field(:is_invoice).boolean(data: { time_material_target: "invoice" }, class: "my-auto mort-form-bool"), "flex justify-end flex-row-reverse items-center"
-            row field(:is_separate).boolean(class: "my-auto mort-form-bool"), "flex justify-end flex-row-reverse items-center"
+            row field(:is_invoice).boolean(data: { time_material_target: "invoice" }, class: "my-auto mort-form-bool"), "mort-field flex justify-end flex-row-reverse items-center"
+            row field(:is_separate).boolean(class: "my-auto mort-form-bool"), "mort-field flex justify-end flex-row-reverse items-center"
           end
         end
       end
