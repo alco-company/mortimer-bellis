@@ -3,6 +3,8 @@
 # fonts to use: Inter, Helvetica, Futura, Garamond, Times New Roman, Bodoni, Baskerville, Century Expanded
 # <https://www.somanycode.com/awesome/awesome-ruby/> listing for many projects and gems
 
+# all the samples for client features - https://github.com/GoogleChrome/samples/tree/gh-pages
+
 ## Rescue tools
 
 ## Ideas
@@ -56,6 +58,10 @@ END
 * pwa-installation.js + joy of rails
 * update time on active t/m's
 * allow edit on t/m's - they fail when started with play in production
+
+## 30/11/2024
+
+* more bug fixing - in the time/material form
 
 ## 29/11/2024
 

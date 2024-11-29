@@ -16,7 +16,7 @@ class List < ApplicationComponent
 
   def view_template(&block)
     if initial
-      div(id: "record_list") { }
+      div(id: "record_list", class: "scrollbar-hide") { }
       turbo_frame_tag "pagination", src: resources_url(format: :turbo_stream), loading: :lazy
     else
       turbo_stream.append "record_list" do
