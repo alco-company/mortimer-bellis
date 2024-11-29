@@ -115,6 +115,7 @@ export default class extends Controller {
       if (response.ok) {
         leave(this.enableNotificationsTarget).then(() => {
           enter(this.disableNotificationsTarget);
+          this.buttonFormTarget.ariaBusy = false;
         });
       } else {
         console.log("Subscription setup failed");

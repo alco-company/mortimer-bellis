@@ -61,6 +61,7 @@ END
 
 * polish all forms
 * make allow notifications stick on client - for ever
+* fix bug on enable_notifications on profile
 
 ## 28/11/2024
 
