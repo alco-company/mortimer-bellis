@@ -56,8 +56,9 @@ END
 
 * this is probably not necessary: format.turbo_stream { render turbo_stream: turbo_stream.remove(dom_id(@resource)) }
 * pwa-installation.js + joy of rails
+* pickup the mobile moving - ask if driving - enter odometer 
 * update time on active t/m's
-* allow edit on t/m's - they fail when started with play in production
+
 
 ## 30/11/2024
 
@@ -66,6 +67,7 @@ END
 * one more go at the scroll thing
 * and another one
 * bullet-proof solution
+* test if geolocation works on mobile
 
 ## 29/11/2024
 
