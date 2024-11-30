@@ -65,6 +65,7 @@ END
 * trying to stop the page refresh - when we cannot stop the scroll
 * one more go at the scroll thing
 * and another one
+* bullet-proof solution
 
 ## 29/11/2024
 

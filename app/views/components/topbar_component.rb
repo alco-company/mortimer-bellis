@@ -15,7 +15,8 @@ class TopbarComponent < ApplicationComponent
         render SearchComponent.new
 
         div(class: "flex items-center gap-x-4 lg:gap-x-6") do
-          # div(class: "ml-4 flex items-center md:ml-6") do
+          # div(class: "ml-4 flex items-center md:ml-6")
+          reload_button
           render Notifications::NotificationBell.new recipient: Current.user
 
           # separator
@@ -65,6 +66,13 @@ class TopbarComponent < ApplicationComponent
       button(type: "button", class: "border-r border-gray-200 px-4 text-gray-400 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-cyan-500 lg:hidden", data: { action: "mobilesidebar#show" }) do
         span(class: "sr-only") { "Open sidebar" }
         render Icons::Hamburger2.new cls: "h-6 w-6 text-sky-900 hover:text-sky-400 hover:rotate-90"
+      end
+    end
+
+    def reload_button
+      button(type: "button", class: "text-sky-200 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-cyan-500 md:hidden", data: { action: "mobilesidebar#reload" }) do
+        span(class: "sr-only") { "Open sidebar" }
+        render Icons::Reload.new cls: "h-6 w-6 text-sky-200 hover:text-sky-400 hover:rotate-90"
       end
     end
 end
