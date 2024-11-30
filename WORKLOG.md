@@ -62,6 +62,7 @@ END
 ## 30/11/2024
 
 * more bug fixing - in the time/material form
+* trying to stop the page refresh - when we cannot stop the scroll
 
 ## 29/11/2024
 

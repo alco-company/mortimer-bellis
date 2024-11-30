@@ -9,6 +9,7 @@ const standalone = window.matchMedia("(display-mode: standalone)").matches
 
 if (standalone) {
     PullToRefresh.init({
+        triggerElement: "#record_list",
         onRefresh() {
             if (!document.getElementById("dont-refresh")) {
                 window.location.reload()
