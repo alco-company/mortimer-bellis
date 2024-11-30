@@ -2,7 +2,7 @@
     <!-- Background backdrop, show/hide based on slide-over state. -->
     <div class="fixed inset-0 bg-black/10 overscroll-none"></div>
     <div class="fixed inset-0 overflow-hidden overscroll-none" data-action="keydown->form#keydown">
-      <div class="absolute inset-0 overflow-hidden  overscroll-none">
+      <div class="absolute inset-0 overflow-hidden overscroll-none">
         <div class="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-4 sm:pl-16">
           <div 
             data-transition-enter="transform transition ease-in-out duration-500 sm:duration-700"
@@ -13,14 +13,14 @@
             data-transition-leave-end="translate-x-full"                  
             class="pointer-events-auto mt-0 w-screen max-w-md overscroll-none">
             <div class="flex h-full flex-col overflow-x-hidden overflow-y-scroll bg-white shadow-xl">
-              <div class="sticky z-20 bg-white top-0 py-5 pl-4 pr-8 sm:pr-6 sm:pl-6 border-b">
+              <div class="sticky z-20 bg-white top-0 py-5 pl-4 pr-4 sm:pr-6 sm:pl-6 border-b">
                 <div class="flex items-start justify-between">
                   <%= render CancelSaveForm.new cancel_url: resources_url, title: I18n.t("%s.form.new" % resource_class.table_name)  %>
                 </div>
               </div>
               <!-- Main -->
               <div>
-                <div class="pl-4 pr-8 sm:pr-6 sm:pl-6 pb-1 pt-1 sm:pt-0">
+                <div class="pl-4 pr-4 sm:pr-6 sm:pl-6 pb-1 pt-1 sm:pt-0">
                     <%= render resource_class.form resource: @resource %>
                 </div>
               </div>

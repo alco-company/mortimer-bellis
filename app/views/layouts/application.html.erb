@@ -3,7 +3,7 @@
     <%= render partial: "layouts/generic_header" %>
     <%= web_push_public_key_meta_tag %>
   </head>
-  <body class="h-full" style="height: 100vh;">
+  <body id="body" class="h-full" style="height: 100vh;">
     <div class="min-h-full" data-controller="mobilesidebar menu page">
       <%= render MobileSidebarComponent.new if Current.user %>
 
