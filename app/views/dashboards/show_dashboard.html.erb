@@ -15,6 +15,15 @@
         <%#= render StatsCard.new label: I18n.t("stats.planned_vacation_days"), value: 1_000,  css: "hidden xl:block", url: "#" %>
         <!-- More items... -->
       </div>
+      <div class="flex flex-col w-1/4">
+        <div class="grid grid-cols-2"><div class="">accuracy</div>         <div class="accuracy text-right">1000</div></div>
+        <div class="grid grid-cols-2"><div class="">altitude</div>         <div class="altitude text-right">10</div></div>
+        <div class="grid grid-cols-2"><div class="">altitudeAccuracy</div> <div class="altitudeAccuracy text-right">0</div></div>
+        <div class="grid grid-cols-2"><div class="">heading</div>          <div class="heading text-right">0</div></div>
+        <div class="grid grid-cols-2"><div class="">latitude</div>         <div class="latitude text-right">0</div></div>
+        <div class="grid grid-cols-2"><div class="">longitude</div>        <div class="longitude text-right">0</div></div>
+        <div class="grid grid-cols-2"><div class="">speed</div>            <div class="speed text-right">0</div>        </div>
+      </div>
     </div>
 
     <!-- Activity section -->
@@ -26,4 +35,66 @@
 
   <%= turbo_stream_from "%s_%s_%s" % [ Current.tenant.id, "punch_buttons", Current.user.id ] %>
   <%= punch_button user: Current.user, punch_clock: @punch_clock %>
+  <script>
+
+    var geoWatch;
+    
+    function startWatch() {         
+      if ( !geoWatch ) { 
+        geoWatch = navigator.geolocation.watchPosition( setCurrentPosition, positionError, { 
+          enableHighAccuracy: false, timeout: 15000, maximumAge: 0 
+        } ); 
+      }
+    }
+
+    function stopWatch() { 
+      navigator.geolocation.clearWatch( geoWatch ); 
+      geoWatch = undefined;
+    }
+
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition( setCurrentPosition, positionError, { 
+        enableHighAccuracy: false, 
+        timeout: 15000, 
+        maximumAge: 0 
+      } );
+
+      if ( "watchPosition" in navigator.geolocation ) { 
+        startWatch();
+      }
+    }
+
+    
+    function setCurrentPosition( position ) {
+      document.querySelector( '.accuracy' ).innerHTML = position.coords.accuracy; 
+      document.querySelector( '.altitude' ).innerHTML = position.coords.altitude; 
+      document.querySelector( '.altitudeAccuracy' ).innerHTML = position.coords.altitudeAccuracy; 
+      document.querySelector( '.heading' ).innerHTML = position.coords.heading; 
+      document.querySelector( '.latitude' ).innerHTML = position.coords.latitude; 
+      document.querySelector( '.longitude' ).innerHTML = position.coords.longitude; 
+      document.querySelector( '.speed' ).innerHTML = position.coords.speed;
+    }
+
+    function positionError( error ) {
+      switch ( error.code ) { 
+        case error.PERMISSION_DENIED:
+          console.error( "User denied the request for Geolocation." ); 
+          break; 
+
+        case error.POSITION_UNAVAILABLE: 
+          console.error( "Location information is unavailable." ); 
+          break; 
+
+        case error.TIMEOUT: 
+          console.error( "The request to get user location timed out." ); 
+          break; 
+
+        case error.UNKNOWN_ERROR: 
+          console.error( "An unknown error occurred." ); 
+          break; 
+      }
+    }
+
+
+  </script>
 </div>

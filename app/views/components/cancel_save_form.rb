@@ -20,7 +20,7 @@ class CancelSaveForm < ApplicationComponent
       class: "text-base font-semibold leading-6 text-gray-900"
     ) { title }
 
-    div(class: "ml-3 flex h-6 items-center") do
+    div(class: "flex h-6 items-center") do
       edit_url ? edit_button : save_button
     end
   end

@@ -3,7 +3,7 @@
     <%= render partial: "layouts/generic_header" %>
     <%= web_push_public_key_meta_tag %>
   </head>
-  <body class="h-full">
+  <body id="body" class="h-full" style="height: 100vh;">
     <div class="min-h-full" data-controller="mobilesidebar menu page">
       <%= render MobileSidebarComponent.new if Current.user %>
 
@@ -11,7 +11,7 @@
 
       <div data-controller="notificationcenter" data-menu-target="topmain" class="flex flex-1 flex-col <%= 'lg:pl-64' if Current.user %>">
         <%= render_topbar %>
-        <main class="flex-1 pb-8">
+        <main id="main-element" class="flex-1 pb-8">
           <%#= render user_top_profile %>
 
           <div class="md:px-4 mt-8">
@@ -25,7 +25,7 @@
             <%#= render activity_list_small_and_up %>
 
             <!-- Before Sidebar Form -->
-            <%= turbo_frame_tag "form" %>
+            <%#= turbo_frame_tag "form" %>
             <!-- End Sidebar Form -->
 
             <%= render Notifications::NotificationCenter.new(recipient: Current.user)  if Current.user %>

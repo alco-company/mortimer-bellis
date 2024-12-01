@@ -5,6 +5,9 @@ import { enter, leave } from "el-transition";
 export default class extends Controller {
   static targets = ["container", "backdrop", "panel", "closeButton"];
 
+  reload() {
+    window.location.reload();
+  }
   show() {
     this.containerTarget.classList.remove("hidden");
     enter(this.backdropTarget);

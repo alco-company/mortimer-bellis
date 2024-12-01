@@ -1,4 +1,5 @@
 import { Controller } from "@hotwired/stimulus"
+import { enter, leave } from "el-transition"
 
 // Connects to data-controller="form"
 export default class extends Controller {
@@ -8,14 +9,11 @@ export default class extends Controller {
   ]
 
   connect() {
-    //
-    // looking for a way to handle the redirect after a form submission
-    //
-    // first clear the event listener
-    // this.element.removeEventListener("turbo:submit-end", this.next);
-    // then add it again
-    // this.element.addEventListener("turbo:submit-end", this.next);
-    console.log("Connected to form controller")
+    document.getElementById("body").classList.add("overflow-y-hidden");
+  }
+
+  disconnect() {
+    document.getElementById("body").classList.remove("overflow-y-hidden");
   }
 
   keydown(e) {

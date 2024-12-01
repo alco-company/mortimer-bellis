@@ -3,6 +3,8 @@
 # fonts to use: Inter, Helvetica, Futura, Garamond, Times New Roman, Bodoni, Baskerville, Century Expanded
 # <https://www.somanycode.com/awesome/awesome-ruby/> listing for many projects and gems
 
+# all the samples for client features - https://github.com/GoogleChrome/samples/tree/gh-pages
+
 ## Rescue tools
 
 ## Ideas
@@ -54,8 +56,18 @@ END
 
 * this is probably not necessary: format.turbo_stream { render turbo_stream: turbo_stream.remove(dom_id(@resource)) }
 * pwa-installation.js + joy of rails
+* pickup the mobile moving - ask if driving - enter odometer 
 * update time on active t/m's
-* allow edit on t/m's - they fail when started with play in production
+
+
+## 30/11/2024
+
+* more bug fixing - in the time/material form
+* trying to stop the page refresh - when we cannot stop the scroll
+* one more go at the scroll thing
+* and another one
+* bullet-proof solution
+* test if geolocation works on mobile
 
 ## 29/11/2024
 
