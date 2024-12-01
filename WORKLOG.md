@@ -59,6 +59,9 @@ END
 * pickup the mobile moving - ask if driving - enter odometer 
 * update time on active t/m's
 
+## 1/12/2024
+
+* band-aiding session timeout - not working - new plan later
 
 ## 30/11/2024
 

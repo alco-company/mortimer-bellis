@@ -12,7 +12,7 @@ class User < ApplicationRecord
   # :two_factor_authenticatable, :two_factor_backupable, otp_secret_encryption_key: ENV["OTP_KEY"]
   devise :two_factor_authenticatable
   devise :omniauthable, omniauth_providers: %i[ entra_id ]
-  devise :timeoutable, timeout_in: ((Time.now.end_of_week - 1.day) - Time.now).minutes
+  devise :timeoutable, timeout_in: 7.days #  ((Time.now.end_of_week - 1.day) - Time.now).minutes
   devise :invitable, :registerable,
          :recoverable, :rememberable, :validatable,
          :confirmable, :trackable, :lockable
