@@ -30,7 +30,7 @@ class TimeMaterialsController < MortimerController
   end
 
   def edit
-    @resource.update time_spent: @resource.time_spent + (Time.current.to_i - @resource.started_at.to_i) if @resource.active?
+    @resource.update time_spent: @resource.time_spent + (Time.current.to_i - @resource.started_at.to_i) if @resource.active? # or @resource.paused?
     @resource.customer_name = @resource.customer&.name unless @resource.customer_id.blank?
     @resource.project_name = @resource.project&.name unless @resource.project_id.blank?
     @resource.product_name = @resource.product&.name unless @resource.product_id.blank?
@@ -40,12 +40,14 @@ class TimeMaterialsController < MortimerController
   #
   def create
     set_mileage
-    params[:play].present? ? create_play : super
+    params[:play].present? ?
+      create_play :
+      super
   end
 
   def update
     set_mileage
-    params.permit![:time_material][:time_spent] = @resource.time_spent + (Time.current.to_i - @resource.started_at.to_i) if @resource.active?
+    # params.permit![:time_material][:time_spent] = @resource.time_spent + (Time.current.to_i - @resource.started_at.to_i) if @resource.active?
     super
   end
 
@@ -60,7 +62,9 @@ class TimeMaterialsController < MortimerController
       about: t("time_material.current_task")
     }
     params.delete(:play)
-    params[:played] = true
+    # params[:played] = true
+
+    # try the create - again
     create
   end
 

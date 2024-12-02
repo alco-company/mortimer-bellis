@@ -1,6 +1,8 @@
 da:
   upload to ERP: Upload til Dinero
   time_material:
+    no_time_spent: Der er ikke logget tid
+    time_spent: Der er logget %{time_spent} tid
     billable: fakturérbar
     uploading_to_erp: Overfører fakturalinjer til Dinero
     current_task: Igangværende opgave

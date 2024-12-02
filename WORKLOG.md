@@ -69,6 +69,7 @@ END
 * some devops work - making stuff easier
 * start documenting with README.md
 * if no product build one-off
+* update time on active t/m's
 
 ## 1/12/2024
 
