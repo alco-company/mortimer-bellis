@@ -46,19 +46,23 @@ END
    {"Number"=>21936, "ContactName"=>"JON KATBORG ApS", "ContactGuid"=>"d7bc214e-719b-42ba-9125-664a6e2aff20", "Date"=>"2024-08-29", "TotalExclVatInDkk"=>225.0}
   ],
   "Pagination"=>{
-    "MaxPageSizeAllowed"=>1000, 
-    "PageSize"=>500, 
-    "Result"=>26, 
-    "ResultWithoutFilter"=>26, 
+    "MaxPageSizeAllowed"=>1000,
+    "PageSize"=>500,
+    "Result"=>26,
+    "ResultWithoutFilter"=>26,
     "Page"=>0
   }
 }
 
 * this is probably not necessary: format.turbo_stream { render turbo_stream: turbo_stream.remove(dom_id(@resource)) }
 * pwa-installation.js + joy of rails
-* pickup the mobile moving - ask if driving - enter odometer 
+* pickup the mobile moving - ask if driving - enter odometer
 * update time on active t/m's
 * set time spent to on global setting - either 0,25,50,75
+
+## 3/12/2024
+
+*
 
 ## 2/12/2024
 

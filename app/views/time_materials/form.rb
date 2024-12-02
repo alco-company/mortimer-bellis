@@ -127,6 +127,10 @@ class TimeMaterials::Form < ApplicationForm
             div(class: "col-span-2") do
               row field(:over_time).select(TimeMaterial.overtimes, class: "mort-form-select"), "mort-field my-1"
             end
+            div(class: "col-span-4") do
+              span(class: "col-span-4 text-sm font-light text-lime-500") { calc_time_spent model.time_spent }
+              # row field(:time).input(class: "mort-form-text"), "mort-field my-1"
+            end
           end
         end
       end
@@ -287,5 +291,17 @@ class TimeMaterials::Form < ApplicationForm
     (@resource.odo_from_time > @resource.odo_to_time) or
     (@resource.odo_from_time.blank?) or
     (@resource.odo_to_time.blank?)
+  end
+
+  def calc_time_spent(time_spent)
+    if time_spent.nil?
+      I18n.t("time_material.no_time_spent")
+    else
+      days, hours = time_spent.divmod 86400
+      hours, minutes = hours.divmod 3600
+      minutes, _seconds = minutes.divmod 60
+
+      I18n.t("time_material.time_spent", time_spent: "#{days}d #{hours}h #{minutes}m")
+    end
   end
 end

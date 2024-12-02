@@ -17,9 +17,11 @@ class Dinero::Service < SaasService
     }
   end
 
-  def process(type:, data:)
+  def process(type:, data: {})
     case type
-    in :invoice_draft; Dinero::InvoiceDraft.new(self).process(data[:records], data[:date])
+    in :invoice_draft
+      return if data[:records].empty? or data[:date].blank?
+      Dinero::InvoiceDraft.new(self).process(data[:records], data[:date])
     end
   end
 
