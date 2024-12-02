@@ -58,10 +58,13 @@ END
 * pwa-installation.js + joy of rails
 * pickup the mobile moving - ask if driving - enter odometer 
 * update time on active t/m's
+* set time spent to on global setting - either 0,25,50,75
+* if no product build one-off
 
 ## 2/12/2024
 
 * some devops work - making stuff easier
+* start documenting with README.md
 
 ## 1/12/2024
 

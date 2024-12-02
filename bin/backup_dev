@@ -1,4 +1,5 @@
-mkdir -p ../../backups/dev/$(date +%Y-%m-%d)
-pushd ../../backups/dev/$(date +%Y-%m-%d)
-scp docker5:'/var/lib/docker/volumes/storage/_data/production*' ./
+newdir=/Volumes/Data/Mortimer/Backups/development/$(date +%Y-%m-%d)
+mkdir -p $newdir
+pushd $newdir
+scp docker5:'/var/lib/docker/volumes/storage/_data/prod*' ./
 popd
