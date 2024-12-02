@@ -16,6 +16,9 @@ one:
   account_for_one_off: 1000
   product_for_time: hours
   product_for_overtime: overhours
+  product_for_overtime_100: a2-timer
+  product_for_mileage: kørsel
+  product_for_hardware: hardware
 
 two:
   tenant: two
