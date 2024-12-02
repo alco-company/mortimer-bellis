@@ -179,7 +179,11 @@ class ModalController < BaseController
 
     def process_time_material_create
       DineroUploadJob.perform_later tenant: Current.tenant, user: Current.user, date: Date.current, provided_service: "Dinero"
-      redirect_to resources_url, status: 303, success: t("time_material.uploading_to_erp")
+      flash.now[:success] = t("time_material.uploading_to_erp")
+      render turbo_stream: [
+        turbo_stream.close_remote_modal { },
+        turbo_stream.replace("flash_container", partial: "application/flash_message")
+      ]
     end
 
     #

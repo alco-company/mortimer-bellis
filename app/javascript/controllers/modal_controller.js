@@ -11,4 +11,9 @@ export default class extends Controller {
     dialog.showModal();
   }  
 
+  closeDialog(event) {
+    const dialog = document.getElementById(event.target.data.dialog);
+    console.log(dialog);
+    dialog.close();
+  }
 }

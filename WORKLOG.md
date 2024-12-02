@@ -57,7 +57,6 @@ END
 * this is probably not necessary: format.turbo_stream { render turbo_stream: turbo_stream.remove(dom_id(@resource)) }
 * pwa-installation.js + joy of rails
 * pickup the mobile moving - ask if driving - enter odometer
-* update time on active t/m's
 * set time spent to on global setting - either 0,25,50,75
 
 ## 3/12/2024
@@ -70,6 +69,7 @@ END
 * start documenting with README.md
 * if no product build one-off
 * update time on active t/m's
+* fix modal control close bug
 
 ## 1/12/2024
 
