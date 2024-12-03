@@ -58,13 +58,12 @@ END
 * pwa-installation.js + joy of rails
 * pickup the mobile moving - ask if driving - enter odometer
 * set time spent to on global setting - either 0,25,50,75
-* show t/m date - not created_at
-* 
 * 
 
 ## 3/12/2024
 
 * show price on time tasks
+* show t/m date - not created_at
 
 ## 2/12/2024
 

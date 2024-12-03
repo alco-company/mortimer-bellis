@@ -101,14 +101,14 @@ class ListItems::TimeMaterial < ListItems::ListItem
     if resource.active? or resource.paused? # and this_user?(resource.user_id)
       paused_info if resource.paused?
     else
+      span(class: "mr-2 truncate") do
+        plain I18n.l resource.date.to_datetime, format: :date
+      end
       if resource.is_invoice?
         span(class: "hidden 2xs:inline-flex w-fit items-center rounded-md bg-green-50 mr-1 px-1 xs:px-2 py-0 xs:py-0.5 text-2xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20 truncate") do
           render Icons::Money.new(cls: "text-green-500 h-4 w-4")
           span(class: "hidden ml-2 md:inline") { I18n.t("time_material.billable") }
         end
-      end
-      span(class: "truncate") do
-        plain I18n.l resource.created_at, format: :date
       end
     end
   end
@@ -136,7 +136,6 @@ class ListItems::TimeMaterial < ListItems::ListItem
       timestring = "%02d:%02d:%02d" % [ hours, minuts, seconds ]
       span(class: "grow mr-2 time_counter", data: { counter: counter, state: resource.state, time_material_target: "counter" }) { timestring }
     else
-      u = resource.unit.blank? ? "" : I18n.t("time_material.units.#{resource.unit}")
       case true
       when (!resource.kilometers.blank? and resource.kilometers != 0); "#{ resource.kilometers}km"
       when resource.quantity.blank?; show_time_details
@@ -151,13 +150,14 @@ class ListItems::TimeMaterial < ListItems::ListItem
       resource.rate
     "#{ resource.time}t á #{ rate }"
   rescue
-    ""
+    "-"
   end
 
   def show_product_details
+    u = resource.unit.blank? ? "" : I18n.t("time_material.units.#{resource.unit}")
     "%s %s á %s" % [ resource.quantity, u, resource.unit_price ]
   rescue
-    ""
+    "!"
   end
 
   def product_rates
