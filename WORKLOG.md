@@ -57,8 +57,6 @@ END
 * this is probably not necessary: format.turbo_stream { render turbo_stream: turbo_stream.remove(dom_id(@resource)) }
 * pwa-installation.js + joy of rails
 * pickup the mobile moving - ask if driving - enter odometer
-* set time spent to on global setting - either 0,25,50,75
-* 
 
 ## 3/12/2024
 
@@ -67,6 +65,7 @@ END
 * set time spent to on global setting - either 0,25,50,75
 * fix debugger
 * fix resource()
+* fix calc_time for time_material in invoice_draft
 
 ## 2/12/2024
 

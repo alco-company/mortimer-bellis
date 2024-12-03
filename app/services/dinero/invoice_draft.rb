@@ -301,7 +301,7 @@ class Dinero::InvoiceDraft
     end
     prod = Product.where("product_number like ?", nbr).first
     raise "Product not found %s - set products in Dinero Service" % nbr unless prod
-    q = line.time.blank? ? 0.25 : ("%.2f" % line.time.gsub(",", ".")).to_f rescue 0.0
+    q = calc_time(line.time)
     p = line.rate.blank? ? prod.base_amount_value : ("%.2f" % line.rate.gsub(",", ".")).to_f
     initials = line.user&.initials rescue "-"
     {
@@ -336,6 +336,19 @@ class Dinero::InvoiceDraft
       f.write(dinero_invoice.to_json)
       f.write("\n")
       f.write(lines.to_json)
+    end
+  end
+
+  def calc_time(time)
+    return 0.25 if time.blank?
+    time = if time.include?(":")
+      h, m = time.split(":")
+      m = (m*100.0/60.0).to_f.round
+      "%s.%i" % [ h, m ]
+    else
+      time = time.split(",") if time.include?(",")
+      time = time.split(".") if time.include?(".")
+      "%s.%i" % [ time[0], time[1] ]
     end
   end
 
