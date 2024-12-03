@@ -31,6 +31,7 @@ class TimeMaterialsController < MortimerController
 
   def edit
     @resource.update time_spent: @resource.time_spent + (Time.current.to_i - @resource.started_at.to_i) if @resource.active? # or @resource.paused?
+    @resource.update time: limit_time_spent_to_quarters(@resource.time_spent, true)
     @resource.customer_name = @resource.customer&.name unless @resource.customer_id.blank?
     @resource.project_name = @resource.project&.name unless @resource.project_id.blank?
     @resource.product_name = @resource.product&.name unless @resource.product_id.blank?
@@ -40,14 +41,18 @@ class TimeMaterialsController < MortimerController
   #
   def create
     set_mileage
-    params[:play].present? ?
-      create_play :
+    if params[:play].present?
+      create_play
+    else
+      debugger
+      resource_params[:time] = limit_time_spent_to_quarters(resource_params[:time])
       super
+    end
   end
 
   def update
     set_mileage
-    # params.permit![:time_material][:time_spent] = @resource.time_spent + (Time.current.to_i - @resource.started_at.to_i) if @resource.active?
+    resource_params[:time] = limit_time_spent_to_quarters(resource_params[:time])
     super
   end
 
@@ -95,8 +100,35 @@ class TimeMaterialsController < MortimerController
       end
     end
 
+    def limit_time_spent_to_quarters(time, minutes = false)
+      return if time.to_s.include?(":")
+      unless @resource.should?(:limit_time_to_quarters)
+        return time
+      else
+        time = split_time(time, minutes)
+        time[1] = "15" if time[1].to_i < 15
+        time[1] = "30" if time[1].to_i > 15 && time[1].to_i < 30
+        time[1] = "45" if time[1].to_i > 30 && time[1].to_i < 45
+        time[1] = "0" && time[0] = time[0].to_i + 1 if time[1].to_i > 45
+      end
+      time.join(":")
+    end
+
+    def split_time(time, minutes)
+      if minutes
+        d, h, m, _s = @resource.calc_hrs_minutes(time)
+        time = d * 24 * 60 + h * 60 + m
+        time = time.divmod 60
+      else
+        time = resource_params[:time].split(",") if resource_params[:time].present? && resource_params[:time].include?(",")
+        time = resource_params[:time].split(".") if resource_params[:time].present? && resource_params[:time].include?(".")
+      end
+      time
+    end
+
     # Only allow a list of trusted parameters through.
     def resource_params
+      return params unless params[:time_material].present?
       params.expect(time_material: [
         :tenant_id,
         :date,

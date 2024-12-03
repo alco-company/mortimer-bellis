@@ -45,6 +45,7 @@ da:
     keys:
       delegate_time_materials: Delegér tid og materialer
       show_all_time_material_posts: Vis alle brugeres t/m poster
+      limit_time_to_quarters: Begræns tidsforbrug til kvart timer
 
     tables:
       background_jobs: Baggrundsopgaver

@@ -297,10 +297,7 @@ class TimeMaterials::Form < ApplicationForm
     if time_spent.nil?
       I18n.t("time_material.no_time_spent")
     else
-      days, hours = time_spent.divmod 86400
-      hours, minutes = hours.divmod 3600
-      minutes, _seconds = minutes.divmod 60
-
+      days, hours, minutes, _seconds = @resource.calc_hrs_minutes(time_spent)
       I18n.t("time_material.time_spent", time_spent: "#{days}d #{hours}h #{minutes}m")
     end
   end

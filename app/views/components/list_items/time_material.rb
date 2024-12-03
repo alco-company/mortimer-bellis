@@ -131,9 +131,8 @@ class ListItems::TimeMaterial < ListItems::ListItem
   def show_time_material_quantative
     if resource.active? or resource.paused?
       counter = resource.paused? ? resource.time_spent : (Time.current.to_i - resource.started_at.to_i) + resource.time_spent
-      hours, minuts = counter.to_f.divmod 3600
-      minuts, seconds = minuts.to_f.divmod 60
-      timestring = "%02d:%02d:%02d" % [ hours, minuts, seconds ]
+      days, hours, minutes, seconds = resource.calc_hrs_minutes counter
+      timestring = "%02d:%02d:%02d" % [ hours, minutes, seconds ]
       span(class: "grow mr-2 time_counter", data: { counter: counter, state: resource.state, time_material_target: "counter" }) { timestring }
     else
       case true

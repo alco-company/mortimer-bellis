@@ -1,6 +1,7 @@
 class TimeMaterial < ApplicationRecord
   include Tenantable
   include TimeMaterialStateable
+  include Settingable
 
   belongs_to :customer, optional: true
   belongs_to :project, optional: true
@@ -95,5 +96,12 @@ class TimeMaterial < ApplicationRecord
       [ "delivery", I18n.t("time_material.trip_purposes.delivery") ],
       [ "pickup", I18n.t("time_material.trip_purposes.pickup") ]
     ]
+  end
+
+  def calc_hrs_minutes(t)
+      days, hours = t.divmod 86400
+      hours, minutes = hours.divmod 3600
+      minutes, seconds = minutes.divmod 60
+      [ days, hours, minutes, seconds ]
   end
 end
