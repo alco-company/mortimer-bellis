@@ -9,20 +9,28 @@ class Dinero::InvoiceDraft
   def process(time_materials, invoice_date = Date.current)
     # prepare hash to hold customer invoices
     @cid_array = {}
-    @invoice_date = invoice_date
+    @invoice_date = invoice_date.to_date
+    return { ok: "none records" } if time_materials.where(date: ..invoice_date).empty?
+
 
     # load settings like accounts, company details, more
     load_settings
+    records=0
     unless settings == {}
       # loop through all time_materials, picking elligible ones
       time_materials.each do |resource|
         next unless resource.valid?
         next if resource.pushed_to_erp?
         can_resource_be_pushed? resource
-        pack_resource_for_push(resource) if resource.is_invoice? && resource.done?
+        pack_resource_for_push(resource) && records += 1 if resource.is_invoice? && resource.done?
       end
       push_to_erp
     end
+    { ok: "%d records drafted" % records }
+
+  rescue => err
+    UserMailer.error_report(err.to_s, "Dinero::InvoiceDraft#process").deliver_later
+    { error: err.message }
   end
 
   # # /sales/settings
@@ -215,7 +223,6 @@ class Dinero::InvoiceDraft
     d = ("%.2f" % line.discount.gsub(",", ".")).to_f rescue 0.0
     p = line.unit_price.blank? ? 0.0 : ("%.2f" % line.unit_price.gsub(",", ".")).to_f
     initials = line.user&.initials rescue "-"
-
     {
       "productGuid" => nil,
       "description" => line.product_name,
@@ -227,6 +234,7 @@ class Dinero::InvoiceDraft
       "lineType" =>    "Product",                 # or Text - in which case only description should be set
       "baseAmountValue" => p
     }
+
   rescue => err
     line.update push_log: "%s\n%s" % [ line.push_log, err.message ]
     line.cannot_be_pushed!

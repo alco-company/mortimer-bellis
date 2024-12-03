@@ -55,3 +55,69 @@ four:
   total_amount: 9.99
   total_amount_incl_vat: 9.99
   external_reference: MyString
+
+hours:
+  tenant: one
+  erp_guid: MyString
+  name: timer
+  product_number: hours
+  quantity: 1.0
+  unit: hours
+  account_number: 1001
+  base_amount_value: 29.99
+  base_amount_value_incl_vat: 9.99
+  total_amount: 9.99
+  total_amount_incl_vat: 9.99
+  external_reference: MyString
+overhours:
+  tenant: one
+  erp_guid: MyString
+  name: overhours
+  product_number: overhours
+  quantity: 1.0
+  unit: hours
+  account_number: 1001
+  base_amount_value: 29.99
+  base_amount_value_incl_vat: 9.99
+  total_amount: 9.99
+  total_amount_incl_vat: 9.99
+  external_reference: MyString
+a2-timer:
+  tenant: one
+  erp_guid: MyString
+  name: a2-timer
+  product_number: a2-timer
+  quantity: 1.0
+  unit: hours
+  account_number: 1001
+  base_amount_value: 29.99
+  base_amount_value_incl_vat: 9.99
+  total_amount: 9.99
+  total_amount_incl_vat: 9.99
+  external_reference: MyString
+kørsel:
+  tenant: one
+  erp_guid: MyString
+  name: kørsel
+  product_number: hours
+  quantity: 1.0
+  unit: km
+  account_number: 1001
+  base_amount_value: 29.99
+  base_amount_value_incl_vat: 9.99
+  total_amount: 9.99
+  total_amount_incl_vat: 9.99
+  external_reference: MyString
+hardware:
+  tenant: one
+  erp_guid: MyString
+  name: not used!
+  product_number: hours
+  quantity: 1.0
+  unit: parts
+  account_number: 1001
+  base_amount_value: 29.99
+  base_amount_value_incl_vat: 9.99
+  total_amount: 9.99
+  total_amount_incl_vat: 9.99
+  external_reference: MyString

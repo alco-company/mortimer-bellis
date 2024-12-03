@@ -6,7 +6,7 @@ one:
   setable_type: Setable
   key: MyString
   priority: 1
-  format: MyString
+  formating: MyString
   value: MyString
 
 two:
@@ -15,5 +15,5 @@ two:
   setable_type: Setable
   key: deleteable
   priority: 1
-  format: MyString
+  formating: MyString
   value: MyString

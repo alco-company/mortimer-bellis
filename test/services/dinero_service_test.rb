@@ -6,16 +6,17 @@ class DineroServiceTest < ActiveSupport::TestCase
 
     dinero_service = Dinero::Service.new
     host = "https://connect.visma.com/connect/authorize"
+    path = "something"
     params = {
       client_id: ENV["DINERO_APP_ID"],
       response_type: "code",
       response_mode: "form_post",
-      state: Base64.encode64({ pos_token: Current.user.pos_token }.to_json),
+      state: Base64.encode64({ pos_token: Current.user.pos_token, path: path }.to_json),
       scope: "dineropublicapi:read dineropublicapi:write offline_access",
       redirect_uri: ENV["DINERO_APP_CALLBACK"]
     }
 
-    url = dinero_service.auth_url
+    url = dinero_service.auth_url path
     assert url == "%s?%s" % [ host, params.to_query ]
   end
 

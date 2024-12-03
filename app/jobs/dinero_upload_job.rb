@@ -7,12 +7,12 @@ class DineroUploadJob < ApplicationJob
     super(**args)
     switch_locale do
       @until_date = args[:date]
-      time_materials = TimeMaterial.where(tenant: args[:tenant], date: ..@until_date)
+      time_materials = TimeMaterial.by_tenant.where(date: ..@until_date)
       return if time_materials.empty?
 
-      ps = ProvidedService.find_by(name: args[:provided_service])
+      ps = ProvidedService.by_tenant.find_by(name: args[:provided_service])
       ps.service.classify.constantize.new(provided_service: ps)
-        .process(type: :invoice_draft, data: time_materials.order(:customer_id))
+        .process(type: :invoice_draft, data: { records: time_materials.order(:customer_id), date: @until_date }) if ps
     end
   end
 end

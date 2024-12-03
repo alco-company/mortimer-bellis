@@ -373,6 +373,35 @@ two_b:
   erp_guid:
   push_log:
 
+# a product - just invented it
+two_c:
+  tenant: two
+  date: <%= Date.today - 3.days %>
+  time: 
+  about: some text
+  customer_name:
+  customer: one
+  project_name:
+  project: 
+  product_name: a-whole-different-product-number
+  product: 
+  quantity: 1.0
+  rate: 
+  discount: "2,34"
+  state:
+  is_invoice: true
+  is_free:
+  is_offer:
+  is_separate:
+  user: one
+  comment: just a comment
+  overtime:
+  unit_price: "12,45"
+  unit: ""
+  pushed_erp_timestamp:
+  erp_guid:
+  push_log:
+
 # a text line
 three:
   tenant: three

@@ -2,14 +2,26 @@ class Dinero::Service < SaasService
   attr_accessor :settings, :provided_service
 
   def initialize(provided_service: nil, settings: nil)
-    @provided_service = provided_service || Current.tenant.provided_services.by_name("Dinero").first
-    @settings = settings || @provided_service&.service_params_hash
-    @settings["organizationId"] = @provided_service.organizationID
+    @provided_service = provided_service || Current.tenant.provided_services.by_name("Dinero").first || ProvidedService.new
+    @settings = settings || @provided_service&.service_params_hash || empty_params
+    @settings["organizationId"] = @provided_service.organizationID || 0
   end
 
-  def process(type:, data:)
+  def empty_params
+    { "access_token"=> "",
+    "refresh_token"=>"",
+    "token_type"=>"",
+    "scope"=>"",
+    "expires_at"=>nil,
+    "expires_in"=>3600
+    }
+  end
+
+  def process(type:, data: {})
     case type
-    in :invoice_draft; Dinero::InvoiceDraft.new(self).process(data)
+    in :invoice_draft
+      return if data[:records].empty? or data[:date].blank?
+      Dinero::InvoiceDraft.new(self).process(data[:records], data[:date])
     end
   end
 

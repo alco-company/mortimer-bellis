@@ -19,6 +19,11 @@ module TurboStreamActionsHelper
       template: @view_context.capture(&block)
     )
   end
+
+  def dispatch_event(name, target = nil)
+    target ||= "window"
+    turbo_stream_action_tag :dispatch_event, name: name, target: target
+  end
 end
 
 Turbo::Streams::TagBuilder.prepend(TurboStreamActionsHelper)
