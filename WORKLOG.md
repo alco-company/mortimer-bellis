@@ -66,6 +66,7 @@ END
 * show t/m date - not created_at
 * set time spent to on global setting - either 0,25,50,75
 * fix debugger
+* fix resource()
 
 ## 2/12/2024
 

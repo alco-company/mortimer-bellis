@@ -101,7 +101,7 @@ class TimeMaterialsController < MortimerController
 
     def limit_time_spent_to_quarters(time, minutes = false)
       return if time.to_s.include?(":")
-      unless @resource.should?(:limit_time_to_quarters)
+      unless resource.should?(:limit_time_to_quarters)  # NOTICE!! calls resourceable#resource
         return time
       else
         time = split_time(time, minutes)
