@@ -44,7 +44,6 @@ class TimeMaterialsController < MortimerController
     if params[:play].present?
       create_play
     else
-      debugger
       resource_params[:time] = limit_time_spent_to_quarters(resource_params[:time])
       super
     end
