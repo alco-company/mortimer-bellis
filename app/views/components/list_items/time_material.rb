@@ -130,7 +130,7 @@ class ListItems::TimeMaterial < ListItems::ListItem
 
   def show_time_material_quantative
     if resource.active? or resource.paused?
-      counter = resource.time_spent # resource.paused? ? resource.time_spent : (Time.current.to_i - resource.started_at.to_i)
+      counter = resource.paused? ? resource.time_spent : (Time.current.to_i - resource.started_at.to_i) + resource.time_spent
       hours, minuts = counter.to_f.divmod 3600
       minuts, seconds = minuts.to_f.divmod 60
       timestring = "%02d:%02d:%02d" % [ hours, minuts, seconds ]
@@ -139,9 +139,34 @@ class ListItems::TimeMaterial < ListItems::ListItem
       u = resource.unit.blank? ? "" : I18n.t("time_material.units.#{resource.unit}")
       case true
       when (!resource.kilometers.blank? and resource.kilometers != 0); "#{ resource.kilometers}km"
-      when resource.quantity.blank?; "#{ resource.time}t á #{ resource.rate}"
-      else; "%s %s á %s" % [ resource.quantity, u, resource.unit_price ]
+      when resource.quantity.blank?; show_time_details
+      else; show_product_details
       end
     end
+  end
+
+  def show_time_details
+    rate = resource.rate.blank? ?
+      product_rates[resource.overtime] :
+      resource.rate
+    "#{ resource.time}t á #{ rate }"
+  rescue
+    ""
+  end
+
+  def show_product_details
+    "%s %s á %s" % [ resource.quantity, u, resource.unit_price ]
+  rescue
+    ""
+  end
+
+  def product_rates
+    @product_rates ||= Product
+      .where(product_number: [ ps.product_for_time, ps.product_for_overtime, ps.product_for_overtime_100 ])
+      .pluck :base_amount_value
+  end
+
+  def ps
+    @ps ||= ProvidedService.by_tenant.find_by(name: "Dinero")
   end
 end
