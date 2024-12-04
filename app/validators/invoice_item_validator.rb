@@ -26,6 +26,7 @@ class InvoiceItemValidator
 
   validates :product_name, presence: true, if: -> { quantity.present? }
   validates :quantity, presence: true, if: -> { product.present? }
+  validates :unit_price, presence: true, if: -> { quantity.present? }
   validate :time_requires_blank_fields
   validate :rate_requires_conditions
   validate :discount_requires_conditions

@@ -64,6 +64,7 @@ END
 * forgot to enable ds.push_invoice
 * very tiny bug - (t missing = nil)
 * return correct value
+* calc time and time_spent better
 
 ## 3/12/2024
 

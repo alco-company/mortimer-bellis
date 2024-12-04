@@ -13,7 +13,7 @@ class TimeMaterialsController < MortimerController
 
   def edit
     @resource.update time_spent: @resource.time_spent + (Time.current.to_i - @resource.started_at.to_i) if @resource.active? # or @resource.paused?
-    @resource.update time: limit_time_spent_to_quarters(@resource.time_spent, true)
+    # @resource.update time: @resource.sanitize_time_spent
     @resource.customer_name = @resource.customer&.name unless @resource.customer_id.blank?
     @resource.project_name = @resource.project&.name unless @resource.project_id.blank?
     @resource.product_name = @resource.product&.name unless @resource.product_id.blank?
@@ -93,41 +93,16 @@ class TimeMaterialsController < MortimerController
     #   end
     # end
 
-    def limit_time_spent_to_quarters(time, minutes = false)
-      return if time.to_s.include?(":")
-      unless resource.should?(:limit_time_to_quarters)  # NOTICE!! calls resourceable#resource
-        return time
-      else
-        time = split_time(time, minutes)
-        time[1] = "15" if time[1].to_i < 15
-        time[1] = "30" if time[1].to_i > 15 && time[1].to_i < 30
-        time[1] = "45" if time[1].to_i > 30 && time[1].to_i < 45
-        time[1] = "0" && time[0] = time[0].to_i + 1 if time[1].to_i > 45
-      end
-      time.join(":")
-    end
-
-    def split_time(time, minutes)
-      if minutes
-        d, h, m, _s = @resource.calc_hrs_minutes(time)
-        time = d * 24 * 60 + h * 60 + m
-        time = time.divmod 60
-      else
-        time = resource_params[:time].split(",") if resource_params[:time].present? && resource_params[:time].include?(",")
-        time = resource_params[:time].split(".") if resource_params[:time].present? && resource_params[:time].include?(".")
-      end
-      time
-    end
-
     def prepare_tm
-      if resource_params[:state].present? && resource_params[:state] == "3" # done!
-        resource_params[:time] = limit_time_spent_to_quarters(resource_params[:time])
+      if resource_params[:state].present? && resource_params[:state] == "done" # done!
+        params[:time_material][:time] = resource.sanitize_time resource_params[:time]
         r = TimeMaterial.build(resource_params)
-        if params[:played].present? or (r.valid? and r.values_ready_for_push?)
+        r.tenant = Current.tenant
+        if params[:played].present? or (r.values_ready_for_push? and r.valid?)
           params.delete(:played)
           return true
         end
-        flash.now[:warning] = t(".validation_errors")
+        flash.now[:warning] = (t(".validation_errors") + "<br/><br/>" + r.errors.full_messages.join(", "))
         render turbo_stream: [
           turbo_stream.update("form", partial: "new", locals: { resource: r }),
           turbo_stream.replace("flash_container", partial: "application/flash_message")
