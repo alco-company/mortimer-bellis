@@ -105,7 +105,7 @@ class TimeMaterial < ApplicationRecord
       [ days, hours, minutes, seconds ]
   end
 
-  def calc_time_to_decimal(t)
+  def calc_time_to_decimal(t = nil)
     t ||= time
     return 0.25 if t.blank?
     return t if t.is_a?(Numeric)

@@ -62,6 +62,7 @@ END
 
 * refactore time_material - too much going on + InvoiceItemValidator
 * forgot to enable ds.push_invoice
+* very tiny bug - (t missing = nil)
 
 ## 3/12/2024
 
