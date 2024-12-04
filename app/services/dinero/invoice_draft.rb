@@ -113,12 +113,18 @@ class Dinero::InvoiceDraft
         # happy path = {"Guid"=>"5856516f-5127-4dfc-98a7-52ab7d09e1df", "TimeStamp"=>"0000000080C81AC0"}
         # result = ds.push_invoice test_invoice
         result = ds.push_invoice dinero_invoice unless dinero_invoice == {}
-        raise "Error trying to push invoice: #{result}" unless result["Guid"]
-
-        lines.each do |line|
-          line.pushed_to_erp!
-          line.update erp_guid: result["Guid"], pushed_erp_timestamp: result["TimeStamp"]
-          Broadcasters::Resource.new(line, { controller: "time_materials" }).replace
+        unless result["Guid"].present?
+          lines.each do |line|
+            line.update push_log: "%s\n%s" % [ line.push_log, result ]
+            line.cannot_be_pushed!
+            Broadcasters::Resource.new(line, { controller: "time_materials" }).replace
+          end
+        else
+          lines.each do |line|
+            line.pushed_to_erp!
+            line.update erp_guid: result["Guid"], pushed_erp_timestamp: result["TimeStamp"]
+            Broadcasters::Resource.new(line, { controller: "time_materials" }).replace
+          end
         end
 
       rescue => err
