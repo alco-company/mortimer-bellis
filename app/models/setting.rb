@@ -40,6 +40,7 @@ class Setting < ApplicationRecord
   def self.available_keys
     [
       [ "delegate_time_materials", I18n.t("settings.keys.delegate_time_materials") ],
+      [ "limit_time_to_quarters", I18n.t("settings.keys.limit_time_to_quarters") ],
       [ "show_all_time_material_posts", I18n.t("settings.keys.show_all_time_material_posts") ]
     ]
   end

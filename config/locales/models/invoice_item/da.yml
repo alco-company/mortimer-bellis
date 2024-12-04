@@ -29,11 +29,17 @@ da:
     invoice_meta: "Fakturanr %{number}"
 
     issues:
-      customer_missing: Der er ikke valgt en kunde
-      product_missing: Der er ikke valgt et produkt
-      time_not_correct: Tidspunktet er ikke korrekt
-      rate_not_correct: Satsen er ikke korrekt
-      quantity_not_correct: Antallet er ikke korrekt
-      time_and_quantity_both_set: Både tid og antal er angivet
-      unit_price_not_correct: Enhedsprisen er ikke korrekt
-      discount_not_correct: Rabatten er ikke korrekt
+      no_issues: Fakturalinjen ser ok ud - sæt status til 'Afsluttet'
+      quantity_product_name_must_blank: Antal og produkt navn skal være blanke
+      time_must_be_set: Tid skal være angivet
+      product_name_product_quantity_must_blank: Produkt navn og antal skal være blanke
+      product_name_quantity_must_be_set: Produkt navn og antal skal være angivet
+      format_wrong_number: Formatet er forkert - brug tal,tal eller tal.tal
+      format_wrong_number_time: Formatet er forkert - brug h,m eller h.m (m=100-dele) eller h:m (m=60-dele)
+      format_wrong_number_digits: Formatet er forkert - brug kun tal fx 123121
+      cannot_be_blank_when_time_quantity_km_blank: Kan ikke være blank når tid, antal og km er blanke
+      km_quantity_must_blank: Km og antal skal være blanke
+      time_km_must_blank: Tid og km skal være blanke
+      time_quantity_must_blank: Tid og antal skal være blanke
+      must_exist: Skal være udfyldt
+      not_found_search_customer_again: Ikke fundet - prøv at søge kunden igen

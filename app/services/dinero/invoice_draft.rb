@@ -56,26 +56,7 @@ class Dinero::InvoiceDraft
 
   def can_resource_be_pushed?(resource)
     return unless resource.is_invoice?
-
-    resource.customer.name                            # check if customer exists/association set correctly
-    if resource.quantity.blank?
-      raise "mileage_wrong" if resource.is_invoice? and !resource.kilometers.blank? and is_mileage_wrong?(resource)
-      raise "quantity not correct format" if (resource.time =~ /^\d*[,.]?\d*$/).nil? and resource.comment.blank?
-      raise "rate not correct format" if !resource.rate.blank? and (resource.rate =~ /^\d*[,.]?\d*$/).nil? and resource.comment.blank?
-      raise "time and quantity and mileage cannot all be blank" if resource.time.blank? and resource.comment.blank? and resource.kilometers.blank?
-      raise "time not correct format" if !resource.time.blank? and (resource.time =~ /^\d*[,.]?\d*$/).nil?
-    else
-      raise "time, quantity, kilometers - only one can be set" if !resource.time.blank? or !resource.kilometers.blank?
-      raise "rate cannot be set if product and quantity is set!" if !resource.rate.blank? && !resource.product_id.blank?
-      raise "product_name cannot be blank if quantity is not blank!" if resource.product_name.blank?          # with one off's we use the product text as description! No need to check resource.product.name   # check if product exists/association set correctly
-      raise "quantity not correct format" if (resource.quantity =~ /^\d*[,.]?\d*$/).nil?
-      raise "unit_price not correct format" if !resource.unit_price.blank? && (resource.unit_price =~ /^\d*[,.]?\d*$/).nil?
-      raise "discount not correct format" if !resource.discount.blank? && (resource.discount =~ /^\d*[,.]?\d*[ ]*%?$/).nil?
-      raise "not service, product, or text - what is this?" if resource.product.nil? && resource.product_name.blank? && resource.comment.blank?
-    end
-    # we'll use the project field for adding a comment in the top of the invoice
-    # or use the project.name !resource.project_name.blank? && resource.project.name
-    resource.done!
+    resource.cannot_be_pushed! unless resource.values_ready_for_push?
 
   rescue => err
     resource.update push_log: "%s\n- - - \n%s\%s" % [ resource.push_log, Time.current.to_s, err.message ]
@@ -132,12 +113,18 @@ class Dinero::InvoiceDraft
         # happy path = {"Guid"=>"5856516f-5127-4dfc-98a7-52ab7d09e1df", "TimeStamp"=>"0000000080C81AC0"}
         # result = ds.push_invoice test_invoice
         result = ds.push_invoice dinero_invoice unless dinero_invoice == {}
-        raise "Error trying to push invoice: #{result}" unless result["Guid"]
-
-        lines.each do |line|
-          line.pushed_to_erp!
-          line.update erp_guid: result["Guid"], pushed_erp_timestamp: result["TimeStamp"]
-          Broadcasters::Resource.new(line, { controller: "time_materials" }).replace
+        unless result["Guid"].present?
+          lines.each do |line|
+            line.update push_log: "%s\n%s" % [ line.push_log, result ]
+            line.cannot_be_pushed!
+            Broadcasters::Resource.new(line, { controller: "time_materials" }).replace
+          end
+        else
+          lines.each do |line|
+            line.pushed_to_erp!
+            line.update erp_guid: result["Guid"], pushed_erp_timestamp: result["TimeStamp"]
+            Broadcasters::Resource.new(line, { controller: "time_materials" }).replace
+          end
         end
 
       rescue => err
@@ -301,7 +288,7 @@ class Dinero::InvoiceDraft
     end
     prod = Product.where("product_number like ?", nbr).first
     raise "Product not found %s - set products in Dinero Service" % nbr unless prod
-    q = line.time.blank? ? 0.25 : ("%.2f" % line.time.gsub(",", ".")).to_f rescue 0.0
+    q = line.calc_time_to_decimal
     p = line.rate.blank? ? prod.base_amount_value : ("%.2f" % line.rate.gsub(",", ".")).to_f
     initials = line.user&.initials rescue "-"
     {
@@ -338,7 +325,6 @@ class Dinero::InvoiceDraft
       f.write(lines.to_json)
     end
   end
-
 
   # used for testing the Dinero service initially
   # whd 24/10/2024 - probably not usefull anymore

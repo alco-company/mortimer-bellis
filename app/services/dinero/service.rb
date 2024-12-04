@@ -126,6 +126,7 @@ class Dinero::Service < SaasService
     post "/v1/#{settings["organizationId"]}/invoices", params.to_json
   rescue => err
     UserMailer.error_report(err.to_s, "DineroUpload - Dinero::Service.push_invoice").deliver_later
+    err.to_s
   end
 
   private

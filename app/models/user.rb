@@ -4,6 +4,7 @@ class User < ApplicationRecord
   include Punchable
   include Stateable
   include TimeZoned
+  include Settingable
 
   belongs_to :team
 
@@ -18,7 +19,6 @@ class User < ApplicationRecord
          :confirmable, :trackable, :lockable
 
   has_many :user_invitations, class_name: "User", as: :invited_by
-  has_many :settings, as: :setable
   has_many :time_materials
 
   has_many :notifications, as: :recipient, dependent: :destroy, class_name: "Noticed::Notification"
@@ -53,11 +53,6 @@ class User < ApplicationRecord
   validates :pincode,
     numericality: { only_integer: true, in: 1000..9999, unless: ->(u) { u.pincode.blank? } },
     uniqueness: { scope: :tenant_id, message: I18n.t("users.errors.messages.pincode_exist_for_tenant"), unless: ->(u) { u.pincode.blank? } }
-
-  def can?(action)
-    settings.where(key: action.to_s, value: "true").count.positive? or
-    Setting.where(setable_type: "User", setable_id: nil, key: action.to_s, value: "true").count.positive?
-  end
 
   def self.filtered(filter)
     flt = filter.filter

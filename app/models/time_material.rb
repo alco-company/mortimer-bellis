@@ -1,6 +1,7 @@
 class TimeMaterial < ApplicationRecord
   include Tenantable
   include TimeMaterialStateable
+  include Settingable
 
   belongs_to :customer, optional: true
   belongs_to :project, optional: true
@@ -95,5 +96,112 @@ class TimeMaterial < ApplicationRecord
       [ "delivery", I18n.t("time_material.trip_purposes.delivery") ],
       [ "pickup", I18n.t("time_material.trip_purposes.pickup") ]
     ]
+  end
+
+  def calc_hrs_minutes(t)
+      days, hours = t.to_i.divmod 86400
+      hours, minutes = hours.divmod 3600
+      minutes, seconds = minutes.divmod 60
+      [ days, hours, minutes, seconds ]
+  end
+
+  #
+  # return time as a decimal number
+  # eg 1:30 => 1.5
+  #
+  def calc_time_to_decimal(t = nil)
+    t ||= time
+    return 0.25 if t.blank?
+    return t if t.is_a?(Numeric)
+    t = if t.include?(":")
+      h, m = t.split(":")
+      m = (m.to_i*100.0/60.0).to_f.round
+      "%s.%i" % [ h, m ]
+    else
+      t = t.split(",") if t.include?(",")
+      t = t.split(".") if t.include?(".")
+      if t.is_a? Array
+        "%s.%i" % [ t[0], t[1] ]
+      else
+        t
+      end
+    end
+  end
+
+  # def sanitize_time_spent
+  #   split_time(time_spent, true)
+  # end
+
+  # first make sure time is a number -
+  # ie if it's a string with 1.25 or 1,25 or 1:25 reformat it
+  # then calculate the hours and minutes from the time integer
+  # if the resource should be limited to quarters, then round up the minutes to the nearest quarter
+  # finally return the hours and minutes as a string with a colon
+  #
+  def sanitize_time(ptime)
+    return "" if ptime.blank? or ptime.gsub(/[,.:]/, "").to_i == 0
+    minutes = case true
+    when ptime.to_s.include?(":"); t = ptime.split(":"); t[1]=t[1].to_i*10 if t[1].size==1; t[0].to_i*60 + t[1].to_i
+    when ptime.to_s.include?(","); t = ptime.split(","); t[1]=t[1].to_i*10 if t[1].size==1; t[0].to_i*60 + t[1].to_i*60/100
+    when ptime.to_s.include?("."); t = ptime.split("."); t[1]=t[1].to_i*10 if t[1].size==1; t[0].to_i*60 + t[1].to_i*60/100
+    else ptime.to_i
+    end
+    hours, minutes = minutes.divmod 60
+    if should?(:limit_time_to_quarters) && !ptime.include?(":")
+      minutes = case minutes
+      when 0..15; 15
+      when 16..30; 30
+      when 31..45; 45
+      else hours += 1; 0
+      end
+    end
+    "%s:%s" % [ hours, minutes ]
+  end
+
+  # def split_time(time, minutes)
+  #   if minutes
+  #     d, h, m, _s = calc_hrs_minutes(time)
+  #     time = d * 24 * 60 + h * 60 + m
+  #     time = time.divmod 60
+  #   else
+  #     time = case true
+  #     when resource_params[:time].present? && resource_params[:time].include?(","); resource_params[:time].split(",")
+  #     when resource_params[:time].present? && resource_params[:time].include?("."); resource_params[:time].split(".")
+  #     else [ time, "0" ]
+  #     end
+  #     time[0] = time[0].blank? ? "0" : time[0].to_s
+  #     time[1] = (time[1].to_i*60.0/100.0).to_i if time.is_a? Array
+  #   end
+  #   time
+  # rescue
+  #   time
+  # end
+
+  #
+  # make sure this record is good for pushing to the ERP
+  #
+  def values_ready_for_push?
+    entry = InvoiceItemValidator.new(self)
+    return true if entry.valid?
+    self.errors.add(:base, entry.errors.full_messages.join(", "))
+    false
+    # if resource.quantity.blank?
+    #   raise "mileage_wrong" if is_invoice? and !kilometers.blank? and is_mileage_wrong?(resource)
+    #   raise "quantity not correct format" if (time =~ /^\d*[:,.]?\d*$/).nil? and comment.blank?
+    #   raise "rate not correct format" if !rate.blank? and (rate =~ /^\d*[,.]?\d*$/).nil? and comment.blank?
+    #   raise "time and quantity and mileage cannot all be blank" if time.blank? and comment.blank? and kilometers.blank?
+    #   raise "time not correct format" if !time.blank? and (time =~ /^\d*[:,.]?\d*$/).nil?
+    # else
+    #   raise "time, quantity, kilometers - only one can be set" if !time.blank? or !kilometers.blank?
+    #   raise "rate cannot be set if product and quantity is set!" if !rate.blank? && !product_id.blank?
+    #   raise "product_name cannot be blank if quantity is not blank!" if product_name.blank?          # with one off's we use the product text as description! No need to check product.name   # check if product exists/association set correctly
+    #   raise "quantity not correct format" if (quantity =~ /^\d*[:,.]?\d*$/).nil?
+    #   raise "unit_price not correct format" if !unit_price.blank? && (unit_price =~ /^\d*[,.]?\d*$/).nil?
+    #   raise "discount not correct format" if !discount.blank? && (discount =~ /^\d*[,.]?\d*[ ]*%?$/).nil?
+    #   raise "not service, product, or text - what is this?" if product.nil? && product_name.blank? && comment.blank?
+    # end
+    # # we'll use the project field for adding a comment in the top of the invoice
+    # # or use the project.name !resource.project_name.blank? && resource.project.name
+    # true
   end
 end

@@ -57,11 +57,24 @@ END
 * this is probably not necessary: format.turbo_stream { render turbo_stream: turbo_stream.remove(dom_id(@resource)) }
 * pwa-installation.js + joy of rails
 * pickup the mobile moving - ask if driving - enter odometer
-* set time spent to on global setting - either 0,25,50,75
+
+## 4/12/2024
+
+* refactore time_material - too much going on + InvoiceItemValidator
+* forgot to enable ds.push_invoice
+* very tiny bug - (t missing = nil)
+* return correct value
+* calc time and time_spent better
+* make session last 7.days - and show it
 
 ## 3/12/2024
 
-*
+* show price on time tasks
+* show t/m date - not created_at
+* set time spent to on global setting - either 0,25,50,75
+* fix debugger
+* fix resource()
+* fix calc_time for time_material in invoice_draft
 
 ## 2/12/2024
 

@@ -49,6 +49,10 @@ da:
   enable_notifications: Abonnér på notifikationer
   disable_notifications: Abonnér ikke mere på notifikationer
 
+  sign_in_info: "Du loggede ind kl %{signin} og din session varer %{session_done}"
+  session_done: "%{days} dage %{hours} timer %{minutes} minutter"
+  session_expired: "Din session er udløbet - log venligst ind igen"
+
   weekdays: Ugedage
   monday: Mandag
   tuesday: Tirsdag
@@ -602,14 +606,18 @@ da:
         allowed_ot_minutes: Tilladt overtid i minutter (-1=ingen, 0=ubegrænset)
       time_material:
         customer_id: Kunde
+        customer_name: Kunde
         project_id: Projekt
+        project_name: Projekt
         product_id: Produkt
+        product_name: Produkt
         user_id: Medarbejder
         comment: Kommentar
         date: Dato
         time: Tid
         state: Status
         over_time: Overtid
+        overtime: Overtid
         material: Materiale
         description: Beskrivelse
         quantity: Antal
