@@ -116,7 +116,11 @@ class TimeMaterial < ApplicationRecord
     else
       t = t.split(",") if t.include?(",")
       t = t.split(".") if t.include?(".")
-      "%s.%i" % [ t[0], t[1] ]
+      if t.is_a? Array
+        "%s.%i" % [ t[0], t[1] ]
+      else
+        t
+      end
     end
   end
 
