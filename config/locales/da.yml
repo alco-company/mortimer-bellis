@@ -49,6 +49,10 @@ da:
   enable_notifications: Abonnér på notifikationer
   disable_notifications: Abonnér ikke mere på notifikationer
 
+  sign_in_info: "Du loggede ind kl %{signin} og din session varer %{session_done}"
+  session_done: "%{days} dage %{hours} timer %{minutes} minutter"
+  session_expired: "Din session er udløbet - log venligst ind igen"
+
   weekdays: Ugedage
   monday: Mandag
   tuesday: Tirsdag

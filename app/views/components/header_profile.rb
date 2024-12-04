@@ -58,6 +58,14 @@ class HeaderProfile < Phlex::HTML
                     end
                     plain Current.user.tenant.name
                   end
+                  dt(class: "sr-only") { "sign in information" }
+                  dd(class: "mt-3 flex items-center text-xs font-light text-gray-500 sm:mr-6 sm:mt-0") do
+                    remains = ((Current.user.last_sign_in_at + 7.days) - Time.now).seconds
+                    days, hours, minutes, _seconds = TimeMaterial.new.calc_hrs_minutes(remains)
+                    str = I18n.t("session_done", days: days, hours: hours, minutes: minutes)
+                    p { I18n.t("sign_in_info", signin: I18n.l(Current.user.last_sign_in_at, format: :long), session_done: str) }
+                  end
+
                   # dt(class: "sr-only") { "Tenant status" }
                   # dd(
                   #   class:

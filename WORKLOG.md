@@ -65,6 +65,7 @@ END
 * very tiny bug - (t missing = nil)
 * return correct value
 * calc time and time_spent better
+* make session last 7.days - and show it
 
 ## 3/12/2024
 
