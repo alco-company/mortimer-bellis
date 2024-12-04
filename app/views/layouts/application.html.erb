@@ -46,4 +46,18 @@
     <remote-modal-container></remote-modal-container>
     <!-- End ModalContainer -->
   </body>
+  <% if user_signed_in? %>
+    <script>
+      setInterval(() => {
+        fetch('<%= check_session_path %>', { method: 'GET', credentials: 'same-origin' })
+          .then(response => {
+            if (response.redirected) {
+              window.location.href = '<%= new_user_session_path %>';
+            }
+          })
+          .catch(error => console.error('Session check failed', error));
+      }, 900000); // 15 min in milliseconds
+    </script>
+  <% end %>
+
 </html>

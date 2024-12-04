@@ -10,6 +10,10 @@ Rails.application.routes.draw do
     unlocks: "users/unlocks",
     omniauth_callbacks: "users/omniauth_callbacks"
   }
+
+  # called by JS on client side to check if the session is still valid
+  get "check_session", to: "sessions#check"
+
   # 2FA routes
   get "auth/edit/2fa/app/init" => "users/second_factor#initiate_new_app", as: :init_new_user_two_factor_app
   post "auth/edit/2fa/app/new" => "users/second_factor#new_app", as: :new_user_two_factor_app

@@ -1,6 +1,7 @@
 class ModalController < BaseController
   before_action :set_vars, only: [ :new, :show, :create, :destroy, :update ]
   skip_before_action :authenticate_user!, only: [ :destroy ]
+  skip_before_action :check_session_length, only: [ :destroy ]
   skip_before_action :ensure_tenanted_user, only: [ :destroy ]
 
   def new
