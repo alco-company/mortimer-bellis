@@ -344,7 +344,8 @@ GEM
       activesupport (>= 7.0.0)
       rack
       railties (>= 7.0.0)
-    psych (5.2.0)
+    psych (5.2.1)
+      date
       stringio
     public_suffix (6.0.1)
     puma (6.5.0)
@@ -552,7 +553,7 @@ DEPENDENCIES
   pagy (~> 9.0)
   phlex-rails
   propshaft
-  psych (~> 5.2.0)
+  psych (~> 5.2.1)
   puma (>= 5.0)
   rails!
   rails_live_reload
