@@ -66,6 +66,7 @@ END
 * return correct value
 * calc time and time_spent better
 * make session last 7.days - and show it
+* let the client logout by checking the session every 15 minutes
 
 ## 3/12/2024
 
