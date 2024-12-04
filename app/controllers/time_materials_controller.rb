@@ -11,24 +11,6 @@ class TimeMaterialsController < MortimerController
     params.permit![:pause].present? ? pause_resume : super
   end
 
-  def pause_resume
-    if @resource.user == Current.user or Current.user.admin? or Current.user.superadmin?
-      params.permit![:pause] == "pause" ? pause : resume
-      Broadcasters::Resource.new(@resource, params).replace
-      respond_to do |format|
-        format.html { render turbo_stream: [ turbo_stream.replace("flash_container", partial: "application/flash_message") ] }
-        format.turbo_stream { render turbo_stream: [ turbo_stream.replace("flash_container", partial: "application/flash_message") ] }
-      end
-    else
-      respond_to do |format|
-        format.turbo_stream { render turbo_stream: [
-          flash.now[:warning] = t("time_material.not_your_time_material"),
-          turbo_stream.replace("flash_container", partial: "application/flash_message")
-        ] }
-      end
-    end
-  end
-
   def edit
     @resource.update time_spent: @resource.time_spent + (Time.current.to_i - @resource.started_at.to_i) if @resource.active? # or @resource.paused?
     @resource.update time: limit_time_spent_to_quarters(@resource.time_spent, true)
@@ -40,36 +22,16 @@ class TimeMaterialsController < MortimerController
   # pick up the play button from the time_material#index view
   #
   def create
-    set_mileage
-    if params[:play].present?
-      create_play
-    else
-      resource_params[:time] = limit_time_spent_to_quarters(resource_params[:time])
-      super
-    end
-  end
-
-  def update
-    set_mileage
-    resource_params[:time] = limit_time_spent_to_quarters(resource_params[:time])
+    # set_mileage
+    create_play if params[:play].present?
+    return unless prepare_tm
     super
   end
 
-  def create_play
-    params[:time_material] = {
-      time: "0,25",
-      state: 1,
-      user_id: Current.user.id,
-      started_at: Time.current,
-      time_spent: 0,
-      date: Time.current.to_date,
-      about: t("time_material.current_task")
-    }
-    params.delete(:play)
-    # params[:played] = true
-
-    # try the create - again
-    create
+  def update
+    # set_mileage
+    return unless prepare_tm
+    super
   end
 
   # POST /users/:id/archive
@@ -88,16 +50,48 @@ class TimeMaterialsController < MortimerController
 
   private
 
-    def set_mileage
-      return unless params[:time_material].present?
-      if resource_params[:odo_from_time].present? &&
-         resource_params[:odo_to_time].present? &&
-         resource_params[:odo_from].present? &&
-         resource_params[:odo_to].present? &&
-         resource_params[:kilometers].present?
-         params[:time_material][:about] = I18n.t("time_material.type.mileage")
+    def create_play
+      params[:time_material] = {
+        time: "0,25",
+        state: 1,
+        user_id: Current.user.id,
+        started_at: Time.current,
+        time_spent: 0,
+        date: Time.current.to_date,
+        about: t("time_material.current_task")
+      }
+      params.delete(:play)
+      params[:played] = true
+    end
+
+    def pause_resume
+      if @resource.user == Current.user or Current.user.admin? or Current.user.superadmin?
+        params.permit![:pause] == "pause" ? pause : resume
+        Broadcasters::Resource.new(@resource, params).replace
+        respond_to do |format|
+          format.html { render turbo_stream: [ turbo_stream.replace("flash_container", partial: "application/flash_message") ] }
+          format.turbo_stream { render turbo_stream: [ turbo_stream.replace("flash_container", partial: "application/flash_message") ] }
+        end
+      else
+        respond_to do |format|
+          format.turbo_stream { render turbo_stream: [
+            flash.now[:warning] = t("time_material.not_your_time_material"),
+            turbo_stream.replace("flash_container", partial: "application/flash_message")
+          ] }
+        end
       end
     end
+
+    # def set_mileage
+    #   return unless params[:time_material].present?
+    #   if resource_params[:odo_from_time].present? &&
+    #      resource_params[:odo_to_time].present? &&
+    #      resource_params[:odo_from].present? &&
+    #      resource_params[:odo_to].present? &&
+    #      resource_params[:kilometers].present?
+    #      params[:time_material][:about] = I18n.t("time_material.type.mileage")
+    #   end
+    # end
 
     def limit_time_spent_to_quarters(time, minutes = false)
       return if time.to_s.include?(":")
@@ -125,9 +119,37 @@ class TimeMaterialsController < MortimerController
       time
     end
 
+    def prepare_tm
+      if resource_params[:state].present? && resource_params[:state] == "3" # done!
+        resource_params[:time] = limit_time_spent_to_quarters(resource_params[:time])
+        r = TimeMaterial.build(resource_params)
+        if params[:played].present? or (r.valid? and r.values_ready_for_push?)
+          params.delete(:played)
+          return true
+        end
+        flash.now[:warning] = t(".validation_errors")
+        render turbo_stream: [
+          turbo_stream.update("form", partial: "new", locals: { resource: r }),
+          turbo_stream.replace("flash_container", partial: "application/flash_message")
+        ]
+        return false
+      end
+      true
+    rescue => e
+      false
+    end
+
     # Only allow a list of trusted parameters through.
     def resource_params
       return params unless params[:time_material].present?
+
+      if params.require(:time_material)[:odo_from_time].present? &&
+         params.require(:time_material)[:odo_to_time].present? &&
+         params.require(:time_material)[:odo_from].present? &&
+         params.require(:time_material)[:odo_to].present? &&
+         params.require(:time_material)[:kilometers].present?
+         params[:time_material][:about] = I18n.t("time_material.type.mileage")
+      end
       params.expect(time_material: [
         :tenant_id,
         :date,

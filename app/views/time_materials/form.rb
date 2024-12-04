@@ -2,9 +2,7 @@ class TimeMaterials::Form < ApplicationForm
   def view_template(&)
     div(data: { controller: "time-material tabs", tabs_index: "0" }) do
       if model.cannot_be_pushed?
-        div(class: "text-sm mt-2 bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded relative") do
-          show_possible_issues
-        end
+        show_possible_issues
       end
       # date_field
       div(class: "mt-2 sm:col-span-4") do
@@ -267,16 +265,19 @@ class TimeMaterials::Form < ApplicationForm
   end
 
   def show_possible_issues
-    ul() do
-      li() { I18n.t("invoice_item.issues.customer_missing") }                   if @resource.is_invoice? and @resource.customer_id.blank?
-      li() { I18n.t("invoice_item.issues.mileage_wrong") }                      if @resource.is_invoice? and !@resource.kilometers.blank? and is_mileage_wrong?
-      li() { I18n.t("invoice_item.issues.product_missing") }                    if @resource.product_id.nil? and is_product_missing?
-      li() { I18n.t("invoice_item.issues.time_not_correct") }                   if (@resource.time =~ /^\d*[,.]?\d*$/).nil?
-      li() { I18n.t("invoice_item.issues.rate_not_correct") }                   if (@resource.rate =~ /^\d*[,.]?\d*$/).nil?
-      li() { I18n.t("invoice_item.issues.quantity_not_correct") }               if !@resource.quantity.blank? and (@resource.quantity =~ /^\d*[,.]?\d*$/).nil?
-      li() { I18n.t("invoice_item.issues.time_and_quantity_both_set") }         if !@resource.quantity.blank? and !@resource.time.blank?
-      li() { I18n.t("invoice_item.issues.unit_price_not_correct") }             if !@resource.unit_price.blank? and (@resource.unit_price =~ /^\d*[,.]?\d*$/).nil?
-      li() { I18n.t("invoice_item.issues.discount_not_correct") }               if !@resource.discount.blank? and (@resource.discount =~ /^\d*[,.]?\d*[ ]*%?$/).nil?
+    entry = InvoiceItemValidator.new(@resource)
+    if entry.valid?
+      div(class: "text-sm mt-2 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative") do
+        p() { I18n.t("invoice_item.issues.no_issues") }
+      end
+    else
+      div(class: "text-sm mt-2 bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded relative") do
+        ul(class: "grid gap-y-2") do
+          entry.errors.each do |error|
+            li() { unsafe_raw "<strong>%s</strong> - %s" % [ I18n.t("activerecord.attributes.time_material.#{error.attribute}"), error.type ] }
+          end
+        end
+      end
     end
   end
 

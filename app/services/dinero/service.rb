@@ -122,7 +122,7 @@ class Dinero::Service < SaasService
   end
 
   def push_invoice(params)
-    return mocked_push_invoice(params) if Rails.env.test?
+    return mocked_push_invoice(params) # if Rails.env.test?
     post "/v1/#{settings["organizationId"]}/invoices", params.to_json
   rescue => err
     UserMailer.error_report(err.to_s, "DineroUpload - Dinero::Service.push_invoice").deliver_later

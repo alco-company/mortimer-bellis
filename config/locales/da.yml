@@ -602,14 +602,18 @@ da:
         allowed_ot_minutes: Tilladt overtid i minutter (-1=ingen, 0=ubegrænset)
       time_material:
         customer_id: Kunde
+        customer_name: Kunde
         project_id: Projekt
+        project_name: Projekt
         product_id: Produkt
+        product_name: Produkt
         user_id: Medarbejder
         comment: Kommentar
         date: Dato
         time: Tid
         state: Status
         over_time: Overtid
+        overtime: Overtid
         material: Materiale
         description: Beskrivelse
         quantity: Antal

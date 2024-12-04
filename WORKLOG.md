@@ -58,6 +58,10 @@ END
 * pwa-installation.js + joy of rails
 * pickup the mobile moving - ask if driving - enter odometer
 
+## 4/12/2024
+
+* refactore time_material - too much going on + InvoiceItemValidator
+
 ## 3/12/2024
 
 * show price on time tasks

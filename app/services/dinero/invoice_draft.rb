@@ -56,26 +56,7 @@ class Dinero::InvoiceDraft
 
   def can_resource_be_pushed?(resource)
     return unless resource.is_invoice?
-
-    resource.customer.name                            # check if customer exists/association set correctly
-    if resource.quantity.blank?
-      raise "mileage_wrong" if resource.is_invoice? and !resource.kilometers.blank? and is_mileage_wrong?(resource)
-      raise "quantity not correct format" if (resource.time =~ /^\d*[,.]?\d*$/).nil? and resource.comment.blank?
-      raise "rate not correct format" if !resource.rate.blank? and (resource.rate =~ /^\d*[,.]?\d*$/).nil? and resource.comment.blank?
-      raise "time and quantity and mileage cannot all be blank" if resource.time.blank? and resource.comment.blank? and resource.kilometers.blank?
-      raise "time not correct format" if !resource.time.blank? and (resource.time =~ /^\d*[,.]?\d*$/).nil?
-    else
-      raise "time, quantity, kilometers - only one can be set" if !resource.time.blank? or !resource.kilometers.blank?
-      raise "rate cannot be set if product and quantity is set!" if !resource.rate.blank? && !resource.product_id.blank?
-      raise "product_name cannot be blank if quantity is not blank!" if resource.product_name.blank?          # with one off's we use the product text as description! No need to check resource.product.name   # check if product exists/association set correctly
-      raise "quantity not correct format" if (resource.quantity =~ /^\d*[,.]?\d*$/).nil?
-      raise "unit_price not correct format" if !resource.unit_price.blank? && (resource.unit_price =~ /^\d*[,.]?\d*$/).nil?
-      raise "discount not correct format" if !resource.discount.blank? && (resource.discount =~ /^\d*[,.]?\d*[ ]*%?$/).nil?
-      raise "not service, product, or text - what is this?" if resource.product.nil? && resource.product_name.blank? && resource.comment.blank?
-    end
-    # we'll use the project field for adding a comment in the top of the invoice
-    # or use the project.name !resource.project_name.blank? && resource.project.name
-    resource.done!
+    resource.cannot_be_pushed! unless resource.values_ready_for_push?
 
   rescue => err
     resource.update push_log: "%s\n- - - \n%s\%s" % [ resource.push_log, Time.current.to_s, err.message ]
@@ -301,7 +282,7 @@ class Dinero::InvoiceDraft
     end
     prod = Product.where("product_number like ?", nbr).first
     raise "Product not found %s - set products in Dinero Service" % nbr unless prod
-    q = calc_time(line.time)
+    q = line.calc_time_to_decimal
     p = line.rate.blank? ? prod.base_amount_value : ("%.2f" % line.rate.gsub(",", ".")).to_f
     initials = line.user&.initials rescue "-"
     {
@@ -338,20 +319,6 @@ class Dinero::InvoiceDraft
       f.write(lines.to_json)
     end
   end
-
-  def calc_time(time)
-    return 0.25 if time.blank?
-    time = if time.include?(":")
-      h, m = time.split(":")
-      m = (m*100.0/60.0).to_f.round
-      "%s.%i" % [ h, m ]
-    else
-      time = time.split(",") if time.include?(",")
-      time = time.split(".") if time.include?(".")
-      "%s.%i" % [ time[0], time[1] ]
-    end
-  end
-
 
   # used for testing the Dinero service initially
   # whd 24/10/2024 - probably not usefull anymore

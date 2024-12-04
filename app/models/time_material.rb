@@ -104,4 +104,48 @@ class TimeMaterial < ApplicationRecord
       minutes, seconds = minutes.divmod 60
       [ days, hours, minutes, seconds ]
   end
+
+  def calc_time_to_decimal(t)
+    t ||= time
+    return 0.25 if t.blank?
+    return t if t.is_a?(Numeric)
+    t = if t.include?(":")
+      h, m = t.split(":")
+      m = (m.to_i*100.0/60.0).to_f.round
+      "%s.%i" % [ h, m ]
+    else
+      t = t.split(",") if t.include?(",")
+      t = t.split(".") if t.include?(".")
+      "%s.%i" % [ t[0], t[1] ]
+    end
+  end
+
+  #
+  # make sure this record is good for pushing to the ERP
+  #
+  def values_ready_for_push?
+    return false if customer.nil? # check if customer exists/association set correctly
+    entry = InvoiceItemValidator.new(self)
+    return true if entry.valid?
+    self.errors.add(:base, entry.errors.full_messages.join(", "))
+    false
+    # if resource.quantity.blank?
+    #   raise "mileage_wrong" if is_invoice? and !kilometers.blank? and is_mileage_wrong?(resource)
+    #   raise "quantity not correct format" if (time =~ /^\d*[:,.]?\d*$/).nil? and comment.blank?
+    #   raise "rate not correct format" if !rate.blank? and (rate =~ /^\d*[,.]?\d*$/).nil? and comment.blank?
+    #   raise "time and quantity and mileage cannot all be blank" if time.blank? and comment.blank? and kilometers.blank?
+    #   raise "time not correct format" if !time.blank? and (time =~ /^\d*[:,.]?\d*$/).nil?
+    # else
+    #   raise "time, quantity, kilometers - only one can be set" if !time.blank? or !kilometers.blank?
+    #   raise "rate cannot be set if product and quantity is set!" if !rate.blank? && !product_id.blank?
+    #   raise "product_name cannot be blank if quantity is not blank!" if product_name.blank?          # with one off's we use the product text as description! No need to check product.name   # check if product exists/association set correctly
+    #   raise "quantity not correct format" if (quantity =~ /^\d*[:,.]?\d*$/).nil?
+    #   raise "unit_price not correct format" if !unit_price.blank? && (unit_price =~ /^\d*[,.]?\d*$/).nil?
+    #   raise "discount not correct format" if !discount.blank? && (discount =~ /^\d*[,.]?\d*[ ]*%?$/).nil?
+    #   raise "not service, product, or text - what is this?" if product.nil? && product_name.blank? && comment.blank?
+    # end
+    # # we'll use the project field for adding a comment in the top of the invoice
+    # # or use the project.name !resource.project_name.blank? && resource.project.name
+    # true
+  end
 end
