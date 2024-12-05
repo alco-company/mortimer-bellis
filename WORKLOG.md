@@ -56,12 +56,14 @@ END
 
 * this is probably not necessary: format.turbo_stream { render turbo_stream: turbo_stream.remove(dom_id(@resource)) }
 * pwa-installation.js + joy of rails
+* send notification to user - new task, remember to punch in/out, session about to close, more
 * pickup the mobile moving - ask if driving - enter odometer
 
 ## 5/12/2024
 
 * use over_time not overtime!!
 * fix session information
+* warn user if session nears end
 
 ## 4/12/2024
 
