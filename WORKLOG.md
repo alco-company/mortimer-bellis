@@ -61,6 +61,7 @@ END
 ## 5/12/2024
 
 * use over_time not overtime!!
+* fix session information
 
 ## 4/12/2024
 

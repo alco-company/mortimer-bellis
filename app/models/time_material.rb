@@ -11,6 +11,15 @@ class TimeMaterial < ApplicationRecord
   scope :by_fulltext, ->(query) { includes([ :customer, :project, :product ]).references([ :customers, :projects, :products ]).where("customers.name LIKE :query OR projects.name like :query or products.name like :query or products.product_number like :query or about LIKE :query OR product_name LIKE :query OR comment LIKE :query", query: "%#{query}%") if query.present? }
   scope :by_about, ->(about) { where("about LIKE ?", "%#{about}%") if about.present? }
   scope :by_exact_user, ->(user) { where("user_id= ?", "%#{user.id}%") if user.present? }
+  scope :weekdays, -> { where("cast(strftime('%w', date) as integer) BETWEEN 1 AND 5") }
+
+  # # PostgreSQL
+  # scope :weekdays_only_in_timezone, ->(timezone) {
+  #   where("EXTRACT(DOW FROM created_at AT TIME ZONE ?) BETWEEN 1 AND 5", timezone)
+  # }
+  # # MySQL
+  # scope :weekdays_only, -> { where("DAYOFWEEK(created_at) BETWEEN 2 AND 6") }
+
 
   # validates :about, presence: true
 
