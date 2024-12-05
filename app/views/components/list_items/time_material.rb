@@ -145,7 +145,7 @@ class ListItems::TimeMaterial < ListItems::ListItem
 
   def show_time_details
     rate = resource.rate.blank? ?
-      product_rates[resource.overtime] :
+      product_rates[resource.over_time] :
       resource.rate
     "#{ resource.time}t á #{ rate }"
   rescue

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2024_11_27_111114) do
+ActiveRecord::Schema[8.1].define(version: 2024_12_05_071915) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -590,8 +590,7 @@ ActiveRecord::Schema[8.1].define(version: 2024_11_27_111114) do
     t.datetime "paused_at"
     t.datetime "started_at"
     t.integer "time_spent"
-    t.integer "overtime", default: 0
-    t.integer "over_time"
+    t.integer "over_time", default: 0
     t.integer "odo_from"
     t.integer "odo_to"
     t.integer "kilometers"

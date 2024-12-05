@@ -43,7 +43,7 @@ class ModalController < BaseController
 
   #
   def destroy
-    (authenticate_user! && ensure_tenanted_user) || verify_api_key
+    (authenticate_user! && ensure_tenanted_user && check_session_length) || verify_api_key
     params[:all] == "true" ? process_destroy_all : process_destroy
   end
 
@@ -285,6 +285,7 @@ class ModalController < BaseController
     end
 
     def verify_api_key
+      return false unless params[:api_key].present? && @resource && @resource.respond_to?(:access_token)
       @resource.access_token == params[:api_key] || redirect_to(new_user_session_path)
     end
 
