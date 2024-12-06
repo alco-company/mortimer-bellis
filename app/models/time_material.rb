@@ -25,7 +25,7 @@ class TimeMaterial < ApplicationRecord
 
   validates :about, presence: true, if: [ Proc.new { |c| c.comment.blank? && c.product_name.blank? } ]
 
-  def self.set_order(resources, field = :created_at, direction = :desc)
+  def self.set_order(resources, field = :date, direction = :desc)
     resources.ordered(field, direction)
   end
 
@@ -164,12 +164,13 @@ class TimeMaterial < ApplicationRecord
     when ptime.to_s.include?(":"); t = ptime.split(":"); t[1]=t[1].to_i*10 if t[1].size==1; t[0].to_i*60 + t[1].to_i
     when ptime.to_s.include?(","); t = ptime.split(","); t[1]=t[1].to_i*10 if t[1].size==1; t[0].to_i*60 + t[1].to_i*60/100
     when ptime.to_s.include?("."); t = ptime.split("."); t[1]=t[1].to_i*10 if t[1].size==1; t[0].to_i*60 + t[1].to_i*60/100
-    else ptime.to_i
+    else ptime.to_i * 60
     end
     hours, minutes = minutes.divmod 60
     if should?(:limit_time_to_quarters) && !ptime.include?(":")
       minutes = case minutes
-      when 0..15; 15
+      when 0; 0
+      when 1..15; 15
       when 16..30; 30
       when 31..45; 45
       else hours += 1; 0

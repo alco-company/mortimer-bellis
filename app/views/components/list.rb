@@ -3,11 +3,15 @@ class List < ApplicationComponent
   include Phlex::Rails::Helpers::TurboStream
   include Phlex::Rails::Helpers::ButtonTo
 
-  attr_reader :records, :pagy, :grouped_by, :initial, :params, :user
+  attr_reader :records, :pagy, :order_by, :group_by, :initial, :params, :user
 
-  def initialize(records:, pagy:, initial: false, params: {}, user: User.new, grouped_by: nil, &block)
+  def initialize(records:, pagy:, initial: false, params: {}, user: User.new, group_by: nil, order_by: nil, &block)
+    @order_by = order_by
+    @group_by = group_by
     @records = records
-    @grouped_by = grouped_by
+    @records = records.order(order_by) if order_by
+    @records = records.group(group_by) if group_by
+    @order_key = order_by ? order_by.keys.first : :created_at
     @initial = initial
     @pagy = pagy
     @params = params
@@ -20,15 +24,15 @@ class List < ApplicationComponent
       turbo_frame_tag "pagination", src: resources_url(format: :turbo_stream), loading: :lazy
     else
       turbo_stream.append "record_list" do
-        if grouped_by && records.any?
-          date = records.first.send(grouped_by).to_date
+        if order_by && records.any?
+          date = (records.first.send(@order_key)).to_date
           render partial: "date", locals: { date: date }
         end
         records.each do |record|
-          if record.send(grouped_by).to_date != date
-            date = record.send(grouped_by).to_date
+          if record.send(@order_key).to_date != date
+            date = (record.send(@order_key)).to_date
             render partial: "date", locals: { date: date }
-          end if grouped_by
+          end if order_by
           render "ListItems::#{resource_class}".classify.constantize.new resource: record, params: params, user: user
         end
       end

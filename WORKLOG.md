@@ -63,6 +63,7 @@ END
 
 * send notification to user - new task, session about to close, more
 * notify user remember to punch in/out
+* fix bugs in time_material - calc time and sort order date
 
 ## 5/12/2024
 
