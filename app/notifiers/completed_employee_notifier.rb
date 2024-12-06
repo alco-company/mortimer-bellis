@@ -4,7 +4,7 @@
 
 class CompletedEmployeeNotifier < ApplicationNotifier
   # Add your delivery methods
-  deliver_by :turbo_stream, class: "DeliveryMethods::TurboStream"
+  # deliver_by :turbo_stream, class: "DeliveryMethods::TurboStream"
   # deliver_by :action_cable do |config|
   #   config.channel = "Noticed::NotificationsChannel"
   #   config.stream = -> { recipient }
