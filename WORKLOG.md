@@ -62,6 +62,7 @@ END
 ## 6/12/2024
 
 * send notification to user - new task, session about to close, more
+* notify user remember to punch in/out
 
 ## 5/12/2024
 

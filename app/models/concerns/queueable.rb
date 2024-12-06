@@ -68,7 +68,7 @@ module Queueable
       begin
         o = set_parms
         w = job_klass.constantize
-        id = t ? (w.set(wait_until: t).perform_later(**o)).job_id : (w.perform_later(**o)).job_id
+        id = t ? (w.set(wait_until: Time.at(t).in_time_zone("UTC")).perform_later(**o)).job_id : (w.perform_later(**o)).job_id
         t = Time.at(t.to_i).utc rescue nil
         persist id, t
       rescue => exception
