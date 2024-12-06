@@ -33,9 +33,20 @@ class TimeMaterial < ApplicationRecord
     TimeMaterialDetailItem.new(item: self, links: links, id: context.dom_id(self))
   end
 
-  def notify(msg: nil, rcp: nil, priority: 0)
+  def notify(action: nil, title: nil, msg: nil, rcp: nil, priority: 0)
+    return if user_id.blank? && rcp.blank?
+
     if user_id != Current.user.id
-      TimeMaterialNotifier.with(record: self, current_user: Current.user, message: I18n.t("time_material.new_assigned_task", delegator: Current.user.name)).deliver(user)
+      msg = case action
+      when :create; I18n.t("time_material.new_assigned_task", delegator: Current.user.name)
+      when :update; I18n.t("time_material.updated_assigned_task", moderator: Current.user.name)
+      when :destroy; I18n.t("time_material.destroyed_assigned_task", terminator: Current.user.name)
+      else
+        msg ||= I18n.t("time_material.assigned_task", transmittor: Current.user.name)
+      end
+      title = title || about || product_name || comment || I18n.t("notifiers.no_title")
+      TimeMaterialNotifier.with(record: self, current_user: Current.user, title: title, message: msg, delegator: Current.user.name).deliver(user)
+      TimeMaterialNotifier.with(record: self, current_user: Current.user, title: title, message: msg, delegator: Current.user.name).deliver(rcp) unless rcp.blank?
     end
   end
 

@@ -68,6 +68,17 @@ class User < ApplicationRecord
     all
   end
 
+  def notify(action: nil, title: nil, msg: nil, rcp: nil, priority: 0)
+    return if rcp.blank?
+
+    case action
+    when :destroy_all
+      title ||= I18n.t("notifiers.no_title")
+      msg ||=   I18n.t("notifiers.no_msg")
+      UserNotifier.with(record: self, current_user: Current.user, title: title, message: msg, delegator: Current.user.name).deliver(rcp)
+    end
+  end
+
   def initials
     name.split(" ").map { |n| n[0] }.join.upcase
   end

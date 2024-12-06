@@ -212,9 +212,13 @@ class ModalController < BaseController
       begin
         set_filter resource_class.to_s.underscore.pluralize
         set_resources
-        DeleteAllJob.perform_later tenant: Current.tenant, resource_class: resource_class.to_s, sql_resources: @resources.to_sql
+        DeleteAllJob.perform_later tenant: Current.tenant, resource_class: resource_class.to_s,
+          ids: @resources.pluck(:id),
+          user_ids: (resource_class.first.respond_to?(:user_id) ? @resources.pluck(:user_id).uniq : User.by_tenant.by_role(:user).pluck(:id)) rescue nil
         @url.gsub!(/\/\d+$/, "") if @url.match?(/\d+$/)
+        flash[:success] = t("delete_all_later")
         respond_to do |format|
+          format.turbo_stream { }
           format.html { redirect_to @url, status: 303, success: t("delete_all_later") }
           format.json { head :no_content }
         end
@@ -234,11 +238,13 @@ class ModalController < BaseController
           redirect_back fallback_location: root_path, success: t(".attachment_deleted")
         else
           cb = get_cb_eval_after_destroy(resource)
-          r = resource
+          r = resource_class.build resource.attributes
           if resource.destroy!
             eval(cb) unless cb.nil?
             @url.gsub!(/\/\d+$/, "") if @url.match?(/\d+$/)
             Broadcasters::Resource.new(r).destroy
+            r.notify(action: :destroy)
+            r.destroy
             flash[:success] = t(".post")
             respond_to do |format|
               format.turbo_stream { }

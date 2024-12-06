@@ -1,0 +1,15 @@
+da:
+  notifiers:
+    no_title: Der er ikke angivet en titel
+    no_msg: Der er ikke angivet en besked
+    punch_notifier:
+      notification:
+        punch_in: "Du har stemplet ind på arbejde"
+        punch_out: "Du har stemplet ud fra arbejde"
+        punch_reminder_title: "Husk at stemple"
+        punch_reminder: "Husk at stemple ind/ud fra arbejde"
+    user_notifier:
+      notification:
+        new_user: "%{user} er blevet oprettet"
+        updated_user: "%{user} er blevet opdateret"
+        destroyed_user: "%{user} er blevet slettet"

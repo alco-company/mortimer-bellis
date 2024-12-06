@@ -59,6 +59,10 @@ END
 * send notification to user - new task, remember to punch in/out, session about to close, more
 * pickup the mobile moving - ask if driving - enter odometer
 
+## 6/12/2024
+
+* send notification to user - new task, session about to close, more
+
 ## 5/12/2024
 
 * use over_time not overtime!!

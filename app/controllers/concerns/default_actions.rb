@@ -95,7 +95,7 @@ module DefaultActions
         if @resource.save
           create_callback @resource
           Broadcasters::Resource.new(@resource, params.permit!).create
-          @resource.notify
+          @resource.notify action: :create
           flash[:success] = t(".post")
           format.turbo_stream { render turbo_stream: [
             turbo_stream.update("form", ""),
@@ -131,7 +131,7 @@ module DefaultActions
         if @resource.update(resource_params)
           update_callback @resource
           Broadcasters::Resource.new(@resource, params.permit!).replace
-          @resource.notify
+          @resource.notify action: :update
           flash[:success] = t(".post")
           format.turbo_stream { render turbo_stream: [
             turbo_stream.update("form", ""),
@@ -160,7 +160,7 @@ module DefaultActions
     def destroy
       if params[:all].present? && params[:all] == "true"
         DeleteAllJob.perform_now tenant: Current.tenant, resource_class: resource_class.to_s, sql_resources: @resources.to_sql
-        Current.tenant.notify msg: "All #{resource_class.name.underscore.pluralize} was deleted in the background"
+        Current.tenant.notify action: :destroy, msg: "All #{resource_class.name.underscore.pluralize} was deleted in the background"
         respond_to do |format|
           format.html { redirect_to resources_url, success: t("delete_all_later") }
           format.json { head :no_content }
@@ -177,7 +177,7 @@ module DefaultActions
           begin
             ActiveRecord::Base.connected_to(role: :writing) do
               # All code in this block will be connected to the reading role.
-              eval(cb) && @resource.notify && Broadcasters::Resource.new(@resource).destroy if @resource.destroy!
+              eval(cb) && @resource.notify(action: :destroy) && Broadcasters::Resource.new(@resource).destroy if @resource.destroy!
             end
           rescue => error
             say error
