@@ -52,7 +52,12 @@ class ApplicationRecord < ActiveRecord::Base
     end
   end
 
-  def notify(msg: nil, rcp: nil, priority: 0)
+  # implement on the model to define the exact functionality of notify
+  # action is the action that triggered the notification - ie create, update, destroy
+  # msg is the message to be sent
+  # rcp is the recipient(s) of the message
+  # priority is "how loud to notify"
+  def notify(action: nil, title: nil, msg: nil, rcp: nil, priority: 0)
     #
   end
 

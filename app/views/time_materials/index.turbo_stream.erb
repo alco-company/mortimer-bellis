@@ -1,1 +1,1 @@
-<%= render List.new records: @records, pagy: @pagy, params: params, grouped_by: :created_at, user: Current.user %>
+<%= render List.new records: @records, pagy: @pagy, params: params, order_by: {date: :desc}, user: Current.user %>

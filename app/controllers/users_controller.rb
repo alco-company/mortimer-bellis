@@ -57,11 +57,11 @@ class UsersController < MortimerController
       params.expect(user: [ :tenant_id, :name, :pincode, :email, :role, :mugshot, :locale, :time_zone ])
     end
 
-    def create_callback(resource)
+    def create_callback
       params[:user].delete(:mugshot)
     end
 
-    def update_callback(_u)
+    def update_callback
       params[:user].delete(:mugshot)
     end
 

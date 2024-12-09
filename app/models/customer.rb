@@ -16,7 +16,7 @@ class Customer  < ApplicationRecord
   scope :by_ean_number, ->(ean_number) { where("color LIKE ?", "%#{ean_number}%") if ean_number.present? }
 
   validates :name, presence: true, uniqueness: { scope: :tenant_id, message: I18n.t("customers.errors.messages.name_exist") }
-  validates :vat_number, presence: true, uniqueness: { scope: :tenant_id, message: I18n.t("customers.errors.messages.vat_number_exist") }
+  validates :vat_number, presence: true, uniqueness: { scope: :tenant_id, message: I18n.t("customers.errors.messages.vat_number_exist") }, if: -> { !is_person? }
 
   def self.filtered(filter)
     flt = filter.filter
@@ -45,6 +45,7 @@ class Customer  < ApplicationRecord
 
   def self.add_from_erp(item)
     return false unless item["Name"].present?
+
     customer = Customer.find_or_create_by(tenant: Current.tenant, erp_guid: item["ContactGuid"])
     customer.name = item["Name"]
     customer.external_reference = item["ExternalReference"]
@@ -71,5 +72,7 @@ class Customer  < ApplicationRecord
     if customer.save
        Broadcasters::Resource.new(customer).create
     end
+  rescue => error
+    UserMailer.error_report(error.message, "Customer#add_from_erp failed ").deliver_later
   end
 end

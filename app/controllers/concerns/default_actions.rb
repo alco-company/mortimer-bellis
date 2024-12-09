@@ -90,12 +90,12 @@ module DefaultActions
       @resource = resource_class.new(resource_params)
       @resource.tenant_id = Current.tenant.id if resource_class.has_attribute? :tenant_id
       @resource.user_id = Current.user.id if resource_class.has_attribute?(:user_id) && !resource_params[:user_id].present?
-      before_create_callback @resource
+
       respond_to do |format|
-        if @resource.save
-          create_callback @resource
+        if before_create_callback && @resource.save
+          create_callback
           Broadcasters::Resource.new(@resource, params.permit!).create
-          @resource.notify
+          @resource.notify action: :create
           flash[:success] = t(".post")
           format.turbo_stream { render turbo_stream: [
             turbo_stream.update("form", ""),
@@ -128,10 +128,10 @@ module DefaultActions
     # PATCH/PUT /users/1 or /users/1.json
     def update
       respond_to do |format|
-        if @resource.update(resource_params)
-          update_callback @resource
+        if before_update_callback && @resource.update(resource_params)
+          update_callback
           Broadcasters::Resource.new(@resource, params.permit!).replace
-          @resource.notify
+          @resource.notify action: :update
           flash[:success] = t(".post")
           format.turbo_stream { render turbo_stream: [
             turbo_stream.update("form", ""),
@@ -160,7 +160,7 @@ module DefaultActions
     def destroy
       if params[:all].present? && params[:all] == "true"
         DeleteAllJob.perform_now tenant: Current.tenant, resource_class: resource_class.to_s, sql_resources: @resources.to_sql
-        Current.tenant.notify msg: "All #{resource_class.name.underscore.pluralize} was deleted in the background"
+        Current.tenant.notify action: :destroy, msg: "All #{resource_class.name.underscore.pluralize} was deleted in the background"
         respond_to do |format|
           format.html { redirect_to resources_url, success: t("delete_all_later") }
           format.json { head :no_content }
@@ -173,11 +173,11 @@ module DefaultActions
           end
           redirect_back fallback_location: root_path, success: t(".attachment_deleted")
         else
-          cb = destroy_callback @resource
+          cb = destroy_callback
           begin
             ActiveRecord::Base.connected_to(role: :writing) do
               # All code in this block will be connected to the reading role.
-              eval(cb) && @resource.notify && Broadcasters::Resource.new(@resource).destroy if @resource.destroy!
+              eval(cb) && @resource.notify(action: :destroy) && Broadcasters::Resource.new(@resource).destroy if @resource.destroy!
             end
           rescue => error
             say error
@@ -199,21 +199,30 @@ module DefaultActions
     # implement on the controller inheriting this concern
     # in order to 'fix' stuff right before the resource gets saved
     #
-    def before_create_callback(obj)
+    def before_create_callback
+      true
     end
 
     #
     # implement on the controller inheriting this concern
     # in order to not having to extend the create method on this concern
     #
-    def create_callback(obj)
+    def create_callback
+    end
+
+    #
+    # implement on the controller inheriting this concern
+    # in order to 'fix' stuff right before the resource gets updated
+    #
+    def before_update_callback
+      true
     end
 
     #
     # implement on the controller inheriting this concern
     # in order to not having to extend the update method on this concern
     #
-    def update_callback(obj)
+    def update_callback
     end
 
     #
@@ -223,7 +232,7 @@ module DefaultActions
     # this has to return a method that will be called after the destroy!!
     # ie - it cannot call methods on the object istself!
     #
-    def destroy_callback(obj)
+    def destroy_callback
     end
 
     private

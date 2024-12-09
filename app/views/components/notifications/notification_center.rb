@@ -79,11 +79,11 @@ class Notifications::NotificationCenter < ApplicationComponent
                   end
                 end
                 ul(role: "list", class: "flex-1 divide-y divide-gray-200 overflow-y-auto scrollbar-hide") do
-                  turbo_frame_tag "notifications_list" do
-                    recipient.notifications.unread.each do |notification|
-                      render Notifications::NotificationItem.new(notification: notification)
-                    end
-                  end
+                  # turbo_frame_tag "notifications_list" do
+                  #   recipient.notifications.unread.each do |notification|
+                  #     render Notifications::NotificationItem.new(notification: notification)
+                  #   end
+                  # end
                 end
               end
             end

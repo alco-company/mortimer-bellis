@@ -1,5 +1,9 @@
 <div class="flex justify-between gap-x-6 mb-1 px-2 py-1 ">
   <div class="w-full pt-10 border-b border-gray-100 text-xs font-semibold">
+    <% if date.is_a? Date or date.is_a? Time or date.is_a? DateTime %>
     <%= I18n.l date, format: :day_summary %>
+    <% else %>
+    <%= I18n.t( "time_material.no_date").html_safe %>
+    <% end %>
   </div>
 </div>

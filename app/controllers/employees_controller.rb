@@ -109,7 +109,7 @@ class EmployeesController < MortimerController
     # implement on the controller inheriting this concern
     # in order to not having to extend the create method on this concern
     #
-    def create_callback(obj)
-      UserMailer.with(user: obj, sender: current_user.name).welcome.deliver_later unless obj.email.blank?
+    def create_callback
+      UserMailer.with(user: @resource, sender: current_user.name).welcome.deliver_later unless @resource.email.blank?
     end
 end

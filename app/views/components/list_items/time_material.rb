@@ -102,7 +102,7 @@ class ListItems::TimeMaterial < ListItems::ListItem
       paused_info if resource.paused?
     else
       span(class: "mr-2 truncate") do
-        plain I18n.l resource.date.to_datetime, format: :date
+        plain (I18n.l(resource.date.to_datetime, format: :date) rescue unsafe_raw(I18n.t("time_material.no_date")))
       end
       if resource.is_invoice?
         span(class: "hidden 2xs:inline-flex w-fit items-center rounded-md bg-green-50 mr-1 px-1 xs:px-2 py-0 xs:py-0.5 text-2xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20 truncate") do
@@ -115,7 +115,7 @@ class ListItems::TimeMaterial < ListItems::ListItem
 
   def paused_info
     span(class: "flex") do
-      plain I18n.l(resource.paused_at.to_datetime, format: :short)
+      plain I18n.l(resource.paused_at.to_datetime, format: :short) rescue ""
     end
   rescue
     {}
@@ -125,7 +125,7 @@ class ListItems::TimeMaterial < ListItems::ListItem
     return resource.customer&.name if resource.customer.present? or !resource.customer_name.blank?
     return resource.project&.name if resource.project.present? or !resource.project_name.blank?
     I18n.t("time_material.internal_or_private")
-  rescue "-"
+  rescue "!"
   end
 
   def show_time_material_quantative
@@ -141,6 +141,8 @@ class ListItems::TimeMaterial < ListItems::ListItem
       else; show_product_details
       end
     end
+  rescue
+    "!"
   end
 
   def show_time_details
@@ -149,7 +151,7 @@ class ListItems::TimeMaterial < ListItems::ListItem
       resource.rate
     "#{ resource.time}t á #{ rate }"
   rescue
-    "-"
+    "!"
   end
 
   def show_product_details

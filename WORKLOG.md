@@ -58,6 +58,20 @@ END
 * pwa-installation.js + joy of rails
 * send notification to user - new task, remember to punch in/out, session about to close, more
 * pickup the mobile moving - ask if driving - enter odometer
+* validate punches before deleting punch_clocks !!
+
+## 9/12/2024
+
+* fix bug - when no account on t/m (or errornous account)
+* add OAuth2.0 service provider (for future use - eg. native ) - and for other service integration (like 3CX)
+* fix missing ErrorHandling
+
+## 6/12/2024
+
+* send notification to user - new task, session about to close, more
+* notify user remember to punch in/out
+* fix bugs in time_material - calc time and sort order date
+* forgot a notifier
 
 ## 5/12/2024
 

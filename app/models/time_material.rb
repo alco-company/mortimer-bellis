@@ -25,7 +25,7 @@ class TimeMaterial < ApplicationRecord
 
   validates :about, presence: true, if: [ Proc.new { |c| c.comment.blank? && c.product_name.blank? } ]
 
-  def self.set_order(resources, field = :created_at, direction = :desc)
+  def self.set_order(resources, field = :date, direction = :desc)
     resources.ordered(field, direction)
   end
 
@@ -33,9 +33,20 @@ class TimeMaterial < ApplicationRecord
     TimeMaterialDetailItem.new(item: self, links: links, id: context.dom_id(self))
   end
 
-  def notify(msg: nil, rcp: nil, priority: 0)
+  def notify(action: nil, title: nil, msg: nil, rcp: nil, priority: 0)
+    return if user_id.blank? && rcp.blank?
+
     if user_id != Current.user.id
-      TimeMaterialNotifier.with(record: self, current_user: Current.user, message: I18n.t("time_material.new_assigned_task", delegator: Current.user.name)).deliver(user)
+      msg = case action
+      when :create; I18n.t("time_material.new_assigned_task", delegator: Current.user.name)
+      when :update; I18n.t("time_material.updated_assigned_task", moderator: Current.user.name)
+      when :destroy; I18n.t("time_material.destroyed_assigned_task", terminator: Current.user.name)
+      else
+        msg ||= I18n.t("time_material.assigned_task", transmittor: Current.user.name)
+      end
+      title = title || about || product_name || comment || I18n.t("notifiers.no_title")
+      TimeMaterialNotifier.with(record: self, current_user: Current.user, title: title, message: msg, delegator: Current.user.name).deliver(user)
+      TimeMaterialNotifier.with(record: self, current_user: Current.user, title: title, message: msg, delegator: Current.user.name).deliver(rcp) unless rcp.blank?
     end
   end
 
@@ -153,12 +164,13 @@ class TimeMaterial < ApplicationRecord
     when ptime.to_s.include?(":"); t = ptime.split(":"); t[1]=t[1].to_i*10 if t[1].size==1; t[0].to_i*60 + t[1].to_i
     when ptime.to_s.include?(","); t = ptime.split(","); t[1]=t[1].to_i*10 if t[1].size==1; t[0].to_i*60 + t[1].to_i*60/100
     when ptime.to_s.include?("."); t = ptime.split("."); t[1]=t[1].to_i*10 if t[1].size==1; t[0].to_i*60 + t[1].to_i*60/100
-    else ptime.to_i
+    else ptime.to_i * 60
     end
     hours, minutes = minutes.divmod 60
     if should?(:limit_time_to_quarters) && !ptime.include?(":")
       minutes = case minutes
-      when 0..15; 15
+      when 0; 0
+      when 1..15; 15
       when 16..30; 30
       when 31..45; 45
       else hours += 1; 0
@@ -192,6 +204,7 @@ class TimeMaterial < ApplicationRecord
   def values_ready_for_push?
     entry = InvoiceItemValidator.new(self)
     return true if entry.valid?
+    self.project = entry.project if entry.project.present?
     self.errors.add(:base, entry.errors.full_messages.join(", "))
     false
     # if resource.quantity.blank?

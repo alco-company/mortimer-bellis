@@ -39,6 +39,16 @@ class Punch < ApplicationRecord
     all
   end
 
+  def notify(action: nil, title: nil, msg: nil, rcp: nil, priority: 0)
+    return if user_id.blank?
+    case action
+    when :reminder
+      title ||= I18n.t("notifiers.punch_notifier.notification.punch_reminder_title")
+      msg ||=   I18n.t("notifiers.punch_notifier.notification.punch_reminder")
+      PunchNotifier.with(record: self, current_user: Current.user, title: title, message: msg, delegator: Current.user.name).deliver(user)
+    end
+  end
+
   # def self.ordered(resources, field, direction = :desc)
   #   resources.joins(:user).joins(:punch_clock).order(field => direction)
   # end

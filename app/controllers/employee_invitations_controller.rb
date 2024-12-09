@@ -38,12 +38,12 @@ class EmployeeInvitationsController < MortimerController
     # implement on the controller inheriting this concern
     # in order to not having to extend the create method on this concern
     #
-    def create_callback(obj)
-      obj.address.split(/[ ,;]/).each do |addr|
+    def create_callback
+      @resource.address.split(/[ ,;]/).each do |addr|
         resource = UserInvitation.create(
-          tenant_id: obj.tenant_id,
-          user_id: obj.user_id,
-          team_id: obj.team_id,
+          tenant_id: @resource.tenant_id,
+          user_id: @resource.user_id,
+          team_id: @resource.team_id,
           address: addr,
           access_token: SecureRandom.hex(16),
           state: :draft
@@ -58,6 +58,6 @@ class EmployeeInvitationsController < MortimerController
           Broadcasters::Resource.new(resource).create
         end
       end
-      obj.destroy
+      @resource.destroy
     end
 end

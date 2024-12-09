@@ -39,6 +39,7 @@ class BackgroundJob < ApplicationRecord
 
   scope :by_fulltext, ->(q) { where("job_klass LIKE ? or params LIKE ?", "%#{q}%", "%#{q}%") if q.present? }
   scope :by_job_klass, ->(job_klass) { where("job_klass LIKE ? or params LIKE ?", "%#{job_klass}%", "%#{job_klass}%") if job_klass.present? }
+  scope :any_jobs_to_run, -> { where(state: 1..2, next_run_at: [ nil, ..DateTime.current ]) }
 
   validates :job_klass, presence: true
 
@@ -73,6 +74,7 @@ class BackgroundJob < ApplicationRecord
       [ "UserStateJob", "UserStateJob" ],
       [ "ImportUsersJob", "ImportUsersJob" ],
       [ "PunchCardJob", "PunchCardJob" ],
+      [ "PunchReminderJob", "PunchReminderJob" ],
       [ "PunchJob", "PunchJob" ]
     ]
   end

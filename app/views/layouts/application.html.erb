@@ -3,7 +3,13 @@
     <%= render partial: "layouts/generic_header" %>
     <%= web_push_public_key_meta_tag %>
   </head>
-  <body id="body" class="h-full" style="height: 100vh;">
+  <body id="body" class="h-full" style="height: 100vh;" >
+    <!-- tooltip -->
+    <%= turbo_frame_tag "tooltip", class: "absolute", target: "_top" %>
+
+    <!-- streams for notifications, menu, profile -->
+    <%= turbo_stream_from Current.notification_stream if Current.user %>
+
     <div class="min-h-full" data-controller="mobilesidebar menu page">
       <%= render MobileSidebarComponent.new if Current.user %>
 

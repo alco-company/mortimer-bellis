@@ -21,13 +21,13 @@ class TenantsController < MortimerController
       resize_before_save(params[:tenant][:logo], 80, 40)
     end
 
-    def create_callback(resource)
+    def create_callback
       params[:tenant].delete(:logo)
-      TenantRegistrationService.call(resource)
+      TenantRegistrationService.call(@resource)
       # TenantUser.create(tenant_id: resource.id, user_id: Current.user.id, role: "superadmin")
     end
 
-    def update_callback(_u)
+    def update_callback
       params[:tenant].delete(:logo)
     end
 end
