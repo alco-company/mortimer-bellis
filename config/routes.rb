@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  use_doorkeeper
   mount MissionControl::Jobs::Engine, at: "/solid_queue_jobs"
 
   devise_for :users, controllers: {
@@ -11,6 +12,12 @@ Rails.application.routes.draw do
     omniauth_callbacks: "users/omniauth_callbacks"
   }
 
+  namespace :api do
+    namespace :v1 do
+      resources :contacts
+      get "hello" => "hello_world#hello"
+    end
+  end
   # called by JS on client side to check if the session is still valid
   get "check_session", to: "sessions#check"
 

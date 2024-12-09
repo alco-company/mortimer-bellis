@@ -172,6 +172,8 @@ GEM
     devise_invitable (2.0.9)
       actionmailer (>= 5.0)
       devise (>= 4.6)
+    doorkeeper (5.8.1)
+      railties (>= 5)
     dotenv (3.1.4)
     dotenv-rails (3.1.4)
       dotenv (= 3.1.4)
@@ -535,6 +537,7 @@ DEPENDENCIES
   devise (~> 4.9)
   devise-two-factor (~> 6.1)
   devise_invitable (~> 2.0)
+  doorkeeper (~> 5.8)
   dotenv-rails
   get_process_mem (~> 1.0.0)
   httparty (~> 0.22.0)

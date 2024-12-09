@@ -63,6 +63,7 @@ END
 ## 9/12/2024
 
 * fix bug - when no account on t/m (or errornous account)
+* add OAuth2.0 service provider (for future use - eg. native ) - and for other service integration (like 3CX)
 
 ## 6/12/2024
 

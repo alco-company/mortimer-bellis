@@ -25,6 +25,17 @@ class User < ApplicationRecord
   has_many :web_push_subscriptions, class_name: "Noticed::WebPush::Subscription", as: :user, dependent: :destroy
   has_many :provided_services, foreign_key: "authorized_by_id", inverse_of: :authorized_by
 
+  has_many :access_grants,
+           class_name: "Doorkeeper::AccessGrant",
+           foreign_key: :resource_owner_id,
+           dependent: :delete_all # or :destroy if you need callbacks
+
+  has_many :access_tokens,
+           class_name: "Doorkeeper::AccessToken",
+           foreign_key: :resource_owner_id,
+           dependent: :delete_all # or :destroy if you need callbacks
+
+
   enum :role, { user: 0, admin: 1, superadmin: 2 }
   has_one_attached :mugshot
   has_secure_token :pos_token

@@ -125,3 +125,5 @@ gem "omniauth-rails_csrf_protection", "~> 1.0"
 gem "web-push", "~> 3.0"
 
 gem "devise-two-factor", "~> 6.1"
+
+gem "doorkeeper", "~> 5.8"
