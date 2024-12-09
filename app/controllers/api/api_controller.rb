@@ -6,7 +6,7 @@ module Api
     #
     # will redirect_to root_path if a 404 is encountered
     #
-    include ErrorHandling
+    # include ErrorHandling
 
     def say(msg)
       Rails.logger.info { "===============================" }
