@@ -11,6 +11,8 @@ class SyncErpJob < ApplicationJob
     super(**args)
     user = args[:user]
     resource_class = args[:resource_class]
+    startDate = nil
+    endDate = nil
     user_time_zone(user.time_zone) do
       ds = Dinero::Service.new
       case resource_class.to_s

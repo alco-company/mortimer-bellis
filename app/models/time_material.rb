@@ -204,6 +204,7 @@ class TimeMaterial < ApplicationRecord
   def values_ready_for_push?
     entry = InvoiceItemValidator.new(self)
     return true if entry.valid?
+    self.project = entry.project if entry.project.present?
     self.errors.add(:base, entry.errors.full_messages.join(", "))
     false
     # if resource.quantity.blank?

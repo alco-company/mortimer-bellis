@@ -21,11 +21,11 @@
 class InvoiceItemValidator
   include ActiveModel::Model
 
-  attr_accessor :quantity, :product_name, :product, :time, :rate, :discount, :unit_price,
-                :kilometers, :comment, :customer, :customer_name, :project_name, :project, :is_invoice
+  attr_accessor :quantity, :product_name, :product_id, :time, :rate, :discount, :unit_price,
+                :kilometers, :comment, :customer_id, :customer_name, :project_name, :project, :is_invoice
 
   validates :product_name, presence: true, if: -> { quantity.present? }
-  validates :quantity, presence: true, if: -> { product.present? }
+  validates :quantity, presence: true, if: -> { product_id.present? || product_name.present? }
   validates :unit_price, presence: true, if: -> { quantity.present? }
   validate :time_requires_blank_fields
   validate :rate_requires_conditions
@@ -44,14 +44,14 @@ class InvoiceItemValidator
   def initialize(tm)
     @quantity = tm.quantity
     @product_name = tm.product_name
-    @product = tm.product
+    @product_id = tm.product_id
     @time = tm.time
     @rate = tm.rate
     @discount = tm.discount
     @unit_price = tm.unit_price
     @kilometers = tm.kilometers
     @comment = tm.comment
-    @customer = tm.customer
+    @customer_id = tm.customer_id
     @customer_name = tm.customer_name
     @project_name = tm.project_name
     @project = tm.project
@@ -70,7 +70,7 @@ class InvoiceItemValidator
   def rate_requires_conditions
     if rate.present?
       errors.add(:rate, tr("time_must_be_set")) if time.blank?
-      errors.add(:rate, tr("product_name_product_quantity_must_blank")) if product.present? || product_name.present? || quantity.present?
+      errors.add(:rate, tr("product_name_product_quantity_must_blank")) if product_id.present? || product_name.present? || quantity.present?
     end
   end
 
@@ -130,18 +130,17 @@ class InvoiceItemValidator
   end
 
   def product_must_exist
-    if product.present? && !Product.by_tenant.find(product.id)
+    if product_id.present? && !Product.by_tenant.find(product_id)
       errors.add(:product, tr("must_exist"))
     end
   end
 
   def customer_must_exist
     if is_invoice
-      if (customer.present? || customer_name.present?) && !Customer.by_tenant.find(customer.id)
+      if customer_id.present? && !Customer.by_tenant.find(customer_id)
         errors.add(:customer, tr("not_found_search_customer_again"))
-      elsif customer.present? || customer_name.present?
-      else
-        errors.add(:customer, tr("must_exist"))
+      elsif customer_name.present? && customer_id.blank?
+        errors.add(:customer, tr("not_found_search_customer_again"))
       end
     end
   end

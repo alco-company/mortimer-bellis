@@ -58,16 +58,16 @@ class PunchesController < MortimerController
 
     #
     # implement on the controller inheriting this concern
-    def create_callback(res)
+    def create_callback
       begin
-        PunchCard.recalculate user: res.user, across_midnight: false, date: res.punched_at.to_date
+        PunchCard.recalculate user: @resource.user, across_midnight: false, date: @resource.punched_at.to_date
       rescue => e
         say e
       end
     end
-    def update_callback(res)
+    def update_callback
       begin
-        PunchCard.recalculate user: res.user, across_midnight: false, date: res.punched_at.to_date
+        PunchCard.recalculate user: @resource.user, across_midnight: false, date: @resource.punched_at.to_date
       rescue => e
          say e
       end
@@ -80,7 +80,7 @@ class PunchesController < MortimerController
     # this has to return a method that will be called after the destroy!!
     # ie - it cannot call methods on the object istself!
     #
-    def destroy_callback(res)
-      "PunchCard.recalculate( user: User.find(#{res.user.id}), across_midnight: false, date: '#{res.punched_at.to_date}')"
+    def destroy_callback
+      "PunchCard.recalculate( user: User.find(#{@resource.user.id}), across_midnight: false, date: '#{@resource.punched_at.to_date}')"
     end
 end

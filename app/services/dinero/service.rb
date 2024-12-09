@@ -71,9 +71,9 @@ class Dinero::Service < SaasService
   #
   def pull(resource_class:, all: false, page: 0, pageSize: 100, fields: nil, status_filter: nil, start_date: nil, end_date: nil)
     case resource_class.to_s
-    when "Customer"; tbl = "contacts"
-    when "Product"; tbl = "products"
-    when "Invoice"; tbl = "invoices"
+    when "Customer"; tbl = "contacts"; api_version = "v2"
+    when "Product"; tbl = "products"; api_version = "v1"
+    when "Invoice"; tbl = "invoices"; api_version = "v1"
     else
       return false
     end
@@ -92,8 +92,7 @@ class Dinero::Service < SaasService
     if status_filter
       query[:statusFilter] = status_filter
     end
-    list = get "/v1/#{settings["organizationId"]}/#{tbl}?#{query.to_query}"
-    # debugger
+    list = get "/#{api_version}/#{settings["organizationId"]}/#{tbl}?#{query.to_query}"
     unless list.parsed_response.present?
       if list.response.class == Net::HTTPUnauthorized
         UserMailer.error_report("", "SyncERP - Dinero::Service.pull").deliver_later
@@ -102,6 +101,7 @@ class Dinero::Service < SaasService
       UserMailer.error_report(list.to_s, "SyncERP - Dinero::Service.pull").deliver_later
       return false
     end
+    # File.open("tmp/dinero", "w") { |f| f.write(list.to_s) }
     list.parsed_response["Collection"].each do |item|
       resource_class.add_from_erp item
     end

@@ -23,14 +23,7 @@ class TimeMaterialsController < MortimerController
   #
   def create
     # set_mileage
-    create_play if params[:play].present?
-    return unless prepare_tm
-    super
-  end
-
-  def update
-    # set_mileage
-    return unless prepare_tm
+    create_play
     super
   end
 
@@ -50,7 +43,17 @@ class TimeMaterialsController < MortimerController
 
   private
 
+    def before_create_callback
+      prepare_tm @resource
+    end
+
+    def before_update_callback
+      prepare_tm TimeMaterial.new(resource_params)
+    end
+
     def create_play
+      return unless params[:play].present?
+
       params[:time_material] = {
         time: "0,25",
         state: 1,
@@ -93,24 +96,23 @@ class TimeMaterialsController < MortimerController
     #   end
     # end
 
-    def prepare_tm
+    def prepare_tm(obj)
       if resource_params[:state].present? && resource_params[:state] == "done" # done!
-        params[:time_material][:time] = resource.sanitize_time resource_params[:time]
-        r = TimeMaterial.build(resource_params)
-        r.tenant = Current.tenant
-        if params[:played].present? or (r.values_ready_for_push? and r.valid?)
+        params[:time_material][:time] = obj.sanitize_time resource_params[:time]
+        if params[:played].present?
           params.delete(:played)
           return true
         end
-        flash.now[:warning] = (t(".validation_errors") + "<br/><br/>" + r.errors.full_messages.join(", "))
-        render turbo_stream: [
-          turbo_stream.update("form", partial: "new", locals: { resource: r }),
-          turbo_stream.replace("flash_container", partial: "application/flash_message")
-        ]
-        return false
+        unless obj.values_ready_for_push?
+          @resource.errors.add(:base, obj.errors.full_messages.join(", "))
+          return false
+        end
+        @resource.valid?
+      else
+        true
       end
-      true
     rescue => e
+      debugger
       false
     end
 
