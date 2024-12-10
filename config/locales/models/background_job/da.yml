@@ -20,6 +20,15 @@ da:
 
   background_jobs:
     validation_errors: Der er fejl i det indtastede
+
+    
+    create:
+      post: Baggroundsjobbet blev oprettet
+    update:
+      post: Baggroundsjobbet blev opdateret
+    destroy:
+      post: Baggroundsjobbet blev slettet
+
     list:
       title: Baggrundsjobs
       new: Nyt baggrundsjob

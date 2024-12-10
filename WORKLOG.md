@@ -63,10 +63,11 @@ END
 
 ## 10/12/2024
 
-* add contacts, and tickets to API 
+* add contacts, and tickets to API
 * fix missing time_spent on active t/m's
 * first sketch for call's
-* fix wrong layout on most record li elements 
+* fix wrong layout on most record li elements
+* update a few translations
 
 ## 9/12/2024
 

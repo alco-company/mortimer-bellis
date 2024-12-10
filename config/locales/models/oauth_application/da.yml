@@ -12,5 +12,13 @@ da:
       validation_errors: 'Der er fejl i det indtastede'
 
   oauth_applications:
+      
+    create:
+      post: API adgangen blev oprettet
+    update:
+      post: API adgangen blev opdateret
+    destroy:
+      post: API adgangen blev slettet
+
     form:
       show: OAuth2 Applikation

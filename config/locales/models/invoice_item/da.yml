@@ -2,6 +2,14 @@ da:
   invoice_items:
     validation_errors: Der er fejl i det indtastede
 
+    
+    create:
+      post: Fakturalinjen blev oprettet
+    update:
+      post: Fakturalinjen blev opdateret
+    destroy:
+      post: Fakturalinjen blev slettet
+
     list:
       new: Ny fakturalinje
     form:
