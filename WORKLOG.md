@@ -64,6 +64,7 @@ END
 
 * add contacts, and tickets to API 
 * fix missing time_spent on active t/m's
+* first sketch for call's
 
 ## 9/12/2024
 
