@@ -30,7 +30,7 @@ class ListItems::Invoice < ListItems::ListItem
   # is_penso_pay_enabled
 
   def show_recipient_link
-    link_to resource_url, class: "hover:underline" do
+    link_to invoice_url(resource), class: "hover:underline" do
       plain resource.invoice_number
     end
   end

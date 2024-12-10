@@ -12,6 +12,7 @@
 setup CI deployment with Kamal - https://www.rickpeyton.com/posts/step-by-step-guide-to-deploying-rails-8-with-kamal-and-github-actions-2
 PWA: https://onrails.blog/2021/03/02/rails-pwas-using-turbo-hhnpwa-7/
 NATIVE: https://blog.corsego.com/navigating-turbo-native, https://www.youtube.com/watch?v=TDQ2wtmgeKw
+3CX: https://www.3cx.com/docs/crm-integration/
 
 osascript = <<END
 tell application "Messages"
@@ -65,6 +66,7 @@ END
 * add contacts, and tickets to API 
 * fix missing time_spent on active t/m's
 * first sketch for call's
+* fix wrong layout on most record li elements 
 
 ## 9/12/2024
 
