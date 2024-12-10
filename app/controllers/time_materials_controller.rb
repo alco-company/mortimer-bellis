@@ -164,6 +164,8 @@ class TimeMaterialsController < MortimerController
     end
 
     def pause
+      @resource.time_spent ||= 0
+      @resource.started_at ||= Time.current
       time_spent = @resource.time_spent + (Time.current.to_i - @resource.started_at.to_i)
       paused_at = Time.current
       @resource.update state: 2, time_spent: time_spent, paused_at: paused_at
