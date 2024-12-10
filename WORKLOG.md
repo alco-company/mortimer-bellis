@@ -9,6 +9,14 @@
 
 ## Ideas
 
+https://anemone.mortimer.pro/oauth2/authorize?client_id=1&redirect_uri=https://anemone.mortimer.pro/oauth2/callback&response_type=code&scope=openid+profile+email+phone+address+roles+offline_access
+
+https://anemone.mortimer.pro/oauth2/token
+https://anemone.mortimer.pro/api/v1/contacts
+
+
+
+
 setup CI deployment with Kamal - https://www.rickpeyton.com/posts/step-by-step-guide-to-deploying-rails-8-with-kamal-and-github-actions-2
 PWA: https://onrails.blog/2021/03/02/rails-pwas-using-turbo-hhnpwa-7/
 NATIVE: https://blog.corsego.com/navigating-turbo-native, https://www.youtube.com/watch?v=TDQ2wtmgeKw
@@ -57,7 +65,6 @@ END
 
 * this is probably not necessary: format.turbo_stream { render turbo_stream: turbo_stream.remove(dom_id(@resource)) }
 * pwa-installation.js + joy of rails
-* send notification to user - new task, remember to punch in/out, session about to close, more
 * pickup the mobile moving - ask if driving - enter odometer
 * validate punches before deleting punch_clocks !!
 
@@ -68,6 +75,8 @@ END
 * first sketch for call's
 * fix wrong layout on most record li elements
 * update a few translations
+* place setting infront of Punch Reminder
+* testing 3CX integration
 
 ## 9/12/2024
 
