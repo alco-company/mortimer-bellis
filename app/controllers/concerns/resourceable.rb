@@ -16,6 +16,7 @@ module Resourceable
       @resource_class ||= case params_ctrl.split("/").last
       # when "invitations"; UserInvitation
       when "notifications"; Noticed::Notification
+      when "applications"; Oauth::Application
       else; params_ctrl.split("/").last.classify.constantize rescue nil
       end
     end
@@ -37,6 +38,7 @@ module Resourceable
       @resources = case resource_class.to_s
       when "TimeMaterial"; Current.user.can?(:show_all_time_material_posts) ? @resources : @resources.by_user()
       when "Noticed::Notification"; Current.user.notifications.unread.includes(event: :record)
+      when "Oauth::Application"; @resources
       else; @resources.by_user()
       end
       @resources = any_sorts? ? @resources.ordered(params_s, params_d) : resource_class.set_order(@resources) rescue @resources
@@ -47,7 +49,10 @@ module Resourceable
     end
 
     def resource_resources
-      params.permit![:search].present? ? resource_class.by_tenant().by_fulltext(params.permit![:search]) : resource_class.by_tenant()
+      case resource_class.to_s
+      when "Oauth::Application"; resource_class.all
+      else; params.permit![:search].present? ? resource_class.by_tenant().by_fulltext(params.permit![:search]) : resource_class.by_tenant()
+      end
     end
 
     # "/teams/37/calendars"

@@ -1,5 +1,8 @@
 Rails.application.routes.draw do
-  use_doorkeeper
+  use_doorkeeper do
+    controllers applications: "oauth/applications"
+  end
+
   mount MissionControl::Jobs::Engine, at: "/solid_queue_jobs"
 
   devise_for :users, controllers: {
@@ -14,7 +17,12 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v1 do
-      resources :contacts
+      resources :tickets
+      resources :contacts do
+        collection do
+          get "lookup"
+        end
+      end
       get "hello" => "hello_world#hello"
     end
   end

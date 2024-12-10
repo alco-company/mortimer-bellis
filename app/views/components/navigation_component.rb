@@ -204,6 +204,7 @@ class NavigationComponent < ApplicationComponent
             # reports: { title: "Reports", url: "/reports", icon: "home" },
             teams: { title: "teams", url: "/teams", icon: "team" },
             tenants: { title: "tenants", url: "/tenants", icon: "tenant" },
+            oauths: { title: "oauth_applications", url: "/oauth/applications", icon: "tenant" },
             users: { title: "users", url: "/users", icon: "user" }
           }
         }

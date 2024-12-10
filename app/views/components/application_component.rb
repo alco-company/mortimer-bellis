@@ -58,6 +58,7 @@ class ApplicationComponent < Phlex::HTML
     @resource_class ||= case params_ctrl.split("/").last
     # when "invitations"; UserInvitation
     when "notifications"; Noticed::Notification
+    when "applications"; Doorkeeper::Application
     else; params_ctrl.split("/").last.classify.constantize rescue nil
     end
   end

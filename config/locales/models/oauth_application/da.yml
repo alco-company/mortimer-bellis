@@ -1,0 +1,16 @@
+da:
+  oauth/application:
+    modal:
+      delete:
+        title: 'Slet denne API adgang'
+        instruction: 'Er du sikker på at du vil slette denne API adgang?'
+      delete_all:
+        title: 'Slet alle API adgange'
+        instruction: 'Er du sikker på at du vil slette alle API adgange?'
+  oauth:
+    applications:
+      validation_errors: 'Der er fejl i det indtastede'
+
+  oauth_applications:
+    form:
+      show: OAuth2 Applikation

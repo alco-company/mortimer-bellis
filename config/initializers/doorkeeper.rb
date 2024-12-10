@@ -7,7 +7,7 @@ Doorkeeper.configure do
 
   # This block will be called to check whether the resource owner is authenticated or not.
   resource_owner_authenticator do
-    raise "Please configure doorkeeper resource_owner_authenticator block located in #{__FILE__}"
+    # raise "Please configure doorkeeper resource_owner_authenticator block located in #{__FILE__}"
     # Put your resource owner authentication logic here.
     # Example implementation:
     #   User.find_by(id: session[:user_id]) || redirect_to(new_user_session_url)
@@ -37,7 +37,7 @@ Doorkeeper.configure do
   #
   # access_token_class "Doorkeeper::AccessToken"
   # access_grant_class "Doorkeeper::AccessGrant"
-  # application_class "Doorkeeper::Application"
+  application_class "Oauth::Application"
   #
   # Don't forget to include Doorkeeper ORM mixins into your custom models:
   #
@@ -239,7 +239,7 @@ Doorkeeper.configure do
   # NOTE: you must also run the rails g doorkeeper:application_owner generator
   # to provide the necessary support
   #
-  # enable_application_owner confirmation: false
+  enable_application_owner confirmation: false
 
   # Define access token scopes for your provider
   # For more information go to

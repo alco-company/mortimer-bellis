@@ -67,7 +67,12 @@ class ModalController < BaseController
     end
 
     def resource_class
-      @resource_class ||= params[:resource_class].classify.constantize
+      @resource_class ||= case params[:resource_class]
+      # when "invitations"; UserInvitation
+      when "notifications"; Noticed::Notification
+      when "doorkeeper/application"; Oauth::Application
+      else; params[:resource_class].classify.constantize rescue nil
+      end
     end
 
     #

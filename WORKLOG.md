@@ -60,6 +60,10 @@ END
 * pickup the mobile moving - ask if driving - enter odometer
 * validate punches before deleting punch_clocks !!
 
+## 10/12/2024
+
+* add contacts, and tickets to API 
+
 ## 9/12/2024
 
 * fix bug - when no account on t/m (or errornous account)
