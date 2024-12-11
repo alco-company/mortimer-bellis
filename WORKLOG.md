@@ -77,7 +77,7 @@ END
 * clean up sign* views
 * allow superadmin to delete tenants
 * use remove on users too
-* 
+* allow inviter to invite more invitees at a time
 
 ## 10/12/2024
 

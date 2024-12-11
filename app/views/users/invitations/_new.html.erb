@@ -1,0 +1,22 @@
+<%= turbo_frame_tag "new_invitation" do %>
+  <div class="my-6 mx-auto w-72 sm:w-96">
+    <h1 class="font-bold text-4xl"> <%= t("devise.invitations.new.header") %> </h1>
+    <div class="text-gray-600 text-sm"><%== t("devise.invitations.new.description") %></div>
+    <%= form_for(resource, as: resource_name, url: invitation_path(resource_name), html: { method: :post }) do |f| %>
+      <%= render "users/shared/error_messages", resource: resource %>
+      <%= f.hidden_field :tenant_id, value: Current.tenant.id %>
+      <%= f.hidden_field :locale, value: Current.user.locale %>
+      <%= f.hidden_field :time_zone, value: Current.user.time_zone %>
+      <% resource.class.invite_key_fields.each do |field| -%>
+        <div class="mort-field">
+          <%= f.label field %><br />
+          <%= f.textarea field, class: "mort-form-text" %>
+        </div>
+      <% end -%>
+
+      <div class="actions mort-field">
+        <%= f.submit t("devise.invitations.new.submit_button"), class: "mort-btn-primary" %>
+      </div>    
+    <% end %>
+  </div>
+<% end %>
