@@ -76,6 +76,7 @@ END
 * don't show EntraID login on sign up
 * clean up sign* views
 * allow superadmin to delete tenants
+* use remove on users too
 * 
 
 ## 10/12/2024

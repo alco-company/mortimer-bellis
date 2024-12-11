@@ -50,6 +50,20 @@ class UsersController < MortimerController
     end
   end
 
+  def destroy
+    @resource = User.find(params[:id])
+    if @resource
+      if @resource.remove
+        redirect_to users_url, notice: t("users.destroyed")
+        Broadcasters::Resource.new(@resource).destroy
+      else
+        redirect_back(fallback_location: root_path, warning: t("users.not_destroyed"))
+      end
+    else
+      redirect_back(fallback_location: root_path, warning: t("users.not_found"))
+    end
+  end
+
   private
 
     # Only allow a list of trusted parameters through.

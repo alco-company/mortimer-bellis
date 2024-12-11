@@ -10,7 +10,7 @@ class UserMailer < ApplicationMailer
     @rcpt = params[:user].email
     Current.user=params[:user]
     switch_locale do
-      mail to: "walther@alco.dk", subject: I18n.t("user_mailer.welcome.subject")
+      mail to: "monitor@alco.dk", subject: I18n.t("user_mailer.welcome.subject")
       # User.where(role: "admin").each do |admin|
       #   mail to: admin.email, subject: I18n.t("user_mailer.welcome.new_user")
       # end
@@ -25,9 +25,27 @@ class UserMailer < ApplicationMailer
     mail to: @user.email, subject: I18n.t("user_mailer.confetti.subject")
   end
 
+  # a user has been removed
+  #
+  def user_farewell
+    @user = params[:user]
+    @name = @user.name
+    @company = @user.tenant.name
+    @sender = @user.tenant.email
+    mail to: @user.email, subject: I18n.t("user_mailer.user_farewell.subject")
+  end
+
+  def last_farewell
+    @user = params[:user]
+    @name = @user.name
+    @company = @user.tenant.name
+    @sender = "info@mortimer.pro"
+    mail to: @user.email, subject: I18n.t("user_mailer.farewell.subject")
+  end
+
   def error_report(error, klass_method)
     @error = error
     @klass_method = klass_method
-    mail to: "walther@alco.dk", subject: "Error Report"
+    mail to: "monitor@alco.dk", subject: "Error Report"
   end
 end
