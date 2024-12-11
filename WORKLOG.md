@@ -71,6 +71,7 @@ END
 ## 11/12/2024
 
 * customize doorkeeper views (later perhaps)
+* open route to /calls
 
 ## 10/12/2024
 
