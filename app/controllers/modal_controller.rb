@@ -244,7 +244,7 @@ class ModalController < BaseController
         else
           cb = get_cb_eval_after_destroy(resource)
           r = resource_class.build resource.attributes
-          if resource.destroy!
+          if resource.remove
             eval(cb) unless cb.nil?
             @url.gsub!(/\/\d+$/, "") if @url.match?(/\d+$/)
             Broadcasters::Resource.new(r).destroy

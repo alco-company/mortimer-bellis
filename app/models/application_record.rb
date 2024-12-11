@@ -10,6 +10,13 @@ class ApplicationRecord < ActiveRecord::Base
   scope :ordered, ->(s, d) { order(s => d) }
 
   #
+  # make it possible to handle model deletion differently from model to model
+  # eg TenantRegistrationService.call(tenant, destroy: true)
+  def remove
+    destroy!
+  end
+
+  #
   # update_row is a helper method to update a row in the database
   # adding the ability to control whether the validations and callbacks are performed or not
   # only issues using this method is that the updated_at field is not updated

@@ -75,6 +75,8 @@ END
 * open route to /calls
 * don't show EntraID login on sign up
 * clean up sign* views
+* allow superadmin to delete tenants
+* 
 
 ## 10/12/2024
 
