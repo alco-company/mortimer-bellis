@@ -74,6 +74,7 @@ da:
         create: Opret kontoen
         sign_up:
           title: Opret en ny konto
+          minimum: "(mindst %{count} tegn)"
         
     passwords:
       new: 

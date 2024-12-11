@@ -1,0 +1,110 @@
+<div class="m-2">
+
+  <h1 class="text-xl">We have compiled a short list of answers to frequently asked questions</h1>
+  <p class="mt-4">Initially, though, here is a few links that you might find usefull in getting started with Mortimer:</p>
+  <p>
+
+    <%- if controller_name != 'sessions' %>
+      <%= link_to I18n.t("devise.login"), new_session_path("user", locale: I18n.locale), class: "mort-link-primary" %><br />
+    <% end %>
+
+    <%- if controller_name != 'registrations' %>
+      <%= link_to I18n.t("devise.sign_up"), new_registration_path("user", locale: I18n.locale), class: "mort-link-primary" %><br />
+    <% end %>
+
+    <%- if controller_name != 'passwords' && controller_name != 'registrations' %>
+      <%= link_to I18n.t("devise.forgot_password"), new_password_path("user", locale: I18n.locale), class: "mort-link-primary" %><br />
+    <% end %>
+
+    <%- if controller_name != 'confirmations' %>
+      <%= link_to I18n.t("devise.missing_confirmation_email"), new_confirmation_path("user", locale: I18n.locale), class: "mort-link-primary" %><br />
+    <% end %>
+
+    <%- if controller_name != 'unlocks' %>
+      <%= link_to I18n.t("devise.missing_unlock_email"), new_unlock_path("user", locale: I18n.locale), class: "mort-link-primary" %><br />
+    <% end %>
+
+  </p>
+  <h1 class="mt-4 mb-2 text-lg">Answers</h1>
+  <!-- Accordion Item 1 -->
+  <div class="border-b border-slate-200">
+    <button onclick="toggleAccordion(1)" class="w-full flex justify-between items-center py-5 text-slate-800">
+      <span>What is Mortimer? </span>
+      <span id="icon-1" class="text-slate-800 transition-transform duration-300">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-4 h-4">
+          <path d="M8.75 3.75a.75.75 0 0 0-1.5 0v3.5h-3.5a.75.75 0 0 0 0 1.5h3.5v3.5a.75.75 0 0 0 1.5 0v-3.5h3.5a.75.75 0 0 0 0-1.5h-3.5v-3.5Z" />
+        </svg>
+      </span>
+    </button>
+    <div id="content-1" class="max-h-0 overflow-hidden transition-all duration-300 ease-in-out">
+      <div class="pb-5 text-sm text-slate-500">
+        Mortimer is a kind of personal assistent that assist you in collecting data. Data you can use to make better decisions, report mileage driving your car whilst on the job, bill your customers or just keep track of your own time.
+      </div>
+    </div>
+  </div>
+  
+  <!-- Accordion Item 2 -->
+  <div class="border-b border-slate-200">
+    <button onclick="toggleAccordion(2)" class="w-full flex justify-between items-center py-5 text-slate-800">
+      <span>How to use Mortimer?</span>
+      <span id="icon-2" class="text-slate-800 transition-transform duration-300">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-4 h-4">
+          <path d="M8.75 3.75a.75.75 0 0 0-1.5 0v3.5h-3.5a.75.75 0 0 0 0 1.5h3.5v3.5a.75.75 0 0 0 1.5 0v-3.5h3.5a.75.75 0 0 0 0-1.5h-3.5v-3.5Z" />
+        </svg>
+      </span>
+    </button>
+    <div id="content-2" class="max-h-0 overflow-hidden transition-all duration-300 ease-in-out">
+      <div class="pb-5 text-sm text-slate-500">
+        It's easy to use Mortimer. Just sign up and start using the app. You can use it on your phone, tablet or computer.
+      </div>
+    </div>
+  </div>
+  
+  <!-- Accordion Item 3 -->
+  <div class="border-b border-slate-200">
+    <button onclick="toggleAccordion(3)" class="w-full flex justify-between items-center py-5 text-slate-800">
+      <span>What can I do with Mortimer?</span>
+      <span id="icon-3" class="text-slate-800 transition-transform duration-300">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-4 h-4">
+          <path d="M8.75 3.75a.75.75 0 0 0-1.5 0v3.5h-3.5a.75.75 0 0 0 0 1.5h3.5v3.5a.75.75 0 0 0 1.5 0v-3.5h3.5a.75.75 0 0 0 0-1.5h-3.5v-3.5Z" />
+        </svg>
+      </span>
+    </button>
+    <div id="content-3" class="max-h-0 overflow-hidden transition-all duration-300 ease-in-out">
+      <div class="pb-5 text-sm text-slate-500">
+        Mortimer allows you to quickly persist data pertaining to tasks that you have completed. You can use it to keep track of your time, mileage, and more.
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    function toggleAccordion(index) {
+      const content = document.getElementById(`content-${index}`);
+      const icon = document.getElementById(`icon-${index}`);
+  
+      // SVG for Minus icon
+      const minusSVG = `
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-4 h-4">
+          <path d="M3.75 7.25a.75.75 0 0 0 0 1.5h8.5a.75.75 0 0 0 0-1.5h-8.5Z" />
+        </svg>
+      `;
+  
+      // SVG for Plus icon
+      const plusSVG = `
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-4 h-4">
+          <path d="M8.75 3.75a.75.75 0 0 0-1.5 0v3.5h-3.5a.75.75 0 0 0 0 1.5h3.5v3.5a.75.75 0 0 0 1.5 0v-3.5h3.5a.75.75 0 0 0 0-1.5h-3.5v-3.5Z" />
+        </svg>
+      `;
+  
+      // Toggle the content's max-height for smooth opening and closing
+      if (content.style.maxHeight && content.style.maxHeight !== '0px') {
+        content.style.maxHeight = '0';
+        icon.innerHTML = plusSVG;
+      } else {
+        content.style.maxHeight = content.scrollHeight + 'px';
+        icon.innerHTML = minusSVG;
+      }
+    }
+  </script>
+
+</div>

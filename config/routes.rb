@@ -95,7 +95,11 @@ Rails.application.routes.draw do
 
   resources :dashboards
   resources :background_jobs
-  resources :pages
+  resources :pages do
+    collection do
+      get "help"
+    end
+  end
   resources :users do
     resources :calendars
     collection do

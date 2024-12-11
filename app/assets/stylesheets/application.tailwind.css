@@ -187,6 +187,10 @@
   .mort-field label {
     @apply text-xs font-medium text-gray-400;
   }
+
+  .mort-field em {
+    @apply text-xs font-light text-gray-400;
+  }
 }
 
 @layer utilities {

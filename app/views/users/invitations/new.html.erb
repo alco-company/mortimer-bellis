@@ -16,5 +16,7 @@
     <div class="actions mort-field">
       <%= f.submit t("devise.invitations.new.submit_button"), class: "mort-btn-primary" %>
     </div>
+    
+    <%= turbo_frame "invitation_result" %>
   <% end %>
 </div>

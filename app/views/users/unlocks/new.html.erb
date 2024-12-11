@@ -2,7 +2,7 @@
   <div class="flex flex-shrink-0 items-center">
   <%= render_logo %>
   </div>
-  <h1 class="font-bold text-4xl"> <%= t("devise.unlocks.new.resend_unlock.title") %> </h1>
+  <h1 class="font-bold text-gray-200 text-2xl"> <%= t("devise.unlocks.new.resend_unlock.title") %> </h1>
 
   <%= form_for(resource, as: resource_name, url: user_unlock_path(), html: { method: :post }) do |f| %>
     <%= render "devise/shared/error_messages", resource: resource %>

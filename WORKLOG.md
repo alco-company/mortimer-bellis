@@ -63,6 +63,7 @@ END
   }
 }
 
+* make sidebar present like https://nordhealth.design/templates/application/#
 * this is probably not necessary: format.turbo_stream { render turbo_stream: turbo_stream.remove(dom_id(@resource)) }
 * pwa-installation.js + joy of rails
 * pickup the mobile moving - ask if driving - enter odometer
@@ -72,6 +73,8 @@ END
 
 * customize doorkeeper views (later perhaps)
 * open route to /calls
+* don't show EntraID login on sign up
+* clean up sign* views
 
 ## 10/12/2024
 
