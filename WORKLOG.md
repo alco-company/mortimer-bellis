@@ -68,6 +68,10 @@ END
 * pickup the mobile moving - ask if driving - enter odometer
 * validate punches before deleting punch_clocks !!
 
+## 11/12/2024
+
+* customize doorkeeper views (later perhaps)
+
 ## 10/12/2024
 
 * add contacts, and tickets to API
