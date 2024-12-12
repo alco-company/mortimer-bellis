@@ -72,6 +72,7 @@ END
 ## 12/12/2024
 
 * deleting users - forwarding wrong email! farewell, not last_farewell
+* clean-up signed_in_user
 
 ## 11/12/2024
 

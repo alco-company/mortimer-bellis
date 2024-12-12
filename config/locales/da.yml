@@ -457,6 +457,10 @@ da:
         confidential: Fortrolig
         uid: UID
         secret: Sikkerhedsnøgle
+      page:
+        slug: URL
+        title: Titel
+        content: Indhold
       participant:
         name: Navn
         teams: Hold/grupper

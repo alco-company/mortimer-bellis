@@ -10,9 +10,9 @@ class BaseController < ApplicationController
   # This is essential to all controllers which is
   # why it gets included on the BaseController - by inheriting
   # from the ApplicationController you may skip it!
-  # or you can this,on controllers by calling
+  # or you can skip the authentication on controllers by calling
+  #
   # skip_before_action :authenticate_user!
-  # skip_before_action :ensure_tenanted_user
   #
   include Authentication
   #

@@ -1,9 +1,6 @@
 require "rqrcode"
 
 class Users::SecondFactorController < BaseController
-  # before_action :authenticate_user!
-  # before_action :ensure_tenanted_user
-  # layout "devise/registrations"
   layout false
 
   def initiate_new_app

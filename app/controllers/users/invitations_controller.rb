@@ -5,7 +5,6 @@ class Users::InvitationsController < Devise::InvitationsController
   # include ActionView::RecordIdentifier
 
   before_action :configure_permitted_parameters
-  skip_before_action :ensure_tenanted_user, only: [ :edit, :update ]
   skip_before_action :authenticate_user!, only: [ :edit, :update ]
 
   def create

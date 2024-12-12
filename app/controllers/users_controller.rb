@@ -1,7 +1,6 @@
 class UsersController < MortimerController
   before_action :authorize
   skip_before_action :authenticate_user!, only: [ :sign_in_success ]
-  skip_before_action :ensure_tenanted_user, only: [ :sign_in_success ]
   skip_before_action :authorize, only: [ :sign_in_success ]
 
   # POST /users/:id/archive

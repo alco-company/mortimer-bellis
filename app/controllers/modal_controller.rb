@@ -2,7 +2,6 @@ class ModalController < BaseController
   before_action :set_vars, only: [ :new, :show, :create, :destroy, :update ]
   skip_before_action :authenticate_user!, only: [ :destroy ]
   skip_before_action :check_session_length, only: [ :destroy ]
-  skip_before_action :ensure_tenanted_user, only: [ :destroy ]
 
   def new
     # resource
@@ -43,7 +42,7 @@ class ModalController < BaseController
 
   #
   def destroy
-    (authenticate_user! && ensure_tenanted_user && check_session_length) || verify_api_key
+    (authenticate_user! && check_session_length) || verify_api_key
     params[:all] == "true" ? process_destroy_all : process_destroy
   end
 
