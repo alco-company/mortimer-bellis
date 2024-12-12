@@ -69,6 +69,10 @@ END
 * pickup the mobile moving - ask if driving - enter odometer
 * validate punches before deleting punch_clocks !!
 
+## 12/12/2024
+
+* deleting users - forwarding wrong email! farewell, not last_farewell
+
 ## 11/12/2024
 
 * customize doorkeeper views (later perhaps)
