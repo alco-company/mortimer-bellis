@@ -73,6 +73,7 @@ END
 
 * deleting users - forwarding wrong email! farewell, not last_farewell
 * clean-up signed_in_user
+* initial DataDictionary - Presentation Definition Modeling - Page
 
 ## 11/12/2024
 
