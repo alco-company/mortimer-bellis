@@ -117,7 +117,7 @@ class TimeMaterials::Form < ApplicationForm
             about_field
             #
             div(class: "col-span-1") do
-              row field(:time).input(class: "mort-form-text"), "mort-field my-1"
+              row field(:time).input(class: "mort-form-text", type: "tel", data: { controller: "hour-minute" }), "mort-field my-1"
             end
             #
             rate_field I18n.t("time_material.rate.hourly")

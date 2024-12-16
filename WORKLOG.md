@@ -74,9 +74,7 @@ END
 
 * modal for call - just a start
 * slide forms and color backdrops
-
-## 13/12/2024
-
+* test time input hh:mm
 
 ## 12/12/2024
 

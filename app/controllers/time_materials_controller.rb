@@ -55,7 +55,7 @@ class TimeMaterialsController < MortimerController
       return unless params[:play].present?
 
       params[:time_material] = {
-        time: "0,25",
+        time: "0:15",
         state: 1,
         user_id: Current.user.id,
         started_at: Time.current,
