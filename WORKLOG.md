@@ -66,8 +66,16 @@ END
 * make sidebar present like https://nordhealth.design/templates/application/#
 * this is probably not necessary: format.turbo_stream { render turbo_stream: turbo_stream.remove(dom_id(@resource)) }
 * pwa-installation.js + joy of rails
+* consider https://bunny.net/ for image optimization and CDN as CloudFlare substitute
 * pickup the mobile moving - ask if driving - enter odometer
 * validate punches before deleting punch_clocks !!
+
+## 16/12/2024
+
+* modal for call - just a start
+
+## 13/12/2024
+
 
 ## 12/12/2024
 

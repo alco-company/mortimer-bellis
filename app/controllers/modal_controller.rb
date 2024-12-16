@@ -6,8 +6,8 @@ class ModalController < BaseController
   def new
     # resource
     case resource_class.to_s.underscore
-    when "event"; process_event_new
     when "calendar"; process_calendar_new
+    when "event"; process_event_new
     when "employee"; process_employee_new
     when "punch_card"; process_punch_card_new
     else; process_other_new

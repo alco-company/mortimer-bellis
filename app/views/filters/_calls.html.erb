@@ -1,0 +1,8 @@
+<div class="min-w-0 w-full columns-3 md:columns-5 lg:columns-7 xl:columns-8 3xl:columns-12">
+  <div class="flex justify-start">
+    <%= form.text_field :direction, value: (filter["direction"] rescue ''), class: "mort-filter-field" %>
+  </div>
+  <div class="flex justify-start">
+    <%= form.text_field :phone, value: (filter["phone"] rescue ''), class: "hidden lg:block mort-filter-field" %>
+  </div>
+</div>

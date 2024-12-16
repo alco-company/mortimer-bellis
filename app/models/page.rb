@@ -13,7 +13,15 @@ class Page < ApplicationRecord
     resources.ordered(field, direction)
   end
 
-  def self.form(resource:, editable: true)
-    Pages::Form.new resource: resource, editable: editable
-  end
+  # if the view is a standard CRU(d) view, the form can be generated
+  # by trusting the inherited form method off of the ApplicationRecord
+  # class. If the form is more complex, a custom form class can be
+  # created in the app/views/{models} directory - fx app/views/pages/form.rb
+  # defining Pages::Form < ApplicationForm - either defining every field
+  # or calling form_fields fields: [ :slug, :title, :content ]
+  # or uncomment the following method and adjust the fields
+  #
+  # def self.form(resource:, editable: true)
+  #   Pages::Form.new resource: resource, editable: editable, fields: [ :slug, :title, :content ]
+  # end
 end

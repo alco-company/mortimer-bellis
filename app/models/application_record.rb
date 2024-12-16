@@ -101,10 +101,20 @@ class ApplicationRecord < ActiveRecord::Base
     raise "implement this method on the model in order to list_item!"
   end
 
-  def self.form(resource:, editable: true)
-    # Locations::Form.new resource: resource, editable: editable
-    raise "implement this method on the model in order to show/edit post!"
+  # def self.form(resource:, editable: true)
+  #   # Locations::Form.new resource: resource, editable: editable
+  #   raise "implement this method on the model in order to show/edit post!"
+  # end
+  #
+  # default field layout for the form
+  # taken from the model attributes - possibly augmented by
+  # the fields array passed to the form method
+  #
+  def self.form(resource:, editable: true, fields: [])
+    ApplicationForm.new resource: resource, editable: editable, fields: fields
   end
+
+
 
   # def self.ordered(resources, field, direction = :desc)
   #   resources.order(field => direction)
