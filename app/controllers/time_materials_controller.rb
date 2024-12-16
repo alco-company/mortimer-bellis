@@ -130,7 +130,8 @@ class TimeMaterialsController < MortimerController
       params.expect(time_material: [
         :tenant_id,
         :date,
-        :time,
+        :hour_time,
+        :minute_time,
         :over_time,
         :about,
         :user_id,

@@ -631,6 +631,8 @@ da:
         comment: Kommentar
         date: Dato
         time: Tid
+        hour_time: Timer
+        minute_time: Minutter
         state: Status
         over_time: Overtid
         overtime: Overtid

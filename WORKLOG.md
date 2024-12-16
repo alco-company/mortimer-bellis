@@ -14,7 +14,7 @@ https://anemone.mortimer.pro/oauth2/authorize?client_id=1&redirect_uri=https://a
 https://anemone.mortimer.pro/oauth2/token
 https://anemone.mortimer.pro/api/v1/contacts
 
-
+https://nordhealth.design/templates/application/#
 
 
 setup CI deployment with Kamal - https://www.rickpeyton.com/posts/step-by-step-guide-to-deploying-rails-8-with-kamal-and-github-actions-2
@@ -75,6 +75,7 @@ END
 * modal for call - just a start
 * slide forms and color backdrops
 * test time input hh:mm
+* second shot at time input
 
 ## 12/12/2024
 
