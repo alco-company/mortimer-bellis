@@ -5,11 +5,16 @@ import { enter, leave } from "el-transition"
 export default class extends Controller {
   static targets = [
     "form",
-    "cancelForm"
+    "cancelForm",
+    "backdrop", 
+    "panel", 
+    "cancelButton"
   ]
 
   connect() {
     document.getElementById("body").classList.add("overflow-y-hidden");
+    enter(this.backdropTarget);
+    enter(this.panelTarget);
   }
 
   disconnect() {
@@ -20,7 +25,10 @@ export default class extends Controller {
     // e.preventDefault();
     switch(e.key) {
       case "Escape":
-        this.cancelFormTarget.click()
+        leave(this.backdropTarget);
+        leave(this.panelTarget).then(() => {
+          this.cancelFormTarget.click()
+        });
         break;
       case "Enter":
         this.submitForm(e);
@@ -55,7 +63,10 @@ export default class extends Controller {
 
   submitForm(e) {
     e.preventDefault();
-    Turbo.navigator.submitForm(this.formTarget);
+    leave(this.backdropTarget);
+    leave(this.panelTarget).then(() => {
+      Turbo.navigator.submitForm(this.formTarget);
+    })
     // this.formTarget.requestSubmit();
   }
 

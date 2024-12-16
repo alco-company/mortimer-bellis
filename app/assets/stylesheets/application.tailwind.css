@@ -217,9 +217,9 @@ html {
 
 dialog {
   &::backdrop {
-    background: gray;
-    opacity: 0.2;
+    @apply bg-sky-300/20
   }
+
 }
 
 .pagy {
