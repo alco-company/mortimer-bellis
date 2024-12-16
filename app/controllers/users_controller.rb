@@ -72,10 +72,12 @@ class UsersController < MortimerController
 
     def create_callback
       params[:user].delete(:mugshot)
+      true
     end
 
     def update_callback
       params[:user].delete(:mugshot)
+      true
     end
 
     def authorize

@@ -151,6 +151,8 @@ class InvoiceItemValidator
         errors.add(:customer, tr("not_found_search_customer_again"))
       elsif customer_name.present? && customer_id.blank?
         errors.add(:customer, tr("not_found_search_customer_again"))
+      elsif customer_name.blank? && customer_id.blank?
+        errors.add(:customer, tr("not_found_search_customer_again"))
       end
     end
   end

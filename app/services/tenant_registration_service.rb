@@ -15,15 +15,19 @@ class TenantRegistrationService
         # User.create tenant: tenant, name: I18n.t("user.me"), pincode: "1234", payroll_employee_ident: "1234", team: team, locale: "da", time_zone: "Europe/Copenhagen"
         PunchClock.create tenant: tenant, name: I18n.t("punch_clocks.user_device_punch_clock"), location: location
         PunchClock.create tenant: tenant, name: I18n.t("punch_clocks.default_punch_clock"), location: location
+        return true
       end
     end
+    false
   end
 
   def self.remove(tenant)
     if tenant.persisted?
       UserMailer.with(user: tenant.users.first).last_farewell.deliver if tenant.users.any?
       KillTenantJob.new.perform(tenant: Current.tenant, user: Current.user, t_id: tenant.id)
+      return true
     end
+    false
   rescue => e
     UserMailer.error_report(e.to_s, "TenantRegistrationService#call - failed for #{tenant&.id} - destroy: #{@destroy ? 'yes' : 'no'}").deliver_later
   end

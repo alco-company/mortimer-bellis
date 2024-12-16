@@ -92,8 +92,7 @@ module DefaultActions
       @resource.user_id = Current.user.id if resource_class.has_attribute?(:user_id) && !resource_params[:user_id].present?
 
       respond_to do |format|
-        if before_create_callback && @resource.save
-          create_callback
+        if before_create_callback && @resource.save && create_callback
           Broadcasters::Resource.new(@resource, params.permit!).create
           @resource.notify action: :create
           flash[:success] = t(".post")
@@ -128,8 +127,7 @@ module DefaultActions
     # PATCH/PUT /users/1 or /users/1.json
     def update
       respond_to do |format|
-        if before_update_callback && @resource.update(resource_params)
-          update_callback
+        if before_update_callback && @resource.update(resource_params) && update_callback
           Broadcasters::Resource.new(@resource, params.permit!).replace
           @resource.notify action: :update
           flash[:success] = t(".post")
@@ -208,6 +206,7 @@ module DefaultActions
     # in order to not having to extend the create method on this concern
     #
     def create_callback
+      true
     end
 
     #
@@ -223,6 +222,7 @@ module DefaultActions
     # in order to not having to extend the update method on this concern
     #
     def update_callback
+      true
     end
 
     #
