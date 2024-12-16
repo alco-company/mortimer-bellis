@@ -62,7 +62,7 @@ class TimeMaterial < ApplicationRecord
   end
 
   def hour_time
-    return "00" if self.time.blank?
+    return "" if self.time.blank?
     return self.time.split(":")[0] if self.time.include?(":")
     return self.time.split(",")[0] if self.time.include?(",")
     return self.time.split(".")[0] if self.time.include?(".")
@@ -77,7 +77,7 @@ class TimeMaterial < ApplicationRecord
   end
 
   def minute_time
-    return "00" if self.time.blank?
+    return "" if self.time.blank?
     return self.time.split(":")[1] if self.time.include?(":")
     return self.time.split(",")[1] if self.time.include?(",")
     return self.time.split(".")[1] if self.time.include?(".")

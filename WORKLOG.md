@@ -77,6 +77,7 @@ END
 * test time input hh:mm
 * second shot at time input
 * second shot at time input II
+* second shot at time input done
 
 ## 12/12/2024
 

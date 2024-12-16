@@ -112,7 +112,7 @@ class TimeMaterials::Form < ApplicationForm
     div(id: "time", data: { tabs_target: "tabPanel" }, class: "time-material-type time tab ") do
       div(class: "space-y-2 ") do
         div(class: "pb-2") do
-          div(class: "mt-2 grid grid-cols-10 gap-x-4 gap-y-1 ") do
+          div(class: "mt-2 grid grid-cols-11 gap-x-1 sm:gap-x-4 gap-y-1 ") do
             #
             about_field
             #
@@ -125,10 +125,10 @@ class TimeMaterials::Form < ApplicationForm
             #
             rate_field I18n.t("time_material.rate.hourly")
             #
-            div(class: "col-span-3") do
+            div(class: "col-span-4") do
               row field(:over_time).select(TimeMaterial.overtimes, class: "mort-form-select"), "mort-field my-1"
             end
-            div(class: "col-span-4") do
+            div(class: "col-span-11") do
               span(class: "col-span-4 text-sm font-light text-lime-500") { calc_time_spent model.time_spent }
               # row field(:time).input(class: "mort-form-text"), "mort-field my-1"
             end
