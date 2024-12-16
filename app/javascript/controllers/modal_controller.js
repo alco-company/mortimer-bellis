@@ -31,7 +31,22 @@ export default class extends Controller {
     //   this.dialogTarget.classList.remove(...this.dialogLeavingClass.split(" "));
     //   this.dialogTarget.classList.add(...this.dialogEnteringClass.split(" "));
     // });
+    document.body.addEventListener("touchmove", (e)=>{ e.preventDefault() }, { passive: false, });
+    document.documentElement.classList.add('lock-scroll'); // For html
+    document.body.classList.add('lock-scroll'); // For body
+  }
 
+  disconnect() {
+    // this.backdropTarget.classList.remove(
+    //   ...this.backdropEnteringClass.split(" ")
+    // );
+    // this.backdropTarget.classList.remove(...this.backdropLeavingClass.split(" "));
+
+    // this.dialogTarget.classList.remove(...this.dialogEnteringClass.split(" "));
+    // this.dialogTarget.classList.remove(...this.dialogLeavingClass.split(" "));
+    document.body.removeEventListener( "touchmove", (e) => { e.preventDefault(); }, { passive: false } );
+    document.documentElement.classList.remove('lock-scroll'); // For html
+    document.body.classList.remove('lock-scroll'); // For body
   }
 
   show(event) {
