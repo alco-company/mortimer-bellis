@@ -13,7 +13,7 @@ export default class extends Controller {
 
   connect() {
     document.getElementById("body").classList.add("overflow-y-hidden");
-    document.body.addEventListener( "touchmove", (e) => { e.preventDefault(); }, { passive: false } );
+    // document.body.addEventListener( "touchmove", (e) => { e.preventDefault(); }, { passive: false } );
     document.documentElement.classList.add('lock-scroll'); // For html
     document.body.classList.add('lock-scroll'); // For body
     
@@ -23,7 +23,7 @@ export default class extends Controller {
 
   disconnect() {
     document.getElementById("body").classList.remove("overflow-y-hidden");
-    document.body.removeEventListener( "touchmove", (e) => { e.preventDefault(); }, { passive: false } );
+    // document.body.removeEventListener( "touchmove", (e) => { e.preventDefault(); }, { passive: false } );
     document.documentElement.classList.remove("lock-scroll"); // For html
     document.body.classList.remove("lock-scroll"); // For body
   }

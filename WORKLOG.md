@@ -79,6 +79,7 @@ END
 * second shot at time input II
 * second shot at time input done
 * stop the background from scrolling
+* stop the background from scrolling II
 
 ## 12/12/2024
 

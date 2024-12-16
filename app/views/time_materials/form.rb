@@ -1,6 +1,6 @@
 class TimeMaterials::Form < ApplicationForm
   def view_template(&)
-    div(data: { controller: "time-material tabs", tabs_index: "0" }) do
+    div(class: "overflow-y-auto", data: { controller: "time-material tabs", tabs_index: "0" }) do
       if model.cannot_be_pushed?
         show_possible_issues
       end

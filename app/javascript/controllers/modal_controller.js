@@ -31,7 +31,7 @@ export default class extends Controller {
     //   this.dialogTarget.classList.remove(...this.dialogLeavingClass.split(" "));
     //   this.dialogTarget.classList.add(...this.dialogEnteringClass.split(" "));
     // });
-    document.body.addEventListener("touchmove", (e)=>{ e.preventDefault() }, { passive: false, });
+    // document.body.addEventListener("touchmove", (e)=>{ e.preventDefault() }, { passive: false, });
     document.documentElement.classList.add('lock-scroll'); // For html
     document.body.classList.add('lock-scroll'); // For body
   }
@@ -44,9 +44,17 @@ export default class extends Controller {
 
     // this.dialogTarget.classList.remove(...this.dialogEnteringClass.split(" "));
     // this.dialogTarget.classList.remove(...this.dialogLeavingClass.split(" "));
-    document.body.removeEventListener( "touchmove", (e) => { e.preventDefault(); }, { passive: false } );
-    document.documentElement.classList.remove('lock-scroll'); // For html
-    document.body.classList.remove('lock-scroll'); // For body
+    this.removeScrollBlock()
+  }
+
+  removeScrollBlock(){
+    // document.body.removeEventListener( "touchmove", (e) => { e.preventDefault(); }, { passive: false } );
+    document.documentElement.classList.remove("lock-scroll"); // For html
+    document.body.classList.remove("lock-scroll"); // For body
+  }
+
+  submitForm(event) {
+    this.removeScrollBlock()
   }
 
   show(event) {
@@ -56,11 +64,11 @@ export default class extends Controller {
 
   closeDialog(event) {
     const dialog = document.getElementById(event.target.data.dialog);
-    console.log(dialog);
     dialog.close();
   }
 
   close(e) {
+    this.removeScrollBlock()
     // e.preventDefault();
     // const abortListener = new AbortController();
 
