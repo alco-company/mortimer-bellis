@@ -44,11 +44,28 @@ class TimeMaterialsController < MortimerController
   private
 
     def before_create_callback
-      prepare_tm @resource
+      prepare_tm
+    end
+
+    def create_callback
+      set_time
     end
 
     def before_update_callback
-      prepare_tm TimeMaterial.new(resource_params)
+      prepare_tm
+    end
+
+    def update_callback
+      set_time
+    end
+
+    def set_time
+      if resource_params[:state].present? && resource_params[:state] == "done" # done!
+        ht = params[:time_material][:hour_time] # && @resource.hour_time=0
+        mt = params[:time_material][:minute_time] # && @resource.minute_time=0
+        @resource.update time: resource.sanitize_time(ht, mt)
+      end
+      true
     end
 
     def create_play
@@ -96,15 +113,14 @@ class TimeMaterialsController < MortimerController
     #   end
     # end
 
-    def prepare_tm(obj)
+    def prepare_tm
       if resource_params[:state].present? && resource_params[:state] == "done" # done!
-        params[:time_material][:time] = obj.sanitize_time resource_params[:time]
         if params[:played].present?
           params.delete(:played)
           return true
         end
-        unless obj.values_ready_for_push?
-          @resource.errors.add(:base, obj.errors.full_messages.join(", "))
+        unless @resource.values_ready_for_push?
+          @resource.errors.add(:base, @resource.errors.full_messages.join(", "))
           return false
         end
         @resource.valid?

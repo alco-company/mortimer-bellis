@@ -24,10 +24,14 @@ class TenantsController < MortimerController
     def create_callback
       params[:tenant].delete(:logo)
       TenantRegistrationService.call(@resource)
+      true
       # TenantUser.create(tenant_id: resource.id, user_id: Current.user.id, role: "superadmin")
     end
 
     def update_callback
       params[:tenant].delete(:logo)
+      true
+    rescue
+      false
     end
 end

@@ -70,6 +70,8 @@ class TimeMaterial < ApplicationRecord
   end
 
   def hour_time=(val)
+    return if val.blank?
+
     self.time = "#{val}:00" if self.time.blank?
     self.time = "%s:%s" % [ val, self.time.split(":")[1] ] if self.time.include?(":")
     self.time = "%s:%s" % [ val, self.time.split(",")[1] ] if self.time.include?(",")
@@ -85,6 +87,8 @@ class TimeMaterial < ApplicationRecord
   end
 
   def minute_time=(val)
+    return if val.blank?
+
     self.time = "00:#{val}" if self.time.blank?
     self.time = "%s:%s" % [ self.time.split(":")[0], val ] if self.time.include?(":")
     self.time = "%s:%s" % [ self.time.split(",")[0], val ] if self.time.include?(",")
@@ -190,16 +194,17 @@ class TimeMaterial < ApplicationRecord
   # if the resource should be limited to quarters, then round up the minutes to the nearest quarter
   # finally return the hours and minutes as a string with a colon
   #
-  def sanitize_time(ptime)
-    return "" if ptime.blank? or ptime.gsub(/[,.:]/, "").to_i == 0
+  def sanitize_time(ht, mt)
+    ptime = set_ptime ht, mt
+    # return "" if ptime.blank? or ptime.gsub(/[,.:]/, "").to_i == 0
     minutes = case true
     when ptime.to_s.include?(":"); t = ptime.split(":"); t[1]=t[1].to_i*10 if t[1].size==1; t[0].to_i*60 + t[1].to_i
-    when ptime.to_s.include?(","); t = ptime.split(","); t[1]=t[1].to_i*10 if t[1].size==1; t[0].to_i*60 + t[1].to_i*60/100
-    when ptime.to_s.include?("."); t = ptime.split("."); t[1]=t[1].to_i*10 if t[1].size==1; t[0].to_i*60 + t[1].to_i*60/100
-    else ptime.to_i * 60
+      # when ptime.to_s.include?(","); t = ptime.split(","); t[1]=t[1].to_i*10 if t[1].size==1; t[0].to_i*60 + t[1].to_i*60/100
+      # when ptime.to_s.include?("."); t = ptime.split("."); t[1]=t[1].to_i*10 if t[1].size==1; t[0].to_i*60 + t[1].to_i*60/100
+      # else ptime.to_i * 60
     end
     hours, minutes = minutes.divmod 60
-    if should?(:limit_time_to_quarters) && !ptime.include?(":")
+    if should?(:limit_time_to_quarters) # && !ptime.include?(":")
       minutes = case minutes
       when 0; 0
       when 1..15; 15
@@ -209,6 +214,12 @@ class TimeMaterial < ApplicationRecord
       end
     end
     "%s:%s" % [ hours, minutes ]
+  end
+
+  def set_ptime(ht, mt)
+    self.hour_time=ht
+    self.minute_time=mt
+    self.time
   end
 
   # def split_time(time, minutes)
