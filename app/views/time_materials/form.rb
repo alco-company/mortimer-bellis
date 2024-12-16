@@ -112,20 +112,20 @@ class TimeMaterials::Form < ApplicationForm
     div(id: "time", data: { tabs_target: "tabPanel" }, class: "time-material-type time tab ") do
       div(class: "space-y-2 ") do
         div(class: "pb-2") do
-          div(class: "mt-2 grid grid-cols-6 gap-x-4 gap-y-1 ") do
+          div(class: "mt-2 grid grid-cols-10 gap-x-4 gap-y-1 ") do
             #
             about_field
             #
-            div(class: "col-span-1") do
+            div(class: "col-span-2") do
               row field(:hour_time).input(class: "mort-form-text", type: "tel"), "mort-field my-1"
             end
-            div(class: "col-span-1") do
+            div(class: "col-span-2") do
               row field(:minute_time).input(class: "mort-form-text", type: "tel"), "mort-field my-1"
             end
             #
             rate_field I18n.t("time_material.rate.hourly")
             #
-            div(class: "col-span-2") do
+            div(class: "col-span-3") do
               row field(:over_time).select(TimeMaterial.overtimes, class: "mort-form-select"), "mort-field my-1"
             end
             div(class: "col-span-4") do
@@ -246,7 +246,7 @@ class TimeMaterials::Form < ApplicationForm
       display_value: @resource.project_name), "mort-field" # Customer.all.select(:id, :name).take(9)
   end
 
-  def rate_field(lbl, css = "col-span-2", fld_name = "rate")
+  def rate_field(lbl, css = "col-span-3", fld_name = "rate")
     div(class: css) do
       row field(fld_name.to_sym).input(class: "mort-form-text"), "mort-field my-1"
     end

@@ -76,6 +76,7 @@ END
 * slide forms and color backdrops
 * test time input hh:mm
 * second shot at time input
+* second shot at time input II
 
 ## 12/12/2024
 
