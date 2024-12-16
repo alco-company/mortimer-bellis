@@ -55,7 +55,7 @@ class TimeMaterialsController < MortimerController
       return unless params[:play].present?
 
       params[:time_material] = {
-        time: "0,25",
+        time: "0:15",
         state: 1,
         user_id: Current.user.id,
         started_at: Time.current,
@@ -130,7 +130,8 @@ class TimeMaterialsController < MortimerController
       params.expect(time_material: [
         :tenant_id,
         :date,
-        :time,
+        :hour_time,
+        :minute_time,
         :over_time,
         :about,
         :user_id,
@@ -164,6 +165,8 @@ class TimeMaterialsController < MortimerController
     end
 
     def pause
+      @resource.time_spent ||= 0
+      @resource.started_at ||= Time.current
       time_spent = @resource.time_spent + (Time.current.to_i - @resource.started_at.to_i)
       paused_at = Time.current
       @resource.update state: 2, time_spent: time_spent, paused_at: paused_at

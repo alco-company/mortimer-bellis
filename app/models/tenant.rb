@@ -11,16 +11,21 @@ class Tenant < ApplicationRecord
   include Serviceable
 
   has_many :background_jobs, dependent: :destroy
+  has_many :calls, dependent: :destroy
   has_many :customers, dependent: :destroy
   has_many :dashboards, dependent: :destroy
   has_many :events, dependent: :destroy
   has_many :filters, dependent: :destroy
+  has_many :invoice, dependent: :destroy
+  has_many :invoice_items, dependent: :destroy
   has_many :locations, dependent: :destroy
   has_many :products, dependent: :destroy
+  has_many :projects, dependent: :destroy
   has_many :punch_cards, dependent: :destroy
   has_many :punch_clocks, dependent: :destroy
   has_many :punches, dependent: :destroy
   has_many :teams, dependent: :destroy
+  has_many :time_materials, dependent: :destroy
   has_many :users, dependent: :destroy
 
   has_one_attached :logo
@@ -35,6 +40,13 @@ class Tenant < ApplicationRecord
 
   validates :name, presence: true, uniqueness: { message: I18n.t("tenants.errors.messages.name_exist") }
   validates :email, presence: true
+
+  #
+  # make it possible to handle model deletion differently from model to model
+  # eg TenantRegistrationService.call(tenant, destroy: true)
+  def remove
+    TenantRegistrationService.call(self, destroy: true)
+  end
 
   def has_this_access_token(token)
     access_token == token

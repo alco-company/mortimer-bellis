@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2024_12_09_174316) do
+ActiveRecord::Schema[8.1].define(version: 2024_12_10_141333) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -63,6 +63,15 @@ ActiveRecord::Schema[8.1].define(version: 2024_12_09_174316) do
     t.datetime "updated_at", null: false
     t.index ["calendarable_type", "calendarable_id"], name: "index_calendars_on_calendarable"
     t.index ["tenant_id"], name: "index_calendars_on_tenant_id"
+  end
+
+  create_table "calls", force: :cascade do |t|
+    t.integer "tenant_id", null: false
+    t.integer "direction"
+    t.string "phone"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["tenant_id"], name: "index_calls_on_tenant_id"
   end
 
   create_table "customers", force: :cascade do |t|
@@ -305,6 +314,9 @@ ActiveRecord::Schema[8.1].define(version: 2024_12_09_174316) do
     t.boolean "confidential", default: true, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "owner_id"
+    t.string "owner_type"
+    t.index ["owner_id", "owner_type"], name: "index_oauth_applications_on_owner_id_and_owner_type"
     t.index ["uid"], name: "index_oauth_applications_on_uid", unique: true
   end
 
@@ -708,6 +720,7 @@ ActiveRecord::Schema[8.1].define(version: 2024_12_09_174316) do
   add_foreign_key "background_jobs", "tenants"
   add_foreign_key "background_jobs", "tenants", on_delete: :cascade
   add_foreign_key "calendars", "tenants"
+  add_foreign_key "calls", "tenants"
   add_foreign_key "customers", "tenants"
   add_foreign_key "dashboards", "tenants"
   add_foreign_key "dashboards", "tenants", on_delete: :cascade

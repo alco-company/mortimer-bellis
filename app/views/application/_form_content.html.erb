@@ -1,10 +1,11 @@
   <div class=" relative z-50 overscroll-none" role="dialog" aria-modal="true" data-controller="form">
     <!-- Background backdrop, show/hide based on slide-over state. -->
-    <div class="fixed inset-0 bg-black/10 overscroll-none"></div>
+    <div data-form-target="backdrop" class="fixed inset-0 bg-sky-300/20 overscroll-none"></div>
     <div class="fixed inset-0 overflow-hidden overscroll-none" data-action="keydown->form#keydown">
       <div class="absolute inset-0 overflow-hidden overscroll-none">
         <div class="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-4 sm:pl-16">
           <div 
+            data-form-target="panel"
             data-transition-enter="transform transition ease-in-out duration-500 sm:duration-700"
             data-transition-enter-start="translate-x-full"
             data-transition-enter-end="translate-x-0"
@@ -21,7 +22,7 @@
               <!-- Main -->
               <div>
                 <div class="pl-4 pr-4 sm:pr-6 sm:pl-6 pb-1 pt-1 sm:pt-0">
-                    <%= render resource_class.form resource: @resource %>
+                    <%= render resource_class.form resource: @resource %> <!-- #, fields: [:slug] -->
                 </div>
               </div>
               <!--<div class="fixed  w-full max-w-md z-20 bottom-0 bg-white px-4 py-5 sm:px-6 border-t">

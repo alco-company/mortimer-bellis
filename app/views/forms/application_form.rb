@@ -2,15 +2,20 @@ class ApplicationForm < Superform::Rails::Form
   include Phlex::Rails::Helpers::Pluralize
   include Phlex::Rails::Helpers::LinkTo
 
-  attr_accessor :resource, :cancel_url, :title, :edit_url,  :editable, :api_key, :model
+  attr_accessor :resource, :cancel_url, :title, :edit_url,  :editable, :api_key, :model, :fields
 
   def initialize(resource:, editable: nil, **options)
     options[:data] = { form_target: "form" }
     options[:class] = "mort-form"
+    @fields = options[:fields] || []
     super(resource, **options)
     @resource = @model = resource
     @editable = editable
     @api_key = options[:api_key] || ""
+  end
+
+  def view_template(&)
+    form_fields fields: fields
   end
 
   class Phlex::SGML
@@ -475,5 +480,24 @@ class ApplicationForm < Superform::Rails::Form
         end
       end
     end
+  end
+
+  def form_fields(fields: [])
+    @fields = fields
+    model.class.attribute_types.each do |key, type|
+      if fields_include?(key)
+        case type.class.to_s
+        when "ActiveModel::Type::String"; row field(key.to_sym).input(class: "mort-form-text")
+        when "ActiveRecord::Type::Text"; row field(key.to_sym).textarea(class: "mort-form-text")
+        else
+          plain raw_unsafe "<!-- #{key} - #{type.class} -->"
+        end
+      end
+    end
+  end
+
+  def fields_include?(key)
+    return false unless fields.any?
+    fields.include?(key.to_sym)
   end
 end

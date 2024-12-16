@@ -29,7 +29,7 @@ class Notifications::NotificationCenter < ApplicationComponent
           transition_leave_start: "opacity-100",
           transition_leave_end: "opacity-0"
         },
-        class: "fixed inset-0 bg-sky-100/10 ") { "" }
+        class: "fixed inset-0 bg-sky-300/20 ") { "" }
       div(class: "fixed inset-0 overflow-hidden") do
         div(class: "absolute inset-0 overflow-hidden") do
           div(class: "pointer-events-none fixed inset-y-0 top-16 right-0 flex max-w-full pl-10 sm:pl-16") do

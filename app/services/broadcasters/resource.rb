@@ -2,16 +2,17 @@ class Broadcasters::Resource
   include Turbo::StreamsHelper
   include ActionView::RecordIdentifier
 
-  attr_reader :tenant, :resource, :resource_class, :resources_stream, :params, :target, :user
+  attr_reader :tenant, :resource, :resource_class, :resources_stream, :params, :target, :user, :partial
 
-  def initialize(resource, params = {}, target = "record_list", user = Current.user)
+  def initialize(resource, params = {}, target = "record_list", user = Current.user, stream = nil, partial = nil)
     @resource = resource
     @params = params
     @target = target
     @resource_class = resource.class rescue nil
     @tenant = resource.respond_to?(:tenant) ? resource.tenant : Current.tenant rescue nil
     @user = user
-    @resources_stream = "%s_%s" % [ tenant&.id, @resource_class.to_s.underscore.pluralize ] rescue nil
+    @resources_stream = stream || "%s_%s" % [ tenant&.id, @resource_class.to_s.underscore.pluralize ] rescue nil
+    @partial = partial || resource
   end
 
   def create
@@ -21,7 +22,7 @@ class Broadcasters::Resource
       resources_stream,
       target: target,
       action: :prepend,
-      partial: resource,
+      partial: partial,
       locals: { resource_class.to_s.underscore => resource, params: params, user: user }
     )
   end
@@ -32,7 +33,7 @@ class Broadcasters::Resource
       resources_stream,
       target: dom_id(resource),
       action: :replace,
-      partial: resource,
+      partial: partial,
       locals: { resource_class.to_s.underscore => resource, params: params, user: user }
     )
   end

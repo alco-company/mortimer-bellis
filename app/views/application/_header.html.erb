@@ -37,7 +37,8 @@
 
             <div class="mt-0 flex items-center sm:ml-6 sm:flex-shrink-0 sm:justify-start">
               <% case params[:controller]
-                when "users"; %><%= link_to("Invite New User", new_user_invitation_path, class: "mort-btn-primary", role: "menuitem", tabindex: "-1", id: "user-menu-item-0") unless Current.user.user?  %>
+                when "calls"; %><%= link_to("New Call", new_call_path, data: { turbo_stream: true}, class: "mort-btn-primary", role: "menuitem", tabindex: "-1", id: "user-menu-item-0")  %>
+                <% when "users"; %><%= link_to("Invite New User", new_user_invitation_path, class: "mort-btn-primary", role: "menuitem", tabindex: "-1", id: "user-menu-item-0") unless Current.user.user?  %>
               <% else; %>
               <%= link_to(new_resource_url, class: "-my-2 flex items-center rounded-md p-2 text-gray-400 hover:text-gray-600 focus:outline-none focus:ring-1 focus:ring-sky-200", data: { turbo_frame: "form" }) do %>
                   <span class="sr-only">Add new</span>

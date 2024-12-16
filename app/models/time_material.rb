@@ -3,6 +3,8 @@ class TimeMaterial < ApplicationRecord
   include TimeMaterialStateable
   include Settingable
 
+  attr_accessor :hour_time, :minute_time
+
   belongs_to :customer, optional: true
   belongs_to :project, optional: true
   belongs_to :product, optional: true
@@ -57,6 +59,36 @@ class TimeMaterial < ApplicationRecord
     when about.blank?; about[..50]
     when comment.blank?; comment[..50]
     end
+  end
+
+  def hour_time
+    return "" if self.time.blank?
+    return self.time.split(":")[0] if self.time.include?(":")
+    return self.time.split(",")[0] if self.time.include?(",")
+    return self.time.split(".")[0] if self.time.include?(".")
+    time
+  end
+
+  def hour_time=(val)
+    self.time = "#{val}:00" if self.time.blank?
+    self.time = "%s:%s" % [ val, self.time.split(":")[1] ] if self.time.include?(":")
+    self.time = "%s:%s" % [ val, self.time.split(",")[1] ] if self.time.include?(",")
+    self.time = "%s:%s" % [ val, self.time.split(".")[1] ] if self.time.include?(".")
+  end
+
+  def minute_time
+    return "" if self.time.blank?
+    return self.time.split(":")[1] if self.time.include?(":")
+    return self.time.split(",")[1] if self.time.include?(",")
+    return self.time.split(".")[1] if self.time.include?(".")
+    time
+  end
+
+  def minute_time=(val)
+    self.time = "00:#{val}" if self.time.blank?
+    self.time = "%s:%s" % [ self.time.split(":")[0], val ] if self.time.include?(":")
+    self.time = "%s:%s" % [ self.time.split(",")[0], val ] if self.time.include?(",")
+    self.time = "%s:%s" % [ self.time.split(".")[0], val ] if self.time.include?(".")
   end
 
   def self.filtered(filter)

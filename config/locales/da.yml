@@ -179,6 +179,7 @@ da:
     punches: Stemplinger
     teams: Hold
     tenants: Konti
+    oauth_applications: API adgang
     users: Medarbejdere
 
     pos:
@@ -449,6 +450,17 @@ da:
         content: Beskeden
       notification:
         uris: Modtagere
+      oauth_application:
+        name: Navn  
+        redirect_uri: Call-back URL
+        scopes: 'scope'
+        confidential: Fortrolig
+        uid: UID
+        secret: Sikkerhedsnøgle
+      page:
+        slug: URL
+        title: Titel
+        content: Indhold
       participant:
         name: Navn
         teams: Hold/grupper
@@ -619,6 +631,8 @@ da:
         comment: Kommentar
         date: Dato
         time: Tid
+        hour_time: Timer
+        minute_time: Minutter
         state: Status
         over_time: Overtid
         overtime: Overtid
@@ -827,6 +841,19 @@ da:
           attributes:
             pincode:
               in: "Pinkoden skal være et tal mellem 1000 og 9999"
+        oauth/application:
+          attributes:
+            name:
+              blank: "Navn skal udfyldes"
+            redirect_uri:
+              blank: "Call-back URL skal udfyldes"
+              relative_uri: "kan ikke være en relativ URI"
+            scopes:
+              blank: "Scope skal udfyldes"
+            uid:
+              blank: "UID skal udfyldes"
+            secret:
+              blank: "Sikkerhedsnøgle skal udfyldes"
 
   date:
     single_day_names:

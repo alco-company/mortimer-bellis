@@ -9,9 +9,18 @@
 
 ## Ideas
 
+https://anemone.mortimer.pro/oauth2/authorize?client_id=1&redirect_uri=https://anemone.mortimer.pro/oauth2/callback&response_type=code&scope=openid+profile+email+phone+address+roles+offline_access
+
+https://anemone.mortimer.pro/oauth2/token
+https://anemone.mortimer.pro/api/v1/contacts
+
+https://nordhealth.design/templates/application/#
+
+
 setup CI deployment with Kamal - https://www.rickpeyton.com/posts/step-by-step-guide-to-deploying-rails-8-with-kamal-and-github-actions-2
 PWA: https://onrails.blog/2021/03/02/rails-pwas-using-turbo-hhnpwa-7/
 NATIVE: https://blog.corsego.com/navigating-turbo-native, https://www.youtube.com/watch?v=TDQ2wtmgeKw
+3CX: https://www.3cx.com/docs/crm-integration/
 
 osascript = <<END
 tell application "Messages"
@@ -54,11 +63,49 @@ END
   }
 }
 
+* make sidebar present like https://nordhealth.design/templates/application/#
 * this is probably not necessary: format.turbo_stream { render turbo_stream: turbo_stream.remove(dom_id(@resource)) }
 * pwa-installation.js + joy of rails
-* send notification to user - new task, remember to punch in/out, session about to close, more
+* consider https://bunny.net/ for image optimization and CDN as CloudFlare substitute
 * pickup the mobile moving - ask if driving - enter odometer
 * validate punches before deleting punch_clocks !!
+
+## 16/12/2024
+
+* modal for call - just a start
+* slide forms and color backdrops
+* test time input hh:mm
+* second shot at time input
+* second shot at time input II
+* second shot at time input done
+* stop the background from scrolling
+* stop the background from scrolling II
+
+## 12/12/2024
+
+* deleting users - forwarding wrong email! farewell, not last_farewell
+* clean-up signed_in_user
+* initial DataDictionary - Presentation Definition Modeling - Page
+
+## 11/12/2024
+
+* customize doorkeeper views (later perhaps)
+* open route to /calls
+* don't show EntraID login on sign up
+* clean up sign* views
+* allow superadmin to delete tenants
+* use remove on users too
+* allow inviter to invite more invitees at a time
+
+## 10/12/2024
+
+* add contacts, and tickets to API
+* fix missing time_spent on active t/m's
+* first sketch for call's
+* fix wrong layout on most record li elements
+* update a few translations
+* place setting infront of Punch Reminder
+* testing 3CX integration
 
 ## 9/12/2024
 

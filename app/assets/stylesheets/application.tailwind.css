@@ -187,6 +187,10 @@
   .mort-field label {
     @apply text-xs font-medium text-gray-400;
   }
+
+  .mort-field em {
+    @apply text-xs font-light text-gray-400;
+  }
 }
 
 @layer utilities {
@@ -210,12 +214,18 @@
 html {
   font-feature-settings: "cv02", "cv03", "cv04", "cv11";
 }
+/* fix iOS Safari scroll quirk */
+html.lock-scroll,
+body.lock-scroll {
+  overflow: hidden;
+  height: 100%;
+}
 
 dialog {
   &::backdrop {
-    background: gray;
-    opacity: 0.2;
+    @apply bg-sky-300/20
   }
+
 }
 
 .pagy {

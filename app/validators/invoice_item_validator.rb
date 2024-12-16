@@ -21,7 +21,7 @@
 class InvoiceItemValidator
   include ActiveModel::Model
 
-  attr_accessor :quantity, :product_name, :product_id, :time, :rate, :discount, :unit_price,
+  attr_accessor :quantity, :product_name, :product_id, :hour_time, :minute_time, :rate, :discount, :unit_price,
                 :kilometers, :comment, :customer_id, :customer_name, :project_name, :project, :is_invoice
 
   validates :product_name, presence: true, if: -> { quantity.present? }
@@ -45,7 +45,8 @@ class InvoiceItemValidator
     @quantity = tm.quantity
     @product_name = tm.product_name
     @product_id = tm.product_id
-    @time = tm.time
+    @hour_time = tm.hour_time
+    @minute_time = tm.minute_time
     @rate = tm.rate
     @discount = tm.discount
     @unit_price = tm.unit_price
@@ -62,14 +63,14 @@ class InvoiceItemValidator
 
   # Custom validation methods
   def time_requires_blank_fields
-    if time.present? && (quantity.present? || product_name.present?)
+    if time_present? && (quantity.present? || product_name.present?)
       errors.add(:time, tr("quantity_product_name_must_blank"))
     end
   end
 
   def rate_requires_conditions
     if rate.present?
-      errors.add(:rate, tr("time_must_be_set")) if time.blank?
+      errors.add(:rate, tr("time_must_be_set")) if time_blank?
       errors.add(:rate, tr("product_name_product_quantity_must_blank")) if product_id.present? || product_name.present? || quantity.present?
     end
   end
@@ -101,9 +102,18 @@ class InvoiceItemValidator
     end
   end
 
+  # def time_format
+  #   if time_present? && time !~ /\A\d*[,:.]?\d{0,2}\z/
+  #     errors.add(:time, tr("format_wrong_number_time")) #  0[,.]00 or 0[,.]00%
+  #   end
+  # end
+
   def time_format
-    if time.present? && time !~ /\A\d*[,:.]?\d{0,2}\z/
-      errors.add(:time, tr("format_wrong_number_time")) #  0[,.]00 or 0[,.]00%
+    if hour_time.present? && hour_time !~ /\A\d*[,:.]?\d{0,2}\z/
+      errors.add(:hour_time, tr("format_wrong_number_time")) #  0[,.]00 or 0[,.]00%
+    end
+    if minute_time.present? && minute_time !~ /\A\d*[,:.]?\d{0,2}\z/
+      errors.add(:minute_time, tr("format_wrong_number_time")) #  0[,.]00 or 0[,.]00%
     end
   end
 
@@ -114,17 +124,17 @@ class InvoiceItemValidator
   end
 
   def comment_required_if_no_fields
-    if time.blank? && quantity.blank? && kilometers.blank? && comment.blank?
+    if time_blank? && quantity.blank? && kilometers.blank? && comment.blank?
       errors.add(:comment, tr("cannot_be_blank_when_time_quantity_km_blank"))
     end
   end
 
   def mutual_exclusivity_of_time_quantity_and_kilometers
-    if time.present? && (kilometers.present? || quantity.present?)
+    if time_present? && (kilometers.present? || quantity.present?)
       errors.add(:time, tr("km_quantity_must_blank"))
-    elsif quantity.present? && (time.present? || kilometers.present?)
+    elsif quantity.present? && (time_present? || kilometers.present?)
       errors.add(:quantity, tr("time_km_must_blank"))
-    elsif kilometers.present? && (time.present? || quantity.present?)
+    elsif kilometers.present? && (time_present? || quantity.present?)
       errors.add(:kilometers, "time_quantity_must_blank")
     end
   end
@@ -149,6 +159,14 @@ class InvoiceItemValidator
     if project_name.present?
       self.project = Project.by_tenant.find_or_create_by(tenant: Current.tenant, customer: customer, name: project_name)
     end
+  end
+
+  def time_present?
+    hour_time.present? || minute_time.present?
+  end
+
+  def time_blank?
+    hour_time.blank? || minute_time.blank?
   end
 
   def tr(msg)

@@ -10,6 +10,13 @@ class ApplicationRecord < ActiveRecord::Base
   scope :ordered, ->(s, d) { order(s => d) }
 
   #
+  # make it possible to handle model deletion differently from model to model
+  # eg TenantRegistrationService.call(tenant, destroy: true)
+  def remove
+    destroy!
+  end
+
+  #
   # update_row is a helper method to update a row in the database
   # adding the ability to control whether the validations and callbacks are performed or not
   # only issues using this method is that the updated_at field is not updated
@@ -94,10 +101,20 @@ class ApplicationRecord < ActiveRecord::Base
     raise "implement this method on the model in order to list_item!"
   end
 
-  def self.form(resource:, editable: true)
-    # Locations::Form.new resource: resource, editable: editable
-    raise "implement this method on the model in order to show/edit post!"
+  # def self.form(resource:, editable: true)
+  #   # Locations::Form.new resource: resource, editable: editable
+  #   raise "implement this method on the model in order to show/edit post!"
+  # end
+  #
+  # default field layout for the form
+  # taken from the model attributes - possibly augmented by
+  # the fields array passed to the form method
+  #
+  def self.form(resource:, editable: true, fields: [])
+    ApplicationForm.new resource: resource, editable: editable, fields: fields
   end
+
+
 
   # def self.ordered(resources, field, direction = :desc)
   #   resources.order(field => direction)

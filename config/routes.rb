@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
-  use_doorkeeper
-  mount MissionControl::Jobs::Engine, at: "/solid_queue_jobs"
+  # -------- AUTHENTICATION ROUTES --------
+  use_doorkeeper do
+    controllers applications: "oauth/applications"
+  end
 
   devise_for :users, controllers: {
     invitations: "users/invitations",
@@ -12,12 +14,6 @@ Rails.application.routes.draw do
     omniauth_callbacks: "users/omniauth_callbacks"
   }
 
-  namespace :api do
-    namespace :v1 do
-      resources :contacts
-      get "hello" => "hello_world#hello"
-    end
-  end
   # called by JS on client side to check if the session is still valid
   get "check_session", to: "sessions#check"
 
@@ -29,10 +25,30 @@ Rails.application.routes.draw do
   post "auth/edit/2fa/app/destroy" => "users/second_factor#destroy_app", as: :destroy_user_two_factor_app
 
 
-  post "/web_push_subscriptions" => "noticed/web_push/subscriptions#create", as: :web_push_subscriptions
+  post "web_push_subscriptions" => "noticed/web_push/subscriptions#create", as: :web_push_subscriptions
+
+  # -------- END AUTHENTICATION ROUTES --------
+
+  mount MissionControl::Jobs::Engine, at: "/solid_queue_jobs"
+
+  # -------- API ROUTES & 3RD PARTY --------
+  namespace :api do
+    namespace :v1 do
+      resources :tickets
+      resources :contacts do
+        collection do
+          get "lookup"
+        end
+      end
+      get "hello" => "hello_world#hello"
+    end
+  end
 
   post "dinero/callback" => "dinero#callback", as: :dinero_callback
 
+  # -------- END API ROUTES & 3RD PARTY --------
+
+  resources :calls
   resources :time_materials do
     member do
       post :archive
@@ -79,7 +95,11 @@ Rails.application.routes.draw do
 
   resources :dashboards
   resources :background_jobs
-  resources :pages
+  resources :pages do
+    collection do
+      get "help"
+    end
+  end
   resources :users do
     resources :calendars
     collection do

@@ -2,13 +2,13 @@
   <div class="flex flex-shrink-0 items-center">
   <%= render_logo %>
   </div>
-  <h1 class="font-bold text-4xl"> <%= t(".confirmation.title") %> </h1>
+  <h1 class="font-bold text-gray-200 text-2xl"> <%= t(".confirmation.title") %> </h1>
 
   <p>Din konto er bekræftet</p>
   <p>Her har vi (vel) chancen for at give brugeren et par links til hvad der nu skal ske - og sådan overordnet sætte deres forventninger til
     hvordan produktet virker, hvad de skal huske at få "lavet" osv
   </p>
-  <p><%= link_to t("login"), root_path %></p>
+  <p><%= link_to t("login"), root_path, class: "mort-btn-primary" %></p>
 
 </div>
 

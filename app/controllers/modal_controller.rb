@@ -2,13 +2,12 @@ class ModalController < BaseController
   before_action :set_vars, only: [ :new, :show, :create, :destroy, :update ]
   skip_before_action :authenticate_user!, only: [ :destroy ]
   skip_before_action :check_session_length, only: [ :destroy ]
-  skip_before_action :ensure_tenanted_user, only: [ :destroy ]
 
   def new
     # resource
     case resource_class.to_s.underscore
-    when "event"; process_event_new
     when "calendar"; process_calendar_new
+    when "event"; process_event_new
     when "employee"; process_employee_new
     when "punch_card"; process_punch_card_new
     else; process_other_new
@@ -43,7 +42,7 @@ class ModalController < BaseController
 
   #
   def destroy
-    (authenticate_user! && ensure_tenanted_user && check_session_length) || verify_api_key
+    (authenticate_user! && check_session_length) || verify_api_key
     params[:all] == "true" ? process_destroy_all : process_destroy
   end
 
@@ -67,7 +66,12 @@ class ModalController < BaseController
     end
 
     def resource_class
-      @resource_class ||= params[:resource_class].classify.constantize
+      @resource_class ||= case params[:resource_class]
+      # when "invitations"; UserInvitation
+      when "notifications"; Noticed::Notification
+      when "doorkeeper/application"; Oauth::Application
+      else; params[:resource_class].classify.constantize rescue nil
+      end
     end
 
     #
@@ -239,7 +243,7 @@ class ModalController < BaseController
         else
           cb = get_cb_eval_after_destroy(resource)
           r = resource_class.build resource.attributes
-          if resource.destroy!
+          if resource.remove
             eval(cb) unless cb.nil?
             @url.gsub!(/\/\d+$/, "") if @url.match?(/\d+$/)
             Broadcasters::Resource.new(r).destroy
