@@ -70,6 +70,10 @@ END
 * pickup the mobile moving - ask if driving - enter odometer
 * validate punches before deleting punch_clocks !!
 
+## 17/12/2024
+
+* comment out calendar on sidebar, and other future-items
+
 ## 16/12/2024
 
 * modal for call - just a start
