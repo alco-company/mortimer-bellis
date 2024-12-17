@@ -185,9 +185,9 @@ class NavigationComponent < ApplicationComponent
 
     def default_menu
       {
-        dashboard: { title: "dashboard", url: "/", icon: "home" },
+        dashboard: { title: "dashboard", url: "/dashboards/show_dashboard", icon: "home" },
         time_material: { title: "time_material", url: "/time_materials", icon: "time_material" },
-        calendar: { title: "calendar", url: "/calendars", icon: "calendar" },
+        # calendar: { title: "calendar", url: "/calendars", icon: "calendar" },
         # reports: { title: "Reports", url: "/pages", icon: "home" },
         manage: { title: "manage",
           submenu: {

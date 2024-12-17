@@ -73,6 +73,8 @@ END
 ## 17/12/2024
 
 * comment out calendar on sidebar, and other future-items
+* fix root_path -> /time_materials
+* list tasks for new customers on dashboard
 
 ## 16/12/2024
 
