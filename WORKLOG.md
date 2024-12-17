@@ -81,6 +81,7 @@ END
 * stop the background from scrolling
 * stop the background from scrolling II
 * fix sanitize_time on time_material
+* fix bug in sanitize_time
 
 ## 12/12/2024
 

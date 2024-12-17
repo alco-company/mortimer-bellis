@@ -197,12 +197,15 @@ class TimeMaterial < ApplicationRecord
   def sanitize_time(ht, mt)
     ptime = set_ptime ht, mt
     # return "" if ptime.blank? or ptime.gsub(/[,.:]/, "").to_i == 0
-    minutes = case true
-    when ptime.to_s.include?(":"); t = ptime.split(":"); t[1]=t[1].to_i*10 if t[1].size==1; t[0].to_i*60 + t[1].to_i
-      # when ptime.to_s.include?(","); t = ptime.split(","); t[1]=t[1].to_i*10 if t[1].size==1; t[0].to_i*60 + t[1].to_i*60/100
-      # when ptime.to_s.include?("."); t = ptime.split("."); t[1]=t[1].to_i*10 if t[1].size==1; t[0].to_i*60 + t[1].to_i*60/100
-      # else ptime.to_i * 60
-    end
+    t = ptime.split(":")
+    minutes = t[0].to_i*60 + t[1].to_i
+    # minutes = case true
+    # when ptime.to_s.include?(":"); t = ptime.split(":"); t[1]=t[1].to_i*10 if t[1].size==1; t[0].to_i*60 + t[1].to_i
+    #   # when ptime.to_s.include?(":"); t = ptime.split(":"); t[1]=t[1].to_i*10 if t[1].size==1; t[0].to_i*60 + t[1].to_i
+    #   # when ptime.to_s.include?(","); t = ptime.split(","); t[1]=t[1].to_i*10 if t[1].size==1; t[0].to_i*60 + t[1].to_i*60/100
+    #   # when ptime.to_s.include?("."); t = ptime.split("."); t[1]=t[1].to_i*10 if t[1].size==1; t[0].to_i*60 + t[1].to_i*60/100
+    #   # else ptime.to_i * 60
+    # end
     hours, minutes = minutes.divmod 60
     if should?(:limit_time_to_quarters) # && !ptime.include?(":")
       minutes = case minutes
