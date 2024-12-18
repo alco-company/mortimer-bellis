@@ -113,7 +113,7 @@ gem "httpx", "~> 1.3"
 
 gem "mission_control-jobs", "~> 0.6.0"
 
-gem "noticed", "~> 2.4"
+gem "noticed", "~> 2.5"
 
 gem "x", "~> 0.14.1"
 
