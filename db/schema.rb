@@ -567,7 +567,10 @@ ActiveRecord::Schema[8.1].define(version: 2024_12_17_173409) do
 
   create_table "tasks", force: :cascade do |t|
     t.integer "tenant_id", null: false
+    t.string "tasked_for_type"
+    t.integer "tasked_for_id"
     t.string "title"
+    t.string "link"
     t.text "description"
     t.integer "state"
     t.integer "priority"
@@ -577,6 +580,7 @@ ActiveRecord::Schema[8.1].define(version: 2024_12_17_173409) do
     t.boolean "archived"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["tasked_for_type", "tasked_for_id"], name: "index_tasks_on_tasked_for"
     t.index ["tenant_id"], name: "index_tasks_on_tenant_id"
   end
 

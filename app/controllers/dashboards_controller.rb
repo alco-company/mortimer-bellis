@@ -9,9 +9,9 @@ class DashboardsController < MortimerController
   # end
 
   # # GET /dashboards/show_dashboard or /dashboards/show_dashboard.json
-  # def show_dashboard
-  def show
-    @activity_list = Current.user.tenant.punches.order(punched_at: :desc).take(10)
+  def show_dashboard
+    # @activity_list = Current.user.tenant.punches.order(punched_at: :desc).take(10)
+    @tasks = Task.by_tenant.tasked_for_the(Current.user).uncompleted.order(due_at: :asc).take(10)
     @punch_clock = PunchClock.where(tenant: Current.user.tenant).first rescue nil
   end
 

@@ -6,7 +6,17 @@
   <div class="mt-8">
     <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
       <h2 class="text-lg font-medium leading-6 text-gray-900"><%= I18n.t("profile.overview") %></h2>
-      
+      <ul role="list" class="mt-8 grid grid-cols-1 gap-x-6 gap-y-8 lg:grid-cols-3 xl:gap-x-8 ">
+
+        <% if @tasks.any? %>
+          <% @tasks.each do |t| %>
+            <%= render DashboardTask.new task: t %>
+          <% end %>
+        <% else %>
+          Du har ingen opgaver, der ikke er afsluttet
+        <% end %>
+      </ul>
+
       <div class="mt-2 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
         <%#= render StatsCard.new label: I18n.t("stats.workers_present"), value: Current.tenant.users.working.count,  css: "", url: "#" %>
         <%#= render StatsCard.new label: I18n.t("stats.hours_worked_this_week"), value: Current.tenant.working_hours_this_week,  css: "hidden sm:block", url: "#" %>
@@ -28,9 +38,9 @@
     </div>
 
     <!-- Activity section -->
-    <% punches = "%s_punches" % Current.tenant.id %>
-    <%= turbo_stream_from punches %>
-    <%= render ActivityList.new list: @activity_list, params: { controller: "punches" }, url: punches_url %>
+    <% # punches = "%s_punches" % Current.tenant.id %>
+    <%#= turbo_stream_from punches %>
+    <%#= render ActivityList.new list: @activity_list, params: { controller: "punches" }, url: punches_url %>
 
   </div>
 
@@ -97,3 +107,4 @@
 
   </script>
 </div>
+

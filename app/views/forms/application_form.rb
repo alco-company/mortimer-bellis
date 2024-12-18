@@ -7,9 +7,10 @@ class ApplicationForm < Superform::Rails::Form
   def initialize(resource:, editable: nil, **options)
     options[:data] = { form_target: "form" }
     options[:class] = "mort-form"
-    @fields = options[:fields] || []
     super(resource, **options)
     @resource = @model = resource
+    @fields = options[:fields] || []
+    @fields = @fields.any? ? @fields : model.class.attribute_types.keys
     @editable = editable
     @api_key = options[:api_key] || ""
   end
@@ -485,19 +486,17 @@ class ApplicationForm < Superform::Rails::Form
   def form_fields(fields: [])
     @fields = fields
     model.class.attribute_types.each do |key, type|
+      included = false
       if fields_include?(key)
-        case type.class.to_s
-        when "ActiveModel::Type::String"; row field(key.to_sym).input(class: "mort-form-text")
-        when "ActiveRecord::Type::Text"; row field(key.to_sym).textarea(class: "mort-form-text")
-        else
-          plain raw_unsafe "<!-- #{key} - #{type.class} -->"
-        end
+        row(field(key.to_sym).input(class: "mort-form-text")) && included = true if type.class.to_s =~ /String/
+        row(field(key.to_sym).textarea(class: "mort-form-text")) && included = true if type.class.to_s =~ /Text/
+        p(class: "hidden") { "missing #{key} - #{type.class}" } unless included
       end
     end
   end
 
   def fields_include?(key)
     return false unless fields.any?
-    fields.include?(key.to_sym)
+    fields.include?(key.to_sym) || fields.include?(key)
   end
 end

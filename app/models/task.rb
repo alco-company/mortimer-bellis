@@ -49,10 +49,14 @@
 
 class Task < ApplicationRecord
   include Tenantable
+  belongs_to :tasked_for, polymorphic: true
 
   scope :by_fulltext, ->(query) { where("name LIKE :query or dewcription LIKE :query", query: "%#{query}%") if query.present? }
   scope :by_title, ->(title) { where("title LIKE ?", "%#{title}%") if title.present? }
+  scope :by_link, ->(link) { where("link LIKE ?", "%#{link}%") if link.present? }
   scope :by_description, ->(description) { where("color LIKE ?", "%#{description}%") if description.present? }
+  scope :tasked_for_the, ->(tasked_for) { where("tasked_for_id = :tid and tasked_for_type = :type", tid: tasked_for.id, type: tasked_for.class.to_s) if tasked_for.present? }
+  scope :uncompleted, -> { where(completed_at: nil) }
 
   validates :title, presence: true, uniqueness: { scope: :tenant_id, message: I18n.t("tasks.errors.messages.title_exist") }
 
@@ -62,6 +66,7 @@ class Task < ApplicationRecord
     all
       .by_tenant()
       .by_title(flt["title"])
+      .by_link(flt["link"])
       .by_description(flt["description"])
   rescue
     filter.destroy if filter
@@ -74,5 +79,9 @@ class Task < ApplicationRecord
 
   def self.set_order(resources, field = :title, direction = :asc)
     resources.ordered(field, direction)
+  end
+
+  def self.form(resource:, editable: true)
+    Tasks::Form.new resource: resource, editable: editable, fields: [ :title, :link, :description ]
   end
 end

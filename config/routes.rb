@@ -95,7 +95,11 @@ Rails.application.routes.draw do
 
   get "tooltips/show"
 
-  resources :dashboards
+  resources :dashboards do
+    collection do
+      get "show_dashboard"
+    end
+  end
   resources :background_jobs
   resources :pages do
     collection do

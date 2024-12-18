@@ -1,6 +1,7 @@
 da:
   english: "Do you prefer english?"
   success: Succes
+  start: Start
   error: Fejl
   alert: Fejl
   warning: Advarsel
@@ -209,7 +210,7 @@ da:
     truncate: "..."
     more: "mere"
   profile:
-    overview: Oversigt
+    overview: Åbne opgaver
     invite_new_user: Invitér ny bruger
     invite_new_ user: Invitér ny medarbejder
 

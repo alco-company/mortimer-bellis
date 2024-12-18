@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/rails/rails.git
-  revision: a725732b3dee53a102d62cb193c02dc886bbb7ea
+  revision: d2ffa44a576f8d0444a6a704bbd8fcf80ddfea90
   branch: main
   specs:
     actioncable (8.1.0.alpha)
@@ -308,7 +308,7 @@ GEM
       racc (~> 1.4)
     nokogiri (1.17.2-x86_64-linux)
       racc (~> 1.4)
-    noticed (2.4.3)
+    noticed (2.5.0)
       rails (>= 6.1.0)
     oauth2 (2.0.9)
       faraday (>= 0.17.3, < 3.0)
@@ -346,7 +346,7 @@ GEM
       activesupport (>= 7.0.0)
       rack
       railties (>= 7.0.0)
-    psych (5.2.1)
+    psych (5.2.2)
       date
       stringio
     public_suffix (6.0.1)
