@@ -1,5 +1,17 @@
 class ProvidedServicesController < MortimerController
+  def new
+    if params[:service].present?
+      case params[:service]
+      when "dinero"; set_dinero
+      end
+    end
+  end
   private
+
+    def set_dinero
+      @resource.name = "Dinero"
+      @resource.service = "Dinero::Service"
+    end
 
     # Only allow a list of trusted parameters through.
     def resource_params

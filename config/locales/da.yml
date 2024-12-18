@@ -593,6 +593,14 @@ da:
         system_key: Nøgle
         position: Rækkefølge
         value: Værdi
+      task:
+        title: Overskrift
+        description: Beskrivelse
+        state: Status
+        priority: Prioritet
+        due_date: Klar senest den
+        user_id: Ansvarlig
+        link: URL
       team:
         norm_time_minutes: timer:min i et rul
         name: Hold navn

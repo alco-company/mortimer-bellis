@@ -75,7 +75,7 @@ END
 
 * add task model
 * show uncompleted tasks on dashboard
-* 
+* handle tasks on dashboard better
 
 ## 17/12/2024
 

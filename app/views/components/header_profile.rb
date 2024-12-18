@@ -4,7 +4,7 @@ class HeaderProfile < Phlex::HTML
 
   def view_template
     comment { "Page header" }
-    div(class: "bg-white shadow border-t border-gray-50", data: { controller: "profile" }) do
+    div(class: "bg-white sm:shadow sm:mx-2 sm:border-t sm:border-gray-50", data: { controller: "profile" }) do
       div(class: "px-4 sm:px-6 lg:mx-auto lg:max-w-6xl lg:px-8") do
         div(
           class:
@@ -84,32 +84,27 @@ class HeaderProfile < Phlex::HTML
               end
             end
           end
-          div(class: "mt-6 flex space-x-3 md:ml-4 md:mt-0") do
-            link_to(I18n.t("profile.invite_new_user"), helpers.new_user_invitation_path, class: "mort-btn-primary", role: "menuitem", tabindex: "-1", id: "user-menu-item-0") unless Current.user.user?
-            # button(
-            #   type: "button",
-            #   class:
-            #     "inline-flex items-center rounded-md bg-cyan-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-cyan-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-600"
-            # ) { "Registrér tid" }
-          end
-          div(class: "mort-field ml-2 ") do
-            form(class: "group m-0", data: { profile_target: "buttonForm" }) do
-              button(id: "enable_notifications", class: "hidden mort-btn-primary group-aria-busy:bg-white", type: "submit",
-                data: {
-                  action: "click->profile#enable",
-                  profile_target: "enableNotifications"
-                }) do
-                  span(class: "group-aria-busy:hidden block") { I18n.t("enable_notifications") }
-                  div(class: "group-aria-busy:block hidden") do
-                    image_tag "motion-blur.svg", class: "size-6 fill-white"
-                  end
-                end
-            end
-            div(data: { profile_target: "disableNotifications" }) { } # empty div to keep profile_controller.js happy
-          end
-          div(class: "mort-field ml-2") do
-            render TwoFactorField.new button_only: true, dashboard: true
-          end
+          # div(class: "mt-6 flex space-x-3 md:ml-4 md:mt-0") do
+          #   link_to(I18n.t("profile.invite_new_user"), helpers.new_user_invitation_path, class: "mort-btn-primary", role: "menuitem", tabindex: "-1", id: "user-menu-item-0") unless Current.user.user?
+          # end
+          # div(class: "mort-field ml-2 ") do
+          #   form(class: "group m-0", data: { profile_target: "buttonForm" }) do
+          #     button(id: "enable_notifications", class: "hidden mort-btn-primary group-aria-busy:bg-white", type: "submit",
+          #       data: {
+          #         action: "click->profile#enable",
+          #         profile_target: "enableNotifications"
+          #       }) do
+          #         span(class: "group-aria-busy:hidden block") { I18n.t("enable_notifications") }
+          #         div(class: "group-aria-busy:block hidden") do
+          #           image_tag "motion-blur.svg", class: "size-6 fill-white"
+          #         end
+          #       end
+          #   end
+          #   div(data: { profile_target: "disableNotifications" }) { } # empty div to keep profile_controller.js happy
+          # end
+          # div(class: "mort-field ml-2") do
+          #   render TwoFactorField.new button_only: true, dashboard: true
+          # end
         end
       end
     end

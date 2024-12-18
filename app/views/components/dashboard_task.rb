@@ -23,9 +23,13 @@ class DashboardTask < ApplicationComponent
         #     "size-12 flex-none rounded-lg bg-white object-cover ring-1 ring-gray-900/10"
         # )
         div(class: "flex text-sm/6 text-gray-900") do
-          link_to task.title, url, class: "mort-link-primary mr-2 text-sm"
-          render Icons::Link.new css: "mort-link-primary h-6 "
-          context_menu if show_options
+          if url.include? "/"
+            link_to task.title, url, class: "mort-link-primary mr-2 text-sm"
+            render Icons::Link.new css: "mort-link-primary h-6 "
+            context_menu if show_options
+          else
+            helpers.send(url)
+          end
         end
       end
       dl(class: "-my-3 divide-y divide-gray-100 px-2 py-4 text-sm/6") do
