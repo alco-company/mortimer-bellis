@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2024_12_10_141333) do
+ActiveRecord::Schema[8.1].define(version: 2024_12_17_173409) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -565,6 +565,21 @@ ActiveRecord::Schema[8.1].define(version: 2024_12_10_141333) do
     t.index ["key"], name: "index_solid_queue_semaphores_on_key", unique: true
   end
 
+  create_table "tasks", force: :cascade do |t|
+    t.integer "tenant_id", null: false
+    t.string "title"
+    t.text "description"
+    t.integer "state"
+    t.integer "priority"
+    t.datetime "due_at"
+    t.integer "progress"
+    t.datetime "completed_at"
+    t.boolean "archived"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["tenant_id"], name: "index_tasks_on_tenant_id"
+  end
+
   create_table "teams", force: :cascade do |t|
     t.integer "tenant_id", null: false
     t.string "name"
@@ -760,6 +775,7 @@ ActiveRecord::Schema[8.1].define(version: 2024_12_10_141333) do
   add_foreign_key "solid_queue_ready_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
   add_foreign_key "solid_queue_recurring_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
   add_foreign_key "solid_queue_scheduled_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
+  add_foreign_key "tasks", "tenants"
   add_foreign_key "teams", "tenants"
   add_foreign_key "teams", "tenants", on_delete: :cascade
   add_foreign_key "time_materials", "tenants"

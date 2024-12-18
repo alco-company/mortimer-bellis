@@ -69,12 +69,16 @@ END
 * consider https://bunny.net/ for image optimization and CDN as CloudFlare substitute
 * pickup the mobile moving - ask if driving - enter odometer
 * validate punches before deleting punch_clocks !!
+* list tasks for new customers on dashboard
+
+## 18/12/2024
+
+* add task model
 
 ## 17/12/2024
 
 * comment out calendar on sidebar, and other future-items
 * fix root_path -> /time_materials
-* list tasks for new customers on dashboard
 
 ## 16/12/2024
 

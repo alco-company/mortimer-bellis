@@ -1,0 +1,29 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  tenant: one
+  title: MyString
+  description: MyText
+  state: 1
+  priority: 1
+  due_at: 2024-12-17 18:34:09
+  completed_at: 2024-12-17 18:34:09
+  ancestry: MyString
+  project: one
+  location: one
+  progress: 1
+  archived: false
+
+two:
+  tenant: two
+  title: MyString
+  description: MyText
+  state: 1
+  priority: 1
+  due_at: 2024-12-17 18:34:09
+  completed_at: 2024-12-17 18:34:09
+  ancestry: MyString
+  project: two
+  location: two
+  progress: 1
+  archived: false

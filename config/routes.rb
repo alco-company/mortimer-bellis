@@ -49,6 +49,8 @@ Rails.application.routes.draw do
   # -------- END API ROUTES & 3RD PARTY --------
 
   resources :calls
+  resources :tasks
+
   resources :time_materials do
     member do
       post :archive
