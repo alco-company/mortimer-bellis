@@ -75,6 +75,7 @@ END
 ## 19/12/2024
 
 * add task model to navigation
+* add validation to task
 
 ## 18/12/2024
 
