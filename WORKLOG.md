@@ -70,6 +70,12 @@ END
 * pickup the mobile moving - ask if driving - enter odometer
 * validate punches before deleting punch_clocks !!
 * list tasks for new customers on dashboard
+* invoices
+* /users/edit
+* team status https://localhost:3000/pos/punch_clock.20?api_key=arbjQmRVrVpLU4fzYSSSQc31
+* location status - missing
+* user status - https://localhost:3000/pos/users?api_key=mVunTFDgFVud5qJAHgrHbp4P
+* put edit icon on show modal
 * check_tasks - check if tasks are done
 
 ## 19/12/2024
@@ -78,6 +84,7 @@ END
 * add validation to task
 * fix stateable on time_material
 * componentize SuperForm specializations - prepare for gem update
+* list issues on WORKLOG
 
 ## 18/12/2024
 
