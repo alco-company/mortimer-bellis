@@ -49,6 +49,8 @@
 
 class Task < ApplicationRecord
   include Tenantable
+  include TaskStateable
+
   belongs_to :tasked_for, polymorphic: true
 
   scope :by_fulltext, ->(query) { where("name LIKE :query or dewcription LIKE :query", query: "%#{query}%") if query.present? }
@@ -57,6 +59,7 @@ class Task < ApplicationRecord
   scope :by_description, ->(description) { where("color LIKE ?", "%#{description}%") if description.present? }
   scope :tasked_for_the, ->(tasked_for) { where("tasked_for_id = :tid and tasked_for_type = :type", tid: tasked_for.id, type: tasked_for.class.to_s) if tasked_for.present? }
   scope :uncompleted, -> { where(completed_at: nil) }
+  scope :first_tasks, -> { where(priority: ..0) }
 
   validates :title, presence: true, uniqueness: { scope: :tenant_id, message: I18n.t("tasks.errors.messages.title_exist") }
 
@@ -68,6 +71,7 @@ class Task < ApplicationRecord
       .by_title(flt["title"])
       .by_link(flt["link"])
       .by_description(flt["description"])
+      .by_state(flt["state"])
   rescue
     filter.destroy if filter
     all
@@ -75,6 +79,10 @@ class Task < ApplicationRecord
 
   def name
     self.title
+  end
+
+  def completed?
+    self.completed_at.present?
   end
 
   def self.set_order(resources, field = :title, direction = :asc)

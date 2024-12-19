@@ -70,6 +70,11 @@ END
 * pickup the mobile moving - ask if driving - enter odometer
 * validate punches before deleting punch_clocks !!
 * list tasks for new customers on dashboard
+* check_tasks - check if tasks are done
+
+## 19/12/2024
+
+* add task model to navigation
 
 ## 18/12/2024
 

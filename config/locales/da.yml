@@ -178,6 +178,7 @@ da:
     products: Produkter
     projects: Projekter
     punches: Stemplinger
+    tasks: Opgaver
     teams: Hold
     tenants: Konti
     oauth_applications: API adgang

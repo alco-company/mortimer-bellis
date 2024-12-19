@@ -24,7 +24,7 @@ da:
     punch_clocks: Stempelure
 
     list:
-      title: Kort beskrivelse
+      title: Opgaver
       new: Ny opgave
       edit: Rediger
       delete: Slet
