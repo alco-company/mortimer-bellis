@@ -76,7 +76,6 @@ END
 * location status - missing
 * user status - https://localhost:3000/pos/users?api_key=mVunTFDgFVud5qJAHgrHbp4P
 * put edit icon on show modal
-* check_tasks - check if tasks are done
 
 ## 19/12/2024
 
@@ -85,6 +84,7 @@ END
 * fix stateable on time_material
 * componentize SuperForm specializations - prepare for gem update
 * list issues on WORKLOG
+* check_tasks - check if tasks are done
 
 ## 18/12/2024
 

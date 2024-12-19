@@ -64,8 +64,24 @@ class TasksController < MortimerController
     # end
 
     # Only allow a list of trusted parameters through.
+    #  :tenant_id
+    #  :tasked_for_type
+    #  :tasked_for_id
+    #  :title
+    #  :link
+    #  :description
+    #  :state
+    #  :priority
+    #  :due_at
+    #  :progress
+    #  :completed_at
+    #  :archived
+    #  :created_at
+    #  :updated_at
+    #  :validation
+
     def resource_params
-      params.expect(task: [ :tenant_id, :title, :link, :description, :state, :priority, :due_at, :completed_at, :progress, :archived ])
+      params.expect(task: [ :tenant_id, :tasked_for_type, :tasked_for_id, :title, :link, :description, :validation, :state, :priority, :due_at, :completed_at, :progress, :archived ])
     end
 
     def before_create_callback

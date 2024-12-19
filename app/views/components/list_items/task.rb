@@ -15,6 +15,7 @@ class ListItems::Task < ListItems::ListItem
 
   def show_matter_mugshot
     # mugshot(resource, css: "sm:hidden mr-2 h-5 w-5 flex-none rounded-full bg-gray-50")
+    span(class: "mr-4") { resource.priority }
   end
 
   def show_secondary_info

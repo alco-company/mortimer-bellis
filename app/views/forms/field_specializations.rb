@@ -88,6 +88,12 @@ module FieldSpecializations
     end
   end
 
+  class NumberField < Superform::Rails::Components::InputComponent
+    def field_attributes
+      @attributes.keys.include?(:class) ? super.merge(type: "number") : super.merge(class: "mort-form-text", type: "number")
+    end
+  end
+
   class LookupField < Superform::Rails::Components::SelectField
     # include Phlex::Rails::Helpers::Request
     #
@@ -332,6 +338,9 @@ module FieldSpecializations
     end
     def datetime(**attributes)
       DateTimeField.new(self, attributes: attributes)
+    end
+    def number(**attributes)
+      NumberField.new(self, attributes: attributes)
     end
     def input(**attributes)
       InputField.new(self, attributes: attributes)

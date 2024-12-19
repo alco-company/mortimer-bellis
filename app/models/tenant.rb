@@ -89,23 +89,15 @@ class Tenant < ApplicationRecord
 
   def check_tasks
     # tasks that should be done by the tenant
-    Task.where(tenant_id: 1).first_tasks.each do |first_task|
-      unless tasks.first_tasks.map(&:priority).include?(first_task.priority)
-        first_task.tenant = self
-        first_task.tasked_for = users.first
-        Task.create(first_task.attributes)
-      end
-    end
-
-    # validate that all tasks are done
-    tasks.first_tasks.uncompleted.each do |task|
-      task.update completed_at: Time.current if eval(task.validation)
-    end
+    fts = FirstTaskService.new(self, Current.user)
+    fts.check
+    fts.validate
   end
 
   # these are the "first" tasks that users should complete
   # soon after registration
-  # they are not mandatory and only the first two is for the admin user only
+  # they are not mandatory
+  # and only the first 99 is for the admin user only
   # the rest are for all users
   # the priority is negative so they are always on top of the list
   # and not included generally in any user's task list

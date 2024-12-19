@@ -61,7 +61,7 @@ class Task < ApplicationRecord
   scope :uncompleted, -> { where(completed_at: nil) }
   scope :first_tasks, -> { where(priority: ..0) }
 
-  validates :title, presence: true, uniqueness: { scope: :tenant_id, message: I18n.t("tasks.errors.messages.title_exist") }
+  validates :title, presence: true # , uniqueness: { scope: :tenant_id, message: I18n.t("tasks.errors.messages.title_exist") }
 
   def self.filtered(filter)
     flt = filter.filter

@@ -597,6 +597,7 @@ da:
       task:
         title: Overskrift
         description: Beskrivelse
+        validation: Validering
         state: Status
         priority: Prioritet
         due_date: Klar senest den
