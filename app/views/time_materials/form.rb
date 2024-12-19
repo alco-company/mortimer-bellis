@@ -43,7 +43,7 @@ class TimeMaterials::Form < ApplicationForm
       # url = @resource.id.nil? ? time_materials_url : time_material_url(@resource)
       # render TimeMaterialForm.new time_material: @resource, url: url
       if @resource.pushed_to_erp?
-        view_only field(:pushed_erp_timestamp).input(class: "mort-form-text")
+        view_only field(:pushed_erp_timestamp).input()
       end
       if @resource.cannot_be_pushed?
         view_only field(:push_log).textarea(class: "mort-form-text")
@@ -117,10 +117,10 @@ class TimeMaterials::Form < ApplicationForm
             about_field
             #
             div(class: "col-span-2") do
-              row field(:hour_time).input(class: "mort-form-text", type: "tel"), "mort-field my-1"
+              row field(:hour_time).input(type: "tel"), "mort-field my-1"
             end
             div(class: "col-span-2") do
-              row field(:minute_time).input(class: "mort-form-text", type: "tel"), "mort-field my-1"
+              row field(:minute_time).input(type: "tel"), "mort-field my-1"
             end
             #
             rate_field I18n.t("time_material.rate.hourly")
@@ -130,7 +130,7 @@ class TimeMaterials::Form < ApplicationForm
             end
             div(class: "col-span-11") do
               span(class: "col-span-4 text-sm font-light text-lime-500") { calc_time_spent model.time_spent }
-              # row field(:time).input(class: "mort-form-text"), "mort-field my-1"
+              # row field(:time).input(), "mort-field my-1"
             end
           end
         end
@@ -159,7 +159,7 @@ class TimeMaterials::Form < ApplicationForm
             end
             div(class: "col-span-4 grid gap-x-2 grid-cols-4") do
               div(class: "col-span-2") do
-                row field(:quantity).input(class: "mort-form-text"), "mort-field my-1"
+                row field(:quantity).input(), "mort-field my-1"
               end
               div(class: "col-span-2") do
                 row field(:unit).select(@resource.units, class: "mort-form-text text-sm"), "mort-field my-1"
@@ -167,10 +167,10 @@ class TimeMaterials::Form < ApplicationForm
             end
             div(class: "col-span-4 grid gap-x-2 grid-cols-5") do
               div(class: "col-span-3") do
-                row field(:unit_price).input(class: "mort-form-text"), "mort-field my-1"
+                row field(:unit_price).input(), "mort-field my-1"
               end
               div(class: "col-span-2") do
-                row field(:discount).input(class: "mort-form-text", placeholder: I18n.t("time_material.discount.placeholder")), "mort-field my-1"
+                row field(:discount).input(placeholder: I18n.t("time_material.discount.placeholder")), "mort-field my-1"
               end
             end
           end
@@ -196,7 +196,7 @@ class TimeMaterials::Form < ApplicationForm
             end
             div(class: "col-span-4 grid gap-x-2 grid-cols-10") do
               div(class: "col-span-4") do
-                row field(:kilometers).input(class: "mort-form-text", data: { time_material_target: "mileage" }), "mort-field my-1"
+                row field(:kilometers).input(data: { time_material_target: "mileage" }), "mort-field my-1"
               end
               div(class: "col-span-6") do
                 row field(:trip_purpose).select(TimeMaterial.trip_purposes, class: "mort-form-select"), "mort-field my-1"
@@ -248,7 +248,7 @@ class TimeMaterials::Form < ApplicationForm
 
   def rate_field(lbl, css = "col-span-3", fld_name = "rate")
     div(class: css) do
-      row field(fld_name.to_sym).input(class: "mort-form-text"), "mort-field my-1"
+      row field(fld_name.to_sym).input(), "mort-field my-1"
     end
   end
 

@@ -77,6 +77,7 @@ END
 * add task model to navigation
 * add validation to task
 * fix stateable on time_material
+* componentize SuperForm specializations - prepare for gem update
 
 ## 18/12/2024
 
