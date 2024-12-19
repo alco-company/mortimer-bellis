@@ -75,7 +75,6 @@ END
 * team status https://localhost:3000/pos/punch_clock.20?api_key=arbjQmRVrVpLU4fzYSSSQc31
 * location status - missing
 * user status - https://localhost:3000/pos/users?api_key=mVunTFDgFVud5qJAHgrHbp4P
-* put edit icon on show modal
 
 ## 19/12/2024
 
@@ -85,6 +84,7 @@ END
 * componentize SuperForm specializations - prepare for gem update
 * list issues on WORKLOG
 * check_tasks - check if tasks are done
+* put edit icon on show modal
 
 ## 18/12/2024
 
