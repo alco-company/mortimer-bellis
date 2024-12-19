@@ -76,6 +76,7 @@ END
 
 * add task model to navigation
 * add validation to task
+* fix stateable on time_material
 
 ## 18/12/2024
 

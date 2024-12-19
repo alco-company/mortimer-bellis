@@ -27,6 +27,18 @@ class TimeMaterial < ApplicationRecord
 
   validates :about, presence: true, if: [ Proc.new { |c| c.comment.blank? && c.product_name.blank? } ]
 
+  def self.filtered(filter)
+    flt = filter.filter
+
+    all
+      .by_tenant()
+      .by_about(flt["about"])
+      .by_state(flt["state"])
+  rescue
+    filter.destroy if filter
+    all
+  end
+
   def self.set_order(resources, field = :date, direction = :desc)
     resources.ordered(field, direction)
   end
@@ -93,17 +105,6 @@ class TimeMaterial < ApplicationRecord
     self.time = "%s:%s" % [ self.time.split(":")[0], val ] if self.time.include?(":")
     self.time = "%s:%s" % [ self.time.split(",")[0], val ] if self.time.include?(",")
     self.time = "%s:%s" % [ self.time.split(".")[0], val ] if self.time.include?(".")
-  end
-
-  def self.filtered(filter)
-    flt = filter.filter
-
-    all
-      .by_tenant()
-      .by_about(flt["about"])
-  rescue
-    filter.destroy if filter
-    all
   end
 
   def has_mugshot?
