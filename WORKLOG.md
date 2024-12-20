@@ -69,12 +69,16 @@ END
 * consider https://bunny.net/ for image optimization and CDN as CloudFlare substitute
 * pickup the mobile moving - ask if driving - enter odometer
 * validate punches before deleting punch_clocks !!
-* list tasks for new customers on dashboard
 * invoices
 * /users/edit
 * team status https://localhost:3000/pos/punch_clock.20?api_key=arbjQmRVrVpLU4fzYSSSQc31
 * location status - missing
 * user status - https://localhost:3000/pos/users?api_key=mVunTFDgFVud5qJAHgrHbp4P
+
+## 20/12/2024
+
+* put edit icon on show modal
+* move turbo_frame 'form' to layout
 
 ## 19/12/2024
 
@@ -84,7 +88,6 @@ END
 * componentize SuperForm specializations - prepare for gem update
 * list issues on WORKLOG
 * check_tasks - check if tasks are done
-* put edit icon on show modal
 
 ## 18/12/2024
 
