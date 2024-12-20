@@ -70,7 +70,6 @@ END
 * pickup the mobile moving - ask if driving - enter odometer
 * validate punches before deleting punch_clocks !!
 * invoices
-* /users/edit
 * team status https://localhost:3000/pos/punch_clock.20?api_key=arbjQmRVrVpLU4fzYSSSQc31
 * location status - missing
 * user status - https://localhost:3000/pos/users?api_key=mVunTFDgFVud5qJAHgrHbp4P
@@ -80,6 +79,7 @@ END
 * put edit icon on show modal
 * move turbo_frame 'form' to layout
 * test 'hotwire-spark' - not ready for prime time (Tailwind or other issue)
+* /users/edit - in form like other form views
 
 ## 19/12/2024
 
