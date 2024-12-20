@@ -79,6 +79,7 @@ END
 
 * put edit icon on show modal
 * move turbo_frame 'form' to layout
+* test 'hotwire-spark' - not ready for prime time (Tailwind or other issue)
 
 ## 19/12/2024
 
