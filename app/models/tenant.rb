@@ -24,6 +24,7 @@ class Tenant < ApplicationRecord
   has_many :punch_cards, dependent: :destroy
   has_many :punch_clocks, dependent: :destroy
   has_many :punches, dependent: :destroy
+  has_many :tasks, dependent: :destroy
   has_many :teams, dependent: :destroy
   has_many :time_materials, dependent: :destroy
   has_many :users, dependent: :destroy
@@ -41,6 +42,19 @@ class Tenant < ApplicationRecord
   validates :name, presence: true, uniqueness: { message: I18n.t("tenants.errors.messages.name_exist") }
   validates :email, presence: true
 
+  def self.filtered(filter)
+    flt = filter.filter
+
+    all
+      .by_tenant()
+      .by_name(flt["name"])
+      .by_locale(flt["locale"])
+      .by_time_zone(flt["time_zone"])
+  rescue
+    filter.destroy if filter
+    all
+  end
+
   #
   # make it possible to handle model deletion differently from model to model
   # eg TenantRegistrationService.call(tenant, destroy: true)
@@ -57,19 +71,6 @@ class Tenant < ApplicationRecord
     calendars
   end
 
-  def self.filtered(filter)
-    flt = filter.filter
-
-    all
-      .by_tenant()
-      .by_name(flt["name"])
-      .by_locale(flt["locale"])
-      .by_time_zone(flt["time_zone"])
-  rescue
-    filter.destroy if filter
-    all
-  end
-
   def self.form(resource:, editable: true)
     Tenants::Form.new resource: resource, editable: editable, enctype: "multipart/form-data"
   end
@@ -84,5 +85,50 @@ class Tenant < ApplicationRecord
 
   def sick_absence_this_week
     punches.sick_absence.this_week.count
+  end
+
+  def check_tasks
+    # tasks that should be done by the tenant
+    fts = FirstTaskService.new(self, Current.user)
+    fts.check
+    fts.validate
+  end
+
+  # these are the "first" tasks that users should complete
+  # soon after registration
+  # they are not mandatory
+  # and only the first 99 is for the admin user only
+  # the rest are for all users
+  # the priority is negative so they are always on top of the list
+  # and not included generally in any user's task list
+  # and the negative value is a kind of unique ID across locales
+  def possible_tasks
+    {
+      colleagues: {
+        title: I18n.t("tasks.first_tasks.colleagues.title"),
+        link: "/users/invitation/new",
+        priority: -1
+      },
+      dinero: {
+        title: I18n.t("tasks.first_tasks.dinero.title"),
+        link: "/provided_services/new?service=dinero",
+        priority: -2
+      },
+      multi_factor: {
+        title: I18n.t("tasks.first_tasks.multi_factor.title"),
+        link: "dashboard_task_enable_2fa",
+        priority: -3
+      },
+      profile: {
+        title: I18n.t("tasks.first_tasks.profile.title"),
+        link: "/users/edit",
+        priority: -4
+      },
+      notifications: {
+        title: I18n.t("tasks.first_tasks.notifications.title"),
+        link: "/users/edit",
+        priority: -5
+      }
+    }
   end
 end

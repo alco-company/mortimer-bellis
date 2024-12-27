@@ -1,6 +1,7 @@
 da:
   english: "Do you prefer english?"
   success: Succes
+  start: Start
   error: Fejl
   alert: Fejl
   warning: Advarsel
@@ -177,6 +178,7 @@ da:
     products: Produkter
     projects: Projekter
     punches: Stemplinger
+    tasks: Opgaver
     teams: Hold
     tenants: Konti
     oauth_applications: API adgang
@@ -209,7 +211,7 @@ da:
     truncate: "..."
     more: "mere"
   profile:
-    overview: Oversigt
+    overview: Åbne opgaver
     invite_new_user: Invitér ny bruger
     invite_new_ user: Invitér ny medarbejder
 
@@ -592,6 +594,15 @@ da:
         system_key: Nøgle
         position: Rækkefølge
         value: Værdi
+      task:
+        title: Overskrift
+        description: Beskrivelse
+        validation: Validering
+        state: Status
+        priority: Prioritet
+        due_date: Klar senest den
+        user_id: Ansvarlig
+        link: URL
       team:
         norm_time_minutes: timer:min i et rul
         name: Hold navn

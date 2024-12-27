@@ -5,8 +5,5 @@
 <div id="list" role="list" class="mb-16">
   <%= render List.new records: @records, pagy: @pagy, initial: true, params: params, user: Current.user %>
 </div>
-<div class="overscroll-none">
-  <%= turbo_frame_tag "form" %>
-</div>
 
 <%#= render partial: "pagination" if @pagy.pages > 1 %>

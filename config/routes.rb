@@ -49,6 +49,8 @@ Rails.application.routes.draw do
   # -------- END API ROUTES & 3RD PARTY --------
 
   resources :calls
+  resources :tasks
+
   resources :time_materials do
     member do
       post :archive
@@ -93,7 +95,11 @@ Rails.application.routes.draw do
 
   get "tooltips/show"
 
-  resources :dashboards
+  resources :dashboards do
+    collection do
+      get "show_dashboard"
+    end
+  end
   resources :background_jobs
   resources :pages do
     collection do
@@ -165,5 +171,6 @@ Rails.application.routes.draw do
   get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
 
   # Defines the root path route ("/")
-  root "dashboards#show_dashboard"
+  # root "dashboards#show_dashboard"
+  root "time_materials#index"
 end

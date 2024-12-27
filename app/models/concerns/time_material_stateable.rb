@@ -12,7 +12,6 @@ module TimeMaterialStateable
       archived:           99
     }
     scope :by_state, ->(state) { where("state = ?", state) if state.present? }
-    scope :archived, ->() { where(state: 99) }
   end
 
   class_methods do

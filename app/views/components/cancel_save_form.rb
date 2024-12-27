@@ -31,8 +31,7 @@ class CancelSaveForm < ApplicationComponent
     link_to(
       cancel_url,
       id: "cancel-form",
-      class:
-        "relative rounded-md bg-white text-gray-400 hover:text-gray-500 focus:ring-1 focus:ring-sky-200",
+      class: "relative rounded-md bg-white text-gray-400 hover:text-gray-500 focus:ring-1 focus:ring-sky-200",
       role: "link",
       data: {
         form_target: "cancelForm",
@@ -40,11 +39,11 @@ class CancelSaveForm < ApplicationComponent
         turbo_frame: "form"
       },
       tabindex: "-1"
-    ) do
-      span(class: "pointer-events-none absolute -inset-2.5")
-      span(class: "pointer-events-none sr-only") { "Go back to List" }
-      render Icons::Cancel.new cls: "h-6 w-6 text-gray-400"
-    end
+      ) do
+        span(class: "pointer-events-none absolute -inset-2.5")
+        span(class: "pointer-events-none sr-only") { "Go back to List" }
+        render Icons::Cancel.new(cls: "h-6 w-6 text-gray-400")
+      end
   end
 
   def edit_button
@@ -52,8 +51,7 @@ class CancelSaveForm < ApplicationComponent
       edit_url == "-1" ? plain(" ") :
       link_to(
         edit_url,
-        class:
-          "relative rounded-md bg-white text-gray-400 hover:text-gray-500 focus:ring-1 focus:ring-sky-200",
+        class: "relative rounded-md bg-white text-gray-400 hover:text-gray-500 focus:ring-1 focus:ring-sky-200",
         role: "link",
         data: {
           turbo_action: "advance",
@@ -62,8 +60,8 @@ class CancelSaveForm < ApplicationComponent
         tabindex: "-1"
       ) do
         span(class: "pointer-events-none absolute -inset-2.5")
-        span(class: "pointer-events-none sr-only") { "Save content" }
-        render Icons::Edit.new cls: "text-sky-600 pointer-events-none"
+        span(class: "pointer-events-none sr-only") { "Edit content" }
+        render Icons::Edit.new(cls: "h-6 w-6 text-sky-600 ")
       end
     end
   end

@@ -184,10 +184,35 @@ class NavigationComponent < ApplicationComponent
   private
 
     def default_menu
-      {
-        dashboard: { title: "dashboard", url: "/", icon: "home" },
+      return {
+        dashboard: { title: "dashboard", url: "/dashboards/show_dashboard", icon: "home" },
         time_material: { title: "time_material", url: "/time_materials", icon: "time_material" },
-        calendar: { title: "calendar", url: "/calendars", icon: "calendar" },
+        # calendar: { title: "calendar", url: "/calendars", icon: "calendar" },
+        # reports: { title: "Reports", url: "/pages", icon: "home" },
+        manage: { title: "manage",
+          submenu: {
+            # background_jobs: { title: "background_jobs", url: "/background_jobs", icon: "background_job" },
+            customers: { title: "customers", url: "/customers", icon: "customer" },
+            # dashboards: { title: "dashboards", url: "/dashboards", icon: "home" },
+            # invoices: { title: "invoices", url: "/invoices", icon: "invoice" },
+            # invoice_items: { title: "invoice_items", url: "/invoice_items", icon: "invoice_item" },
+            kiosks: { title: "kiosks", url: "/punch_clocks", icon: "punch_clock" },
+            locations: { title: "locations", url: "/locations", icon: "location" },
+            products: { title: "products", url: "/products", icon: "product" },
+            projects: { title: "projects", url: "/projects", icon: "project" },
+            # punches: { title: "punches", url: "/punches", icon: "punch" },
+            # reports: { title: "Reports", url: "/reports", icon: "home" },
+            teams: { title: "teams", url: "/teams", icon: "team" },
+            tenants: { title: "tenants", url: "/tenants", icon: "tenant" },
+            oauths: { title: "oauth_applications", url: "/oauth/applications", icon: "oauth" },
+            users: { title: "users", url: "/users", icon: "user" }
+          }
+        }
+      } unless Current.user.superadmin?
+      {
+        dashboard: { title: "dashboard", url: "/dashboards/show_dashboard", icon: "home" },
+        time_material: { title: "time_material", url: "/time_materials", icon: "time_material" },
+        # calendar: { title: "calendar", url: "/calendars", icon: "calendar" },
         # reports: { title: "Reports", url: "/pages", icon: "home" },
         manage: { title: "manage",
           submenu: {
@@ -202,9 +227,10 @@ class NavigationComponent < ApplicationComponent
             projects: { title: "projects", url: "/projects", icon: "project" },
             punches: { title: "punches", url: "/punches", icon: "punch" },
             # reports: { title: "Reports", url: "/reports", icon: "home" },
+            tasks: { title: "tasks", url: "/tasks", icon: "task" },
             teams: { title: "teams", url: "/teams", icon: "team" },
             tenants: { title: "tenants", url: "/tenants", icon: "tenant" },
-            oauths: { title: "oauth_applications", url: "/oauth/applications", icon: "tenant" },
+            oauths: { title: "oauth_applications", url: "/oauth/applications", icon: "oauth" },
             users: { title: "users", url: "/users", icon: "user" }
           }
         }

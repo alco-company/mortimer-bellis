@@ -12,8 +12,8 @@ class Employees::Profile < ApplicationForm
         class:
           "mt-10 space-y-8 border-b border-gray-900/10 pb-12 sm:space-y-0 sm:divide-y sm:divide-gray-900/10 sm:border-t sm:pb-0"
       ) do
-        row field(:name).input(class: "mort-form-text")
-        row field(:description).input(class: "mort-form-text")
+        row field(:name).input()
+        row field(:description).input()
         row field(:mugshot).file(class: "mort-form-file")
       end
       h2(class: "text-base font-semibold leading-7 text-gray-900") do
@@ -26,8 +26,8 @@ class Employees::Profile < ApplicationForm
         class:
           "mt-10 space-y-8 border-b border-gray-900/10 pb-12 sm:space-y-0 sm:divide-y sm:divide-gray-900/10 sm:border-t sm:pb-0"
       ) do
-        row field(:email).input(class: "mort-form-text")
-        row field(:cell_phone).input(class: "mort-form-text")
+        row field(:email).input()
+        row field(:cell_phone).input()
         row field(:birthday).date(class: "mort-form-text")
         row field(:locale).select(User.locales, prompt: I18n.t(".select_user_locale"), class: "mort-form-text")
         row field(:time_zone).select(ActiveSupport::TimeZone.all.collect { |tz| [ "(GMT#{ActiveSupport::TimeZone.seconds_to_utc_offset(tz.utc_offset)}) #{tz.name}", tz.tzinfo.name ] }, class: "mort-form-text")

@@ -2,22 +2,27 @@ class TwoFactorField < ApplicationComponent
   include Phlex::Rails::Helpers::LinkTo
   include Phlex::Rails::Helpers::Routes
 
-  def initialize(button_only: false, dashboard: false)
+  def initialize(button_only: false, dashboard: false, link_only: false)
     @button_only = button_only
     @dashboard = dashboard
+    @link_only = link_only
   end
 
   def view_template
     if @button_only
-      div(id: "two_factor_field_button", class: %(ml-6 mt-0 flex-shrink-0)) do
+      css = @link_only ? "flex mort-link-primary" : "mort-btn-primary"
+      div(id: "two_factor_field_button", class: %( mt-0 flex-shrink-0)) do
         if Current.user.two_factor_app_enabled
           link_to(
             I18n.t("devise.second_factor.disable_2fa"),
             new_destroy_user_two_factor_app_url(button_only: true),
             data: { turbo_stream: true },
-            class: "mort-btn-primary bg-yellow-500") unless @dashboard
+            class: "#{css} bg-yellow-500") unless @dashboard
         else
-          link_to I18n.t("devise.second_factor.enable_2fa"), init_new_user_two_factor_app_url(button_only: true), data: { turbo_stream: true }, class: "mort-btn-primary"
+          link_to(init_new_user_two_factor_app_url(button_only: true), data: { turbo_stream: true }, class: css) do
+            span(class: "text-sm mr-2") { I18n.t("devise.second_factor.enable_2fa") }
+            render Icons::Link.new css: "mort-link-primary h-6 "
+          end
         end
       end
     else

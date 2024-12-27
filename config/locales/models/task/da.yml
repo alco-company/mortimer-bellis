@@ -1,0 +1,59 @@
+da:
+  task:
+    modal:
+      delete_all: 
+        title: Slet alle opgaver
+        instruction: Er du sikker på, at du vil slette alle opgaver?
+      delete:
+        title: Slet denne opgave
+        instruction: Er du sikker på, at du vil slette opgaven %{name}?
+        button: Slet
+
+  tasks:
+    default_task: Opgave
+    new: Ny opgave
+    validation_errors: Der er fejl i det indtastede
+
+    create:
+      post: Opgaven blev oprettet
+    update:
+      post: Opgaven blev opdateret
+    destroy:
+      post: Opgaven blev slettet
+
+    punch_clocks: Stempelure
+
+    list:
+      title: Opgaver
+      new: Ny opgave
+      edit: Rediger
+      delete: Slet
+      show: Vis
+      name: Navn
+      email: Email
+      color: Farve
+      phone: Telefon
+      pincode: Pinkode
+      state: Status
+      updated_at: Opdateret den
+
+    form:
+      new: Ny opgave
+      edit: Rediger opgave
+      show: Vis opgave
+
+    new:
+      title: Ny opgave
+      create: Opret
+
+    edit:
+      title: Rediger opgave
+      update: Opdater
+
+    show:
+      title: opgave
+      back: Tilbage
+
+    errors:
+      messages:
+        name_exist: "Opgaven findes allerede"

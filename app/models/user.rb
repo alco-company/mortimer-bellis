@@ -35,6 +35,7 @@ class User < ApplicationRecord
            foreign_key: :resource_owner_id,
            dependent: :delete_all # or :destroy if you need callbacks
 
+  has_many :tasks, as: :tasked_for
 
   enum :role, { user: 0, admin: 1, superadmin: 2 }
   has_one_attached :mugshot

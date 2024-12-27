@@ -19,6 +19,8 @@ module DefaultActions
       redirect_to root_path, alert: I18n.t("errors.messages.something_went_wrong", error: e.message)
     end
 
+    # GET /users/lookup
+    # renders a lookup partial used by <SELECT>
     def lookup
       set_query
       lookup_options = "%s_lookup_options" % params.permit![:div_id]

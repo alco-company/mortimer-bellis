@@ -7,10 +7,10 @@ class PunchClocks::Form < ApplicationForm
       link_to(I18n.t("punch_clock.kiosk_ui"), pos_punch_clock_url(model, api_key: model.access_token), class: "mort-pri-link", target: "_blank")
     end
 
-    # view_only field(:access_token).input(class: "mort-form-text")
-    row field(:name).input(class: "mort-form-text").focus
+    # view_only field(:access_token).input()
+    row field(:name).input().focus
     row field(:location_id).select(Location.by_tenant.order(name: :asc).select(:id, :name), prompt: I18n.t(".select_location"), class: "mort-form-text")
-    row field(:ip_addr).input(class: "mort-form-text").focus
+    row field(:ip_addr).input().focus
     row field(:locale).select(PunchClock.locales, prompt: I18n.t(".select_punch_clock_locale"), class: "mort-form-text")
     row field(:time_zone).select(PunchClock.time_zones_for_phlex, class: "mort-form-text")
   end

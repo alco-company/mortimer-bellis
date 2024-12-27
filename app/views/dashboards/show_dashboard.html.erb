@@ -4,19 +4,29 @@
   <%= render HeaderProfile.new %>
 
   <div class="mt-8">
-    <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+    <div class="flex mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+
       <h2 class="text-lg font-medium leading-6 text-gray-900"><%= I18n.t("profile.overview") %></h2>
-      
-      <div class="mt-2 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
+
+      <% if Current.user.superadmin? %>
+        <div class="grow">&nbsp;</div>
+        <div class="">
+          <%= link_to new_task_url, class: "mort-btn-primary" do %>
+            <%= render Icons::Add.new %>
+            <%= I18n.t("tasks.new.title") %>
+          <% end %>
+        </div>
+      <% end %>
+      <!-- <div class="mt-2 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
         <%#= render StatsCard.new label: I18n.t("stats.workers_present"), value: Current.tenant.users.working.count,  css: "", url: "#" %>
         <%#= render StatsCard.new label: I18n.t("stats.hours_worked_this_week"), value: Current.tenant.working_hours_this_week,  css: "hidden sm:block", url: "#" %>
         <%#= render StatsCard.new label: I18n.t("stats.extra_hours_worked_this_week"), value: Current.tenant.extra_working_hours_this_week,  css: "hidden lg:block", url: "#" %>
         <%#= render StatsCard.new label: I18n.t("stats.sick_days_week"), value: Current.tenant.sick_absence_this_week,  css: "hidden xl:block", url: "#" %>
         <%# <%= render StatsCard.new label: I18n.t("stats.billable_hours"), value: 1_000,  css: "hidden lg:block", url: "#" %>
         <%#= render StatsCard.new label: I18n.t("stats.planned_vacation_days"), value: 1_000,  css: "hidden xl:block", url: "#" %>
-        <!-- More items... -->
-      </div>
-      <div class="flex flex-col w-full md:w-1/2 lg:w-1/3">
+        More items... 
+      </div> -->
+      <!-- <div class="flex flex-col w-full md:w-1/2 lg:w-1/3">
         <div class="grid grid-cols-2"><div class="">accuracy</div>         <div class="accuracy text-right">1000</div></div>
         <div class="grid grid-cols-2"><div class="">altitude</div>         <div class="altitude text-right">10</div></div>
         <div class="grid grid-cols-2"><div class="">altitudeAccuracy</div> <div class="altitudeAccuracy text-right">0</div></div>
@@ -24,13 +34,23 @@
         <div class="grid grid-cols-2"><div class="">latitude</div>         <div class="latitude text-right">0</div></div>
         <div class="grid grid-cols-2"><div class="">longitude</div>        <div class="longitude text-right">0</div></div>
         <div class="grid grid-cols-2"><div class="">speed</div>            <div class="speed text-right">0</div>        </div>
-      </div>
+      </div>-->
     </div>
+    <ul role="list" class="px-4 mt-8 grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-8 lg:grid-cols-3 2xl:grid-cols-5 xl:gap-x-8 ">
+
+      <% if @tasks.any? %>
+        <% @tasks.each do |t| %>
+          <%= render DashboardTask.new task: t %>
+        <% end %>
+      <% else %>
+        Du har ingen opgaver, der ikke er afsluttet
+      <% end %>
+    </ul>
 
     <!-- Activity section -->
-    <% punches = "%s_punches" % Current.tenant.id %>
-    <%= turbo_stream_from punches %>
-    <%= render ActivityList.new list: @activity_list, params: { controller: "punches" }, url: punches_url %>
+    <% # punches = "%s_punches" % Current.tenant.id %>
+    <%#= turbo_stream_from punches %>
+    <%#= render ActivityList.new list: @activity_list, params: { controller: "punches" }, url: punches_url %>
 
   </div>
 
@@ -53,19 +73,6 @@
       geoWatch = undefined;
     }
 
-    if ("geolocation" in navigator) {
-      navigator.geolocation.getCurrentPosition( setCurrentPosition, positionError, { 
-        enableHighAccuracy: false, 
-        timeout: 15000, 
-        maximumAge: 0 
-      } );
-
-      if ( "watchPosition" in navigator.geolocation ) { 
-        startWatch();
-      }
-    }
-
-    
     function setCurrentPosition( position ) {
       document.querySelector( '.accuracy' ).innerHTML = position.coords.accuracy; 
       document.querySelector( '.altitude' ).innerHTML = position.coords.altitude; 
@@ -96,6 +103,18 @@
       }
     }
 
+    // if ("geolocation" in navigator) {
+    //   navigator.geolocation.getCurrentPosition( setCurrentPosition, positionError, { 
+    //     enableHighAccuracy: false, 
+    //     timeout: 15000, 
+    //     maximumAge: 0 
+    //   } );
+    // 
+    //   if ( "watchPosition" in navigator.geolocation ) { 
+    //     startWatch();
+    //   }
+    // }
 
   </script>
 </div>
+

@@ -39,15 +39,51 @@ class Users::RegistrationsController < Devise::RegistrationsController
   # end
 
   # PUT /resource
+  #
+  # rewriting update method to allow for turbo drive/stream update
+  #
   def update
+    unless params[:user][:mugshot].present?
+      mugshot = resource.mugshot
+    end
     if params[:user][:role].present? &&
       !Current.user.superadmin? &&
       [ 0, "0", "superadmin", "Superadmin", "SUPERADMIN" ].include?(params[:user][:role])
       redirect_to edit_user_registration_path, alert: I18n.t("errors.messages.user_role_cannot_be_assigned") and return
     end
-    # params[:user][:password].blank? && params[:user][:password_confirmation].blank? ? update_now : super
-    super
+
+    self.resource = resource_class.to_adapter.get!(send(:"current_#{resource_name}").to_key)
+    prev_unconfirmed_email = resource.unconfirmed_email if resource.respond_to?(:unconfirmed_email)
+
+    resource_updated = update_resource(resource, account_update_params)
+    yield resource if block_given?
+    if resource_updated
+      resource.mugshot = mugshot if mugshot
+      set_flash_message_for_update(resource, prev_unconfirmed_email)
+      render turbo_stream: [
+        turbo_stream.update("form", ""),
+        turbo_stream.replace("flash_container", partial: "application/flash_message")
+      ]
+
+      # bypass_sign_in resource, scope: resource_name if sign_in_after_change_password?
+
+      # respond_with resource, location: after_update_path_for(resource)
+    else
+      resource.attachment_changes.each do |_, change|
+        if change.is_a?(ActiveStorage::Attached::Changes::CreateOne)
+          change.upload
+          change.blob.save
+        end
+        # TODO: ActiveStorage::Attached::Changes::CreateMany
+      end
+
+      clean_up_passwords resource
+      set_minimum_password_length
+      respond_with resource
+    end
   end
+
+
 
   # DELETE /resource
   # def destroy

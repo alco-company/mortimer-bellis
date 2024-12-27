@@ -69,6 +69,37 @@ END
 * consider https://bunny.net/ for image optimization and CDN as CloudFlare substitute
 * pickup the mobile moving - ask if driving - enter odometer
 * validate punches before deleting punch_clocks !!
+* invoices
+* team status https://localhost:3000/pos/punch_clock.20?api_key=arbjQmRVrVpLU4fzYSSSQc31
+* location status - missing
+* user status - https://localhost:3000/pos/users?api_key=mVunTFDgFVud5qJAHgrHbp4P
+
+## 20/12/2024
+
+* put edit icon on show modal
+* move turbo_frame 'form' to layout
+* test 'hotwire-spark' - not ready for prime time (Tailwind or other issue)
+* /users/edit - in form like other form views
+
+## 19/12/2024
+
+* add task model to navigation
+* add validation to task
+* fix stateable on time_material
+* componentize SuperForm specializations - prepare for gem update
+* list issues on WORKLOG
+* check_tasks - check if tasks are done
+
+## 18/12/2024
+
+* add task model
+* show uncompleted tasks on dashboard
+* handle tasks on dashboard better
+
+## 17/12/2024
+
+* comment out calendar on sidebar, and other future-items
+* fix root_path -> /time_materials
 
 ## 16/12/2024
 
