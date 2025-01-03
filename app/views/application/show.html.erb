@@ -1,25 +1,21 @@
 <%= turbo_frame_tag "form" do %>
-  <!-- drawer -->
-  <div class=" relative z-50" role="dialog" aria-modal="true" data-controller="form">
+  <div class=" relative z-50 overscroll-none" role="dialog" aria-modal="true" data-controller="form">
     <!-- Background backdrop, show/hide based on slide-over state. -->
-    <div class="fixed inset-0"></div>
-
-    <div class="fixed inset-0 overflow-hidden" data-action="keydown->form#keydown">
-      <div class="absolute inset-0 overflow-hidden">
-        <div class="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10 sm:pl-16">
-          <!--
-            Slide-over panel, show/hide based on slide-over state.
-
-            Entering: "transform transition ease-in-out duration-500 sm:duration-700"
-              From: "translate-x-full"
-              To: "translate-x-0"
-            Leaving: "transform transition ease-in-out duration-500 sm:duration-700"
-              From: "translate-x-0"
-              To: "translate-x-full"
-          -->
-          <div class="pointer-events-auto mt-0 w-screen max-w-md">
-            <div class="flex h-full flex-col overflow-y-scroll bg-white shadow-xl">
-              <div class="sticky z-20 bg-white top-0 px-4 py-5 sm:px-6 border-b">
+    <div data-form-target="backdrop" class="fixed inset-0 bg-sky-300/20 overscroll-none"></div>
+    <div class="fixed inset-0 overflow-hidden overscroll-none" data-action="keydown->form#keydown">
+      <div class="absolute inset-0 overflow-hidden overscroll-none">
+        <div class="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-4 sm:pl-16">
+          <div 
+            data-form-target="panel"
+            data-transition-enter="transform transition ease-in-out duration-500 sm:duration-700"
+            data-transition-enter-start="translate-x-full"
+            data-transition-enter-end="translate-x-0"
+            data-transition-leave="transform transition ease-in-out duration-500 sm:duration-700"
+            data-transition-leave-start="translate-x-0"
+            data-transition-leave-end="translate-x-full"                  
+            class="pointer-events-auto mt-0 w-screen max-w-md overscroll-none">
+            <div class="flex h-full flex-col overflow-x-hidden overflow-y-scroll bg-white shadow-xl">
+              <div class="sticky z-20 bg-white top-0 py-5 pl-4 pr-4 sm:pr-6 sm:pl-6 border-b">
                 <div class="flex items-start justify-between">
                   <% url = (resource_class == TimeMaterial && @resource.pushed_to_erp?) ? "-1" : edit_resource_url %>
                   <%= render CancelSaveForm.new cancel_url: resources_url, title: I18n.t("%s.form.show" % resource_class.table_name), edit_url: url  %>
@@ -27,23 +23,23 @@
               </div>
               <!-- Main -->
               <div>
-                <div class="px-4 pb-5 pt-5 sm:pt-0">
-                    <%= render resource_class.form resource: @resource, editable: false %>
+                <div class="pl-4 pr-4 sm:pr-6 sm:pl-6 pb-1 pt-1 sm:pt-0">
+                  <%= render resource_class.form resource: @resource, editable: false %>
                 </div>
               </div>
-              <div class="fixed  w-full max-w-md z-20 bottom-0 bg-white px-4 py-5 sm:px-6 border-t">
-                <!-- <div class="flex justify-between">
-                  <%#= render CancelSaveForm.new cancel_url: resources_url, title: I18n.t("%s.form.show" % resource_class.table_name), edit_url: edit_resource_url    %>
-                </div>-->
-              </div>
+              <!--<div class="fixed  w-full max-w-md z-20 bottom-0 bg-white px-4 py-5 sm:px-6 border-t">
+                <div class="flex justify-between">
+                  <%#= render CancelSaveForm.new cancel_url: resources_url, title: I18n.t("%s.form.new" % resource_class.table_name)  %>
+                </div>
+              </div> -->
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-
 <% end %>
+
 <!--
       <div class="grid gap-2 grid-cols-1 lg:grid-cols-2 items-center">
         <%= svg_qr_code_link(resource_url)  %>

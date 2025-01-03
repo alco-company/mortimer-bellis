@@ -82,6 +82,7 @@ END
 ### 3/1/2025
 
 - add hidden description to dashboard tasks
+- fix show form not using same layout as edit/new
 
 ### 20/12/2024
 
