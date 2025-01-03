@@ -17,7 +17,7 @@ export default class extends Controller {
     document.documentElement.classList.add('lock-scroll'); // For html
     document.body.classList.add('lock-scroll'); // For body
     
-    enter(this.backdropTarget);
+    if (this.backdropTarget) enter(this.backdropTarget);
     enter(this.panelTarget);
   }
 

@@ -1,12 +1,12 @@
 class Icons::ChevronUpDown < Phlex::HTML
-  attr_accessor :cls
-  def initialize(cls:  "h-5 w-5 text-gray-400")
-    @cls = cls
+  attr_accessor :css
+  def initialize(css:  "h-5 w-5 text-gray-400")
+    @css = css
   end
 
   def view_template
     svg(
-      class: cls,
+      class: css,
       viewbox: "0 0 20 20",
       fill: "currentColor",
       aria_hidden: "true",

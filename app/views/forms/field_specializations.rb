@@ -117,7 +117,7 @@ module FieldSpecializations
         )
         hide = @collection.any? ? "" : "hidden"
         button(type: "button", data: { lookup_target: "optionsIcon", action: "click->lookup#toggleOptions" }, class: "#{hide} absolute w-10 inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:ring-1 focus:ring-inset focus:ring-sky-200 focus:outline-none") do
-          render Icons::ChevronUpDown.new cls: "h-5 w-5 text-gray-400"
+          render Icons::ChevronUpDown.new css: "h-5 w-5 text-gray-400"
         end
         hide = (!hide.blank? && field.value.nil?) ? "" : "hidden"
         button(type: "button", data: { lookup_target: "searchIcon", action: "click->lookup#search" }, class: "#{hide} absolute w-10 inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:ring-1 focus:ring-inset focus:ring-sky-200 focus:outline-none") do

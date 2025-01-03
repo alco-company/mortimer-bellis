@@ -25,6 +25,7 @@ class TwoFactorField < ApplicationComponent
           end
         end
       end
+      render Icons::ChevronUp.new css: "mort-link-primary h-6 rotate-180 cursor-pointer", data: { action: "click->hidden-description#toggle" }
     else
       div(id: "two_factor_field", class: %(rounded-md bg-sky-100 px-6 py-5 flex items-start justify-between)) do
         div(class: %(flex items-start)) do

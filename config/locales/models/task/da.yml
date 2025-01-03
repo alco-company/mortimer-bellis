@@ -11,7 +11,6 @@ da:
 
   tasks:
     default_task: Opgave
-    new: Ny opgave
     validation_errors: Der er fejl i det indtastede
 
     create:
@@ -22,6 +21,10 @@ da:
       post: Opgaven blev slettet
 
     punch_clocks: Stempelure
+
+    dashboard:
+      get_help_here: Få hjælp her
+      no_unfinished_tasks: Du har ingen opgaver, der ikke er afsluttet
 
     list:
       title: Opgaver
