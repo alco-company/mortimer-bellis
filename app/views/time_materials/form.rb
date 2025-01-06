@@ -22,13 +22,13 @@ class TimeMaterials::Form < ApplicationForm
             nav(class: "-mb-px flex space-x-2", aria_label: "Tabs") do
               time_tab
               material_tab
-              mileage_tab
+              # mileage_tab
             end
           end
         end
         show_time_tab
         show_material_tab
-        show_mileage_tab
+        # show_mileage_tab
       end
       #
       #

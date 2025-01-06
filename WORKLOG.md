@@ -82,6 +82,7 @@ END
 ### 6/1/2025
 
 - fix wrong redirect on edit password
+- hide 'kørsel' tab on t/m's
 
 ### 3/1/2025
 
