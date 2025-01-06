@@ -66,8 +66,8 @@ class User < ApplicationRecord
     numericality: { only_integer: true, in: 1000..9999, unless: ->(u) { u.pincode.blank? } },
     uniqueness: { scope: :tenant_id, message: I18n.t("users.errors.messages.pincode_exist_for_tenant"), unless: ->(u) { u.pincode.blank? } }
 
-  def remove
-    if tenant.users.count == 1
+  def remove(step = nil)
+    if tenant.users.count == 1 || step == "delete_account"
       TenantRegistrationService.call(tenant, destroy: true)
     else
       UserMailer.with(user: self).user_farewell.deliver

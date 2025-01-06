@@ -58,7 +58,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
     resource_updated = update_resource(resource, account_update_params)
     yield resource if block_given?
     if resource_updated
-      resource.mugshot = mugshot if mugshot
+      resource.mugshot = mugshot if mugshot && mugshot.attachable?
       set_flash_message_for_update(resource, prev_unconfirmed_email)
       render turbo_stream: [
         turbo_stream.update("form", ""),

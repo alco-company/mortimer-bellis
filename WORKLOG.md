@@ -84,7 +84,7 @@ END
 - fix wrong redirect on edit password
 - hide 'kørsel' tab on t/m's
 - fix redirect on accept invitation
-
+- fix bug on destroying account (admin user)
 
 ### 3/1/2025
 

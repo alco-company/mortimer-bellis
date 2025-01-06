@@ -146,6 +146,14 @@ da:
   modal:
     destroy:
       attachment_deleted: Den vedhæftede fil blev slettet
+      account:
+        title: Slet konto
+        instruction: | 
+          Er du sikker på at du vil slette kontoen?
+          Alle data vil blive slettet, og kan ikke gendannes.
+          Du vil herefter ikke kunne bruge  M O R T I M E R  mere, med denne konto.
+
+          Vi vil være kede af at miste dig som kunde.
       post: Posten blev slettet korrekt.
       logo:
         title: Slet logo

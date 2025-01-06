@@ -11,4 +11,12 @@ module ModalHelper
       I18n.t("#{@resource_class.to_s.underscore}.modal.delete.instruction", name: @resource.name) :
       I18n.t("#{@resource_class.to_s.underscore}.modal.delete_all.instruction")
   end
+
+  def delete_account_modal_title
+    I18n.t("modal.destroy.account.title")
+  end
+
+  def delete_account_modal_instruction
+    I18n.t("modal.destroy.account.instruction")
+  end
 end
