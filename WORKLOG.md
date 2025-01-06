@@ -79,6 +79,10 @@ END
 - user status - https://localhost:3000/pos/users?api_key=mVunTFDgFVud5qJAHgrHbp4P
 - redirect after change password bug
 
+### 6/1/2025
+
+- fix wrong redirect on edit password
+
 ### 3/1/2025
 
 - add hidden description to dashboard tasks
