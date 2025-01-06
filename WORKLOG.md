@@ -83,6 +83,8 @@ END
 
 - fix wrong redirect on edit password
 - hide 'kørsel' tab on t/m's
+- fix redirect on accept invitation
+
 
 ### 3/1/2025
 
