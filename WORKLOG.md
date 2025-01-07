@@ -85,6 +85,7 @@ END
 
 - fix bug on resource.remove (missing argument)
 - make it visible that we are not on production
+- create tasks for new account(s)
 
 ### 6/1/2025
 

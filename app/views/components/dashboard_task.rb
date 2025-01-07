@@ -16,16 +16,13 @@ class DashboardTask < ApplicationComponent
         class:
           "flex justify-between items-center gap-x-4 border-b border-gray-900/5 bg-gray-50 p-2"
       ) do
-        if url.include? "/"
-          div(class: "flex text-sm/6 text-gray-900") do
-            link_to task.title, url, class: "mort-link-primary mr-2 text-sm"
-            render Icons::Link.new css: "mort-link-primary h-6 "
-            context_menu if show_options
-          end
-          render Icons::ChevronUp.new css: "mort-link-primary h-6 rotate-180 cursor-pointer", data: { action: "click->hidden-description#toggle" }
-        else
-          helpers.send(url)
+        url = url.include?("/") ? url : helpers.send(url)
+        div(class: "flex text-sm/6 text-gray-900") do
+          link_to task.title, url, class: "mort-link-primary mr-2 text-sm"
+          render Icons::Link.new css: "mort-link-primary h-6 "
+          context_menu if show_options
         end
+        render Icons::ChevronUp.new css: "mort-link-primary h-6 rotate-180 cursor-pointer", data: { action: "click->hidden-description#toggle" }
       end
       dl(class: "-my-3  px-2 py-4 text-sm/6") do
         div(class: "hidden flex justify-between gap-x-4 py-3 text-xs", data: { hidden_description_target: "description" }) { task.description } unless task.description.blank?
