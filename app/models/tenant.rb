@@ -16,7 +16,7 @@ class Tenant < ApplicationRecord
   has_many :dashboards, dependent: :destroy
   has_many :events, dependent: :destroy
   has_many :filters, dependent: :destroy
-  has_many :invoice, dependent: :destroy
+  has_many :invoices, dependent: :destroy
   has_many :invoice_items, dependent: :destroy
   has_many :locations, dependent: :destroy
   has_many :products, dependent: :destroy

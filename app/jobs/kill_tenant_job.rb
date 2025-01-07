@@ -13,7 +13,7 @@ class KillTenantJob < ApplicationJob
         tenant.dashboards.destroy_all
         tenant.events.destroy_all
         tenant.filters.destroy_all
-        tenant.invoice.destroy_all
+        tenant.invoices.destroy_all
         tenant.invoice_items.destroy_all
         tenant.locations.destroy_all
         tenant.products.destroy_all
@@ -23,7 +23,6 @@ class KillTenantJob < ApplicationJob
         tenant.punch_clocks.destroy_all
         tenant.punches.destroy_all
         tenant.settings.destroy_all
-        tenant.tasks.destroy_all
         tenant.teams.destroy_all
 
         tenant.users.each do |user|
@@ -36,8 +35,10 @@ class KillTenantJob < ApplicationJob
           user.delete
         end
 
+        tenant.tasks.destroy_all
+        tenant.time_materials.destroy_all
         tenant.logo.purge if tenant.logo.attached?
-        tenant.destroy!
+        tenant.delete
       end
     end
   end
