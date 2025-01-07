@@ -7,6 +7,7 @@
 
 ## tools
 
+- setup monitoring with https://levelup.gitconnected.com/ruby-on-rails-monitor-you-app-logs-with-grafana-loki-fb33dc79dab7
 - if you need to add components before/after a Phlex component view_template - look at https://github.com/mbajur/phlex-hookable
 
 ## Rescue tools
@@ -67,6 +68,7 @@ END
   }
 }
 
+- tasks in tree structure - https://www.codemancers.com/blog/maintaining-a-tree-structure-in-rails-with-the-ancestry-gem/
 - make sidebar present like https://nordhealth.design/templates/application/#
 - this is probably not necessary: format.turbo_stream { render turbo_stream: turbo_stream.remove(dom_id(@resource)) }
 - pwa-installation.js + joy of rails
@@ -82,6 +84,7 @@ END
 ### 7/1/2025
 
 - fix bug on resource.remove (missing argument)
+- make it visible that we are not on production
 
 ### 6/1/2025
 
