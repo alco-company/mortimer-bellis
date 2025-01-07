@@ -58,7 +58,7 @@ class Tenant < ApplicationRecord
   #
   # make it possible to handle model deletion differently from model to model
   # eg TenantRegistrationService.call(tenant, destroy: true)
-  def remove
+  def remove(step = nil)
     TenantRegistrationService.call(self, destroy: true)
   end
 

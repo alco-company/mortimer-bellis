@@ -12,7 +12,10 @@ class ApplicationRecord < ActiveRecord::Base
   #
   # make it possible to handle model deletion differently from model to model
   # eg TenantRegistrationService.call(tenant, destroy: true)
-  def remove
+  # argument step is used to control the deletion process - used on User model
+  # when deleting an account
+  #
+  def remove(step = nil)
     destroy!
   end
 
