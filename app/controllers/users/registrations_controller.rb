@@ -21,9 +21,9 @@ class Users::RegistrationsController < Devise::RegistrationsController
       # configure_sign_up_params
       super do |resource|
         if resource.valid?
+          raise "user was not registered correctly" unless UserRegistrationService.call(resource, tenant_name)
           resource.add_role
           usr = resource.dup
-          raise "user was not registered correctly" unless UserRegistrationService.call(resource, tenant_name)
         end
       end
     rescue => e

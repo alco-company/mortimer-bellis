@@ -87,6 +87,7 @@ END
 - make it visible that we are not on production
 - create tasks for new account(s)
 - fix error on kill_tenant_job
+- make creating new account(s) precise
 
 ### 6/1/2025
 
