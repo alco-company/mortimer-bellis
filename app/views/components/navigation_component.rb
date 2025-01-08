@@ -196,13 +196,13 @@ class NavigationComponent < ApplicationComponent
             # dashboards: { title: "dashboards", url: "/dashboards", icon: "home" },
             # invoices: { title: "invoices", url: "/invoices", icon: "invoice" },
             # invoice_items: { title: "invoice_items", url: "/invoice_items", icon: "invoice_item" },
-            kiosks: { title: "kiosks", url: "/punch_clocks", icon: "punch_clock" },
-            locations: { title: "locations", url: "/locations", icon: "location" },
+            # kiosks: { title: "kiosks", url: "/punch_clocks", icon: "punch_clock" },
+            # locations: { title: "locations", url: "/locations", icon: "location" },
             products: { title: "products", url: "/products", icon: "product" },
             projects: { title: "projects", url: "/projects", icon: "project" },
             # punches: { title: "punches", url: "/punches", icon: "punch" },
             # reports: { title: "Reports", url: "/reports", icon: "home" },
-            teams: { title: "teams", url: "/teams", icon: "team" },
+            # teams: { title: "teams", url: "/teams", icon: "team" },
             tenants: { title: "tenants", url: "/tenants", icon: "tenant" },
             oauths: { title: "oauth_applications", url: "/oauth/applications", icon: "oauth" },
             users: { title: "users", url: "/users", icon: "user" }
@@ -230,7 +230,7 @@ class NavigationComponent < ApplicationComponent
             tasks: { title: "tasks", url: "/tasks", icon: "task" },
             teams: { title: "teams", url: "/teams", icon: "team" },
             tenants: { title: "tenants", url: "/tenants", icon: "tenant" },
-            oauths: { title: "oauth_applications", url: "/oauth/applications", icon: "oauth" },
+            # oauths: { title: "oauth_applications", url: "/oauth/applications", icon: "oauth" },
             users: { title: "users", url: "/users", icon: "user" }
           }
         }

@@ -87,6 +87,7 @@ END
 
 - first user cannot be deleted!
 - hide country && pp_identification on tenant
+- hide kiosks, locations, oauths, and teams on menu
 
 ### 7/1/2025
 
