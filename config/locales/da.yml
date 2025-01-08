@@ -855,6 +855,8 @@ da:
     errors:
       messages:
         record_invalid: "Posten findes ikke"
+        not_found: "%{model} blev ikke fundet"
+        no_permission: "Du har ikke tilladelse til at udføre denne handling"
       models:
         user:
           attributes:
@@ -1007,6 +1009,8 @@ da:
       confirmation_period_expired: "skal bekræftes inden %{period}, forespørg venligst om en ny"
       expired: "er udløbet, venligst anmod om en ny"
       not_found: "blev ikke fundet"
+      record_invalid: "Posten findes ikke"
+      no_permission: "Du har ikke tilladelse til at udføre denne handling"
       not_locked: "blev ikke låst"
       accepted: skal accepteres
       blank: skal udfyldes

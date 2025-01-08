@@ -121,6 +121,28 @@ class User < ApplicationRecord
     self.update(role: r)
   end
 
+  #
+  # basically superadmin can do anything
+  # whereas admins can only do things within their tenant
+  # and users can only do things within their tenant and for themselves
+  # called from ressourceable.rb
+  #
+  def allowed_to?(action, record)
+    case role
+    when "superadmin"
+      true
+    else
+      case record.class.to_s
+      when "Tenant"; record == tenant
+      when "User"; admin? ? record.tenant == tenant : record == self
+      else
+        record.respond_to?(:tenant) ? record.tenant == tenant :
+        record.respond_to?(:user) ? record.user == self :
+        record.respond_to?(:resource_owner_id) ? record.resource_owner_id == id : false
+      end
+    end
+  end
+
   def get_team_color
     team.color.blank? ? "border-white" : team.color
   rescue
