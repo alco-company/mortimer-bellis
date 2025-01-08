@@ -89,6 +89,7 @@ END
 - hide country && pp_identification on tenant
 - hide kiosks, locations, oauths, and teams on menu
 - missed oauths on menu
+- add link to show/edit tenant on admin users' dashboard
 
 ### 7/1/2025
 
