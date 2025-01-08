@@ -203,8 +203,8 @@ class NavigationComponent < ApplicationComponent
             # punches: { title: "punches", url: "/punches", icon: "punch" },
             # reports: { title: "Reports", url: "/reports", icon: "home" },
             # teams: { title: "teams", url: "/teams", icon: "team" },
-            tenants: { title: "tenants", url: "/tenants", icon: "tenant" },
-            oauths: { title: "oauth_applications", url: "/oauth/applications", icon: "oauth" },
+            # tenants: { title: "tenants", url: "/tenants", icon: "tenant" },
+            # oauths: { title: "oauth_applications", url: "/oauth/applications", icon: "oauth" },
             users: { title: "users", url: "/users", icon: "user" }
           }
         }
@@ -230,7 +230,7 @@ class NavigationComponent < ApplicationComponent
             tasks: { title: "tasks", url: "/tasks", icon: "task" },
             teams: { title: "teams", url: "/teams", icon: "team" },
             tenants: { title: "tenants", url: "/tenants", icon: "tenant" },
-            # oauths: { title: "oauth_applications", url: "/oauth/applications", icon: "oauth" },
+            oauths: { title: "oauth_applications", url: "/oauth/applications", icon: "oauth" },
             users: { title: "users", url: "/users", icon: "user" }
           }
         }
