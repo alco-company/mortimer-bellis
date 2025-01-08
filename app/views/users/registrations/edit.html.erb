@@ -157,7 +157,7 @@
                       </div> -->
                     <% end %>
 
-                    <% if Current.user.admin? or Current.user.superadmin? %>
+                    <% if (Current.user.admin? or Current.user.superadmin?) && (Current.user.id > 1) %>
                       <h2 class="font-bold text-2xl"><%= t("users.edit_profile.cancel.title") %></h2>
                       <div>
                         <p class="text-sm">

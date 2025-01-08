@@ -9,6 +9,7 @@
 
 - setup monitoring with https://levelup.gitconnected.com/ruby-on-rails-monitor-you-app-logs-with-grafana-loki-fb33dc79dab7
 - if you need to add components before/after a Phlex component view_template - look at https://github.com/mbajur/phlex-hookable
+- missing a tools - look at https://notchtools.com/
 
 ## Rescue tools
 
@@ -68,6 +69,7 @@ END
   }
 }
 
+- loading skeleton frames on all lists - using https://www.driftingruby.com/episodes/skeleton-frames
 - tasks in tree structure - https://www.codemancers.com/blog/maintaining-a-tree-structure-in-rails-with-the-ancestry-gem/
 - make sidebar present like https://nordhealth.design/templates/application/#
 - this is probably not necessary: format.turbo_stream { render turbo_stream: turbo_stream.remove(dom_id(@resource)) }
@@ -80,6 +82,10 @@ END
 - location status - missing
 - user status - https://localhost:3000/pos/users?api_key=mVunTFDgFVud5qJAHgrHbp4P
 - redirect after change password bug
+
+### 8/1/2025
+
+- first user cannot be deleted!
 
 ### 7/1/2025
 
