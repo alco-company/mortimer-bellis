@@ -86,6 +86,7 @@ END
 ### 8/1/2025
 
 - first user cannot be deleted!
+- hide country && pp_identification on tenant
 
 ### 7/1/2025
 
