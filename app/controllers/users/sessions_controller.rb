@@ -12,18 +12,20 @@ class Users::SessionsController < Devise::SessionsController
   # POST /resource/sign_in
   def create
     ActiveRecord::Base.connected_to(role: :writing) do
-      if sign_in_params[:otp_attempt].nil?
-        user = attempting_user
-        if user&.otp_required_for_login
+      if sign_in_params[:otp_attempt].nil? && attempting_user&.otp_required_for_login
+        render turbo_stream: turbo_stream.replace("otp_attempt_outlet", partial: "users/sessions/otp_attempt")
+        return
+      else
+        # super
+        self.resource = warden.authenticate!(auth_options)
+        sign_in(resource_name, resource)
+        if user_signed_in?
           respond_to do |format|
-            format.turbo_stream do
-              render turbo_stream: turbo_stream.replace("otp_attempt_outlet", partial: "users/sessions/otp_attempt")
-            end
+            format.turbo_stream { render turbo_stream: turbo_stream.replace("body", partial: "users/sessions/redirect") }
+            format.html         { redirect_to root_path }
           end
-          return
         end
       end
-      super
     end
   end
 

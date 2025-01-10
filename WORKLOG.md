@@ -83,11 +83,12 @@ END
 - user status - https://localhost:3000/pos/users?api_key=mVunTFDgFVud5qJAHgrHbp4P
 - redirect after change password bug
 - toast user until having visited /dashboards/show_dashboard
-- fix bug in 2FA login - OTP input missing from login form
+
 
 ### 9/1/2025
 
 - fix bug on task 'enable 2FA'
+- fix bug in 2FA login - OTP input missing from login form 
 
 ### 8/1/2025
 

@@ -11,7 +11,7 @@ class MortimerController < BaseController
   include TimezoneLocale
 
   def after_sign_in_path_for(resource)
-    root_path
+    root_path(format: :html)
   end
   #
   # called by models that have a mugshot
