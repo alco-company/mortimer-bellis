@@ -16,9 +16,9 @@ class DashboardTask < ApplicationComponent
         class:
           "flex justify-between items-center gap-x-4 border-b border-gray-900/5 bg-gray-50 p-2"
       ) do
-        url = url.include?("/") ? url : helpers.send(url)
+        url, turbo = url.include?("/") ? [ url, false ] : helpers.send(url)
         div(class: "flex text-sm/6 text-gray-900") do
-          link_to task.title, url, class: "mort-link-primary mr-2 text-sm"
+          link_to task.title, url, class: "mort-link-primary mr-2 text-sm", data: { turbo_stream: turbo }
           render Icons::Link.new css: "mort-link-primary h-6 "
           context_menu if show_options
         end
