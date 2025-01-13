@@ -1,4 +1,5 @@
 da:
+
   task:
     modal:
       delete_all: 
@@ -21,6 +22,9 @@ da:
       post: Opgaven blev slettet
 
     punch_clocks: Stempelure
+
+    open_tasks_remain: Du har %{count} opgaver som ikke er afsluttet
+    find_them_here: Vis mig dem
 
     dashboard:
       get_help_here: Få hjælp her

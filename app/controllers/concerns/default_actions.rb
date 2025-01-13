@@ -88,6 +88,8 @@ module DefaultActions
     # on success removes turbo_frame 'form' and renders application/flash_message
     # on error renders views/:models/_new.html.erb or views/application/_new.html.erb (Turbo)
     #
+    # v2: use /app/forms/model_[scope]_form.rb - eg user_registration_form.rb (keeping logic together with view)
+    #
     def create
       @resource = resource_class.new(resource_params)
       @resource.tenant_id = Current.tenant.id if resource_class.has_attribute? :tenant_id

@@ -10,6 +10,9 @@
 - setup monitoring with https://levelup.gitconnected.com/ruby-on-rails-monitor-you-app-logs-with-grafana-loki-fb33dc79dab7
 - if you need to add components before/after a Phlex component view_template - look at https://github.com/mbajur/phlex-hookable
 - missing a tools - look at https://notchtools.com/
+- if VUE components are required - look at inertiajs.com
+- look at modularization using ideas / patterns from https://diversepixel.medium.com/rails-architecture-best-practices-and-building-scalable-applications-ruby-deep-dive-11-7cc514766728
+- 
 
 ## Rescue tools
 
@@ -82,8 +85,11 @@ END
 - location status - missing
 - user status - https://localhost:3000/pos/users?api_key=mVunTFDgFVud5qJAHgrHbp4P
 - redirect after change password bug
-- toast user until having visited /dashboards/show_dashboard
 
+
+### 13/1/2025
+
+- toast user until having visited /dashboards/show_dashboard
 
 ### 9/1/2025
 
