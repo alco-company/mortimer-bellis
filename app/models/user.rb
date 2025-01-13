@@ -99,7 +99,13 @@ class User < ApplicationRecord
       title ||= I18n.t("notifiers.no_title")
       msg ||=   I18n.t("notifiers.no_msg")
       UserNotifier.with(record: self, current_user: Current.user, title: title, message: msg, delegator: self.name).deliver(recipient)
+    else
+      UserNotifier.with(record: self, current_user: Current.user, title: title, message: msg, delegator: self.name).deliver(recipient)
     end
+  end
+
+  def notified?(action)
+    notifications.where(action: action).any?
   end
 
   def initials

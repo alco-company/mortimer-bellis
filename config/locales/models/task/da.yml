@@ -26,6 +26,11 @@ da:
     open_tasks_remain: Du har %{count} opgaver som ikke er afsluttet
     find_them_here: Vis mig dem
 
+    remaining:
+      title: Uafsluttede opgaver
+      msg: Du har %{count} uafsluttede opgaver, der venter på dig
+
+
     dashboard:
       get_help_here: Få hjælp her
       no_unfinished_tasks: Du har ingen opgaver, der ikke er afsluttet

@@ -85,11 +85,14 @@ END
 - location status - missing
 - user status - https://localhost:3000/pos/users?api_key=mVunTFDgFVud5qJAHgrHbp4P
 - redirect after change password bug
-
+- move CVR number up on form
+- fix bug on project create
+- fix bug on sending email invitation to new user
 
 ### 13/1/2025
 
 - toast user until having visited /dashboards/show_dashboard
+- notify user - don't toast on every page
 
 ### 9/1/2025
 

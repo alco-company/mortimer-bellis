@@ -52,6 +52,9 @@ class Task < ApplicationRecord
   include TaskStateable
 
   belongs_to :tasked_for, polymorphic: true
+  has_many :noticed_events, as: :record, dependent: :destroy, class_name: "Noticed::Event"
+  has_many :notifications, through: :noticed_events, class_name: "Noticed::Notification"
+  scope :by_user, ->(user) { where(recipient_type: "User", recipient_id: user.id) if user.present? }
 
   scope :by_fulltext, ->(query) { where("name LIKE :query or dewcription LIKE :query", query: "%#{query}%") if query.present? }
   scope :by_title, ->(title) { where("title LIKE ?", "%#{title}%") if title.present? }
@@ -87,6 +90,19 @@ class Task < ApplicationRecord
 
   def self.set_order(resources, field = :title, direction = :asc)
     resources.ordered(field, direction)
+  end
+
+  def notify(action: nil, title: nil, msg: nil, rcp: nil, priority: 0)
+    recipient = rcp.blank? ? self : (rcp.is_a?(User) ? rcp : User.find(rcp))
+
+    case action
+    when :tasks_remaining
+      TaskNotifier.with(record: self, current_user: Current.user, title: title, message: msg, delegator: self.name).deliver(recipient)
+    end
+  end
+
+  def notified?(action)
+    notifications.where(action: action).any?
   end
 
   def self.form(resource:, editable: true)
