@@ -25,7 +25,6 @@ https://anemone.mortimer.pro/api/v1/contacts
 
 https://nordhealth.design/templates/application/#
 
-
 setup CI deployment with Kamal - https://www.rickpeyton.com/posts/step-by-step-guide-to-deploying-rails-8-with-kamal-and-github-actions-2
 PWA: https://onrails.blog/2021/03/02/rails-pwas-using-turbo-hhnpwa-7/
 NATIVE: https://blog.corsego.com/navigating-turbo-native, https://www.youtube.com/watch?v=TDQ2wtmgeKw
@@ -41,8 +40,6 @@ tell application "Messages"
 end tell
 END
 `osascript -e '#{osascript}'`
-
-
 
 ## BUGS
 
@@ -85,9 +82,12 @@ END
 - location status - missing
 - user status - https://localhost:3000/pos/users?api_key=mVunTFDgFVud5qJAHgrHbp4P
 - redirect after change password bug
-- move CVR number up on form
 - fix bug on project create
 - fix bug on sending email invitation to new user
+
+### 14/1/2025
+
+- move CVR number up on form
 
 ### 13/1/2025
 

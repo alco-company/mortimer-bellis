@@ -345,7 +345,7 @@ da:
       customer:
         name: Navn
         external_reference: Ekstern reference
-        is_person: Er en person
+        is_person: Er en person (hvis ikke - husk at udfylde CVR nummer)
         is_member: Er det et medlem (af Dinero)
         is_debitor: Er debitor
         is_creditor: Er kreditor
