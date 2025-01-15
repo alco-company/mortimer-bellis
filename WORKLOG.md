@@ -87,6 +87,7 @@ END
 ### 15/1/2025
 
 - fix bug on project create
+- allow project to set customer
 
 ### 14/1/2025
 

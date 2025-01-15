@@ -19,18 +19,16 @@ export default class extends Controller {
     .toLowerCase();
 
   connect() {
-    console.log("Connected to lookup controller")
+    // console.log("Connected to lookup controller")
     this.inputTarget.addEventListener("input", this.change.bind(this));
   }
 
   async itemTargetConnected(e) {
-    if (!this.items_connected) {
-      this.items_connected = true;
-      await new Promise(r => setTimeout(r, 50));
-      this.optionsIconTarget.classList.remove("hidden");
-      this.searchIconTarget.classList.add("hidden");
-      this.optionsListTarget.getElementsByTagName("LI")[0].focus();
-    }
+    await new Promise(r => setTimeout(r, 50));
+    this.items_connected = true;
+    this.optionsIconTarget.classList.remove("hidden");
+    this.searchIconTarget.classList.add("hidden");
+    this.optionsListTarget.getElementsByTagName("LI")[0].focus();
   }
 
   keyDown(e) {
@@ -38,7 +36,7 @@ export default class extends Controller {
       case "Escape": e.stopPropagation(); this.toggleOptions(e); break;
       case "Enter": e.stopPropagation(); this.search(e); break; //this.searchIconTarget.click(); break;
       case "ArrowDown": e.stopPropagation(); this.searchIconTarget.click(); break;
-      default: console.log(`[lookup_controller key_down] you pressed ${e.key}`);
+      // default: console.log(`[lookup_controller key_down] you pressed ${e.key}`);
     }
   }
 
@@ -65,6 +63,13 @@ export default class extends Controller {
     }
     this.inputTarget.value = el.dataset.displayValue;
     this.selectIdTarget.value = el.dataset.value;
+    let selectId = this.selectIdTarget;
+    console.log(`selectId ${selectId}`);
+    for (const key in el.dataset) {
+      if (key != "lookupTarget") {
+        selectId.dataset[key] = el.dataset[key];
+      }
+    }
     this.optionsIconTarget.classList.remove("hidden");
     this.searchIconTarget.classList.add("hidden");
 
@@ -86,7 +91,7 @@ export default class extends Controller {
     }
   }
 
-  toggleOptions(e) {
+  async toggleOptions(e) {
     const options = this.lookupOptionsTarget;
     if (options.classList.contains("hidden")) {
       options.classList.remove("hidden");
@@ -128,11 +133,18 @@ export default class extends Controller {
     .then(html => Turbo.renderStreamMessage(html))
   }
 
+  focusFirstItem(e) {
+    console.log(this.optionsListTarget.getElementsByTagName("LI")[0]);
+    this.optionsListTarget.getElementsByTagName("LI")[0].focus();
+  }
+
   focusNextItem(e) {
+    console.log(e.target.nextElementSibling);
     e.target.nextElementSibling.focus();
   }
 
   focusPreviousItem(e) {
+    console.log(e.target.previousElementSibling);
     e.target.previousElementSibling.focus();
   }
 }

@@ -18,7 +18,6 @@ class SelectLookup < ApplicationComponent
       id: "%s_lookup_options" % div_id,
       data: {
         lookup_target: "lookupOptions",
-        action: "focus->lookup#focusFirstItem",
         controller: @controller_name
       }
     ) do
