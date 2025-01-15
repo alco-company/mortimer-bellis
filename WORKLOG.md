@@ -88,6 +88,7 @@ END
 
 - fix bug on project create
 - allow project to set customer
+- change logo color
 
 ### 14/1/2025
 
