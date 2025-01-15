@@ -82,8 +82,11 @@ END
 - location status - missing
 - user status - https://localhost:3000/pos/users?api_key=mVunTFDgFVud5qJAHgrHbp4P
 - redirect after change password bug
-- fix bug on project create
 - fix bug on sending email invitation to new user
+
+### 15/1/2025
+
+- fix bug on project create
 
 ### 14/1/2025
 
