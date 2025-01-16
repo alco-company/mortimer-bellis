@@ -96,7 +96,9 @@ module DefaultActions
       @resource.user_id = Current.user.id if resource_class.has_attribute?(:user_id) && !resource_params[:user_id].present?
 
       respond_to do |format|
-        if before_create_callback && @resource.save && create_callback
+        if before_create_callback # &&
+          @resource.save # &&
+          create_callback
           Broadcasters::Resource.new(@resource, params.permit!).create
           @resource.notify action: :create
           flash[:success] = t(".post")

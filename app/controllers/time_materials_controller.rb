@@ -69,7 +69,7 @@ class TimeMaterialsController < MortimerController
       if resource_params[:state].present? && resource_params[:state] == "done" # done!
         ht = params[:time_material][:hour_time] # && @resource.hour_time=0
         mt = params[:time_material][:minute_time] # && @resource.minute_time=0
-        @resource.update time: resource.sanitize_time(ht, mt)
+        @resource.update time: resource.sanitize_time(ht, mt) unless ht.blank? || mt.blank?
       end
       true
     end
