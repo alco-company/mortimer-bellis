@@ -91,6 +91,7 @@ END
 - verify add material works ok
 - make sign in speak danish on need help
 - fix bug in /tasks
+- set links and FAQ help page
 
 ### 15/1/2025
 

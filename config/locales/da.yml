@@ -1,4 +1,5 @@
 da:
+  need_help: "Brug for hjælp?"
   english: "Do you prefer english?"
   success: Succes
   start: Start
@@ -204,6 +205,19 @@ da:
       body: Indhold
       updated_at: Opdateret den
       created_at: Oprettet den
+    help:
+      title: Vi har samlet en kort liste over svar på ofte stillede spørgsmål
+      paragraph: "Først er her imidlertid nogle links, som du måske vil finde nyttige til at komme i gang med Mortimer:"
+      answers: "Svar på ofte stillede spørgsmål"
+      what_is:
+        question: Hvad er Mortimer?
+        answer: "Mortimer er en slags personlig assistent som hjælper dig med at samle data. Data du kan bruge til at træffe bedre beslutninger, aflevere et kørselsregnskab, fakturere dine kunder eller bare holde styr på dit tidsforbrug på arbejdet."
+      how_to_use:
+        question: Hvordan bruger jeg Mortimer?
+        answer: "Det er nemt at bruge Mortimer. Opret en bruger (eller benyt dig af en invitation fra en kollega, og begynd at bruge app'en. Du kan bruge Mortimer fra din telefon, en tablet, eller en 'desktop' computer."
+      what_to_use_for: 
+        question: Hvad kan jeg bruge Mortimer til?
+        answer: Mortimer giver dig mulighed for hurtigt, enkelt, og billigt at gemme data om opgaver, du har færdiggjort. Du kan bruge disse data til at holde styr på din tid, kørsel, hvilke produkter, du har solgt til kunder, og mere.
 
   pagy:
     # showing: Viser %{from} til %{to}, af %{count} %{entry_name}
