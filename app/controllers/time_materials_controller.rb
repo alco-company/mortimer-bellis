@@ -7,6 +7,12 @@ class TimeMaterialsController < MortimerController
     @resource.user_id = Current.user.id
   end
 
+  # def index
+  #   # tell user about his uncompleted tasks
+  #   Current.user.notify(action: :tasks_remaining, title: t("tasks.remaining.title"), msg: t("tasks.remaining.msg", count: Current.user.tasks.first_tasks.uncompleted.count)) unless Current.user.notified?(:tasks_remaining)
+  #   super
+  # end
+
   def show
     params.permit![:pause].present? ? pause_resume : super
   end
@@ -63,7 +69,7 @@ class TimeMaterialsController < MortimerController
       if resource_params[:state].present? && resource_params[:state] == "done" # done!
         ht = params[:time_material][:hour_time] # && @resource.hour_time=0
         mt = params[:time_material][:minute_time] # && @resource.minute_time=0
-        @resource.update time: resource.sanitize_time(ht, mt)
+        @resource.update time: resource.sanitize_time(ht, mt) unless ht.blank? || mt.blank?
       end
       true
     end

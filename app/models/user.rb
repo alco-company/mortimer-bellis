@@ -66,8 +66,8 @@ class User < ApplicationRecord
     numericality: { only_integer: true, in: 1000..9999, unless: ->(u) { u.pincode.blank? } },
     uniqueness: { scope: :tenant_id, message: I18n.t("users.errors.messages.pincode_exist_for_tenant"), unless: ->(u) { u.pincode.blank? } }
 
-  def remove
-    if tenant.users.count == 1
+  def remove(step = nil)
+    if tenant.users.count == 1 || step == "delete_account"
       TenantRegistrationService.call(tenant, destroy: true)
     else
       UserMailer.with(user: self).user_farewell.deliver
@@ -99,7 +99,13 @@ class User < ApplicationRecord
       title ||= I18n.t("notifiers.no_title")
       msg ||=   I18n.t("notifiers.no_msg")
       UserNotifier.with(record: self, current_user: Current.user, title: title, message: msg, delegator: self.name).deliver(recipient)
+    else
+      UserNotifier.with(record: self, current_user: Current.user, title: title, message: msg, delegator: self.name).deliver(recipient)
     end
+  end
+
+  def notified?(action)
+    notifications.where(action: action).any?
   end
 
   def initials
@@ -119,6 +125,28 @@ class User < ApplicationRecord
     end
 
     self.update(role: r)
+  end
+
+  #
+  # basically superadmin can do anything
+  # whereas admins can only do things within their tenant
+  # and users can only do things within their tenant and for themselves
+  # called from ressourceable.rb
+  #
+  def allowed_to?(action, record)
+    case role
+    when "superadmin"
+      true
+    else
+      case record.class.to_s
+      when "Tenant"; record == tenant
+      when "User"; admin? ? record.tenant == tenant : record == self
+      else
+        record.respond_to?(:tenant) ? record.tenant == tenant :
+        record.respond_to?(:user) ? record.user == self :
+        record.respond_to?(:resource_owner_id) ? record.resource_owner_id == id : false
+      end
+    end
   end
 
   def get_team_color

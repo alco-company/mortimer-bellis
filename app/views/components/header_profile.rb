@@ -56,7 +56,11 @@ class HeaderProfile < Phlex::HTML
                         clip_rule: "evenodd"
                       )
                     end
-                    plain Current.user.tenant.name
+                    if Current.user.user?
+                      plain Current.user.tenant.name
+                    else
+                      link_to Current.user.tenant.name, helpers.edit_tenant_path(Current.user.tenant), class: "mort-link-primary"
+                    end
                   end
                   render SessionInformation.new Current.user
 

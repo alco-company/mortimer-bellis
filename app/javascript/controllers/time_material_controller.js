@@ -38,6 +38,10 @@ export default class extends Controller {
     this.stopTimer();
   }
   
+  tellLoaded(e) {
+    console.log(`loaded: ${e.currentTarget}`);
+  }
+
   toggleActive(e){
     this.stopTimer()
     fetch(e.currentTarget.dataset.url, {
@@ -93,6 +97,18 @@ export default class extends Controller {
   projectChange(e) {
     if (e.currentTarget.value === "") {
       e.target.previousSibling.value = "";
+      return
+    }
+    
+    if (document.querySelector("#time_material_project_id").dataset.lookupCustomerName) {
+      document.querySelector("#time_material_customer_id").value =
+      document.querySelector(
+        "#time_material_project_id"
+      ).dataset.lookupCustomerId;
+      document.querySelector("#time_material_customer_name").value =
+      document.querySelector(
+        "#time_material_project_id"
+      ).dataset.lookupCustomerName;
     }
   }
 

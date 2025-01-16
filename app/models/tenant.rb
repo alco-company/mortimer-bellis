@@ -16,7 +16,7 @@ class Tenant < ApplicationRecord
   has_many :dashboards, dependent: :destroy
   has_many :events, dependent: :destroy
   has_many :filters, dependent: :destroy
-  has_many :invoice, dependent: :destroy
+  has_many :invoices, dependent: :destroy
   has_many :invoice_items, dependent: :destroy
   has_many :locations, dependent: :destroy
   has_many :products, dependent: :destroy
@@ -58,7 +58,7 @@ class Tenant < ApplicationRecord
   #
   # make it possible to handle model deletion differently from model to model
   # eg TenantRegistrationService.call(tenant, destroy: true)
-  def remove
+  def remove(step = nil)
     TenantRegistrationService.call(self, destroy: true)
   end
 

@@ -35,9 +35,9 @@ registry:
     - KAMAL_REGISTRY_PASSWORD
 
 # Configure builder setup.
-builder:
-  remote: ssh://root@135.181.202.106
-  arch: arm64
+# builder:
+#   remote: ssh://root@135.181.202.106
+#   arch: arm64
 
 # Inject ENV variables into containers (secrets come from .env).
 # Remember to run `kamal env push` after making changes!

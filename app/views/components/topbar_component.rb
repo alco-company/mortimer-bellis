@@ -1,11 +1,16 @@
 # frozen_string_literal: true
 
 class TopbarComponent < ApplicationComponent
+  attr_accessor :gradient
+
+  def initialize
+    @gradient = Rails.env.production? ? "from-cyan-200 to-sky-600" : "from-pink-200 to-pink-600"
+  end
   #
   # top navigation with menu button, search, notifications, and profile
   def view_template
     # topbar for mobile & desktop
-    div(data: { controller: "navigation" }, class: "sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 bg-gradient-to-r from-cyan-200 to-sky-600 bg-white px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8") do
+    div(data: { controller: "navigation" }, class: "sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 bg-gradient-to-r #{gradient} bg-white px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8") do
       mobile_menu_button if Current.user
       # separator
       div(class: "h-6 w-px bg-gray-900/10 lg:hidden", aria_hidden: "true") { }

@@ -23,7 +23,7 @@ module Resourceable
 
     # Use callbacks to share common setup or constraints between actions.
     def set_resource
-      @resource = params_id ? (resource_class.find(params_id) rescue resource_class.new) : resource_class.new
+      @resource = params_id ? find_resource : resource_class.new
     end
 
     def set_resources_stream
@@ -164,5 +164,14 @@ module Resourceable
 
     def params_id
       rc_params[:id]
+    end
+
+    def find_resource
+      r = resource_class.find(params_id)
+      redirect_to "/", alert: I18n.t("errors.messages.no_permission") and return unless Current.user.allowed_to?(params[:action], r)
+      r
+    rescue
+      resource_class.new
+      # redirect_to "/", alert: I18n.t("errors.messages.not_found", model: resource_class.to_s) and return
     end
 end

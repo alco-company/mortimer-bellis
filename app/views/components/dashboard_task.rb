@@ -11,30 +11,22 @@ class DashboardTask < ApplicationComponent
   def view_template
     url, help = task.link.split(/,| |;/)
     help ||= "https://mortimer.pro/help"
-    li(class: "overflow-hidden rounded-xl border border-gray-200") do
+    li(class: "overflow-hidden rounded-xl border border-gray-200", data: { controller: "hidden-description" }) do
       div(
         class:
-          "flex items-center gap-x-4 border-b border-gray-900/5 bg-gray-50 p-2"
+          "flex justify-between items-center gap-x-4 border-b border-gray-900/5 bg-gray-50 p-2"
       ) do
-        # img(
-        #   src: "https://tailwindui.com/plus/img/logos/48x48/tuple.svg",
-        #   alt: "Tuple",
-        #   class:
-        #     "size-12 flex-none rounded-lg bg-white object-cover ring-1 ring-gray-900/10"
-        # )
+        url, turbo = url.include?("/") ? [ url, false ] : helpers.send(url)
         div(class: "flex text-sm/6 text-gray-900") do
-          if url.include? "/"
-            link_to task.title, url, class: "mort-link-primary mr-2 text-sm"
-            render Icons::Link.new css: "mort-link-primary h-6 "
-            context_menu if show_options
-          else
-            helpers.send(url)
-          end
+          link_to task.title, url, class: "mort-link-primary mr-2 text-sm", data: { turbo_stream: turbo }
+          render Icons::Link.new css: "mort-link-primary h-6 "
+          context_menu if show_options
         end
+        render Icons::ChevronUp.new css: "mort-link-primary h-6 rotate-180 cursor-pointer", data: { action: "click->hidden-description#toggle" }
       end
-      dl(class: "-my-3 divide-y divide-gray-100 px-2 py-4 text-sm/6") do
-        div(class: "flex justify-between gap-x-4 py-3 text-xs") { task.description } unless task.description.blank?
-        p { link_to "Du kan få hjælp her", help, class: "mort-link-error text-xs" }
+      dl(class: "-my-3  px-2 py-4 text-sm/6") do
+        div(class: "hidden flex justify-between gap-x-4 py-3 text-xs", data: { hidden_description_target: "description" }) { task.description } unless task.description.blank?
+        p { link_to I18n.t("tasks.dashboard.get_help_here"), help, class: "mort-link-error text-xs" }
         # dt(class: "text-gray-500") { "Last invoice" }
         # dd(class: "text-gray-700") do
         #   time(datetime: "2022-12-13") { "December 13, 2022" }

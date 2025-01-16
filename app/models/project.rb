@@ -47,4 +47,19 @@ class Project < ApplicationRecord
   def self.form(resource:, editable: true)
     Projects::Form.new resource: resource, editable: editable
   end
+
+  def customer_name
+    customer&.name
+  end
+
+  def select_data_attributes
+    {
+      lookup_target: "item",
+      lookup_customer_id: customer.id,
+      lookup_customer_name: customer.name,
+      value: id,
+      display_value: name,
+      action: "keydown->lookup#optionKeydown click->lookup#selectOption"
+    }
+  end
 end

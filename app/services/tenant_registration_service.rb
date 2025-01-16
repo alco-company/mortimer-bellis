@@ -24,7 +24,7 @@ class TenantRegistrationService
   def self.remove(tenant)
     if tenant.persisted?
       UserMailer.with(user: tenant.users.first).last_farewell.deliver if tenant.users.any?
-      KillTenantJob.new.perform(tenant: Current.tenant, user: Current.user, t_id: tenant.id)
+      KillTenantJob.perform_later(tenant: Current.tenant, user: Current.user, t_id: tenant.id)
       return true
     end
     false

@@ -43,7 +43,7 @@
           <%= render DashboardTask.new task: t %>
         <% end %>
       <% else %>
-        Du har ingen opgaver, der ikke er afsluttet
+        <%= I18n.t("tasks.dashboard.no_unfinished_tasks") %>
       <% end %>
     </ul>
 

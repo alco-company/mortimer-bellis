@@ -114,7 +114,7 @@ class ModalController < BaseController
     end
 
     def process_other_new
-      @step = "accept"
+      @step = params[:modal_next_step] || "accept"
     end
 
     #
@@ -243,18 +243,14 @@ class ModalController < BaseController
         else
           cb = get_cb_eval_after_destroy(resource)
           r = resource_class.build resource.attributes
-          if resource.remove
+          if resource.remove params[:step]
             eval(cb) unless cb.nil?
             @url.gsub!(/\/\d+$/, "") if @url.match?(/\d+$/)
             Broadcasters::Resource.new(r).destroy
             r.notify(action: :destroy)
             r.destroy
             flash[:success] = t(".post")
-            respond_to do |format|
-              format.turbo_stream { }
-              format.html { redirect_to @url, status: 303, success: t(".post") }
-              format.json { head :no_content }
-            end
+            params[:step] == "delete_account" ? redirect_to(root_path) : do_respond
           else
             head :no_content
           end
@@ -262,6 +258,14 @@ class ModalController < BaseController
       rescue => e
         say "ERROR on destroy: #{e.message}"
         redirect_to resources_url, status: 303, error: t("something_went_wrong", error: e.message)
+      end
+    end
+
+    def do_respond
+      respond_to do |format|
+        format.turbo_stream { }
+        format.html { redirect_to @url, status: 303, success: t(".post") }
+        format.json { head :no_content }
       end
     end
 

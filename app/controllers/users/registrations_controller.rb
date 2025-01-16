@@ -21,9 +21,9 @@ class Users::RegistrationsController < Devise::RegistrationsController
       # configure_sign_up_params
       super do |resource|
         if resource.valid?
+          raise "user was not registered correctly" unless UserRegistrationService.call(resource, tenant_name)
           resource.add_role
           usr = resource.dup
-          raise "user was not registered correctly" unless UserRegistrationService.call(resource, tenant_name)
         end
       end
     rescue => e
@@ -58,7 +58,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
     resource_updated = update_resource(resource, account_update_params)
     yield resource if block_given?
     if resource_updated
-      resource.mugshot = mugshot if mugshot
+      resource.mugshot = mugshot if mugshot && mugshot.attachable?
       set_flash_message_for_update(resource, prev_unconfirmed_email)
       render turbo_stream: [
         turbo_stream.update("form", ""),
@@ -166,3 +166,36 @@ class Users::RegistrationsController < Devise::RegistrationsController
     end
   end
 end
+
+#
+# TODO - fit mugshot
+#
+# require 'mini_magick'
+# require 'opencv'
+
+# def process_avatar(image_path)
+#   # Load the image
+#   image = MiniMagick::Image.open(image_path)
+
+#   # Face detection
+#   detector = OpenCV::CvHaarClassifierCascade::load('haarcascade_frontalface_default.xml')
+#   img = OpenCV::CvMat.load(image_path)
+#   faces = detector.detect_objects(img)
+
+#   if faces.any?
+#     face = faces.first
+#     face_x, face_y, face_width, face_height = face.top_left.x, face.top_left.y, face.width, face.height
+
+#     # Crop the image to the detected face
+#     image.crop("#{face_width}x#{face_height}+#{face_x}+#{face_y}")
+
+#     # Resize the image
+#     image.resize "150x150"
+
+#     # Compress the image
+#     image.quality "80"
+
+#     # Save the processed image
+#     image.write "processed_avatar.jpg"
+#   end
+# end

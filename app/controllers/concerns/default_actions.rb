@@ -10,8 +10,8 @@ module DefaultActions
       respond_to do |format|
         format.html { }
         format.turbo_stream { }
-        format.pdf { send_file resource_class.pdf_file(html_content), filename: "#{resource_class.name.pluralize.downcase}-#{Date.today}.pdf" }
-        format.csv { send_data resource_class.to_csv(@resources), filename: "#{resource_class.name.pluralize.downcase}-#{Date.today}.csv" }
+        format.pdf { send_pdf }
+        format.csv { send_csv }
       end
 
     rescue => e
@@ -88,13 +88,17 @@ module DefaultActions
     # on success removes turbo_frame 'form' and renders application/flash_message
     # on error renders views/:models/_new.html.erb or views/application/_new.html.erb (Turbo)
     #
+    # v2: use /app/forms/model_[scope]_form.rb - eg user_registration_form.rb (keeping logic together with view)
+    #
     def create
       @resource = resource_class.new(resource_params)
       @resource.tenant_id = Current.tenant.id if resource_class.has_attribute? :tenant_id
       @resource.user_id = Current.user.id if resource_class.has_attribute?(:user_id) && !resource_params[:user_id].present?
 
       respond_to do |format|
-        if before_create_callback && @resource.save && create_callback
+        if before_create_callback # &&
+          @resource.save # &&
+          create_callback
           Broadcasters::Resource.new(@resource, params.permit!).create
           @resource.notify action: :create
           flash[:success] = t(".post")
@@ -259,6 +263,14 @@ module DefaultActions
         end
 
         @resources = [ Struct.new("Lookup", :id, :name).new(id: 0, name: I18n.t("no records were found")) ] if @resources.nil? or @resources.empty?
+      end
+
+      def send_pdf
+        send_file resource_class.pdf_file(html_content), filename: "#{resource_class.name.pluralize.downcase}-#{Date.today}.pdf"
+      end
+
+      def send_csv
+        send_data resource_class.to_csv(@resources), filename: "#{resource_class.name.pluralize.downcase}-#{Date.today}.csv"
       end
   end
 end

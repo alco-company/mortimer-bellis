@@ -16,3 +16,15 @@ if (standalone) {
         },
     })
 }
+
+addEventListener("turbo:before-stream-render", (event) => {
+  const fallbackToDefaultActions = event.detail.render;
+
+  event.detail.render = function (streamElement) {
+    if (streamElement.action == "redirect") {
+      window.location.href = streamElement.getAttribute("location");
+    } else {
+      fallbackToDefaultActions(streamElement);
+    }
+  };
+});

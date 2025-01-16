@@ -10,3 +10,8 @@
 <%#= render partial: "pagination" if @pagy.pages > 1 %>
 
 <%= time_material_button(user: current_user) %>
+
+<% # notify user instead !! %>
+<% # if Current.user.tasks.first_tasks.uncompleted %>
+  <%#= render partial: "toast", locals: { count: Current.user.tasks.first_tasks.uncompleted.count } %>
+<% # end %> 

@@ -1,4 +1,5 @@
 da:
+  need_help: "Brug for hjælp?"
   english: "Do you prefer english?"
   success: Succes
   start: Start
@@ -146,6 +147,14 @@ da:
   modal:
     destroy:
       attachment_deleted: Den vedhæftede fil blev slettet
+      account:
+        title: Slet konto
+        instruction: | 
+          Er du sikker på at du vil slette kontoen?
+          Alle data vil blive slettet, og kan ikke gendannes.
+          Du vil herefter ikke kunne bruge  M O R T I M E R  mere, med denne konto.
+
+          Vi vil være kede af at miste dig som kunde.
       post: Posten blev slettet korrekt.
       logo:
         title: Slet logo
@@ -196,6 +205,19 @@ da:
       body: Indhold
       updated_at: Opdateret den
       created_at: Oprettet den
+    help:
+      title: Vi har samlet en kort liste over svar på ofte stillede spørgsmål
+      paragraph: "Først er her imidlertid nogle links, som du måske vil finde nyttige til at komme i gang med Mortimer:"
+      answers: "Svar på ofte stillede spørgsmål"
+      what_is:
+        question: Hvad er Mortimer?
+        answer: "Mortimer er en slags personlig assistent som hjælper dig med at samle data. Data du kan bruge til at træffe bedre beslutninger, aflevere et kørselsregnskab, fakturere dine kunder eller bare holde styr på dit tidsforbrug på arbejdet."
+      how_to_use:
+        question: Hvordan bruger jeg Mortimer?
+        answer: "Det er nemt at bruge Mortimer. Opret en bruger (eller benyt dig af en invitation fra en kollega, og begynd at bruge app'en. Du kan bruge Mortimer fra din telefon, en tablet, eller en 'desktop' computer."
+      what_to_use_for: 
+        question: Hvad kan jeg bruge Mortimer til?
+        answer: Mortimer giver dig mulighed for hurtigt, enkelt, og billigt at gemme data om opgaver, du har færdiggjort. Du kan bruge disse data til at holde styr på din tid, kørsel, hvilke produkter, du har solgt til kunder, og mere.
 
   pagy:
     # showing: Viser %{from} til %{to}, af %{count} %{entry_name}
@@ -337,7 +359,7 @@ da:
       customer:
         name: Navn
         external_reference: Ekstern reference
-        is_person: Er en person
+        is_person: Er en person (hvis ikke - husk at udfylde CVR nummer)
         is_member: Er det et medlem (af Dinero)
         is_debitor: Er debitor
         is_creditor: Er kreditor
@@ -847,6 +869,8 @@ da:
     errors:
       messages:
         record_invalid: "Posten findes ikke"
+        not_found: "%{model} blev ikke fundet"
+        no_permission: "Du har ikke tilladelse til at udføre denne handling"
       models:
         user:
           attributes:
@@ -999,6 +1023,8 @@ da:
       confirmation_period_expired: "skal bekræftes inden %{period}, forespørg venligst om en ny"
       expired: "er udløbet, venligst anmod om en ny"
       not_found: "blev ikke fundet"
+      record_invalid: "Posten findes ikke"
+      no_permission: "Du har ikke tilladelse til at udføre denne handling"
       not_locked: "blev ikke låst"
       accepted: skal accepteres
       blank: skal udfyldes
