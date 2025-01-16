@@ -70,6 +70,7 @@ END
 }
 
 - loading skeleton frames on all lists - using https://www.driftingruby.com/episodes/skeleton-frames
+- TODO - fit mugshot (see users/registrations_controller)
 - tasks in tree structure - https://www.codemancers.com/blog/maintaining-a-tree-structure-in-rails-with-the-ancestry-gem/
 - make sidebar present like https://nordhealth.design/templates/application/#
 - this is probably not necessary: format.turbo_stream { render turbo_stream: turbo_stream.remove(dom_id(@resource)) }
@@ -82,12 +83,14 @@ END
 - team status https://localhost:3000/pos/punch_clock.20?api_key=arbjQmRVrVpLU4fzYSSSQc31
 - location status - missing
 - user status - https://localhost:3000/pos/users?api_key=mVunTFDgFVud5qJAHgrHbp4P
-- redirect after change password bug
+- filtering
 
 ### 16/1/2025
 
 - make index actions send_file and send_csv
 - verify add material works ok
+- make sign in speak danish on need help
+- fix bug in /tasks
 
 ### 15/1/2025
 
