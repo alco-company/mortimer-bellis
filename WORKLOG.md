@@ -76,13 +76,18 @@ END
 - pwa-installation.js + joy of rails
 - consider https://bunny.net/ for image optimization and CDN as CloudFlare substitute
 - pickup the mobile moving - ask if driving - enter odometer
+- fix bug on sending email invitation to new user
 - validate punches before deleting punch_clocks !!
 - invoices
 - team status https://localhost:3000/pos/punch_clock.20?api_key=arbjQmRVrVpLU4fzYSSSQc31
 - location status - missing
 - user status - https://localhost:3000/pos/users?api_key=mVunTFDgFVud5qJAHgrHbp4P
 - redirect after change password bug
-- fix bug on sending email invitation to new user
+
+### 16/1/2025
+
+- make index actions send_file and send_csv
+- verify add material works ok
 
 ### 15/1/2025
 
