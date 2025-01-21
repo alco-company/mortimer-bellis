@@ -8,10 +8,6 @@ class ListItems::BackgroundJob < ListItems::ListItem
   # :job_id
 
 
-  def show_recipient_link
-    plain resource.job_klass
-  end
-
   def show_matter_link
     show_matter_mugshot
     if Current.user.global_queries?

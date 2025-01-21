@@ -16,12 +16,6 @@ class ListItems::InvoiceItem < ListItems::ListItem
   # total_amount
   # total_amount_incl_vat
 
-  def show_recipient_link
-    link_to resource_url, class: "hover:underline" do
-      plain resource.invoice.invoice_number
-    end
-  end
-
   def show_left_mugshot
     # mugshot(resource, css: "hidden sm:block h-12 w-12 flex-none rounded-full bg-gray-50")
   end

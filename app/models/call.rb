@@ -23,6 +23,9 @@ class Call < ApplicationRecord
     all
   end
 
+  def name
+    phone
+  end
   # def self.form(resource:, editable: true)
   #   Invoices::Form.new resource: resource, editable: editable
   # end

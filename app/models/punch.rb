@@ -17,7 +17,8 @@ class Punch < ApplicationRecord
 
   # used by eg delete
   def name
-    "#{user.name} #{punched_at}"
+    I18n.l(punched_at, format: :short)
+    # "#{user.name} #{punched_at}"
   end
 
   def self.set_order(resources, field = :created_at, direction = :desc)
