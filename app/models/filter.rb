@@ -14,7 +14,7 @@ class Filter < ApplicationRecord
     all
   end
 
-  def self.form(resource:, editable: true)
-    Filters::Form.new resource
+  def self.form(resource:, url:, filter_form:, params:, editable: true)
+    ::Filters::Form.new resource: resource, url: url, filter_form: filter_form, editable: editable, params: params
   end
 end

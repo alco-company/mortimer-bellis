@@ -118,6 +118,10 @@ class ApplicationRecord < ActiveRecord::Base
   end
 
 
+  def self.filter_presets
+    %w[mine all some other]
+  end
+
 
   # def self.ordered(resources, field, direction = :desc)
   #   resources.order(field => direction)

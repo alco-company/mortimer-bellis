@@ -1,5 +1,4 @@
 <%= render partial: "header" %>
-<%= render partial: "filtering" unless @filter.new_record? %>
 <!-- List -->
 <%= turbo_stream_from @resources_stream %>
 <div id="list" role="list" class="mb-16">

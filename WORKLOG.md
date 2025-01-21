@@ -85,6 +85,10 @@ END
 - user status - https://localhost:3000/pos/users?api_key=mVunTFDgFVud5qJAHgrHbp4P
 - fix form flow - new -> edit -> show - on all models issue with url and reload of #index
 
+### 21/1/2025
+
+- filtering - take 1
+
 ### 20/1/2025
 
 - list only users.by_tenant on selects!
