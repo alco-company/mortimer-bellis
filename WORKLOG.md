@@ -83,11 +83,13 @@ END
 - team status https://localhost:3000/pos/punch_clock.20?api_key=arbjQmRVrVpLU4fzYSSSQc31
 - location status (like user, team) - missing
 - user status - https://localhost:3000/pos/users?api_key=mVunTFDgFVud5qJAHgrHbp4P
+- fix bug in deleting invoices
 
 ### 21/1/2025
 
 - filtering - take 1
 - fix form flow - new -> edit -> show - on all models issue with url and reload of #index - 1: show
+- fix form flow - new -> edit -> show - on all models issue with url and reload of #index - 2: new
 
 ### 20/1/2025
 
