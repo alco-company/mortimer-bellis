@@ -9,10 +9,10 @@ class TimeMaterials::Form < ApplicationForm
       if Current.user.can?(:delegate_time_materials)
         div(class: "my-1 grid grid-cols-4 gap-x-1 md:gap-x-4 gap-y-1 ") do
           div(class: "my-0 col-span-4 xs:col-span-2") do
-            row field(:date).date(class: "mort-form-text"), class: "mort-field my-0"
+            row field(:date).date(class: "mort-form-text"), "mort-field my-0"
           end
           div(class: "my-0 col-span-4 xs:col-span-2") do
-            row field(:user_id).select(User.by_tenant.order(name: :asc).select(:id, :name), class: "mort-form-select my-0")
+            row field(:user_id).select(User.by_tenant.order(name: :asc).select(:id, :name), class: "mort-form-select my-0"), "mort-field my-0"
           end
         end
       else

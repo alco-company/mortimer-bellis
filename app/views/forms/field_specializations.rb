@@ -200,7 +200,7 @@ module FieldSpecializations
 
   class BooleanField < Superform::Rails::Components::CheckboxComponent
     def field_attributes
-      super.merge(type: "boolean")
+      @attributes.keys.include?(:class) ? super.merge(type: "boolean") : super.merge(class: "mort-form-text", type: "boolean")
     end
     def view_template(&)
       data_attr = attributes[:data] || {}
@@ -278,7 +278,7 @@ module FieldSpecializations
 
   class TimeField < InputField
     def field_attributes
-      super.merge(type: "time")
+      @attributes.keys.include?(:class) ? super.merge(type: "time") : super.merge(class: "mort-form-text", type: "time")
     end
     def view_template(&)
       input(**attributes, value: field.value&.strftime("%H:%M"))
@@ -287,7 +287,7 @@ module FieldSpecializations
 
   class DateField < InputField
     def field_attributes
-      super.merge(type: "date")
+      @attributes.keys.include?(:class) ? super.merge(type: "date") : super.merge(class: "mort-form-text", type: "date")
     end
     def view_template(&)
       fld = field.value.class == String ? field.value : field.value&.strftime("%Y-%m-%d") rescue nil
@@ -296,7 +296,7 @@ module FieldSpecializations
   end
   class DateTimeField < InputField
     def field_attributes
-      super.merge(type: "datetime-local")
+      @attributes.keys.include?(:class) ? super.merge(type: "datetime-local") : super.merge(class: "mort-form-text", type: "datetime-local")
     end
     def view_template(&)
       input(**attributes, value: field.value&.strftime("%Y-%m-%dT%H:%M"))

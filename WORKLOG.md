@@ -92,6 +92,7 @@ END
 - fix form flow - new -> edit -> show - on all models issue with url and reload of #index - 2: new
 - fix form flow - new -> edit -> show - on all models issue with url and reload of #index - 3: edit
 - optimize t/m form
+- fix bug in formatting date, user fields on t/m
 
 ### 20/1/2025
 
