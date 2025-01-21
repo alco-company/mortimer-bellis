@@ -5,19 +5,25 @@ class TimeMaterials::Form < ApplicationForm
         show_possible_issues
       end
       # date_field
-      div(class: "mt-2 sm:col-span-4") do
-        row field(:date).date(class: "mort-form-text")
-      end
       # user
       if Current.user.can?(:delegate_time_materials)
-        div(class: "mt-2 sm:col-span-4") do
-          row field(:user_id).select(User.by_tenant.order(name: :asc).select(:id, :name), class: "mort-form-select")
+        div(class: "my-1 grid grid-cols-4 gap-x-1 md:gap-x-4 gap-y-1 ") do
+          div(class: "my-0 col-span-4 xs:col-span-2") do
+            row field(:date).date(class: "mort-form-text"), class: "mort-field my-0"
+          end
+          div(class: "my-0 col-span-4 xs:col-span-2") do
+            row field(:user_id).select(User.by_tenant.order(name: :asc).select(:id, :name), class: "mort-form-select my-0")
+          end
+        end
+      else
+        div(class: "mt-1") do
+          row field(:date).date(class: "mort-form-text")
         end
       end
       #
       div(class: "border border-gray-900/10 rounded-md bg-slate-50 p-2") do
         div(class: "") do
-          p(class: "text-xs text-gray-400") { I18n.t("time_material.type.warning") }
+          # p(class: "text-xs text-gray-400") { I18n.t("time_material.type.warning") }
           div(class: "w-full") do
             nav(class: "-mb-px flex space-x-2", aria_label: "Tabs") do
               time_tab
@@ -59,7 +65,7 @@ class TimeMaterials::Form < ApplicationForm
       type: "button",
       data: { tabs_target: "tab", action: "tabs#change" },
       value: 0,
-      class: "flex justify-center tab-header w-1/3 border-b-2 border-transparent p-2 pt-4 text-center text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700",
+      class: "flex justify-center tab-header w-1/3 border-b-2 border-transparent p-2 pt-1 text-center text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700",
       role: "switch",
       aria_checked: "false") do
         # comment do
@@ -78,7 +84,7 @@ class TimeMaterials::Form < ApplicationForm
       type: "button",
       data: { tabs_target: "tab", action: "tabs#change" },
       value: 1,
-      class: "flex justify-center tab-header w-1/3 border-b-2 border-transparent p-2 pt-4 text-center text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700",
+      class: "flex justify-center tab-header w-1/3 border-b-2 border-transparent p-2 pt-1 text-center text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700",
       role: "switch",
       aria_checked: "false") do
         # comment do
@@ -230,7 +236,7 @@ class TimeMaterials::Form < ApplicationForm
         lookup_target: "input",
         action: "keydown->lookup#keyDown blur->time-material#customerChange"
       },
-      display_value: @resource.customer_name), "mort-field" # Customer.all.select(:id, :name).take(9)
+      display_value: @resource.customer_name), "mort-field my-1" # Customer.all.select(:id, :name).take(9)
   end
 
   def project_field
@@ -243,7 +249,7 @@ class TimeMaterials::Form < ApplicationForm
         lookup_association_div_id: "time_material_customer_id",
         action: "keydown->lookup#keyDown blur->time-material#projectChange"
       },
-      display_value: @resource.project_name), "mort-field" # Customer.all.select(:id, :name).take(9)
+      display_value: @resource.project_name), "mort-field my-1" # Customer.all.select(:id, :name).take(9)
   end
 
   def rate_field(lbl, css = "col-span-3", fld_name = "rate")
@@ -254,13 +260,13 @@ class TimeMaterials::Form < ApplicationForm
 
   def invoicing
     div(class: "pb-12") do
-      div(class: "mt-2 space-y-1") do
+      div(class: "mt-1 space-y-1") do
         row field(:state).select(TimeMaterial.time_material_states, class: "my-auto mort-form-select"), "mort-field" # , "flex justify-end flex-row-reverse items-center"
         fieldset do
           legend(class: "text-sm font-semibold leading-6 text-gray-900") { I18n.t("time_material.invoicing.lead") }
-          div(class: "mt-6 space-y-1") do
-            row field(:is_invoice).boolean(data: { time_material_target: "invoice" }, class: "my-auto mort-form-bool"), "mort-field flex justify-end flex-row-reverse items-center"
-            row field(:is_separate).boolean(class: "my-auto mort-form-bool"), "mort-field flex justify-end flex-row-reverse items-center"
+          div(class: "mt-1 space-y-1") do
+            row field(:is_invoice).boolean(data: { time_material_target: "invoice" }, class: "my-auto mort-form-bool"), "mort-field my-1 flex justify-end flex-row-reverse items-center"
+            row field(:is_separate).boolean(class: "my-auto mort-form-bool"), "mort-field my-1 flex justify-end flex-row-reverse items-center"
           end
         end
       end

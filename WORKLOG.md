@@ -91,6 +91,7 @@ END
 - fix form flow - new -> edit -> show - on all models issue with url and reload of #index - 1: show
 - fix form flow - new -> edit -> show - on all models issue with url and reload of #index - 2: new
 - fix form flow - new -> edit -> show - on all models issue with url and reload of #index - 3: edit
+- optimize t/m form
 
 ### 20/1/2025
 
