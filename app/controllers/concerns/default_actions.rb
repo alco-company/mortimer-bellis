@@ -137,7 +137,6 @@ module DefaultActions
           flash[:success] = t(".post")
           format.turbo_stream { render turbo_stream: [
             turbo_stream.update("form", ""),
-            turbo_stream.action(:full_page_redirect, resources_url),
             turbo_stream.replace("flash_container", partial: "application/flash_message")
           ] }
           format.html { redirect_to resources_url, success: t(".post") }

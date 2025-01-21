@@ -1,6 +1,9 @@
 <html lang="<%= I18n.locale %>" class="h-full bg-white scrollbar-hide">
   <head>
     <%= render partial: "layouts/generic_header" %>
+    <!-- Before Turbo -->
+    <%= turbo_refreshes_with method: :morph, scroll: :preserve %>
+    <!-- End Turbo -->
     <%= web_push_public_key_meta_tag %>
   </head>
   <body id="body" class="h-full" style="height: 100vh;" >
