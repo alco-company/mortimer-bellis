@@ -40,6 +40,32 @@ class Punch < ApplicationRecord
     all
   end
 
+  def self.filterable_fields(model = self)
+    f = column_names - [
+      "id",
+      "tenant_id",
+      "user_id",
+      "punch_clock_id",
+      "punch_card_id"
+      # "punched_at",
+      # "state",
+      # "remote_ip",
+      # "created_at",
+      # "updated_at",
+      # "comment"
+    ]
+    f = f - [
+      "punched_at",
+      "created_at",
+      "updated_at"
+    ] if model == self
+    f
+  end
+
+  def self.associations
+    [ [ PunchClock, PunchCard ], [] ]
+  end
+
   def notify(action: nil, title: nil, msg: nil, rcp: nil, priority: 0)
     return if user_id.blank?
     case action

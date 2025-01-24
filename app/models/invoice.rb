@@ -26,6 +26,54 @@ class Invoice < ApplicationRecord
     all
   end
 
+  def self.filterable_fields(model = self)
+    f = column_names - [
+      "id",
+      "tenant_id",
+      "customer_id",
+      "project_id",
+      # "invoice_number",
+      # "currency",
+      # "state",
+      "mail_out_state",
+      "latest_mail_out_type",
+      # "locale",
+      # "external_reference",
+      # "description",
+      # "comment",
+      # "invoice_date",
+      # "payment_date",
+      # "address",
+      "erp_guid",
+      # "show_lines_incl_vat",
+      "invoice_template_id",
+      "contact_guid"
+      # "payment_condition_number_of_days",
+      # "payment_condition_type",
+      # "reminder_fee",
+      # "reminder_interest_rate",
+      # "total_excl_vat_in_dkk",
+      # "total_excl_vat",
+      # "total_incl_vat_in_dkk",
+      # "total_incl_vat",
+      # "is_mobile_pay_invoice_enabled",
+      # "is_penso_pay_enabled",
+      # "created_at",
+      # "updated_at"
+    ]
+    f = f - [
+      "invoice_date",
+      "payment_date",
+      "created_at",
+      "updated_at"
+    ] if model == self
+    f
+  end
+
+  def self.associations
+    [ [ Customer, Project ], [ InvoiceItem ] ]
+  end
+
   def self.form(resource:, editable: true)
     Invoices::Form.new resource: resource, editable: editable
   end

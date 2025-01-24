@@ -31,6 +31,31 @@ class ProvidedService < ApplicationRecord
     all
   end
 
+  def self.filterable_fields(model = self)
+    f = column_names - [
+      "id",
+      "tenant_id",
+      "authorized_by_id"
+      # "name",
+      # "service",
+      # "params",
+      # "created_at",
+      # "updated_at",
+      # "organizationID",
+      # "account_for_one_off",
+      # "product_for_time",
+      # "product_for_overtime",
+      # "product_for_hardware",
+      # "product_for_overtime_100",
+      # "product_for_mileage"
+    ]
+    f = f - [
+      "created_at",
+      "updated_at"
+    ] if model == self
+    f
+  end
+
   def self.form(resource:, editable: true)
     ProvidedServices::Form.new resource: resource, editable: editable
   end

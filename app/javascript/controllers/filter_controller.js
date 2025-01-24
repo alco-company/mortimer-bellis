@@ -6,6 +6,7 @@ export default class extends Controller {
   static targets = [ 
     "tabs", 
     "tabtitle",
+    "dateRange",
     "content" 
   ]
 
@@ -14,9 +15,17 @@ export default class extends Controller {
     //that.element.addEventListener('change', _.debounce(that.handleChange, 500))
   }
 
+  toggleAssociationFieldList(e){
+    e.stopPropagation()
+    e.preventDefault()
+    e.currentTarget.getElementsByTagName("svg")[0].classList.toggle("rotate-90")
+    let list = e.currentTarget.dataset.list
+    document.getElementById(list).classList.toggle("hidden")
+  }
+
   selectTab(e){
     e.stopPropagation()
-    this.tabtitleTargets.forEach(tab => { tab.classList.remove("border-sky-200", "font-medium", "text-sky-200"); tab.classList.add(
+    this.tabtitleTargets.forEach(tab => { tab.classList.remove("border-sky-200", "font-medium", "text-sky-600"); tab.classList.add(
       "border-transparent", "text-gray-500"
     ); })
     this.tabsTargets.forEach(tab => { 
@@ -25,7 +34,7 @@ export default class extends Controller {
           "border-transparent", "text-gray-500"
         );
         e.currentTarget.classList.add(
-          "border-sky-200", "font-medium", "text-sky-200"
+          "border-sky-200", "font-medium", "text-sky-600"
         );
         tab.classList.remove("hidden") 
       } else {
@@ -39,6 +48,25 @@ export default class extends Controller {
     // console.log(e.target.dataset.id)
     // console.log(this.element.dataset.id)
     // console.log(this.element)
+  }
+
+  // setDate
+  //
+  setDate(e){
+    e.stopPropagation()
+    e.preventDefault()
+    let range = e.currentTarget.dataset.range
+    this.dateRangeTargets.forEach(dateRange => { dateRange.classList.remove("bg-sky-100", "font-medium", "text-sky-600"); dateRange.classList.add("bg-white", "text-gray-500"); })
+    e.currentTarget.classList.remove("bg-white", "text-gray-500"); e.currentTarget.classList.add("bg-sky-100", "font-medium", "text-sky-600")
+    document.getElementById("filter_date_fixed_range").value = range;
+  }
+
+  clearFixedRange(e){
+    this.dateRangeTargets.forEach((dateRange) => {
+      dateRange.classList.remove("bg-sky-100", "font-medium", "text-sky-600");
+      dateRange.classList.add("bg-white", "text-gray-500");
+    });
+    document.getElementById("filter_date_fixed_range").value = "";
   }
 
   hide(){

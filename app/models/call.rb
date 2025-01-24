@@ -23,6 +23,22 @@ class Call < ApplicationRecord
     all
   end
 
+  def self.filterable_fields(model = self)
+    f = column_names - [
+      "id",
+      "tenant_id",
+      "direction",
+      "phone"
+      # t.datetime "created_at", null: false
+      # t.datetime "updated_at", null: false
+    ]
+    f = f - [
+      "created_at",
+      "updated_at"
+    ] if model == self
+    f
+  end
+
   def name
     phone
   end

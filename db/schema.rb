@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2024_12_19_071646) do
+ActiveRecord::Schema[8.1].define(version: 2025_01_22_083558) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -158,6 +158,9 @@ ActiveRecord::Schema[8.1].define(version: 2024_12_19_071646) do
     t.json "filter"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "user_id"
+    t.integer "state", default: 0
+    t.string "name"
     t.index ["tenant_id"], name: "index_filters_on_tenant_id"
   end
 

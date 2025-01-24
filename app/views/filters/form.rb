@@ -7,7 +7,7 @@ class Filters::Form < ApplicationForm
   #   @url = url
   # end
 
-  attr_accessor :resource, :cancel_url, :title, :edit_url,  :editable, :api_key, :model, :fields, :params
+  attr_accessor :resource, :cancel_url, :title, :edit_url,  :editable, :api_key, :model, :fields, :params, :url, :filter_form, :filtered_model
 
   def initialize(resource:, url:, filter_form:, params:, editable:, **options)
     options[:data] = { controller: "filter" }
@@ -15,17 +15,18 @@ class Filters::Form < ApplicationForm
     super(resource: resource, **options)
     @resource = @model = resource
     @filter_form = filter_form
+    @filtered_model = filter_form.classify.constantize
     @params = params
     @fields = options[:fields] || []
-    # @fields = @fields.any? ? @fields : model.class.attribute_types.keys
+    @fields = @fields.any? ? @fields : filtered_model.attribute_types.keys
     @editable = editable
+    @url = url
   end
 
   def view_template
     div(data_controller: "filter") do
-      row field(:url).hidden value: @url
-      row field(:filter_form).hidden value: @filter_form
-      row field(:tenant_id).hidden value: Current.tenant.id
+      row field(:url).hidden(value: @url)
+      row field(:filter_form).hidden(value: @filter_form)
 
       div do
         tabs
@@ -38,19 +39,17 @@ class Filters::Form < ApplicationForm
   def tabs
     div(class: "sm:hidden") do
       label(for: "tabs", class: "sr-only") { "Select a tab" }
-      comment do
-        %(Use an "onChange" listener to redirect the user to the selected tab URL.)
-      end
       select(
         id: "tabs",
         name: "tabs",
+        data: { action: "filter#selectTab" },
         class:
           "block mt-2 w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-sky-200 focus:outline-none focus:ring-sky-200 sm:text-sm"
       ) do
-        option(selected: "selected") { "Introduction" }
-        option { "Date" }
-        option { "Field" }
-        option { "Scope" }
+        option(selected: "selected")  { I18n.t("filters.tabs.titles.date") }
+        option { I18n.t("filters.tabs.titles.field") }
+        option { I18n.t("filters.tabs.titles.scope") }
+        option { I18n.t("filters.tabs.titles.help") }
       end
     end
     div(class: "hidden sm:block") do
@@ -61,21 +60,13 @@ class Filters::Form < ApplicationForm
           end
           a(
             href: "#",
-            data_id: "introduction",
-            data_action: "filter#selectTab",
-            data_filter_target: "tabtitle",
-            class:
-              "whitespace-nowrap border-b-2 border-sky-200 px-1 py-4 text-sm font-medium text-sky-200 hover:border-gray-300 hover:text-gray-700"
-          ) { "Introduction" }
-          a(
-            href: "#",
             data_id: "dates",
             data_action: "filter#selectTab",
             data_filter_target: "tabtitle",
             class:
-              "whitespace-nowrap border-b-2 border-transparent px-1 py-4 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700",
+              "whitespace-nowrap border-b-2 border-sky-100 px-1 py-4 text-sm font-medium text-sky-600 hover:border-gray-300 hover:text-gray-700",
             aria_current: "page"
-          ) { "Date" }
+          ) { I18n.t("filters.tabs.titles.date") }
           a(
             href: "#",
             data_id: "fields",
@@ -83,7 +74,7 @@ class Filters::Form < ApplicationForm
             data_filter_target: "tabtitle",
             class:
               "whitespace-nowrap border-b-2 border-transparent px-1 py-4 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700"
-          ) { "Field" }
+          ) { I18n.t("filters.tabs.titles.field") }
           a(
             href: "#",
             data_id: "scopes",
@@ -91,374 +82,461 @@ class Filters::Form < ApplicationForm
             data_filter_target: "tabtitle",
             class:
               "whitespace-nowrap border-b-2 border-transparent px-1 py-4 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700"
-          ) { "Scope" }
+          ) { I18n.t("filters.tabs.titles.scope") }
+          a(
+            href: "#",
+            data_id: "introduction",
+            data_action: "filter#selectTab",
+            data_filter_target: "tabtitle",
+            class:
+              "whitespace-nowrap border-b-2 border-transparent px-1 py-4 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700"
+          ) { I18n.t("filters.tabs.titles.help") }
         end
       end
     end
   end
 
   def tabs_content
-    comment { "Tabs content" }
-    div(class: "", data_filter_target: "tabs", id: "introduction") do
-      h3(class: "mt-4 font-medium") { "Introduction to filtering" }
-      p(class: "my-2") do
-        "You can filter on one of the date fields in this table"
-      end
-      p(class: "my-2") do
-        "You can filter on one/more of the fields values in this table"
-      end
-      p(class: "my-2") do
-        "You can filter on one of the scopes in this table."
-      end
-      p(class: "my-2") do
-        "- or you can pick one of the preset filters listed below:"
-      end
-      ul(class: "my-2") do
-        @filter_form.classify.constantize.filter_presets.each do |preset|
-          li do
-            button_to I18n.t(".filter_presets.#{preset}"),
-                      resources_url(
-                        filter: {
-                          filter_preset: preset,
-                          filter_form: @filter_form,
-                          url: @url
-                        }
-                      ),
-                      class: "mort-link-primary"
-          end
-        end
-      end
+    dates_tab
+    fields_tab
+    scopes_tab
+    div(class: "hidden", data_filter_target: "tabs", id: "introduction") do
+      h3(class: "mt-4 font-medium") { I18n.t("filters.help.title") }
+      p(class: "my-2") { I18n.t("filters.help.description") }
+      #
+      # 2025/1/22: preset filters will have to wait for the next version
+      #
+      # p(class: "my-2") { I18n.t("filters.help.presets") }
+      # ul(class: "my-2") do
+      #   Current.user.preset_filter.each do |preset|
+      #     li do
+      #       button_to preset.name,
+      #         resources_url(
+      #           filter: {
+      #             filter_form: preset,
+      #           }
+      #         ),
+      #         class: "mort-link-primary"
+      #     end
+      #   end
+      # end
     end
-    div(class: "hidden", data_filter_target: "tabs", id: "dates") do
+  end
+
+  def dates_tab
+    div(class: "", data_filter_target: "tabs", id: "dates") do
       div do
-        div(class: "flex flex-row items-center") do
+        div(class: "mort-field") do
           label(class: "mr-2 text-nowrap text-gray-400", for: "") do
-            "Date field"
+            I18n.t("filters.period.title")
           end
-          select(name: "", id: "", class: "mort-form-select mt-2") do
-            option(value: "") { "date" }
-            option(value: "") { "created_at" }
-            option(value: "") { "updated_at" }
-            option(value: "") { "invoiced_at" }
+          select(name: "filter[date][attribute]", id: "", class: "mort-form-select mt-2") do
+            filtered_model.columns.each do |col|
+              next if col.name =~ /^odo/
+              option(value: col.name) { I18n.t("activerecord.attributes.#{filtered_model.to_s.underscore}.#{col.name}") } if %w[ date datetime time ].include? col.type.to_s
+            end
           end
         end
-        label(class: "mr-2 text-gray-400", for: "") { "Period" }
-        ul(class: "w-full") do
-          li(class: "w-full my-1 px-3") { "Today" }
-          li(class: "w-full my-1 px-3") { "Yesterday" }
-          li(class: "w-full my-1 px-3") { "This week" }
-          li(class: "w-full my-1 px-3") { "Last week" }
-          li(class: "w-full bg-gray-100 font-bold my-1 px-3") { "This month" }
-          li(class: "w-full my-1 px-3") { "Last month" }
-          li(class: "w-full my-1 px-3") { "Last 3 months" }
-          li(class: "w-full my-1 px-3") { "Last year" }
+        div(class: "mort-field") do
+          label(class: "mr-2 text-gray-400", for: "") { I18n.t("filters.period.fixed_range") }
+          input(type: "hidden", id: "filter_date_fixed_range", name: "filter[date][fixed_range]")
+          ul(class: "mt-1 px-2 w-full") do
+            li(class: "rounded-md hover:bg-gray-50 leading-6 text-sm w-full my-1 py-2 px-3 cursor-pointer", data: { filter_target: "dateRange", action: "click->filter#setDate", range: "today" })          { I18n.t("filters.period.today") }
+            li(class: "rounded-md hover:bg-gray-50 leading-6 text-sm w-full my-1 py-2 px-3 cursor-pointer", data: { filter_target: "dateRange", action: "click->filter#setDate", range: "yesterday" })      { I18n.t("filters.period.yesterday") }
+            li(class: "rounded-md hover:bg-gray-50 leading-6 text-sm w-full my-1 py-2 px-3 cursor-pointer", data: { filter_target: "dateRange", action: "click->filter#setDate", range: "this_week" })      { I18n.t("filters.period.this_week") }
+            li(class: "rounded-md hover:bg-gray-50 leading-6 text-sm w-full my-1 py-2 px-3 cursor-pointer", data: { filter_target: "dateRange", action: "click->filter#setDate", range: "last_week" })      { I18n.t("filters.period.last_week") }
+            li(class: "rounded-md hover:bg-gray-50 leading-6 text-sm w-full my-1 py-2 px-3 cursor-pointer", data: { filter_target: "dateRange", action: "click->filter#setDate", range: "this_month" })     { I18n.t("filters.period.this_month") }
+            li(class: "rounded-md hover:bg-gray-50 leading-6 text-sm w-full my-1 py-2 px-3 cursor-pointer", data: { filter_target: "dateRange", action: "click->filter#setDate", range: "last_month" })     { I18n.t("filters.period.last_month") }
+            li(class: "rounded-md hover:bg-gray-50 leading-6 text-sm w-full my-1 py-2 px-3 cursor-pointer", data: { filter_target: "dateRange", action: "click->filter#setDate", range: "last_3_months" })  { I18n.t("filters.period.last_3_months") }
+            li(class: "rounded-md hover:bg-gray-50 leading-6 text-sm w-full my-1 py-2 px-3 cursor-pointer", data: { filter_target: "dateRange", action: "click->filter#setDate", range: "last_year" })      { I18n.t("filters.period.last_year") }
+          end
         end
         div(class: "px-3 mt-3") do
-          h3(class: "text-gray-400") { "Custom" }
+          h3(class: "text-gray-400") { I18n.t("filters.period.custom_range") }
           div(class: "grid items-center") do
-            div(class: "flex columns-2 items-center") do
+            div(class: "mort-field my-1 flex columns-2 items-center") do
               label(class: "mr-2 grow", for: "") { "from" }
-              input(type: "date", class: "mort-form-text w-3/4")
+              input(type: "date", name: "filter[date][custom_from]", class: "mort-form-text w-3/4", data: { action: "blur->filter#clearFixedRange" })
             end
-            div(class: "flex columns-2 items-center") do
+            div(class: "mort-field my-0 flex columns-2 items-center") do
               label(class: "mr-2 grow", for: "") { "to" }
-              input(type: "date", class: "mort-form-text w-3/4")
+              input(type: "date", name: "filter[date][custom_to]", class: "mort-form-text w-3/4", data: { action: "blur->filter#clearFixedRange" })
             end
           end
         end
       end
     end
+  end
+
+  def fields_tab
     div(class: "hidden", data_filter_target: "tabs", id: "fields") do
       ul(role: "list", class: "-mx-2 mt-2 space-y-1") do
-        li do
-          comment { %(Current: "bg-gray-50", Default: "hover:bg-gray-50") }
-          a(
-            href: "#",
-            class:
-              "block rounded-md bg-gray-50 py-2 pl-10 pr-2 text-sm font-semibold leading-6 text-gray-700"
-          ) { "ID" }
+        bt, _hm = filtered_model.associations
+        bt.each do |assoc|
+          list_association_fields(assoc)
         end
-        li do
-          div do
-            button(
-              type: "button",
+        # li do
+        #   comment { %(Current: "bg-gray-50", Default: "hover:bg-gray-50") }
+        #   div do
+        #     button(
+        #       data: { action: "filter#toggleAssociationFieldList" },
+        #       type: "button",
+        #       class:
+        #         "flex w-full items-center gap-x-3 rounded-md p-2 text-left text-sm leading-6 text-gray-700 hover:bg-gray-50",
+        #       aria_controls: "sub-menu-1",
+        #       aria_expanded: "false"
+        #     ) do
+        #       comment do
+        #         %(Expanded: "rotate-90 text-gray-500", Collapsed: "text-gray-400")
+        #       end
+        #       svg(
+        #         class: "h-5 w-5 shrink-0 text-gray-400",
+        #         viewbox: "0 0 20 20",
+        #         fill: "currentColor",
+        #         aria_hidden: "true",
+        #         data_slot: "icon"
+        #       ) do |s|
+        #         s.path(
+        #           fill_rule: "evenodd",
+        #           d:
+        #             "M8.22 5.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L11.94 10 8.22 6.28a.75.75 0 0 1 0-1.06Z",
+        #           clip_rule: "evenodd"
+        #         )
+        #       end
+        #       plain " Customer "
+        #     end
+        #     comment { "Expandable link section, show/hide based on state." }
+        #     ul(class: "mt-1 px-2", id: "sub-menu-1") do
+        #       (Customer.filterable_fields).each do |col|
+        #         li(class: " rounded-md") do
+        #           comment { "column: #{col}" }
+        #           a(
+        #             href: "#",
+        #             class:
+        #               "block rounded-md py-2 pl-10 pr-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50"
+        #           ) { I18n.t("activerecord.attributes.customer.#{col}") }
+        #         end
+        #       end
+        #     end
+        #   end
+        # end
+        # li do
+        #   div do
+        #     button(
+        #       type: "button",
+        #       class:
+        #         "flex w-full items-center gap-x-3 rounded-md p-2 text-left text-sm leading-6 text-gray-700 hover:bg-gray-50",
+        #       aria_controls: "sub-menu-2",
+        #       aria_expanded: "false"
+        #     ) do
+        #       comment do
+        #         %(Expanded: "rotate-90 text-gray-500", Collapsed: "text-gray-400")
+        #       end
+        #       svg(
+        #         class: "h-5 w-5 shrink-0 text-gray-400",
+        #         viewbox: "0 0 20 20",
+        #         fill: "currentColor",
+        #         aria_hidden: "true",
+        #         data_slot: "icon"
+        #       ) do |s|
+        #         s.path(
+        #           fill_rule: "evenodd",
+        #           d:
+        #             "M8.22 5.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L11.94 10 8.22 6.28a.75.75 0 0 1 0-1.06Z",
+        #           clip_rule: "evenodd"
+        #         )
+        #       end
+        #       plain " Project "
+        #     end
+        #     comment { "Expandable link section, show/hide based on state." }
+        #     ul(class: "hidden mt-1 px-2", id: "sub-menu-2") do
+        #       li do
+        #         a(
+        #           href: "#",
+        #           class:
+        #             "block rounded-md py-2 pl-9 pr-2 text-sm leading-6 text-gray-700 hover:bg-gray-50"
+        #         ) { "GraphQL API" }
+        #       end
+        #       li do
+        #         a(
+        #           href: "#",
+        #           class:
+        #             "block rounded-md py-2 pl-9 pr-2 text-sm leading-6 text-gray-700 hover:bg-gray-50"
+        #         ) { "iOS App" }
+        #       end
+        #       li do
+        #         a(
+        #           href: "#",
+        #           class:
+        #             "block rounded-md py-2 pl-9 pr-2 text-sm leading-6 text-gray-700 hover:bg-gray-50"
+        #         ) { "Android App" }
+        #       end
+        #       li do
+        #         a(
+        #           href: "#",
+        #           class:
+        #             "block rounded-md py-2 pl-9 pr-2 text-sm leading-6 text-gray-700 hover:bg-gray-50"
+        #         ) { "New Customer Portal" }
+        #       end
+        #     end
+        #   end
+        # end
+        # li do
+        #   div do
+        #     button(
+        #       type: "button",
+        #       class:
+        #         "flex w-full items-center gap-x-3 rounded-md p-2 text-left text-sm leading-6 text-gray-700 hover:bg-gray-50",
+        #       aria_controls: "sub-menu-2",
+        #       aria_expanded: "false"
+        #     ) do
+        #       comment do
+        #         %(Expanded: "rotate-90 text-gray-500", Collapsed: "text-gray-400")
+        #       end
+        #       svg(
+        #         class: "h-5 w-5 shrink-0 text-gray-400",
+        #         viewbox: "0 0 20 20",
+        #         fill: "currentColor",
+        #         aria_hidden: "true",
+        #         data_slot: "icon"
+        #       ) do |s|
+        #         s.path(
+        #           fill_rule: "evenodd",
+        #           d:
+        #             "M8.22 5.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L11.94 10 8.22 6.28a.75.75 0 0 1 0-1.06Z",
+        #           clip_rule: "evenodd"
+        #         )
+        #       end
+        #       plain " Product "
+        #     end
+        #     comment { "Expandable link section, show/hide based on state." }
+        #     ul(class: "hidden mt-1 px-2", id: "sub-menu-2") do
+        #       li do
+        #         a(
+        #           href: "#",
+        #           class:
+        #             "block rounded-md py-2 pl-9 pr-2 text-sm leading-6 text-gray-700 hover:bg-gray-50"
+        #         ) { "name" }
+        #       end
+        #       li do
+        #         a(
+        #           href: "#",
+        #           class:
+        #             "block rounded-md py-2 pl-9 pr-2 text-sm leading-6 text-gray-700 hover:bg-gray-50"
+        #         ) { "iOS App" }
+        #       end
+        #       li do
+        #         a(
+        #           href: "#",
+        #           class:
+        #             "block rounded-md py-2 pl-9 pr-2 text-sm leading-6 text-gray-700 hover:bg-gray-50"
+        #         ) { "Android App" }
+        #       end
+        #       li do
+        #         a(
+        #           href: "#",
+        #           class:
+        #             "block rounded-md py-2 pl-9 pr-2 text-sm leading-6 text-gray-700 hover:bg-gray-50"
+        #         ) { "New Customer Portal" }
+        #       end
+        #     end
+        #   end
+        # end
+        (filtered_model.filterable_fields).each do |col|
+          li(class: " rounded-md") do
+            comment { "column: #{col}" }
+            a(
+              href: "#",
               class:
-                "flex w-full items-center gap-x-3 rounded-md p-2 text-left text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50",
-              aria_controls: "sub-menu-1",
-              aria_expanded: "false"
-            ) do
-              comment do
-                %(Expanded: "rotate-90 text-gray-500", Collapsed: "text-gray-400")
-              end
-              svg(
-                class: "h-5 w-5 rotate-90 shrink-0 text-gray-400",
-                viewbox: "0 0 20 20",
-                fill: "currentColor",
-                aria_hidden: "true",
-                data_slot: "icon"
-              ) do |s|
-                s.path(
-                  fill_rule: "evenodd",
-                  d:
-                    "M8.22 5.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L11.94 10 8.22 6.28a.75.75 0 0 1 0-1.06Z",
-                  clip_rule: "evenodd"
-                )
-              end
-              plain " Customer "
-            end
-            comment { "Expandable link section, show/hide based on state." }
-            ul(class: "mt-1 px-2", id: "sub-menu-1") do
-              li(class: "bg-sky-100 rounded-md") do
-                a(
-                  href: "#",
-                  class:
-                    "block rounded-md py-2 pl-9 pr-2 text-sm leading-6 text-sky-600 hover:bg-gray-50"
-                ) { "Name" }
-              end
-              li do
-                a(
-                  href: "#",
-                  class:
-                    "block rounded-md py-2 pl-9 pr-2 text-sm leading-6 text-gray-700 hover:bg-gray-50"
-                ) { "Street" }
-              end
-              li do
-                a(
-                  href: "#",
-                  class:
-                    "block rounded-md py-2 pl-9 pr-2 text-sm leading-6 text-gray-700 hover:bg-gray-50"
-                ) { "City" }
-              end
-            end
+                "block rounded-md py-2 pl-10 pr-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50"
+            ) { I18n.t("activerecord.attributes.#{filtered_model.to_s.underscore}.#{col}") }
           end
-        end
-        li do
-          div do
-            button(
-              type: "button",
-              class:
-                "flex w-full items-center gap-x-3 rounded-md p-2 text-left text-sm leading-6 text-gray-700 hover:bg-gray-50",
-              aria_controls: "sub-menu-2",
-              aria_expanded: "false"
-            ) do
-              comment do
-                %(Expanded: "rotate-90 text-gray-500", Collapsed: "text-gray-400")
-              end
-              svg(
-                class: "h-5 w-5 shrink-0 text-gray-400",
-                viewbox: "0 0 20 20",
-                fill: "currentColor",
-                aria_hidden: "true",
-                data_slot: "icon"
-              ) do |s|
-                s.path(
-                  fill_rule: "evenodd",
-                  d:
-                    "M8.22 5.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L11.94 10 8.22 6.28a.75.75 0 0 1 0-1.06Z",
-                  clip_rule: "evenodd"
-                )
-              end
-              plain " Project "
-            end
-            comment { "Expandable link section, show/hide based on state." }
-            ul(class: "hidden mt-1 px-2", id: "sub-menu-2") do
-              li do
-                a(
-                  href: "#",
-                  class:
-                    "block rounded-md py-2 pl-9 pr-2 text-sm leading-6 text-gray-700 hover:bg-gray-50"
-                ) { "GraphQL API" }
-              end
-              li do
-                a(
-                  href: "#",
-                  class:
-                    "block rounded-md py-2 pl-9 pr-2 text-sm leading-6 text-gray-700 hover:bg-gray-50"
-                ) { "iOS App" }
-              end
-              li do
-                a(
-                  href: "#",
-                  class:
-                    "block rounded-md py-2 pl-9 pr-2 text-sm leading-6 text-gray-700 hover:bg-gray-50"
-                ) { "Android App" }
-              end
-              li do
-                a(
-                  href: "#",
-                  class:
-                    "block rounded-md py-2 pl-9 pr-2 text-sm leading-6 text-gray-700 hover:bg-gray-50"
-                ) { "New Customer Portal" }
-              end
-            end
-          end
-        end
-        li do
-          div do
-            button(
-              type: "button",
-              class:
-                "flex w-full items-center gap-x-3 rounded-md p-2 text-left text-sm leading-6 text-gray-700 hover:bg-gray-50",
-              aria_controls: "sub-menu-2",
-              aria_expanded: "false"
-            ) do
-              comment do
-                %(Expanded: "rotate-90 text-gray-500", Collapsed: "text-gray-400")
-              end
-              svg(
-                class: "h-5 w-5 shrink-0 text-gray-400",
-                viewbox: "0 0 20 20",
-                fill: "currentColor",
-                aria_hidden: "true",
-                data_slot: "icon"
-              ) do |s|
-                s.path(
-                  fill_rule: "evenodd",
-                  d:
-                    "M8.22 5.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L11.94 10 8.22 6.28a.75.75 0 0 1 0-1.06Z",
-                  clip_rule: "evenodd"
-                )
-              end
-              plain " Product "
-            end
-            comment { "Expandable link section, show/hide based on state." }
-            ul(class: "hidden mt-1 px-2", id: "sub-menu-2") do
-              li do
-                a(
-                  href: "#",
-                  class:
-                    "block rounded-md py-2 pl-9 pr-2 text-sm leading-6 text-gray-700 hover:bg-gray-50"
-                ) { "name" }
-              end
-              li do
-                a(
-                  href: "#",
-                  class:
-                    "block rounded-md py-2 pl-9 pr-2 text-sm leading-6 text-gray-700 hover:bg-gray-50"
-                ) { "iOS App" }
-              end
-              li do
-                a(
-                  href: "#",
-                  class:
-                    "block rounded-md py-2 pl-9 pr-2 text-sm leading-6 text-gray-700 hover:bg-gray-50"
-                ) { "Android App" }
-              end
-              li do
-                a(
-                  href: "#",
-                  class:
-                    "block rounded-md py-2 pl-9 pr-2 text-sm leading-6 text-gray-700 hover:bg-gray-50"
-                ) { "New Customer Portal" }
-              end
-            end
-          end
-        end
-        li(class: "border border-sky-200 rounded-md") do
-          a(
-            href: "#",
-            class:
-              "block rounded-md py-2 pl-10 pr-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50"
-          ) { "About" }
-        end
-        li do
-          a(
-            href: "#",
-            class:
-              "block rounded-md py-2 pl-10 pr-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50"
-          ) { "Time" }
-        end
-        li do
-          a(
-            href: "#",
-            class:
-              "block rounded-md py-2 pl-10 pr-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50"
-          ) { "Rate" }
-        end
-        li do
-          a(
-            href: "#",
-            class:
-              "block rounded-md py-2 pl-10 pr-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50"
-          ) { "Quantity" }
-        end
-        li do
-          a(
-            href: "#",
-            class:
-              "block rounded-md py-2 pl-10 pr-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50"
-          ) { "Unit" }
         end
       end
     end
+  end
+
+  def scopes_tab
     div(class: "hidden mt-4", data_filter_target: "tabs", id: "scopes") do
-      comment do
-        "This example requires some changes to your config: ``` // tailwind.config.js module.exports = { // ... plugins: [ // ... require('@tailwindcss/forms'), ], } ```"
-      end
       fieldset do
-        legend(class: "text-sm font-semibold leading-6 text-gray-900") do
-          "User"
-        end
-        p(class: "mt-1 text-sm leading-6 text-gray-600") do
-          "Whose transactions would you like to see?"
-        end
+        legend(class: "text-sm font-semibold leading-6 text-gray-900") { I18n.t("filters.scope.user.title") }
+        p(class: "mt-1 text-sm leading-6 text-gray-600") { I18n.t("filters.scope.user.description") }
         div(class: "mt-3 space-y-4") do
           div(class: "flex items-center") do
             input(
-              id: "email",
-              name: "notification-method",
+              id: "filter_scope_user_mine",
+              name: "filter[scope][user]",
               type: "radio",
               checked: "checked",
               class: "h-4 w-4 border-gray-300 text-sky-200 focus:ring-sky-200"
             )
             label(
-              for: "email",
+              for: "filter_scope_user_mine",
               class: "ml-3 block text-sm font-medium leading-6 text-gray-900"
-            ) { "Mine" }
+            ) { I18n.t("filters.scope.user.mine") }
           end
           div(class: "flex items-center") do
             input(
-              id: "sms",
-              name: "notification-method",
+              id: "filter_scope_user_team",
+              name: "filter[scope][user]",
               type: "radio",
               class: "h-4 w-4 border-gray-300 text-sky-200 focus:ring-sky-200"
             )
             label(
-              for: "sms",
+              for: "filter_scope_user_team",
               class: "ml-3 block text-sm font-medium leading-6 text-gray-900"
-            ) { "Those of my team" }
+            ) { I18n.t("filters.scope.user.team") }
           end
           div(class: "flex items-center") do
             input(
-              id: "push",
-              name: "notification-method",
+              id: "filter_scope_user_all",
+              name: "filter[scope][user]",
               type: "radio",
               class: "h-4 w-4 border-gray-300 text-sky-200 focus:ring-sky-200"
             )
             label(
-              for: "push",
+              for: "filter_scope_user_all",
               class: "ml-3 block text-sm font-medium leading-6 text-gray-900"
-            ) { "Everybody's" }
+            ) { I18n.t("filters.scope.user.all") }
           end
-          input(class: "mort-form-text", placeholder: "named users/teams")
+          input(class: "mort-form-text", name: "filter[scope][named_users_teams]", placeholder: I18n.t("filters.scope.user.named_users_teams"))
         end
       end
-      div(class: "mt-4") do
-        label(for: "", class: "text-sm") { "Customers" }
-        select(name: "", id: "", class: "mort-form-text") do
-          option(value: "") { "Sindico" }
+      bt, _hm = filtered_model.associations
+      bt.each do |assoc|
+        case 0
+        when assoc.to_s.downcase =~ /customer/
+          div(class: "mort-field", id: "filter_customer_id") do
+            row field(:customer_id).lookup(class: "mort-form-text",
+              data: {
+                url: "/customers/lookup",
+                div_id: "filter_customer_id",
+                lookup_target: "input",
+                action: "keydown->lookup#keyDown blur->filter#customerChange"
+              },
+              display_value: @resource.customer_name), "mort-field my-1" # Customer.all.select(:id, :name).take(9)
+          end
+
+        when assoc.to_s.downcase =~ /punchclock/
+          div(class: "mort-field", id: "filter_punch_clock_id") do
+            row field(:punch_clock_id).lookup(class: "mort-form-text",
+              data: {
+                url: "/punch_clocks/lookup",
+                div_id: "filter_punch_clock_id",
+                lookup_target: "input",
+                action: "keydown->lookup#keyDown blur->filter#customerChange"
+              },
+              display_value: @resource.punch_clock_name), "mort-field my-1" # Customer.all.select(:id, :name).take(9)
+          end
+
+        when assoc.to_s.downcase =~ /product/
+          div(class: "mort-field", id: "filter_product_id") do
+            row field(:product_id).lookup(class: "mort-form-text",
+              data: {
+                url: "/products/lookup",
+                div_id: "filter_product_id",
+                lookup_target: "input",
+                action: "keydown->lookup#keyDown blur->filter#customerChange"
+              },
+              display_value: @resource.product_name), "mort-field my-1" # Customer.all.select(:id, :name).take(9)
+          end
+
+        when assoc.to_s.downcase =~ /location/
+          div(class: "mort-field", id: "filter_location_id") do
+            row field(:location_id).lookup(class: "mort-form-text",
+              data: {
+                url: "/locations/lookup",
+                div_id: "filter_location_id",
+                lookup_target: "input",
+                action: "keydown->lookup#keyDown blur->filter#customerChange"
+              },
+              display_value: @resource.location_name), "mort-field my-1" # Customer.all.select(:id, :name).take(9)
+          end
+
+        when assoc.to_s.downcase =~ /invoice/
+          div(class: "mort-field", id: "filter_invoice_id") do
+            row field(:invoice_id).lookup(class: "mort-form-text",
+              data: {
+                url: "/invoices/lookup",
+                div_id: "filter_invoice_id",
+                lookup_target: "input",
+                action: "keydown->lookup#keyDown blur->filter#customerChange"
+              },
+              display_value: @resource.invoice_name), "mort-field my-1" # Customer.all.select(:id, :name).take(9)
+          end
+
+        when assoc.to_s.downcase =~ /invoiceitem/
+          div(class: "mort-field", id: "filter_invoice_item_id") do
+            row field(:invoice_item_id).lookup(class: "mort-form-text",
+              data: {
+                url: "/invoice_items/lookup",
+                div_id: "filter_invoice_item_id",
+                lookup_target: "input",
+                action: "keydown->lookup#keyDown blur->filter#customerChange"
+              },
+              display_value: @resource.invoice_item_name), "mort-field my-1" # Customer.all.select(:id, :name).take(9)
+          end
+
+        when assoc.to_s.downcase =~ /project/
+          div(class: "mort-field", id: "filter_project_id") do
+            row field(:project_id).lookup(class: "mort-form-text",
+              data: {
+                url: "/projects/lookup",
+                div_id: "filter_project_id",
+                lookup_target: "input",
+                action: "keydown->lookup#keyDown blur->filter#customerChange"
+              },
+              display_value: @resource.project_name), "mort-field my-1" # Customer.all.select(:id, :name).take(9)
+          end
+
         end
       end
-      div(class: "mt-4") do
-        label(for: "", class: "text-sm") { "Projects" }
-        select(name: "", id: "", class: "mort-form-text") do
-          option(value: "") { "Cloud-mg" }
+    end
+  end
+
+  def list_association_fields(assoc)
+    li do
+      comment { %(Current: "bg-gray-50", Default: "hover:bg-gray-50") }
+      div do
+        button(
+          data: { action: "filter#toggleAssociationFieldList", list: "#{assoc.to_s.underscore}_fields" },
+          type: "button",
+          class:
+            "flex w-full items-center gap-x-3 rounded-md p-2 text-left text-sm leading-6 text-gray-700 hover:bg-gray-50",
+          aria_controls: "sub-menu-1",
+          aria_expanded: "false"
+        ) do
+          comment do
+            %(Expanded: "rotate-90 text-gray-500", Collapsed: "text-gray-400")
+          end
+          svg(
+            class: "h-5 w-5 shrink-0 text-gray-400",
+            viewbox: "0 0 20 20",
+            fill: "currentColor",
+            aria_hidden: "true",
+            data_slot: "icon"
+          ) do |s|
+            s.path(
+              fill_rule: "evenodd",
+              d:
+                "M8.22 5.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L11.94 10 8.22 6.28a.75.75 0 0 1 0-1.06Z",
+              clip_rule: "evenodd"
+            )
+          end
+          plain I18n.t("activerecord.models.#{assoc.to_s.underscore}.one")
         end
-      end
-      div(class: "mt-4") do
-        label(for: "", class: "text-sm") { "Products" }
-        select(name: "", id: "", class: "mort-form-text") do
-          option(value: "") { "web-hosting" }
+        comment { "Expandable link section, show/hide based on state." }
+        ul(class: "hidden mt-1 px-2", id: "#{assoc.to_s.underscore}_fields") do
+          (assoc.filterable_fields(filtered_model)).each do |col|
+            li(class: " rounded-md") do
+              comment { "column: #{col}" }
+              a(
+                href: "#",
+                class:
+                  "block rounded-md py-2 pl-10 pr-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50"
+              ) { I18n.t("activerecord.attributes.#{assoc.to_s.underscore}.#{col}") }
+            end
+          end
         end
       end
     end

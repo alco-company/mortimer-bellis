@@ -84,12 +84,14 @@ module FieldSpecializations
   #
   class InputField < Superform::Rails::Components::InputComponent
     def field_attributes
+      field.value = @attributes[:value] if @attributes[:value]
       @attributes.keys.include?(:class) ? super : super.merge(class: "mort-form-text")
     end
   end
 
   class NumberField < Superform::Rails::Components::InputComponent
     def field_attributes
+      field.value = @attributes[:value] if @attributes[:value]
       @attributes.keys.include?(:class) ? super.merge(type: "number") : super.merge(class: "mort-form-text", type: "number")
     end
   end
@@ -98,6 +100,8 @@ module FieldSpecializations
     # include Phlex::Rails::Helpers::Request
     #
     def view_template(&)
+      field.value = @attributes[:value] if @attributes[:value]
+
       div(class: "relative", data: { controller: "lookup" }) do
         input(type: "hidden", id: dom.id, name: dom.name, value: field.value, data: { lookup_target: "selectId" })
         data = attributes[:data] || { url: attributes[:lookup_path], div_id: field.dom.id, lookup_target: "input", action: "keydown->lookup#keyDown" }
@@ -162,6 +166,9 @@ module FieldSpecializations
     def field_attributes
       super.merge(type: "week")
     end
+    def view_template(&)
+      input(**attributes, value: field.value&.strftime("%Y-W%V"))
+    end
   end
 
   class FileField < InputField
@@ -203,6 +210,7 @@ module FieldSpecializations
       @attributes.keys.include?(:class) ? super.merge(type: "boolean") : super.merge(class: "mort-form-text", type: "boolean")
     end
     def view_template(&)
+      field.value = attributes[:value] if attributes[:value]
       data_attr = attributes[:data] || {}
       div(class: attributes[:class], data: { controller: "boolean" }) do
         input(name: dom.name, data: data_attr.merge({ boolean_target: "input" }), type: :hidden, value: setValue)

@@ -55,6 +55,30 @@ class Tenant < ApplicationRecord
     all
   end
 
+  def self.filterable_fields(model = self)
+    f = column_names - [
+      "id"
+      # "name",
+      # "email",
+      # "pp_identification",
+      # "locale",
+      # "time_zone",
+      # "created_at",
+      # "updated_at",
+      # "send_state_rrule",
+      # "send_eu_state_rrule",
+      # "color",
+      # "tax_number",
+      # "country",
+      # "access_token"
+    ]
+    f = f - [
+      "created_at",
+      "updated_at"
+    ] if model == self
+    f
+  end
+
   #
   # make it possible to handle model deletion differently from model to model
   # eg TenantRegistrationService.call(tenant, destroy: true)

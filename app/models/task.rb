@@ -90,6 +90,34 @@ class Task < ApplicationRecord
     all
   end
 
+  def self.filterable_fields(model = self)
+    f = column_names - [
+      "id",
+      "tenant_id",
+      "tasked_for_type",
+      "tasked_for_id"
+      # "title"
+      # "link"
+      # "description"
+      # "state"
+      # "priority"
+      # "progress"
+      # "due_at"
+      # "completed_at"
+      # "archived"
+      # "created_at"
+      # "updated_at"
+      # "validation"
+    ]
+    f = f - [
+      "due_at",
+      "completed_at",
+      "created_at",
+      "updated_at"
+    ] if model == self
+    f
+  end
+
   def name
     self.title
   end

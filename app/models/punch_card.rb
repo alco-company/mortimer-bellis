@@ -40,6 +40,33 @@ class PunchCard < ApplicationRecord
     all
   end
 
+  def self.filterable_fields(model = self)
+    f = column_names - [
+      "id",
+      "tenant_id",
+      "user_id"
+      # "work_minutes",
+      # "ot1_minutes",
+      # "ot2_minutes",
+      # "break_minutes",
+      # "work_date",
+      # "punches_settled_at",
+      # "created_at",
+      # "updated_at"
+    ]
+    f = f - [
+      "work_date",
+      "punches_settled_at",
+      "created_at",
+      "updated_at"
+    ] if model == self
+    f
+  end
+
+  def self.associations
+    [ [], [ Punch ] ]
+  end
+
   # def self.ordered(resources, field, direction = :desc)
   #   resources.joins(:user).order(field => direction)
   # end

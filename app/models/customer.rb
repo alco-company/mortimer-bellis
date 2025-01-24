@@ -35,6 +35,47 @@ class Customer  < ApplicationRecord
     all
   end
 
+  def self.filterable_fields(model = self)
+    f = column_names - [
+      "id",
+      "tenant_id",
+      "erp_guid",
+      # t.string "name"
+      # t.string "street"
+      # t.string "zipcode"
+      # t.string "city"
+      # t.string "phone"
+      # t.string "email"
+      # t.string "vat_number"
+      # t.string "ean_number"
+      # "created_at",
+      # "updated_at",
+      # t.string "external_reference"
+      # t.boolean "is_person"
+      "is_member",
+      # t.boolean "is_debitor"
+      # t.boolean "is_creditor"
+      "country_key",
+      # t.string "webpage"
+      # t.string "att_person"
+      # t.string "payment_condition_type"
+      # t.string "payment_condition_number_of_days"
+      "member_number",
+      "company_status",
+      "vat_region_key",
+      "invoice_mail_out_option_key"
+    ]
+    f = f - [
+      "created_at",
+      "updated_at"
+      ] if model == self
+    f
+  end
+
+  def self.associations
+    [ [], [ "invoices", "time_materials", "projects" ] ]
+  end
+
   def address
     "%s\n%s  %s" % [ street, zipcode, city ]
   end

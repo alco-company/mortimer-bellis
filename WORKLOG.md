@@ -70,6 +70,7 @@ END
 }
 
 - loading skeleton frames on all lists - using https://www.driftingruby.com/episodes/skeleton-frames
+- run spinner on submitting forms - https://github.com/edudepetris/rails-8-turbo-morph-and-stream/commit/ff69db6050f8ace429fb05ac926a01031bcb67c3
 - TODO - fit mugshot (see users/registrations_controller)
 - tasks in tree structure - https://www.codemancers.com/blog/maintaining-a-tree-structure-in-rails-with-the-ancestry-gem/
 - make sidebar present like https://nordhealth.design/templates/application/#
@@ -84,6 +85,10 @@ END
 - location status (like user, team) - missing
 - user status - https://localhost:3000/pos/users?api_key=mVunTFDgFVud5qJAHgrHbp4P
 - fix bug in deleting invoices
+
+### 24/1/2025
+
+- filtering - take 2 (navigation and presenting fields)
 
 ### 21/1/2025
 

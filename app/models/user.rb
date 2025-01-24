@@ -89,6 +89,81 @@ class User < ApplicationRecord
     all
   end
 
+  def self.filterable_fields(model = self)
+    f = column_names - [
+      "id",
+      "tenant_id",
+      # "email",
+      # "encrypted_password",
+      "reset_password_token",
+      # "reset_password_sent_at",
+      # "remember_created_at",
+      # "sign_in_count",
+      # "current_sign_in_at",
+      # "last_sign_in_at",
+      # "current_sign_in_ip",
+      # "last_sign_in_ip",
+      "confirmation_token",
+      # "confirmed_at",
+      # "confirmation_sent_at",
+      # "role",
+      # "locale",
+      # "time_zone",
+      # "created_at",
+      # "updated_at",
+      "invitation_token",
+      # "invitation_created_at",
+      # "invitation_sent_at",
+      # "invitation_accepted_at",
+      # "invitation_limit",
+      "invited_by_type",
+      "invited_by_id",
+      # "invitations_count",
+      # "name",
+      # "global_queries",
+      # "locked_at",
+      # "failed_attempts",
+      "unlock_token",
+      # "team_id",
+      # "state",
+      # "eu_state",
+      # "color",
+      # "pincode",
+      "pos_token",
+      # "job_title",
+      # "hired_at",
+      # "birthday",
+      # "last_punched_at",
+      # "cell_phone",
+      # "blocked_from_punching",
+      # "consumed_timestep",
+      # "otp_required_for_login",
+      "otp_secret"
+      # "two_factor_app_enabled",
+      # "two_factor_app_enabled_at"
+    ]
+    f = f - [
+      "reset_password_sent_at",
+      "remember_created_at",
+      "current_sign_in_at",
+      "last_sign_in_at",
+      "confirmed_at",
+      "confirmation_sent_at",
+      "created_at",
+      "updated_at",
+      "invitation_token",
+      "invitation_created_at",
+      "invitation_sent_at",
+      "invitation_accepted_at",
+      "hired_at",
+      "last_punched_at",
+      "two_factor_app_enabled_at",
+      "created_at",
+      "updated_at"
+    ] if model == self
+    f
+  end
+
   def notify(action: nil, title: nil, msg: nil, rcp: nil, priority: 0)
     recipient = rcp.blank? ? self : (rcp.is_a?(User) ? rcp : User.find(rcp))
 

@@ -16,8 +16,8 @@ class FiltersController < BaseController
   #   "filter"=>{"filter_form"=>"punch_cards", "tenant_id"=>"1", "name"=>"max", "work_date"=>"16/4/24", "work_minutes"=>"1t 20m", "break_minutes"=>"", "submit"=>""}}
   #
   def create
-    json_filters = filter_params.except(:filter_form, :filter_preset, :url, :tenant_id, :submit)
-    Filter.create(tenant: Current.tenant, view: filter_params[:filter_form], filter: json_filters)
+    json_filters = filter_params.except(:filter_form, :filter_preset, :name, :url, :tenant_id, :submit)
+    Filter.create(name: filter_params[:name], tenant: Current.tenant, user: Current.user, view: filter_params[:filter_form], filter: json_filters)
     redirect_to redirect_url
   end
 
@@ -44,7 +44,8 @@ class FiltersController < BaseController
   #     "filter"=>{"url"=>"https://localhost:3000/teams", "filter_form"=>"teams", "tenant_id"=>"1", "name"=>"", "team_color"=>"", "locale"=>"en", "time_zone"=>"", "submit"=>""},
   #     "controller"=>"filters", "action"=>"create"} }
   def filter_params
-    params.expect(filter: [ :url, :filter_form, :filter_preset, :tenant_id, :name ])
+    # params.expect(filter: [ :url, :filter_form, :filter_preset, :tenant_id, :name, date: [], field: [], scope: [] ])
+    params.require(:filter).permit!
   end
 
   def create_params

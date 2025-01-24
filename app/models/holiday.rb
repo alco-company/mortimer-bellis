@@ -31,6 +31,26 @@ class Holiday < ApplicationRecord
     all
   end
 
+  def self.filterable_fields(model = self)
+    f = column_names - [
+      "id"
+      # "name",
+      # "countries",
+      # "from_date",
+      # "to_date",
+      # "all_day"
+      # "created_at",
+      # "updated_at"
+    ]
+    f = f - [
+      "from_date",
+      "to_date",
+      "created_at",
+      "updated_at"
+    ] if model == self
+    f
+  end
+
   def self.form(resource:, editable: true)
     Holidays::Form.new resource: resource, editable: editable, enctype: "multipart/form-data"
   end
