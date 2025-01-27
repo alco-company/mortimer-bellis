@@ -138,6 +138,7 @@ Rails.application.routes.draw do
     resources :punch_clocks
   end
   resources :filters
+  resource :filter_fields, only: [ :show, :new ]
   resources :tenants do
     resources :calendars
   end

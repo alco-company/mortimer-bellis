@@ -1,6 +1,7 @@
 class Filters::Form < ApplicationForm
   include Phlex::Rails::Helpers::ButtonTo
   include Phlex::Rails::Helpers::Routes
+  include Phlex::Rails::Helpers::DOMID
 
   # def initialize(filter_form:, url:)
   #   @filter_form = filter_form
@@ -171,187 +172,12 @@ class Filters::Form < ApplicationForm
   def fields_tab
     div(class: "hidden", data_filter_target: "tabs", id: "fields") do
       ul(role: "list", class: "-mx-2 mt-2 space-y-1") do
+        # 24/1/2025 TODO allow user to filter on has_many associations (the _hm)
         bt, _hm = filtered_model.associations
         bt.each do |assoc|
           list_association_fields(assoc)
         end
-        # li do
-        #   comment { %(Current: "bg-gray-50", Default: "hover:bg-gray-50") }
-        #   div do
-        #     button(
-        #       data: { action: "filter#toggleAssociationFieldList" },
-        #       type: "button",
-        #       class:
-        #         "flex w-full items-center gap-x-3 rounded-md p-2 text-left text-sm leading-6 text-gray-700 hover:bg-gray-50",
-        #       aria_controls: "sub-menu-1",
-        #       aria_expanded: "false"
-        #     ) do
-        #       comment do
-        #         %(Expanded: "rotate-90 text-gray-500", Collapsed: "text-gray-400")
-        #       end
-        #       svg(
-        #         class: "h-5 w-5 shrink-0 text-gray-400",
-        #         viewbox: "0 0 20 20",
-        #         fill: "currentColor",
-        #         aria_hidden: "true",
-        #         data_slot: "icon"
-        #       ) do |s|
-        #         s.path(
-        #           fill_rule: "evenodd",
-        #           d:
-        #             "M8.22 5.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L11.94 10 8.22 6.28a.75.75 0 0 1 0-1.06Z",
-        #           clip_rule: "evenodd"
-        #         )
-        #       end
-        #       plain " Customer "
-        #     end
-        #     comment { "Expandable link section, show/hide based on state." }
-        #     ul(class: "mt-1 px-2", id: "sub-menu-1") do
-        #       (Customer.filterable_fields).each do |col|
-        #         li(class: " rounded-md") do
-        #           comment { "column: #{col}" }
-        #           a(
-        #             href: "#",
-        #             class:
-        #               "block rounded-md py-2 pl-10 pr-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50"
-        #           ) { I18n.t("activerecord.attributes.customer.#{col}") }
-        #         end
-        #       end
-        #     end
-        #   end
-        # end
-        # li do
-        #   div do
-        #     button(
-        #       type: "button",
-        #       class:
-        #         "flex w-full items-center gap-x-3 rounded-md p-2 text-left text-sm leading-6 text-gray-700 hover:bg-gray-50",
-        #       aria_controls: "sub-menu-2",
-        #       aria_expanded: "false"
-        #     ) do
-        #       comment do
-        #         %(Expanded: "rotate-90 text-gray-500", Collapsed: "text-gray-400")
-        #       end
-        #       svg(
-        #         class: "h-5 w-5 shrink-0 text-gray-400",
-        #         viewbox: "0 0 20 20",
-        #         fill: "currentColor",
-        #         aria_hidden: "true",
-        #         data_slot: "icon"
-        #       ) do |s|
-        #         s.path(
-        #           fill_rule: "evenodd",
-        #           d:
-        #             "M8.22 5.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L11.94 10 8.22 6.28a.75.75 0 0 1 0-1.06Z",
-        #           clip_rule: "evenodd"
-        #         )
-        #       end
-        #       plain " Project "
-        #     end
-        #     comment { "Expandable link section, show/hide based on state." }
-        #     ul(class: "hidden mt-1 px-2", id: "sub-menu-2") do
-        #       li do
-        #         a(
-        #           href: "#",
-        #           class:
-        #             "block rounded-md py-2 pl-9 pr-2 text-sm leading-6 text-gray-700 hover:bg-gray-50"
-        #         ) { "GraphQL API" }
-        #       end
-        #       li do
-        #         a(
-        #           href: "#",
-        #           class:
-        #             "block rounded-md py-2 pl-9 pr-2 text-sm leading-6 text-gray-700 hover:bg-gray-50"
-        #         ) { "iOS App" }
-        #       end
-        #       li do
-        #         a(
-        #           href: "#",
-        #           class:
-        #             "block rounded-md py-2 pl-9 pr-2 text-sm leading-6 text-gray-700 hover:bg-gray-50"
-        #         ) { "Android App" }
-        #       end
-        #       li do
-        #         a(
-        #           href: "#",
-        #           class:
-        #             "block rounded-md py-2 pl-9 pr-2 text-sm leading-6 text-gray-700 hover:bg-gray-50"
-        #         ) { "New Customer Portal" }
-        #       end
-        #     end
-        #   end
-        # end
-        # li do
-        #   div do
-        #     button(
-        #       type: "button",
-        #       class:
-        #         "flex w-full items-center gap-x-3 rounded-md p-2 text-left text-sm leading-6 text-gray-700 hover:bg-gray-50",
-        #       aria_controls: "sub-menu-2",
-        #       aria_expanded: "false"
-        #     ) do
-        #       comment do
-        #         %(Expanded: "rotate-90 text-gray-500", Collapsed: "text-gray-400")
-        #       end
-        #       svg(
-        #         class: "h-5 w-5 shrink-0 text-gray-400",
-        #         viewbox: "0 0 20 20",
-        #         fill: "currentColor",
-        #         aria_hidden: "true",
-        #         data_slot: "icon"
-        #       ) do |s|
-        #         s.path(
-        #           fill_rule: "evenodd",
-        #           d:
-        #             "M8.22 5.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L11.94 10 8.22 6.28a.75.75 0 0 1 0-1.06Z",
-        #           clip_rule: "evenodd"
-        #         )
-        #       end
-        #       plain " Product "
-        #     end
-        #     comment { "Expandable link section, show/hide based on state." }
-        #     ul(class: "hidden mt-1 px-2", id: "sub-menu-2") do
-        #       li do
-        #         a(
-        #           href: "#",
-        #           class:
-        #             "block rounded-md py-2 pl-9 pr-2 text-sm leading-6 text-gray-700 hover:bg-gray-50"
-        #         ) { "name" }
-        #       end
-        #       li do
-        #         a(
-        #           href: "#",
-        #           class:
-        #             "block rounded-md py-2 pl-9 pr-2 text-sm leading-6 text-gray-700 hover:bg-gray-50"
-        #         ) { "iOS App" }
-        #       end
-        #       li do
-        #         a(
-        #           href: "#",
-        #           class:
-        #             "block rounded-md py-2 pl-9 pr-2 text-sm leading-6 text-gray-700 hover:bg-gray-50"
-        #         ) { "Android App" }
-        #       end
-        #       li do
-        #         a(
-        #           href: "#",
-        #           class:
-        #             "block rounded-md py-2 pl-9 pr-2 text-sm leading-6 text-gray-700 hover:bg-gray-50"
-        #         ) { "New Customer Portal" }
-        #       end
-        #     end
-        #   end
-        # end
-        (filtered_model.filterable_fields).each do |col|
-          li(class: " rounded-md") do
-            comment { "column: #{col}" }
-            a(
-              href: "#",
-              class:
-                "block rounded-md py-2 pl-10 pr-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50"
-            ) { I18n.t("activerecord.attributes.#{filtered_model.to_s.underscore}.#{col}") }
-          end
-        end
+        list_fields(filtered_model)
       end
     end
   end
@@ -361,135 +187,97 @@ class Filters::Form < ApplicationForm
       fieldset do
         legend(class: "text-sm font-semibold leading-6 text-gray-900") { I18n.t("filters.scope.user.title") }
         p(class: "mt-1 text-sm leading-6 text-gray-600") { I18n.t("filters.scope.user.description") }
-        div(class: "mt-3 space-y-4") do
-          div(class: "flex items-center") do
-            input(
-              id: "filter_scope_user_mine",
-              name: "filter[scope][user]",
-              type: "radio",
-              checked: "checked",
-              class: "h-4 w-4 border-gray-300 text-sky-200 focus:ring-sky-200"
-            )
-            label(
-              for: "filter_scope_user_mine",
-              class: "ml-3 block text-sm font-medium leading-6 text-gray-900"
-            ) { I18n.t("filters.scope.user.mine") }
-          end
-          div(class: "flex items-center") do
-            input(
-              id: "filter_scope_user_team",
-              name: "filter[scope][user]",
-              type: "radio",
-              class: "h-4 w-4 border-gray-300 text-sky-200 focus:ring-sky-200"
-            )
-            label(
-              for: "filter_scope_user_team",
-              class: "ml-3 block text-sm font-medium leading-6 text-gray-900"
-            ) { I18n.t("filters.scope.user.team") }
-          end
-          div(class: "flex items-center") do
-            input(
-              id: "filter_scope_user_all",
-              name: "filter[scope][user]",
-              type: "radio",
-              class: "h-4 w-4 border-gray-300 text-sky-200 focus:ring-sky-200"
-            )
-            label(
-              for: "filter_scope_user_all",
-              class: "ml-3 block text-sm font-medium leading-6 text-gray-900"
-            ) { I18n.t("filters.scope.user.all") }
-          end
-          input(class: "mort-form-text", name: "filter[scope][named_users_teams]", placeholder: I18n.t("filters.scope.user.named_users_teams"))
-        end
+        user_scope
       end
       bt, _hm = filtered_model.associations
       bt.each do |assoc|
-        case 0
-        when assoc.to_s.downcase =~ /customer/
-          div(class: "mort-field", id: "filter_customer_id") do
-            row field(:customer_id).lookup(class: "mort-form-text",
-              data: {
-                url: "/customers/lookup",
-                div_id: "filter_customer_id",
-                lookup_target: "input",
-                action: "keydown->lookup#keyDown blur->filter#customerChange"
-              },
-              display_value: @resource.customer_name), "mort-field my-1" # Customer.all.select(:id, :name).take(9)
-          end
-
-        when assoc.to_s.downcase =~ /punchclock/
-          div(class: "mort-field", id: "filter_punch_clock_id") do
-            row field(:punch_clock_id).lookup(class: "mort-form-text",
-              data: {
-                url: "/punch_clocks/lookup",
-                div_id: "filter_punch_clock_id",
-                lookup_target: "input",
-                action: "keydown->lookup#keyDown blur->filter#customerChange"
-              },
-              display_value: @resource.punch_clock_name), "mort-field my-1" # Customer.all.select(:id, :name).take(9)
-          end
-
-        when assoc.to_s.downcase =~ /product/
-          div(class: "mort-field", id: "filter_product_id") do
-            row field(:product_id).lookup(class: "mort-form-text",
-              data: {
-                url: "/products/lookup",
-                div_id: "filter_product_id",
-                lookup_target: "input",
-                action: "keydown->lookup#keyDown blur->filter#customerChange"
-              },
-              display_value: @resource.product_name), "mort-field my-1" # Customer.all.select(:id, :name).take(9)
-          end
-
-        when assoc.to_s.downcase =~ /location/
-          div(class: "mort-field", id: "filter_location_id") do
-            row field(:location_id).lookup(class: "mort-form-text",
-              data: {
-                url: "/locations/lookup",
-                div_id: "filter_location_id",
-                lookup_target: "input",
-                action: "keydown->lookup#keyDown blur->filter#customerChange"
-              },
-              display_value: @resource.location_name), "mort-field my-1" # Customer.all.select(:id, :name).take(9)
-          end
-
-        when assoc.to_s.downcase =~ /invoice/
-          div(class: "mort-field", id: "filter_invoice_id") do
-            row field(:invoice_id).lookup(class: "mort-form-text",
-              data: {
-                url: "/invoices/lookup",
-                div_id: "filter_invoice_id",
-                lookup_target: "input",
-                action: "keydown->lookup#keyDown blur->filter#customerChange"
-              },
-              display_value: @resource.invoice_name), "mort-field my-1" # Customer.all.select(:id, :name).take(9)
-          end
-
-        when assoc.to_s.downcase =~ /invoiceitem/
-          div(class: "mort-field", id: "filter_invoice_item_id") do
-            row field(:invoice_item_id).lookup(class: "mort-form-text",
-              data: {
-                url: "/invoice_items/lookup",
-                div_id: "filter_invoice_item_id",
-                lookup_target: "input",
-                action: "keydown->lookup#keyDown blur->filter#customerChange"
-              },
-              display_value: @resource.invoice_item_name), "mort-field my-1" # Customer.all.select(:id, :name).take(9)
-          end
-
-        when assoc.to_s.downcase =~ /project/
-          div(class: "mort-field", id: "filter_project_id") do
-            row field(:project_id).lookup(class: "mort-form-text",
-              data: {
-                url: "/projects/lookup",
-                div_id: "filter_project_id",
-                lookup_target: "input",
-                action: "keydown->lookup#keyDown blur->filter#customerChange"
-              },
-              display_value: @resource.project_name), "mort-field my-1" # Customer.all.select(:id, :name).take(9)
-          end
-
-        end
+        association_scope(assoc)
+        # case 0
+        # when assoc.to_s.downcase =~ /customer/
+        #   div(class: "mort-field", id: "filter_customer_id") do
+        #     row field(:customer_id).lookup(class: "mort-form-text",
+        #       data: {
+        #         url: "/customers/lookup",
+        #         div_id: "filter_customer_id",
+        #         lookup_target: "input",
+        #         action: "keydown->lookup#keyDown blur->filter#customerChange"
+        #       },
+        #       display_value: @resource.customer_name), "mort-field my-1" # Customer.all.select(:id, :name).take(9)
+        #   end
+        #
+        # when assoc.to_s.downcase =~ /punchclock/
+        #   div(class: "mort-field", id: "filter_punch_clock_id") do
+        #     row field(:punch_clock_id).lookup(class: "mort-form-text",
+        #       data: {
+        #         url: "/punch_clocks/lookup",
+        #         div_id: "filter_punch_clock_id",
+        #         lookup_target: "input",
+        #         action: "keydown->lookup#keyDown blur->filter#customerChange"
+        #       },
+        #       display_value: @resource.punch_clock_name), "mort-field my-1" # Customer.all.select(:id, :name).take(9)
+        #   end
+        #
+        # when assoc.to_s.downcase =~ /product/
+        #   div(class: "mort-field", id: "filter_product_id") do
+        #     row field(:product_id).lookup(class: "mort-form-text",
+        #       data: {
+        #         url: "/products/lookup",
+        #         div_id: "filter_product_id",
+        #         lookup_target: "input",
+        #         action: "keydown->lookup#keyDown blur->filter#customerChange"
+        #       },
+        #       display_value: @resource.product_name), "mort-field my-1" # Customer.all.select(:id, :name).take(9)
+        #   end
+        #
+        # when assoc.to_s.downcase =~ /location/
+        #   div(class: "mort-field", id: "filter_location_id") do
+        #     row field(:location_id).lookup(class: "mort-form-text",
+        #       data: {
+        #         url: "/locations/lookup",
+        #         div_id: "filter_location_id",
+        #         lookup_target: "input",
+        #         action: "keydown->lookup#keyDown blur->filter#customerChange"
+        #       },
+        #       display_value: @resource.location_name), "mort-field my-1" # Customer.all.select(:id, :name).take(9)
+        #   end
+        #
+        # when assoc.to_s.downcase =~ /invoice/
+        #   div(class: "mort-field", id: "filter_invoice_id") do
+        #     row field(:invoice_id).lookup(class: "mort-form-text",
+        #       data: {
+        #         url: "/invoices/lookup",
+        #         div_id: "filter_invoice_id",
+        #         lookup_target: "input",
+        #         action: "keydown->lookup#keyDown blur->filter#customerChange"
+        #       },
+        #       display_value: @resource.invoice_name), "mort-field my-1" # Customer.all.select(:id, :name).take(9)
+        #   end
+        #
+        # when assoc.to_s.downcase =~ /invoiceitem/
+        #   div(class: "mort-field", id: "filter_invoice_item_id") do
+        #     row field(:invoice_item_id).lookup(class: "mort-form-text",
+        #       data: {
+        #         url: "/invoice_items/lookup",
+        #         div_id: "filter_invoice_item_id",
+        #         lookup_target: "input",
+        #         action: "keydown->lookup#keyDown blur->filter#customerChange"
+        #       },
+        #       display_value: @resource.invoice_item_name), "mort-field my-1" # Customer.all.select(:id, :name).take(9)
+        #   end
+        #
+        # when assoc.to_s.downcase =~ /project/
+        #   div(class: "mort-field", id: "filter_project_id") do
+        #     row field(:project_id).lookup(class: "mort-form-text",
+        #       data: {
+        #         url: "/projects/lookup",
+        #         div_id: "filter_project_id",
+        #         lookup_target: "input",
+        #         action: "keydown->lookup#keyDown blur->filter#customerChange"
+        #       },
+        #       display_value: @resource.project_name), "mort-field my-1" # Customer.all.select(:id, :name).take(9)
+        #   end
+        #
+        # end
       end
     end
   end
@@ -527,18 +315,76 @@ class Filters::Form < ApplicationForm
         end
         comment { "Expandable link section, show/hide based on state." }
         ul(class: "hidden mt-1 px-2", id: "#{assoc.to_s.underscore}_fields") do
-          (assoc.filterable_fields(filtered_model)).each do |col|
-            li(class: " rounded-md") do
-              comment { "column: #{col}" }
-              a(
-                href: "#",
-                class:
-                  "block rounded-md py-2 pl-10 pr-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50"
-              ) { I18n.t("activerecord.attributes.#{assoc.to_s.underscore}.#{col}") }
-            end
-          end
+          list_fields(assoc)
         end
       end
+    end
+  end
+
+  def list_fields(model)
+    (model.filterable_fields).each do |col|
+      render partial: "filter_fields/show", locals: { field: col, model: model.to_s.underscore, value: "", selected: "" }
+    end
+  end
+
+  def user_scope
+    div(class: "mt-3 space-y-4") do
+      div(class: "flex items-center") do
+        input(
+          id: "filter_scope_user_mine",
+          name: "filter[scope][user]",
+          value: "mine",
+          type: "radio",
+          checked: "checked",
+          class: "h-4 w-4 border-gray-300 text-sky-200 focus:ring-sky-200"
+        )
+        label(
+          for: "filter_scope_user_mine",
+          class: "ml-3 block text-sm font-medium leading-6 text-gray-900"
+        ) { I18n.t("filters.scope.user.mine") }
+      end
+      div(class: "flex items-center") do
+        input(
+          id: "filter_scope_user_team",
+          name: "filter[scope][user]",
+          value: "my_team",
+          type: "radio",
+          class: "h-4 w-4 border-gray-300 text-sky-200 focus:ring-sky-200"
+        )
+        label(
+          for: "filter_scope_user_team",
+          class: "ml-3 block text-sm font-medium leading-6 text-gray-900"
+        ) { I18n.t("filters.scope.user.team") }
+      end
+      div(class: "flex items-center") do
+        input(
+          id: "filter_scope_user_all",
+          name: "filter[scope][user]",
+          value: "all",
+          type: "radio",
+          class: "h-4 w-4 border-gray-300 text-sky-200 focus:ring-sky-200"
+        )
+        label(
+          for: "filter_scope_user_all",
+          class: "ml-3 block text-sm font-medium leading-6 text-gray-900"
+        ) { I18n.t("filters.scope.user.all") }
+      end
+      input(class: "mort-form-text", name: "filter[scope][named_users_teams]", placeholder: I18n.t("filters.scope.user.named_users_teams"))
+    end
+  end
+
+  def association_scope(model)
+    lower = model.to_s.underscore
+    div(class: "mort-field", id: "filter_#{lower}_id") do
+      row field("#{lower}_id".to_sym).lookup(class: "mort-form-text",
+        data: {
+          url: "/#{model.table_name}/lookup",
+          div_id: "filter_#{lower}_id",
+          lookup_target: "input",
+          action: "keydown->lookup#keyDown blur->filter#customerChange"
+        },
+        display_value: @resource.send("#{lower}_name")),
+        "mort-field my-1"
     end
   end
 end

@@ -86,6 +86,10 @@ END
 - user status - https://localhost:3000/pos/users?api_key=mVunTFDgFVud5qJAHgrHbp4P
 - fix bug in deleting invoices
 
+### 27/1/2025
+
+- filtering - take 3 (remember values)
+
 ### 24/1/2025
 
 - filtering - take 2 (navigation and presenting fields)

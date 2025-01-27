@@ -1,6 +1,7 @@
 class Filter < ApplicationRecord
   include Tenantable
 
+  belongs_to :user, optional: true
   scope :by_view, ->(view) { where("view LIKE ?", "%#{view}%") if view.present? }
 
   def self.filtered(filter)

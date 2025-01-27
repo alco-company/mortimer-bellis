@@ -7,7 +7,9 @@ export default class extends Controller {
     "tabs", 
     "tabtitle",
     "dateRange",
-    "content" 
+    "content",
+    "input", 
+    "selector"
   ]
 
   connect() {
@@ -79,5 +81,25 @@ export default class extends Controller {
     // event.target.name // => "user[answer]"
     // event.target.value // => <user input string>
     event.target.form.requestSubmit()
+  }
+
+  async submitField(e){
+    e.stopPropagation();
+    e.preventDefault()
+    let se = this.selectorTarget
+    let selected = se.options[se.selectedIndex].value
+    let url = `filter_fields?field=${this.inputTarget.name}&value=${this.inputTarget.value}&selected=${selected}`
+    const response = await fetch(url, {
+      method: "GET",
+      // body: JSON.stringify({ promo_code: this.promoCodeTarget.value }),
+      headers: { Accept: "text/vnd.turbo-stream.html" }
+    });
+
+    if (response.status === 204) {
+      return true;
+    } else {
+      const text = await response.text();
+      Turbo.renderStreamMessage(text);
+    }
   }
 }
