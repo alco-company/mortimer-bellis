@@ -26,7 +26,7 @@
                 <div class="pl-4 pr-4 sm:pr-6 sm:pl-6 pb-1 pt-1 sm:pt-0">
 
 
-                  <div data-controller="profile" class="mx-auto w-72 sm:w-96">
+                  <div data-controller="profile password-strength" class="mx-auto w-72 sm:w-96">
                     <h1 class="font-bold text-gray-200 text-2xl"> <%= t("users.edit_profile.name") %> </h1>
 
                     <h3>Mortimer version:
@@ -129,25 +129,32 @@
                       <% end %>
 
                       <div class="p-4 rounded-md shadow-sm bg-sky-100">
+                        <i class="text-xs"> <%= I18n.t("users.registrations.edit.sign_up.leave_empty") %></i>
 
                         <div class="mort-field">
-                          <%= f.label :password %> <br />
-                          <%= f.password_field :password, autocomplete: "new-password", class: "mort-form-text" %>
+                          <%= f.label :password %>
                           <% if @minimum_password_length %>
-                            <em class="text-xs font-medium"><%= @minimum_password_length %> characters minimum</em>
-                          <% end %>
-                          <i class="text-xs">(leave blank if you don't want to change it)</i>
+                          <em ><%= t(".sign_up.minimum", count: @minimum_password_length) %></em>
+                          <% end %><br />
+                          <%= f.password_field :password, 
+                            required: true,
+                            placeholder: I18n.t("users.enter_password"),
+                            maxlength: 72,
+                            "data-password-strength-target": :password,
+                            "data-action": "input->password-strength#updateStrength",
+                            class: "mort-form-text" %>
+                          <div data-password-strength-target="strengthIndicator" class="mt-0 pl-3 text-xs"></div>
                         </div>
 
                         <div class="mort-field">
                           <%= f.label :password_confirmation %><br />
-                          <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "mort-form-text" %>
+                          <%= f.password_field :password_confirmation, placeholder: I18n.t("users.reenter_password"), class: "mort-form-text" %>
                         </div>
 
                         <div class="mort-field">
-                          <%= f.label :current_password %><br />
+                          <%= f.label :current_password, I18n.t("users.registrations.edit.sign_up.current_password") %><br />
                           <%= f.password_field :current_password, autocomplete: "current-password", class: "mort-form-text" %>
-                          <i class="text-xs">(we need your current password to confirm your change of password)</i>
+                          <i class="text-xs"><%= I18n.t("users.registrations.edit.sign_up.need_current_password") %></i>
                         </div>
                       </div>
 

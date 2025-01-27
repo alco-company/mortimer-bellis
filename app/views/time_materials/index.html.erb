@@ -1,5 +1,5 @@
 <%= render partial: "header" %>
-<%= render partial: "filtering" unless @filter.new_record? %>
+<%#= render partial: "filtering" unless @filter.new_record? %>
 <%= turbo_frame_tag "form" %>
 <!-- List -->
 <%= turbo_stream_from @resources_stream %>

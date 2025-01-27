@@ -19,7 +19,8 @@ da:
     next_step: "Hvis du ikke har modtaget emailen, kan du få den sendt igen."
     email_missing: Check din 'junk'/'reklame' postmappe - måske ligger email'en der?
     validation_errors: Der er fejl i det indtastede
-    
+    enter_password: Indtast din nye adgangskode
+    reenter_password: Gentag din nye adgangskode
     create:
       post: Bruger blev oprettet
     update:
@@ -74,12 +75,21 @@ da:
         create: Opret kontoen
         sign_up:
           title: Opret en ny konto
+          leave_empty: "Lad være tom, hvis du ikke vil ændre adgangskoden"
           minimum: "(mindst %{count} tegn)"
+      edit:
+        sign_up:
+          current_password: Nuværende adgangskode
+          leave_empty: "Lad være tom, hvis du ikke vil ændre adgangskoden"
+          minimum: "(mindst %{count} tegn)"
+          need_current_password: "Du skal indtaste din nuværende adgangskode for at ændre den."
         
     passwords:
       new: 
         reset_password: Nulstil adgangskoden
       edit:
+        sign_up:
+          minimum: "(mindst %{count} tegn)"
         change_password: Skift din adgangskode
         password: Adgangskode
         password_confirmation: Bekræft/Gentag adgangskoden

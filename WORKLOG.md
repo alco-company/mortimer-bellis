@@ -85,10 +85,13 @@ END
 - location status (like user, team) - missing
 - user status - https://localhost:3000/pos/users?api_key=mVunTFDgFVud5qJAHgrHbp4P
 - fix bug in deleting invoices
+- add invoice items - if exist on customer
+- set invoice date on invoice_item - not created_at
 
 ### 27/1/2025
 
 - filtering - take 3 (remember values)
+- password strength
 
 ### 24/1/2025
 
