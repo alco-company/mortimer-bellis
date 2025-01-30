@@ -135,6 +135,8 @@ da:
       title: Overblik
 
   filters:
+    filtered: Filtreret
+    destroyed: "Filteret blev slettet korrekt." 
     help:
       title: "Hjælp"
       description: "Hjælp til at bruge filtre"

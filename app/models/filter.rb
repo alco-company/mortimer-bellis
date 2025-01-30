@@ -1,4 +1,6 @@
 class Filter < ApplicationRecord
+  include Tenantable
+
   SELECTORS = [
     [ I18n.t("one_of"), "in" ],
     [ I18n.t("not_one_of"), "not_in" ],
@@ -13,32 +15,19 @@ class Filter < ApplicationRecord
     [ I18n.t("matches"), "matches" ],
     [ I18n.t("not_matching"), "does_not_match" ]
   ]
-  include Tenantable
 
   belongs_to :user, optional: true
   scope :by_user, ->(user = Current.user) { where(user: user) if user.present? }
   scope :by_view, ->(view) { where(view: view) if view.present? }
 
   def do_filter(model)
-    resources = model
-    model_name = model.to_s.underscore
+    conditions = []
     model.column_names.map do |column|
-      if filter_argument?(model_name, column)
-        resources = filter_sql resources, model_name, column
+      if filter_argument?(model, column)
+        conditions << filter_sql(model, column)
       end
     end
-    resources
-  end
-
-  def self.filtered(filter)
-    flt = filter.filter
-
-    all
-      # .by_tenant()
-      .by_view(flt["view"])
-  rescue
-    filter.destroy if filter
-    all
+    conditions.reduce(:and) || model.all
   end
 
   def self.form(resource:, url:, filter_form:, params:, editable: true)
@@ -46,67 +35,18 @@ class Filter < ApplicationRecord
   end
 
   def filter_argument?(model, column)
+    model = model.to_s.underscore
     filter[model][column].present? && !filter[model][column].split("|")[1].blank?
   end
 
-  def filter_sql(resources, model, column, joined = false)
-    selected, value = filter[model][column].split("|")
+  def filter_sql(model, column, joined = false)
+    model_name = model.to_s.underscore
+
+    selected, value = filter[model_name][column].split("|")
     if joined
       # " #{model.pluralize}.#{column} %s %s " % [ selected, value ]
     else
-      resources.where_op(selected.to_sym, column.to_sym => value)
+      model.where_op(selected.to_sym, column.to_sym => value.downcase)
     end
   end
-  #
-  # associations on the model
-  # will pull from the json_filter
-  # and return the association.id & association.name
-  #
-
-  # # customer
-  # def customer_id
-  #   "829"
-  # end
-
-  # def customer_name
-  #   "Nordthy A/S"
-  # end
-
-  # # punch_clock
-  # def punch_clock_id
-  # end
-
-  # def punch_clock_name
-  # end
-
-  # # product
-  # def product_id
-  # end
-
-  # def product_name
-  # end
-  # # location
-  # def location_id
-  # end
-
-  # def location_name
-  # end
-  # # invoice
-  # def invoice_id
-  # end
-
-  # def invoice_name
-  # end
-  # # invoice_item
-  # def invoice_item_id
-  # end
-
-  # def invoice_item_name
-  # end
-  # # project
-  # def project_id
-  # end
-
-  # def project_name
-  # end
 end

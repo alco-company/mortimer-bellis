@@ -135,7 +135,8 @@ module Resourceable
 
     def any_filters?
       return false if @filter.nil? or params_ctrl.split("/").last == "filters"
-      !@filter.id.nil?
+      # !@filter.id.nil?
+      @filter.persisted?
     end
 
     def any_sorts?

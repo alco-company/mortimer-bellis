@@ -91,6 +91,7 @@ END
 ### 30/1/2025
 
 - filtering - take 4 (first successful filtering)
+- filtering - take 4 (first successful delete of filter)
 
 ### 27/1/2025
 

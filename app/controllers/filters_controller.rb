@@ -38,7 +38,7 @@ class FiltersController < BaseController
 
   def destroy
     Filter.find(params[:id]).destroy
-    redirect_to redirect_url, status: 303, notice: "Filter was successfully destroyed."
+    redirect_to redirect_url, status: 303, notice: I18n.t("filters.destroyed")
   end
 
   private
