@@ -12,7 +12,7 @@
 - missing a tools - look at https://notchtools.com/
 - if VUE components are required - look at inertiajs.com
 - look at modularization using ideas / patterns from https://diversepixel.medium.com/rails-architecture-best-practices-and-building-scalable-applications-ruby-deep-dive-11-7cc514766728
-- 
+- use Bullet to erradicate N+1 queries - IMPORTANT
 
 ## Rescue tools
 
@@ -87,6 +87,10 @@ END
 - fix bug in deleting invoices
 - add invoice items - if exist on customer
 - set invoice date on invoice_item - not created_at
+
+### 30/1/2025
+
+- filtering - take 4 (first successful filtering)
 
 ### 27/1/2025
 

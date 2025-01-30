@@ -3,7 +3,14 @@ class FiltersController < BaseController
 
   def new
     @filter_form = params[:filter_form]
-    @resource = @filter = Filter.by_tenant().where(view: params[:filter_form]).take || Filter.new
+    @resource = @filter = Filter.by_user().by_view(params[:filter_form]).take || Filter.new
+    @url = params[:url]
+    @filter.filter ||= {}
+  end
+
+  def edit
+    @filter_form = params[:filter_form]
+    @resource = @filter = Filter.find(params[:id])
     @url = params[:url]
     @filter.filter ||= {}
   end
@@ -23,9 +30,9 @@ class FiltersController < BaseController
 
   def update
     json_filters = params[:filter].except(:filter_form, :url, :tenant_id, :submit)
-    filter = Filter.by_tenant().where(view: filter_params[:filter_form]).take
+    filter = Filter.by_user.by_view(filter_params[:filter_form]).take
 
-    filter.update(tenant: Current.tenant, view: filter_params[:filter_form], filter: json_filters)
+    filter.update(tenant: Current.tenant, view: filter_params[:filter_form], filter: json_filters) if filter
     redirect_to redirect_url
   end
 
@@ -41,7 +48,8 @@ class FiltersController < BaseController
     end
 
     def redirect_url
-      filter_params[:url].split("?").first
+      fp = filter_params[:url].split("?").first
+      "#{fp}?replace=true"
     end
 
     #

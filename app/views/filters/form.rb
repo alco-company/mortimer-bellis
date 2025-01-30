@@ -1,3 +1,55 @@
+#
+# ex of filter form output
+#
+# {"date"=>{"attribute"=>"paused_at", "fixed_range"=>"this_week", "custom_from"=>"", "custom_to"=>""},
+#  "customer"=>
+#   {"name"=>"like|mosegrisen",
+#    "street"=>"|",
+#    "zipcode"=>"|",
+#    "city"=>"|",
+#    "phone"=>"|",
+#    "email"=>"|",
+#    "vat_number"=>"|",
+#    "ean_number"=>"|",
+#    "external_reference"=>"|",
+#    "is_person"=>"|",
+#    "is_debitor"=>"|",
+#    "is_creditor"=>"|",
+#    "webpage"=>"|",
+#    "att_person"=>"|",
+#    "payment_condition_type"=>"|",
+#    "payment_condition_number_of_days"=>"|"},
+#  "project"=>{"name"=>"|", "state"=>"|", "budget"=>"|", "is_billable"=>"|", "is_separate_invoice"=>"|", "hourly_rate"=>"|", "priority"=>"|", "estimated_minutes"=>"|", "actual_minutes"=>"|"},
+#  "product"=>
+#   {"name"=>"|", "product_number"=>"|", "quantity"=>"|", "unit"=>"|", "account_number"=>"|", "base_amount_value"=>"|", "base_amount_value_incl_vat"=>"|", "total_amount"=>"|", "total_amount_incl_vat"=>"|", "external_reference"=>"|"},
+#  "time_material"=>
+#   {"about"=>"|",
+#    "customer_name"=>"|",
+#    "project_name"=>"|",
+#    "product_name"=>"|",
+#    "quantity"=>"|",
+#    "rate"=>"|",
+#    "discount"=>"|",
+#    "state"=>"|",
+#    "is_invoice"=>"|",
+#    "is_free"=>"|",
+#    "is_offer"=>"|",
+#    "is_separate"=>"|",
+#    "comment"=>"|",
+#    "unit_price"=>"|",
+#    "unit"=>"|",
+#    "time_spent"=>"|",
+#    "over_time"=>"|"},
+#  "scope"=>{"user"=>"my_team", "named_users_teams"=>""},
+#  "customer_id"=>"829",
+#  "customer_name"=>"",
+#  "project_id"=>"56",
+#  "project_name"=>"11",
+#  "product_id"=>"",
+#  "product_name"=>""
+# }
+
+
 class Filters::Form < ApplicationForm
   include Phlex::Rails::Helpers::ButtonTo
   include Phlex::Rails::Helpers::Routes
@@ -8,9 +60,9 @@ class Filters::Form < ApplicationForm
   #   @url = url
   # end
 
-  attr_accessor :resource, :cancel_url, :title, :edit_url,  :editable, :api_key, :model, :fields, :params, :url, :filter_form, :filtered_model
+  attr_accessor :resource, :cancel_url, :title, :edit_url, :api_key, :model, :fields, :params, :url, :filter_form, :filtered_model
 
-  def initialize(resource:, url:, filter_form:, params:, editable:, **options)
+  def initialize(resource:, url:, filter_form:, params:, **options)
     options[:data] = { controller: "filter" }
     options[:class] = "mort-form"
     super(resource: resource, **options)
@@ -20,7 +72,6 @@ class Filters::Form < ApplicationForm
     @params = params
     @fields = options[:fields] || []
     @fields = @fields.any? ? @fields : filtered_model.attribute_types.keys
-    @editable = editable
     @url = url
   end
 
@@ -35,7 +86,6 @@ class Filters::Form < ApplicationForm
       end
     end
   end
-
 
   def tabs
     div(class: "sm:hidden") do
@@ -124,9 +174,11 @@ class Filters::Form < ApplicationForm
     end
   end
 
+  # resource.filter["date"] = {"attribute"=>"paused_at", "fixed_range"=>"this_week", "custom_from"=>"", "custom_to"=>""},
   def dates_tab
     div(class: "", data_filter_target: "tabs", id: "dates") do
       div do
+        date_attr = resource.filter["date"] ? resource.filter["date"]["attribute"] : ""
         div(class: "mort-field") do
           label(class: "mr-2 text-nowrap text-gray-400", for: "") do
             I18n.t("filters.period.title")
@@ -134,13 +186,14 @@ class Filters::Form < ApplicationForm
           select(name: "filter[date][attribute]", id: "", class: "mort-form-select mt-2") do
             filtered_model.columns.each do |col|
               next if col.name =~ /^odo/
-              option(value: col.name) { I18n.t("activerecord.attributes.#{filtered_model.to_s.underscore}.#{col.name}") } if %w[ date datetime time ].include? col.type.to_s
+              option(value: col.name, selected: date_attr == col.name) { I18n.t("activerecord.attributes.#{filtered_model.to_s.underscore}.#{col.name}") } if %w[ date datetime time ].include? col.type.to_s
             end
           end
         end
+        fixed_range_attr = resource.filter["date"] ? resource.filter["date"]["fixed_range"] : ""
         div(class: "mort-field") do
           label(class: "mr-2 text-gray-400", for: "") { I18n.t("filters.period.fixed_range") }
-          input(type: "hidden", id: "filter_date_fixed_range", name: "filter[date][fixed_range]")
+          input(type: "hidden", id: "filter_date_fixed_range", name: "filter[date][fixed_range]", value: fixed_range_attr)
           ul(class: "mt-1 px-2 w-full") do
             li(class: "rounded-md hover:bg-gray-50 leading-6 text-sm w-full my-1 py-2 px-3 cursor-pointer", data: { filter_target: "dateRange", action: "click->filter#setDate", range: "today" })          { I18n.t("filters.period.today") }
             li(class: "rounded-md hover:bg-gray-50 leading-6 text-sm w-full my-1 py-2 px-3 cursor-pointer", data: { filter_target: "dateRange", action: "click->filter#setDate", range: "yesterday" })      { I18n.t("filters.period.yesterday") }
@@ -155,13 +208,15 @@ class Filters::Form < ApplicationForm
         div(class: "px-3 mt-3") do
           h3(class: "text-gray-400") { I18n.t("filters.period.custom_range") }
           div(class: "grid items-center") do
+            custom_from_attr = resource.filter["date"] ? resource.filter["date"]["custom_from"] : ""
             div(class: "mort-field my-1 flex columns-2 items-center") do
               label(class: "mr-2 grow", for: "") { "from" }
-              input(type: "date", name: "filter[date][custom_from]", class: "mort-form-text w-3/4", data: { action: "blur->filter#clearFixedRange" })
+              input(type: "date", id: "filter_date_custom_from", name: "filter[date][custom_from]", value: custom_from_attr, class: "mort-form-text w-3/4", data: { action: "blur->filter#clearFixedRange" })
             end
+            custom_to_attr = resource.filter["date"] ? resource.filter["date"]["custom_to"] : ""
             div(class: "mort-field my-0 flex columns-2 items-center") do
               label(class: "mr-2 grow", for: "") { "to" }
-              input(type: "date", name: "filter[date][custom_to]", class: "mort-form-text w-3/4", data: { action: "blur->filter#clearFixedRange" })
+              input(type: "date", id: "filter_date_custom_to", name: "filter[date][custom_to]", value: custom_to_attr, class: "mort-form-text w-3/4", data: { action: "blur->filter#clearFixedRange" })
             end
           end
         end
@@ -322,20 +377,29 @@ class Filters::Form < ApplicationForm
   end
 
   def list_fields(model)
+    lower = model.to_s.underscore
     (model.filterable_fields).each do |col|
-      render partial: "filter_fields/show", locals: { field: col, model: model.to_s.underscore, value: "", selected: "" }
+      col_selected, col_value = resource.filter[lower] && resource.filter[lower][col] ?
+        resource.filter[lower][col].split("|") :
+        [ "", "" ]
+      col_selected_text = Filter::SELECTORS.filter { |s| s[1] == col_selected }.first[0] rescue ""
+      render partial: "filter_fields/show", locals: { field: col, model: model.to_s.underscore, value: col_value, selected: col_selected, selected_text: col_selected_text }
     end
   end
 
   def user_scope
     div(class: "mt-3 space-y-4") do
+      #
+      user_scope = resource.filter["scope"] && resource.filter["scope"]["user"] ?
+        resource.filter["scope"]["user"] :
+        ""
       div(class: "flex items-center") do
         input(
           id: "filter_scope_user_mine",
           name: "filter[scope][user]",
           value: "mine",
           type: "radio",
-          checked: "checked",
+          checked: user_scope == "mine", # ."checked",
           class: "h-4 w-4 border-gray-300 text-sky-200 focus:ring-sky-200"
         )
         label(
@@ -349,6 +413,7 @@ class Filters::Form < ApplicationForm
           name: "filter[scope][user]",
           value: "my_team",
           type: "radio",
+          checked: user_scope == "my_team",
           class: "h-4 w-4 border-gray-300 text-sky-200 focus:ring-sky-200"
         )
         label(
@@ -362,6 +427,7 @@ class Filters::Form < ApplicationForm
           name: "filter[scope][user]",
           value: "all",
           type: "radio",
+          checked: user_scope == "all",
           class: "h-4 w-4 border-gray-300 text-sky-200 focus:ring-sky-200"
         )
         label(
@@ -369,7 +435,13 @@ class Filters::Form < ApplicationForm
           class: "ml-3 block text-sm font-medium leading-6 text-gray-900"
         ) { I18n.t("filters.scope.user.all") }
       end
-      input(class: "mort-form-text", name: "filter[scope][named_users_teams]", placeholder: I18n.t("filters.scope.user.named_users_teams"))
+      named_scope = resource.filter["scope"] && resource.filter["scope"]["named_users_teams"] ?
+        resource.filter["scope"]["named_users_teams"] :
+        ""
+      input(class: "mort-form-text",
+        name: "filter[scope][named_users_teams]",
+        value: named_scope,
+        placeholder: I18n.t("filters.scope.user.named_users_teams"))
     end
   end
 
@@ -381,10 +453,10 @@ class Filters::Form < ApplicationForm
           url: "/#{model.table_name}/lookup",
           div_id: "filter_#{lower}_id",
           lookup_target: "input",
+          value: resource.filter["#{lower}_id"],
           action: "keydown->lookup#keyDown blur->filter#customerChange"
         },
-        display_value: @resource.send("#{lower}_name")),
-        "mort-field my-1"
+        display_value: resource.filter["#{lower}_name"]), "mort-field my-1"
     end
   end
 end

@@ -6,6 +6,7 @@ module DefaultActions
     def index
       params.permit![:url] = resources_url
       @pagy, @records = pagy(@resources)
+      @replace = params.permit![:replace] || false
 
       respond_to do |format|
         format.html { }

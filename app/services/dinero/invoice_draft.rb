@@ -143,6 +143,7 @@ class Dinero::InvoiceDraft
   # 4. Text
   #
   def product_line(line, date)
+    date = line.date.blank? ? date : line.date
     return a_product(line, date) unless line.product_id.blank?
     return a_one_off(line, date) unless line.quantity.blank?
     return a_mileage(line, date) unless line.kilometers.blank?

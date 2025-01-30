@@ -14,6 +14,13 @@ export default class extends Controller {
 
   connect() {
     let that = this;
+    this.dateRangeTargets.forEach((dateRange) => {
+      if (document.getElementById("filter_date_fixed_range").value == dateRange.dataset.range) {
+        document.getElementById("filter_date_custom_from").value = null;
+        document.getElementById("filter_date_custom_to").value = null;
+        dateRange.classList.add("bg-sky-100", "font-medium", "text-sky-600");
+      }
+    });
     //that.element.addEventListener('change', _.debounce(that.handleChange, 500))
   }
 
@@ -43,13 +50,6 @@ export default class extends Controller {
         tab.classList.add("hidden") 
       }
     })
-    // console.log(e)
-    // console.log(e.currentTarget)
-    // console.log(e.target)
-    // console.log(e.currentTarget.dataset.id)
-    // console.log(e.target.dataset.id)
-    // console.log(this.element.dataset.id)
-    // console.log(this.element)
   }
 
   // setDate
@@ -61,9 +61,12 @@ export default class extends Controller {
     this.dateRangeTargets.forEach(dateRange => { dateRange.classList.remove("bg-sky-100", "font-medium", "text-sky-600"); dateRange.classList.add("bg-white", "text-gray-500"); })
     e.currentTarget.classList.remove("bg-white", "text-gray-500"); e.currentTarget.classList.add("bg-sky-100", "font-medium", "text-sky-600")
     document.getElementById("filter_date_fixed_range").value = range;
+    document.getElementById("filter_date_custom_from").value = null;
+    document.getElementById("filter_date_custom_to").value = null;
   }
 
   clearFixedRange(e){
+    if (e.currentTarget.value == "") return
     this.dateRangeTargets.forEach((dateRange) => {
       dateRange.classList.remove("bg-sky-100", "font-medium", "text-sky-600");
       dateRange.classList.add("bg-white", "text-gray-500");
@@ -72,7 +75,6 @@ export default class extends Controller {
   }
 
   hide(){
-    console.log(`element: ${this.element.dataset.id}`)
     this.element.closest("filter-container").innerHTML = ""
   }
 
@@ -88,11 +90,12 @@ export default class extends Controller {
     e.preventDefault()
     let se = this.selectorTarget
     let selected = se.options[se.selectedIndex].value
+    console.log(`value: ${this.inputTarget.value}, selected: ${selected}`)
     let url = `filter_fields?field=${this.inputTarget.name}&value=${this.inputTarget.value}&selected=${selected}`
-    const response = await fetch(url, {
+    const response = await fetch(encodeURI(url), {
       method: "GET",
       // body: JSON.stringify({ promo_code: this.promoCodeTarget.value }),
-      headers: { Accept: "text/vnd.turbo-stream.html" }
+      headers: { Accept: "text/vnd.turbo-stream.html" },
     });
 
     if (response.status === 204) {

@@ -4,7 +4,7 @@ class FilterFieldsController < ApplicationController
     m = params[:model]
     f = params[:field]
     v = params[:value] || ""
-    selector =  [ [ "==", "eq" ], [ "!=", "neq" ], [ "<", "lt" ], [ ">", "gt" ], [ "=~", "like" ], [ "!~", "not_like" ] ]
+    selector = Filter::SELECTORS
     s = selector.filter { |s| s[1] == params[:selected] }
     render turbo_stream: turbo_stream.replace("li_#{m}_#{f}",
       partial: "filter_fields/new",
@@ -15,5 +15,6 @@ class FilterFieldsController < ApplicationController
     @model, @field = params[:field].split("-")
     @value = params[:value]
     @selected = params[:selected]
+    @selected_text = Filter::SELECTORS.filter { |s| s[1] == params[:selected] }.first[0] rescue ""
   end
 end

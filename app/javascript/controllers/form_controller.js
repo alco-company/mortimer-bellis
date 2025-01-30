@@ -71,11 +71,17 @@ export default class extends Controller {
   submitForm(e) {
     e.preventDefault();
     leave(this.backdropTarget);
-    leave(this.panelTarget).then(() => {
+    leave(this.panelTarget)
+    .then(() => {
       this.formTarget.requestSubmit();
       this.changeBrowserUrl();
       // Turbo.navigator.submitForm(this.formTarget);
     })
+    .then(() => {
+      this.closeForm(e);
+      // this.formTarget.reset();
+      // this.cancelButtonTarget.click();
+    });
     // this.formTarget.requestSubmit();
   }
 

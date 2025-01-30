@@ -69,6 +69,19 @@ da:
   saturday: Lørdag
   sunday: Søndag
 
+  one_of: En af
+  not_one_of: Ikke en af
+  between: Mellem
+  not_between: Ikke mellem
+  equal_to: lig med
+  not_equal_to: forskellig fra
+  less_than: mindre end
+  less_than_equal: mindre end eller lig med
+  greater_than: større end
+  greater_than_equal: større end eller lig med
+  matches: indeholder
+  not_matching: indeholder ikke
+
   application:
     header:
       sync_with_ERP: Synkroniser med ERP

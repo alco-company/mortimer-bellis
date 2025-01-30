@@ -5,7 +5,7 @@ class List < ApplicationComponent
 
   attr_reader :records, :pagy, :order_by, :group_by, :initial, :params, :user
 
-  def initialize(records:, pagy:, initial: false, params: {}, user: User.new, group_by: nil, order_by: nil, &block)
+  def initialize(records:, pagy:, initial: false, replace: false, params: {}, user: User.new, group_by: nil, order_by: nil, &block)
     @order_by = order_by
     @group_by = group_by
     @records = records
@@ -13,6 +13,7 @@ class List < ApplicationComponent
     @records = records.group(group_by) if group_by
     @order_key = order_by ? order_by.keys.first : :created_at
     @initial = initial
+    @replace = replace
     @pagy = pagy
     @params = params
     @user = user
@@ -23,19 +24,7 @@ class List < ApplicationComponent
       div(id: "record_list", class: "scrollbar-hide") { }
       turbo_frame_tag "pagination", src: resources_url(format: :turbo_stream), loading: :lazy
     else
-      turbo_stream.append "record_list" do
-        if order_by && records.any?
-          date = (records.first.send(@order_key)).to_date
-          render partial: "date", locals: { date: date }
-        end
-        records.each do |record|
-          if record.send(@order_key).to_date != date
-            date = (record.send(@order_key)).to_date
-            render partial: "date", locals: { date: date }
-          end if order_by
-          render "ListItems::#{resource_class}".classify.constantize.new resource: record, params: params, user: user
-        end
-      end
+      @replace ? replace_list : append_list
 
       if pagy.next
         turbo_stream.replace "pagination" do
@@ -43,5 +32,42 @@ class List < ApplicationComponent
         end
       end
     end
+  end
+
+  def append_list
+    turbo_stream.append "record_list" do
+      if order_by && records.any?
+        date = (records.first.send(@order_key)).to_date
+        render partial: "date", locals: { date: date }
+      end
+      records.each do |record|
+        if record.send(@order_key).to_date != date
+          date = (record.send(@order_key)).to_date
+          render partial: "date", locals: { date: date }
+        end if order_by
+        render "ListItems::#{resource_class}".classify.constantize.new resource: record, params: params, user: user
+      end
+    end
+  end
+
+  def replace_list
+    turbo_stream.replace "record_list" do
+      div(id: "record_list", class: "scrollbar-hide") { }
+      turbo_frame_tag "pagination", src: resources_url(format: :turbo_stream), loading: :lazy
+    end
+
+    # turbo_stream.replace "record_list" do
+    #   if order_by && records.any?
+    #     date = (records.first.send(@order_key)).to_date
+    #     render partial: "date", locals: { date: date }
+    #   end
+    #   records.each do |record|
+    #     if record.send(@order_key).to_date != date
+    #       date = (record.send(@order_key)).to_date
+    #       render partial: "date", locals: { date: date }
+    #     end if order_by
+    #     render "ListItems::#{resource_class}".classify.constantize.new resource: record, params: params, user: user
+    #   end
+    # end
   end
 end

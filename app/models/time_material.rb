@@ -28,6 +28,7 @@ class TimeMaterial < ApplicationRecord
   validates :about, presence: true, if: [ Proc.new { |c| c.comment.blank? && c.product_name.blank? } ]
 
   def self.filtered(filter)
+    flt = filter.collect_filters self
     flt = filter.filter
 
     all
@@ -45,11 +46,11 @@ class TimeMaterial < ApplicationRecord
       "tenant_id",
       "time",
       # t.string "about"
-      # t.string "customer_name"
+      "customer_name",
       "customer_id",
-      # t.string "project_name"
+      "project_name",
       "project_id",
-      # t.string "product_name"
+      "product_name",
       "product_id",
       # t.string "quantity"
       # t.string "rate"
