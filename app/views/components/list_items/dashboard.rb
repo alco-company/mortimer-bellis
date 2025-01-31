@@ -6,12 +6,6 @@ class ListItems::Dashboard < ListItems::ListItem
   # created_at
   # updated_at
 
-  def show_recipient_link
-    link_to resource_url, class: "hover:underline" do
-      plain resource.feed
-    end
-  end
-
   def show_left_mugshot
     # mugshot(resource, css: "hidden sm:block h-12 w-12 flex-none rounded-full bg-gray-50")
   end

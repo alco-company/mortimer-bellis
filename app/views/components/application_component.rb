@@ -49,7 +49,7 @@ class ApplicationComponent < Phlex::HTML
   end
 
   def resources_url(**options)
-    options[:search] = params.permit![:search] if params.permit![:search].present?
+    options[:search] = params.expect(:search) if params[:search].present?
     return url_for(controller: params_ctrl, action: :index, **options) if options.delete(:rewrite).present?
     @resources_url ||= url_for(controller: params_ctrl, action: :index, **options)
   end

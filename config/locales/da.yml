@@ -32,6 +32,7 @@ da:
   export: Eksportér
   pdf: Hent PDF
   records: poster
+  value: værdi
   delete_all_later: Alle poster slettes - i baggrunden, vent venligst...
   unauthorized: Du har ikke rettigheder til at gennemføre denne handling
   cannot_change_role: Du kan ikke ændre din egen rolle til super_user!
@@ -67,6 +68,19 @@ da:
   friday: Fredag
   saturday: Lørdag
   sunday: Søndag
+
+  one_of: En af
+  not_one_of: Ikke en af
+  between: Mellem
+  not_between: Ikke mellem
+  equal_to: lig med
+  not_equal_to: forskellig fra
+  less_than: mindre end
+  less_than_equal: mindre end eller lig med
+  greater_than: større end
+  greater_than_equal: større end eller lig med
+  matches: indeholder
+  not_matching: indeholder ikke
 
   application:
     header:
@@ -119,6 +133,57 @@ da:
 
     show:
       title: Overblik
+
+  filters:
+    filtered: Filtreret
+    destroyed: "Filteret blev slettet korrekt." 
+    help:
+      title: "Hjælp"
+      description: "Hjælp til at bruge filtre"
+    tabs:
+      titles:
+        date: dato
+        field: felt
+        scope: sigte
+        help: hjælp
+    form:
+      new: Nyt filter
+      edit: Rediger filter
+      show: Vis filter
+    period:
+      title: Periode
+      fixed_range: Fast periode
+      custom_range: Tilpasset periode
+      today: I dag
+      yesterday: I går
+      this_week: Denne uge
+      last_week: Sidste uge
+      this_month: Denne måned
+      last_month: Sidste måned
+      last_3_months: Sidste 3 måneder
+      last_year: Sidste år
+    scope:
+      customer:
+        title: Kunde
+      punch_clock:
+        title: Stempelur
+      product:
+        title: Produkt
+      location:
+        title: Arbejdssted
+      invoice:
+        title: Faktura
+      invoice_item:
+        title: Fakturalinje
+      project:
+        title: Projekt
+      user:
+        title: Bruger
+        description: Hvilke poster vil du se?
+        mine: Mine
+        team: Mit hold/gruppe
+        all: Alle
+        named_users_teams: Navngivne brugere/hold
 
   landing:
     recent_activity: Seneste aktiviteter
@@ -312,10 +377,15 @@ da:
   activerecord:
     attributes:
       tenant:
+        created_at: Oprettet den
+        updated_at: Opdateret den
         name: Kontonavn
         email: Email adresse - konto ansvarlig
         pp_identification: Lønbureau ID
         eu_work_directive: EU regulativ (2003/88/EC)
+        send_state_rrule: Send compliance
+        send_eu_state_rrule: Send EU compliance
+        access_token: API nøgle
         tax_number: CVR nummer
         time_zone: Tidszone
         locale: Sprog
@@ -323,6 +393,8 @@ da:
         logo: Logo (80 x 40)
         color: Farve
       asset:
+        created_at: Oprettet den
+        updated_at: Opdateret den
         name: 'Navn'
         asset_teams: 'Hold/grupper'
         last_punched_at: sidst stemplet 
@@ -330,6 +402,8 @@ da:
         user: admin bruger 
         state: Status
       asset_work_session:
+        created_at: Oprettet den
+        updated_at: Opdateret den
         user_id: Medarbejder
         start_at: Startet den 
         stop_at: Stoppet den
@@ -339,12 +413,16 @@ da:
         adjust_next: Tilpas øvrige
 
       asset_work_transaction:
+        created_at: Oprettet den
+        updated_at: Opdateret den
         punched_at: "stemplet kl:"
         days: Dage
         hours: Timer
         comment: Beskrivelse - især ved overarbejde, vikariat, evt sygdom og mere
         reason: Årsag - '15MIN', og 'XTRA' ved aftalte særlige indstemplinger
       background_job:
+        created_at: Oprettet den
+        updated_at: Opdateret den
         tenant_id: Konto
         user_id: Bruger
         state: Status
@@ -355,8 +433,12 @@ da:
         next_run_at: Næste kørsel
         params: Argumenter
       calendar:
+        created_at: Oprettet den
+        updated_at: Opdateret den
         name: Navn
       customer:
+        created_at: Oprettet den
+        updated_at: Opdateret den
         name: Navn
         external_reference: Ekstern reference
         is_person: Er en person (hvis ikke - husk at udfylde CVR nummer)
@@ -382,27 +464,48 @@ da:
         contact_person: Kontaktperson
         description: Beskrivelse
       dashboard:
+        created_at: Oprettet den
+        updated_at: Opdateret den
         name: Navn
         feed: Indholdsstrøm
+        last_feed: Seneste indhold
         last_feed_at: Indhold sidst opdateret
         layout: Skabelon
         body: Indhold
       employee_invitation:
+        created_at: Oprettet den
+        updated_at: Opdateret den
         user_id: Inviteret af
         team_id: Hold
         address: Email adresse | Tlfnr (SMS)
         state: Status på invitationen
       event:
+        created_at: Oprettet den
+        updated_at: Opdateret den
         color: Farve
         minutes: Minutter
         user_id: Medarbejder
       faq:
+        created_at: Oprettet den
+        updated_at: Opdateret den
         endpoint: URL 
         field: felt 
         action: handling 
         title: titel 
         description: beskrivelse
+      filter:
+        created_at: Oprettet den
+        updated_at: Opdateret den
+        customer_id: Kunde
+        punch_clock_id: Stempelur
+        product_id: Produkt
+        location_id: Arbejdssted
+        invoice_id: Faktura
+        invoice_item_id: Fakturalinje
+        project_id: Projekt
       holiday:
+        created_at: Oprettet den
+        updated_at: Opdateret den
         name: Navn
         from_date: Fra dato
         to_date: Til dato
@@ -410,6 +513,8 @@ da:
         description: Beskrivelse
         countries: Hvilke lande (sprogområder) gælder helligdagen for
       invoice:
+        created_at: Oprettet den
+        updated_at: Opdateret den
         customer_id: Kunde
         invoice_number: Faktura nummer
         currency: Valuta
@@ -438,6 +543,8 @@ da:
         is_mobile_pay_invoice_enabled: MobilePay faktura
         is_penso_pay_enabled: PensoPay faktura
       invoice_item:
+        created_at: Oprettet den
+        updated_at: Opdateret den
         invoice_id: Faktura
         project_id: Projekt
         product_id: Produkt
@@ -454,14 +561,20 @@ da:
         total_amount: Total ialt
         total_amount_incl_vat: Total ialt inkl. moms
       lead:
+        created_at: Oprettet den
+        updated_at: Opdateret den
         email_address: Email adresse
         trial_ends_at: Prøveperioden slutter
         converted_at: Kunde fra    
       location:
+        created_at: Oprettet den
+        updated_at: Opdateret den
         name: Navn/Betegnelse
         color: Farve
         long_lat: Position (long,lat)
       message:
+        created_at: Oprettet den
+        updated_at: Opdateret den
         subject: Overskrift
         body: Besked 
         rrule: gentagelser 
@@ -469,12 +582,18 @@ da:
         recipients_taglist: Modtagere
         attachments: Vedhæftet fil/vedhæftede filer
       motd:
+        created_at: Oprettet den
+        updated_at: Opdateret den
         valid_from_at: Gælder fra 
         valid_to_at: Gælder indtil
         content: Beskeden
       notification:
+        created_at: Oprettet den
+        updated_at: Opdateret den
         uris: Modtagere
       oauth_application:
+        created_at: Oprettet den
+        updated_at: Opdateret den
         name: Navn  
         redirect_uri: Call-back URL
         scopes: 'scope'
@@ -482,33 +601,48 @@ da:
         uid: UID
         secret: Sikkerhedsnøgle
       page:
+        created_at: Oprettet den
+        updated_at: Opdateret den
         slug: URL
         title: Titel
         content: Indhold
       participant:
+        created_at: Oprettet den
+        updated_at: Opdateret den
         name: Navn
         teams: Hold/grupper
         roles: Roller
         work_schedules: Arbejdsplaner
       print_template:
+        created_at: Oprettet den
+        updated_at: Opdateret den
         name: Skabelon navn
         context: Bruges af
         cmd: Data opsamling
         body: Indhold
       printserver:
+        created_at: Oprettet den
+        updated_at: Opdateret den
         name: navn 
         mac_addr: MAC adresse 
         port: port 
         state: status 
       product:
+        created_at: Oprettet den
+        updated_at: Opdateret den
         name: Navn
         product_number: Produkt nummer
         quantity: Antal
         unit: Enhed
         base_amount_value: Pris
+        base_amount_value_incl_vat: Pris inkl. moms
+        total_amount: Total salg
+        total_amount_incl_vat: Total salg inkl. moms
         account_number: Salgskonto nummer
         external_reference: Ekstern reference
       project:
+        created_at: Oprettet den
+        updated_at: Opdateret den
         customer_id: Kunde
         name: Navn
         description: Beskrivelse
@@ -523,6 +657,8 @@ da:
         estimated_minutes: Estimeret tid
         actual_minutes: Forbrugt tid
       profile: 
+        created_at: Oprettet den
+        updated_at: Opdateret den
         name: Brugernavn
         avatar: Profil billede
         time_zone: Tidszone 
@@ -530,8 +666,11 @@ da:
         locale: Sprog 
 
       provided_service:
+        created_at: Oprettet den
+        updated_at: Opdateret den
         name: Navn
         service: Service klasse
+        params: Service parametre
         organizationID: Hvilket regnskab skal integreres med Mortimer?
         account_for_one_off: Konto for diverse salg
         product_for_time: Produkt for salg af timer
@@ -542,17 +681,23 @@ da:
         service_params: Service indstillinger
 
       punch:
+        created_at: Oprettet den
+        updated_at: Opdateret den
         punched_at: "stemplet kl:"
         user_id: Medarbejder
+        remote_ip: IP adresse
         state: Status
         punch_clock_id: Stempelur
         excluded_days: Undtagen disse dage
         comment: Bemærkning
         
       punch_card:
+        created_at: Oprettet den
+        updated_at: Opdateret den
         user:
           name: Medarbejder
         punched_at: "stemplet kl:"
+        punches_settled_at: sidst afstemt
         user_id: Medarbejder
         location_id: Arbejdssted
         punch_clock_id: Stempelur
@@ -566,6 +711,8 @@ da:
         reason: Årsag
         state: Status
       punch_clock:
+        created_at: Oprettet den
+        updated_at: Opdateret den
         name: Navn
         ip_addr: IP adresse 
         location: lokation 
@@ -575,21 +722,29 @@ da:
         location_id: Arbejdssted
         access_token: API nøgle
       reporting: 
+        created_at: Oprettet den
+        updated_at: Opdateret den
         print_template_id: Skabelon 
         destination: medie 
         secure: Krypteret 
         format: format
         priority: prioritet
       role:
+        created_at: Oprettet den
+        updated_at: Opdateret den
         name: Navn
         context: Situation/kontekst
         state: Status 
         role: Rettigheder
       sentence:
+        created_at: Oprettet den
+        updated_at: Opdateret den
         reference: Ord/sætning
         language: Sprog
         translation: Oversættelse 
       service: 
+        created_at: Oprettet den
+        updated_at: Opdateret den
         name: Navn
         state: Aktiv 
         menu_label: Menu navn 
@@ -598,6 +753,8 @@ da:
         service_model: Beregningsmodel
         menu_icon: Icon (html)
       setting:
+        created_at: Oprettet den
+        updated_at: Opdateret den
         key: Nøgle
         setable_type: Tabel
         setable_id: Post/record ID - blank hvis alle poster berørt
@@ -605,6 +762,8 @@ da:
         formating: Format - skal værdien formateres særligt
         value: Værdi
       stocked_product:
+        created_at: Oprettet den
+        updated_at: Opdateret den
         name: Navn
         stock: Lager
         stock_location: Lagerlokation 
@@ -612,20 +771,30 @@ da:
         stock_unit: Lagerenhed
         minimum_stock_level: Min enheder på lager
       system_parameter:
+        created_at: Oprettet den
+        updated_at: Opdateret den
         name: Navn
         system_key: Nøgle
         position: Rækkefølge
         value: Værdi
       task:
+        created_at: Oprettet den
+        updated_at: Opdateret den
         title: Overskrift
         description: Beskrivelse
         validation: Validering
         state: Status
         priority: Prioritet
+        progress: Fremdrift
+        archived: Arkiveret
         due_date: Klar senest den
+        due_at: Klar senest den
+        completed_at: Færdig den
         user_id: Ansvarlig
         link: URL
       team:
+        created_at: Oprettet den
+        updated_at: Opdateret den
         norm_time_minutes: timer:min i et rul
         name: Hold navn
         punches_settled_at: sidst afstemt
@@ -647,6 +816,7 @@ da:
         contract_days_per_payroll: Aftalt antal kalenderdage/lønperiode (0=måned)
         contract_days_per_week: Aftalt antal arbejdsdage/uge
         hour_pay: Timeløn
+        hour_rate_cent: Timepris i øre
         ot1_add_hour_pay: Overtid 1 tillæg (fx 15,25 eller 50%)
         ot2_add_hour_pay: Overtid 2 tillæg (fx 30,50 eller 100%)
         tmp_overtime_allowed: Overtid midlertidigt tilladt i 24t fra kl
@@ -654,6 +824,8 @@ da:
         blocked: Blokeret for tidsregistrering
         allowed_ot_minutes: Tilladt overtid i minutter (-1=ingen, 0=ubegrænset)
       time_material:
+        created_at: Oprettet den
+        updated_at: Opdateret den
         customer_id: Kunde
         customer_name: Kunde
         project_id: Projekt
@@ -697,6 +869,8 @@ da:
         odo_to_time: Kørsel stoppet
 
       uri_scheme: 
+        created_at: Oprettet den
+        updated_at: Opdateret den
         scheme: skema
         purpose: Anvendelse
         reference: RFC / reference
@@ -709,7 +883,14 @@ da:
         version: version 
         sub_scheme: Under skema
       user:
+        created_at: Oprettet den
+        updated_at: Opdateret den
+        consumed_timestep: Forbrugt tidsstempel
         name: Navn
+        global_queries: Globale søgninger
+        locked_at: Låst den
+        failed_attempts: Mislykkede forsøg
+        blocked_from_punching: Blokeret for stempling
         tenant:
           one: Konto
           name: Konto
@@ -722,6 +903,8 @@ da:
         password: Adgangskode
         password_confirmation: Bekræft adgangskode
         otp_attempt: 2FA kode
+        otp_required_for_login: 2FA påkrævet
+        two_factor_app_enabled: 2FA aktiveret
         encrypted_password: Krypteret adgangskode
         confirmed_at: Bekræftet den
         confirmation_sent_at: Bekræftelse sendt den
@@ -784,6 +967,9 @@ da:
       background_job:
         one: baggrundsjob
         other: baggrundsjob
+      customer:
+        one: kunde
+        other: kunder
       dashboard:
         one: Overblik 
         other: Overblik
@@ -799,6 +985,12 @@ da:
       invitation:
         one: invitation
         other: invitationer
+      invoice:
+        one: faktura
+        other: fakturaer
+      invoice_item:
+        one: fakturalinje
+        other: fakturalinjer
       motd:
         one: dagens besked
         other: dagens beskeder
@@ -820,6 +1012,9 @@ da:
       product: 
         one: produkt 
         other: produkter
+      project:
+        one: projekt
+        other: projekter
       punch:
         one: Stempling
         other: stemplinger

@@ -1,9 +1,9 @@
 class ListItems::PunchClock < ListItems::ListItem
-  def show_recipient_link
-    link_to pos_punch_clock_url(resource, api_key: resource.access_token), class: "hover:underline" do
-      plain "Kiosk link for %s" % resource.name
-    end
-  end
+  # def show_recipient_link
+  #   link_to pos_punch_clock_url(resource, api_key: resource.access_token), class: "hover:underline" do
+  #     plain "Kiosk link for %s" % resource.name
+  #   end
+  # end
 
   def show_left_mugshot
     # mugshot(resource, css: "hidden sm:block h-12 w-12 flex-none rounded-full bg-gray-50")

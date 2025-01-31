@@ -28,6 +28,7 @@ module TimezoneLocale
       locale = params.permit![:locale] || locale
       parsed_locale = get_locale_from_user_or_tenant || locale
       I18n.with_locale(parsed_locale, &action)
+    rescue I18n::MissingTranslationData => e
     end
 
     # Get locale from top-level domain or return +nil+ if such locale is not available

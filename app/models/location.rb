@@ -22,6 +22,26 @@ class Location < ApplicationRecord
     all
   end
 
+  def self.filterable_fields(model = self)
+    f = column_names - [
+      "id",
+      "tenant_id"
+      # "name"
+      # "color"
+      # "created_at", null: false
+      # "updated_at", null: false
+    ]
+    f = f - [
+      "created_at",
+      "updated_at"
+    ] if model == self
+    f
+  end
+
+  def self.associations
+    [ [], [ PunchClock ] ]
+  end
+
   def self.form(resource:, editable: true)
     Locations::Form.new resource: resource, editable: editable
   end

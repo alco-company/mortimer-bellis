@@ -40,7 +40,9 @@ class ListItems::ListItem < ApplicationComponent
   end
 
   def show_recipient_link
-    plain resource.name
+    link_to resource_url, data: { turbo_action: "advance", turbo_frame: "form", tabindex: "-1" }, class: "hover:underline" do
+      plain resource.name
+    end
   end
 
   def show_matter_link

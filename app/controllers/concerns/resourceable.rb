@@ -34,7 +34,7 @@ module Resourceable
     end
 
     def set_resources
-      @resources = any_filters? ? resource_class.filtered(@filter) : parent_or_class
+      @resources = any_filters? ? @filter.do_filter(resource_class) : parent_or_class
       @resources = case resource_class.to_s
       when "TimeMaterial"; Current.user.can?(:show_all_time_material_posts) ? @resources : @resources.by_user()
       when "Noticed::Notification"; Current.user.notifications.unread.includes(event: :record)
@@ -87,7 +87,7 @@ module Resourceable
     def set_filter
       @filter_form = params_ctrl.split("/").last
       @url = resources_url
-      @filter = Filter.where(tenant: Current.tenant).where(view: @filter_form).take || Filter.new
+      @filter = Filter.by_user.by_view(@filter_form).take || Filter.new
       @filter.filter ||= {}
     end
 
@@ -120,7 +120,9 @@ module Resourceable
     end
 
     def filtering_url
-      new_filter_url(url: resources_url, filter_form: params_ctrl.split("/").last)
+      @filter.persisted? ?
+        edit_filter_url(@filter, url: resources_url, filter_form: params_ctrl.split("/").last):
+        new_filter_url(url: resources_url, filter_form: params_ctrl.split("/").last)
     end
 
     def delete_all_url
@@ -133,7 +135,8 @@ module Resourceable
 
     def any_filters?
       return false if @filter.nil? or params_ctrl.split("/").last == "filters"
-      !@filter.id.nil?
+      # !@filter.id.nil?
+      @filter.persisted?
     end
 
     def any_sorts?

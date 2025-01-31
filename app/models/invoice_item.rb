@@ -30,6 +30,39 @@ class InvoiceItem < ApplicationRecord
     all
   end
 
+  def self.filterable_fields(model = self)
+    f = column_names - [
+      "id",
+      "tenant_id",
+      "invoice_id",
+      "project_id",
+      "product_id",
+      "product_guid"
+      # "description"
+      # "comments"
+      # "quantity"
+      # "account_number"
+      # "unit"
+      # "discount"
+      # "line_type"
+      # "base_amount_value"
+      # "base_amount_value_incl_vat"
+      # "total_amount"
+      # "total_amount_incl_vat"
+      # "created_at"
+      # "updated_at"
+    ]
+    f = f - [
+      "created_at",
+      "updated_at"
+    ] if model == self
+    f
+  end
+
+  def self.associations
+    [ [ Invoice, Product, Project ], [] ]
+  end
+
   def self.form(resource:, editable: true)
     InvoiceItems::Form.new resource: resource, editable: editable
   end

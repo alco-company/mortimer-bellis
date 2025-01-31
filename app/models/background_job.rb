@@ -62,6 +62,28 @@ class BackgroundJob < ApplicationRecord
     all
   end
 
+  def self.filterable_fields(model = self)
+    f = column_names - [
+      "id",
+      "tenant_id",
+      "user_id"
+      # "state",
+      # "job_klass",
+      # "params",
+      # "schedule",
+      # "next_run_at",
+      # "job_id"
+      # t.datetime "created_at", null: false
+      # t.datetime "updated_at", null: false
+    ]
+    f = f - [
+      "next_run_at",
+      "created_at",
+      "updated_at"
+    ] if model == self
+    f
+  end
+
   def self.set_order(resources, field = :job_klass, direction = :asc)
     resources.ordered(field, direction)
   end

@@ -12,11 +12,6 @@ class ListItems::Product < ListItems::ListItem
   # total_amount_incl_vat
   # external_reference
 
-  def show_recipient_link
-    link_to resource_url, class: "hover:underline" do
-      plain resource.name
-    end
-  end
 
   def show_left_mugshot
     # mugshot(resource, css: "hidden sm:block h-12 w-12 flex-none rounded-full bg-gray-50")

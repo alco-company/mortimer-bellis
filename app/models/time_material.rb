@@ -28,6 +28,7 @@ class TimeMaterial < ApplicationRecord
   validates :about, presence: true, if: [ Proc.new { |c| c.comment.blank? && c.product_name.blank? } ]
 
   def self.filtered(filter)
+    flt = filter.collect_filters self
     flt = filter.filter
 
     all
@@ -37,6 +38,56 @@ class TimeMaterial < ApplicationRecord
   rescue
     filter.destroy if filter
     all
+  end
+
+  def self.filterable_fields(model = self)
+    f = column_names - [
+      "id",
+      "tenant_id",
+      "time",
+      # t.string "about"
+      "customer_name",
+      "customer_id",
+      "project_name",
+      "project_id",
+      "product_name",
+      "product_id",
+      # t.string "quantity"
+      # t.string "rate"
+      # t.string "discount"
+      # t.integer "state",
+      # t.boolean "is_invoice"
+      # t.boolean "is_free"
+      # t.boolean "is_offer"
+      # t.boolean "is_separate"
+      "user_id",
+      # t.text "comment"
+      # t.string "unit_price"
+      # t.string "unit"
+      "pushed_erp_timestamp",
+      "erp_guid",
+      "push_log",
+      # t.integer "time_spent"
+      # t.integer "over_time",
+      "odo_from",
+      "odo_to",
+      "kilometers",
+      "trip_purpose",
+      "odo_from_time",
+      "odo_to_time"
+    ]
+    f = f - [
+      "date",
+      "paused_at",
+      "created_at",
+      "updated_at",
+      "started_at"
+      ] if model == self
+    f
+  end
+
+  def self.associations
+    [ [ Customer, Project, Product ], [] ]
   end
 
   def self.set_order(resources, field = :date, direction = :desc)

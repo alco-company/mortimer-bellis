@@ -25,6 +25,26 @@ class Setting < ApplicationRecord
     all
   end
 
+  def self.filterable_fields(model = self)
+    f = column_names - [
+      "id",
+      "tenant_id",
+      "setable_type",
+      "setable_id"
+      # "key",
+      # "priority",
+      # "formating",
+      # "value",
+      # "created_at",
+      # "updated_at"
+    ]
+    f = f - [
+      "created_at",
+      "updated_at"
+    ] if model == self
+    f
+  end
+
   def self.set_order(resources, field = :key, direction = :asc)
     resources.ordered(field, direction)
   end

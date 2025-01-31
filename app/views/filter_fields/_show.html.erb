@@ -1,0 +1,11 @@
+<li id="<%= "li_#{model}_#{field}" %>" class=" rounded-md">
+  <%= link_to new_filter_fields_url(model: model, field: field, value: value, selected: selected),
+    class: "flex rounded-md py-2 pl-10 pr-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50",
+    data: { turbo_prefetch: "false" } do
+   %>  
+   <% field_value = (value.blank? ? "" : "#{selected_text} '#{value}'") %>
+    <input type="hidden" name="<%= "filter[#{model}][#{field}]" %>" value="<%= "#{selected}|#{value}" %>" />
+    <span class=" text-sm font-semibold leading-6"> <%= I18n.t("activerecord.attributes.#{model}.#{field}") %></span>
+    <span class="ml-2 text-sm font-thin"><%= field_value %></span>
+   <% end %>
+</li>

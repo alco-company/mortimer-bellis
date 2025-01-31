@@ -71,10 +71,17 @@ export default class extends Controller {
   submitForm(e) {
     e.preventDefault();
     leave(this.backdropTarget);
-    leave(this.panelTarget).then(() => {
+    leave(this.panelTarget)
+    .then(() => {
       this.formTarget.requestSubmit();
+      this.changeBrowserUrl();
       // Turbo.navigator.submitForm(this.formTarget);
     })
+    .then(() => {
+      this.closeForm(e);
+      // this.formTarget.reset();
+      // this.cancelButtonTarget.click();
+    });
     // this.formTarget.requestSubmit();
   }
 
@@ -86,5 +93,17 @@ export default class extends Controller {
   closeForm(e) {
    document.getElementById("form").innerHTML="";
   }
+
+  changeBrowserUrl() {
+    const url = document.getElementById("cancel-form").href
+    // const url = new URL(window.location.href.split("?")[0])
+  
+    // this.labelFilterValue.forEach((filter) => {
+    //   url.searchParams.append("label[]", filter)
+    // })
+  
+    history.pushState({}, null, url.toString())
+    Turbo.navigator.history.replace(url.toString())
+  }  
 
 }

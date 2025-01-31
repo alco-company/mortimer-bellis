@@ -6,6 +6,7 @@ module DefaultActions
     def index
       params.permit![:url] = resources_url
       @pagy, @records = pagy(@resources)
+      @replace = params.permit![:replace] || false
 
       respond_to do |format|
         format.html { }
@@ -96,9 +97,7 @@ module DefaultActions
       @resource.user_id = Current.user.id if resource_class.has_attribute?(:user_id) && !resource_params[:user_id].present?
 
       respond_to do |format|
-        if before_create_callback # &&
-          @resource.save # &&
-          create_callback
+        if before_create_callback && @resource.save && create_callback
           Broadcasters::Resource.new(@resource, params.permit!).create
           @resource.notify action: :create
           flash[:success] = t(".post")
@@ -139,7 +138,6 @@ module DefaultActions
           flash[:success] = t(".post")
           format.turbo_stream { render turbo_stream: [
             turbo_stream.update("form", ""),
-            turbo_stream.action(:full_page_redirect, resources_url),
             turbo_stream.replace("flash_container", partial: "application/flash_message")
           ] }
           format.html { redirect_to resources_url, success: t(".post") }

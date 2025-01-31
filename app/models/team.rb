@@ -32,6 +32,51 @@ class Team < ApplicationRecord
     all
   end
 
+  def self.filterable_fields(model = self)
+    f = column_names - [
+      "id",
+      "tenant_id",
+      # "name",
+      # "color",
+      # "locale",
+      # "time_zone",
+      # "payroll_team_ident",
+      # "state",
+      # "description",
+      # "email",
+      # "cell_phone",
+      # "pbx_extension",
+      # "contract_minutes",
+      # "contract_days_per_payroll",
+      # "contract_days_per_week",
+      # "hour_pay",
+      # "ot1_add_hour_pay",
+      # "ot2_add_hour_pay",
+      "hour_rate_cent",
+      "ot1_hour_add_cent",
+      "ot2_hour_add_cent"
+      # "eu_state",
+      # "blocked",
+      # "allowed_ot_minutes",
+      # "country",
+      # "created_at",
+      # "updated_at",
+      # "punches_settled_at",
+      # "tmp_overtime_allowed"
+    ]
+    f = f - [
+      "created_at",
+      "updated_at",
+      "punches_settled_at",
+      "tmp_overtime_allowed"
+    ] if model == self
+    f
+  end
+
+  def self.associations
+    [ [], [ PunchCard ] ]
+  end
+
   def all_calendars
     tenant.calendars + calendars
   end

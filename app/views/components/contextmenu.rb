@@ -111,7 +111,7 @@ class Contextmenu < Phlex::HTML
     ) do
       #  Active: "bg-gray-100 text-gray-900", Not Active: "text-gray-700"
       link_to helpers.filtering_url(),
-        data: { turbo_stream: true, action: "click->contextmenu#hide" },
+        data: { turbo_stream: true, action: "click->contextmenu#hide", turbo_frame: "form" },
         class: "flex justify-between px-4 py-2 text-sm text-gray-700",
         role: "menuitem",
         tabindex: "-1" do

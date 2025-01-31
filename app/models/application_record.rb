@@ -72,6 +72,15 @@ class ApplicationRecord < ActiveRecord::Base
   end
 
   #
+  # extend this method on the model to define the associations
+  # existing on the model
+  # define as array of belongs_to, has_many
+  # fx [ [ Customer, User, Tenant ], [ Comment, InvoiceItem ] ]
+  def self.associations
+    [ [], [] ]
+  end
+
+  #
   # extend this method on the model to define the field formats
   # its a callback from the superform when rendering the form
   # (in non-editable mode, the form will render the field value using this method)
@@ -116,8 +125,6 @@ class ApplicationRecord < ActiveRecord::Base
   def self.form(resource:, editable: true, fields: [])
     ApplicationForm.new resource: resource, editable: editable, fields: fields
   end
-
-
 
   # def self.ordered(resources, field, direction = :desc)
   #   resources.order(field => direction)

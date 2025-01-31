@@ -234,3 +234,7 @@ https://native.hotwired.dev/ios/getting-started
 https://www.writesoftwarewell.com/implement-content-security-policy-in-rails/
 https://content-security-policy.com/examples/meta/
 https://guides.rubyonrails.org/security.html#content-security-policy-header
+
+### Tutorials, Lessons, Courses
+
+https://courses.bigbinaryacademy.com/learn-rubyonrails/

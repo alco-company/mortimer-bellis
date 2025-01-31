@@ -1,0 +1,37 @@
+<%= turbo_frame_tag "form" do %>
+  <div data-controller="form" class="fixed flex flex-row flex-shrink-0 overflow-y-auto overscroll-contain top-16 right-0 z-30 bg-white mx-auto h-full w-full md:w-2/3 xl:w-1/2 2xl:w-1/3 border-l">
+    <div class="fixed grow-0 h-22 py-8 bg-white px-4 z-40 w-full md:w-2/3 xl:w-1/2 2xl:w-1/3 flex flex-col">
+      <div class="flex flex-row">
+        <h1 class="grow font-bold text-4xl">  <%= @resource.name %> </h1>
+        <div class="grow-0 flex-none pt-2 justify-end">
+          <%= link_to resources_url, data: { turbo_frame: "_top"} do %>
+            <span class="sr-only">Close</span>
+            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          <% end %>
+        </div>
+
+      </div>
+      <div>
+        <h1 class="font-bold text-4xl"> <%= @resource.name %> </h1>
+        <%= link_to t(".pos_punch_clock"), pos_punch_clock_url(api_key: @resource.access_token), class: "inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10", target: "_blank", data: { turbo_frame: '_top', turbo_stream: true } %>
+
+      </div>
+      <div class="grid gap-2 grid-cols-1 lg:grid-cols-2 items-center">
+        <%= svg_qr_code_link(pos_punch_clock_url(api_key: @resource.access_token))  %>
+        <%= link_to t("#{ resource_class.table_name}.form.edit"), edit_resource_url, class: "mort-btn-primary" %>
+      </div>
+    </div>
+    <div class="relative grow top-32 px-4 w-full">
+      <%= render resource_class.form resource: @resource, editable: false %>
+      <hr>
+      <div class="mt-3">
+        <%== pagy_nav(@punch_pagy) if @punch_pagy.pages > 1 %>
+        <%#= render partial: 'punches/list' %>
+        <%= render @punch_records %>
+        <%#= render @resource.punch_clocks %>
+      </div>
+    </div>
+  </div>
+<% end %>

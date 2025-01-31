@@ -12,7 +12,7 @@
 - missing a tools - look at https://notchtools.com/
 - if VUE components are required - look at inertiajs.com
 - look at modularization using ideas / patterns from https://diversepixel.medium.com/rails-architecture-best-practices-and-building-scalable-applications-ruby-deep-dive-11-7cc514766728
-- 
+- use Bullet to erradicate N+1 queries - IMPORTANT
 
 ## Rescue tools
 
@@ -70,6 +70,7 @@ END
 }
 
 - loading skeleton frames on all lists - using https://www.driftingruby.com/episodes/skeleton-frames
+- run spinner on submitting forms - https://github.com/edudepetris/rails-8-turbo-morph-and-stream/commit/ff69db6050f8ace429fb05ac926a01031bcb67c3
 - TODO - fit mugshot (see users/registrations_controller)
 - tasks in tree structure - https://www.codemancers.com/blog/maintaining-a-tree-structure-in-rails-with-the-ancestry-gem/
 - make sidebar present like https://nordhealth.design/templates/application/#
@@ -81,9 +82,44 @@ END
 - validate punches before deleting punch_clocks !!
 - invoices
 - team status https://localhost:3000/pos/punch_clock.20?api_key=arbjQmRVrVpLU4fzYSSSQc31
-- location status - missing
+- location status (like user, team) - missing
 - user status - https://localhost:3000/pos/users?api_key=mVunTFDgFVud5qJAHgrHbp4P
-- filtering
+- fix bug in deleting invoices
+- add invoice items - if exist on customer
+
+### 31/1/2025
+
+- filtering - take 5 (present boolean attributes better)
+- set invoice date on invoice_item - not created_at
+- filtering - take 6 (present date attributes better )
+- filtering - take 7 (present state attributes better )
+
+### 30/1/2025
+
+- filtering - take 4 (first successful filtering)
+- filtering - take 4 (first successful delete of filter)
+
+### 27/1/2025
+
+- filtering - take 3 (remember values)
+- password strength
+
+### 24/1/2025
+
+- filtering - take 2 (navigation and presenting fields)
+
+### 21/1/2025
+
+- filtering - take 1
+- fix form flow - new -> edit -> show - on all models issue with url and reload of #index - 1: show
+- fix form flow - new -> edit -> show - on all models issue with url and reload of #index - 2: new
+- fix form flow - new -> edit -> show - on all models issue with url and reload of #index - 3: edit
+- optimize t/m form
+- fix bug in formatting date, user fields on t/m
+
+### 20/1/2025
+
+- list only users.by_tenant on selects!
 
 ### 16/1/2025
 

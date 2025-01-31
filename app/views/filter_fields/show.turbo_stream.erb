@@ -1,0 +1,3 @@
+<%= turbo_stream.replace("li_#{@model}_#{@field}", 
+    partial: "filter_fields/show", 
+    locals: { field: @field, model: @model, value: @value, selected: @selected, selected_text: @selected_text }) %>
