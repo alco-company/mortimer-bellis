@@ -92,6 +92,7 @@ END
 - filtering - take 5 (present boolean attributes better)
 - set invoice date on invoice_item - not created_at
 - filtering - take 6 (present date attributes better )
+- filtering - take 7 (present state attributes better )
 
 ### 30/1/2025
 

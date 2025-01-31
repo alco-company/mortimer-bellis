@@ -179,9 +179,51 @@ class FieldComponent < Phlex::HTML
   end
 
   def integer_field_input
+    div(class: "mort-field grid grid-cols-5 gap-2") do
       label(class: "col-span-5", for: "id_#{model_name}-#{field}") { I18n.t("activerecord.attributes.#{model_name}.#{field}") }
-    div do
-      plain "integer_field"
+      if field == "state"
+        input(type: "hidden",
+          name: %(#{"#{model_name}_#{field}"}_selector),
+          id: "id_#{model_name}-#{field}_selector",
+          data_filter_target: "selector",
+          value: "eq")
+        input(type: "hidden",
+          name: "#{model_name}-#{field}",
+          id: "id_#{model_name}-#{field}",
+          value: value,
+          data_filter_target: "input"
+        )
+        select(
+          name: %(#{"#{model_name}_#{field}_values"}),
+          class: "mort-form-select col-span-2",
+          data: { action: "blur->filter#blurSelect" }
+        ) do
+          options_for_select model.states, value
+        end
+      else
+        select(
+          name: %(#{"#{model_name}_#{field}"}_selector),
+          data_filter_target: "selector",
+          class: "mort-form-select col-span-2"
+        ) do
+          options_for_select Filter::SELECTORS, selected
+        end
+        input(
+          name: "#{model_name}-#{field}",
+          id: "id_#{model_name}-#{field}",
+          placeholder: I18n.t("value"),
+          class: "mort-form-text col-span-2",
+          value: value,
+          data_filter_target: "input"
+        )
+      end
+      button(
+        data_action: " click->filter#submitField",
+        class:
+          "col-span-1 relative rounded-md justify-self-end bg-white text-gray-400 hover:text-gray-500 focus:ring-1 focus:ring-sky-200"
+      ) do
+        render Icons::Checkmark.new cls: "h-6 w-6 text-green-500"
+      end
     end
   end
 

@@ -40,10 +40,7 @@ class Filter < ApplicationRecord
   end
 
   def filter_for_date(model, conditions)
-    model_name = model.to_s.underscore
-    return conditions if filter["date"]["fixed_range"].blank? &&
-      filter["date"]["custom_from"].blank? &&
-      filter["date"]["custom_to"].blank? &&
+    return conditions if filter["date"]["fixed_range"].blank? && filter["date"]["custom_from"].blank? && filter["date"]["custom_to"].blank?
 
     unless filter["date"]["fixed_range"].blank?
       today = DateTime.current.beginning_of_day
@@ -59,11 +56,11 @@ class Filter < ApplicationRecord
       when "this_month"
         conditions << model.where_op(:gteq, filter["date"]["attribute"] => today.beginning_of_month)
       when "last_month"
-        conditions << model.where_op(:gteq, filter["date"]["attribute"] => today.beginning_of_month - 1.month..today.beginning_of_month)
+        conditions << model.where_op(:between, filter["date"]["attribute"] => today.beginning_of_month - 1.month..today.beginning_of_month)
       when "this_year"
         conditions << model.where_op(:gteq, filter["date"]["attribute"] => today.beginning_of_year)
       when "last_year"
-        conditions << model.where_op(:gteq, filter["date"]["attribute"] => today.beginning_of_year - 1.year..today.beginning_of_year)
+        conditions << model.where_op(:between, filter["date"]["attribute"] => today.beginning_of_year - 1.year..today.beginning_of_year)
       end
     end
     unless filter["date"]["custom_from"].blank?

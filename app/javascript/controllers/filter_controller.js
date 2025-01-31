@@ -85,6 +85,13 @@ export default class extends Controller {
     event.target.form.requestSubmit()
   }
 
+  blurSelect(e){
+    e.stopPropagation()
+    e.preventDefault()
+    let se = e.currentTarget
+    this.inputTarget.value=se.options[se.selectedIndex].value
+  }
+
   async submitField(e){
     e.stopPropagation();
     e.preventDefault()

@@ -187,6 +187,7 @@ class Filters::Form < ApplicationForm
             filtered_model.columns.each do |col|
               next if col.name =~ /^odo/
               option(value: col.name, selected: date_attr == col.name) { I18n.t("activerecord.attributes.#{filtered_model.to_s.underscore}.#{col.name}") } if %w[ date datetime time ].include? col.type.to_s
+              option(value: col.name, selected: date_attr == col.name) { I18n.t("activerecord.attributes.#{filtered_model.to_s.underscore}.#{col.name}") } if col.name =~ /^date/
             end
           end
         end
@@ -195,14 +196,9 @@ class Filters::Form < ApplicationForm
           label(class: "mr-2 text-gray-400", for: "") { I18n.t("filters.period.fixed_range") }
           input(type: "hidden", id: "filter_date_fixed_range", name: "filter[date][fixed_range]", value: fixed_range_attr)
           ul(class: "mt-1 px-2 w-full") do
-            li(class: "rounded-md hover:bg-gray-50 leading-6 text-sm w-full my-1 py-2 px-3 cursor-pointer", data: { filter_target: "dateRange", action: "click->filter#setDate", range: "today" })          { I18n.t("filters.period.today") }
-            li(class: "rounded-md hover:bg-gray-50 leading-6 text-sm w-full my-1 py-2 px-3 cursor-pointer", data: { filter_target: "dateRange", action: "click->filter#setDate", range: "yesterday" })      { I18n.t("filters.period.yesterday") }
-            li(class: "rounded-md hover:bg-gray-50 leading-6 text-sm w-full my-1 py-2 px-3 cursor-pointer", data: { filter_target: "dateRange", action: "click->filter#setDate", range: "this_week" })      { I18n.t("filters.period.this_week") }
-            li(class: "rounded-md hover:bg-gray-50 leading-6 text-sm w-full my-1 py-2 px-3 cursor-pointer", data: { filter_target: "dateRange", action: "click->filter#setDate", range: "last_week" })      { I18n.t("filters.period.last_week") }
-            li(class: "rounded-md hover:bg-gray-50 leading-6 text-sm w-full my-1 py-2 px-3 cursor-pointer", data: { filter_target: "dateRange", action: "click->filter#setDate", range: "this_month" })     { I18n.t("filters.period.this_month") }
-            li(class: "rounded-md hover:bg-gray-50 leading-6 text-sm w-full my-1 py-2 px-3 cursor-pointer", data: { filter_target: "dateRange", action: "click->filter#setDate", range: "last_month" })     { I18n.t("filters.period.last_month") }
-            li(class: "rounded-md hover:bg-gray-50 leading-6 text-sm w-full my-1 py-2 px-3 cursor-pointer", data: { filter_target: "dateRange", action: "click->filter#setDate", range: "last_3_months" })  { I18n.t("filters.period.last_3_months") }
-            li(class: "rounded-md hover:bg-gray-50 leading-6 text-sm w-full my-1 py-2 px-3 cursor-pointer", data: { filter_target: "dateRange", action: "click->filter#setDate", range: "last_year" })      { I18n.t("filters.period.last_year") }
+            %w[ today yesterday this_week last_week this_month last_month last_3_months last_year ].each do |range|
+              li(class: "rounded-md hover:bg-gray-50 leading-6 text-sm w-full my-1 py-2 px-3 cursor-pointer", data: { filter_target: "dateRange", action: "click->filter#setDate", range: range }) { I18n.t("filters.period.#{range}") }
+            end
           end
         end
         div(class: "px-3 mt-3") do
