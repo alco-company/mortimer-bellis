@@ -142,6 +142,8 @@ class Dinero::InvoiceDraft
   # 3. Product (one offs)
   # 4. Text
   #
+  # set invoice date on invoice_item - not created_at
+  #
   def product_line(line, date)
     date = line.date.blank? ? date : line.date
     return a_product(line, date) unless line.product_id.blank?
