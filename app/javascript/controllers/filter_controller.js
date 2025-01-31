@@ -89,8 +89,7 @@ export default class extends Controller {
     e.stopPropagation();
     e.preventDefault()
     let se = this.selectorTarget
-    let selected = se.options[se.selectedIndex].value
-    console.log(`value: ${this.inputTarget.value}, selected: ${selected}`)
+    let selected = se.options == undefined ? se.value : se.options[se.selectedIndex].value
     let url = `filter_fields?field=${this.inputTarget.name}&value=${this.inputTarget.value}&selected=${selected}`
     const response = await fetch(encodeURI(url), {
       method: "GET",

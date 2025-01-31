@@ -376,14 +376,11 @@ class Filters::Form < ApplicationForm
     end
   end
 
+  # selected = one of <, >, =, !=, between, not_between, matches, does_not_match, more
+  #
   def list_fields(model)
-    lower = model.to_s.underscore
     (model.filterable_fields).each do |col|
-      col_selected, col_value = resource.filter[lower] && resource.filter[lower][col] ?
-        resource.filter[lower][col].split("|") :
-        [ "", "" ]
-      col_selected_text = Filter::SELECTORS.filter { |s| s[1] == col_selected }.first[0] rescue ""
-      render partial: "filter_fields/show", locals: { field: col, model: model.to_s.underscore, value: col_value, selected: col_selected, selected_text: col_selected_text }
+      render FieldComponent.new model: model, field: col, filter: resource
     end
   end
 

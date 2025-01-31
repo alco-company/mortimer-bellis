@@ -88,6 +88,10 @@ END
 - add invoice items - if exist on customer
 - set invoice date on invoice_item - not created_at
 
+### 31/1/2025
+
+- filtering - take 5 (present boolean attributes better)
+
 ### 30/1/2025
 
 - filtering - take 4 (first successful filtering)
