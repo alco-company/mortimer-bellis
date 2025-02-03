@@ -78,10 +78,10 @@ class Filter < ApplicationRecord
   #
   def filter_for_scope(model, conditions)
     unless filter["scope"]["user"].blank?
-      # conditions << model.send(filter["scope"]["user"])
+      conditions << model.send(:user_scope, filter["scope"]["user"])
     end
     unless filter["scope"]["named_users_teams"].blank?
-      # conditions << model.send(filter["scope"]["user"])
+      conditions << model.send(:named_scope, filter["scope"]["named_users_teams"])
     end
     unless filter["customer_id"].blank?
       conditions << model.where(customer_id: filter["customer_id"])

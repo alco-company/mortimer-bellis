@@ -90,6 +90,7 @@ END
 ### 3/2/2025
 
 - allow setting team on user
+- filtering - take 8 (make scope consider users/teams)
 
 
 ### 31/1/2025

@@ -97,10 +97,10 @@ class Filters::Form < ApplicationForm
         class:
           "block mt-2 w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-sky-200 focus:outline-none focus:ring-sky-200 sm:text-sm"
       ) do
-        option(selected: "selected")  { I18n.t("filters.tabs.titles.date") }
-        option { I18n.t("filters.tabs.titles.field") }
-        option { I18n.t("filters.tabs.titles.scope") }
-        option { I18n.t("filters.tabs.titles.help") }
+        option(data: { id: "dates" }, selected: "selected")  { I18n.t("filters.tabs.titles.date") }
+        option(data: { id: "fields" }) { I18n.t("filters.tabs.titles.field") }
+        option(data: { id: "scopes" }) { I18n.t("filters.tabs.titles.scope") }
+        option(data: { id: "help" }) { I18n.t("filters.tabs.titles.help") }
       end
     end
     div(class: "hidden sm:block") do

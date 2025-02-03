@@ -61,6 +61,7 @@ class User < ApplicationRecord
   scope :by_role, ->(role) { where(role: role) if role.present? }
   scope :by_locale, ->(locale) { where("locale LIKE ?", "%#{locale}%") if locale.present? }
   scope :by_time_zone, ->(time_zone) { where("time_zone LIKE ?", "%#{time_zone}%") if time_zone.present? }
+  scope :by_team_users, ->(team) { where(id: team.users.pluck(:id)) if team.present? }
 
   validates :pincode,
     numericality: { only_integer: true, in: 1000..9999, unless: ->(u) { u.pincode.blank? } },
