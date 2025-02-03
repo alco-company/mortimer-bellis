@@ -87,6 +87,11 @@ END
 - fix bug in deleting invoices
 - add invoice items - if exist on customer
 
+### 3/2/2025
+
+- allow setting team on user
+
+
 ### 31/1/2025
 
 - filtering - take 5 (present boolean attributes better)

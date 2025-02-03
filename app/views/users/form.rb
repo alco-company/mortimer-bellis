@@ -11,6 +11,7 @@ class Users::Form < ApplicationForm
       row field(:name).input()
       row field(:email).input()
       row field(:pincode).input()
+      row field(:team_id).select(Team.by_tenant.order(name: :asc).select(:id, :name), prompt: I18n.t(".select_team"), class: "mort-form-select")
       row field(:mugshot).file(class: "mort-form-file")
       row field(:locale).select(User.locales, prompt: I18n.t(".select_user_locale"), class: "mort-form-text")
       row field(:time_zone).select(User.time_zones_for_phlex, class: "mort-form-text")
