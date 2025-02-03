@@ -447,7 +447,7 @@ class Filters::Form < ApplicationForm
           div_id: "filter_#{lower}_id",
           lookup_target: "input",
           value: resource.filter["#{lower}_id"],
-          action: "keydown->lookup#keyDown blur->filter#customerChange"
+          action: "keydown->lookup#keyDown"
         },
         display_value: resource.filter["#{lower}_name"]), "mort-field my-1"
     end

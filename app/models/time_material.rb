@@ -88,7 +88,7 @@ class TimeMaterial < ApplicationRecord
 
   def self.user_scope(scope)
     case scope
-    when "all"; all
+    when "all"; all.by_tenant()
     when "mine"; where(user_id: Current.user.id)
     when "my_team"; where(user_id: Current.user.team.users.pluck(:id))
     end

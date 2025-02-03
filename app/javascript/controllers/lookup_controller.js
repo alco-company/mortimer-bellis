@@ -64,7 +64,6 @@ export default class extends Controller {
     this.inputTarget.value = el.dataset.displayValue;
     this.selectIdTarget.value = el.dataset.value;
     let selectId = this.selectIdTarget;
-    console.log(`selectId ${selectId}`);
     for (const key in el.dataset) {
       if (key != "lookupTarget") {
         selectId.dataset[key] = el.dataset[key];

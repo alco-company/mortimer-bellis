@@ -134,7 +134,7 @@ module Resourceable
     end
 
     def any_filters?
-      return false if @filter.nil? or params_ctrl.split("/").last == "filters"
+      return false if @filter.nil? or params_ctrl.split("/").last == "filters" or params[:action] == "lookup"
       # !@filter.id.nil?
       @filter.persisted?
     end
