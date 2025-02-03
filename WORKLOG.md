@@ -91,6 +91,7 @@ END
 
 - allow setting team on user
 - filtering - take 8 (make scope consider users/teams)
+- fix bug on user profile
 
 
 ### 31/1/2025

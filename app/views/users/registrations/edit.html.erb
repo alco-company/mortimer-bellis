@@ -137,7 +137,8 @@
                           <em ><%= t(".sign_up.minimum", count: @minimum_password_length) %></em>
                           <% end %><br />
                           <%= f.password_field :password, 
-                            required: true,
+                            focus: false,
+                            autocomplete: true,
                             placeholder: I18n.t("users.enter_password"),
                             maxlength: 72,
                             "data-password-strength-target": :password,
@@ -148,12 +149,18 @@
 
                         <div class="mort-field">
                           <%= f.label :password_confirmation %><br />
-                          <%= f.password_field :password_confirmation, placeholder: I18n.t("users.reenter_password"), class: "mort-form-text" %>
+                          <%= f.password_field :password_confirmation, 
+                            autocomplete: true,
+                            focus: false,
+                            placeholder: I18n.t("users.reenter_password"), class: "mort-form-text" %>
                         </div>
 
                         <div class="mort-field">
                           <%= f.label :current_password, I18n.t("users.registrations.edit.sign_up.current_password") %><br />
-                          <%= f.password_field :current_password, autocomplete: "current-password", class: "mort-form-text" %>
+                          <%= f.password_field :current_password, 
+                            autocomplete: true, 
+                            focus: false,
+                            class: "mort-form-text" %>
                           <i class="text-xs"><%= I18n.t("users.registrations.edit.sign_up.need_current_password") %></i>
                         </div>
                       </div>
