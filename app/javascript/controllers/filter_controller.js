@@ -34,17 +34,21 @@ export default class extends Controller {
 
   selectTab(e){
     e.stopPropagation()
-    this.tabtitleTargets.forEach(tab => { tab.classList.remove("border-sky-200", "font-medium", "text-sky-600"); tab.classList.add(
-      "border-transparent", "text-gray-500"
-    ); })
+    this.tabtitleTargets.forEach(tab => { 
+      tab.classList.remove("border-sky-200", "font-medium", "text-sky-600"); 
+      tab.classList.add( "border-transparent", "text-gray-500" ); 
+    })
+    let selectedElement = e.currentTarget
+    let selected = selectedElement.dataset.id;
+    if (selectedElement.id == "tabs") {
+      selected = selectedElement.options[selectedElement.selectedIndex].dataset.id;
+      console.log(selected)
+      selectedElement = null
+    }
     this.tabsTargets.forEach(tab => { 
-      if (tab.id == e.currentTarget.dataset.id) {
-        e.currentTarget.classList.remove(
-          "border-transparent", "text-gray-500"
-        );
-        e.currentTarget.classList.add(
-          "border-sky-200", "font-medium", "text-sky-600"
-        );
+      if (tab.id == selected) {
+        if (selectedElement) selectedElement.classList.remove( "border-transparent", "text-gray-500" );
+        if (selectedElement) selectedElement.classList.add( "border-sky-200", "font-medium", "text-sky-600" );
         tab.classList.remove("hidden") 
       } else {
         tab.classList.add("hidden") 

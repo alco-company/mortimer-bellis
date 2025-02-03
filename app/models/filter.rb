@@ -78,10 +78,10 @@ class Filter < ApplicationRecord
   #
   def filter_for_scope(model, conditions)
     unless filter["scope"]["user"].blank?
-      # conditions << model.send(filter["scope"]["user"])
+      conditions << model.send(:user_scope, filter["scope"]["user"])
     end
     unless filter["scope"]["named_users_teams"].blank?
-      # conditions << model.send(filter["scope"]["user"])
+      conditions << model.send(:named_scope, filter["scope"]["named_users_teams"])
     end
     unless filter["customer_id"].blank?
       conditions << model.where(customer_id: filter["customer_id"])
@@ -91,6 +91,9 @@ class Filter < ApplicationRecord
     end
     unless filter["product_id"].blank?
       conditions << model.where(product_id: filter["product_id"])
+    end
+    unless filter["location_id"].blank?
+      conditions << model.where(location_id: filter["location_id"])
     end
     conditions
   end
@@ -114,5 +117,20 @@ class Filter < ApplicationRecord
     else
       model.where_op(selected.to_sym, column.to_sym => value.downcase)
     end
+  end
+
+  def self.user_scope(scope)
+    case scope
+    when "all"; all.by_tenant()
+    when "mine"; where(user_id: Current.user.id)
+    when "my_team"; where(user_id: Current.user.team.users.pluck(:id))
+    end
+  end
+
+  def self.named_scope(scope)
+    users = User.where name: "%#{scope}%"
+    team_users = User.where team_id: Team.where_op(:matches, name: "%#{scope}%").pluck(:id)
+    users = users + team_users if team_users.any?
+    where(user_id: users.pluck(:id))
   end
 end

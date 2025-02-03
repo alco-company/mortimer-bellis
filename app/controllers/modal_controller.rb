@@ -288,7 +288,7 @@ class ModalController < BaseController
     end
 
     def set_resources
-      @resources = any_filters? ? resource_class.filtered(@filter) : resource_class.by_tenant()
+      @resources = any_filters? ? @filter.do_filter(resource_class) : resource_class.by_tenant()
       @resources = any_sorts? ? resource_class.ordered(@resources, params[:s], params[:d]) : @resources.order(created_at: :desc)
     end
 

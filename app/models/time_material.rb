@@ -27,18 +27,18 @@ class TimeMaterial < ApplicationRecord
 
   validates :about, presence: true, if: [ Proc.new { |c| c.comment.blank? && c.product_name.blank? } ]
 
-  def self.filtered(filter)
-    flt = filter.collect_filters self
-    flt = filter.filter
+  # def self.filtered(filter)
+  #   flt = filter.collect_filters self
+  #   flt = filter.filter
 
-    all
-      .by_tenant()
-      .by_about(flt["about"])
-      .by_state(flt["state"])
-  rescue
-    filter.destroy if filter
-    all
-  end
+  #   all
+  #     .by_tenant()
+  #     .by_about(flt["about"])
+  #     .by_state(flt["state"])
+  # rescue
+  #   filter.destroy if filter
+  #   all
+  # end
 
   def self.filterable_fields(model = self)
     f = column_names - [
@@ -84,6 +84,21 @@ class TimeMaterial < ApplicationRecord
       "started_at"
       ] if model == self
     f
+  end
+
+  def self.user_scope(scope)
+    case scope
+    when "all"; all.by_tenant()
+    when "mine"; where(user_id: Current.user.id)
+    when "my_team"; where(user_id: Current.user.team.users.pluck(:id))
+    end
+  end
+
+  def self.named_scope(scope)
+    users = User.where name: "%#{scope}%"
+    team_users = User.where team_id: Team.where_op(:matches, name: "%#{scope}%").pluck(:id)
+    users = users + team_users if team_users.any?
+    where(user_id: users.pluck(:id))
   end
 
   def self.associations

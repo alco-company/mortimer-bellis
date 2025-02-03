@@ -87,6 +87,13 @@ END
 - fix bug in deleting invoices
 - add invoice items - if exist on customer
 
+### 3/2/2025
+
+- allow setting team on user
+- filtering - take 8 (make scope consider users/teams)
+- fix bug on user profile
+- make filtering scopes work on all models
+
 ### 31/1/2025
 
 - filtering - take 5 (present boolean attributes better)

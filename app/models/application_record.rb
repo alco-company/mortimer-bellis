@@ -126,6 +126,23 @@ class ApplicationRecord < ActiveRecord::Base
     ApplicationForm.new resource: resource, editable: editable, fields: fields
   end
 
+  def self.user_scope(scope)
+    all.by_tenant()
+    # case scope
+    # when "all"; all
+    # when "mine"; where(user_id: Current.user.id)
+    # when "my_team"; where(user_id: Current.user.team.users.pluck(:id))
+    # end
+  end
+
+  def self.named_scope(scope)
+    all.by_tenant()
+    # users = User.where name: "%#{scope}%"
+    # team_users = User.where team_id: Team.where_op(:matches, name: "%#{scope}%").pluck(:id)
+    # users = users + team_users if team_users.any?
+    # where(user_id: users.pluck(:id))
+  end
+
   # def self.ordered(resources, field, direction = :desc)
   #   resources.order(field => direction)
   # end

@@ -66,6 +66,21 @@ class Punch < ApplicationRecord
     [ [ PunchClock, PunchCard ], [] ]
   end
 
+  def self.user_scope(scope)
+    case scope
+    when "all"; all.by_tenant()
+    when "mine"; where(user_id: Current.user.id)
+    when "my_team"; where(user_id: Current.user.team.users.pluck(:id))
+    end
+  end
+
+  def self.named_scope(scope)
+    users = User.where name: "%#{scope}%"
+    team_users = User.where team_id: Team.where_op(:matches, name: "%#{scope}%").pluck(:id)
+    users = users + team_users if team_users.any?
+    where(user_id: users.pluck(:id))
+  end
+
   def notify(action: nil, title: nil, msg: nil, rcp: nil, priority: 0)
     return if user_id.blank?
     case action

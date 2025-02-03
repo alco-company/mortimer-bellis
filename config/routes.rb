@@ -48,6 +48,18 @@ Rails.application.routes.draw do
 
   # -------- END API ROUTES & 3RD PARTY --------
 
+  concern :lookupable do
+    collection do
+      get "lookup"
+    end
+  end
+
+  concern :erp_pullable do
+    collection do
+      get "erp_pull"
+    end
+  end
+
   resources :calls
   resources :tasks
 
@@ -59,29 +71,11 @@ Rails.application.routes.draw do
 
   resources :invoice_items
 
-  resources :products do
-    collection do
-      get "erp_pull"
-      get "lookup"
-    end
-  end
-  resources :customers do
-    collection do
-      get "erp_pull"
-      get "lookup"
-    end
-  end
-  resources :invoices do
-    collection do
-      get "erp_pull"
-    end
-  end
+  resources :products, concerns: [ :lookupable, :erp_pullable ]
+  resources :customers, concerns: [ :lookupable, :erp_pullable ]
+  resources :invoices, concerns: [ :erp_pullable ]
 
-  resources :projects do
-    collection do
-      get "lookup"
-    end
-  end
+  resources :projects, concerns: [ :lookupable ]
 
 
   resources :provided_services
@@ -134,7 +128,7 @@ Rails.application.routes.draw do
     resources :calendars
   end
   resources :punch_clocks
-  resources :locations do
+  resources :locations, concerns: [ :lookupable ] do
     resources :punch_clocks
   end
   resources :filters
