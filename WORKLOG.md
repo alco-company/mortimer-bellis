@@ -93,6 +93,7 @@ END
 ### 4/2/2025
 
 - add invoice items to invoice - if invoice exist on customer at Dinero
+- add hotwire-spark to project
 
 ### 3/2/2025
 
