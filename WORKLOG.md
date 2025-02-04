@@ -85,7 +85,14 @@ END
 - location status (like user, team) - missing
 - user status - https://localhost:3000/pos/users?api_key=mVunTFDgFVud5qJAHgrHbp4P
 - fix bug in deleting invoices
-- add invoice items - if exist on customer
+- inform user when wrong password used
+- provide better text on confirm email
+- remove information on time logged on time_material/play
+- handle Dinero::Service.refresh_token error better - inform user to re-authenticate service
+
+### 4/2/2025
+
+- add invoice items to invoice - if invoice exist on customer at Dinero
 
 ### 3/2/2025
 

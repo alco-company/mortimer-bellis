@@ -69,7 +69,9 @@ class Dinero::Service < SaasService
   # changesSince = 2015-08-18T06:36:22Z (UTC)
   # pageSize = 100 (max 1000)
   #
-  def pull(resource_class:, all: false, page: 0, pageSize: 100, fields: nil, status_filter: nil, start_date: nil, end_date: nil)
+  # just_consume = true if we pull from invoice_draft.rb
+  #
+  def pull(resource_class:, all: false, page: 0, pageSize: 100, fields: nil, status_filter: nil, start_date: nil, end_date: nil, just_consume: false)
     case resource_class.to_s
     when "Customer"; tbl = "contacts"; api_version = "v2"
     when "Product"; tbl = "products"; api_version = "v1"
@@ -102,6 +104,8 @@ class Dinero::Service < SaasService
       return false
     end
     # File.open("tmp/dinero", "w") { |f| f.write(list.to_s) }
+    return list if just_consume
+
     list.parsed_response["Collection"].each do |item|
       resource_class.add_from_erp item
     end
@@ -121,11 +125,19 @@ class Dinero::Service < SaasService
     {}
   end
 
-  def push_invoice(params)
+  def create_invoice(params:)
     return mocked_push_invoice(params) if Rails.env.test?
     post "/v1/#{settings["organizationId"]}/invoices", params.to_json
   rescue => err
-    UserMailer.error_report(err.to_s, "DineroUpload - Dinero::Service.push_invoice").deliver_later
+    UserMailer.error_report(err.to_s, "DineroUpload - Dinero::Service.create_invoice").deliver_later
+    err.to_s
+  end
+
+  def update_invoice(guid:, params:)
+    return mocked_push_invoice(params) if Rails.env.test?
+    put "/v1.2/#{settings["organizationId"]}/invoices/#{guid}", params.to_json
+  rescue => err
+    UserMailer.error_report(err.to_s, "DineroUpload - Dinero::Service.update_invoice").deliver_later
     err.to_s
   end
 
@@ -180,6 +192,19 @@ class Dinero::Service < SaasService
       headers["Authorization"] = "Bearer %s" % settings["access_token"]
       headers["Content-Type"] = "application/json"
       res = HTTParty.post("https://api.dinero.dk#{path}", body: body, headers: headers)
+      if res["error"].present?
+        raise "Dinero::Service.post: %s" % res["error"].to_s
+      end
+      res
+    rescue => err
+      UserMailer.error_report(err.to_s, "Dinero::Service.post").deliver_later
+    end
+
+    def put(path, body, headers = {})
+      refresh_token if token_expired? || settings["access_token"].nil?
+      headers["Authorization"] = "Bearer %s" % settings["access_token"]
+      headers["Content-Type"] = "application/json"
+      res = HTTParty.put("https://api.dinero.dk#{path}", body: body, headers: headers)
       if res["error"].present?
         raise "Dinero::Service.post: %s" % res["error"].to_s
       end
