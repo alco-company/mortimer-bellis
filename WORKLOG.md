@@ -85,7 +85,6 @@ END
 - location status (like user, team) - missing
 - user status - https://localhost:3000/pos/users?api_key=mVunTFDgFVud5qJAHgrHbp4P
 - fix bug in deleting invoices
-- inform user when wrong password used
 - provide better text on confirm email
 - handle Dinero::Service.refresh_token error better - inform user to re-authenticate service
 - background_jobs - run each night to pull invoices from Dinero
@@ -95,6 +94,7 @@ END
 - remove information on time logged on time_material/play
 - fix regression on kill_tenant_job
 - add posthog to project
+- inform user when wrong password used, more
 
 ### 4/2/2025
 

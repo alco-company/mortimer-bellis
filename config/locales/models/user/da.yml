@@ -159,7 +159,7 @@ da:
     failure:
       already_authenticated: "Du er allerede logget ind."
       inactive: "Din konto er endnu ikke aktiveret."
-      invalid: "Invalid %{authentication_keys} or password."
+      invalid: "Forkert email adresse eller adgangskode"
       locked: "Din konto er låst. Vi har sendt dig en email med instruktioner om hvordan du låser den op."
       last_attempt: "Du har et forsøg tilbage før din konto låses."
       not_found_in_database: "Invalid %{authentication_keys} or password."
@@ -258,6 +258,7 @@ da:
       no_token: "Du kan ikke tilgå denne side uden at komme fra en email med instruktioner til at nulstille din adgangskode. Hvis du kommer fra en email med instruktioner til at nulstille din adgangskode, så sørg for at du brugte den fulde URL."
       send_instructions: "Du vil modtage en email med instruktioner om hvordan du nulstiller din adgangskode om et par minutter."
       send_paranoid_instructions: "Hvis din email adresse eksisterer i vores database, vil du modtage et link til at nulstille din adgangskode om et par minutter."
+      update_now: "Opdatér adgangskoden - og tryk på 'Skift adgangskoden' (gør du ikke det, vil din adgangskode ikke blive ændret)."
       updated: "Din adgangskode er blevet ændret korrekt. Du er nu logget ind."
       updated_not_active: "Din adgangskode er blevet ændret korrekt."
     registrations:

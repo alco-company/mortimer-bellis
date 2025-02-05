@@ -1,0 +1,42 @@
+<%= turbo_frame_tag "new_session" do %>
+  <div class="mx-auto w-72 sm:w-96">
+    <div class="flex flex-shrink-0 items-center justify-between">
+    <%= render_logo %>
+    </div>
+    <h1 class="font-bold text-gray-200 text-2xl"> <%= t("#{ resource_class.table_name}.sign_in.title") %> </h1>
+
+    <%= render partial: "users/shared/error_messages", locals: {resource: resource} %>
+
+    <%= form_for(resource, as: resource_name, url: session_path(resource_name), id: "login", data: { turbo: true }) do |f| %>
+      <div class="mort-field">
+        <%= f.label :email %><br />
+        <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "mort-form-text" %>
+      </div>
+
+      <div class="mort-field">
+        <%= f.label :password %><br />
+        <%= f.password_field :password, autocomplete: "current-password", class: "mort-form-text" %>
+      </div>
+
+      <div id="otp_attempt_outlet" class="mort-field">
+      </div>
+
+      <% if devise_mapping.rememberable? %>
+        <div class="mort-field">
+          <%= f.check_box :remember_me %>
+          <%= f.label :remember_me, I18n.t("devise.remember_me") %>
+        </div>
+      <% end %>
+
+      <div class="actions mort-field">
+        <%= f.submit t(".sign_in"), class: "mort-btn-primary" %>
+      </div>
+    <% end %>
+
+    <div class="actions mort-field">
+      <%= render "users/shared/links" %>
+    </div>
+
+  </div>
+
+<% end %>
