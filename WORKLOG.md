@@ -87,8 +87,11 @@ END
 - fix bug in deleting invoices
 - inform user when wrong password used
 - provide better text on confirm email
-- remove information on time logged on time_material/play
 - handle Dinero::Service.refresh_token error better - inform user to re-authenticate service
+
+### 5/2/2025
+
+- remove information on time logged on time_material/play
 
 ### 4/2/2025
 
