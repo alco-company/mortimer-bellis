@@ -92,6 +92,7 @@ END
 ### 5/2/2025
 
 - remove information on time logged on time_material/play
+- fix regression on kill_tenant_job
 
 ### 4/2/2025
 

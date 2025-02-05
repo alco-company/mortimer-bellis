@@ -131,11 +131,11 @@ class TimeMaterial < ApplicationRecord
   end
 
   def name
-    about[..50]
+    about
     case false
-    when product_name.blank?; product_name[..50]
-    when about.blank?; about[..50]
-    when comment.blank?; comment[..50]
+    when product_name.blank?; product_name
+    when about.blank?; about
+    when comment.blank?; comment
     end
   end
 

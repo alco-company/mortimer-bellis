@@ -23,20 +23,20 @@ class KillTenantJob < ApplicationJob
         tenant.punch_clocks.destroy_all
         tenant.punches.destroy_all
         tenant.settings.destroy_all
-        tenant.teams.destroy_all
+        tenant.tasks.destroy_all
+        tenant.time_materials.destroy_all
 
         tenant.users.each do |user|
           next if user.id == 1
           user.mugshot.purge if user.mugshot.attached?
           user.access_grants.destroy_all
           user.access_tokens.destroy_all
-          user.time_materials.destroy_all
           user.notifications.destroy_all
+          user.web_push_subscriptions.destroy_all
           user.delete
         end
 
-        tenant.tasks.destroy_all
-        tenant.time_materials.destroy_all
+        tenant.teams.destroy_all
         tenant.logo.purge if tenant.logo.attached?
         tenant.delete
       end
