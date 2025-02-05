@@ -18,6 +18,8 @@ class ApplicationController < ActionController::Base
   #
   include ErrorHandling
 
+  include PostHogging
+
   def say(msg)
     Rails.logger.info { "===============================" }
     Rails.logger.info { msg }

@@ -88,11 +88,13 @@ END
 - inform user when wrong password used
 - provide better text on confirm email
 - handle Dinero::Service.refresh_token error better - inform user to re-authenticate service
+- background_jobs - run each night to pull invoices from Dinero
 
 ### 5/2/2025
 
 - remove information on time logged on time_material/play
 - fix regression on kill_tenant_job
+- add posthog to project
 
 ### 4/2/2025
 

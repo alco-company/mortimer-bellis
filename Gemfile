@@ -127,3 +127,5 @@ gem "web-push", "~> 3.0"
 gem "devise-two-factor", "~> 6.1"
 
 gem "doorkeeper", "~> 5.8"
+
+gem "posthog-ruby", "~> 2.5"

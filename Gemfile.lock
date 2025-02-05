@@ -345,6 +345,8 @@ GEM
     phlex-rails (1.2.2)
       phlex (>= 1.10, < 2)
       railties (>= 6.1, < 9)
+    posthog-ruby (2.5.1)
+      concurrent-ruby (~> 1)
     propshaft (1.1.0)
       actionpack (>= 7.0.0)
       activesupport (>= 7.0.0)
@@ -555,6 +557,7 @@ DEPENDENCIES
   omniauth-rails_csrf_protection (~> 1.0)
   pagy (~> 9.0)
   phlex-rails
+  posthog-ruby (~> 2.5)
   propshaft
   psych (~> 5.2.0)
   puma (>= 5.0)
