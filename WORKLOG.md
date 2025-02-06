@@ -85,9 +85,12 @@ END
 - location status (like user, team) - missing
 - user status - https://localhost:3000/pos/users?api_key=mVunTFDgFVud5qJAHgrHbp4P
 - fix bug in deleting invoices
-- provide better text on confirm email
 - handle Dinero::Service.refresh_token error better - inform user to re-authenticate service
-- background_jobs - run each night to pull invoices from Dinero
+
+### 6/2/2025
+
+- background_jobs - run each */* to refresh token
+
 
 ### 5/2/2025
 

@@ -105,12 +105,13 @@ class BackgroundJob < ApplicationRecord
 
   def self.job_klasses
     [
-      [ "DatalonPreparationJob", "DatalonPreparationJob" ],
-      [ "UserAutoPunchJob", "UserAutoPunchJob" ],
-      [ "UserEuStateJob", "UserEuStateJob" ],
-      [ "UserStateJob", "UserStateJob" ],
-      [ "ImportUsersJob", "ImportUsersJob" ],
+      # [ "DatalonPreparationJob", "DatalonPreparationJob" ],
+      # [ "UserAutoPunchJob", "UserAutoPunchJob" ],
+      # [ "UserEuStateJob", "UserEuStateJob" ],
+      # [ "UserStateJob", "UserStateJob" ],
+      # [ "ImportUsersJob", "ImportUsersJob" ],
       [ "PunchCardJob", "PunchCardJob" ],
+      [ "RefreshErpTokenJob", "RefreshErpTokenJob" ],
       [ "PunchReminderJob", "PunchReminderJob" ],
       [ "PunchJob", "PunchJob" ]
     ]

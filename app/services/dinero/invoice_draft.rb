@@ -118,9 +118,10 @@ class Dinero::InvoiceDraft
           result = ds.create_invoice(params: dinero_invoice)
         else
           result = ds.update_invoice(guid: invoice["Guid"], params: dinero_invoice)
-          result["guid"] = invoice["Guid"] if invoice["Guid"].present?
         end
+        result["guid"] = invoice["Guid"] if invoice["Guid"].present?
         unless result["guid"].present?
+          raise "Invoice not created - %s" % result if result[:error]
           lines.each do |line|
             line.update push_log: "%s\n%s" % [ line.push_log, result ]
             line.cannot_be_pushed!
@@ -426,8 +427,9 @@ class Dinero::InvoiceDraft
 
   def invoice_details(invoice)
     invoice = @ds.pull_invoice(guid: invoice["guid"])
-  rescue => err
-    UserMailer.error_report(err.to_s, "Dinero::InvoiceDraft#invoice_details").deliver_later
-    nil
+    invoice[:error].present? ? nil : invoice
+    # rescue => err
+    #   UserMailer.error_report(err.to_s, "Dinero::InvoiceDraft#invoice_details").deliver_later
+    #   nil
   end
 end

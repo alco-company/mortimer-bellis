@@ -1,7 +1,7 @@
 class ProvidedServicesController < MortimerController
   def new
     if params[:service].present?
-      case params[:service]
+      case params[:service]&.downcase
       when "dinero"; set_dinero
       end
     end
