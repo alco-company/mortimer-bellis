@@ -90,7 +90,7 @@ END
 ### 6/2/2025
 
 - background_jobs - run each */* to refresh token
-
+- provide better text on confirming email show action
 
 ### 5/2/2025
 

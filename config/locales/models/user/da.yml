@@ -56,7 +56,11 @@ da:
         resend_confirmation: 
           title: Bekræftelses email
           action: Send igen
-
+      show:
+        confirmation:
+          title: Oprettelse godkendt!
+          thankyou: Tak for at bekræfte din oprettelse. Du er nu klar til at komme i gang!
+          help: "Har du spørgsmål kan du altid finde svar her: <span class='cursor-pointer mort-link-primary'>https://mortimer.pro/help</span> <p>Eller kig efter redningskransen nederst til venstre i appen.</p>"
     sessions:
       new: 
         sign_in: Log ind
