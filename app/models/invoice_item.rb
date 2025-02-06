@@ -89,7 +89,7 @@ class InvoiceItem < ApplicationRecord
       line_type: item["LineType"],
       base_amount_value: item["BaseAmountValue"]
     )
-       Broadcasters::Resource.new(ii).create
+       Broadcasters::Resource.new(ii, { controller: "invoice_items" }).create
     end
   end
 end

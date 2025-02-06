@@ -92,6 +92,7 @@ END
 - background_jobs - run each */* to refresh token
 - provide better text on confirming email show action
 - add background_job when new dinero provided_service is created
+- update list of customers, products, invoices when sync_erp'ing
 
 ### 5/2/2025
 

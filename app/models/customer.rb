@@ -111,7 +111,7 @@ class Customer  < ApplicationRecord
     customer.vat_region_key = item["VatRegionKey"]
     customer.invoice_mail_out_option_key = item["InvoiceMailOutOptionKey"]
     if customer.save
-       Broadcasters::Resource.new(customer).create
+       Broadcasters::Resource.new(customer, { controller: "customers" }).create
     end
   rescue => error
     UserMailer.error_report(error.message, "Customer#add_from_erp failed ").deliver_later
