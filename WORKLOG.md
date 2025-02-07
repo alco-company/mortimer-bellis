@@ -92,6 +92,7 @@ END
 ### 8/2/2025
 
 - make home prettier
+- forgot about a debugger statement or two
 
 ### 7/2/2025
 
