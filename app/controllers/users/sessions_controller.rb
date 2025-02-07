@@ -23,7 +23,7 @@ class Users::SessionsController < Devise::SessionsController
         if user_signed_in?
           respond_to do |format|
             format.turbo_stream { render turbo_stream: turbo_stream.replace("body", partial: "users/sessions/redirect") }
-            format.html         { redirect_to root_path }
+            format.html         { redirect_to time_materials_url }
           end
         else
           sign_in_params[:otp_attempt].present? ? flash[:alert] = I18n.t("devise.second_factor.bad_otp_or_password") : flash[:alert] = I18n.t("devise.failure.invalid")
@@ -55,6 +55,10 @@ class Users::SessionsController < Devise::SessionsController
         return nil
       end
       user
+    end
+
+    def after_sign_in_path_for(resource)
+      time_materials_url
     end
 
     def otp_ok?

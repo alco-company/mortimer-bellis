@@ -81,4 +81,8 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
   def after_omniauth_failure_path_for(scope)
     super(scope)
   end
+
+  def after_sign_in_path_for(resource)
+    time_materials_url
+  end
 end

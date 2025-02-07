@@ -10,9 +10,6 @@ class MortimerController < BaseController
   include DefaultActions
   include TimezoneLocale
 
-  def after_sign_in_path_for(resource)
-    root_path(format: :html)
-  end
   #
   # called by models that have a mugshot
   # on create and update actions
