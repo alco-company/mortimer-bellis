@@ -86,6 +86,13 @@ END
 - user status - https://localhost:3000/pos/users?api_key=mVunTFDgFVud5qJAHgrHbp4P
 - fix bug in deleting invoices
 - handle Dinero::Service.refresh_token error better - inform user to re-authenticate service
+- check all icon files - for PWA and all
+- timer på desktop
+
+### 7/2/2025
+
+- add landing page (home#show)
+
 
 ### 6/2/2025
 
