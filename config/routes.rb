@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get "home/show"
   # -------- AUTHENTICATION ROUTES --------
   use_doorkeeper do
     controllers applications: "oauth/applications"
@@ -167,5 +168,6 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "dashboards#show_dashboard"
-  root "time_materials#index"
+  # root "time_materials#index"
+  root "home#show"
 end

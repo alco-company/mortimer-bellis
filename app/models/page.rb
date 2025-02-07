@@ -9,6 +9,10 @@ class Page < ApplicationRecord
     false
   end
 
+  def slug=(value)
+    @slug = (value || title).split.map { |w| w.capitalize }.join.underscore
+  end
+
   def self.set_order(resources, field = :title, direction = :asc)
     resources.ordered(field, direction)
   end
