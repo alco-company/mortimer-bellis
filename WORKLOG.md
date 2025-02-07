@@ -93,6 +93,7 @@ END
 
 - add landing page (home#show)
 - fix redirects on sign_in and sign_up as a result of new landing page
+- bugs on invoice_draft 
 
 
 ### 6/2/2025

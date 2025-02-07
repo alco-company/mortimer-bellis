@@ -52,9 +52,9 @@ class Dinero::Service < SaasService
   def get_invoice_settings(code = nil)
     return mocked_settings(code) if Rails.env.test?
 
-    settings = get "/v1/#{settings["organizationId"]}/sales/settings"
-    return {} if settings[:error].present?
-    settings[:ok].parsed_response
+    invoice_settings = get "/v1/#{settings["organizationId"]}/sales/settings"
+    return {} if invoice_settings[:error].present?
+    invoice_settings[:ok].parsed_response
     # rescue => err
     #   UserMailer.error_report(err.to_s, "DineroUpload - Dinero::Service.get_invoice_settings").deliver_later
     #   {}
@@ -91,34 +91,11 @@ class Dinero::Service < SaasService
     else
       return false
     end
-    query = {}
-    unless start_date.nil?
-      query[:startDate] = start_date
-      query[:endDate] = end_date
-    end
-    query[:changesSince] = resource_class.order(updated_at: :desc).first.updated_at.iso8601 rescue nil
-    query.delete(:changesSince) if all
-    query[:page] = page
-    query[:pageSize] = pageSize
-    if fields
-      query[:fields] = fields
-    end
-    if status_filter
-      query[:statusFilter] = status_filter
-    end
+    query = build_query(start_date: start_date, all: all, page: page, pageSize: pageSize, fields: fields, status_filter: status_filter)
     list = get "/#{api_version}/#{settings["organizationId"]}/#{tbl}?#{query.to_query}"
     if list[:error].present?
       return false
     end
-    # unless list.parsed_response.present?
-    #   if list.response.class == Net::HTTPUnauthorized
-    #     UserMailer.error_report("", "SyncERP - Dinero::Service.pull").deliver_later
-    #     return false
-    #   end
-    #   UserMailer.error_report(list.to_s, "SyncERP - Dinero::Service.pull").deliver_later
-    #   return false
-    # end
-    # File.open("tmp/dinero", "w") { |f| f.write(list.to_s) }
     return list[:ok] if just_consume
 
     list[:ok].parsed_response["Collection"].each do |item|
@@ -137,9 +114,6 @@ class Dinero::Service < SaasService
     invoice = get "/v1/#{settings["organizationId"]}/invoices/#{guid}"
     return {} if invoice[:error].present?
     invoice[:ok]
-    # rescue => err
-    #   UserMailer.error_report(err.to_s, "SyncERP - Dinero::Service.pull_invoice").deliver_later
-    #   {}
   end
 
   def create_invoice(params:)
@@ -147,9 +121,6 @@ class Dinero::Service < SaasService
     invoice = post "/v1/#{settings["organizationId"]}/invoices", params.to_json
     return invoice if invoice[:error].present?
     invoice[:ok]
-    # rescue => err
-    #   UserMailer.error_report(err.to_s, "DineroUpload - Dinero::Service.create_invoice").deliver_later
-    #   err.to_s
   end
 
   def update_invoice(guid:, params:)
@@ -157,9 +128,6 @@ class Dinero::Service < SaasService
     invoice = put "/v1.2/#{settings["organizationId"]}/invoices/#{guid}", params.to_json
     return invoice if invoice[:error].present?
     invoice[:ok]
-    # rescue => err
-    #   UserMailer.error_report(err.to_s, "DineroUpload - Dinero::Service.update_invoice").deliver_later
-    #   err.to_s
   end
 
   private
@@ -197,43 +165,44 @@ class Dinero::Service < SaasService
       # res
     end
 
+    def build_query(start_date:, all:, page:, pageSize:, fields:, status_filter:)
+      query = {}
+      unless start_date.nil?
+        query[:startDate] = start_date
+        query[:endDate] = end_date
+      end
+      query[:changesSince] = resource_class.order(updated_at: :desc).first.updated_at.iso8601 rescue nil
+      query.delete(:changesSince) if all
+      query[:page] = page
+      query[:pageSize] = pageSize
+      if fields
+        query[:fields] = fields
+      end
+      if status_filter
+        query[:statusFilter] = status_filter
+      end
+      query
+    end
+
     def get(path, headers = {})
       refresh_token if token_expired? || settings["access_token"].nil?
       headers["Authorization"] = "Bearer %s" % settings["access_token"]
       safe_response "get", "https://api.dinero.dk#{path}", headers
-      #   if res["error"].present?
-      #     raise "Dinero::Service.get: %s" % res["error"].to_s
-      #   end
-      #   res
-      # rescue => err
-      #   UserMailer.error_report(err.to_s, "Dinero::Service.get").deliver_later
-      #   false
     end
 
     def post(path, params, headers = {})
       refresh_token if token_expired? || settings["access_token"].nil?
       headers["Authorization"] = "Bearer %s" % settings["access_token"]
       headers["Content-Type"] = "application/json"
+
       safe_response "post", "https://api.dinero.dk#{path}", headers, "post", params
-      #   if res["error"].present?
-      #     raise "Dinero::Service.post: %s" % res["error"].to_s
-      #   end
-      #   res
-      # rescue => err
-      #   UserMailer.error_report(err.to_s, "Dinero::Service.post").deliver_later
     end
 
     def put(path, params, headers = {})
       refresh_token if token_expired? || settings["access_token"].nil?
       headers["Authorization"] = "Bearer %s" % settings["access_token"]
       headers["Content-Type"] = "application/json"
-      safe_response "put", "https://api.dinero.dk#{path}", params, "put", headers
-      #   if res["error"].present?
-      #     raise "Dinero::Service.post: %s" % res["error"].to_s
-      #   end
-      #   res
-      # rescue => err
-      #   UserMailer.error_report(err.to_s, "Dinero::Service.post").deliver_later
+      safe_response "put", "https://api.dinero.dk#{path}", headers, "put", params
     end
 
     def token_expired?
@@ -265,9 +234,6 @@ class Dinero::Service < SaasService
       @settings = provided_service.service_params_hash
       @settings["organizationId"] = provided_service.organizationID
       res[:ok]
-      # rescue => err
-      #   UserMailer.error_report(err.to_s, "Dinero::Service.refresh_token").deliver_later
-      #   res
     end
 
     #
@@ -284,14 +250,17 @@ class Dinero::Service < SaasService
     def safe_response(work, url, headers, method = "get", params = {})
       res = case method
       when "get"; HTTParty.get(url, headers: headers)
-      when "post"; HTTParty.post(url, body: params, headers: { "Content-Type" => "application/x-www-form-urlencoded" })
-      when "put"; HTTParty.put(url, body: params, headers: { "Content-Type" => "application/x-www-form-urlencoded" })
+      when "post"; HTTParty.post(url, body: params, headers: headers)
+      when "put"; HTTParty.put(url, body: params, headers: headers)
       end
 
       case true
       when res.response.code == "200"; { ok: res }
+      when res.response.code == "201"; debugger; { ok: res }
+      when res["code"].to_i < 200; report_error(work, res.response.code, res); { error: res }
       else
-        report_error(work, res.response.code)
+        debugger
+        report_error(work, res.response.code, res.response)
         { error: res.response.code }
       end
     rescue => err
@@ -299,8 +268,8 @@ class Dinero::Service < SaasService
       { error: err.to_s }
     end
 
-    def report_error(work, code)
-      UserMailer.error_report(code, "Dinero::Service.#{work}").deliver_later
+    def report_error(work, code, response = "")
+      UserMailer.error_report(code, "Dinero::Service.#{work} #{response}").deliver_later
     end
 
     ### mocked answers for testing
@@ -332,6 +301,73 @@ class Dinero::Service < SaasService
         "trustPilotEmail": "string"
       }
       end
+    end
+
+    def mocked_pull_invoices(contactGuid)
+    end
+
+    def mocked_pull_invoice(guid)
+      {
+        "currency": "DKK",
+        "language": "en-GB",
+        "externalReference": "Fx. WebshopSpecialId: 42",
+        "description": "Description of document type. Fx.: invoice, credit note or offer",
+        "comment": "Here is a comment",
+        "date": "2022-06-01",
+        "productLines": [
+          {
+            "productGuid": "102eb2e1-d732-4915-96f7-dac83512f16d",
+            "description": "Flowers",
+            "comments": "Smells good",
+            "quantity": 5,
+            "accountNumber": 1000,
+            "unit": "parts",
+            "discount": 10,
+            "lineType": "Product",
+            "accountName": "Bank",
+            "baseAmountValue": 20,
+            "baseAmountValueInclVat": 25,
+            "totalAmount": 100,
+            "totalAmountInclVat": 125
+          }
+        ],
+        "address": "Test Road 3 2300 Copenhagen S Denmark",
+        "number": 12,
+        "contactName": "My Customer",
+        "showLinesInclVat": false,
+        "totalExclVat": 200,
+        "totalVatableAmount": 200,
+        "totalInclVat": 250,
+        "totalNonVatableAmount": 0,
+        "totalVat": 50,
+        "totalLines": [
+          {
+            "type": "SubTotal",
+            "totalAmount": 200,
+            "position": 0,
+            "label": "Subtotal"
+          }
+        ],
+        "invoiceTemplateId": "0e2218cf-2209-4a99-926b-e096382f8ef3",
+        "guid": "ee6a7af7-650d-499b-8e32-58a52ffdb7bc",
+        "timeStamp": "00000000020A5EA8",
+        "createdAt": "2019-08-24T14:15:22Z",
+        "updatedAt": "2019-08-24T14:15:22Z",
+        "deletedAt": "2019-08-24T14:15:22Z",
+        "status": "Draft",
+        "contactGuid": "f8e8286a-9838-46f7-85c6-080dd48b67f4",
+        "paymentDate": "2022-06-01",
+        "paymentStatus": "Overdue",
+        "paymentConditionNumberOfDays": 8,
+        "paymentConditionType": "Netto",
+        "fikCode": "+71000000016460909+12345678",
+        "depositAccountNumber": 55000,
+        "mailOutStatus": "Sent, NotSent, Failed, SeenByCustomer",
+        "latestMailOutType": "einvoice",
+        "isSentToDebtCollection": true,
+        "isMobilePayInvoiceEnabled": true,
+        "isPensoPayEnabled": true
+      }
     end
 
     def mocked_push_invoice(params)
