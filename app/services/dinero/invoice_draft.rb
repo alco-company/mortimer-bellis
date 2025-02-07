@@ -1,5 +1,5 @@
 class Dinero::InvoiceDraft
-  attr_accessor :ds, :cid_array, :settings, :invoice_date
+  attr_accessor :ds, :cid_array, :settings, :invoice_date, :drafts
 
   def initialize(ds)
     @ds = ds
@@ -7,25 +7,26 @@ class Dinero::InvoiceDraft
   end
 
   def process(time_materials, invoice_date = Date.current)
-    # prepare hash to hold customer invoices
+    return if time_materials.empty?
     @cid_array = {}
     @invoice_date = invoice_date.to_date
-    return { ok: "none records" } if time_materials.where(date: ..invoice_date).empty?
-
+    return { ok: "no records" } if time_materials.where(date: ..invoice_date).empty?
 
     # load settings like accounts, company details, more
     load_settings
-    records=0
-    unless settings == {}
-      # loop through all time_materials, picking elligible ones
+    records = 0
+
+    unless settings=={}
+      # Group time materials by customer and project
       time_materials.each do |resource|
         next unless resource.valid?
         next if resource.pushed_to_erp?
-        can_resource_be_pushed? resource
+        next unless can_resource_be_pushed?(resource)
         pack_resource_for_push(resource) && records += 1 if resource.is_invoice? && resource.done?
       end
       push_to_erp
     end
+
     { ok: "%d records drafted" % records }
 
   rescue => err
@@ -55,8 +56,12 @@ class Dinero::InvoiceDraft
   end
 
   def can_resource_be_pushed?(resource)
-    return unless resource.is_invoice?
-    resource.cannot_be_pushed! unless resource.values_ready_for_push?
+    return false unless resource.is_invoice?
+    unless resource.values_ready_for_push?
+      resource.cannot_be_pushed!
+      return false
+    end
+    true
 
   rescue => err
     resource.update push_log: "%s\n- - - \n%s\%s" % [ resource.push_log, Time.current.to_s, err.message ]
@@ -96,10 +101,7 @@ class Dinero::InvoiceDraft
   def push_to_erp
     cid_array.each do |cid, lines|
       begin
-        dinero_lines = []
-        project_description = []
-        refs = []
-        date = I18n.l(invoice_date, format: :short_iso)
+        invoice, dinero_lines, project_description, refs, date = find_draft_invoices_for_customer(cid)
         lines.each do |line|
           # Struct.new("Line", :productGuid, :description, :comments, :quantity, :accountNumber, :unit, :discount, :lineType, :baseAmountValue).new(
           dinero_lines << product_line(line, date)
@@ -107,13 +109,19 @@ class Dinero::InvoiceDraft
           refs << line.product&.external_reference || ""
         end
         line = lines.first
-        dinero_invoice = invoice_header(line, date, dinero_lines, refs.join(", "), project_description.compact.join(", "))
+        dinero_invoice = get_invoice_header(invoice, line, dinero_lines, project_description, refs, date)
         persist_invoice_for_testing(cid, dinero_invoice, lines) if Rails.env.test?
 
         # happy path = {"Guid"=>"5856516f-5127-4dfc-98a7-52ab7d09e1df", "TimeStamp"=>"0000000080C81AC0"}
         # result = ds.push_invoice test_invoice
-        result = ds.push_invoice dinero_invoice unless dinero_invoice == {}
-        unless result["Guid"].present?
+        if invoice.nil?
+          result = ds.create_invoice(params: dinero_invoice)
+        else
+          result = ds.update_invoice(guid: invoice["Guid"], params: dinero_invoice)
+        end
+        result["guid"] = invoice["Guid"] if invoice["Guid"].present?
+        unless result["guid"].present?
+          raise "Invoice not created - %s" % result if result[:error]
           lines.each do |line|
             line.update push_log: "%s\n%s" % [ line.push_log, result ]
             line.cannot_be_pushed!
@@ -122,7 +130,7 @@ class Dinero::InvoiceDraft
         else
           lines.each do |line|
             line.pushed_to_erp!
-            line.update erp_guid: result["Guid"], pushed_erp_timestamp: result["TimeStamp"]
+            line.update erp_guid: result["guid"], pushed_erp_timestamp: result["TimeStamp"]
             Broadcasters::Resource.new(line, { controller: "time_materials" }).replace
           end
         end
@@ -135,22 +143,12 @@ class Dinero::InvoiceDraft
     end
   end
 
-  # 4 types of lines:
-  #
-  # 1. Product
-  # 2. Service (hours)
-  # 3. Product (one offs)
-  # 4. Text
-  #
-  # set invoice date on invoice_item - not created_at
-  #
-  def product_line(line, date)
-    date = line.date.blank? ? date : line.date
-    return a_product(line, date) unless line.product_id.blank?
-    return a_one_off(line, date) unless line.quantity.blank?
-    return a_mileage(line, date) unless line.kilometers.blank?
-    return a_text(line, date) unless line.comment.blank?
-    service_line(line, date)
+  def get_invoice_header(invoice, line, dinero_lines, project_description, refs, date)
+    return invoice_header(line, date, dinero_lines, refs.join(", "), project_description.compact.join(", ")) if invoice.nil?
+    {
+      "productLines": dinero_lines,
+      "timeStamp": invoice["TimeStamp"]
+    }
   end
 
   def invoice_header(line, date, lines, refs, comment)
@@ -179,6 +177,24 @@ class Dinero::InvoiceDraft
     line.cannot_be_pushed!
     UserMailer.error_report(err.to_s, "DineroUpload.invoice_header").deliver_later
     {}
+  end
+
+  # 4 types of lines:
+  #
+  # 1. Product
+  # 2. Service (hours)
+  # 3. Product (one offs)
+  # 4. Text
+  #
+  # set invoice date on invoice_item - not created_at
+  #
+  def product_line(line, date)
+    date = line.date.blank? ? date : line.date
+    return a_product(line, date) unless line.product_id.blank?
+    return a_one_off(line, date) unless line.quantity.blank?
+    return a_mileage(line, date) unless line.kilometers.blank?
+    return a_text(line, date) unless line.comment.blank?
+    service_line(line, date)
   end
 
   def a_product(line, date)
@@ -376,5 +392,44 @@ class Dinero::InvoiceDraft
       "isMobilePayInvoiceEnabled": false,
       "isPensoPayEnabled": false
     }
+  end
+
+  # return
+  # dinero_invoice, dinero_lines, project_description, refs, date
+  #
+  def find_draft_invoices_for_customer(customer_id)
+    contactGuid = Customer.find(customer_id).erp_guid rescue nil
+    return [ nil, [], [], [], I18n.l(invoice_date, format: :short_iso) ] if contactGuid.blank?
+
+    # Get all draft invoices from Dinero
+    @drafts ||= @ds.pull(
+      resource_class: "Invoice",
+      all: true,
+      pageSize: 500,
+      status_filter: "Draft",
+      fields: "guid,contactGuid,externalReference",
+      just_consume: true
+    )
+
+    # Filter drafts to only those for this customer
+    draft = drafts&.parsed_response&.dig("Collection")&.select do |invoice|
+      invoice["contactGuid"] == contactGuid
+    end.first || nil
+
+    invoice = invoice_details(draft) || nil
+    dinero_lines = invoice["ProductLines"] rescue []
+    project_description = [ draft["comment"] ] rescue []
+    refs = [ draft["externalReference"] ] rescue []
+    date = draft["date"] rescue I18n.l(invoice_date, format: :short_iso)
+
+    [ invoice, dinero_lines, project_description, refs, date ]
+  end
+
+  def invoice_details(invoice)
+    invoice = @ds.pull_invoice(guid: invoice["guid"])
+    invoice[:error].present? ? nil : invoice
+    # rescue => err
+    #   UserMailer.error_report(err.to_s, "Dinero::InvoiceDraft#invoice_details").deliver_later
+    #   nil
   end
 end

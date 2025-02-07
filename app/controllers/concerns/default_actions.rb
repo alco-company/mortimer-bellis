@@ -4,6 +4,7 @@ module DefaultActions
   included do
     # GET /users or /users.json
     def index
+      posthog_capture
       params.permit![:url] = resources_url
       @pagy, @records = pagy(@resources)
       @replace = params.permit![:replace] || false
@@ -23,6 +24,7 @@ module DefaultActions
     # GET /users/lookup
     # renders a lookup partial used by <SELECT>
     def lookup
+      posthog_capture
       set_query
       lookup_options = "%s_lookup_options" % params.permit![:div_id]
       respond_to do |format|
@@ -41,11 +43,13 @@ module DefaultActions
     end
 
     def erp_pull
+      posthog_capture
       SyncErpJob.perform_later tenant: Current.tenant, user: Current.user, resource_class: resource_class
       redirect_to resources_url, success: t(".erp_pull")
     end
 
     def html_content
+      posthog_capture
       render_to_string layout: "pdf", formats: :pdf
     end
 
@@ -55,6 +59,7 @@ module DefaultActions
     # exceptions are fx dashboards/
     #
     def show
+      posthog_capture
     rescue => e
       UserMailer.error_report(e.to_s, "DefaultActions#show - failed with params: #{params}").deliver_later
       redirect_to root_path, alert: I18n.t("errors.messages.something_went_wrong", error: e.message)
@@ -66,6 +71,7 @@ module DefaultActions
     # exceptions are fx time_materials/
     #
     def new
+      posthog_capture
       @resource.tenant_id = Current.tenant.id if resource_class.has_attribute? :tenant_id
       @resource.user_id = Current.user.id if resource_class.has_attribute? :user_id
 
@@ -80,6 +86,7 @@ module DefaultActions
     # exceptions are fx time_materials/
     #
     def edit
+      posthog_capture
     rescue => e
       UserMailer.error_report(e.to_s, "DefaultActions#edit - failed with params: #{params}").deliver_later
       redirect_to root_path, alert: I18n.t("errors.messages.something_went_wrong", error: e.message)
@@ -92,6 +99,7 @@ module DefaultActions
     # v2: use /app/forms/model_[scope]_form.rb - eg user_registration_form.rb (keeping logic together with view)
     #
     def create
+      posthog_capture
       @resource = resource_class.new(resource_params)
       @resource.tenant_id = Current.tenant.id if resource_class.has_attribute? :tenant_id
       @resource.user_id = Current.user.id if resource_class.has_attribute?(:user_id) && !resource_params[:user_id].present?
@@ -131,6 +139,7 @@ module DefaultActions
 
     # PATCH/PUT /users/1 or /users/1.json
     def update
+      posthog_capture
       respond_to do |format|
         if before_update_callback && @resource.update(resource_params) && update_callback
           Broadcasters::Resource.new(@resource, params.permit!).replace
@@ -160,6 +169,7 @@ module DefaultActions
 
     # DELETE /users/1 or /users/1.json
     def destroy
+      posthog_capture
       if params[:all].present? && params[:all] == "true"
         DeleteAllJob.perform_now tenant: Current.tenant, resource_class: resource_class.to_s, sql_resources: @resources.to_sql
         Current.tenant.notify action: :destroy, msg: "All #{resource_class.name.underscore.pluralize} was deleted in the background"

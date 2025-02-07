@@ -86,7 +86,7 @@ class Product < ApplicationRecord
     product.total_amount_incl_vat = item["TotalAmountInclVat"]
     product.external_reference = item["ExternalReference"]
     if product.save
-      Broadcasters::Resource.new(product).create
+      Broadcasters::Resource.new(product, { controller: "products" }).create
     end
   end
 end

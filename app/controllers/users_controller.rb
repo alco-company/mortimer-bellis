@@ -11,7 +11,7 @@ class UsersController < MortimerController
         (@resource.update(state: :out) && notice = t("users.unarchived")) :
         (@resource.archived! && notice = t("users.archived"))
       redirect_back(fallback_location: root_path, notice: notice)
-      Broadcasters::Resource.new(@resource).replace
+      Broadcasters::Resource.new(@resource, params.permit!).replace
     else
       redirect_back(fallback_location: root_path, warning: t("users.not_found"))
     end
@@ -43,7 +43,7 @@ class UsersController < MortimerController
         (@resource.update(state: :out) && notice = t("users.unarchived")) :
         (@resource.archived! && notice = t("users.archived"))
       redirect_back(fallback_location: root_path, notice: notice)
-      Broadcasters::Resource.new(@resource).replace
+      Broadcasters::Resource.new(@resource, params.permit!).replace
     else
       redirect_back(fallback_location: root_path, warning: t("users.not_found"))
     end

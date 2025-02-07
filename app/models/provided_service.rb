@@ -61,7 +61,7 @@ class ProvidedService < ApplicationRecord
   end
 
   def authorized?
-    !params.blank?
+    params.blank? ? false : Dinero::Service.new.token_fresh?
   end
 
   def service_params

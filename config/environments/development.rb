@@ -10,6 +10,8 @@ Rails.application.configure do
   # it changes. This slows down response time but is perfect for development
   # since you don't have to restart the web server when you make code changes.
   config.enable_reloading = true
+  config.hotwire.spark.html_paths += %w[ app/assets/build lib app/validators app/services app/notifiers app/mailers app/jobs ]
+
 
   #
   # testing SQLite3 enhancements

@@ -17,6 +17,11 @@ class ListItems::ProvidedService < ListItems::ListItem
     link_to resource_url(), data: { turbo_action: "advance", turbo_frame: "form", tabindex: "-1" }, class: "hover:underline" do
       plain resource.name
     end
+    unless resource.authorized?
+      span { " - " }
+      link_to I18n.t("provided_service.authorize_now"), Dinero::Service.new.auth_url("/provided_services"), class: "mort-link-primary text-sm hover:underline", target: "_top"
+      # render partial: "provided_services/#{resource.service.underscore}/authorize", locals: { path: resources_url } unless resource.authorized?
+    end
   end
 
   def show_left_mugshot

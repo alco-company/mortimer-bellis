@@ -134,7 +134,7 @@ class TimeMaterials::Form < ApplicationForm
             div(class: "col-span-4") do
               row field(:over_time).select(TimeMaterial.overtimes, class: "mort-form-select"), "mort-field my-1"
             end
-            div(class: "col-span-11") do
+            div(class: "hidden col-span-11") do
               span(class: "col-span-4 text-sm font-light text-lime-500") { calc_time_spent model.time_spent }
               # row field(:time).input(), "mort-field my-1"
             end

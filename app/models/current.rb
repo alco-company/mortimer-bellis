@@ -1,5 +1,5 @@
 class Current < ActiveSupport::CurrentAttributes
-  attribute :tenant, :user, :locale
+  attribute :tenant, :user, :locale, :posthog
 
   resets { Time.zone = nil }
 
@@ -21,6 +21,10 @@ class Current < ActiveSupport::CurrentAttributes
 
   def find_tenant(tenant_access_token)
     Current.tenant ||= Tenant.find_by(access_token: tenant_access_token) rescue nil
+  end
+
+  def posthog=(posthog)
+    super
   end
 
   def user=(user)

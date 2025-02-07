@@ -5,7 +5,7 @@ class ListItems::TimeMaterial < ListItems::ListItem
       div(class: "flex grow min-w-0 gap-x-4") do
         show_left_mugshot
         div(class: "min-w-0 flex-auto") do
-          p(class: "text-sm font-semibold leading-6 text-gray-900 truncate") do
+          p(class: "text-sm font-semibold leading-6 text-gray-900 ") do
             show_recipient_link
           end
           p(class: "mt-1 flex text-xs leading-5 text-gray-500") do
@@ -82,14 +82,14 @@ class ListItems::TimeMaterial < ListItems::ListItem
   def show_matter_link
     mugshot(resource.user, css: "sm:hidden mr-2 h-5 w-5 flex-none rounded-full bg-gray-50")
     if resource&.user&.global_queries?
-      span(class: "hidden md:inline text-xs mr-2") { show_resource_link(resource.tenant) }
+      span(class: "hidden md:inline text-xs mr-2 truncate") { show_resource_link(resource.tenant) }
     end
     link_to(edit_resource_url,
-      class: "truncate hover:underline",
+      class: " hover:underline truncate",
       data: { turbo_action: "advance", turbo_frame: "form" },
       tabindex: -1) do
       span(class: "2xs:hidden") { show_time_material_quantative unless resource.active? }
-      plain resource.name
+      span(class: " truncate") { resource.name }
     end
   end
 

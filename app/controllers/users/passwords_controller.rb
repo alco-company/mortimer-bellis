@@ -7,10 +7,30 @@ class Users::PasswordsController < Devise::PasswordsController
   #   super
   # end
 
+  def edit
+    self.resource = resource_class.new
+    set_minimum_password_length
+    resource.reset_password_token = params[:reset_password_token]
+    flash[:notice] = I18n.t("devise.passwords.update_now")
+  end
+
   # POST /resource/password
-  # def create
-  #   super
-  # end
+  def create
+    self.resource = resource_class.send_reset_password_instructions(resource_params)
+
+    if successfully_sent?(resource)
+      flash[:notice] = I18n.t("devise.passwords.send_instructions")
+      respond_to do |format|
+        format.turbo_stream { render turbo_stream: [
+          turbo_stream.replace("new_password", partial: "users/sessions/new", locals: { resource: User.new, resource_class: User, resource_name: "user" }),
+          turbo_stream.replace("flash_container", partial: "application/flash_message")
+        ] }
+        format.html         { redirect_to root_path }
+      end
+    else
+      respond_with(resource)
+    end
+  end
 
   # GET /resource/password/edit?reset_password_token=abcdef
   # def edit

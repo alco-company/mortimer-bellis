@@ -1,5 +1,6 @@
 da:
   provided_service:
+    authorize_now: "Autorisér nu!"
     modal:
       delete_all: 
         title: Slet alle udvidelser/integrationer
@@ -33,6 +34,7 @@ da:
     form:
       new: Ny udvidelse/integration
       edit: Rediger udvidelse/integration
+      show: Udvidelse/Integration
 
     new:
       title: Ny udvidelse/integration

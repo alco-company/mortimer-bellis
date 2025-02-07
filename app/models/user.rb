@@ -1,10 +1,11 @@
 class User < ApplicationRecord
-  include Tenantable
   include Localeable
   include Punchable
-  include Stateable
-  include TimeZoned
   include Settingable
+  include Stateable
+  include Tenantable
+  include TimeMaterialable
+  include TimeZoned
 
   belongs_to :team
 
@@ -18,8 +19,9 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable,
          :confirmable, :trackable, :lockable
 
+  has_many :background_jobs
+  has_many :filters
   has_many :user_invitations, class_name: "User", as: :invited_by
-  has_many :time_materials
 
   has_many :notifications, as: :recipient, dependent: :destroy, class_name: "Noticed::Notification"
   has_many :web_push_subscriptions, class_name: "Noticed::WebPush::Subscription", as: :user, dependent: :destroy

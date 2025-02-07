@@ -41,7 +41,7 @@ class TimeMaterialsController < MortimerController
         (@resource.pushed_to_erp! && notice = t("time_material.unarchived")) :
         (@resource.archived! && notice = t("time_material.archived"))
       redirect_back(fallback_location: root_path, notice: notice)
-      Broadcasters::Resource.new(@resource).replace
+      Broadcasters::Resource.new(@resource, { controller: "time_materials" }).replace
     else
       redirect_back(fallback_location: root_path, warning: t("users.not_found"))
     end

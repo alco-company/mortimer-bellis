@@ -85,7 +85,26 @@ END
 - location status (like user, team) - missing
 - user status - https://localhost:3000/pos/users?api_key=mVunTFDgFVud5qJAHgrHbp4P
 - fix bug in deleting invoices
-- add invoice items - if exist on customer
+- handle Dinero::Service.refresh_token error better - inform user to re-authenticate service
+
+### 6/2/2025
+
+- background_jobs - run each */* to refresh token
+- provide better text on confirming email show action
+- add background_job when new dinero provided_service is created
+- update list of customers, products, invoices when sync_erp'ing
+
+### 5/2/2025
+
+- remove information on time logged on time_material/play
+- fix regression on kill_tenant_job
+- add posthog to project
+- inform user when wrong password used, more
+
+### 4/2/2025
+
+- add invoice items to invoice - if invoice exist on customer at Dinero
+- add hotwire-spark to project
 
 ### 3/2/2025
 

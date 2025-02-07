@@ -115,7 +115,7 @@ class Invoice < ApplicationRecord
     invoice.is_mobile_pay_invoice_enabled = item["IsMobilePayInvoiceEnabled"]
     invoice.is_penso_pay_enabled = item["IsPensoPayEnabled"]
     if invoice.save
-      Broadcasters::Resource.new(invoice).create
+      Broadcasters::Resource.new(invoice, { controller: "invoices" }).create
     end
   end
 end

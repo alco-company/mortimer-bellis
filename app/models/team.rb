@@ -6,7 +6,7 @@ class Team < ApplicationRecord
   include Calendarable
   include TimeZoned
 
-  has_many :users, dependent: :destroy
+  has_many :users
   has_many :punch_cards, through: :users
   # has_and_belongs_to_many :users
 
