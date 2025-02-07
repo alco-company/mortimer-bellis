@@ -89,6 +89,10 @@ END
 - check all icon files - for PWA and all
 - timer på desktop
 
+### 8/2/2025
+
+- make home prettier
+
 ### 7/2/2025
 
 - add landing page (home#show)
