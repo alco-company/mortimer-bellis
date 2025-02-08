@@ -1,13 +1,16 @@
 # README
 
 Mortimer Time & Attendance (MTA) is a lean take on the centuries old 'punch clock'. You get a back office
-with tenants, users, locations, punch_clocks, teams, employees, and you get a front office with
-punch_cards, and punches.
+with tenants, users, locations, punch_clocks, teams, more, and you get a _front office_ with
+time_material, punch_cards, and punches.
 
-MTA will email you a summary every morning at 05:00 highlighting what is important - employees working more than what has been
+Later MTA will email you a summary every morning at 05:00 highlighting what is important - employees/users working more than what has been
 agreed with them, employees working less, and employees not been working at all.
 
-MTA will allow you to pull essential payroll data when your next payroll data contribution date nears.
+Further down the road MTA will allow you to pull essential payroll data when your next payroll data contribution date nears.
+
+But for now - MTA is a simple time and attendance system that will allow you to keep track of your employees' time, and 
+allow you to bill your customers for the time your employees have spent on their projects, and materials used.
 
 ## REFERENCES
 
@@ -63,6 +66,8 @@ small dataset. All you have to do is sign up - with the first user being a 'supe
 ## Maintenance
 
 There are 2 shell scripts in the `bin` directory that you can use to maintain your MTA installation. The `bin/backup_dev` script
-will backup your development database to a file in the `db` directory. The `bin/backup_prod` will do the same for your production.
+will backup your development database to a file in the `db` directory. The `bin/backup_prod` will do the same for your production. 
+
+Please note that both scripts are cut to measure - you most likely will have to adjust them to your environment!
 
 If the SQLite3 database is broken there's a fair chance `bin/fixsql` just might come through for you.

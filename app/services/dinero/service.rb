@@ -256,10 +256,9 @@ class Dinero::Service < SaasService
 
       case true
       when res.response.code == "200"; { ok: res }
-      when res.response.code == "201"; debugger; { ok: res }
+      when res.response.code == "201"; { ok: res }
       when res["code"].to_i < 200; report_error(work, res.response.code, res); { error: res }
       else
-        debugger
         report_error(work, res.response.code, res.response)
         { error: res.response.code }
       end

@@ -92,6 +92,8 @@ END
 ### 8/2/2025
 
 - make home prettier
+- forgot about a debugger statement or two
+- straighten the README.md and REFERENCE.md
 
 ### 7/2/2025
 
