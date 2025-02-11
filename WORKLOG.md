@@ -69,7 +69,9 @@ END
   }
 }
 
+- adding cache strategy (using fastest cache technology ATM) -- se https://blog.appsignal.com/2024/01/17/speed-up-your-ruby-on-rails-application-with-litecache.html
 - loading skeleton frames on all lists - using https://www.driftingruby.com/episodes/skeleton-frames
+- add editor to content - https://github.com/avo-hq/marksmith
 - run spinner on submitting forms - https://github.com/edudepetris/rails-8-turbo-morph-and-stream/commit/ff69db6050f8ace429fb05ac926a01031bcb67c3
 - TODO - fit mugshot (see users/registrations_controller)
 - tasks in tree structure - https://www.codemancers.com/blog/maintaining-a-tree-structure-in-rails-with-the-ancestry-gem/
@@ -89,6 +91,10 @@ END
 - check all icon files - for PWA and all
 - timer på desktop
 
+### 11/2/2025
+
+- add batch_actions (brad_gessler inspiration) - take 1: mechanics
+
 ### 8/2/2025
 
 - make home prettier
@@ -100,7 +106,6 @@ END
 - add landing page (home#show)
 - fix redirects on sign_in and sign_up as a result of new landing page
 - bugs on invoice_draft 
-
 
 ### 6/2/2025
 

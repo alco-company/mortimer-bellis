@@ -70,6 +70,7 @@ class ListItems::ListItem < ApplicationComponent
   end
 
   def show_left_mugshot
+    input(type: "checkbox", name: "batch[ids][]", value: resource.id, class: "mort-form-checkbox")
     mugshot(resource.user, css: "hidden sm:block h-12 w-12 flex-none rounded-full bg-gray-50")
   end
 
