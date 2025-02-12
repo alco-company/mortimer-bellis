@@ -62,9 +62,9 @@ class ListItems::TimeMaterial < ListItems::ListItem
 
   def background
     return "bg-green-200" if resource.active?
-    return "bg-yellow-200" if resource.paused?
+    return "bg-orange-200" if resource.paused?
     return "bg-gray-50" if !resource.pushed_to_erp? and !resource.cannot_be_pushed?
-    return "bg-gray-500/20" if resource.pushed_to_erp?
+    return "bg-gray-200" if resource.pushed_to_erp?
     return "bg-yellow-400/50" if resource.cannot_be_pushed?
     "bg-gray-50"
   end

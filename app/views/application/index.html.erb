@@ -1,12 +1,13 @@
-<%= render partial: "header" %>
 <!-- List -->
 <%= turbo_stream_from @resources_stream %>
-  <%= form_with model: @batch, id: "batch_form" do |form| %>
-      <%= form.hidden_field :id%>
-      <%= form.hidden_field :entity %>
-      <%= form.check_box :all, class: "mort-form-checkbox" %>
-      <div id="list" role="list" class="mb-16">
-        <%= render List.new records: @records, pagy: @pagy, initial: true, params: params, user: Current.user %>
-      </div>
-  <% end %>
+<%= form_with model: @batch, id: "batch_form", data: { controller: "list" } do |form| %>
+  <%= render partial: "header", locals: { batch_form: form } %>
+  <%= form.hidden_field :id%>
+  <%= form.hidden_field :entity %>
+  <%= form.hidden_field :ids_range, value: "#{@records.first.id}..#{@records.last.id}" %>
+
+  <div id="list" role="list" class="mb-16">
+    <%= render List.new records: @records, pagy: @pagy, initial: true, params: params, user: Current.user %>
+  </div>
+<% end %>
 <%#= render partial: "pagination" if @pagy.pages > 1 %>

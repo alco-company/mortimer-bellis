@@ -6,6 +6,13 @@ class Batch < ApplicationRecord
     @entities ||= find_entities
   end
 
+  def ids_range
+    is= ids.split(",").collect { |i| i.to_i }.sort
+    is.first..is.last
+  rescue
+    0..0
+  end
+
   private
     def find_entities
       entity_class = entity.constantize

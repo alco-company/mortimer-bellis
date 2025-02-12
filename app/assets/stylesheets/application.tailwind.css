@@ -237,6 +237,10 @@ dialog {
 
 }
 
+.button_to {
+  @apply mb-0;
+}
+
 .pagy {
   @apply flex space-x-1 font-thin text-sm text-sky-600;
 

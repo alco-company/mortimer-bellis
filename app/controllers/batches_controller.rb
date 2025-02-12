@@ -37,13 +37,14 @@ class BatchesController < ApplicationController
       params.expect(batch: [ :id, :entity, :all, :user_id, :ids ])
     end
 
-    # TODO handle multiple pages with selected items
-    #
     def merge_ids
       params[:batch][:ids] = if params.dig(:batch, :all) == "1"
         ""
       else
-        params[:batch][:ids].join(",")
+        range = eval params.dig(:batch, :ids_range)
+        ids_old = @batch&.ids.blank? ? [] : @batch&.ids.split(",").collect { |i| i.to_i }.sort
+        ids_new = params.dig(:batch, :ids).collect { |i| i.to_i }.sort
+        params[:batch][:ids] = ids_old.filter { |i| range.include? i }.empty? ? ids_old + ids_new : ids_new
       end
     end
 end

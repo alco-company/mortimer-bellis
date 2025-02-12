@@ -3,7 +3,12 @@
   <div data-controller="header" class="border-b border-gray-200 pb-5">
     <div class="flex items-center sm:justify-between">
       <div class="sm:w-0 flex-1">
-        <h1 id="message-heading" class="text-base font-semibold leading-6 pl-2 text-gray-900"><%= t("#{ resource_class.table_name}.list.title") %></h1>
+        <% if (batch_form rescue false) %>
+          <%= batch_form.check_box :all, class: "hidden batch mort-form-checkbox ml-2" %>
+          <span id="message-heading" class="text-base font-semibold leading-6 pl-6 text-gray-900"><%= t("#{ resource_class.table_name}.list.title") %></span>
+        <% else %>
+          <h1 id="message-heading" class="text-base font-semibold leading-6 pl-6 text-gray-900"><%= t("#{ resource_class.table_name}.list.title") %></h1>
+        <% end %>
         <p class=" mt-1 truncate pl-2 text-sm text-gray-500">
           <% case @filter_form %>
           <% when "background_jobs" %>
@@ -50,6 +55,13 @@
             </span>
           <% end %>
         <% end %>
+
+        <% if (batch_form rescue false) %>
+          <span class="batch hidden inline-flex items-center group rounded-md bg-gray-100 px-2 py-1.5 text-xs font-medium text-gray-600 hover:text-white hover:bg-gray-400 sm:ring-1 ring-inset ring-gray-500/10">
+            <%= batch_form.submit "Vælg", class: "text-gray-400 group-hover:text-white text-2xs" %>
+          </span>
+        <% end %>
+
         <div class="relative ml-3 inline-block text-left">
           <%= render_contextmenu list: @resources, resource_class: resource_class %>
         </div>

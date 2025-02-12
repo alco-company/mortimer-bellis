@@ -80,6 +80,7 @@ END
 - pwa-installation.js + joy of rails
 - consider https://bunny.net/ for image optimization and CDN as CloudFlare substitute
 - pickup the mobile moving - ask if driving - enter odometer
+- consider https://terminalwire.com/articles/superview
 - fix bug on sending email invitation to new user
 - validate punches before deleting punch_clocks !!
 - invoices
@@ -90,6 +91,12 @@ END
 - handle Dinero::Service.refresh_token error better - inform user to re-authenticate service
 - check all icon files - for PWA and all
 - timer på desktop
+- check that import users still works
+- add batch_actions (brad_gessler inspiration) - take 3: SQL
+
+### 12/2/2025
+
+- add batch_actions (brad_gessler inspiration) - take 2: UI
 
 ### 11/2/2025
 

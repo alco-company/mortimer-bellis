@@ -26,6 +26,7 @@ da:
   save: Gem
   create: Opret 
   filter: Filtrér
+  batch: Udvælg
   sort: Sortér
   select: Vælg (poster)
   delete: Slet
