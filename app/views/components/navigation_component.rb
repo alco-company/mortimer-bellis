@@ -219,6 +219,7 @@ class NavigationComponent < ApplicationComponent
             background_jobs: { title: "background_jobs", url: "/background_jobs", icon: "background_job" },
             customers: { title: "customers", url: "/customers", icon: "customer" },
             dashboards: { title: "dashboards", url: "/dashboards", icon: "home" },
+            filters: { title: "filters", url: "/filters", icon: "filter" },
             invoices: { title: "invoices", url: "/invoices", icon: "invoice" },
             invoice_items: { title: "invoice_items", url: "/invoice_items", icon: "invoice_item" },
             kiosks: { title: "kiosks", url: "/punch_clocks", icon: "punch_clock" },

@@ -68,7 +68,7 @@ class Filters::Form < ApplicationForm
     super(resource: resource, **options)
     @resource = @model = resource
     @filter_form = filter_form
-    @filtered_model = filter_form.classify.constantize
+    @filtered_model = filter_form.classify.constantize rescue resource.view.classify.constantize
     @params = params
     @fields = options[:fields] || []
     @fields = @fields.any? ? @fields : filtered_model.attribute_types.keys
@@ -79,7 +79,7 @@ class Filters::Form < ApplicationForm
     div(data_controller: "filter") do
       row field(:url).hidden(value: @url)
       row field(:filter_form).hidden(value: @filter_form)
-
+      h3(class: "text-lg font-medium") { I18n.t("filters.filter_for", model: I18n.t("#{filtered_model.to_s.underscore.pluralize}.list.title")) }
       div do
         tabs
         tabs_content

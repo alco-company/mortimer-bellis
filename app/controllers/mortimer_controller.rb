@@ -1,13 +1,13 @@
 class MortimerController < BaseController
   #
+  # defined in the batch_actions concern
+  before_action :set_batch, only: %i[ index destroy]
+  #
   # defined in the resourceable concern
   before_action :set_resource, only: %i[ new show edit update destroy ]
   before_action :set_filter, only: %i[ index destroy ]
   before_action :set_resources, only: %i[ index destroy ]
   before_action :set_resources_stream
-  #
-  # defined in the batch_actions concern
-  before_action :set_batch, only: :index
 
   include Resourceable
   include BatchActions

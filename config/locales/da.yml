@@ -232,33 +232,34 @@ da:
         instruction: Er du sikker på at du vil slette profilbilledet?
 
   menu:
-    login: Log ind
-    home: Hjem
-    calendars: Kalendere
-    pages: Sider
-    holidays: Helligdage
-    tenant: Konto
-    punch_clocks: Stempelure
-    punch_cards: Stempelkort
-    motds: Dagens beskeder
-    dashboard: Overblik
-    time_material: Tid/Materialer
-    calendar: Kalender
-    manage: Administration
     background_jobs: Baggrundsopgaver
+    calendar: Kalender
+    calendars: Kalendere
     customers: Kunder
+    dashboard: Overblik
     dashboards: Overblik
+    filters: Filtre
+    home: Hjem
+    holidays: Helligdage
     invoices: Fakturaer
     invoice_items: Fakturalinjer
     kiosks: Kiosker
     locations: Arbejdssteder
+    login: Log ind
+    manage: Administration
+    motds: Dagens beskeder
+    oauth_applications: API adgang
+    pages: Sider
     products: Produkter
     projects: Projekter
     punches: Stemplinger
-    tasks: Opgaver
+    punch_cards: Stempelkort
+    punch_clocks: Stempelure
     teams: Hold
+    tenant: Konto
     tenants: Konti
-    oauth_applications: API adgang
+    tasks: Opgaver
+    time_material: Tid/Materialer
     users: Medarbejdere
 
     pos:
@@ -497,6 +498,10 @@ da:
         title: titel 
         description: beskrivelse
       filter:
+        view: Liste (fx kunder)
+        filter: JSON formateret filter
+        state: Status
+        name: Navn
         created_at: Oprettet den
         updated_at: Opdateret den
         customer_id: Kunde
@@ -1065,6 +1070,11 @@ da:
         other: brugere
       
     errors:
+      resources:
+        resource_class:
+          not_found: "%{ctrl} blev ikke fundet, pga: %{reason}"
+          record_invalid: "Posten findes ikke"
+          no_permission: "Du har ikke tilladelse til at udføre denne handling"
       messages:
         record_invalid: "Posten findes ikke"
         not_found: "%{model} blev ikke fundet"

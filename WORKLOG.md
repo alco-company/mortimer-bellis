@@ -69,6 +69,7 @@ END
   }
 }
 
+- use passwordless authentication - https://blog.saeloun.com/2024/11/26/passwordless-authentication-using-webauth/
 - adding cache strategy (using fastest cache technology ATM) -- se https://blog.appsignal.com/2024/01/17/speed-up-your-ruby-on-rails-application-with-litecache.html
 - loading skeleton frames on all lists - using https://www.driftingruby.com/episodes/skeleton-frames
 - add editor to content - https://github.com/avo-hq/marksmith
@@ -92,6 +93,9 @@ END
 - check all icon files - for PWA and all
 - timer på desktop
 - check that import users still works
+
+### 14/2/2025 (12-14/2/2025)
+
 - add batch_actions (brad_gessler inspiration) - take 3: SQL
 
 ### 12/2/2025
