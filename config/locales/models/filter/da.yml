@@ -1,0 +1,58 @@
+da:
+  filter:
+    title: Filter
+    modal:
+      delete_all: 
+        title: Slet alle filtre
+        instruction: Er du sikker på, at du vil slette alle filtre?
+      delete:
+        title: Slet dette filter
+        instruction: Er du sikker på, at du vil slette filteret %{name}?
+        button: Slet
+
+  filters:
+    filter_for: Filter for %{model}
+    filtered: Filtreret
+    batched: Udvalgte
+    default_filter: Filter
+    validation_errors: Der er fejl i det indtastede
+
+    create:
+      post: Filteret blev oprettet
+    update:
+      post: Filteret blev opdateret
+    destroy:
+      post: Filteret blev slettet
+
+    list:
+      title: Filtre
+      new: Nyt filter
+      edit: Rediger
+      delete: Slet
+      show: Vis
+      name: Navn
+      view: Liste
+      filter: JSON formateret filter
+      state: Status
+      updated_at: Opdateret den
+
+    form:
+      new: Nyt filter
+      edit: Rediger filter
+      show: Vis filter
+
+    new:
+      title: Nyt filter
+      create: Opret
+
+    edit:
+      title: Rediger filter
+      update: Opdater
+
+    show:
+      title: filter
+      back: Tilbage
+
+    errors:
+      messages:
+        name_exist: "Filteret findes allerede"

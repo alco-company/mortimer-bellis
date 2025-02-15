@@ -1,5 +1,9 @@
-class FiltersController < BaseController
-  include Authentication
+class FiltersController < MortimerController
+  # include Authentication
+  # defined in the batch_actions concern
+  # before_action :set_batch, only: %i[ index destroy]
+  # before_action :set_resource_class
+  # before_action :set_resources_stream
 
   def new
     @filter_form = params[:filter_form]
@@ -11,7 +15,7 @@ class FiltersController < BaseController
   def edit
     @filter_form = params[:filter_form]
     @resource = @filter = Filter.find(params[:id])
-    @url = params[:url]
+    @url = @filter_form == "filters" ? resources_url : params[:url]
     @filter.filter ||= {}
   end
 
@@ -65,4 +69,27 @@ class FiltersController < BaseController
     def create_params
       params.expect(filter: [ :form, :preset ]) # , filter_formrequire(filter).permit!
     end
+
+  # def set_resources_stream
+  #   tenant = Current.tenant || @resource&.tenant || nil
+  #   @resources_stream ||= tenant.nil? ?
+  #     "1_#{resource_class.to_s.underscore.pluralize}" :
+  #     "%s_%s" % [ tenant&.id, resource_class.to_s.underscore.pluralize ]
+  # end
+
+  # def resource_class
+  #   @resource_class ||= set_resource_class
+  # end
+
+  # def set_resource_class
+  #   ctrl = params.dig(:controller).split("/").last
+  #   case ctrl
+  #   # when "invitations"; UserInvitation
+  #   when "notifications"; Noticed::Notification
+  #   when "applications"; Oauth::Application
+  #   else; ctrl.classify.constantize
+  #   end
+  # rescue => e
+  #   redirect_to "/", alert: I18n.t("errors.resources.resource_class.not_found", ctrl: params.dig(:controller), reason: e.to_s) and return
+  # end
 end

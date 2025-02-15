@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_01_22_083558) do
+ActiveRecord::Schema[8.1].define(version: 2025_02_11_161111) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -52,6 +52,18 @@ ActiveRecord::Schema[8.1].define(version: 2025_01_22_083558) do
     t.datetime "updated_at", null: false
     t.index ["tenant_id"], name: "index_background_jobs_on_tenant_id"
     t.index ["user_id"], name: "index_background_jobs_on_user_id"
+  end
+
+  create_table "batches", force: :cascade do |t|
+    t.integer "tenant_id", null: false
+    t.integer "user_id", null: false
+    t.string "entity"
+    t.boolean "all"
+    t.text "ids"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["tenant_id"], name: "index_batches_on_tenant_id"
+    t.index ["user_id"], name: "index_batches_on_user_id"
   end
 
   create_table "calendars", force: :cascade do |t|
@@ -742,6 +754,8 @@ ActiveRecord::Schema[8.1].define(version: 2025_01_22_083558) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "background_jobs", "tenants"
   add_foreign_key "background_jobs", "tenants", on_delete: :cascade
+  add_foreign_key "batches", "tenants"
+  add_foreign_key "batches", "users"
   add_foreign_key "calendars", "tenants"
   add_foreign_key "calls", "tenants"
   add_foreign_key "customers", "tenants"

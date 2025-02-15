@@ -4,9 +4,9 @@ class List < ApplicationComponent
   include Phlex::Rails::Helpers::ButtonTo
   include Phlex::Rails::Helpers::Flash
 
-  attr_reader :records, :pagy, :order_by, :group_by, :initial, :params, :user
+  attr_reader :records, :pagy, :order_by, :group_by, :initial, :params, :user, :batch_form
 
-  def initialize(records:, pagy:, initial: false, replace: false, filter: nil, params: {}, user: User.new, group_by: nil, order_by: nil, &block)
+  def initialize(records:, pagy:, initial: false, replace: false, filter: nil, params: {}, batch_form: nil, user: User.new, group_by: nil, order_by: nil, &block)
     @order_by = order_by
     @group_by = group_by
     @records = records
@@ -19,6 +19,7 @@ class List < ApplicationComponent
     @pagy = pagy
     @params = params
     @user = user
+    @batch_form = batch_form
   end
 
   def view_template(&block)
@@ -66,7 +67,7 @@ class List < ApplicationComponent
   end
 
   def replace_list_header
-    turbo_stream.replace("#{user.id}_list_header", partial: "application/header")
+    turbo_stream.replace("#{user.id}_list_header", partial: "application/header", locals: { batch_form: batch_form })
 
     # turbo_frame_tag "#{user.id}_list_header" do
     #   button_to helpers.filter_url(@filter, url: resources_url), method: :delete, class: "group relative ml-2 h-3.5 w-3.5 rounded-sm hover:bg-gray-500/20", data: { turbo_stream: true } do

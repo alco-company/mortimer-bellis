@@ -126,8 +126,9 @@ class ApplicationRecord < ActiveRecord::Base
     ApplicationForm.new resource: resource, editable: editable, fields: fields
   end
 
+  # FIXME - implement this method on models that have users
   def self.user_scope(scope)
-    all.by_tenant()
+    nil # all.by_tenant()
     # case scope
     # when "all"; all
     # when "mine"; where(user_id: Current.user.id)
@@ -135,8 +136,9 @@ class ApplicationRecord < ActiveRecord::Base
     # end
   end
 
+  # FIXME - implement this method on models that have users/teams
   def self.named_scope(scope)
-    all.by_tenant()
+    nil # all.by_tenant()
     # users = User.where name: "%#{scope}%"
     # team_users = User.where team_id: Team.where_op(:matches, name: "%#{scope}%").pluck(:id)
     # users = users + team_users if team_users.any?

@@ -1,4 +1,4 @@
-class ModalController < BaseController
+class ModalController < MortimerController
   before_action :set_vars, only: [ :new, :show, :create, :destroy, :update ]
   skip_before_action :authenticate_user!, only: [ :destroy ]
   skip_before_action :check_session_length, only: [ :destroy ]
@@ -57,22 +57,22 @@ class ModalController < BaseController
       @view = params[:view] || "month"
     end
 
-    def resource
-      if params[:id].present?
-        @resource = resource_class.find(params[:id]) rescue resource_class.new
-      else
-        @resource = resource_class.new
-      end
-    end
+    # def resource
+    #   if params[:id].present?
+    #     @resource = resource_class.find(params[:id]) rescue resource_class.new
+    #   else
+    #     @resource = resource_class.new
+    #   end
+    # end
 
-    def resource_class
-      @resource_class ||= case params[:resource_class]
-      # when "invitations"; UserInvitation
-      when "notifications"; Noticed::Notification
-      when "doorkeeper/application"; Oauth::Application
-      else; params[:resource_class].classify.constantize rescue nil
-      end
-    end
+    # def resource_class
+    #   @resource_class ||= case params[:resource_class]
+    #   # when "invitations"; UserInvitation
+    #   when "notifications"; Noticed::Notification
+    #   when "doorkeeper/application"; Oauth::Application
+    #   else; params[:resource_class].classify.constantize rescue nil
+    #   end
+    # end
 
     #
     # --------------------------- NEW --------------------------------
@@ -282,48 +282,40 @@ class ModalController < BaseController
       render_to_string "employees/report_state", layout: "pdf", formats: :pdf
     end
 
-    def resources_url(**options)
-      return url_for(controller: resource_class.to_s.underscore.pluralize, action: :index, **options) if options.delete(:rewrite).present?
-      @resources_url ||= url_for(controller: resource_class.to_s.underscore.pluralize, action: :index, **options)
-    end
+    # def resources_url(**options)
+    #   return url_for(controller: resource_class.to_s.underscore.pluralize, action: :index, **options) if options.delete(:rewrite).present?
+    #   @resources_url ||= url_for(controller: resource_class.to_s.underscore.pluralize, action: :index, **options)
+    # end
 
-    def set_resources
-      @resources = any_filters? ? @filter.do_filter(resource_class) : resource_class.by_tenant()
-      @resources = any_sorts? ? resource_class.ordered(@resources, params[:s], params[:d]) : @resources.order(created_at: :desc)
-    end
+    # def set_resources
+    #   @resources = any_filters? ? @filter.do_filter(resource_class) : resource_class.by_tenant()
+    #   @resources = any_sorts? ? resource_class.ordered(@resources, params[:s], params[:d]) : @resources.order(created_at: :desc)
+    # end
 
-    def set_filter(view = params[:controller].split("/").last)
-      @filter_form = resource_class.to_s.underscore.pluralize
-      @filter = Filter.where(tenant: Current.tenant).where(view: view).take || Filter.new
-      @filter.filter ||= {}
+    # def set_filter(view = params[:controller].split("/").last)
+    #   @filter_form = resource_class.to_s.underscore.pluralize
+    #   @filter = Filter.where(tenant: Current.tenant).where(view: view).take || Filter.new
+    #   @filter.filter ||= {}
+    # end
+
+    def set_resource_class
+      @resource_class = params.dig(:resource_class).classify.constantize
+    rescue => e
+      redirect_to "/", alert: I18n.t("errors.resources.resource_class.not_found", ctrl: params.dig(:resource_class), reason: e.to_s) and return
     end
 
     def verify_api_key
-      return false unless params[:api_key].present? && @resource && @resource.respond_to?(:access_token)
-      @resource.access_token == params[:api_key] || redirect_to(new_user_session_path)
+      return false unless params.dig(:api_key) && @resource && @resource.respond_to?(:access_token)
+      @resource.access_token == params.dig(:api_key) || redirect_to(new_user_session_path)
     end
 
     def any_filters?
-      return false if @filter.nil? or params[:controller].split("/").last == "filters"
-      !@filter.id.nil?
+      return false if @filter.nil? or params.dig(:controller).split("/").last == "filters" or params.dig(:action) == "lookup"
+      # !@filter.id.nil?
+      @filter.persisted?
     end
 
     def any_sorts?
-      params[:s].present?
+      params.dig :s
     end
 end
-
-
-# case params[:modal_form]
-# when "payroll"
-#   params[:update_payroll] = params[:update_payroll] == "on" ? true : false
-#    DatalonPreparationJob.perform_later tenant: Current.tenant, last_payroll_at: Date.parse(params[:last_payroll_at]), update_payroll: params[:update_payroll]
-# end
-
-# html_filename = Rails.root.join("tmp", "report_state.html")
-# pdf_filename = Rails.root.join("tmp", "#{Current.user.id}_report_state.pdf")
-# File.open(html_filename, "w") { |f| f.write(html) }
-# if BuildPdfJob.new.perform(html: html_filename, pdf: pdf_filename)
-#   TenantMailer.with(tenant: Current.tenant, tmpfiles: [ pdf_filename.to_s ]).report_state.deliver_later
-# end
-# UserEuStateJob.perform_later tenant: Current.tenant

@@ -3,7 +3,9 @@
   <div data-controller="header" class="border-b border-gray-200 pb-5">
     <div class="flex items-center sm:justify-between">
       <div class="sm:w-0 flex-1">
-        <h1 id="message-heading" class="text-base font-semibold leading-6 pl-2 text-gray-900"><%= t("#{ resource_class.table_name}.list.title") %></h1>
+        <input name="batch[all]" type="hidden" value="0" autocomplete="off">
+        <input class="hidden batch mort-form-checkbox ml-2" type="checkbox" value="1" checked="checked" name="batch[all]" id="batch_all">
+        <span id="message-heading" class="text-base font-semibold leading-6 pl-6 text-gray-900"><%= t("#{ resource_class.table_name}.list.title") %></span>
         <p class=" mt-1 truncate pl-2 text-sm text-gray-500">
           <% case @filter_form %>
           <% when "background_jobs" %>
@@ -23,9 +25,9 @@
           <% when 'teams' %>
             <%= link_to_team_users_status('all') %>
           <% end %>
-          <%= button_to filter_url(@filter, filter: {url: resources_url}), method: :delete, class: "group relative ml-2 h-3.5 w-3.5 rounded-sm hover:bg-gray-500/20", data: { turbo_stream: true } do %>
+          <%= link_to filter_url(@filter, filter: {url: resources_url}), data: { turbo_method: :delete }, class: "group relative ml-2 h-3.5 w-3.5 rounded-sm hover:bg-gray-500/20" do %>
             <span class=" <%= "hidden" unless any_filters? %> inline-flex items-center rounded-md bg-gray-50 px-1.5 py-0.5 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10">
-              filtered
+              <%= t("filters.filtered") %>
               <span class="sr-only">Remove</span>
               <svg viewBox="0 0 14 14" class="h-3.5 w-3.5 stroke-gray-700/50 group-hover:stroke-gray-700/75">
                 <path d="M4 4l6 6m0-6l-6 6" />
@@ -34,6 +36,17 @@
               </button>
             </span>
           <% end if any_filters? %>
+          <%= link_to batch_url(@batch, batch: {url: resources_url+"?replace=true", action: :destroy}), data: { turbo_method: :delete }, class: "group relative ml-2 h-3.5 w-3.5 rounded-sm hover:bg-gray-500/20" do %>
+            <span class=" <%= "hidden" unless @batch&.batch_set? %> inline-flex items-center rounded-md bg-gray-50 px-1.5 py-0.5 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10">
+              <%= t("filters.batched") %>
+              <span class="sr-only">Remove</span>
+              <svg viewBox="0 0 14 14" class="h-3.5 w-3.5 stroke-gray-700/50 group-hover:stroke-gray-700/75">
+                <path d="M4 4l6 6m0-6l-6 6" />
+              </svg>
+              <span class="absolute -inset-1"></span>
+              </button>
+            </span>
+          <% end %>
         </p>
       </div>
 
@@ -50,6 +63,12 @@
             </span>
           <% end %>
         <% end %>
+
+        <span class="batch hidden inline-flex items-center group rounded-md bg-gray-100 px-2 py-1.5 text-xs font-medium text-gray-600 hover:text-white hover:bg-gray-400 sm:ring-1 ring-inset ring-gray-500/10">
+          <input type="hidden" name="url" value="<%= resources_url %>">
+          <input type="submit" name="commit" value="Vælg" class="text-gray-400 group-hover:text-white text-2xs" data-disable-with="Vælg">
+        </span>
+
         <div class="relative ml-3 inline-block text-left">
           <%= render_contextmenu list: @resources, resource_class: resource_class %>
         </div>

@@ -69,7 +69,10 @@ END
   }
 }
 
+- use passwordless authentication - https://blog.saeloun.com/2024/11/26/passwordless-authentication-using-webauth/
+- adding cache strategy (using fastest cache technology ATM) -- se https://blog.appsignal.com/2024/01/17/speed-up-your-ruby-on-rails-application-with-litecache.html
 - loading skeleton frames on all lists - using https://www.driftingruby.com/episodes/skeleton-frames
+- add editor to content - https://github.com/avo-hq/marksmith
 - run spinner on submitting forms - https://github.com/edudepetris/rails-8-turbo-morph-and-stream/commit/ff69db6050f8ace429fb05ac926a01031bcb67c3
 - TODO - fit mugshot (see users/registrations_controller)
 - tasks in tree structure - https://www.codemancers.com/blog/maintaining-a-tree-structure-in-rails-with-the-ancestry-gem/
@@ -78,6 +81,7 @@ END
 - pwa-installation.js + joy of rails
 - consider https://bunny.net/ for image optimization and CDN as CloudFlare substitute
 - pickup the mobile moving - ask if driving - enter odometer
+- consider https://terminalwire.com/articles/superview
 - fix bug on sending email invitation to new user
 - validate punches before deleting punch_clocks !!
 - invoices
@@ -88,6 +92,19 @@ END
 - handle Dinero::Service.refresh_token error better - inform user to re-authenticate service
 - check all icon files - for PWA and all
 - timer på desktop
+- check that import users still works
+
+### 14/2/2025 (12-14/2/2025)
+
+- add batch_actions (brad_gessler inspiration) - take 3: SQL
+
+### 12/2/2025
+
+- add batch_actions (brad_gessler inspiration) - take 2: UI
+
+### 11/2/2025
+
+- add batch_actions (brad_gessler inspiration) - take 1: mechanics
 
 ### 8/2/2025
 
@@ -100,7 +117,6 @@ END
 - add landing page (home#show)
 - fix redirects on sign_in and sign_up as a result of new landing page
 - bugs on invoice_draft 
-
 
 ### 6/2/2025
 

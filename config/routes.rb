@@ -70,6 +70,7 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :batches
   resources :invoice_items
 
   resources :products, concerns: [ :lookupable, :erp_pullable ]

@@ -101,7 +101,7 @@ export default class extends Controller {
     e.preventDefault()
     let se = this.selectorTarget
     let selected = se.options == undefined ? se.value : se.options[se.selectedIndex].value
-    let url = `filter_fields?field=${this.inputTarget.name}&value=${this.inputTarget.value}&selected=${selected}`
+    let url = `/filter_fields?field=${this.inputTarget.name}&value=${this.inputTarget.value}&selected=${selected}`
     const response = await fetch(encodeURI(url), {
       method: "GET",
       // body: JSON.stringify({ promo_code: this.promoCodeTarget.value }),

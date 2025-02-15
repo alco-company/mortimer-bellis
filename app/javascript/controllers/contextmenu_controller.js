@@ -43,8 +43,10 @@ export default class extends Controller {
       ) {
         // changed your solution with crispinheneise's recommendation and added additional check:
         // event.preventDefault();
-        if( event.target.tagName != 'A')
+        console.log("event.target.tagName: ", event.target.tagName);
+        if( event.target.tagName != 'A' && event.target.tagName != 'BUTTON' ) {
           return;
+        }
       }
 
       this.buttonTarget.setAttribute("aria-expanded", "false");
