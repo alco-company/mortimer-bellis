@@ -94,6 +94,10 @@ END
 - timer på desktop
 - check that import users still works
 
+### 17/2/2025
+
+- fix bug on selecting time_materials on users.name, more
+
 ### 14/2/2025 (12-14/2/2025)
 
 - add batch_actions (brad_gessler inspiration) - take 3: SQL

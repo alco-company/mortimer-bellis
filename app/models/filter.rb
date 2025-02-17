@@ -148,8 +148,13 @@ class Filter < ApplicationRecord
   end
 
   def self.named_scope(scope)
-    (User[:name].matches("%#{scope}%")).
-    or(User[:team_id].in(Team.arel_table.project(:id).where(Team[:name].matches("%#{scope}%"))))
+    TimeMaterial.arel_table[:user_id].
+    in(
+      User.arel_table.project(:id).where(
+        User[:name].matches("%#{scope}%").
+        or(User[:team_id].in(Team.arel_table.project(:id).where(Team[:name].matches("%#{scope}%"))))
+      )
+    )
   end
 
   # def self.user_scope(scope)
