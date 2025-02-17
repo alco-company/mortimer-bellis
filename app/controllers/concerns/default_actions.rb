@@ -18,6 +18,8 @@ module DefaultActions
         format.csv { send_csv }
       end
 
+    rescue Pagy::OverflowError => e
+      head :ok
     rescue => e
       UserMailer.error_report(e.to_s, "DefaultActions#index - failed with params: #{params}").deliver_later
       redirect_to root_path, alert: I18n.t("errors.messages.something_went_wrong", error: e.message)

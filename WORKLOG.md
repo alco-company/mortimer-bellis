@@ -97,6 +97,7 @@ END
 ### 17/2/2025
 
 - fix bug on selecting time_materials on users.name, more
+- fix bug "expected :page in 1..1; got 2"
 
 ### 14/2/2025 (12-14/2/2025)
 
