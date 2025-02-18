@@ -80,7 +80,7 @@ class Contextmenu < Phlex::HTML
       tabindex: "-1"
     ) do
       #  Active: "bg-gray-100 text-gray-900", Not Active: "text-gray-700"
-      link2 url: helpers.filtering_url(), data: { action: "click->contextmenu#hide", turbo_frame: "form" }, label: I18n.t(".filter.title")
+      link2 url: helpers.filtering_url(), data: { action: "click->contextmenu#hide", turbo_frame: "form" }, label: I18n.t("filters.title")
       a_button action: "click->list#toggleBatch click->contextmenu#hide", css: "flex justify-between px-4 py-2 text-sm text-gray-700 hover:text-gray-900" do
         plain I18n.t(".batch")
       end

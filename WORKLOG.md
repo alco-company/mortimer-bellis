@@ -18,6 +18,10 @@
 
 ## Ideas
 
+refactor app using ideas from https://medium.com/@HasstrupEzekiel/context-based-programming-in-rails-0ce951a59c36
+
+consider printing PDF's with https://medium.com/@ihcnemed/rails-the-ultimate-guide-to-printing-anything-as-pdf-27fc4fa1e700 
+
 https://anemone.mortimer.pro/oauth2/authorize?client_id=1&redirect_uri=https://anemone.mortimer.pro/oauth2/callback&response_type=code&scope=openid+profile+email+phone+address+roles+offline_access
 
 https://anemone.mortimer.pro/oauth2/token
@@ -69,19 +73,22 @@ END
   }
 }
 
+- use Ruby Patterns as explained in https://medium.com/@slimbennasrallah_89177/ruby-on-rails-design-patterns-101-d99f43adc2b3
+- use materialized views for most index actions - https://medium.com/@michal.a.rudzki/utilizing-materialized-views-power-in-ruby-on-rails-bcd2332604bb
+- consider https://bunny.net/ for image optimization and CDN as CloudFlare substitute
 - use passwordless authentication - https://blog.saeloun.com/2024/11/26/passwordless-authentication-using-webauth/
 - adding cache strategy (using fastest cache technology ATM) -- se https://blog.appsignal.com/2024/01/17/speed-up-your-ruby-on-rails-application-with-litecache.html
 - loading skeleton frames on all lists - using https://www.driftingruby.com/episodes/skeleton-frames
 - add editor to content - https://github.com/avo-hq/marksmith
 - run spinner on submitting forms - https://github.com/edudepetris/rails-8-turbo-morph-and-stream/commit/ff69db6050f8ace429fb05ac926a01031bcb67c3
-- TODO - fit mugshot (see users/registrations_controller)
 - tasks in tree structure - https://www.codemancers.com/blog/maintaining-a-tree-structure-in-rails-with-the-ancestry-gem/
+- consider https://terminalwire.com/articles/superview
 - make sidebar present like https://nordhealth.design/templates/application/#
+- pickup the mobile moving - ask if driving - enter odometer
 - this is probably not necessary: format.turbo_stream { render turbo_stream: turbo_stream.remove(dom_id(@resource)) }
 - pwa-installation.js + joy of rails
-- consider https://bunny.net/ for image optimization and CDN as CloudFlare substitute
-- pickup the mobile moving - ask if driving - enter odometer
-- consider https://terminalwire.com/articles/superview
+- have a second look at background_jobs - see https://bluetickconsultants.medium.com/rails-8-and-active-job-enhancements-whats-new-for-developers-9e6046a2c5ce
+- TODO - fix mugshot (see users/registrations_controller)
 - fix bug on sending email invitation to new user
 - validate punches before deleting punch_clocks !!
 - invoices
@@ -91,8 +98,13 @@ END
 - fix bug in deleting invoices
 - handle Dinero::Service.refresh_token error better - inform user to re-authenticate service
 - check all icon files - for PWA and all
-- timer på desktop
+- timer (play) på desktop
 - check that import users still works
+- allow 2. open on fields on filtering
+
+### 18/2/2024
+
+- drop date filtering
 
 ### 17/2/2025
 

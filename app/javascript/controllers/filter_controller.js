@@ -56,6 +56,17 @@ export default class extends Controller {
     })
   }
 
+  // clearDate
+  //
+  clearDate(e){
+    e.stopPropagation()
+    e.preventDefault()
+    this.dateRangeTargets.forEach(dateRange => { dateRange.classList.remove("bg-sky-100", "font-medium", "text-sky-600"); dateRange.classList.add("bg-white", "text-gray-500"); })
+    document.getElementById("filter_date_fixed_range").value = "";
+    document.getElementById("filter_date_custom_from").value = null;
+    document.getElementById("filter_date_custom_to").value = null;
+  }
+
   // setDate
   //
   setDate(e){

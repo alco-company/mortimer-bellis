@@ -1,6 +1,5 @@
 da:
   filter:
-    title: Filter
     modal:
       delete_all: 
         title: Slet alle filtre
@@ -11,7 +10,9 @@ da:
         button: Slet
 
   filters:
+    title: Filter
     filter_for: Filter for %{model}
+    drop_date_filtering: Drop dato filtrering
     filtered: Filtreret
     batched: Udvalgte
     default_filter: Filter

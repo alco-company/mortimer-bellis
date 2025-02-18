@@ -179,6 +179,7 @@ class Filters::Form < ApplicationForm
     div(class: "", data_filter_target: "tabs", id: "dates") do
       div do
         date_attr = resource.filter["date"] ? resource.filter["date"]["attribute"] : ""
+        button(class: "mort-btn-primary mt-4", data: { action: "click->filter#clearDate" }) { I18n.t("filters.drop_date_filtering") }
         div(class: "mort-field") do
           label(class: "mr-2 text-nowrap text-gray-400", for: "") do
             I18n.t("filters.period.title")
