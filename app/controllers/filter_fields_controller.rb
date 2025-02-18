@@ -4,17 +4,24 @@ class FilterFieldsController < ApplicationController
     @model = params[:model].classify.constantize
     @field = params[:field]
     @value = params[:value] || ""
-    selector = Filter::SELECTORS
-    @selected = selector.filter { |s| s[1] == params[:selected] }
-    # render turbo_stream: turbo_stream.replace("li_#{m}_#{f}",
-    #   partial: "filter_fields/new",
-    #   locals: { filter: @filter, selector: selector, model: m, field: f, value: v, selected: s[0] })
+    select_field
+    # selector = Filter::SELECTORS
+    # @selected = selector.filter { |s| s[1] == params[:selected] }
+    # @selected, @selected_text = @selected.first
   end
 
   def show
+    @filter = Filter.new
     @model, @field = params[:field].split("-")
     @value = params[:value]
-    @selected = params[:selected]
-    @selected_text = Filter::SELECTORS.filter { |s| s[1] == params[:selected] }.first[0] rescue ""
+    select_field
+    # @selected = params[:selected]
+    # @selected_text = Filter::SELECTORS.filter { |s| s[1] == params[:selected] }.first[0] rescue ""
+  end
+
+  def select_field
+    selector = Filter::SELECTORS
+    @selected = selector.filter { |s| s[1] == params[:selected] }
+    @selected_text, @selected = @selected.first rescue [ "", "" ]
   end
 end

@@ -5,13 +5,14 @@ class FieldComponent < Phlex::HTML
 
   attr_accessor :model, :model_name, :field, :filter, :value, :selected, :selected_text, :editable
 
-  def initialize(model:, field:, filter: Filter.new, value: nil, selected: nil, editable: false, &block)
+  def initialize(model:, field:, filter: Filter.new, value: nil, selected: nil, selected_text: nil, editable: false, &block)
     @model = model
     @field = field
     @filter = filter
     @editable = editable
     @value = value
     @selected = selected
+    @selected_text = selected_text
     set_variables
   end
 

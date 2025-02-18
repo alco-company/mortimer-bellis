@@ -100,11 +100,11 @@ END
 - check all icon files - for PWA and all
 - timer (play) på desktop
 - check that import users still works
-- allow 2. open on fields on filtering
 
 ### 18/2/2024
 
 - drop date filtering
+- allow 2. open on fields on filtering
 
 ### 17/2/2025
 

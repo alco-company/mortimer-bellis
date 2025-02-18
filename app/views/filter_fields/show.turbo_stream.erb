@@ -1,3 +1,5 @@
-<%= turbo_stream.replace("li_#{@model}_#{@field}", 
-    partial: "filter_fields/show", 
-    locals: { field: @field, model: @model, value: @value, selected: @selected, selected_text: @selected_text }) %>
+<%= 
+    turbo_stream.replace "li_#{@model.to_s.underscore}_#{@field}" do
+      render FieldComponent.new model: @model, field: @field, filter: @filter, value: @value, selected: @selected, selected_text: @selected_text, editable: false
+    end
+%>
