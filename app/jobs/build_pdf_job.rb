@@ -10,6 +10,7 @@ class BuildPdfJob < ApplicationJob
   def perform(**args)
     super(**args)
     url = "http://#{ENV["PDF_HOST"]}:8080"
+    url = "http://#{ENV["PDF_HOST"]}:32770" if Rails.env.development?
     options = {
       headers: {
         "ContentType" => "multipart/form-data"

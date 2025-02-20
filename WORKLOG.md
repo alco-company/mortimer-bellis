@@ -73,6 +73,7 @@ END
   }
 }
 
+- use Hotwire for downloading PDF's
 - use Ruby Patterns as explained in https://medium.com/@slimbennasrallah_89177/ruby-on-rails-design-patterns-101-d99f43adc2b3
 - use materialized views for most index actions - https://medium.com/@michal.a.rudzki/utilizing-materialized-views-power-in-ruby-on-rails-bcd2332604bb
 - consider https://bunny.net/ for image optimization and CDN as CloudFlare substitute
@@ -100,6 +101,13 @@ END
 - check all icon files - for PWA and all
 - timer (play) på desktop
 - check that import users still works
+- CSRF token on login ages out - fix
+- truncate on time_materials header
+
+
+### 20/2/2025
+
+- fix _pdf partials for all models
 
 ### 18/2/2024
 

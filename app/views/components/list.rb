@@ -4,9 +4,9 @@ class List < ApplicationComponent
   include Phlex::Rails::Helpers::ButtonTo
   include Phlex::Rails::Helpers::Flash
 
-  attr_reader :records, :pagy, :order_by, :group_by, :initial, :params, :user, :batch_form
+  attr_reader :records, :pagy, :order_by, :group_by, :initial, :user, :batch_form
 
-  def initialize(records:, pagy:, initial: false, replace: false, filter: nil, params: {}, batch_form: nil, user: User.new, group_by: nil, order_by: nil, &block)
+  def initialize(records:, pagy: nil, initial: false, replace: false, filter: nil, params: {}, batch_form: nil, user: User.new, format: :html, group_by: nil, order_by: nil, &block)
     @order_by = order_by
     @group_by = group_by
     @records = records
@@ -20,9 +20,17 @@ class List < ApplicationComponent
     @params = params
     @user = user
     @batch_form = batch_form
+    @format = format
   end
 
   def view_template(&block)
+    case @format
+    when :html  ; html_list(&block)
+    when :pdf   ; pdf_list(&block)
+    end
+  end
+
+  def html_list(&block)
     if initial
       div(id: "record_list", class: "scrollbar-hide") { }
       turbo_frame_tag "pagination", src: resources_url(format: :turbo_stream), loading: :lazy
@@ -35,6 +43,24 @@ class List < ApplicationComponent
         end
       end
     end
+  end
+
+  def pdf_list(&block)
+    rc = records&.first.class rescue nil
+    div(class: "w-full") do
+      div(class: "class") do
+        div(class: "min-w-full") do
+          table(role: "list", class: "divide-y divide-gray-100") do
+            render "ListItems::#{rc}".classify.constantize.new(resource: records, params: params, user: user, format: :pdf_header)
+            tbody do
+              records.each do |record|
+                render "ListItems::#{rc}".classify.constantize.new(resource: record, params: params, user: user, format: :pdf)
+              end
+            end
+          end
+        end
+      end
+    end if rc
   end
 
   def append_list

@@ -1,5 +1,5 @@
 class ListItems::TimeMaterial < ListItems::ListItem
-  def view_template
+  def html_list
     comment { "bg-green-200 bg-yellow-200" }
     div(id: (dom_id resource), class: "relative flex justify-between gap-x-6 mb-1 px-2 py-5 rounded-sm #{ background }", data: time_material_controller?) do
       div(class: "flex grow min-w-0 gap-x-4") do

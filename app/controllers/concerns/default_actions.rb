@@ -20,9 +20,9 @@ module DefaultActions
 
     rescue Pagy::OverflowError => e
       head :ok
-    rescue => e
-      UserMailer.error_report(e.to_s, "DefaultActions#index - failed with params: #{params}").deliver_later
-      redirect_to root_path, alert: I18n.t("errors.messages.something_went_wrong", error: e.message)
+      # rescue => e
+      #   UserMailer.error_report(e.to_s, "DefaultActions#index - failed with params: #{params}").deliver_later
+      #   redirect_to root_path, alert: I18n.t("errors.messages.something_went_wrong", error: e.message)
     end
 
     # GET /users/lookup
@@ -278,7 +278,8 @@ module DefaultActions
       end
 
       def send_pdf
-        send_file resource_class.pdf_file(html_content), filename: "#{resource_class.name.pluralize.downcase}-#{Date.today}.pdf"
+        # send_file resource_class.pdf_file(html_content), filename: "#{resource_class.name.pluralize.downcase}-#{Date.today}.pdf"
+        resource_class.pdf_file(html_content, filename: "#{resource_class.name.pluralize.downcase}-#{Date.today}.pdf", context: self)
       end
 
       def send_csv
