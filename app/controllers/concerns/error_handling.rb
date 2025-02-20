@@ -12,7 +12,7 @@ module ErrorHandling
       rescue_from ActionController::UnknownFormat, with: -> { render_404  }
       rescue_from ActiveRecord::RecordNotFound,        with: -> { render_404 }
       rescue_from ActionController::UrlGenerationError, with: -> { render_404 }
-      rescue_from ActionController::InvalidAuthenticityToken, with: -> { render_404 }
+      rescue_from ActionController::InvalidAuthenticityToken, with: -> { render_40x }
     end
 
     # def blackholed
@@ -25,6 +25,15 @@ module ErrorHandling
         # format.all { render nothing: true, status: 404 }
         # format.all { head :ok }
         format.all { render_not_found  }
+      end
+    end
+
+    def render_40x
+      respond_to do |format|
+        # format.html { render template: 'errors/not_found', status: 404 }
+        # format.all { render nothing: true, status: 404 }
+        # format.all { head :ok }
+        format.all { redirect_to root_path, warning: t("old_csrf")  }
       end
     end
 

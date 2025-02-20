@@ -5,7 +5,7 @@ class ListItems::TimeMaterial < ListItems::ListItem
       div(class: "flex grow min-w-0 gap-x-4") do
         show_left_mugshot
         div(class: "min-w-0 flex-auto") do
-          p(class: "text-sm font-semibold leading-6 text-gray-900 ") do
+          p(class: "text-sm font-semibold leading-6 text-gray-900 truncate") do
             show_recipient_link
           end
           p(class: "mt-1 flex text-xs leading-5 text-gray-500") do

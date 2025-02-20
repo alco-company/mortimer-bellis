@@ -62,6 +62,7 @@ da:
   session_done_days: "%{days} dage, %{hours} timer og %{minutes} minutter"
   session_expired: "Din session er udløbet - log venligst ind igen"
   sign_out_in_session_expires_shortly: "Overvej snart at logge ud/ind igen, din session udløber om under 10 minutter"
+  old_csrf: Din session indeholder en ældre CSRF nøgle - prøv venligst igen
 
   weekdays: Ugedage
   monday: Mandag
