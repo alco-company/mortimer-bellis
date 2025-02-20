@@ -4,6 +4,7 @@ da:
       delete_all: 
         title: Slet alle fakturaer
         instruction: Er du sikker på, at du vil slette alle fakturaer?
+        instruction_selected: Er du sikker på, at du vil slette alle %{count} udvalgte fakturaer?
       delete:
         title: Slet denne faktura
         instruction: Er du sikker på, at du vil slette fakturaen %{number}?

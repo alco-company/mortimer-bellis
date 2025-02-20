@@ -4,6 +4,7 @@ da:
       delete_all: 
         title: Slet alle Indstillinger
         instruction: Er du sikker på, at du vil slette alle indstillinger?
+        instruction_selected: Er du sikker på, at du vil slette alle %{count} udvalgte indstillinger?
       delete:
         title: Slet denne indstilling
         instruction: Er du sikker på, at du vil slette indstillingen %{name}?

@@ -109,6 +109,17 @@ da:
     black: Sort
     white: Hvid
 
+  dashboard:
+    modal:
+      delete_all: 
+        title: Slet alle overblik
+        instruction: Er du sikker på, at du vil slette alle overblik?
+        instruction_selected: Er du sikker på, at du vil slette alle %{count} udvalgte overblik?
+      delete:
+        title: Slet denne overblik
+        instruction: Er du sikker på, at du vil slette overblik %{name}?
+        button: Slet
+
   dashboards:
     list:
       title: Overblik

@@ -21,6 +21,7 @@ class Filter < ApplicationRecord
   belongs_to :user, optional: true
   scope :by_user, ->(user = Current.user) { where(user: user) if user.present? }
   scope :by_view, ->(view) { where(view: view) if view.present? }
+  scope :by_fulltext, ->(query) { where("view LIKE :query OR name LIKE :query", query: "%#{query}%") if query.present? }
 
   def self.filterable_fields(model = self)
     f = column_names - [

@@ -51,10 +51,22 @@ class ModalController < MortimerController
     def set_vars
       @modal_form = params[:modal_form]
       @attachment = params[:attachment]
+      set_filter_and_batch
       resource()
+      set_resources()
       @step = params[:step]
       @url = params[:url] || resources_url
       @view = params[:view] || "month"
+      @search = params[:search]
+    end
+
+    def set_filter_and_batch
+      @filter_form = resource_class.to_s.underscore.pluralize
+      @filter = Filter.by_user.by_view(@filter_form).take || Filter.new
+      @filter.filter ||= {}
+
+      @batch = Batch.where(tenant: Current.tenant, user: Current.user, entity: resource_class.to_s).take ||
+                Batch.create(tenant: Current.tenant, user: Current.user, entity: resource_class.to_s, ids: "", all: true)
     end
 
     # def resource
@@ -183,7 +195,8 @@ class ModalController < MortimerController
     end
 
     def process_time_material_create
-      DineroUploadJob.perform_later tenant: Current.tenant, user: Current.user, date: Date.current, provided_service: "Dinero"
+      ids = @filter.filter != {} || @batch&.batch_set? || @search.present? ? @resources.pluck(:id) : nil
+      DineroUploadJob.perform_later tenant: Current.tenant, user: Current.user, date: Date.current, provided_service: "Dinero", ids: ids
       flash.now[:success] = t("time_material.uploading_to_erp")
       render turbo_stream: [
         turbo_stream.close_remote_modal { },
@@ -214,8 +227,6 @@ class ModalController < MortimerController
 
     def process_destroy_all
       begin
-        set_filter resource_class.to_s.underscore.pluralize
-        set_resources
         DeleteAllJob.perform_later tenant: Current.tenant, resource_class: resource_class.to_s,
           ids: @resources.pluck(:id),
           user_ids: (resource_class.first.respond_to?(:user_id) ? @resources.pluck(:user_id).uniq : User.by_tenant.by_role(:user).pluck(:id)) rescue nil
@@ -281,22 +292,6 @@ class ModalController < MortimerController
     def html_content
       render_to_string "employees/report_state", layout: "pdf", formats: :pdf
     end
-
-    # def resources_url(**options)
-    #   return url_for(controller: resource_class.to_s.underscore.pluralize, action: :index, **options) if options.delete(:rewrite).present?
-    #   @resources_url ||= url_for(controller: resource_class.to_s.underscore.pluralize, action: :index, **options)
-    # end
-
-    # def set_resources
-    #   @resources = any_filters? ? @filter.do_filter(resource_class) : resource_class.by_tenant()
-    #   @resources = any_sorts? ? resource_class.ordered(@resources, params[:s], params[:d]) : @resources.order(created_at: :desc)
-    # end
-
-    # def set_filter(view = params[:controller].split("/").last)
-    #   @filter_form = resource_class.to_s.underscore.pluralize
-    #   @filter = Filter.where(tenant: Current.tenant).where(view: view).take || Filter.new
-    #   @filter.filter ||= {}
-    # end
 
     def set_resource_class
       @resource_class = params.dig(:resource_class).classify.constantize

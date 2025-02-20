@@ -4,6 +4,8 @@ da:
       delete_all: 
         title: Slet alle filtre
         instruction: Er du sikker på, at du vil slette alle filtre?
+        instruction_selected: Er du sikker på, at du vil slette alle %{count} udvalgte filtre?
+
       delete:
         title: Slet dette filter
         instruction: Er du sikker på, at du vil slette filteret %{name}?

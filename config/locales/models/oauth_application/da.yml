@@ -7,6 +7,8 @@ da:
       delete_all:
         title: 'Slet alle API adgange'
         instruction: 'Er du sikker på at du vil slette alle API adgange?'
+        instruction_selected: Er du sikker på, at du vil slette alle %{count} udvalgte API adgange?
+
   oauth:
     applications:
       validation_errors: 'Der er fejl i det indtastede'

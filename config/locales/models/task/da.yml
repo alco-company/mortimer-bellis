@@ -5,6 +5,7 @@ da:
       delete_all: 
         title: Slet alle opgaver
         instruction: Er du sikker på, at du vil slette alle opgaver?
+        instruction_selected: Er du sikker på, at du vil slette alle %{count} udvalgte opgaver?
       delete:
         title: Slet denne opgave
         instruction: Er du sikker på, at du vil slette opgaven %{name}?

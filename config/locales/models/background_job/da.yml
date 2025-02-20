@@ -5,6 +5,7 @@ da:
       delete_all: 
         title: Slet alle baggrundsjob
         instruction: Er du sikker på, at du vil slette alle baggrundsjob?
+        instruction_selected: Er du sikker på, at du vil slette alle %{count} udvalgte baggrundsjob?
       delete:
         title: Slet dette baggrundsjob
         instruction: Er du sikker på, at du vil slette baggrundsjobbet %{name}?

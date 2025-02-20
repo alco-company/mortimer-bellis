@@ -4,6 +4,7 @@ da:
       delete_all: 
         title: Slet alle brugere
         instruction: Er du sikker på, at du vil slette alle brugere?
+        instruction_selected: Er du sikker på, at du vil slette alle %{count} udvalgte brugere?
       delete:
         title: Slet denne bruger
         instruction: Er du sikker på, at du vil slette brugeren %{name}?

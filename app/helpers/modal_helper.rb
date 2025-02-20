@@ -9,7 +9,10 @@ module ModalHelper
     return I18n.t("modal.destroy.#{@attachment}.instruction", name: @resource.name) if @attachment.present?
     @resource.id.present? ?
       I18n.t("#{@resource_class.to_s.underscore}.modal.delete.instruction", name: @resource.name) :
-      I18n.t("#{@resource_class.to_s.underscore}.modal.delete_all.instruction")
+      case true
+      when filtered_or_batched?; I18n.t("#{@resource_class.to_s.underscore}.modal.delete_all.instruction_selected", count: @resources.count)
+      else ; I18n.t("#{@resource_class.to_s.underscore}.modal.delete_all.instruction", count: @resources.count)
+      end
   end
 
   def delete_account_modal_title
@@ -18,5 +21,9 @@ module ModalHelper
 
   def delete_account_modal_instruction
     I18n.t("modal.destroy.account.instruction")
+  end
+
+  def filtered_or_batched?
+    (@filter.filter != {}) || @batch&.batch_set? || @search.present?
   end
 end

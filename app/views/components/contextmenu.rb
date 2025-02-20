@@ -1,4 +1,5 @@
 class Contextmenu < Phlex::HTML
+  include Phlex::Rails::Helpers::Request
   include Phlex::Rails::Helpers::Routes
   include Phlex::Rails::Helpers::LinkTo
   include Phlex::Rails::Helpers::ButtonTo
@@ -86,7 +87,10 @@ class Contextmenu < Phlex::HTML
       end
 
       resource_class.any? ?
-        link2(url: helpers.new_modal_url(modal_form: "delete", resource_class: resource_class.to_s.underscore, modal_next_step: "accept"),
+        link2(url: helpers.new_modal_url(modal_form: "delete",
+          resource_class: resource_class.to_s.underscore,
+          modal_next_step: "accept",
+          search: request.query_parameters.dig(:search)),
           action: "click->contextmenu#hide",
           label: I18n.t(".delete_all")) :
         div(class: "block px-3 py-1 text-sm leading-6 text-gray-400") { I18n.t(".delete_all") }
@@ -94,7 +98,10 @@ class Contextmenu < Phlex::HTML
       link2(url: helpers.new_modal_url(modal_form: "import", resource_class: resource_class.to_s.underscore, modal_next_step: "preview"),
         action: "click->contextmenu#hide",
         label: I18n.t(".import")) if resource_class.to_s == "User"
-      link2(url: helpers.new_modal_url(modal_form: "upload_dinero", resource_class: resource_class.to_s.underscore, modal_next_step: "preview"),
+      link2(url: helpers.new_modal_url(modal_form: "upload_dinero",
+        resource_class: resource_class.to_s.underscore,
+        search: request.query_parameters.dig(:search),
+        modal_next_step: "preview"),
         action: "click->contextmenu#hide",
         label: I18n.t(".upload to ERP")) if resource_class.to_s == "TimeMaterial"
       link2 url: helpers.resources_url() + ".csv",

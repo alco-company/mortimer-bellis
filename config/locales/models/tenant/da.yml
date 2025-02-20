@@ -4,6 +4,7 @@ da:
       delete_all: 
         title: Slet alle konti
         instruction: Er du sikker på, at du vil slette alle konti?
+        instruction_selected: Er du sikker på, at du vil slette alle %{count} udvalgte konti?
       delete:
         title: Slet denne konto
         instruction: Er du sikker på, at du vil slette kontoen %{name}?

@@ -103,11 +103,12 @@ END
 - check that import users still works
 - CSRF token on login ages out - fix
 - truncate on time_materials header
-
+- batches only set on every second try
 
 ### 20/2/2025
 
 - fix _pdf partials for all models
+- fix deleting selected items on all models
 
 ### 18/2/2024
 

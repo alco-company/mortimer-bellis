@@ -77,6 +77,7 @@ da:
       delete_all: 
         title: Slet alle tid/materialer
         instruction: Er du sikker på, at du vil slette alle tid/materialer?
+        instruction_selected: Er du sikker på, at du vil slette alle %{count} udvalgte tid/materialer?
       delete:
         title: Slet denne tid/materiale
         instruction: Er du sikker på, at du vil slette denne tid/materiale %{name}?
