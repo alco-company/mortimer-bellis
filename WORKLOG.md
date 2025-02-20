@@ -109,6 +109,7 @@ END
 
 - fix _pdf partials for all models
 - fix deleting selected items on all models
+- fix other batch actions on all models
 
 ### 18/2/2024
 
