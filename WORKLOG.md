@@ -104,10 +104,13 @@ END
 - CSRF token on login ages out - fix
 - batches only set on every second try
 - upgrade Tailwind to 4.0 - https://www.zolkos.com/2024/11/30/upgrading-to-tailwind4
+- hide notification bell
+- make login sequence work
 
 ### 21/2/2025
 
 - check all icon files - for PWA and all
+- check all icon files - for PWA and all - second shot
 
 ### 20/2/2025
 
