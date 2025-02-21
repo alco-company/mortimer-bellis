@@ -41,9 +41,11 @@ contributions to Open Source Software have in each their own way made a crucial 
 * Working With TimeZones [Elle Meredith](https://thoughtbot.com/blog/its-about-time-zones)
 * (man)handling Turbo Frames [Radan Skoric](https://radanskoric.com/articles/update-full-page-on-form-in-frame-submit)
 * Setting Up TOTP Two-Factor Authentication in Ruby on Rails Application [Mikołaj Bogucki](https://blog.lunarlogic.com/2024/setting-up-totp-two-factor-authentication-in-rails)
+* Correctly resizing PWA icons [Jon Henshaw](https://coywolf.pro/webdev/how-to-create-pwa-icons-that-look-correct-on-all-platforms-and-devices/)
 
 ## Resources
 
+* [Maskable Icons - by Tiger Oakes](https://maskable.app/editor)
 * [How To GraphQL](https://www.howtographql.com/)
 * [Sidekiq and Redis example](https://www.digitalocean.com/community/tutorials/how-to-add-sidekiq-and-redis-to-a-ruby-on-rails-application)
 * [A Goldchest of Rails tips and tricks](https://til.hashrocket.com/rails)

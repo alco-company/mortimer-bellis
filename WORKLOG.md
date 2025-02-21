@@ -103,6 +103,11 @@ END
 - check that import users still works
 - CSRF token on login ages out - fix
 - batches only set on every second try
+- upgrade Tailwind to 4.0 - https://www.zolkos.com/2024/11/30/upgrading-to-tailwind4
+
+### 21/2/2025
+
+- check all icon files - for PWA and all
 
 ### 20/2/2025
 
