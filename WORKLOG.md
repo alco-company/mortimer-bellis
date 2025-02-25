@@ -107,6 +107,10 @@ END
 - hide notification bell
 - make login sequence work
 
+### 25/2/2025
+
+- icon files remove third shot
+
 ### 21/2/2025
 
 - check all icon files - for PWA and all
