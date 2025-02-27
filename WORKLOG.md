@@ -110,6 +110,7 @@ END
 ### 27/2/2025
 
 - move from Devise to Rails 8.0.0 authentication - day 3 - comment entire API
+- drop change field names 20250225170102_change_fields
 
 ### 26/2/2025
 
