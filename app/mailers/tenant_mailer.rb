@@ -7,7 +7,7 @@ class TenantMailer < ApplicationMailer
     @pw = params[:pw]
     @tenant = params[:tenant]
     @resource = @tenant.users.first
-    @url = new_user_session_url
+    @url = new_users_session_url
     I18n.with_locale(locale) do
       mail to: @rcpt, subject: I18n.t("tenant.mailer.welcome.subject")
     end

@@ -123,7 +123,7 @@ en:
         title: titel 
         description: beskrivelse
       lead:
-        email_address: Email adresse
+        email: Email adresse
         trial_ends_at: Prøveperioden slutter
         converted_at: Kunde fra    
       location:

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_02_11_161111) do
+ActiveRecord::Schema[8.1].define(version: 2025_02_26_084615) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -446,6 +446,17 @@ ActiveRecord::Schema[8.1].define(version: 2025_02_11_161111) do
     t.index ["user_id"], name: "index_punches_on_user_id"
   end
 
+  create_table "sessions", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.string "ip_address"
+    t.string "user_agent"
+    t.boolean "otp_passed", default: false
+    t.integer "authentication_strategy", default: 0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_sessions_on_user_id"
+  end
+
   create_table "settings", force: :cascade do |t|
     t.integer "tenant_id", null: false
     t.string "setable_type"
@@ -693,7 +704,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_02_11_161111) do
   create_table "users", force: :cascade do |t|
     t.integer "tenant_id", null: false
     t.string "email", default: "", null: false
-    t.string "encrypted_password", default: "", null: false
+    t.string "password_digest"
     t.string "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
@@ -714,7 +725,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_02_11_161111) do
     t.datetime "invitation_created_at"
     t.datetime "invitation_sent_at"
     t.datetime "invitation_accepted_at"
-    t.integer "invitation_limit"
+    t.integer "invitations_limit"
     t.string "invited_by_type"
     t.integer "invited_by_id"
     t.integer "invitations_count", default: 0
@@ -737,9 +748,9 @@ ActiveRecord::Schema[8.1].define(version: 2025_02_11_161111) do
     t.boolean "blocked_from_punching", default: false
     t.integer "consumed_timestep"
     t.boolean "otp_required_for_login"
-    t.string "otp_secret"
-    t.boolean "two_factor_app_enabled", default: false, null: false
-    t.datetime "two_factor_app_enabled_at"
+    t.string "otp_secret_key"
+    t.boolean "otp_enabled", default: false
+    t.datetime "otp_enabled_at"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["invitation_token"], name: "index_users_on_invitation_token", unique: true
     t.index ["invited_by_id"], name: "index_users_on_invited_by_id"
@@ -790,6 +801,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_02_11_161111) do
   add_foreign_key "punches", "punch_cards", on_delete: :cascade
   add_foreign_key "punches", "tenants"
   add_foreign_key "punches", "tenants", on_delete: :cascade
+  add_foreign_key "sessions", "users"
   add_foreign_key "settings", "tenants"
   add_foreign_key "solid_queue_blocked_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
   add_foreign_key "solid_queue_claimed_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade

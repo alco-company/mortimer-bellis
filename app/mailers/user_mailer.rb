@@ -8,7 +8,7 @@ class UserMailer < ApplicationMailer
   def welcome
     # rcpt =  email_address_with_name params[:rcpt].email, params[:rcpt].name
     @rcpt = params[:user].email
-    Current.user=params[:user]
+    # @rcpt=params[:user]
     switch_locale do
       mail to: "monitor@alco.dk", subject: I18n.t("user_mailer.welcome.subject")
       # User.where(role: "admin").each do |admin|
@@ -16,6 +16,23 @@ class UserMailer < ApplicationMailer
       # end
     end
   end
+
+  def confirmation_instructions(user)
+    @user = user
+    @email = user.email
+    @confirmation_url = confirm_users_confirmations_url(token: @user.confirmation_token)
+
+    mail(to: @user.email, subject: "Confirm your account")
+  end
+
+  def invitation_instructions(invitee, invited_by, invitation_message)
+    @resource = invitee
+    @invited_by = invited_by
+    @invitation_message = invitation_message
+    @accept_url = users_invitations_accept_url(token: invitee.invitation_token)
+    mail(to: invitee.email, subject: "Invitation to join")
+  end
+
 
   def confetti_first_punch
     @user = params[:user]

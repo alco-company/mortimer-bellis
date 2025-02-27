@@ -9,18 +9,9 @@ class User < ApplicationRecord
 
   belongs_to :team
 
-  # Include default devise modules. Others available are:
-  # :database_authenticatable, :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
-  # :two_factor_authenticatable, :two_factor_backupable, otp_secret_encryption_key: ENV["OTP_KEY"]
-  devise :two_factor_authenticatable
-  devise :omniauthable, omniauth_providers: %i[ entra_id ]
-  devise :timeoutable, timeout_in: 7.days #  ((Time.now.end_of_week - 1.day) - Time.now).minutes
-  devise :invitable, :registerable,
-         :recoverable, :rememberable, :validatable,
-         :confirmable, :trackable, :lockable
-
   has_many :background_jobs
-  has_many :filters
+  has_many :batches, dependent: :destroy
+  has_many :filters, dependent: :destroy
   has_many :user_invitations, class_name: "User", as: :invited_by
 
   has_many :notifications, as: :recipient, dependent: :destroy, class_name: "Noticed::Notification"
@@ -42,6 +33,40 @@ class User < ApplicationRecord
   enum :role, { user: 0, admin: 1, superadmin: 2 }
   has_one_attached :mugshot
   has_secure_token :pos_token
+
+  has_secure_password
+  has_one_time_password
+  has_secure_token :confirmation_token
+  has_secure_token :invitation_token
+  has_many :sessions, dependent: :destroy
+  belongs_to :invited_by, polymorphic: true, optional: true
+
+  validates :email, presence: true, uniqueness: true, format: { with: URI::MailTo::EMAIL_REGEXP }
+  # validates :password, presence: true
+
+  normalizes :email, with: ->(e) { e.strip.downcase }
+
+  def confirm!
+    update!(confirmed_at: Time.current, confirmation_token: nil)
+  end
+
+  def confirmed?
+    confirmed_at.present?
+  end
+
+  def send_confirmation_instructions
+    regenerate_confirmation_token
+    UserMailer.confirmation_instructions(self).deliver_later
+  end
+
+  def qr_code
+    require "rqrcode"
+    totp = ROTP::TOTP.new(otp_secret_key, issuer: "OTP Test")
+    RQRCode::QRCode.new(totp.provisioning_uri(email))
+  end
+
+  attr_accessor :invitees, :invitation_message
+
 
   scope :by_tenant, ->() {
     if Current.user.present?
@@ -142,8 +167,8 @@ class User < ApplicationRecord
       # "consumed_timestep",
       # "otp_required_for_login",
       "otp_secret"
-      # "two_factor_app_enabled",
-      # "two_factor_app_enabled_at"
+      # "otp_enabled",
+      # "otp_enabled_at"
     ]
     f = f - [
       "reset_password_sent_at",
@@ -160,7 +185,7 @@ class User < ApplicationRecord
       "invitation_accepted_at",
       "hired_at",
       "last_punched_at",
-      "two_factor_app_enabled_at",
+      "otp_enabled_at",
       "created_at",
       "updated_at"
     ] if model == self

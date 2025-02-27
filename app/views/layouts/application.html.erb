@@ -78,14 +78,14 @@
 
 
   </body>
-  <% if user_signed_in? %>
+  <% if Current.user %>
     <script>
       setInterval(() => {
         fetch('<%= check_session_path %>', { method: 'GET', credentials: 'same-origin' })
           .then(response => {
             console.log('Session check response', response.status);
             if (response.redirected) {
-              window.location.href = '<%= new_user_session_path %>';
+              window.location.href = '<%= new_users_session_url %>';
             }
           })
           .catch(error => console.error('Session check failed', error));

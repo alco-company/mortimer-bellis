@@ -2,11 +2,11 @@
 
 class SessionsController < BaseController
   include TimezoneLocale
-  before_action :authenticate_user!, only: [ :check ]
+  before_action :require_authentication, only: [ :check ]
 
   # called by the client side to check if the session is still valid
   def check
-    # return unless user_signed_in?
+    # return unless Current.user
 
     expires_at = Current.user.last_sign_in_at + 7.days
     if Time.now > expires_at

@@ -1,0 +1,8 @@
+<h1>Welcome <%= @invitee.email %>!</h1>
+
+<p><%= @invitation_message %></p>
+
+<p><%= link_to 'Accept invitation', @accept_url %></p>
+
+<p>Thanks for joining!</p>
+<p><%= @invited_by.email %></p>

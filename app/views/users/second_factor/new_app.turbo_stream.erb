@@ -35,7 +35,7 @@
                   role: "dialog",
                   aria: {labbeledby: "modal-title", modal: true}
                 ) do %>
-              <%= form_with(model: @two_factor_app_enablement_form, class: "mt-10", url: create_user_two_factor_app_path) do |form| %>
+              <%= form_with(model: @otp_enablement_form, class: "mt-10", url: create_user_otp_path) do |form| %>
                 <%= form.hidden_field :password %>
                 <% if @button_only %>
                   <%= form.hidden_field :button_only, value: true %>
@@ -45,10 +45,10 @@
                   <div class="flex justify-center items-center w-md flex-col">
                     <div class="flex flex-col mt-4 space-y-4">
                     <div class="">
-                      <% if @two_factor_app_enablement_form.errors.any? %>
+                      <% if @otp_enablement_form.errors.any? %>
                         <div id="error_explanation" class="relative z-1 bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3">
                           <ul>
-                            <% @two_factor_app_enablement_form.errors.each do |error| %>
+                            <% @otp_enablement_form.errors.each do |error| %>
                               <li><%= error.full_message %></li>
                             <% end %>
                           </ul>

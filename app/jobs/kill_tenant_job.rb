@@ -7,6 +7,7 @@ class KillTenantJob < ApplicationJob
     if tenant
       Tenant.transaction do
         tenant.background_jobs.destroy_all
+        tenant.batches.destroy_all
         tenant.calendars.destroy_all
         tenant.calls.destroy_all
         tenant.customers.destroy_all

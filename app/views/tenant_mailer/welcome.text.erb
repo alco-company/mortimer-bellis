@@ -10,4 +10,4 @@
 
 <%= I18n.t("tenant.mailer.welcome.regards") %>
 M O R T I M E R
-<%= @resource.invited_by.name %>
+<%= @resource.invited_by.name rescue @tenant.email %>

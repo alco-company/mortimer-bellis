@@ -4,6 +4,7 @@ da:
       invited: "Du har en uafsluttet invitation, accepter den for at færdiggøre oprettelsen af din konto."
     invitations:
       send_instructions: "En inviterende email er blev sendt til %{email}."
+      send_instructions_count: "En inviterende email er blev sendt til %{count} personer."
       invitation_token_invalid: "Den angivne invitationstoken er ugyldig!"
       updated: "Dit kodeord blev sat korrekt. Du er nu logget ind."
       updated_not_active: "Dit kodeord blev sat korrekt."

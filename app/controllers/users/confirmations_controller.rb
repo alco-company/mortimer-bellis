@@ -1,54 +1,46 @@
-# frozen_string_literal: true
+class Users::ConfirmationsController < MortimerController
+  allow_unauthenticated_access only: %i[ new create update ]
 
-class Users::ConfirmationsController < Devise::ConfirmationsController
-  include TimezoneLocale
-  # GET /resource/confirmation/new
-  # def new
-  #   super
-  # end
+  def new
+  end
 
-  # POST /resource/confirmation
-  # def create
-  #   super
-  # end
-
-  # GET /resource/confirmation?confirmation_token=abcdef
-  def show
-    self.resource = resource_class.confirm_by_token(params[:confirmation_token])
-    yield resource if block_given?
-
-    if resource.errors.empty?
-      set_flash_message!(:notice, :confirmed)
-      # respond_with_navigational(resource) { redirect_to after_confirmation_path_for(resource_name, resource) }
+  def create
+    user = User.find_by(email: confirmation_params[:email])
+    if user && !user.confirmed?
+      user.send_confirmation_instructions
+      flash[:notice] = I18n.t("devise.confirmations.send_instructions")
     else
-      errors = resource.errors.full_messages.join(", ")
-      flash[:alert] = errors
-      # respond_with_navigational(resource) { redirect_to not_confirmed_path_for(resource_name, resource) }
-      # TODO: use `error_status` when the default changes to `:unprocessable_entity`.
-      # respond_with_navigational(resource.errors, status: :unprocessable_entity){ render :new }
+      flash[:warning] = I18n.t("devise.confirmations.send_paranoid_instructions")
+    end
+    respond_to do |format|
+      format.turbo_stream { render turbo_stream: [
+        turbo_stream.replace("new_confirmation", partial: "users/sessions/new", locals: { resource: User.new, resource_class: User, resource_name: "user" }),
+        turbo_stream.replace("flash_container", partial: "application/flash_message")
+      ] }
+      format.html         { redirect_to new_users_session_url }
     end
   end
-  # protected
 
-  # The path used after resending confirmation instructions.
-  # def after_resending_confirmation_instructions_path_for(resource_name)
-  #   super(resource_name)
-  # end
+  def update
+    @user = User.find_by(confirmation_token: params[:token])
 
-  # The path used after confirmation.
-  # def after_confirmation_path_for(resource_name, resource)
-  #   debugger
-  #   if signed_in?(resource_name)
-  #     signed_in_root_path(resource)
-  #   else
-  #     new_session_path(resource_name)
-  #   end
-  # end
+    if @user
+      @user.confirm!
+      flash[:notice] = I18n.t("devise.confirmations.confirmed")
+    else
+      flash[:warning] = I18n.t("devise.failure.already_confirmed")
+    end
+    respond_to do |format|
+      format.turbo_stream { render turbo_stream: [
+        turbo_stream.replace("new_confirmation", partial: "users/sessions/new", locals: { resource: User.new, resource_class: User, resource_name: "user" }),
+        turbo_stream.replace("flash_container", partial: "application/flash_message")
+      ] }
+      format.html         { redirect_to new_users_session_url }
+    end
+  end
 
-  # def not_confirmed_path_for(resource_name, resource)
-  #   debugger
-  #   errors = resource.errors.full_messages.join(", ")
-  #   flash[:alert] = errors
-  #   root_path
-  # end
+  private
+    def confirmation_params
+      params.expect(user: [ :email ])
+    end
 end

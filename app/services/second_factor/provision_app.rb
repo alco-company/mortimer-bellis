@@ -18,7 +18,7 @@ module SecondFactor
         #   return Failure(InvalidPassword.new)
         # end
 
-        raise Errors::TwoFactorAlreadyEnabledError if user.two_factor_app_enabled
+        raise Errors::TwoFactorAlreadyEnabledError if user.otp_enabled
         #   return Failure(YouAlreadyHaveSecondFactorAppEnabled.new)
         # end
 
@@ -27,8 +27,8 @@ module SecondFactor
         # end
 
         user.otp_required_for_login = true
-        user.two_factor_app_enabled = true
-        user.two_factor_app_enabled_at = Time.current
+        user.otp_enabled = true
+        user.otp_enabled_at = Time.current
         user.save!
 
         user

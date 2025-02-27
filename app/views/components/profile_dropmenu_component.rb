@@ -74,14 +74,14 @@ class ProfileDropmenuComponent < ApplicationComponent
         hr
         link_to(
           I18n.t("topbar.profile.your_profile"),
-          edit_user_registration_path,
+          edit_users_registrations_url,
           class: "block px-3 py-1 text-sm leading-6 text-gray-900",
           data: { turbo_action: "advance", turbo_frame: "form" },
           role: "menuitem",
           tabindex: "-1",
           id: "user-menu-item-0")
         # link_to( "Settings", "#", class: "block px-3 py-1 text-sm leading-6 text-gray-900", role: "menuitem", tabindex: "-1", id: "user-menu-item-1")
-        link_to(I18n.t("topbar.profile.sign_out"), destroy_user_session_path(), class: "block px-3 py-1 text-sm leading-6 text-gray-900", method: :delete, data: { turbo_method: :delete }, role: "menuitem", tabindex: "-1", id: "user-menu-item-2")
+        link_to(I18n.t("topbar.profile.sign_out"), users_session_path(), class: "block px-3 py-1 text-sm leading-6 text-gray-900", method: :delete, data: { turbo_method: :delete }, role: "menuitem", tabindex: "-1", id: "user-menu-item-2")
       end
     end
   end

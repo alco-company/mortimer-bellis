@@ -28,7 +28,7 @@ module UsersHelper
 
   def remaining_session_time
     last_request_at = warden.session(:user)["last_request_at"]
-    timeout_in = Devise.timeout_in
+    timeout_in = 7.days
     return 0 unless last_request_at
 
     elapsed_time = Time.current.to_i - last_request_at.to_i

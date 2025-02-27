@@ -583,7 +583,7 @@ da:
       lead:
         created_at: Oprettet den
         updated_at: Opdateret den
-        email_address: Email adresse
+        email: Email adresse
         trial_ends_at: Prøveperioden slutter
         converted_at: Kunde fra    
       location:
@@ -924,7 +924,7 @@ da:
         password_confirmation: Bekræft adgangskode
         otp_attempt: 2FA kode
         otp_required_for_login: 2FA påkrævet
-        two_factor_app_enabled: 2FA aktiveret
+        otp_enabled: 2FA aktiveret
         encrypted_password: Krypteret adgangskode
         confirmed_at: Bekræftet den
         confirmation_sent_at: Bekræftelse sendt den

@@ -12,7 +12,7 @@ class BaseController < ApplicationController
   # from the ApplicationController you may skip it!
   # or you can skip the authentication on controllers by calling
   #
-  # skip_before_action :authenticate_user!
+  # skip_before_action :require_authentication
   #
   include Authentication
   #

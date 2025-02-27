@@ -63,7 +63,7 @@ module ApplicationHelper
 
   # def menu_items
   #   items = []
-  #   if user_signed_in?
+  #   if Current.user
   #     if current_user.superadmin?
   #       items += [
   #         { title: I18n.t("menu.tenants"), url: tenants_url },

@@ -47,7 +47,7 @@ class TimeMaterialHeader < ApplicationComponent
 
       div(class: "flex gap-x-2 gap-y-2 mr-2 flex-wrap basis-1/3 justify-end content-end sm:content-center") do
         case resource_class.table_name
-        when "users"; link_to("Invite New User", new_user_invitation_path, class: "mort-btn-primary", role: "menuitem", tabindex: "-1", id: "user-menu-item-0") unless Current.user.user?
+        when "users"; link_to("Invite New User", users_invitations_new_url, class: "mort-btn-primary", role: "menuitem", tabindex: "-1", id: "user-menu-item-0") unless Current.user.user?
         else
           # Add button
           link_to helpers.new_resource_url, class: "mort-btn-primary", data: { turbo_frame: "form" } do

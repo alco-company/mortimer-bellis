@@ -19,6 +19,7 @@ class ToastComponent < ApplicationComponent
     # Leaving: "transition ease-in duration-100"
     #   From: "opacity-100"
     #   To: "opacity-0")
+
     div(
       data_controller: "notice",
       class:

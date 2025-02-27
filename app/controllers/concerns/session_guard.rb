@@ -6,12 +6,12 @@ module SessionGuard
   end
 
   def check_session_length
-    return unless user_signed_in?
+    return unless Current.user
 
     expires_at = Current.user.last_sign_in_at + 7.days
     if Time.now > expires_at
-      sign_out(current_user)
-      redirect_to new_user_session_path, warning: I18n.t("session_expired")
+      terminate_session
+      redirect_to new_users_session_url, warning: I18n.t("session_expired")
     end
   end
 end

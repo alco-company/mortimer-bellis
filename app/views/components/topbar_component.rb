@@ -22,7 +22,7 @@ class TopbarComponent < ApplicationComponent
         div(class: "flex items-center gap-x-4 lg:gap-x-6") do
           # div(class: "ml-4 flex items-center md:ml-6")
           reload_button
-          render Notifications::NotificationBell.new recipient: Current.user
+          # render Notifications::NotificationBell.new recipient: Current.user
 
           # separator
           div(class: "hidden lg:block lg:h-6 lg:w-px lg:bg-gray-900/10")

@@ -378,7 +378,7 @@
                   </strong>
                   <br>
                   <br>
-                  <span class="text-sm italic text-gray-500"><%= @resource.invited_by.name %></span>
+                  <span class="text-sm italic text-gray-500"><%= @resource.invited_by.name rescue @tenant.name %></span>
                 </div>
               </td>
             </tr>

@@ -61,6 +61,23 @@ da:
     errors:
       messages:
         name_exist: "Kontoen findes allerede"
+
+
+    registrations:
+      new:
+        create: Opret kontoen
+        sign_up:
+          title: Opret en ny konto
+          leave_empty: "Lad være tom, hvis du ikke vil ændre adgangskoden"
+          minimum: "(mindst %{count} tegn)"
+      edit:
+        sign_up:
+          current_password: Nuværende adgangskode
+          leave_empty: "Lad være tom, hvis du ikke vil ændre adgangskoden"
+          minimum: "(mindst %{count} tegn)"
+          need_current_password: "Du skal indtaste din nuværende adgangskode for at ændre den."
+        
+
         
     tenant_mailer:
       report_state:

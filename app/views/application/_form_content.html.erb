@@ -16,7 +16,7 @@
             <div class="flex h-full flex-col overflow-x-hidden overflow-y-scroll bg-white shadow-xl">
               <div class="sticky z-20 bg-white top-0 py-5 pl-4 pr-4 sm:pr-6 sm:pl-6 border-b">
                 <div class="flex items-start justify-between">
-                  <% act = @resource.persisted? ? "edit" : "new" %>
+                  <% act = resource.persisted? ? "edit" : "new" %>
                   <%= render CancelSaveForm.new cancel_url: resources_url, title: I18n.t("%s.form.#{act}" % resource_class.table_name)  %>
                 </div>
               </div>

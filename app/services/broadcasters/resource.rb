@@ -15,6 +15,17 @@ class Broadcasters::Resource
     @partial = partial || resource
   end
 
+  ## TODO - use Broadcasters::Resource.new(resource)#flash instead of flash[:*] in controllers, elsewhere
+  def flash
+    return unless tenant
+    Turbo::StreamsChannel.broadcast_action_later_to(
+      resources_stream,
+      target: "flash_container",
+      action: :replace,
+      partial: "application/flash_message"
+    )
+  end
+
   def create
     return unless tenant
     return unless resource.persisted?

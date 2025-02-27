@@ -14,7 +14,7 @@ class DeleteAllJob < ApplicationJob
       delete_all(rc, ids, user_ids) if ids.any?
     end
   rescue => e
-    UserMailer.error_report(e.to_s, "DeleteAllJob#perform").deliver_later
+    UserMailer.error_report(e.to_s, "DeleteAllJob#perform #{rc}").deliver_later
   end
 
   def delete_all(rc, ids, user_ids)

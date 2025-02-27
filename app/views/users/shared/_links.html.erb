@@ -1,12 +1,7 @@
-<%- if devise_mapping.omniauthable? %>
-  <%- resource_class.omniauth_providers.each do |provider| %>
-    <%= button_to I18n.t("devise.sign_in_with", provider: OmniAuth::Utils.camelize(provider)), 
-      omniauth_authorize_path(resource_name, provider), 
-      data: { turbo: false }, 
-      class: "mort-btn-primary" %><br />
-  <% end %>
+<%- if controller_name == 'sessions' %>
+  <%= button_to I18n.t("devise.sign_in_with", provider: "EntraID"), "/auth/entra_id", method: :post, class: "mort-btn-primary", data: { turbo: false } %>
   <hr class="my-2">
-<% end if controller_name == 'sessions' %>
+<% end  %>
 
 <%= link_to I18n.t("need_help"), help_pages_url(locale: I18n.locale), class: "mort-link-primary", data: { turbo_frame: "_top"} %>
 <hr class="my-2">

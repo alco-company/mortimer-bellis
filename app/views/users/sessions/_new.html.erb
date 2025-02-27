@@ -7,7 +7,7 @@
 
     <%= render partial: "users/shared/error_messages", locals: {resource: resource} %>
 
-    <%= form_for(resource, as: resource_name, url: session_path(resource_name), id: "login", data: { turbo: true }) do |f| %>
+    <%= form_with(model: User, url: users_session_url, id: "login", data: { turbo: false }) do |f| %>
       <div class="mort-field">
         <%= f.label :email %><br />
         <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "mort-form-text" %>
@@ -20,13 +20,6 @@
 
       <div id="otp_attempt_outlet" class="mort-field">
       </div>
-
-      <% if devise_mapping.rememberable? %>
-        <div class="mort-field">
-          <%= f.check_box :remember_me %>
-          <%= f.label :remember_me, I18n.t("devise.remember_me") %>
-        </div>
-      <% end %>
 
       <div class="actions mort-field">
         <%= f.submit t(".sign_in"), class: "mort-btn-primary" %>

@@ -5,8 +5,8 @@
     </div>
     <h1 class="font-bold text-gray-200 text-2xl"> <%= t(".reset_password") %> </h1>
     
-    <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }, class: "my-5") do |f| %>
-      <%= render "devise/shared/error_messages", resource: resource %>
+    <%= form_with( url: users_passwords_url, method: :post, class: "my-5") do |f| %>
+      <%= render "users/shared/error_messages", resource: resource %>
 
       <div class="mort-field">
         <%= f.label :email %><br />

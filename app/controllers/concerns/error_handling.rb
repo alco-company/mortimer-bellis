@@ -12,8 +12,8 @@ module ErrorHandling
       rescue_from ActionController::UnknownFormat, with: -> { render_404  }
       rescue_from ActiveRecord::RecordNotFound,        with: -> { render_404 }
       rescue_from ActionController::UrlGenerationError, with: -> { render_404 }
-      rescue_from ActionController::InvalidAuthenticityToken, with: -> { render_40x }
     end
+    rescue_from ActionController::InvalidAuthenticityToken, with: :handle_bad_csrf_token
 
     # def blackholed
     #   render_404
@@ -49,6 +49,12 @@ module ErrorHandling
     def blackholed
       # `sudo route add #{request.remote_ip} gw 127.0.0.1 lo`
       head :ok
+    end
+
+    def handle_bad_csrf_token
+      url = request.path == "/session" ? new_users_session_url : root_url
+      logger.error("Invalid CSRF token")
+      redirect_back(fallback_location: url, alert: "Your session has expired. Please try again.")
     end
   end
 end

@@ -1,10 +1,11 @@
 class ModalController < MortimerController
   before_action :set_vars, only: [ :new, :show, :create, :destroy, :update ]
-  skip_before_action :authenticate_user!, only: [ :destroy ]
+  skip_before_action :require_authentication, only: [ :destroy ]
   skip_before_action :check_session_length, only: [ :destroy ]
 
   def new
     # resource
+    @resource = find_resource
     case resource_class.to_s.underscore
     when "calendar"; process_calendar_new
     when "event"; process_event_new
@@ -42,7 +43,9 @@ class ModalController < MortimerController
 
   #
   def destroy
-    (authenticate_user! && check_session_length) || verify_api_key
+    params[:action] = "destroy"
+    (require_authentication && check_session_length) || verify_api_key
+    @resource = find_resource
     params[:all] == "true" ? process_destroy_all : process_destroy
   end
 
@@ -301,7 +304,7 @@ class ModalController < MortimerController
 
     def verify_api_key
       return false unless params.dig(:api_key) && @resource && @resource.respond_to?(:access_token)
-      @resource.access_token == params.dig(:api_key) || redirect_to(new_user_session_path)
+      @resource.access_token == params.dig(:api_key) || redirect_to(new_users_session_path)
     end
 
     def any_filters?

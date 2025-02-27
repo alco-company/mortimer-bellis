@@ -32,10 +32,9 @@
                     <h3>Mortimer version:
                       <span class="text-xs font-thin"><%= ENV["MORTIMER_VERSION"] %></span>
                     </h3>
-                    
 
-                    <%= form_for(resource, as: resource_name, url: registration_path(resource_name), data: { form_target: "form", profile_target: "buttonForm" }, html: { class: "group mort-form", method: :put }) do |f| %>
-                      <%= render "devise/shared/error_messages", resource: resource %>
+                    <%= form_for(resource, as: resource_name, url: users_registrations_url(resource), data: { form_target: "form", profile_target: "buttonForm" }, html: { class: "group mort-form", method: :put }) do |f| %>
+                      <%= render "users/shared/error_messages", resource: resource %>
 
                       <% if Current.user.superadmin? %>
                         <div class="mort-field">
@@ -124,8 +123,8 @@
                         <%= f.select :time_zone, User.time_zones_for_select, {}, class: "mort-form-select text-sm" %>
                       </div>
 
-                      <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
-                        <div class="">Currently waiting confirmation for: <%= resource.unconfirmed_email %></div>
+                      <% unless f.object.confirmed? %>
+                        <div class="">Currently waiting confirmation for: <%= resource.email %></div>
                       <% end %>
 
                       <div class="p-4 rounded-md shadow-sm bg-sky-100">

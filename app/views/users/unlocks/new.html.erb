@@ -5,7 +5,7 @@
   <h1 class="font-bold text-gray-200 text-2xl"> <%= t("devise.unlocks.new.resend_unlock.title") %> </h1>
 
   <%= form_for(resource, as: resource_name, url: user_unlock_path(), html: { method: :post }) do |f| %>
-    <%= render "devise/shared/error_messages", resource: resource %>
+    <%= render "users/shared/error_messages", resource: resource %>
 
     <div class="mort-field">
       <%= f.label :email %><br />

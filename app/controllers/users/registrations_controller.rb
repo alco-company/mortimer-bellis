@@ -1,29 +1,39 @@
-# frozen_string_literal: true
+class Users::RegistrationsController < MortimerController
+  allow_unauthenticated_access only: %i[new create]
+  # resume_session only: :new
 
-class Users::RegistrationsController < Devise::RegistrationsController
-  include Authentication
-  include TimezoneLocale
-  before_action :configure_sign_up_params, only: [ :create ]
-  before_action :configure_account_update_params, only: [ :update ]
-  skip_before_action :authenticate_user!, only: [ :new, :create ]
+  def new
+    @user = User.new
+  end
 
-  # GET /resource/sign_up
-  # def new
-  #   super
-  # end
-
-  # POST /resource
   def create
     begin
       usr = nil
       params[:user][:tenant_id] = 1 # temporary placeholder - UserRegistrationService will fix!
       params[:user][:team_id] = 1   # temporary placeholder - UserRegistrationService will fix!
-      # configure_sign_up_params
-      super do |resource|
-        if resource.valid?
-          raise "user was not registered correctly" unless UserRegistrationService.call(resource, tenant_name)
-          resource.add_role
-          usr = resource.dup
+      resource = User.new(user_params)
+      if resource.save
+        raise "user was not registered correctly" unless UserRegistrationService.call(resource, tenant_name)
+        resource.add_role
+        usr = resource.dup
+        flash[:notice] = I18n.t("devise.registrations.signed_up_but_unconfirmed")
+        # , alert: "<span>Your account is not confirmed.<span> #{view_context.link_to("Resend confirmation email?", new_confirmation_url(email: user.email), class: "underline text-sky-500")}".html_safe
+        respond_to do |format|
+          format.turbo_stream { render turbo_stream: [
+            turbo_stream.replace("new_registration", partial: "users/sessions/new", locals: { resource: User.new, resource_class: User, resource_name: "user" }),
+            turbo_stream.replace("flash_container", partial: "application/flash_message")
+          ] }
+          format.html         { redirect_to new_users_session_url }
+        end
+      else
+        flash[:alert] = I18n.t("devise.registrations.failed")
+        # , alert: "<span>Your account is not confirmed.<span> #{view_context.link_to("Resend confirmation email?", new_confirmation_url(email: user.email), class: "underline text-sky-500")}".html_safe
+        respond_to do |format|
+          format.turbo_stream { render turbo_stream: [
+            turbo_stream.replace("new_registration", partial: "users/registrations/new", locals: { resource: User.new, resource_class: User, resource_name: "user" }),
+            turbo_stream.replace("flash_container", partial: "application/flash_message")
+          ] }
+          format.html         { redirect_to new_users_session_url }
         end
       end
     rescue => e
@@ -34,32 +44,34 @@ class Users::RegistrationsController < Devise::RegistrationsController
   end
 
   # GET /resource/edit
-  # def edit
-  #   super
-  # end
+  def edit
+    @resource = resource.persisted? ? resource : Current.user
+    super
+  end
 
   # PUT /resource
   #
   # rewriting update method to allow for turbo drive/stream update
   #
   def update
+    @resource = resource.persisted? ? resource : Current.user
     unless params[:user][:mugshot].present?
       mugshot = resource.mugshot
     end
     if params[:user][:role].present? &&
       !Current.user.superadmin? &&
       [ 0, "0", "superadmin", "Superadmin", "SUPERADMIN" ].include?(params[:user][:role])
-      redirect_to edit_user_registration_path, alert: I18n.t("errors.messages.user_role_cannot_be_assigned") and return
+      redirect_to edit_users_registrations_path, alert: I18n.t("errors.messages.user_role_cannot_be_assigned") and return
     end
 
-    self.resource = resource_class.to_adapter.get!(send(:"current_#{resource_name}").to_key)
-    prev_unconfirmed_email = resource.unconfirmed_email if resource.respond_to?(:unconfirmed_email)
-
-    resource_updated = update_resource(resource, account_update_params)
-    yield resource if block_given?
+    # self.resource = resource_class.to_adapter.get!(send(:"current_#{resource_name}").to_key)
+    # prev_unconfirmed_email = resource.unconfirmed_email if resource.respond_to?(:unconfirmed_email)
+    resource_updated = update_resource(resource, user_params)
+    # yield resource if block_given?
     if resource_updated
       resource.mugshot = mugshot if mugshot && mugshot.attachable?
-      set_flash_message_for_update(resource, prev_unconfirmed_email)
+      # set_flash_message_for_update(resource, prev_unconfirmed_email)
+      flash[:notice] = I18n.t("users.registrations.updated")
       render turbo_stream: [
         turbo_stream.update("form", ""),
         turbo_stream.replace("flash_container", partial: "application/flash_message")
@@ -77,9 +89,9 @@ class Users::RegistrationsController < Devise::RegistrationsController
         # TODO: ActiveStorage::Attached::Changes::CreateMany
       end
 
-      clean_up_passwords resource
-      set_minimum_password_length
-      respond_with resource
+      # clean_up_passwords resource
+      # set_minimum_password_length
+      # respond_with resource
     end
   end
 
@@ -102,7 +114,15 @@ class Users::RegistrationsController < Devise::RegistrationsController
   protected
 
   def update_resource(resource, params)
-    params[:password].blank? && params[:password_confirmation].blank? ? update_now(resource, params) : super
+    params[:password].blank? && params[:password_confirmation].blank? ? update_now(resource, params) : update_access(resource, params)
+  end
+
+  def update_access(resource, params)
+    usr = User.authenticate_by(email: resource.email, password: params[:current_password])
+    return unless usr
+    params.delete :current_password
+
+    resource.update(params)
   end
 
   def update_now(resource, params)
@@ -119,36 +139,14 @@ class Users::RegistrationsController < Devise::RegistrationsController
       time_zone: params[:time_zone]
   end
 
-  # If you have extra params to permit, append them to the sanitizer.
-  def configure_sign_up_params
-    devise_parameter_sanitizer.permit(:sign_up, keys: [ :tenant_id, :team_id, :role ])
-  end
-
   #
   # a_waffle_23_company_com - random company name generator by AHD 19/6/2024
   #
   def tenant_name
-    sign_up_params[:email]
+    user_params[:email]
     # sign_up_params[:email].split("@")[1].split(".")[..-2].join(" ").capitalize
   rescue
     "Unknown Tenant Name"
-  end
-
-  # If you have extra params to permit, append them to the sanitizer.
-  def configure_account_update_params
-    devise_parameter_sanitizer.permit(:account_update, keys: [ :tenant_id, :team_id, :global_queries, :name, :pincode, :mugshot, :locale, :time_zone ])
-  end
-
-  # The path used after sign up.
-  def after_sign_up_path_for(resource)
-    # super(resource)
-    "/users/sign_in_success"
-  end
-
-  # The path used after sign up for inactive tenants.
-  def after_inactive_sign_up_path_for(resource)
-    # super(resource)
-    "/users/sign_in_success"
   end
 
   def resize_before_save(image_param, width, height)
@@ -165,37 +163,13 @@ class Users::RegistrationsController < Devise::RegistrationsController
       # model validations.
     end
   end
+
+  private
+    def user_params
+      params.expect(user: [ :email, :current_password, :password, :password_confirmation, :tenant_id, :team_id, :global_queries, :name, :pincode, :mugshot, :locale, :time_zone, :role ])
+    end
+
+    def clean_up_passwords(resource)
+      resource.password = resource.password_confirmation = nil
+    end
 end
-
-#
-# TODO - fit mugshot
-#
-# require 'mini_magick'
-# require 'opencv'
-
-# def process_avatar(image_path)
-#   # Load the image
-#   image = MiniMagick::Image.open(image_path)
-
-#   # Face detection
-#   detector = OpenCV::CvHaarClassifierCascade::load('haarcascade_frontalface_default.xml')
-#   img = OpenCV::CvMat.load(image_path)
-#   faces = detector.detect_objects(img)
-
-#   if faces.any?
-#     face = faces.first
-#     face_x, face_y, face_width, face_height = face.top_left.x, face.top_left.y, face.width, face.height
-
-#     # Crop the image to the detected face
-#     image.crop("#{face_width}x#{face_height}+#{face_x}+#{face_y}")
-
-#     # Resize the image
-#     image.resize "150x150"
-
-#     # Compress the image
-#     image.quality "80"
-
-#     # Save the processed image
-#     image.write "processed_avatar.jpg"
-#   end
-# end
