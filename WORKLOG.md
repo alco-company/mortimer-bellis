@@ -111,6 +111,7 @@ END
 
 - move from Devise to Rails 8.0.0 authentication - day 3 - comment entire API
 - drop change field names 20250225170102_change_fields
+- fix error on login - bad migrations
 
 ### 26/2/2025
 
