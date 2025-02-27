@@ -107,6 +107,10 @@ END
 - hide notification bell
 - make login sequence work
 
+### 27/2/2025
+
+- move from Devise to Rails 8.0.0 authentication - day 3 - comment entire API
+
 ### 26/2/2025
 
 - move from Devise to Rails 8.0.0 authentication - day 2 - minus 2FA

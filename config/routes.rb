@@ -1,9 +1,9 @@
 Rails.application.routes.draw do
   get "home/show"
   # -------- AUTHENTICATION ROUTES --------
-  use_doorkeeper do
-    controllers applications: "oauth/applications"
-  end
+  # use_doorkeeper do
+  #   controllers applications: "oauth/applications"
+  # end
 
   namespace :tenants do
     resource :registrations
@@ -41,17 +41,17 @@ Rails.application.routes.draw do
   mount MissionControl::Jobs::Engine, at: "/solid_queue_jobs"
 
   # -------- API ROUTES & 3RD PARTY --------
-  namespace :api do
-    namespace :v1 do
-      resources :tickets
-      resources :contacts do
-        collection do
-          get "lookup"
-        end
-      end
-      get "hello" => "hello_world#hello"
-    end
-  end
+  # namespace :api do
+  #   namespace :v1 do
+  #     resources :tickets
+  #     resources :contacts do
+  #       collection do
+  #         get "lookup"
+  #       end
+  #     end
+  #     get "hello" => "hello_world#hello"
+  #   end
+  # end
 
   post "dinero/callback" => "dinero#callback", as: :dinero_callback
 
