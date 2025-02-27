@@ -1,40 +1,48 @@
 {
   "name": "Mortimer",
+  "categories": ["productivity", "attendance", "time management"],
+  "short_name": "Mortimer",
   "id": "Mortimer",
   "icons": [
     { "src": "<%= image_url("mortimer_logo.svg") %>",                "type": "image/svg+xml", "sizes": "any" },
-    { "src": "<%= image_url("mortimer_app_icon_512x512.png") %>",    "type": "image/png", "purpose": "any",      "sizes": "512x512" },
-    { "src": "<%= image_url("mortimer_app_icon_512x512@2x.png") %>", "type": "image/png", "purpose": "any",      "sizes": "1024x1024" },
-    { "src": "<%= image_url("mortimer_maskable_icon.png") %>",       "type": "image/png", "purpose": "maskable", "sizes": "1439x1439"  },
-    { "src": "<%= image_url("mortimer_maskable_icon_x48.png") %>",   "type": "image/png", "purpose": "maskable", "sizes": "48x48"  },
-    { "src": "<%= image_url("mortimer_maskable_icon_x72.png") %>",   "type": "image/png", "purpose": "maskable", "sizes": "72x72"  },
-    { "src": "<%= image_url("mortimer_maskable_icon_x96.png") %>",   "type": "image/png", "purpose": "maskable", "sizes": "96x96"  },
-    { "src": "<%= image_url("mortimer_maskable_icon_x128.png") %>",  "type": "image/png", "purpose": "maskable", "sizes": "128x128"  },
-    { "src": "<%= image_url("mortimer_maskable_icon_x192.png") %>",  "type": "image/png", "purpose": "maskable", "sizes": "192x192"  },
-    { "src": "<%= image_url("mortimer_maskable_icon_x384.png") %>",  "type": "image/png", "purpose": "maskable", "sizes": "384x384"  },
-    { "src": "<%= image_url("mortimer_maskable_icon_x512.png") %>",  "type": "image/png", "purpose": "maskable", "sizes": "512x512"  }
+    { "src": "<%= image_url("favicon-16.png") %>",    "type": "image/png", "purpose": "any", "sizes": "16x16"  },
+    { "src": "<%= image_url("favicon-32.png") %>",    "type": "image/png", "purpose": "any", "sizes": "32x32"  },
+    { "src": "<%= image_url("pwa-icon-58.png") %>",   "type": "image/png", "purpose": "any", "sizes": "58x58"  },
+    { "src": "<%= image_url("pwa-icon-60.png") %>",   "type": "image/png", "purpose": "any", "sizes": "60x60"  },
+    { "src": "<%= image_url("pwa-icon-76.png") %>",   "type": "image/png", "purpose": "any", "sizes": "76x76"  },
+    { "src": "<%= image_url("pwa-icon-80.png") %>",   "type": "image/png", "purpose": "any", "sizes": "80x80"  },
+    { "src": "<%= image_url("pwa-icon-87.png") %>",   "type": "image/png", "purpose": "any", "sizes": "87x87"  },
+    { "src": "<%= image_url("pwa-icon-120.png") %>",  "type": "image/png", "purpose": "any", "sizes": "120x120"  },
+    { "src": "<%= image_url("pwa-icon-128.png") %>",  "type": "image/png", "purpose": "any", "sizes": "128x128"  },
+    { "src": "<%= image_url("pwa-icon-136.png") %>",  "type": "image/png", "purpose": "any", "sizes": "136x136"  },
+    { "src": "<%= image_url("pwa-icon-114.png") %>",  "type": "image/png", "purpose": "any", "sizes": "114x114"  },
+    { "src": "<%= image_url("pwa-icon-152.png") %>",  "type": "image/png", "purpose": "any", "sizes": "152x152"  },
+    { "src": "<%= image_url("pwa-icon-167.png") %>",  "type": "image/png", "purpose": "any", "sizes": "167x167"  },
+    { "src": "<%= image_url("pwa-icon-192.png") %>",  "type": "image/png", "purpose": "any", "sizes": "192x192"  },
+    { "src": "<%= image_url("pwa-icon-512.png") %>",  "type": "image/png", "purpose": "any", "sizes": "512x512"  },
+    { "src": "<%= image_url("pwa-icon-1024.png") %>", "type": "image/png", "purpose": "any", "sizes": "1024x1024"  }
   ],
   "screenshots": [
-  {
-    "src": "<%= image_url("install_screenshot_1.webp") %>",
-    "sizes": "703x703",
-    "type": "image/webp",
-    "form_factor": "wide",
-    "label": "Home screen showing main navigation and featured content"
-  },
-  {
-    "src": "<%= image_url("install_screenshot_2.webp") %>",
-    "sizes": "690x690",
-    "type": "image/webp",
-    "platform": "ios",
-    "label": "View displaying input for a new time registration"
-  }
+    {
+      "src": "<%= image_url("install_screenshot_1.webp") %>",
+      "sizes": "703x703",
+      "type": "image/webp",
+      "form_factor": "wide",
+      "label": "Home screen showing main navigation and featured content"
+    },
+    {
+      "src": "<%= image_url("install_screenshot_2.webp") %>",
+      "sizes": "690x690",
+      "type": "image/webp",
+      "platform": "ios",
+      "label": "View displaying input for a new time registration"
+    }
   ],
   "start_url": "<%= root_url %>",
-  "display_override": ["window-controls-overlay","fullscreen", "minimal-ui"],
+  "display_override": ["window-controls-overlay", "fullscreen", "minimal-ui"],
   "display": "standalone",
   "orientation": "portrait",
-  "author": "Walther H Diechman",
+  "author": "Walther H Diechmann",
   "developer": {
     "name": "ALCO Company ApS",
     "url": "https://alco.dk"
@@ -46,7 +54,7 @@
     }
   ],  
   "scope": "/",
-  "description": "Mortimer - a simple, fast, and afforable time and attendance service, affording you a shortcut from job done to invoice sent.",
-  "theme_color": "#0284c7",
-  "background_color": "white"
+  "description": "Mortimer - a simple, fast, and affordable time and attendance service, affording you a shortcut from job done to invoice sent.",
+  "theme_color": "#0084d1",
+  "background_color": "#0084d1"
 }

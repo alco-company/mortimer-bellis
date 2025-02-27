@@ -113,6 +113,7 @@ END
 - drop change field names 20250225170102_change_fields
 - fix error on login - bad migrations
 - fix bug set_resource
+- remove icons - start all over
 
 ### 26/2/2025
 

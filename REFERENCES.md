@@ -42,6 +42,7 @@ contributions to Open Source Software have in each their own way made a crucial 
 * (man)handling Turbo Frames [Radan Skoric](https://radanskoric.com/articles/update-full-page-on-form-in-frame-submit)
 * Setting Up TOTP Two-Factor Authentication in Ruby on Rails Application [Mikołaj Bogucki](https://blog.lunarlogic.com/2024/setting-up-totp-two-factor-authentication-in-rails)
 * Correctly resizing PWA icons [Jon Henshaw](https://coywolf.pro/webdev/how-to-create-pwa-icons-that-look-correct-on-all-platforms-and-devices/)
+* Automating the generation of PWA Icons [Dominik Fiala](https://dev.to/dominikfiala/hassle-free-pwa-icons-and-splash-screen-generation-3c24)
 
 ## Resources
 
