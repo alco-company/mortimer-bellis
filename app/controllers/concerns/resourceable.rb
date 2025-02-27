@@ -21,8 +21,8 @@ module Resourceable
     end
 
     # Use callbacks to share common setup or constraints between actions.
-    def set_resource(params = nil)
-      @resource = params&.dig(:id) ? find_resource : new_resource(params)
+    def set_resource
+      @resource = params&.dig(:id) ? find_resource : new_resource
     end
 
     def new_resource(params = nil)

@@ -104,7 +104,7 @@ module DefaultActions
     #
     def create
       posthog_capture
-      set_resource(resource_params)
+      new_resource(resource_params)
       resource.tenant_id = Current.tenant.id if resource_class.has_attribute? :tenant_id
       resource.user_id = Current.user.id if resource_class.has_attribute?(:user_id) && !resource_params[:user_id].present?
 
