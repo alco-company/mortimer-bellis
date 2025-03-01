@@ -106,6 +106,18 @@ END
 - upgrade Tailwind to 4.0 - https://www.zolkos.com/2024/11/30/upgrading-to-tailwind4
 - hide notification bell
 - make login sequence work
+- ret notifikation til notice for 'din konto er godkendt'
+- efter gem af profil - 'content missing'
+- åbne opgaver - klik på profil så sker der ikke noget
+- gå alle åbne opgaver igennem
+- hvis email findes - fortæl brugeren at invitation ikke kan sendes til vedkommende
+- skriv på brugeroversigt at brugeren er inviteret
+
+### 1/3/2025
+
+- add new splash screens
+- slet konti og brugere
+- 
 
 ### 27/2/2025
 
