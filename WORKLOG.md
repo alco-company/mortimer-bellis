@@ -116,6 +116,7 @@ END
 ### 1/3/2025
 
 - add new splash screens
+- add missing artwork
 - slet konti og brugere
 - 
 
