@@ -1,7 +1,5 @@
 class ModalController < MortimerController
   before_action :set_vars, only: [ :new, :show, :create, :destroy, :update ]
-  skip_before_action :require_authentication, only: [ :destroy ]
-  skip_before_action :check_session_length, only: [ :destroy ]
 
   def new
     # resource
@@ -44,8 +42,6 @@ class ModalController < MortimerController
   #
   def destroy
     params[:action] = "destroy"
-    (require_authentication && check_session_length) || verify_api_key
-    @resource = find_resource
     params[:all] == "true" ? process_destroy_all : process_destroy
   end
 
@@ -54,23 +50,20 @@ class ModalController < MortimerController
     def set_vars
       @modal_form = params[:modal_form]
       @attachment = params[:attachment]
-      set_filter_and_batch
-      resource()
-      set_resources()
       @step = params[:step]
       @url = params[:url] || resources_url
       @view = params[:view] || "month"
       @search = params[:search]
     end
 
-    def set_filter_and_batch
-      @filter_form = resource_class.to_s.underscore.pluralize
-      @filter = Filter.by_user.by_view(@filter_form).take || Filter.new
-      @filter.filter ||= {}
+    # def set_filter_and_batch
+    #   @filter_form = resource_class.to_s.underscore.pluralize
+    #   @filter = Filter.by_user.by_view(@filter_form).take || Filter.new
+    #   @filter.filter ||= {}
 
-      @batch = Batch.where(tenant: Current.tenant, user: Current.user, entity: resource_class.to_s).take ||
-                Batch.create(tenant: Current.tenant, user: Current.user, entity: resource_class.to_s, ids: "", all: true)
-    end
+    #   @batch = Batch.where(tenant: Current.tenant, user: Current.user, entity: resource_class.to_s).take ||
+    #             Batch.create(tenant: Current.tenant, user: Current.user, entity: resource_class.to_s, ids: "", all: true)
+    # end
 
     # def resource
     #   if params[:id].present?
@@ -296,24 +289,13 @@ class ModalController < MortimerController
       render_to_string "employees/report_state", layout: "pdf", formats: :pdf
     end
 
-    def set_resource_class
-      @resource_class = params.dig(:resource_class).classify.constantize
-    rescue => e
-      redirect_to "/", alert: I18n.t("errors.resources.resource_class.not_found", ctrl: params.dig(:resource_class), reason: e.to_s) and return
-    end
+  # def any_filters?
+  #   return false if @filter.nil? or params.dig(:controller).split("/").last == "filters" or params.dig(:action) == "lookup"
+  #   # !@filter.id.nil?
+  #   @filter.persisted?
+  # end
 
-    def verify_api_key
-      return false unless params.dig(:api_key) && @resource && @resource.respond_to?(:access_token)
-      @resource.access_token == params.dig(:api_key) || redirect_to(new_users_session_path)
-    end
-
-    def any_filters?
-      return false if @filter.nil? or params.dig(:controller).split("/").last == "filters" or params.dig(:action) == "lookup"
-      # !@filter.id.nil?
-      @filter.persisted?
-    end
-
-    def any_sorts?
-      params.dig :s
-    end
+  # def any_sorts?
+  #   params.dig :s
+  # end
 end

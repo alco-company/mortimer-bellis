@@ -1,7 +1,7 @@
 module Resourceable
   extend ActiveSupport::Concern
 
-  attr_reader :resource, :resource_name, :resources, :resource_class # , :filter, :filter_form, :url
+  attr_reader :resource, :resource_name, :resources, :resource_class, :collection # , :filter, :filter_form, :url
 
   included do
     def resource
@@ -26,7 +26,7 @@ module Resourceable
     end
 
     def new_resource(params = nil)
-      params.nil? ? resource_class.new : resource_class.new(params)
+      params.nil? ? @resource = resource_class.new : @resource = resource_class.new(params)
     end
 
     def set_resources_stream
@@ -50,6 +50,7 @@ module Resourceable
     def set_resource_class
       ctrl = params.dig(:controller).split("/").last
       case ctrl
+      when "modal"; params.dig(:resource_class).classify.constantize
       when "otps"; User
       when "invitations"; User
       when "passwords"; User

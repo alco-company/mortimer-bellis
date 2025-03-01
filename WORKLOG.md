@@ -117,6 +117,7 @@ END
 
 - add new splash screens
 - add missing artwork
+- add manifest and header
 - slet konti og brugere
 - 
 
