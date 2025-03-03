@@ -125,7 +125,7 @@ class ListItems::TimeMaterial < ListItems::ListItem
     return resource.customer&.name if resource.customer.present? or !resource.customer_name.blank?
     return resource.project&.name if resource.project.present? or !resource.project_name.blank?
     I18n.t("time_material.internal_or_private")
-  rescue "!"
+  rescue "!128"
   end
 
   def show_time_material_quantative
@@ -142,7 +142,7 @@ class ListItems::TimeMaterial < ListItems::ListItem
       end
     end
   rescue
-    "!"
+    "!145"
   end
 
   def show_time_details
@@ -151,14 +151,14 @@ class ListItems::TimeMaterial < ListItems::ListItem
       resource.rate
     "#{ resource.time}t á #{ rate }"
   rescue
-    "!"
+    "!154"
   end
 
   def show_product_details
     u = resource.unit.blank? ? "" : I18n.t("time_material.units.#{resource.unit}")
     "%s %s á %s" % [ resource.quantity, u, resource.unit_price ]
   rescue
-    "!"
+    "!161"
   end
 
   def product_rates

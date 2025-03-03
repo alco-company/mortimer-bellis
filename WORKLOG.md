@@ -123,6 +123,7 @@ END
 - revert favicon to previous
 - fjern password på tenant registration email confirmation
 - do not validate account_number on products
+- mark rescues on time_material view
 
 ### 1/3/2025
 
