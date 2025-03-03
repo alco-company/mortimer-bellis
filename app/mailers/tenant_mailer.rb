@@ -31,7 +31,7 @@ class TenantMailer < ApplicationMailer
   end
 
   def report_state
-    Current.tenant = params[:tenant]
+    Current.system_tenant = params[:tenant]
     rcpt =  email_address_with_name Current.tenant.email, Current.tenant.name
     params[:tmpfiles].each_with_index do |tmpfile, i|
       attachments["report_state_#{i}.pdf"] = File.read(tmpfile)

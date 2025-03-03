@@ -118,6 +118,7 @@ END
 ### 3/3/2025
 
 - foreign key constraint on tenant delete
+- cannot delete own account/tenant
 
 ### 1/3/2025
 

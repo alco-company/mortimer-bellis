@@ -96,7 +96,7 @@ class User < ApplicationRecord
 
   def remove(step = nil)
     if tenant.users.count == 1 || step == "delete_account"
-      TenantRegistrationService.call(tenant, destroy: true)
+      TenantRegistrationService.call(tenant, {}, destroy: true)
     else
       UserMailer.with(user: self).user_farewell.deliver
       destroy!
@@ -205,6 +205,8 @@ class User < ApplicationRecord
     else
       UserNotifier.with(record: self, current_user: Current.user, title: title, message: msg, delegator: self.name).deliver(recipient)
     end
+  rescue => e
+    UserMailer.error_report(e.to_s, "User#notify - failed for #{self&.id}").deliver_later
   end
 
   def notified?(action)

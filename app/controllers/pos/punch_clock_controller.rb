@@ -38,16 +38,18 @@ class Pos::PunchClockController < Pos::PosController
       redirect_to pos_punch_clock_path(api_key: @resource.access_token) and return unless @user
     end
 
+    ## TODO must be set using new Rails authentication model
     def verify_token
-      api_key = case true
-      when params[:api_key].present?; params.delete(:api_key)
-      when params[:punch_card].present?; params[:punch_card].delete(:api_key)
-      when params[:punch_clock].present?; params[:punch_clock].delete(:api_key)
-      else ""
-      end
-      @resource = PunchClock.by_tenant.find_by(access_token: api_key)
-      redirect_to root_path and return if @resource.nil?
-      Current.tenant = @resource.tenant
+      raise "set tenant with new Rails authentication model"
+      # api_key = case true
+      # when params[:api_key].present?; params.delete(:api_key)
+      # when params[:punch_card].present?; params[:punch_card].delete(:api_key)
+      # when params[:punch_clock].present?; params[:punch_clock].delete(:api_key)
+      # else ""
+      # end
+      # @resource = PunchClock.by_tenant.find_by(access_token: api_key)
+      # redirect_to root_path and return if @resource.nil?
+      # Current.tenant = @resource.tenant
       # @resource.regenerate_access_token
     end
 

@@ -34,6 +34,7 @@ class KillTenantJob < ApplicationJob
           user.access_tokens.destroy_all
           user.notifications.destroy_all
           user.web_push_subscriptions.destroy_all
+          user.sessions.destroy_all
           user.delete
         end
 
