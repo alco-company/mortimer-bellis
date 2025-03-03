@@ -14,7 +14,7 @@ class Product < ApplicationRecord
   validates :base_amount_value, presence: true
   validates :quantity, presence: true
   validates :unit, presence: true # hours, parts, km, day, week, month, kilogram, cubicMetre, set, litre, box, case, carton, metre, package, shipment, squareMetre, session, tonne, unit, other
-  validates :account_number, presence: true
+  # validates :account_number, presence: true
 
   def self.filtered(filter)
     flt = filter.filter

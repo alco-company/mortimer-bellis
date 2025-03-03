@@ -122,6 +122,7 @@ END
 - kill tenant later
 - revert favicon to previous
 - fjern password på tenant registration email confirmation
+- do not validate account_number on products
 
 ### 1/3/2025
 
