@@ -2,11 +2,20 @@
 # Registration of first user for a new tenant
 #
 class Tenants::RegistrationsController < MortimerController
-  allow_unauthenticated_access only: %i[new create]
+  allow_unauthenticated_access only: %i[new show create]
   # resume_session only: :new
 
   def new
     @user = User.new
+  end
+
+  def show
+    @tenant = User.find_by(email: params[:email]) || Tenant.find_by(email: params[:email]) rescue Tenant.new
+    if @tenant&.persisted?
+      @tenant.email = I18n.t("devise.registrations.email_taken")
+    else
+      @tenant = Tenant.new email: I18n.t("devise.registrations.email_ok"), name: ""
+    end
   end
 
   def create

@@ -110,7 +110,6 @@ END
 - efter gem af profil - 'content missing'
 - åbne opgaver - klik på profil så sker der ikke noget
 - gå alle åbne opgaver igennem
-- hvis email findes - fortæl brugeren at invitation ikke kan sendes til vedkommende
 - skriv på brugeroversigt at brugeren er inviteret
 
 
@@ -124,6 +123,7 @@ END
 - fjern password på tenant registration email confirmation
 - do not validate account_number on products
 - mark rescues on time_material view
+- if email exist - tell user on sign_up
 
 ### 1/3/2025
 

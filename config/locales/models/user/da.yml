@@ -270,6 +270,8 @@ da:
       updated_not_active: "Din adgangskode er blevet ændret korrekt. Log ind med din nye adgangskode."
       passwords_not_matching: "Adgangskoderne er ikke ens."
     registrations:
+      email_taken: "Email adressen er allerede tilknyttet en anden konto."
+      email_ok: "Email adressen er ledig."
       failed: "Der opstod en fejl under oprettelsen af din konto."
       destroyed: "Farvel! Din konto er blevet annulleret korrekt. Det ville glæde os at se dig tilbage."
       signed_up: "Velkommen! Du er blevet oprettet korrekt."

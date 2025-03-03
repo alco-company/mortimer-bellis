@@ -5,12 +5,17 @@
     </div>
     <h1 class="font-bold text-gray-200 text-2xl"> <%= t(".sign_up.title") %> </h1>
 
-    <%= form_for(resource, as: resource_name, url: tenants_registrations_url,  data: { controller: "password-strength" }) do |f| %>
+    <%= form_for(resource, as: resource_name, url: tenants_registrations_url,  data: { controller: "email-taken password-strength" }) do |f| %>
       <%= render "users/shared/error_messages", resource: resource %>
 
       <div class="mort-field">
         <%= f.label :email %><br />
-        <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "mort-form-text" %>
+        <%= f.email_field :email, 
+          autofocus: true, 
+          autocomplete: "email", 
+          "data-action": "blur->email-taken#validate",
+          class: "mort-form-text" %>
+        <div data-email-taken-target="emailTakenMessage" class="mt-0 pl-3 text-xs"></div>
       </div>
 
       <div class="mort-field">
