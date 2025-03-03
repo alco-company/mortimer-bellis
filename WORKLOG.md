@@ -112,6 +112,12 @@ END
 - gå alle åbne opgaver igennem
 - hvis email findes - fortæl brugeren at invitation ikke kan sendes til vedkommende
 - skriv på brugeroversigt at brugeren er inviteret
+- fjern password på tenant registration email confirmation
+
+
+### 3/3/2025
+
+- foreign key constraint on tenant delete
 
 ### 1/3/2025
 
