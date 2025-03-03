@@ -112,7 +112,6 @@ END
 - gå alle åbne opgaver igennem
 - hvis email findes - fortæl brugeren at invitation ikke kan sendes til vedkommende
 - skriv på brugeroversigt at brugeren er inviteret
-- fjern password på tenant registration email confirmation
 
 
 ### 3/3/2025
@@ -122,6 +121,7 @@ END
 - fix bug on user invitation
 - kill tenant later
 - revert favicon to previous
+- fjern password på tenant registration email confirmation
 
 ### 1/3/2025
 
@@ -129,7 +129,6 @@ END
 - add missing artwork
 - add manifest and header
 - slet konti og brugere
-- 
 
 ### 27/2/2025
 
