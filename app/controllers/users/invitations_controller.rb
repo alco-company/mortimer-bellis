@@ -1,4 +1,6 @@
 class Users::InvitationsController < MortimerController
+  skip_before_action :require_authentication, only: [ :edit ]
+
   def new
   end
 
@@ -30,10 +32,12 @@ class Users::InvitationsController < MortimerController
 
   def edit
     @user = User.find_by(invitation_token: params[:token])
-    @user.confirm!
-    @user.update invitation_accepted_at: Time.now
+    if @user
+      @user.confirm!
+      @user.update invitation_accepted_at: Time.now
+    end
 
-    if @user.confirmed?
+    if @user&.confirmed?
       redirect_to edit_users_password_url(@user.password_reset_token)
     else
       render :new, alert: "Error accepting invitation. Please try again."

@@ -119,6 +119,7 @@ END
 
 - foreign key constraint on tenant delete
 - cannot delete own account/tenant
+- fix bug on user invitation
 
 ### 1/3/2025
 
