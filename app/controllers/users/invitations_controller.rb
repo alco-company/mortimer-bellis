@@ -13,6 +13,7 @@ class Users::InvitationsController < MortimerController
         Current.user.update invitations_count: Current.user.invitations_count + 1
         UserMailer.invitation_instructions(invitee_user, Current.user, msg).deliver_later
         flash[:info] = I18n.t("devise.invitations.send_instructions", email: invitee)
+        invitee_user.invited!
         count += 1
       else
         flash[:alert] = I18n.t("devise.failure.invitation_failed", invitee: invitee)

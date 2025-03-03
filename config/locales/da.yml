@@ -916,6 +916,12 @@ da:
           name: Konto
         invited_by: 
           name: Blev inviteret af
+        invitations_count: Antal invitationer
+        invitation_token: Invitationstoken
+        invitation_created_at: Invitation oprettet den
+        invitation_sent_at: Invitation sendt den
+        invitation_accepted_at: Invitation accepteret den
+        invitation_limit: Max antal invitationer
         email: Emailadresse
         mugshot: Profil billede
         role: Rolle

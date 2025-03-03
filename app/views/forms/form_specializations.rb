@@ -15,13 +15,13 @@ module FormSpecializations
     end
 
     def view_only(component, outer_class = "mort-field")
-      div do
+      div(class: outer_class) do
         render(component.field.label) do
           plain I18n.t("activerecord.attributes.#{component.field.parent.key}.#{component.field.key}")
           # span(class: "font-bold") do
           # end
         end
-        div(class: outer_class) do
+        div() do
           display_field(component.field)
         end
       end

@@ -110,7 +110,6 @@ END
 - efter gem af profil - 'content missing'
 - åbne opgaver - klik på profil så sker der ikke noget
 - gå alle åbne opgaver igennem
-- skriv på brugeroversigt at brugeren er inviteret
 
 
 ### 3/3/2025
@@ -124,6 +123,7 @@ END
 - do not validate account_number on products
 - mark rescues on time_material view
 - if email exist - tell user on sign_up
+- show user status on list
 
 ### 1/3/2025
 

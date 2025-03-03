@@ -69,4 +69,11 @@ class ListItems::User < ListItems::ListItem
   def show_secondary_info
     plain "%s %s " % [ resource.sign_in_count, resource.last_sign_in_at ]
   end
+
+  def show_time_info
+    span(class: "text-xs text-sky-300 mr-2") { WORK_STATE_H[resource.state] }
+    span(class: "truncate") do
+      plain I18n.l resource.created_at, format: :date
+    end
+  end
 end
