@@ -121,6 +121,7 @@ END
 - cannot delete own account/tenant
 - fix bug on user invitation
 - kill tenant later
+- revert favicon to previous
 
 ### 1/3/2025
 
