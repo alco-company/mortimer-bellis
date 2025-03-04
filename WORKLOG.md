@@ -113,11 +113,16 @@ END
 - gå alle åbne opgaver igennem
 - there's still a foreign key lurking somewhere in the kill_tenant_job
 - big fix on time_materials
+- create 3 products
+- create invoicing service
+- no requirements on t/m
+- toggle switch on products and customers for sync with invoicing service
 
 ### 4/3/2025
 
 - fix profile update not working
 - fix profile update not working II
+- fix profile update not working III
 
 
 ### 3/3/2025

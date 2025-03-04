@@ -77,6 +77,7 @@ da:
 
     registrations:
       updated: Din profil er blevet opdateret
+      validation_errors: "Der opstod fejl under opdateringen af brugeren."
       new:
         create: Opret kontoen
         sign_up:

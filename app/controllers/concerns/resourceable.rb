@@ -22,7 +22,7 @@ module Resourceable
 
     # Use callbacks to share common setup or constraints between actions.
     def set_resource
-      @resource = params&.dig(:id) ? find_resource : new_resource
+      @resource = get_resource_id ? find_resource : new_resource
     end
 
     def new_resource(params = nil)
@@ -119,13 +119,19 @@ module Resourceable
   end
 
   def find_resource
-    r = resource_class.find(params.dig(:id))
+    r = resource_class.find(get_resource_id)
     redirect_to "/", alert: I18n.t("errors.messages.no_permission") and return unless Current.user.allowed_to?(params.dig(:action), r)
     r
   rescue
     Rails.logger.info "ERROR! >>>>>>>>>>>>> Resourceable#find_resource: #{r.inspect}"
     resource_class.new
     # redirect_to "/", alert: I18n.t("errors.messages.not_found", model: resource_class.to_s) and return
+  end
+
+  def get_resource_id
+    params&.dig(:id) || params&.dig(resource_class.to_s.underscore.to_sym, :id)
+  rescue
+    nil
   end
 
   private
