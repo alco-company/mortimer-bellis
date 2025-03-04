@@ -35,6 +35,7 @@ class Users::InvitationsController < MortimerController
     @user = User.find_by(invitation_token: params[:token])
     if @user
       @user.confirm!
+      @user.confirmed!
       @user.update invitation_accepted_at: Time.now
     end
 

@@ -34,7 +34,7 @@
                     </h3>
                     
 
-                    <%= form_for(resource, as: resource_name, url: users_registrations_url(resource_name), data: { form_target: "form", profile_target: "buttonForm" }, html: { class: "group mort-form", method: :put }) do |f| %>
+                    <%= form_for(resource, as: resource_name, url: tenants_registrations_url(), data: { form_target: "form", profile_target: "buttonForm" }, html: { class: "group mort-form", method: :put }) do |f| %>
                       <%= render "users/shared/error_messages", resource: resource %>
 
                       <% if Current.user.superadmin? %>

@@ -125,7 +125,8 @@ class ListItems::TimeMaterial < ListItems::ListItem
     return resource.customer&.name if resource.customer.present? or !resource.customer_name.blank?
     return resource.project&.name if resource.project.present? or !resource.project_name.blank?
     I18n.t("time_material.internal_or_private")
-  rescue "!128"
+  rescue
+    "!129"
   end
 
   def show_time_material_quantative
@@ -142,13 +143,11 @@ class ListItems::TimeMaterial < ListItems::ListItem
       end
     end
   rescue
-    "!145"
+    "!146"
   end
 
   def show_time_details
-    rate = resource.rate.blank? ?
-      product_rates[resource.over_time] :
-      resource.rate
+    rate = resource.rate.blank? ? product_rates : resource.rate
     "#{ resource.time}t á #{ rate }"
   rescue
     "!154"
@@ -164,7 +163,9 @@ class ListItems::TimeMaterial < ListItems::ListItem
   def product_rates
     @product_rates ||= Product
       .where(product_number: [ ps.product_for_time, ps.product_for_overtime, ps.product_for_overtime_100 ])
-      .pluck :base_amount_value
+      .pluck(:base_amount_value)[resource.over_time]
+  rescue
+    ""
   end
 
   def ps

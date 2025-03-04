@@ -26,6 +26,7 @@ class Users::ConfirmationsController < MortimerController
 
     if @user
       @user.confirm!
+      @user.confirmed!
       flash[:notice] = I18n.t("devise.confirmations.confirmed")
     else
       flash[:warning] = I18n.t("devise.failure.already_confirmed")

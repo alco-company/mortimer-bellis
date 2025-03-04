@@ -27,6 +27,7 @@ class Users::PasswordsController < MortimerController
   def update
     if @user.update(user_params)
       flash[:notice] = I18n.t("devise.passwords.updated_not_active")
+      @user.out!
       redirect_to new_users_session_path
     else
       flash[:alert] = I18n.t("devise.passwords.passwords_not_matching")

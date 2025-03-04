@@ -123,6 +123,7 @@ END
 - fix profile update not working
 - fix profile update not working II
 - fix profile update not working III
+- upon confirmation set user state
 
 
 ### 3/3/2025
