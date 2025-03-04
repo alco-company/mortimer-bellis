@@ -117,6 +117,7 @@ END
 ### 4/3/2025
 
 - fix profile update not working
+- fix profile update not working II
 
 
 ### 3/3/2025
