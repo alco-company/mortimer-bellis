@@ -9,6 +9,9 @@
     <%= web_push_public_key_meta_tag %>
   </head>
   <body id="body" class="h-full" style="height: 100vh;" >
+    <!-- stream for this user -->
+    <%= turbo_stream_from "#{Current.user.id}_user_stream" if Current.user %>
+
     <!-- tooltip -->
     <%= turbo_frame_tag "tooltip", class: "absolute", target: "_top" %>
 

@@ -74,12 +74,9 @@ class Users::RegistrationsController < MortimerController
       flash[:notice] = I18n.t("users.registrations.updated")
       render turbo_stream: [
         turbo_stream.update("form", ""),
+        turbo_stream.replace("profile_dropmenu", ProfileDropmenuComponent.new),
         turbo_stream.replace("flash_container", partial: "application/flash_message")
       ]
-
-      # bypass_sign_in resource, scope: resource_name if sign_in_after_change_password?
-
-      # respond_with resource, location: after_update_path_for(resource)
     else
       resource.attachment_changes.each do |_, change|
         if change.is_a?(ActiveStorage::Attached::Changes::CreateOne)

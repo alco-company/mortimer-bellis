@@ -1,11 +1,18 @@
 # frozen_string_literal: true
 
 class ProfileDropmenuComponent < ApplicationComponent
+  include Phlex::Rails::Helpers::TurboFrameTag
   include Phlex::Rails::Helpers::ImageTag
   include Phlex::Rails::Helpers::LinkTo
 
   def view_template
     comment { "Profile dropdown" }
+    turbo_frame_tag "profile_dropmenu" do
+      profile_dropmenu
+    end
+  end
+
+  def profile_dropmenu
     div(class: "relative", data: { controller: "contextmenu" }) do
       button(
         type: "button",

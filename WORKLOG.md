@@ -73,6 +73,9 @@ END
   }
 }
 
+- investigate into refactoring the render - use https://fly.io/ruby-dispatch/component-driven-development-on-rails-with-phlex/
+- switch to Nokolexbor (from Nokogiri) for parsing HTML like when scraping
+
 - use Hotwire for downloading PDF's
 - use Ruby Patterns as explained in https://medium.com/@slimbennasrallah_89177/ruby-on-rails-design-patterns-101-d99f43adc2b3
 - use materialized views for most index actions - https://medium.com/@michal.a.rudzki/utilizing-materialized-views-power-in-ruby-on-rails-bcd2332604bb
@@ -104,12 +107,16 @@ END
 - CSRF token on login ages out - fix
 - batches only set on every second try
 - upgrade Tailwind to 4.0 - https://www.zolkos.com/2024/11/30/upgrading-to-tailwind4
-- hide notification bell
-- make login sequence work
 - ret notifikation til notice for 'din konto er godkendt'
 - efter gem af profil - 'content missing'
 - åbne opgaver - klik på profil så sker der ikke noget
 - gå alle åbne opgaver igennem
+- there's still a foreign key lurking somewhere in the kill_tenant_job
+- big fix on time_materials
+
+### 4/3/2025
+
+- fix profile update not working
 
 
 ### 3/3/2025
