@@ -117,6 +117,11 @@ END
 - create invoicing service
 - no requirements on t/m
 - toggle switch on products and customers for sync with invoicing service
+- settings update wrong list_item (user?)
+
+### 5/3/2025
+
+- add default settings for time_material
 
 ### 4/3/2025
 
@@ -124,7 +129,6 @@ END
 - fix profile update not working II
 - fix profile update not working III
 - upon confirmation set user state
-
 
 ### 3/3/2025
 

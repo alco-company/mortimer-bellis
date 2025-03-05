@@ -1,10 +1,16 @@
 class TimeMaterialsController < MortimerController
   def new
     super
-    @resource.customer_name = TimeMaterial.by_exact_user(Current.user).last&.customer_name
-    @resource.state = 3
-    @resource.date = Time.current.to_date
-    @resource.user_id = Current.user.id
+    resource.customer_name = TimeMaterial.by_exact_user(Current.user).last&.customer_name
+    resource.state =         Current.user.default(:default_time_material_state, "draft")
+    resource.about =         Current.user.default(:default_time_material_about, "ongoing task")
+    resource.hour_time =     Current.user.default(:default_time_material_hour_time, 0)
+    resource.minute_time =   Current.user.default(:default_time_material_minute_time, 15)
+    resource.rate =          Current.user.default(:default_time_material_rate, "500,00")
+    resource.over_time =     Current.user.default(:default_time_material_over_time, 0)
+
+    resource.date = Time.current.to_date
+    resource.user_id = Current.user.id
   end
 
   def index
@@ -14,15 +20,24 @@ class TimeMaterialsController < MortimerController
   end
 
   def show
-    params.permit![:pause].present? ? pause_resume : super
+    if params.permit![:reload].present? and resource.active?
+      resource.time_spent ||= 0
+      resource.started_at ||= Time.current
+      time_spent = (Time.current.to_i - resource.started_at.to_i) + resource.time_spent
+      resource.update time_spent: time_spent, paused_at: nil, started_at: Time.current
+      Broadcasters::Resource.new(resource.reload, { controller: "time_materials" }, Current.user).replace
+      head :ok
+    else
+      params.permit![:pause].present? ? pause_resume : super
+    end
   end
 
   def edit
-    @resource.update time_spent: @resource.time_spent + (Time.current.to_i - @resource.started_at.to_i) if @resource.active? # or @resource.paused?
-    # @resource.update time: @resource.sanitize_time_spent
-    @resource.customer_name = @resource.customer&.name unless @resource.customer_id.blank?
-    @resource.project_name = @resource.project&.name unless @resource.project_id.blank?
-    @resource.product_name = @resource.product&.name unless @resource.product_id.blank?
+    resource.update time_spent: resource.time_spent + (Time.current.to_i - resource.started_at.to_i) if resource.active? # or resource.paused?
+    # resource.update time: resource.sanitize_time_spent
+    resource.customer_name = resource.customer&.name  || resource.customer_name  # unless resource.customer_id.blank?
+    resource.project_name = resource.project&.name    || resource.project_name   # unless resource.project_id.blank?
+    resource.product_name = resource.product&.name    || resource.product_name   # unless resource.product_id.blank?
   end
 
   # pick up the play button from the time_material#index view
@@ -35,13 +50,13 @@ class TimeMaterialsController < MortimerController
 
   # POST /users/:id/archive
   def archive
-    @resource = TimeMaterial.find(params[:id])
-    if @resource
-      @resource.archived? ?
-        (@resource.pushed_to_erp! && notice = t("time_material.unarchived")) :
-        (@resource.archived! && notice = t("time_material.archived"))
+    resource = TimeMaterial.find(params[:id])
+    if resource
+      resource.archived? ?
+        (resource.pushed_to_erp! && notice = t("time_material.unarchived")) :
+        (resource.archived! && notice = t("time_material.archived"))
       redirect_back(fallback_location: root_path, notice: notice)
-      Broadcasters::Resource.new(@resource, { controller: "time_materials" }).replace
+      Broadcasters::Resource.new(resource, { controller: "time_materials" }).replace
     else
       redirect_back(fallback_location: root_path, warning: t("users.not_found"))
     end
@@ -50,7 +65,13 @@ class TimeMaterialsController < MortimerController
   private
 
     def before_create_callback
-      prepare_tm
+      if resource.active?
+        resource.time_spent ||= 0
+        resource.started_at ||= Time.current
+        time_spent = (Time.current.to_i - resource.started_at.to_i) + resource.time_spent
+        resource.update time_spent: time_spent, paused_at: nil, started_at: Time.current
+      end
+      resource.prepare_tm resource_params
     end
 
     def create_callback
@@ -58,7 +79,13 @@ class TimeMaterialsController < MortimerController
     end
 
     def before_update_callback
-      prepare_tm
+      if resource.active?
+        resource.time_spent ||= 0
+        resource.started_at ||= Time.current
+        time_spent = (Time.current.to_i - resource.started_at.to_i) + resource.time_spent
+        resource.update time_spent: time_spent, paused_at: nil, started_at: Time.current
+      end
+      resource.prepare_tm resource_params
     end
 
     def update_callback
@@ -67,9 +94,9 @@ class TimeMaterialsController < MortimerController
 
     def set_time
       if resource_params[:state].present? && resource_params[:state] == "done" # done!
-        ht = params[:time_material][:hour_time] # && @resource.hour_time=0
-        mt = params[:time_material][:minute_time] # && @resource.minute_time=0
-        @resource.update time: resource.sanitize_time(ht, mt) unless ht.blank? || mt.blank?
+        ht = params[:time_material][:hour_time] # && resource.hour_time=0
+        mt = params[:time_material][:minute_time] # && resource.minute_time=0
+        resource.update time: resource.sanitize_time(ht, mt) unless ht.blank? || mt.blank?
       end
       true
     end
@@ -78,7 +105,7 @@ class TimeMaterialsController < MortimerController
       return unless params[:play].present?
 
       params[:time_material] = {
-        time: "0:15",
+        time: "0",
         state: 1,
         user_id: Current.user.id,
         started_at: Time.current,
@@ -91,9 +118,9 @@ class TimeMaterialsController < MortimerController
     end
 
     def pause_resume
-      if @resource.user == Current.user or Current.user.admin? or Current.user.superadmin?
+      if resource.user == Current.user or Current.user.admin? or Current.user.superadmin?
         params.permit![:pause] == "pause" ? pause : resume
-        Broadcasters::Resource.new(@resource, params).replace
+        Broadcasters::Resource.new(resource, params).replace
         respond_to do |format|
           format.html { render turbo_stream: [ turbo_stream.replace("flash_container", partial: "application/flash_message") ] }
           format.turbo_stream { render turbo_stream: [ turbo_stream.replace("flash_container", partial: "application/flash_message") ] }
@@ -119,36 +146,20 @@ class TimeMaterialsController < MortimerController
     #   end
     # end
 
-    def prepare_tm
-      if resource_params[:state].present? && resource_params[:state] == "done" # done!
-        if params[:played].present?
-          params.delete(:played)
-          return true
-        end
-        unless @resource.values_ready_for_push?
-          @resource.errors.add(:base, @resource.errors.full_messages.join(", "))
-          return false
-        end
-        @resource.valid?
-      else
-        true
-      end
-    rescue => e
-      debugger
-      false
-    end
-
     # Only allow a list of trusted parameters through.
     def resource_params
       return params unless params[:time_material].present?
 
-      if params.require(:time_material)[:odo_from_time].present? &&
-         params.require(:time_material)[:odo_to_time].present? &&
-         params.require(:time_material)[:odo_from].present? &&
-         params.require(:time_material)[:odo_to].present? &&
-         params.require(:time_material)[:kilometers].present?
-         params[:time_material][:about] = I18n.t("time_material.type.mileage")
-      end
+      #
+      # TODO make odo work
+      #
+      # if params.require(:time_material)[:odo_from_time].present? &&
+      #    params.require(:time_material)[:odo_to_time].present? &&
+      #    params.require(:time_material)[:odo_from].present? &&
+      #    params.require(:time_material)[:odo_to].present? &&
+      #    params.require(:time_material)[:kilometers].present?
+      #    params[:time_material][:about] = I18n.t("time_material.type.mileage")
+      # end
       params.expect(time_material: [
         :tenant_id,
         :date,
@@ -187,16 +198,16 @@ class TimeMaterialsController < MortimerController
     end
 
     def pause
-      @resource.time_spent ||= 0
-      @resource.started_at ||= Time.current
-      time_spent = @resource.time_spent + (Time.current.to_i - @resource.started_at.to_i)
+      resource.time_spent ||= 0
+      resource.started_at ||= Time.current
+      time_spent = (Time.current.to_i - resource.started_at.to_i) + resource.time_spent
       paused_at = Time.current
-      @resource.update state: 2, time_spent: time_spent, paused_at: paused_at
+      resource.update state: 2, time_spent: time_spent, paused_at: paused_at
       flash.now[:success] = t("time_material.paused")
     end
 
     def resume
-      @resource.update state: 1, started_at: Time.current, paused_at: nil
+      resource.update state: 1, started_at: Time.current, paused_at: nil
       flash.now[:success] = t("time_material.resumed")
     end
 end

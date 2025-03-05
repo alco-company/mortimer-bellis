@@ -1,3 +1,51 @@
+#
+#
+# Transition TimeMaterial
+#
+# 1. add defaults (implement using settings)
+# 2. add validations depending upon state
+# 3. add conversion table - -
+#
+# state                         draft   active  paused  finished  pushed_to_erp   error_on_push   archived        default_state             fx 'draft'
+#
+# FIELDS:
+#
+# date                                                  x
+# user_id                                               x                                                         delegate_time_materials   true
+# about                                                                                                           default_about             'ongoing task'
+# hour_time                             s               x                                                         default_hours             0
+# minute_time                           s               x                                                         default_minutes           fx 15
+# rate                                                  x                                                         default_rate              fx 500.00
+# over_time                                             x                                                         default_over_time         fx {base: 100, quarter: 125, fifty: 150, three_quarter: 175, 100percent:200} (%)
+#
+#
+# product_id                                            x         y                                               allow_create_product
+# comment
+# quantity                                              x         y
+# unit                                                  x         y
+# unit_price                                            x         y
+# discount
+#
+# customer_name                                         x                                                         allow_create_customer
+# customer_id                                           x         y
+# project_name                                          x                                                         allow_create_project
+# project_id                                            x
+#
+# is_invoice                  [ 'y', 'n' ]
+# is_separate                 [ 'y', 'n' ]
+
+# VALIDATIONS:
+#
+# validate_draft
+# validate_active                       set_time_spent
+# validate_paused                       set_time_spent
+# validate_finished                     set_time_spent  finishable?
+# validate_pushed_to_erp                                          pushable?
+# validate_error_on_push
+# validate_archived
+#
+
+
 class TimeMaterial < ApplicationRecord
   include Tenantable
   include TimeMaterialStateable
@@ -152,7 +200,6 @@ class TimeMaterial < ApplicationRecord
 
   def hour_time=(val)
     return if val.blank?
-
     self.time = "#{val}:00" if self.time.blank?
     self.time = "%s:%s" % [ val, self.time.split(":")[1] ] if self.time.include?(":")
     self.time = "%s:%s" % [ val, self.time.split(",")[1] ] if self.time.include?(",")
@@ -169,7 +216,6 @@ class TimeMaterial < ApplicationRecord
 
   def minute_time=(val)
     return if val.blank?
-
     self.time = "00:#{val}" if self.time.blank?
     self.time = "%s:%s" % [ self.time.split(":")[0], val ] if self.time.include?(":")
     self.time = "%s:%s" % [ self.time.split(",")[0], val ] if self.time.include?(",")
@@ -286,7 +332,7 @@ class TimeMaterial < ApplicationRecord
       else hours += 1; 0
       end
     end
-    "%s:%s" % [ hours, minutes ]
+    "%02d:%02d" % [ hours.to_i, minutes.to_i ] rescue "00:00"
   end
 
   def set_ptime(ht, mt)
@@ -341,5 +387,29 @@ class TimeMaterial < ApplicationRecord
     # # we'll use the project field for adding a comment in the top of the invoice
     # # or use the project.name !resource.project_name.blank? && resource.project.name
     # true
+  end
+
+
+  def prepare_tm(resource_params)
+    if resource_params[:state].present? &&
+      resource_params[:state] == "done" &&
+      Current.user.default(:validate_time_material_done, true) == "true"
+
+      if resource_params[:played].present?
+        resource_params.delete(:played)
+        return true
+      end
+      unless values_ready_for_push?
+        errors.add(:base, errors.full_messages.join(", "))
+        return false
+      end
+      valid?
+    else
+      true
+    end
+  rescue => e
+    debugger
+    UserMailer.error_report(e.to_s, "TimeMaterial#prepare_tm - failed with params: #{resource_params}").deliver_later
+    false
   end
 end
