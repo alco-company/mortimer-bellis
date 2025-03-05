@@ -122,6 +122,7 @@ END
 ### 5/3/2025
 
 - add default settings for time_material
+- handle playing time_materials better
 
 ### 4/3/2025
 

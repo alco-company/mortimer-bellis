@@ -20,7 +20,8 @@ da:
     resumed: Opgaven blev genoptaget
     pushed_to_erp: Overført til Dinero
     cannot_be_pushed: Kan ikke overføres
-    archived: Arkiveret
+    archived: Posten er blevet arkiveret
+    unarchived: Posten er taget ud af arkivet (igen)
     states:
       draft: Kladde
       active: Aktiv

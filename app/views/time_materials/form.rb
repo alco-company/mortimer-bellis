@@ -114,6 +114,13 @@ class TimeMaterials::Form < ApplicationForm
     end
   end
 
+  #
+  # about
+  # hour_time
+  # minute_time
+  # rate
+  # over_time
+  #
   def show_time_tab
     div(id: "time", data: { tabs_target: "tabPanel" }, class: "time-material-type time tab ") do
       div(class: "space-y-2 ") do
@@ -134,16 +141,20 @@ class TimeMaterials::Form < ApplicationForm
             div(class: "col-span-4") do
               row field(:over_time).select(TimeMaterial.overtimes, class: "mort-form-select"), "mort-field my-1"
             end
-            div(class: "hidden col-span-11") do
-              span(class: "col-span-4 text-sm font-light text-lime-500") { calc_time_spent model.time_spent }
-              # row field(:time).input(), "mort-field my-1"
-            end
           end
         end
       end
     end
   end
 
+  #
+  # product_id
+  # comment
+  # quantity
+  # unit
+  # unit_price
+  # discount
+  #
   def show_material_tab
     div(id: "material", data: { tabs_target: "tabPanel" }, class: "time-material-type material tab hidden") do
       div(class: "space-y-2") do
@@ -224,8 +235,34 @@ class TimeMaterials::Form < ApplicationForm
 
   def about_field
     div(class: "col-span-full") do
-      row field(:about).textarea(class: "mort-form-text").focus, "mort-field my-0"
+      div(class: "mort-field my-0") do
+        div(class: "flex justify-between", data: { controller: "time-material" }) do
+          label(for: "time_material_about", class: "block text-sm font-medium leading-6 text-gray-900") { I18n.t("time_material.about.lbl") }
+          if resource.active? or resource.paused?
+            color = resource.paused? ? "text-gray-500" : "text-lime-500"
+            counter = resource.time_spent # resource.paused? ? resource.time_spent : (Time.current.to_i - resource.started_at.to_i) +
+            _days, hours, minutes, seconds = resource.calc_hrs_minutes counter
+            timestring = "%02d:%02d:%02d" % [ hours, minutes, seconds ]
+            div(class: "float-right") do
+              span(class: "text-xs font-light #{color} grow mr-2 time_counter", data: { counter: counter, state: resource.state, time_material_target: "counter" }) { timestring }
+            end
+          end
+        end
+        textarea(id: "time_material_about", name: "time_material[about]", class: "mort-form-text") do
+          plain resource.about
+        end
+      end
     end
+    div(class: "col-span-full") do
+      div(class: "flex justify-between") do
+        p(class: "mt-3 text-sm leading-6 text-gray-600") { Time.current.to_datetime }
+        p(class: "mt-3 text-sm leading-6 text-gray-600") { resource.started_at.to_datetime }
+        p(class: "mt-3 text-sm leading-6 text-gray-600") { resource.paused_at&.to_datetime }
+        p(class: "mt-3 text-sm leading-6 text-gray-600") { "%s %s" % resource.time_spent.divmod(60) }
+      end
+    end
+
+    # row field(:about).textarea(class: "mort-form-text").focus, "mort-field my-0"
   end
 
   def customer_field
@@ -309,6 +346,15 @@ class TimeMaterials::Form < ApplicationForm
     else
       days, hours, minutes, _seconds = @resource.calc_hrs_minutes(time_spent)
       I18n.t("time_material.time_spent", time_spent: "#{days}d #{hours}h #{minutes}m")
+    end
+  end
+
+  def show_time_spent(time_spent)
+    if time_spent.nil?
+      "00:00"
+    else
+      days, hours, minutes, _seconds = @resource.calc_hrs_minutes(time_spent)
+      "#{days}d #{hours}h #{minutes}m"
     end
   end
 end

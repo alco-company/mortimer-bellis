@@ -1,8 +1,8 @@
 class ListItems::TimeMaterial < ListItems::ListItem
   def html_list
     comment { "bg-green-200 bg-yellow-200" }
-    div(id: (dom_id resource), class: "relative flex justify-between gap-x-6 mb-1 px-2 py-5 rounded-sm #{ background }", data: time_material_controller?) do
-      div(class: "flex grow min-w-0 gap-x-4") do
+    div(id: (dom_id resource), class: "relative flex justify-between gap-x-6 mb-1 px-2 py-5 rounded-sm #{ background }", data: { controller: "time-material" }) do
+      div(class: "flex grow min-w-0 gap-x-4", data: time_material_controller?) do
         show_left_mugshot
         div(class: "min-w-0 flex-auto") do
           p(class: "text-sm font-semibold leading-6 text-gray-900 truncate") do
@@ -31,15 +31,22 @@ class ListItems::TimeMaterial < ListItems::ListItem
   end
 
   def time_material_controller?
-    (resource.active? or resource.paused?) ?
+    if (resource.user == user or user&.admin? or user&.superadmin?) and (resource.active? or resource.paused?)
       {
-        controller: "time-material",
+        time_material_target: "listlabel",
+        reload_url: resource_url(reload: true),
         url: resource_url(pause: (resource.paused? ? "resume" : "pause")),
         action: "click->time-material#toggleActive"
-      } : {}
+      }
+    else
+      {
+        time_material_target: "listlabel"
+      }
+    end
   end
 
   def render_play_pause
+    return unless resource.user == user or user&.admin? or user&.superadmin?
     div(class: "absolute inset-0 flex items-center justify-center pointer-events-none") do
       if resource.active? or resource.paused? # and this_user?(resource.user_id)
         resource.paused? ?

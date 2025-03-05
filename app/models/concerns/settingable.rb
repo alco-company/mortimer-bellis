@@ -11,6 +11,11 @@ module Settingable
     def should?(action)
       can?(action)
     end
+
+    def default(key, default)
+      defaults = Setting.by_tenant.where(key: key.to_s)
+      defaults.count.positive? ? defaults.first.value : default
+    end
   end
 
   class_methods do
