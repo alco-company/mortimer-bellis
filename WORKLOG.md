@@ -117,11 +117,11 @@ END
 - create invoicing service
 - no requirements on t/m
 - toggle switch on products and customers for sync with invoicing service
-- settings update wrong list_item (user?)
 
 ### 6/3/2025
 
 - remove odometer validations (comment for now)
+- settings update wrong list_item (user?)
 
 ### 5/3/2025
 
