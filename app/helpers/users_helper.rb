@@ -5,6 +5,14 @@ module UsersHelper
     usr.global_queries?
   end
 
+  def user_can_create?
+    return true if Current.user.superadmin? || Current.user.admin?
+    key = "allow_create_#{resource_class.to_s.underscore}"
+    Current.user.can? key
+  rescue
+    false
+  end
+
   #
   def user_mugshot(user, size: nil, css: "")
     size = size.blank? ? "40x40!" : size

@@ -51,6 +51,7 @@ da:
       default_time_material_minute_time: Standard minutter for ny tid og materialer post
       default_time_material_rate: Standard pris for ny tid og materialer post
       default_time_material_over_time: Standard overtid for ny tid og materialer post
+      allow_create_time_material: Tillad bruger at oprette tid og materialer
       allow_create_product: Tillad bruger at oprette produkter på tid og materialer
       allow_create_customer: Tillad bruger at oprette kunder på tid og materialer
       allow_create_project: Tillad bruger at oprette projekter på tid og materialer

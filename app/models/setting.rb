@@ -67,6 +67,7 @@ class Setting < ApplicationRecord
       [ "default_time_material_minute_time", I18n.t("settings.keys.default_time_material_minute_time") ],
       [ "default_time_material_rate", I18n.t("settings.keys.default_time_material_rate") ],
       [ "default_time_material_over_time", I18n.t("settings.keys.default_time_material_over_time") ],
+      [ "allow_create_time_material", I18n.t("settings.keys.allow_create_time_material") ],
       [ "allow_create_product", I18n.t("settings.keys.allow_create_product") ],
       [ "allow_create_customer", I18n.t("settings.keys.allow_create_customer") ],
       [ "allow_create_project", I18n.t("settings.keys.allow_create_project") ],
