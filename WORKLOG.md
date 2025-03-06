@@ -127,6 +127,7 @@ END
 - :allow_create_time_material
 - show warning icon on insufficient_data on time_material
 - fix bug on delete_all
+- fix tenant and user (Current.)
 
 ### 5/3/2025
 

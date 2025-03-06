@@ -5,7 +5,6 @@ class PunchJob < ApplicationJob
 
   def perform(**args)
     super(**args)
-    @user = args[:user]
     switch_locale(@user.locale) do
       user_time_zone(@user.time_zone) do
         calc_vars(args)

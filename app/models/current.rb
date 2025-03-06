@@ -1,5 +1,5 @@
 class Current < ActiveSupport::CurrentAttributes
-  attribute :locale, :posthog, :session, :system_tenant
+  attribute :locale, :posthog, :session
   delegate :user, to: :session, allow_nil: true
   delegate :tenant, to: :session, allow_nil: true
 
@@ -15,10 +15,6 @@ class Current < ActiveSupport::CurrentAttributes
 
   def notification_stream
     "#{Current.user.id}_noticed/notifications"
-  end
-
-  def system_user=(val)
-    self.user = val
   end
 
   # def find_user(user_pos_token)
