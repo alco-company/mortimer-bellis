@@ -88,6 +88,7 @@ class Contextmenu < Phlex::HTML
 
       resource_class.any? ?
         link2(url: helpers.new_modal_url(modal_form: "delete",
+          all: true,
           resource_class: resource_class.to_s.underscore,
           modal_next_step: "accept",
           search: request.query_parameters.dig(:search)),

@@ -126,6 +126,7 @@ END
 - by_tenant or by_user on time_materials depending on :show_all_time_material_posts setting
 - :allow_create_time_material
 - show warning icon on insufficient_data on time_material
+- fix bug on delete_all
 
 ### 5/3/2025
 

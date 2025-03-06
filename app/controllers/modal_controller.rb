@@ -223,9 +223,10 @@ class ModalController < MortimerController
 
     def process_destroy_all
       begin
-        DeleteAllJob.perform_later tenant: Current.tenant, resource_class: resource_class.to_s,
-          ids: @resources.pluck(:id),
-          user_ids: (resource_class.first.respond_to?(:user_id) ? @resources.pluck(:user_id).uniq : User.by_tenant.by_role(:user).pluck(:id)) rescue nil
+        DeleteAllJob.perform_later tenant: Current.tenant, user: Current.user, resource_class: resource_class.to_s,
+          ids: resources.pluck(:id),
+          batch: @batch,
+          user_ids: (resource_class.first.respond_to?(:user_id) ? resources.pluck(:user_id).uniq : User.by_tenant.by_role(:user).pluck(:id)) rescue nil
         @url.gsub!(/\/\d+$/, "") if @url.match?(/\d+$/)
         flash[:success] = t("delete_all_later")
         respond_to do |format|
