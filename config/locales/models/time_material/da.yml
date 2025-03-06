@@ -22,6 +22,7 @@ da:
     cannot_be_pushed: Kan ikke overføres
     archived: Posten er blevet arkiveret
     unarchived: Posten er taget ud af arkivet (igen)
+    insufficient_data: Manglende data
     states:
       draft: Kladde
       active: Aktiv

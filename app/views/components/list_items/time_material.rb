@@ -1,5 +1,6 @@
 class ListItems::TimeMaterial < ListItems::ListItem
   def html_list
+    @insufficient_data = resource.has_insufficient_data?
     comment { "bg-green-200 bg-yellow-200" }
     div(id: (dom_id resource), class: "relative flex justify-between gap-x-6 mb-1 px-2 py-5 rounded-sm #{ background }", data: { controller: "time-material" }) do
       div(class: "flex grow min-w-0 gap-x-4", data: time_material_controller?) do
@@ -117,6 +118,12 @@ class ListItems::TimeMaterial < ListItems::ListItem
           span(class: "hidden ml-2 md:inline") { I18n.t("time_material.billable") }
         end
       end
+      if @insufficient_data
+        span(class: "2xs:inline-flex w-fit items-center rounded-md bg-yellow-50 mr-1 px-1 xs:px-2 py-0 xs:py-0.5 text-2xs font-medium text-yellow-700 ring-1 ring-inset ring-yellow-600/20 truncate") do
+          render Icons::Warning.new(cls: "text-yellow-500 h-4 w-4")
+          span(class: "ml-2 md:inline") { I18n.t("time_material.insufficient_data") }
+        end
+      end
     end
   end
 
@@ -129,11 +136,11 @@ class ListItems::TimeMaterial < ListItems::ListItem
   end
 
   def name_resource
-    return resource.customer&.name if resource.customer.present? or !resource.customer_name.blank?
-    return resource.project&.name if resource.project.present? or !resource.project_name.blank?
+    return resource.customer&.name || resource.customer_name if resource.customer.present? or !resource.customer_name.blank?
+    return resource.project&.name || resource.project_name if resource.project.present? or !resource.project_name.blank?
     I18n.t("time_material.internal_or_private")
   rescue
-    "!129"
+    "!145"
   end
 
   def show_time_material_quantative
@@ -150,21 +157,21 @@ class ListItems::TimeMaterial < ListItems::ListItem
       end
     end
   rescue
-    "!146"
+    "!169"
   end
 
   def show_time_details
     rate = resource.rate.blank? ? product_rates : resource.rate
     "#{ resource.time}t á #{ rate }"
   rescue
-    "!154"
+    "!176"
   end
 
   def show_product_details
     u = resource.unit.blank? ? "" : I18n.t("time_material.units.#{resource.unit}")
     "%s %s á %s" % [ resource.quantity, u, resource.unit_price ]
   rescue
-    "!161"
+    "!183"
   end
 
   def product_rates

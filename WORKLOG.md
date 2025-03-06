@@ -113,7 +113,6 @@ END
 - gå alle åbne opgaver igennem
 - there's still a foreign key lurking somewhere in the kill_tenant_job
 - big fix on time_materials
-- create 3 products
 - create invoicing service
 - no requirements on t/m
 - toggle switch on products and customers for sync with invoicing service
@@ -126,6 +125,7 @@ END
 - show current search in topbar
 - by_tenant or by_user on time_materials depending on :show_all_time_material_posts setting
 - :allow_create_time_material
+- show warning icon on insufficient_data on time_material
 
 ### 5/3/2025
 

@@ -32,8 +32,8 @@ class ApplicationComponent < Phlex::HTML
     end if item
   end
 
-  def new_resource_url
-    url_for(controller: params_ctrl, action: :new)
+  def new_resource_url(**options)
+    url_for(controller: params_ctrl, action: :new, **options)
   end
 
   def resource_url(**options)

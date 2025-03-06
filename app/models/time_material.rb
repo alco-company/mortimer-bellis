@@ -75,6 +75,11 @@ class TimeMaterial < ApplicationRecord
 
   validates :about, presence: true, if: [ Proc.new { |c| c.comment.blank? && c.product_name.blank? } ]
 
+  def has_insufficient_data?
+    (project_name.present? && project_id.blank?) ||
+    (customer_name.present? && customer_id.blank?) ||
+    (product_name.present? && product_id.blank?)
+  end
   # def self.filtered(filter)
   #   flt = filter.collect_filters self
   #   flt = filter.filter
