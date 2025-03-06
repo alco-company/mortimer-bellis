@@ -253,12 +253,12 @@ class TimeMaterials::Form < ApplicationForm
         end
       end
     end
-    div(class: "col-span-full") do
+    div(class: "hidden col-span-full") do
       div(class: "flex justify-between") do
         p(class: "mt-3 text-sm leading-6 text-gray-600") { Time.current.to_datetime }
-        p(class: "mt-3 text-sm leading-6 text-gray-600") { resource.started_at.to_datetime }
+        p(class: "mt-3 text-sm leading-6 text-gray-600") { resource.started_at&.to_datetime }
         p(class: "mt-3 text-sm leading-6 text-gray-600") { resource.paused_at&.to_datetime }
-        p(class: "mt-3 text-sm leading-6 text-gray-600") { "%s %s" % resource.time_spent.divmod(60) }
+        p(class: "mt-3 text-sm leading-6 text-gray-600") { ("%s %s" % resource.time_spent.divmod(60)) rescue "" }
       end
     end
 

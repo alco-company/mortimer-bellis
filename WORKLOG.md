@@ -124,6 +124,7 @@ END
 - remove odometer validations (comment for now)
 - settings update wrong list_item (user?)
 - show current search in topbar
+- by_tenant or by_user on time_materials depending on :show_all_time_material_posts setting
 
 ### 5/3/2025
 

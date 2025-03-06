@@ -195,7 +195,7 @@ module Resourceable
       end
 
       def searched
-        @collection = params.dig(:search) ? collection.by_tenant().by_fulltext(params.dig(:search)) : collection.by_tenant()
+        @collection = params.dig(:search) ? collection.by_fulltext(params.dig(:search)) : collection
         self
       end
 
@@ -212,6 +212,8 @@ module Resourceable
 
         def resource_resources
           case rc.to_s
+          when "TimeMaterial"; Current.user.can?(:show_all_time_material_posts) ? rc.by_tenant() : rc.by_user()
+          when "Noticed::Notification"; Current.user.notifications.unread.includes(event: :record)
           when "Oauth::Application"; rc.all
           else; rc.by_tenant
           end
@@ -226,6 +228,8 @@ module Resourceable
           (request_path =~ /\/(team|employee|tenant|calendar)s\/(\d+)\/(calendars|events)/).nil? ? false : true
         end
 
+        #
+        # TODO how do we show invoices/11/invoice_items
         def parent_resources
           parent.send params_ctrl
         end
