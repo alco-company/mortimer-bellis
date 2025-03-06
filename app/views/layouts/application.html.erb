@@ -24,7 +24,7 @@
       <%= render SidebarComponent.new if Current.user %>
 
       <div data-controller="notificationcenter" data-menu-target="topmain" class="flex flex-1 flex-col <%= 'lg:pl-64' if Current.user %>">
-        <%= render_topbar %>
+        <%= render_topbar params: params %>
         <main id="main-element" class="flex-1 pb-8">
           <%#= render user_top_profile %>
 

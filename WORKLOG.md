@@ -117,11 +117,13 @@ END
 - create invoicing service
 - no requirements on t/m
 - toggle switch on products and customers for sync with invoicing service
+- add hidden 'date' on time_material to allow for query
 
 ### 6/3/2025
 
 - remove odometer validations (comment for now)
 - settings update wrong list_item (user?)
+- show current search in topbar
 
 ### 5/3/2025
 

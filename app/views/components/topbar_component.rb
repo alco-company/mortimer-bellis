@@ -1,9 +1,10 @@
 # frozen_string_literal: true
 
 class TopbarComponent < ApplicationComponent
-  attr_accessor :gradient
+  attr_accessor :gradient, :params
 
-  def initialize
+  def initialize(params: {})
+    @params = params
     @gradient = Rails.env.production? ? "from-cyan-200 to-sky-600" : "from-pink-200 to-pink-600"
   end
   #
@@ -17,7 +18,7 @@ class TopbarComponent < ApplicationComponent
 
       div(class: "flex flex-1 gap-x-4 self-stretch lg:gap-x-6") do
         # div(class: "flex flex-1 justify-between px-4 sm:px-6 lg:mx-auto lg:max-w-6xl lg:px-8") do
-        render SearchComponent.new
+        render SearchComponent.new params: params
 
         div(class: "flex items-center gap-x-4 lg:gap-x-6") do
           # div(class: "ml-4 flex items-center md:ml-6")

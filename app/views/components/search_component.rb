@@ -15,7 +15,14 @@
 # </div>
 
 class SearchComponent < Phlex::HTML
+  attr_accessor :params
+
+  def initialize(params: {})
+    @params = params
+  end
+
   def view_template
+    search = params.dig(:search) || ""
     form(class: "relative flex flex-1 pt-2", action: "#", method: "GET") do
       label(for: "search-field", class: "sr-only") { "Search" }
       render Icons::Search.new cls: "pointer-events-none absolute top-1 left-0 h-full w-5 text-sky-100"
@@ -25,7 +32,8 @@ class SearchComponent < Phlex::HTML
           "block h-full w-full border-0 py-0 pl-8 pr-0 text-gray-900 bg-transparent placeholder:text-sky-100 focus:ring-0 sm:text-sm",
         placeholder: I18n.t("topbar.search.placeholder"),
         type: "search",
-        name: "search"
+        name: "search",
+        value: search
       )
     end
   end
