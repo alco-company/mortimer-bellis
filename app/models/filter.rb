@@ -54,7 +54,7 @@ class Filter < ApplicationRecord
     relation.where(conditions.reduce(:and))
   rescue => e
     debugger
-    # UserMailer.error_report(e.message, "Filter#do_filter failed ").deliver_later
+    UserMailer.error_report(e.message, "Filter#do_filter failed ").deliver_later
     relation
   end
 

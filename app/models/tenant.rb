@@ -131,7 +131,7 @@ class Tenant < ApplicationRecord
     {
       colleagues: {
         title: I18n.t("tasks.first_tasks.colleagues.title"),
-        link: "/users/invitation/new",
+        link: "/users/invitations/new",
         priority: -1
       },
       dinero: {
@@ -146,12 +146,12 @@ class Tenant < ApplicationRecord
       },
       profile: {
         title: I18n.t("tasks.first_tasks.profile.title"),
-        link: "/users/edit",
+        link: "/users/registrations/edit",
         priority: -4
       },
       notifications: {
         title: I18n.t("tasks.first_tasks.notifications.title"),
-        link: "/users/edit",
+        link: "/users/registrations/edit",
         priority: -5
       }
     }
