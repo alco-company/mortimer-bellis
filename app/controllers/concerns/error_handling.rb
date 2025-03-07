@@ -52,9 +52,14 @@ module ErrorHandling
     end
 
     def handle_bad_csrf_token
-      url = request.path == "/session" ? new_users_session_url : root_url
-      logger.error("Invalid CSRF token")
-      redirect_back(fallback_location: url, alert: "Your session has expired. Please try again.")
+      if request.path == "/session"
+        flash[:alert] = I18n.t("session_expired")
+      else
+        flash[:alert] = I18n.t("old_csrf")
+      end
+      render turbo_stream: [
+        turbo_stream.replace("flash_container", partial: "application/flash_message")
+      ] and return
     end
   end
 end

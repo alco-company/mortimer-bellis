@@ -4,8 +4,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-<%= csrf_meta_tags %>
-<%= csp_meta_tag %>
+<%= render partial: "application/csrf_token" %>
 
 <%= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
 

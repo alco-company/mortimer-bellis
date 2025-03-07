@@ -147,6 +147,7 @@ https://github.com/mailchimp/email-blueprints
 
 ### Push notifications
 
+https://github.com/pushpad/web-push
 https://github.com/rpush/rpush
 https://www.colby.so/posts/user-notifications-with-rails-noticed-and-hotwire
 
@@ -242,3 +243,7 @@ https://guides.rubyonrails.org/security.html#content-security-policy-header
 ### Tutorials, Lessons, Courses
 
 https://courses.bigbinaryacademy.com/learn-rubyonrails/
+
+### CSRF 
+
+https://bloggie.io/@kinopyo/sending-non-get-requests-with-fetch-javascript-api-in-rails

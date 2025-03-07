@@ -122,6 +122,7 @@ END
 
 - stop registrations/new with missing pw
 - clear flash messages after streaming
+- fix bug on web_push_notifications
 
 ### 6/3/2025
 

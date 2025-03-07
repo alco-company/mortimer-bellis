@@ -58,6 +58,9 @@ class TimeMaterial < ApplicationRecord
   belongs_to :product, optional: true
   belongs_to :user
 
+  # notifications
+  has_many :notification_mentions, as: :record, dependent: :destroy, class_name: "Noticed::Event"
+
   scope :by_fulltext, ->(query) { includes([ :customer, :project, :product ]).references([ :customers, :projects, :products ]).where("customers.name LIKE :query OR projects.name like :query or products.name like :query or products.product_number like :query or about LIKE :query OR product_name LIKE :query OR comment LIKE :query", query: "%#{query}%") if query.present? }
   scope :by_about, ->(about) { where("about LIKE ?", "%#{about}%") if about.present? }
   scope :by_exact_user, ->(user) { where("user_id= ?", "%#{user.id}%") if user.present? }

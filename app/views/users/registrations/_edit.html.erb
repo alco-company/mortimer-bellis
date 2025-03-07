@@ -88,26 +88,8 @@
                       </div>
 
                       <div class="mort-field">
-                        <button id="enable_notifications" class="hidden mort-btn-primary group-aria-busy:bg-white" 
-                          data-turbo="false" 
-                          data-profile-target="enableNotifications" 
-                          data-action="click->profile#enable">
-                          <span class="group-aria-busy:hidden block"><%= I18n.t("enable_notifications") %> </span>
-                          <div class="group-aria-busy:block hidden">
-                            <%= image_tag "motion-blur.svg", class: "size-6 fill-white" %>
-                          </div>
-                        </button>
-                        <button id="disable_notifications" class="hidden mort-btn-warning" 
-                          data-turbo="false" 
-                          data-transition-enter="transition ease-in duration-700"
-                          data-transition-enter-start="transform opacity-0"
-                          data-transition-enter-end="transform opacity-100"
-                          data-transition-leave="transition ease-out duration-700"
-                          data-transition-leave-start="transform opacity-100"
-                          data-transition-leave-end="transform opacity-0"        
-                          data-profile-target="disableNotifications" 
-                          data-action="click->profile#disable"><%= I18n.t("disable_notifications") %></button>
-                        </form>
+                        <%= render partial: "notifications_outlet", locals: { enable: "hidden", disabled: "hidden" } %>
+                      </div>
 
                       <div class="mort-field">
                         <%= render TwoFactorField.new %>
