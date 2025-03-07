@@ -19,6 +19,7 @@ class Users::InvitationsController < MortimerController
         flash[:alert] = I18n.t("devise.failure.invitation_failed", invitee: invitee)
       end
       Broadcasters::Resource.new(Current.user, stream: "%s_%s_%s" % [ Current.tenant.id, "new_invitation", Current.user.id ]).flash
+      flash.clear
     end
 
     flash[:info] = I18n.t("devise.invitations.send_instructions_count", count: count)
@@ -26,7 +27,7 @@ class Users::InvitationsController < MortimerController
       format.turbo_stream { render turbo_stream: [
         turbo_stream.replace("#{Current.tenant.id}_new_invitations", partial: "users/invitations/new", locals: { resource: User.new, resource_class: User, resource_name: "user" }),
         turbo_stream.replace("flash_container", partial: "application/flash_message")
-      ] }
+      ]; flash.clear }
       format.html         { render :new }
     end
   end

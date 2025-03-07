@@ -118,6 +118,11 @@ END
 - toggle switch on products and customers for sync with invoicing service
 - add hidden 'date' on time_material to allow for query
 
+### 7/3/2025
+
+- stop registrations/new with missing pw
+- clear flash messages after streaming
+
 ### 6/3/2025
 
 - remove odometer validations (comment for now)

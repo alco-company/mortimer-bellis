@@ -117,7 +117,7 @@ module DefaultActions
             turbo_stream.update("form", ""),
             turbo_stream.replace("flash_container", partial: "application/flash_message")
             # special
-          ] }
+          ] ; flash.clear}
           format.html { redirect_to resources_url, success: t(".post") }
           format.json { render :show, status: :created, location: resource }
         else
@@ -125,7 +125,7 @@ module DefaultActions
           format.turbo_stream { render turbo_stream: [
             turbo_stream.update("form", partial: "new"),
             turbo_stream.replace("flash_container", partial: "application/flash_message")
-          ] }
+          ] ; flash.clear}
           format.html { render :new, status: :unprocessable_entity, warning: t(".warning") }
           format.json { render json: resource.errors, status: :unprocessable_entity }
         end
@@ -152,7 +152,7 @@ module DefaultActions
           format.turbo_stream { render turbo_stream: [
             turbo_stream.update("form", ""),
             turbo_stream.replace("flash_container", partial: "application/flash_message")
-          ] }
+          ] ; flash.clear}
           format.html { redirect_to resources_url, success: t(".post") }
           format.json { render :show, status: :ok, location: resource }
         else
@@ -160,7 +160,7 @@ module DefaultActions
           format.turbo_stream { render turbo_stream: [
             turbo_stream.update("form", partial: "edit"),
             turbo_stream.replace("flash_container", partial: "application/flash_message")
-          ] }
+          ] ; flash.clear}
           format.html { render :edit, status: :unprocessable_entity, warning: t(".warning") }
           format.json { render json: resource.errors, status: :unprocessable_entity }
         end
@@ -199,7 +199,7 @@ module DefaultActions
             say error
           end
           respond_to do |format|
-            format.turbo_stream { render turbo_stream: turbo_stream.remove(dom_id(resource)) }
+            format.turbo_stream { render turbo_stream: turbo_stream.remove(dom_id(resource)); flash.clear }
             format.html { redirect_to resources_url, status: 303, success: t(".post") }
             format.json { head :no_content }
           end

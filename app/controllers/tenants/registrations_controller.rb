@@ -22,7 +22,7 @@ class Tenants::RegistrationsController < MortimerController
     begin
       usr = nil
       resource = Tenant.new(email: user_params[:email], name: user_params[:email])
-      if resource.save
+      if user_params_ok? && resource.save
         raise "user was not registered correctly" unless usr = TenantRegistrationService.call(resource, user_params)
         # raise "user was not registered correctly" unless UserRegistrationService.call(resource, tenant_name)
         usr.add_role
@@ -32,7 +32,7 @@ class Tenants::RegistrationsController < MortimerController
           format.turbo_stream { render turbo_stream: [
             turbo_stream.replace("new_registration", partial: "users/sessions/new", locals: { resource: User.new, resource_class: User, resource_name: "user" }),
             turbo_stream.replace("flash_container", partial: "application/flash_message")
-          ] }
+          ]; flash.clear }
           format.html         { redirect_to new_users_session_url }
         end
       else
@@ -40,9 +40,9 @@ class Tenants::RegistrationsController < MortimerController
         # , alert: "<span>Your account is not confirmed.<span> #{view_context.link_to("Resend confirmation email?", new_confirmation_url(email: user.email), class: "underline text-sky-500")}".html_safe
         respond_to do |format|
           format.turbo_stream { render turbo_stream: [
-            turbo_stream.replace("new_registration", partial: "users/registrations/new", locals: { resource: User.new, resource_class: User, resource_name: "user" }),
+            turbo_stream.replace("new_registration", partial: "tenants/registrations/new", locals: { resource: User.new, resource_class: User, resource_name: "user" }),
             turbo_stream.replace("flash_container", partial: "application/flash_message")
-          ] }
+          ]; flash.clear }
           format.html         { redirect_to new_users_session_url }
         end
       end
@@ -189,5 +189,12 @@ class Tenants::RegistrationsController < MortimerController
   private
     def user_params
       params.expect(user: [ :email, :password, :password_confirmation, :tenant_id, :team_id ])
+    end
+
+    def user_params_ok?
+      user_params[:email].present? &&
+      user_params[:password].present? &&
+      user_params[:password_confirmation].present? &&
+      user_params[:password] == user_params[:password_confirmation]
     end
 end

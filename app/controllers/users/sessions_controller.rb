@@ -65,6 +65,7 @@ class Users::SessionsController < MortimerController
           turbo_stream.replace("flash_container", partial: "application/flash_message")
         ]
       }
+      flash.clear
     end
 
     def start_session
@@ -83,7 +84,7 @@ class Users::SessionsController < MortimerController
         format.turbo_stream { render turbo_stream: [
           turbo_stream.replace("new_session", partial: "users/sessions/new", locals: { resource: User.new, resource_class: User, resource_name: "user" }),
           turbo_stream.replace("flash_container", partial: "application/flash_message")
-        ] }
+        ] ; flash.clear}
         format.html         { redirect_to new_users_session_url }
       end
     end
@@ -94,7 +95,7 @@ class Users::SessionsController < MortimerController
         format.turbo_stream { render turbo_stream: [
           turbo_stream.replace("new_session", partial: "users/sessions/new", locals: { resource: User.new, resource_class: User, resource_name: "user" }),
           turbo_stream.replace("flash_container", partial: "application/flash_message")
-        ] }
+        ] ; flash.clear}
 
         format.turbo_stream { render turbo_stream:  }
         format.html         { redirect_to new_users_session_url }

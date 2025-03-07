@@ -33,6 +33,7 @@ class PunchesController < MortimerController
         turbo_stream.replace("flash_container", partial: "application/flash_message") # ,
         # turbo_stream.replace("activity_list", partial: "punches/dashboard_punches", locals: { activity_list: @activity_list, user: Current.user })
       ]
+      flash.clear
     else
       user = User.find(resource_params[:user_id])
       respond_to do |format|
@@ -40,7 +41,10 @@ class PunchesController < MortimerController
           Broadcasters::Resource.new(@resource, { controller: "punches" }, "activity_list").create
           Broadcasters::Resource.new(@resource, params.permit!).create
           flash[:success] = t(".post")
-          format.turbo_stream { render turbo_stream: [ turbo_stream.update("form", ""), turbo_stream.replace("flash_container", partial: "application/flash_message") ] }
+          format.turbo_stream {
+            render turbo_stream: [ turbo_stream.update("form", ""), turbo_stream.replace("flash_container", partial: "application/flash_message") ]
+            flash.clear
+          }
           format.html { redirect_to resources_url, success: t(".post") }
           format.json { render :show, status: :created, location: @resource }
         else

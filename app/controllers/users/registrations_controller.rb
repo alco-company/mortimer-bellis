@@ -3,50 +3,6 @@
 # is solely for the Current.user themselves
 #
 class Users::RegistrationsController < MortimerController
-  # allow_unauthenticated_access only: %i[new create]
-  # resume_session only: :new
-
-  # def new
-  #   @user = User.new
-  # end
-
-  # def create
-  #   begin
-  #     usr = nil
-  #     params[:user][:tenant_id] = 1 # temporary placeholder - UserRegistrationService will fix!
-  #     params[:user][:team_id] = 1   # temporary placeholder - UserRegistrationService will fix!
-  #     resource = User.new(user_params)
-  #     if resource.save
-  #       raise "user was not registered correctly" unless UserRegistrationService.call(resource, tenant_name)
-  #       resource.add_role
-  #       usr = resource.dup
-  #       flash[:notice] = I18n.t("devise.registrations.signed_up_but_unconfirmed")
-  #       # , alert: "<span>Your account is not confirmed.<span> #{view_context.link_to("Resend confirmation email?", new_confirmation_url(email: user.email), class: "underline text-sky-500")}".html_safe
-  #       respond_to do |format|
-  #         format.turbo_stream { render turbo_stream: [
-  #           turbo_stream.replace("new_registration", partial: "users/sessions/new", locals: { resource: User.new, resource_class: User, resource_name: "user" }),
-  #           turbo_stream.replace("flash_container", partial: "application/flash_message")
-  #         ] }
-  #         format.html         { redirect_to new_users_session_url }
-  #       end
-  #     else
-  #       flash[:alert] = I18n.t("devise.registrations.failed")
-  #       # , alert: "<span>Your account is not confirmed.<span> #{view_context.link_to("Resend confirmation email?", new_confirmation_url(email: user.email), class: "underline text-sky-500")}".html_safe
-  #       respond_to do |format|
-  #         format.turbo_stream { render turbo_stream: [
-  #           turbo_stream.replace("new_registration", partial: "users/registrations/new", locals: { resource: User.new, resource_class: User, resource_name: "user" }),
-  #           turbo_stream.replace("flash_container", partial: "application/flash_message")
-  #         ] }
-  #         format.html         { redirect_to new_users_session_url }
-  #       end
-  #     end
-  #   rescue => e
-  #     UserMailer.error_report(e.to_s, "Users::RegistrationController#create - failed for email #{usr&.email}").deliver_later
-  #     usr.destroy unless usr.nil?
-  #     redirect_to root_path, alert: I18n.t("errors.messages.user_registration_failed", error: e.message)
-  #   end
-  # end
-
   # GET /resource/edit
   def edit
     @resource = resource.persisted? ? resource : Current.user
@@ -80,6 +36,7 @@ class Users::RegistrationsController < MortimerController
         turbo_stream.replace("profile_dropmenu", ProfileDropmenuComponent.new),
         turbo_stream.replace("flash_container", partial: "application/flash_message")
       ]
+      flash.clear
     else
       resource.attachment_changes.each do |_, change|
         if change.is_a?(ActiveStorage::Attached::Changes::CreateOne)
@@ -96,7 +53,7 @@ class Users::RegistrationsController < MortimerController
         turbo_stream.update("form", partial: "users/registrations/edit", locals: { resource: resource }),
         turbo_stream.replace("flash_container", partial: "application/flash_message")
       ]
-
+      flash.clear
     end
   end
 
