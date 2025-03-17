@@ -118,6 +118,10 @@ END
 - toggle switch on products and customers for sync with invoicing service
 - add hidden 'date' on time_material to allow for query
 
+### 17/3/2025
+
+- add translation for button on upload to Dinero
+
 ### 7/3/2025
 
 - stop registrations/new with missing pw

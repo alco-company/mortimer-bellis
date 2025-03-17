@@ -85,8 +85,9 @@ da:
         instruction: Er du sikker på, at du vil slette denne tid/materiale %{name}?
         button: Slet
       upload_dinero:
+        button: Overfør til Dinero
         title: Dan fakturalinjer i Dinero
-        instruction: Når du trykker upload, vil der blive oprettet fakturalinjer i Dinero for alle tid/materialer, der er markeret til fakturering. Er du sikker på, at du vil fortsætte?
+        instruction: Når du trykker upload, vil der blive oprettet fakturalinjer i Dinero for alle valgte tid/materialer, der er markeret til fakturering (%{posts} linjer). Er du sikker på, at du vil fortsætte?
         label: Fakturalinjer
         description: Fakturalinjerne dannes i Dinero som kladder, så du skal logge ind i Dinero, og godkende dem, før de bliver til fakturaer, og kan sendes.
         approved: 
