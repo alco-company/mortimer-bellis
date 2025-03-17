@@ -238,6 +238,7 @@ da:
 
     second_factor:
       otp_code: "2 faktor kode"
+      authentication_title: "2 Faktor Autentificering"
       authenticator_app: "Autentificerings app"
       enabled: "Din to-faktor autentificering er aktiveret."
       already_enabled: "Din to-faktor autentificering er allerede aktiveret."
@@ -246,6 +247,7 @@ da:
       enable: "Aktiver"
       disable_2fa: "Deaktiver 2FA"
       enable_2fa: "Aktiver 2FA"
+      enable_2fa_introduction: "For at aktivere 2FA skal du downloade en autentificerings app, fx Google Authenticator, scanne QR koden herunder. Derefter skal du indtaste den genererede kode (fx 231312)."
       title: "Bekræft din identitet"
       password_placeholder: "Adgangskode"
       bad_password: "Din adgangskode er forkert"

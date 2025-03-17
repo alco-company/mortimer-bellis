@@ -45,14 +45,6 @@ end tell
 END
 `osascript -e '#{osascript}'`
 
-## BUGS
-
-- [ ] add breaks and included_in_duration to payroll_period#manual_punch
-- [ ] redesign punch and add work_schedule to payroll_period#manual_punch
-- fix error on employee_invitation#create -> returns turbo_frame in clear text - not HTML - at least on iPad
-- <https://railsdesigner.com/preview-images-with-hotwire>
-
-## CHANGELOG
 
 - add customer has balance marker
 {
@@ -75,7 +67,6 @@ END
 
 - investigate into refactoring the render - use https://fly.io/ruby-dispatch/component-driven-development-on-rails-with-phlex/
 - switch to Nokolexbor (from Nokogiri) for parsing HTML like when scraping
-
 - use Hotwire for downloading PDF's
 - use Ruby Patterns as explained in https://medium.com/@slimbennasrallah_89177/ruby-on-rails-design-patterns-101-d99f43adc2b3
 - use materialized views for most index actions - https://medium.com/@michal.a.rudzki/utilizing-materialized-views-power-in-ruby-on-rails-bcd2332604bb
@@ -92,6 +83,14 @@ END
 - this is probably not necessary: format.turbo_stream { render turbo_stream: turbo_stream.remove(dom_id(@resource)) }
 - pwa-installation.js + joy of rails
 - have a second look at background_jobs - see https://bluetickconsultants.medium.com/rails-8-and-active-job-enhancements-whats-new-for-developers-9e6046a2c5ce
+- upgrade Tailwind to 4.0 - https://www.zolkos.com/2024/11/30/upgrading-to-tailwind4
+- <https://railsdesigner.com/preview-images-with-hotwire>
+
+## BUGS
+
+- add breaks and included_in_duration to payroll_period#manual_punch
+- redesign punch and add work_schedule to payroll_period#manual_punch
+- fix error on employee_invitation#create -> returns turbo_frame in clear text - not HTML - at least on iPad
 - TODO - fix mugshot (see users/registrations_controller)
 - fix bug on sending email invitation to new user
 - validate punches before deleting punch_clocks !!
@@ -106,7 +105,6 @@ END
 - check that import users still works
 - CSRF token on login ages out - fix
 - batches only set on every second try
-- upgrade Tailwind to 4.0 - https://www.zolkos.com/2024/11/30/upgrading-to-tailwind4
 - ret notifikation til notice for 'din konto er godkendt'
 - efter gem af profil - 'content missing'
 - åbne opgaver - klik på profil så sker der ikke noget
@@ -117,11 +115,24 @@ END
 - no requirements on t/m
 - toggle switch on products and customers for sync with invoicing service
 - add hidden 'date' on time_material to allow for query
+- use email address on new users on list
+- send invitation - describe how to separate more new users
+- translation missing on invitation email - new user
+- new users cannot add time/material (no button)
+- redraw projects (after new project does not list projects)
+- redraw provided_services (after new provided_service does not list provided_services)
+- show price when picking product
+- translate new project name validation - error is wrong if double projects same name
+- validation on time_materials is not optimal/working
+- add defaults for hour/minute/price/more
+
+## CHANGELOG
 
 ### 17/3/2025
 
 - add translation for button on upload to Dinero
 - use filter and batch and search on upload
+- totp missing
 
 ### 7/3/2025
 

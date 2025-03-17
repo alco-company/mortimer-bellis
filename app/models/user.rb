@@ -35,7 +35,12 @@ class User < ApplicationRecord
   has_secure_token :pos_token
 
   has_secure_password
+
+  # OTP
   has_one_time_password
+  attr_accessor :otp_code_token
+  #
+
   has_secure_token :confirmation_token
   has_secure_token :invitation_token
   has_many :sessions, dependent: :destroy
@@ -61,8 +66,15 @@ class User < ApplicationRecord
 
   def qr_code
     require "rqrcode"
-    totp = ROTP::TOTP.new(otp_secret_key, issuer: "OTP Test")
-    RQRCode::QRCode.new(totp.provisioning_uri(email))
+    totp = ROTP::TOTP.new(otp_secret_key, issuer: "Mortimer")
+    qrcode = RQRCode::QRCode.new(totp.provisioning_uri(email))
+    qrcode.as_svg(
+      color: "000",
+      shape_rendering: "crispEdges",
+      module_size: 3,
+      standalone: true,
+      use_path: true
+    )
   end
 
   attr_accessor :invitees, :invitation_message

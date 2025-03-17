@@ -7,7 +7,7 @@
 
     <%= render partial: "users/shared/error_messages", locals: {resource: resource} %>
 
-    <%= form_with(model: User, url: users_session_url, id: "login", data: { turbo: false }) do |f| %>
+    <%= form_with(model: User, url: users_session_url, id: "login", data: { turbo: true }) do |f| %>
       <div class="mort-field">
         <%= f.label :email %><br />
         <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "mort-form-text" %>

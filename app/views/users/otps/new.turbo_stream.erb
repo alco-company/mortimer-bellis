@@ -35,20 +35,21 @@
                   role: "dialog",
                   aria: {labbeledby: "modal-title", modal: true}
                 ) do %>
-              <%= form_with(model: @otp_enablement_form, class: "mt-10", url: create_user_otp_path) do |form| %>
+              <%= form_with(model: @user, class: "mt-10", url: users_otp_url, method: :post) do |form| %>
                 <%= form.hidden_field :password %>
                 <% if @button_only %>
                   <%= form.hidden_field :button_only, value: true %>
                 <% end %>              
                 <div class="">
-                  <h1 class="font-medium"><%= t("second_factor.authenticator_app") %></h1>
+                  <h1 class="font-medium"><%= t("devise.second_factor.authentication_title") %></h1>
+                  <p><%= t("devise.second_factor.enable_2fa_introduction") %></p>
                   <div class="flex justify-center items-center w-md flex-col">
                     <div class="flex flex-col mt-4 space-y-4">
                     <div class="">
-                      <% if @otp_enablement_form.errors.any? %>
+                      <% if @user.errors.any? %>
                         <div id="error_explanation" class="relative z-1 bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3">
                           <ul>
-                            <% @otp_enablement_form.errors.each do |error| %>
+                            <% @user.errors.each do |error| %>
                               <li><%= error.full_message %></li>
                             <% end %>
                           </ul>
@@ -56,7 +57,7 @@
                       <% end %>
 
                       <h3 class="text-base font-semibold leading-6 text-gray-900"><%= t("devise.second_factor.1_download_the_authenticator_app") %></h3>
-                      <div class="flex justify-around items-center w-full flex-col space-y-6 mt-3">
+                      <div class="flex justify-around items-left w-full flex-col space-y-6 mt-3 ml-4">
                         <a href="https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2" target="_blank">
                           <!-- you can find this image in google partner marketing hub -->
                           <%= image_tag("get_it_on_google_play_en.png", class: "w-[9rem]") %>
@@ -68,8 +69,8 @@
                       </div>
                     </div>
                     <h3 class="text-base font-semibold leading-6 text-gray-900"><%= t("devise.second_factor.2_scan_or_enter_the_code") %></h3>
-                    <div class="flex justify-center items-center w-full flex-col space-y-3 mt-3">
-                      <div class="text-white w-32">
+                    <div class="flex justify-center items-left w-full flex-col space-y-3 mt-3 ml-4">
+                      <div class="text-white w-32 pl-1">
                         <%= raw(@qr_code) %> <!-- see controller file below for qr code generation example -->
                       </div>
                       <div class="font-medium">
@@ -78,7 +79,10 @@
                     </div>
                     <h3 class="text-base font-semibold leading-6 text-gray-900 mt-5"><%= t("devise.second_factor.3_enter_the_generated_code") %></h3>
                     </div>
-                    <%= form.text_field :otp_code, id: "otp_code", class: "my-3 block shadow rounded-md border border-gray-200 outline-none px-3 py-2 w-md", autocomplete: "off", placeholder: t("devise.second_factor.one_time_code_placeholder") %>
+                    <%= form.text_field :otp_code_token, id: "otp_code_token", class: "my-3 block shadow rounded-md border border-gray-200 outline-none px-3 py-2 w-md", autocomplete: "off", placeholder: t("devise.second_factor.one_time_code_placeholder") %>
+                    <span class="text-red-500">
+                      <%= @warning %>
+                    </span>
                   </div>
                   <%= form.submit t("devise.second_factor.enable"), class: "mort-btn-primary" %>
                 </div>

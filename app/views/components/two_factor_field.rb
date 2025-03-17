@@ -15,8 +15,8 @@ class TwoFactorField < ApplicationComponent
         if Current.user.otp_enabled
           link_to(
             I18n.t("devise.second_factor.disable_2fa"),
-            new_destroy_user_otp_url(button_only: true),
-            data: { turbo_stream: true },
+            users_otp_url(button_only: true),
+            data: { method: :delete },
             class: "#{css} bg-yellow-500") unless @dashboard
         else
           link_to(new_users_otp_url(button_only: true), data: { turbo_stream: true }, class: css) do
@@ -45,9 +45,9 @@ class TwoFactorField < ApplicationComponent
             end
             div(id: "two_factor_field_button", class: %(ml-6 mt-0 flex-shrink-0)) do
               if Current.user.otp_enabled
-                link_to I18n.t("devise.second_factor.disable"), users_otp_url, method: :delete, data: { turbo_stream: true }, class: "mort-btn-alert"
+                link_to I18n.t("devise.second_factor.disable_2fa"), users_otp_url, method: :delete, data: { turbo_stream: true }, class: "mort-btn-alert"
               else
-                link_to I18n.t("devise.second_factor.enable"), new_users_otp_url, data: { turbo_stream: true }, class: "mort-btn-primary"
+                link_to I18n.t("devise.second_factor.enable_2fa"), new_users_otp_url, data: { turbo_stream: true }, class: "mort-btn-primary"
               end
             end
           end

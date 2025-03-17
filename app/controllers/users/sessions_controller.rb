@@ -9,8 +9,8 @@ class Users::SessionsController < MortimerController
 
   def create
     ActiveRecord::Base.connected_to(role: :writing) do
-      if params[:otp_attempt].nil? && attempting_user&.otp_required_for_login
-        show_otp_field and return
+      if otp_params[:otp_attempt].nil? && attempting_user&.otp_enabled
+        show_otp_field
       else
         if attempting_user && otp_ok?
           attempting_user.confirmed? ? start_session : tell_unconfirmed
@@ -18,7 +18,6 @@ class Users::SessionsController < MortimerController
           tell_input_error
         end
       end
-      return
     end
   end
 
@@ -50,7 +49,7 @@ class Users::SessionsController < MortimerController
     end
 
     def otp_ok?
-      !attempting_user&.otp_required_for_login || attempting_user.otp_secret_key == otp_params[:otp_attempt]
+      !attempting_user&.otp_enabled || attempting_user.authenticate_otp(otp_params[:otp_attempt])
     rescue
       false
     end
@@ -59,12 +58,10 @@ class Users::SessionsController < MortimerController
 
     def show_otp_field
       flash[:notice] = "Please enter your OTP code."
-      render turbo_stream: {
-        turbo_stream: [
-          turbo_stream.replace("otp_attempt_outlet", partial: "users/sessions/otp_attempt"),
-          turbo_stream.replace("flash_container", partial: "application/flash_message")
-        ]
-      }
+      render turbo_stream: [
+        turbo_stream.replace("otp_attempt_outlet", partial: "users/sessions/otp_attempt"),
+        turbo_stream.replace("flash_container", partial: "application/flash_message")
+      ]
       flash.clear
     end
 
@@ -90,7 +87,7 @@ class Users::SessionsController < MortimerController
     end
 
     def tell_input_error
-      sign_in_params[:otp_attempt].present? ? flash[:alert] = I18n.t("devise.second_factor.bad_otp_or_password") : flash[:alert] = I18n.t("devise.failure.invalid")
+      otp_params[:otp_attempt].present? ? flash[:alert] = I18n.t("devise.second_factor.bad_otp_or_password") : flash[:alert] = I18n.t("devise.failure.invalid")
       respond_to do |format|
         format.turbo_stream { render turbo_stream: [
           turbo_stream.replace("new_session", partial: "users/sessions/new", locals: { resource: User.new, resource_class: User, resource_name: "user" }),
