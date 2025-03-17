@@ -1,5 +1,9 @@
 class ModalController < MortimerController
   before_action :set_vars, only: [ :new, :show, :create, :destroy, :update ]
+  before_action :set_batch
+  before_action :set_filter # , only: %i[ new index destroy ] # new b/c of modal
+  before_action :set_resources # , only: %i[ index destroy ]
+  before_action :set_resources_stream
 
   def new
     # resource
@@ -123,6 +127,7 @@ class ModalController < MortimerController
 
     def process_other_new
       @step = params[:modal_next_step] || "accept"
+      @ids = @filter.filter != {} || @batch&.batch_set? || @search.present? ? resources.pluck(:id) : []
     end
 
     #
@@ -191,7 +196,8 @@ class ModalController < MortimerController
     end
 
     def process_time_material_create
-      ids = @filter.filter != {} || @batch&.batch_set? || @search.present? ? @resources.pluck(:id) : nil
+      debugger
+      ids = @filter.filter != {} || @batch&.batch_set? || @search.present? ? resources.pluck(:id) : nil
       DineroUploadJob.perform_later tenant: Current.tenant, user: Current.user, date: Date.current, provided_service: "Dinero", ids: ids
       flash.now[:success] = t("time_material.uploading_to_erp")
       render turbo_stream: [

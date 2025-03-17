@@ -121,6 +121,7 @@ END
 ### 17/3/2025
 
 - add translation for button on upload to Dinero
+- use filter and batch and search on upload
 
 ### 7/3/2025
 
