@@ -134,6 +134,7 @@ END
 - set production API key for Dinero
 - add defaults for hour/minute/price/more
 - error 'end_date' on SyncERP
+- find_user dinero_controller
 
 ### 17/3/2025
 

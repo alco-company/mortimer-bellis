@@ -2,7 +2,7 @@ class Dinero::Service < SaasService
   attr_accessor :settings, :provided_service
 
   def initialize(provided_service: nil, settings: nil)
-    @provided_service = provided_service || Current.tenant.provided_services.by_name("Dinero").first || ProvidedService.new
+    @provided_service = provided_service || Current.get_tenant.provided_services.by_name("Dinero").first || ProvidedService.new
     @settings = settings || @provided_service&.service_params_hash || empty_params
     @settings["organizationId"] = @provided_service.organizationID || 0
   end
@@ -187,6 +187,7 @@ class Dinero::Service < SaasService
     def get(path, headers = {})
       refresh_token if token_expired? || settings["access_token"].nil?
       headers["Authorization"] = "Bearer %s" % settings["access_token"]
+
       safe_response "get", "https://api.dinero.dk#{path}", headers
     end
 
@@ -202,6 +203,7 @@ class Dinero::Service < SaasService
       refresh_token if token_expired? || settings["access_token"].nil?
       headers["Authorization"] = "Bearer %s" % settings["access_token"]
       headers["Content-Type"] = "application/json"
+
       safe_response "put", "https://api.dinero.dk#{path}", headers, "put", params
     end
 
