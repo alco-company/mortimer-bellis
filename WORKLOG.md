@@ -130,6 +130,7 @@ END
 
 - use email address on new users on list
 - translation missing on invitation email - new user
+- do not show error on /users/session/new
 
 ### 17/3/2025
 

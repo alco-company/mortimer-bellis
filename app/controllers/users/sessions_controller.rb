@@ -5,6 +5,7 @@ class Users::SessionsController < MortimerController
   attr_accessor :attempting_user
 
   def new
+    flash.clear
   end
 
   def create

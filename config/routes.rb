@@ -4,6 +4,8 @@ Rails.application.routes.draw do
   # use_doorkeeper do
   #   controllers applications: "oauth/applications"
   # end
+  get "/users/sign_in", to: "users/sessions#new"
+  get "/users/login", to: "users/sessions#new"
 
   namespace :tenants do
     resource :registrations
@@ -21,6 +23,13 @@ Rails.application.routes.draw do
     get "invitations/new", to: "invitations#new"
     post "invitations", to: "invitations#create"
     get "invitations/accept", to: "invitations#edit"
+  end
+
+  resources :users do
+    resources :calendars
+    member do
+      post :archive
+    end
   end
 
   # called by JS on client side to check if the session is still valid
@@ -110,15 +119,6 @@ Rails.application.routes.draw do
       get "help"
     end
   end
-  resources :users do
-    resources :calendars
-    collection do
-      get "sign_in_success"
-    end
-    member do
-      post :archive
-    end
-  end
   resources :punches do
     resource :tooltip, only: :show
   end
@@ -178,5 +178,6 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   # root "dashboards#show_dashboard"
   root "time_materials#index"
+
   # root "home#show"
 end
