@@ -120,6 +120,7 @@ END
 - show price when picking product
 - translate new project name validation - error is wrong if double projects same name
 - validation on time_materials is not optimal/working
+- add checkbox when loading more items on a list
 
 ## CHANGELOG
 
@@ -132,6 +133,7 @@ END
 - hide user secondline on list users - or show name
 - set production API key for Dinero
 - add defaults for hour/minute/price/more
+- error 'end_date' on SyncERP
 
 ### 17/3/2025
 

@@ -91,7 +91,7 @@ class Dinero::Service < SaasService
     else
       return false
     end
-    query = build_query(start_date: start_date, all: all, page: page, pageSize: pageSize, fields: fields, status_filter: status_filter)
+    query = build_query(start_date: start_date, end_date: end_date, all: all, page: page, pageSize: pageSize, fields: fields, status_filter: status_filter)
     list = get "/#{api_version}/#{settings["organizationId"]}/#{tbl}?#{query.to_query}"
     if list[:error].present?
       return false
@@ -165,7 +165,7 @@ class Dinero::Service < SaasService
       # res
     end
 
-    def build_query(start_date:, all:, page:, pageSize:, fields:, status_filter:)
+    def build_query(start_date: nil, end_date: nil, all:, page:, pageSize:, fields:, status_filter:)
       query = {}
       unless start_date.nil?
         query[:startDate] = start_date
