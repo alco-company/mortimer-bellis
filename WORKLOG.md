@@ -116,7 +116,6 @@ END
 - toggle switch on products and customers for sync with invoicing service
 - add hidden 'date' on time_material to allow for query
 - send invitation - describe how to separate more new users
-- translation missing on invitation email - new user
 - new users cannot add time/material (no button)
 - redraw projects (after new project does not list projects)
 - redraw provided_services (after new provided_service does not list provided_services)
@@ -130,6 +129,7 @@ END
 ### 18/3/2025
 
 - use email address on new users on list
+- translation missing on invitation email - new user
 
 ### 17/3/2025
 

@@ -30,7 +30,7 @@ class UserMailer < ApplicationMailer
     @invited_by = invited_by
     @invitation_message = invitation_message
     @accept_url = users_invitations_accept_url(token: invitee.invitation_token)
-    mail(to: invitee.email, subject: "Invitation to join")
+    mail to: invitee.email, subject: I18n.t("devise.mailer.invitation_instructions.subject")
   end
 
 
