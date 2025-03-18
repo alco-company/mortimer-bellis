@@ -12,7 +12,7 @@ da:
       invitation_removed: "Din invitation blev fjernet."
       new:
         header: "Send en invitation"
-        description: "<p class='my-2'>Indtast en emailadresse på den person, du vil invitere til at bruge Mortimer's administrative brugergrænseflade.</p><p class='my-2'>Brugeren oprettes som 'bruger' men når brugeren har færdiggjort oprettelse af sin profil, kan du rette brugerens rolle til 'admin'</p>"
+        description: "<p class='my-2'>Indtast emailadresser på de personer, du vil invitere til at bruge Mortimer's administrative brugergrænseflade, adskilt af mellemrum, komma, eller semi-kolon.</p><p class='my-2'>Brugeren oprettes som 'bruger' men når brugeren har færdiggjort oprettelse af sin profil, kan du rette brugerens rolle til 'admin'</p>"
         submit_button: "Send invitationen"
       edit:
         header: "Indstil din egen adgangskode"
