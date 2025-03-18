@@ -117,7 +117,6 @@ END
 - add hidden 'date' on time_material to allow for query
 - redraw projects (after new project does not list projects)
 - redraw provided_services (after new provided_service does not list provided_services)
-- hide user secondline on list users
 - show price when picking product
 - translate new project name validation - error is wrong if double projects same name
 - validation on time_materials is not optimal/working
@@ -132,6 +131,7 @@ END
 - translation missing on invitation email - new user
 - do not show error on /users/session/new
 - send invitation - describe how to separate more new users
+- hide user secondline on list users - or show name
 
 ### 17/3/2025
 

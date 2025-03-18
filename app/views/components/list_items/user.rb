@@ -56,6 +56,21 @@ class ListItems::User < ListItems::ListItem
     end
   end
 
+  def show_matter_link
+    show_matter_mugshot
+    if user&.global_queries? && resource.respond_to?(:tenant)
+      span(class: "hidden md:inline text-xs mr-2") { show_resource_link(resource.tenant) }
+    end unless resource_class == Tenant
+    lbl = resource.name.blank? ? "" : resource.email
+    link_to(resource_url,
+      class: "truncate hover:underline",
+      data: { turbo_action: "advance", turbo_frame: "form" },
+      tabindex: -1) do
+      span(class: "2xs:hidden") { show_secondary_info }
+      plain lbl
+    end
+  end
+
   def show_left_mugshot
     div(class: "flex items-center") do
       input(type: "checkbox", name: "batch[ids][]", value: resource.id, class: "hidden batch mort-form-checkbox mr-2")
