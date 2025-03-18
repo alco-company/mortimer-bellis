@@ -48,6 +48,9 @@ class User < ApplicationRecord
 
   validates :email, presence: true, uniqueness: true, format: { with: URI::MailTo::EMAIL_REGEXP }
   # validates :password, presence: true
+  validates :pincode,
+    numericality: { only_integer: true, in: 1000..9999, unless: ->(u) { u.pincode.blank? } },
+    uniqueness: { scope: :tenant_id, message: I18n.t("users.errors.messages.pincode_exist_for_tenant"), unless: ->(u) { u.pincode.blank? } }
 
   normalizes :email, with: ->(e) { e.strip.downcase }
 
@@ -101,10 +104,6 @@ class User < ApplicationRecord
   scope :by_locale, ->(locale) { where("locale LIKE ?", "%#{locale}%") if locale.present? }
   scope :by_time_zone, ->(time_zone) { where("time_zone LIKE ?", "%#{time_zone}%") if time_zone.present? }
   scope :by_team_users, ->(team) { where(id: team.users.pluck(:id)) if team.present? }
-
-  validates :pincode,
-    numericality: { only_integer: true, in: 1000..9999, unless: ->(u) { u.pincode.blank? } },
-    uniqueness: { scope: :tenant_id, message: I18n.t("users.errors.messages.pincode_exist_for_tenant"), unless: ->(u) { u.pincode.blank? } }
 
   def remove(step = nil)
     if tenant.users.count == 1 || step == "delete_account"

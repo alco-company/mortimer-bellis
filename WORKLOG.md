@@ -115,7 +115,6 @@ END
 - no requirements on t/m
 - toggle switch on products and customers for sync with invoicing service
 - add hidden 'date' on time_material to allow for query
-- use email address on new users on list
 - send invitation - describe how to separate more new users
 - translation missing on invitation email - new user
 - new users cannot add time/material (no button)
@@ -127,6 +126,10 @@ END
 - add defaults for hour/minute/price/more
 
 ## CHANGELOG
+
+### 18/3/2025
+
+- use email address on new users on list
 
 ### 17/3/2025
 

@@ -50,8 +50,9 @@ class ListItems::User < ListItems::ListItem
   # otp_required_for_login
 
   def show_recipient_link
+    lbl = resource.name.blank? ? resource.email : resource.name
     link_to user_url(resource), data: { turbo_action: "advance", turbo_frame: "form", tabindex: "-1" }, class: "hover:underline" do
-      plain resource.name
+      plain lbl
     end
   end
 
