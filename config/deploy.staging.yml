@@ -61,6 +61,7 @@ env:
     - SMTP_PORT
     - SMTP_AUTHENTICATION
     - SMTP_HOST
+    - MORTIMER_VERSION
   clear:
     SOLID_QUEUE_IN_PUMA: true
     WEB_HOST: anemone.mortimer.pro
@@ -70,7 +71,6 @@ env:
     SMTP_DOMAIN: mortimer.pro
     SMTP_ENABLE_STARTTLS_AUTO: 'false'
     SSL_DOMAIN: anemone.mortimer.pro
-    MORTIMER_VERSION: "1.1.0"
     DINERO_APP_CALLBACK: 'https://anemone.mortimer.pro/dinero/callback'
 
 # Aliases are triggered with "bin/kamal <alias>". You can overwrite arguments on invocation:

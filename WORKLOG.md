@@ -132,6 +132,7 @@ END
 - do not show error on /users/session/new
 - send invitation - describe how to separate more new users
 - hide user secondline on list users - or show name
+- set production API key for Dinero
 
 ### 17/3/2025
 
