@@ -20,7 +20,7 @@ class Users::OtpsController < MortimerController
       render turbo_stream: [
         turbo_stream.remove("new_form_modal"),
         turbo_stream.update("two_factor_field", partial: "users/otps/two_factor_field"),
-        turbo_stream.replace("flash_container", partial: "application/flash_message")
+        turbo_stream.replace("flash_container", partial: "application/flash_message", locals: { tenant: Current.get_tenant, messages: flash, user: Current.get_user })
       ]
       flash.clear
     else
@@ -36,7 +36,7 @@ class Users::OtpsController < MortimerController
     flash[:success] = t("devise.second_factor.disabled")
     render turbo_stream: [
       turbo_stream.update("two_factor_field", partial: "users/otps/two_factor_field"),
-      turbo_stream.replace("flash_container", partial: "application/flash_message")
+      turbo_stream.replace("flash_container", partial: "application/flash_message", locals: { tenant: Current.get_tenant, messages: flash, user: Current.get_user })
     ]
     flash.clear
   end

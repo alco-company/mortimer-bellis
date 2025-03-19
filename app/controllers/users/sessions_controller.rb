@@ -61,7 +61,7 @@ class Users::SessionsController < MortimerController
       flash[:notice] = "Please enter your OTP code."
       render turbo_stream: [
         turbo_stream.replace("otp_attempt_outlet", partial: "users/sessions/otp_attempt"),
-        turbo_stream.replace("flash_container", partial: "application/flash_message")
+        turbo_stream.replace("flash_container", partial: "application/flash_message", locals: { tenant: Current.get_tenant, messages: flash, user: Current.get_user })
       ]
       flash.clear
     end
@@ -81,7 +81,7 @@ class Users::SessionsController < MortimerController
       respond_to do |format|
         format.turbo_stream { render turbo_stream: [
           turbo_stream.replace("new_session", partial: "users/sessions/new", locals: { resource: User.new, resource_class: User, resource_name: "user" }),
-          turbo_stream.replace("flash_container", partial: "application/flash_message")
+          turbo_stream.replace("flash_container", partial: "application/flash_message", locals: { tenant: Current.get_tenant, messages: flash, user: Current.get_user })
         ] ; flash.clear}
         format.html         { redirect_to new_users_session_url }
       end
@@ -92,7 +92,7 @@ class Users::SessionsController < MortimerController
       respond_to do |format|
         format.turbo_stream { render turbo_stream: [
           turbo_stream.replace("new_session", partial: "users/sessions/new", locals: { resource: User.new, resource_class: User, resource_name: "user" }),
-          turbo_stream.replace("flash_container", partial: "application/flash_message")
+          turbo_stream.replace("flash_container", partial: "application/flash_message", locals: { tenant: Current.get_tenant, messages: flash, user: Current.get_user })
         ] ; flash.clear}
 
         format.turbo_stream { render turbo_stream:  }

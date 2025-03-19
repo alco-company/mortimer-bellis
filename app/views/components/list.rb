@@ -89,7 +89,7 @@ class List < ApplicationComponent
   end
 
   def flash_it
-    turbo_stream.replace("flash_container", partial: "application/flash_message") if flash.any?
+    turbo_stream.replace("flash_container", partial: "application/flash_message", locals: { tenant: Current.get_tenant, messages: flash, user: Current.get_user }) if flash.any?
   end
 
   def replace_list_header

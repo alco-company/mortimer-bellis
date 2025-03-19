@@ -31,7 +31,7 @@ class Tenants::RegistrationsController < MortimerController
         respond_to do |format|
           format.turbo_stream { render turbo_stream: [
             turbo_stream.replace("new_registration", partial: "users/sessions/new", locals: { resource: User.new, resource_class: User, resource_name: "user" }),
-            turbo_stream.replace("flash_container", partial: "application/flash_message")
+            turbo_stream.replace("flash_container", partial: "application/flash_message", locals: { tenant: Current.get_tenant, messages: flash, user: Current.get_user })
           ]; flash.clear }
           format.html         { redirect_to new_users_session_url }
         end
@@ -41,7 +41,7 @@ class Tenants::RegistrationsController < MortimerController
         respond_to do |format|
           format.turbo_stream { render turbo_stream: [
             turbo_stream.replace("new_registration", partial: "tenants/registrations/new", locals: { resource: User.new, resource_class: User, resource_name: "user" }),
-            turbo_stream.replace("flash_container", partial: "application/flash_message")
+            turbo_stream.replace("flash_container", partial: "application/flash_message", locals: { tenant: Current.get_tenant, messages: flash, user: Current.get_user })
           ]; flash.clear }
           format.html         { redirect_to new_users_session_url }
         end
@@ -78,11 +78,12 @@ class Tenants::RegistrationsController < MortimerController
     resource_updated = update_resource(resource, account_update_params)
     yield resource if block_given?
     if resource_updated
+      flash[:notice] = I18n.t(".updated")
       resource.mugshot = mugshot if mugshot && mugshot.attachable?
       # set_flash_message_for_update(resource, prev_unconfirmed_email)
       render turbo_stream: [
         turbo_stream.update("form", ""),
-        turbo_stream.replace("flash_container", partial: "application/flash_message")
+        turbo_stream.replace("flash_container", partial: "application/flash_message", locals: { tenant: Current.get_tenant, messages: flash, user: Current.get_user })
       ]
 
       # bypass_sign_in resource, scope: resource_name if sign_in_after_change_password?

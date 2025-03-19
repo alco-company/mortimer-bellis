@@ -58,7 +58,7 @@ module ErrorHandling
         flash[:alert] = I18n.t("old_csrf")
       end
       render turbo_stream: [
-        turbo_stream.replace("flash_container", partial: "application/flash_message")
+        turbo_stream.replace("flash_container", partial: "application/flash_message", locals: { tenant: Current.get_tenant, messages: flash, user: Current.get_user })
       ] and return
     end
   end

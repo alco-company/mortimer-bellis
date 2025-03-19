@@ -122,14 +122,14 @@ class TimeMaterialsController < MortimerController
         params.permit![:pause] == "pause" ? pause : resume
         Broadcasters::Resource.new(resource, params).replace
         respond_to do |format|
-          format.html { render turbo_stream: [ turbo_stream.replace("flash_container", partial: "application/flash_message") ] }
-          format.turbo_stream { render turbo_stream: [ turbo_stream.replace("flash_container", partial: "application/flash_message") ] }
+          format.html { render turbo_stream: [ turbo_stream.replace("flash_container", partial: "application/flash_message", locals: { tenant: Current.get_tenant, messages: flash, user: Current.get_user }) ] }
+          format.turbo_stream { render turbo_stream: [ turbo_stream.replace("flash_container", partial: "application/flash_message", locals: { tenant: Current.get_tenant, messages: flash, user: Current.get_user }) ] }
         end
       else
         respond_to do |format|
           format.turbo_stream { render turbo_stream: [
             flash.now[:warning] = t("time_material.not_your_time_material"),
-            turbo_stream.replace("flash_container", partial: "application/flash_message")
+            turbo_stream.replace("flash_container", partial: "application/flash_message", locals: { tenant: Current.get_tenant, messages: flash, user: Current.get_user })
           ] }
         end
       end

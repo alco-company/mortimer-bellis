@@ -34,7 +34,7 @@ class Users::RegistrationsController < MortimerController
       render turbo_stream: [
         turbo_stream.update("form", ""),
         turbo_stream.replace("profile_dropmenu", ProfileDropmenuComponent.new),
-        turbo_stream.replace("flash_container", partial: "application/flash_message")
+        turbo_stream.replace("flash_container", partial: "application/flash_message", locals: { tenant: Current.get_tenant, messages: flash, user: Current.get_user })
       ]
       flash.clear
     else
@@ -51,7 +51,7 @@ class Users::RegistrationsController < MortimerController
       flash.now[:warning] = t(".validation_errors")
       render turbo_stream: [
         turbo_stream.update("form", partial: "users/registrations/edit", locals: { resource: resource }),
-        turbo_stream.replace("flash_container", partial: "application/flash_message")
+        turbo_stream.replace("flash_container", partial: "application/flash_message", locals: { tenant: Current.get_tenant, messages: flash, user: Current.get_user })
       ]
       flash.clear
     end

@@ -66,7 +66,9 @@ module Resourceable
     end
 
     def set_filter
-      @filter_form = params_ctrl.split("/").last
+      # @filter_form = params_ctrl.split("/").last
+      # @filter_form = @filter_form == "modal" ? resource_class.table_name : @filter_form
+      @filter_form = resource_class.table_name
       @url = resources_url
       @filter = Filter.by_user.by_view(@filter_form).take || Filter.new
       @filter.filter ||= {}

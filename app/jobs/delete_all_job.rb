@@ -8,6 +8,7 @@ class DeleteAllJob < ApplicationJob
     rc = args[:resource_class].constantize
     user_ids = args[:user_ids].present? ? args[:user_ids].compact : nil
     ids = args[:ids].compact
+    # set the batch to be deleted if resources was selected by batch
     @batch = args[:batch] rescue nil
     switch_locale do
       resources = rc.where id: ids
@@ -27,8 +28,12 @@ class DeleteAllJob < ApplicationJob
         if @user.allowed_to?(:destroy, r)
           t = r.dup
           t.id=r.id
-          r.destroy
-          Broadcasters::Resource.new(t).destroy
+          begin
+            r.destroy
+            Broadcasters::Resource.new(t).destroy
+          rescue => e
+            Broadcasters::Resource.new(t).flash error: "DeleteAllJob failed on #{rc}##{t.id}: #{e.message}"
+          end
         end
       end
       notify_all user_ids, tmp_resource

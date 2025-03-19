@@ -31,7 +31,7 @@ class Current < ActiveSupport::CurrentAttributes
   end
 
   def get_tenant
-    Current.tenant || Current.system_user&.tenant
+    Current.tenant || Current.get_user&.tenant
   end
 
   # def find_tenant(tenant_access_token)

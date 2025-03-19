@@ -115,7 +115,7 @@ module DefaultActions
           flash[:success] = t(".post")
           format.turbo_stream { render turbo_stream: [
             turbo_stream.update("form", ""),
-            turbo_stream.replace("flash_container", partial: "application/flash_message")
+            turbo_stream.replace("flash_container", partial: "application/flash_message", locals: { tenant: Current.get_tenant, messages: flash, user: Current.get_user })
             # special
           ] ; flash.clear}
           format.html { redirect_to resources_url, success: t(".post") }
@@ -124,7 +124,7 @@ module DefaultActions
           flash.now[:warning] = t(".validation_errors")
           format.turbo_stream { render turbo_stream: [
             turbo_stream.update("form", partial: "new"),
-            turbo_stream.replace("flash_container", partial: "application/flash_message")
+            turbo_stream.replace("flash_container", partial: "application/flash_message", locals: { tenant: Current.get_tenant, messages: flash, user: Current.get_user })
           ] ; flash.clear}
           format.html { render :new, status: :unprocessable_entity, warning: t(".warning") }
           format.json { render json: resource.errors, status: :unprocessable_entity }
@@ -151,7 +151,7 @@ module DefaultActions
           flash[:success] = t(".post")
           format.turbo_stream { render turbo_stream: [
             turbo_stream.update("form", ""),
-            turbo_stream.replace("flash_container", partial: "application/flash_message")
+            turbo_stream.replace("flash_container", partial: "application/flash_message", locals: { tenant: Current.get_tenant, messages: flash, user: Current.get_user })
           ] ; flash.clear}
           format.html { redirect_to resources_url, success: t(".post") }
           format.json { render :show, status: :ok, location: resource }
@@ -159,7 +159,7 @@ module DefaultActions
           flash[:warning] = t(".validation_errors")
           format.turbo_stream { render turbo_stream: [
             turbo_stream.update("form", partial: "edit"),
-            turbo_stream.replace("flash_container", partial: "application/flash_message")
+            turbo_stream.replace("flash_container", partial: "application/flash_message", locals: { tenant: Current.get_tenant, messages: flash, user: Current.get_user })
           ] ; flash.clear}
           format.html { render :edit, status: :unprocessable_entity, warning: t(".warning") }
           format.json { render json: resource.errors, status: :unprocessable_entity }
@@ -175,7 +175,7 @@ module DefaultActions
     def destroy
       posthog_capture
       if params[:all].present? && params[:all] == "true"
-        DeleteAllJob.perform_now tenant: Current.tenant, resource_class: resource_class.to_s, sql_resources: @resources.to_sql
+        DeleteAllJob.perform_later tenant: Current.tenant, resource_class: resource_class.to_s, sql_resources: @resources.to_sql
         Current.tenant.notify action: :destroy, msg: "All #{resource_class.name.underscore.pluralize} was deleted in the background"
         respond_to do |format|
           format.html { redirect_to resources_url, success: t("delete_all_later") }

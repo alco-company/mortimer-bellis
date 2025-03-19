@@ -23,6 +23,10 @@ module ModalHelper
     I18n.t("modal.destroy.account.instruction")
   end
 
+  def set_all_true
+    !resource.id.present? # and !filtered_or_batched?
+  end
+
   def filtered_or_batched?
     (@filter&.filter != {}) || @batch&.batch_set? || @search.present?
   end

@@ -128,6 +128,7 @@ END
 
 - make Dinero authorization work with new Current.user model
 - make Dinero SyncERP work with new Current.user model
+- set flash for FlashComponent
 
 ### 18/3/2025
 

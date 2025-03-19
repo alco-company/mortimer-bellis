@@ -26,7 +26,7 @@ class Users::InvitationsController < MortimerController
     respond_to do |format|
       format.turbo_stream { render turbo_stream: [
         turbo_stream.replace("#{Current.tenant.id}_new_invitations", partial: "users/invitations/new", locals: { resource: User.new, resource_class: User, resource_name: "user" }),
-        turbo_stream.replace("flash_container", partial: "application/flash_message")
+        turbo_stream.replace("flash_container", partial: "application/flash_message", locals: { tenant: Current.get_tenant, messages: flash, user: Current.get_user })
       ]; flash.clear }
       format.html         { render :new }
     end
