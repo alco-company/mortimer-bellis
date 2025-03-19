@@ -60,32 +60,6 @@ class ModalController < MortimerController
       @search = params[:search]
     end
 
-    # def set_filter_and_batch
-    #   @filter_form = resource_class.to_s.underscore.pluralize
-    #   @filter = Filter.by_user.by_view(@filter_form).take || Filter.new
-    #   @filter.filter ||= {}
-
-    #   @batch = Batch.where(tenant: Current.tenant, user: Current.user, entity: resource_class.to_s).take ||
-    #             Batch.create(tenant: Current.tenant, user: Current.user, entity: resource_class.to_s, ids: "", all: true)
-    # end
-
-    # def resource
-    #   if params[:id].present?
-    #     @resource = resource_class.find(params[:id]) rescue resource_class.new
-    #   else
-    #     @resource = resource_class.new
-    #   end
-    # end
-
-    # def resource_class
-    #   @resource_class ||= case params[:resource_class]
-    #   # when "invitations"; UserInvitation
-    #   when "notifications"; Noticed::Notification
-    #   when "doorkeeper/application"; Oauth::Application
-    #   else; params[:resource_class].classify.constantize rescue nil
-    #   end
-    # end
-
     #
     # --------------------------- NEW --------------------------------
 
@@ -201,7 +175,7 @@ class ModalController < MortimerController
       flash.now[:success] = t("time_material.uploading_to_erp")
       render turbo_stream: [
         turbo_stream.close_remote_modal { },
-        turbo_stream.replace("flash_container", partial: "application/flash_message")
+        turbo_stream.replace("flash_container", partial: "application/flash_message", locals: { tenant: Current.get_tenant, messages: flash, user: Current.get_user })
       ]
     end
 
@@ -228,7 +202,7 @@ class ModalController < MortimerController
 
     def process_destroy_all
       begin
-        DeleteAllJob.perform_later tenant: Current.tenant, user: Current.user, resource_class: resource_class.to_s,
+        DeleteAllJob.perform_now tenant: Current.tenant, user: Current.user, resource_class: resource_class.to_s,
           ids: resources.pluck(:id),
           batch: @batch,
           user_ids: (resource_class.first.respond_to?(:user_id) ? resources.pluck(:user_id).uniq : User.by_tenant.by_role(:user).pluck(:id)) rescue nil

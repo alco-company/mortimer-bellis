@@ -77,7 +77,7 @@ class InvoiceItem < ApplicationRecord
   def self.add_from_erp(item, invoice)
     product = Product.find_by erp_guid: item["ProductGuid"]
     if ii = InvoiceItem.create(
-      tenant: Current.tenant,
+      tenant: Current.get_tenant,
       invoice: invoice,
       product: product,
       description: item["Description"],

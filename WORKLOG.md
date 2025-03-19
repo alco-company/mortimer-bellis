@@ -127,6 +127,7 @@ END
 ### 19/3/2025
 
 - make Dinero authorization work with new Current.user model
+- make Dinero SyncERP work with new Current.user model
 
 ### 18/3/2025
 

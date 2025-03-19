@@ -5,8 +5,8 @@ class DineroController < ApplicationController
   #
   def callback
     state = JSON.parse(Base64.decode64(params[:state]))
-    if Current.find_user state["pos_token"]
-      dinero_service = Dinero::Service.new
+    if usr = Current.find_user(state["pos_token"])
+      dinero_service = Dinero::Service.new user: usr
       creds = { code: params[:code], pos_token: state["pos_token"] }
       res = dinero_service.get_creds(creds: creds)
       if res[:result] && dinero_service.add_service("Dinero", res[:service_params])
