@@ -132,7 +132,7 @@ END
 - make Dinero SyncERP work with new Current.user model
 - set flash for FlashComponent
 - set :passive on touchstart addEventListeners
-- 
+- Missing target element "backdrop" for "notificationcenter" controller
 
 ### 18/3/2025
 
