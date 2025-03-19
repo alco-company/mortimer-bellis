@@ -8,6 +8,7 @@ da:
     uploading_to_erp: Overfører fakturalinjer til Dinero
     current_task: Igangværende opgave
     default_assigned_task_title: "Vedr en af dine opgaver"
+    default_assigned_about: "En opgave"
     new_assigned_task: "%{delegator} har tildelt dig en ny opgave"
     updated_assigned_task: "%{moderator} har rettet en af dine opgaver"
     destroyed_assigned_task: "%{terminator} har slettet en af dine opgaver"
