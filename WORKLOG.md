@@ -90,29 +90,21 @@ END
 
 - add breaks and included_in_duration to payroll_period#manual_punch
 - redesign punch and add work_schedule to payroll_period#manual_punch
-- fix error on employee_invitation#create -> returns turbo_frame in clear text - not HTML - at least on iPad
 - TODO - fix mugshot (see users/registrations_controller)
-- fix bug on sending email invitation to new user
 - validate punches before deleting punch_clocks !!
 - invoices
 - team status https://localhost:3000/pos/punch_clock.20?api_key=arbjQmRVrVpLU4fzYSSSQc31
 - location status (like user, team) - missing
 - user status - https://localhost:3000/pos/users?api_key=mVunTFDgFVud5qJAHgrHbp4P
 - fix bug in deleting invoices
+- gå alle åbne opgaver igennem
+- check that import users still works
 - handle Dinero::Service.refresh_token error better - inform user to re-authenticate service
 - check all icon files - for PWA and all
 - timer (play) på desktop
-- check that import users still works
-- CSRF token on login ages out - fix
-- batches only set on every second try
 - ret notifikation til notice for 'din konto er godkendt'
-- efter gem af profil - 'content missing'
 - åbne opgaver - klik på profil så sker der ikke noget
-- gå alle åbne opgaver igennem
-- there's still a foreign key lurking somewhere in the kill_tenant_job
-- big fix on time_materials
 - create invoicing service
-- no requirements on t/m
 - toggle switch on products and customers for (auto) sync with invoicing service
 - add hidden 'date' on time_material to allow for query
 - redraw projects (after new project does not list projects)
@@ -121,7 +113,6 @@ END
 - translate new project name validation - error is wrong if double projects same name
 - validation on time_materials is not optimal/working
 - add checkbox when loading more items on a list
-- ERROR on destroy: 550 5.1.1 <walther@mortimer.pro>: Recipient address rejected: User unknown in virtual alias table
 
 ## CHANGELOG
 
@@ -133,6 +124,7 @@ END
 - set :passive on touchstart addEventListeners
 - Missing target element "backdrop" for "notificationcenter" controller
 - missing da.time_material.default_assigned_about
+- handle errors on mailers
 
 ### 18/3/2025
 

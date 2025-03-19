@@ -11,6 +11,8 @@ class TenantMailer < ApplicationMailer
     I18n.with_locale(locale) do
       mail to: @rcpt, subject: I18n.t("tenant.mailer.welcome.subject")
     end
+  rescue => e
+    UserMailer.error_report(e.to_s, "TenantMailer#welcome - failed for #{params[:tenant]&.id}").deliver_later
   end
 
 
