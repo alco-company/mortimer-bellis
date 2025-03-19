@@ -53,7 +53,7 @@ class Filter < ApplicationRecord
     filter_for_associations model
     relation.where(conditions.reduce(:and))
   rescue => e
-    debugger
+    # debug-ger
     UserMailer.error_report(e.message, "Filter#do_filter failed ").deliver_later
     relation
   end

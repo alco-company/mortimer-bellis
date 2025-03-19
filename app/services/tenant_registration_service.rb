@@ -9,7 +9,6 @@ class TenantRegistrationService
     return remove(tenant) if destroy
 
     if tenant.persisted?
-      debugger
       user = User.new tenant_id: tenant.id, email: user_params[:email], role: "admin", password: user_params[:password], locale: "da", time_zone: "Europe/Copenhagen"
       if user.save
         user.send_confirmation_instructions

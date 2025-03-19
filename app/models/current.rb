@@ -21,6 +21,15 @@ class Current < ActiveSupport::CurrentAttributes
     Current.system_user ||= User.find_by(pos_token: user_pos_token) rescue nil
   end
 
+  #
+  # the get_ methods are used by the jobs
+  # and services where no user is logged in and no tenant is set
+  # and user and hence tenant is found by the pos_token
+  #
+  def get_user
+    Current.user || Current.system_user
+  end
+
   def get_tenant
     Current.tenant || Current.system_user&.tenant
   end

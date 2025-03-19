@@ -22,7 +22,6 @@ class Tenants::RegistrationsController < MortimerController
     begin
       usr = nil
       resource = Tenant.new(email: user_params[:email], name: user_params[:email])
-      debugger
       if user_params_ok? && resource.save
         raise "user was not registered correctly" unless usr = TenantRegistrationService.call(resource, user_params)
         # raise "user was not registered correctly" unless UserRegistrationService.call(resource, tenant_name)

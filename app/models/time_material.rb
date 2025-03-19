@@ -416,7 +416,7 @@ class TimeMaterial < ApplicationRecord
       true
     end
   rescue => e
-    debugger
+    # debug-ger
     UserMailer.error_report(e.to_s, "TimeMaterial#prepare_tm - failed with params: #{resource_params}").deliver_later
     false
   end

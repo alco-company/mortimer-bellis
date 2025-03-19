@@ -124,6 +124,10 @@ END
 
 ## CHANGELOG
 
+### 19/3/2025
+
+- make Dinero authorization work with new Current.user model
+
 ### 18/3/2025
 
 - use email address on new users on list

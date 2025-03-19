@@ -10,7 +10,7 @@ class SelectLookup < ApplicationComponent
     @div_id = div_id
     @field_value = field_value
     @controller_name = collection.first.id==0 ? "notice" : "" rescue ""
-    # debugger
+    # debug-ger
   end
 
   def view_template(&block)

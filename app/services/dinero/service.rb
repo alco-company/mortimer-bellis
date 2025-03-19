@@ -26,13 +26,13 @@ class Dinero::Service < SaasService
   end
 
   def auth_url(path)
-    return unless Current.tenant
+    return unless Current.get_tenant
     host = "https://connect.visma.com/connect/authorize"
     params = {
       client_id: ENV["DINERO_APP_ID"],
       response_type: "code",
       response_mode: "form_post",
-      state: Base64.encode64({ pos_token: Current.user.pos_token, path: path }.to_json),
+      state: Base64.encode64({ pos_token: Current.get_user.pos_token, path: path }.to_json),
       scope: "dineropublicapi:read dineropublicapi:write offline_access",
       redirect_uri: ENV["DINERO_APP_CALLBACK"]
     }

@@ -69,7 +69,7 @@ class EventService
       end
       true
     rescue => error
-      debugger
+      # debug-ger
       false
     end
 

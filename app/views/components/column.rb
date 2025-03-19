@@ -45,7 +45,7 @@ class Column < Phlex::HTML
         end
       end
     rescue => e
-      debugger
+    # debug-ger
   end
 
   def build_link(val)

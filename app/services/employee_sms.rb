@@ -5,7 +5,7 @@ class EmployeeSms
 
   def invite
     # send sms
-    # debugger
+    # debug-ger
     # I18n.t("user_mailer.invite.title")
 
     # I18n.t("user_mailer.invite.introduction")

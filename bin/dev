@@ -10,7 +10,7 @@ end
 ENV["PORT"] ||= "3000"
 
 # Let the debug gem allow remote connections,
-# but avoid loading until `debugger` is called
+# but avoid loading until `debug-ger` is called
 ENV["RUBY_DEBUG_OPEN"]="true"
 ENV["RUBY_DEBUG_LAZY"]="true"
 
