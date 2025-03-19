@@ -12,7 +12,7 @@ class Notifications::NotificationBell < ApplicationComponent
         type: "button",
         data: {
           notificationcenter_target: "notificationBellButton",
-          action: "touchstart->notificationcenter#gong click->notificationcenter#gong "
+          action: "touchstart->notificationcenter#gong:passive click->notificationcenter#gong "
         },
         class: "-m-2.5 p-2.5 text-sky-200 hover:text-sky-600",
         aria_expanded: "false"

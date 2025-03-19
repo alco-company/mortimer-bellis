@@ -121,6 +121,8 @@ END
 - translate new project name validation - error is wrong if double projects same name
 - validation on time_materials is not optimal/working
 - add checkbox when loading more items on a list
+- missing da.time_material.default_assigned_about
+- ERROR on destroy: 550 5.1.1 <walther@mortimer.pro>: Recipient address rejected: User unknown in virtual alias table
 
 ## CHANGELOG
 
@@ -129,6 +131,8 @@ END
 - make Dinero authorization work with new Current.user model
 - make Dinero SyncERP work with new Current.user model
 - set flash for FlashComponent
+- set :passive on touchstart addEventListeners
+- 
 
 ### 18/3/2025
 

@@ -19,7 +19,7 @@ class ProfileDropmenuComponent < ApplicationComponent
          data: {
             navigation_target: "profileMenuButton",
             contextmenu_target: "button",
-            action: "touchstart->contextmenu#tap click@window->contextmenu#hide click->contextmenu#tap"
+            action: "touchstart->contextmenu#tap:passive click@window->contextmenu#hide click->contextmenu#tap"
           },
          class: "-m-1.5 flex items-center p-1.5",
         id: "user-menu-button",

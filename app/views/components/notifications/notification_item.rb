@@ -44,7 +44,7 @@ class Notifications::NotificationItem < Phlex::HTML
             type: "button",
             data_contextmenu_target: "button",
             data_action:
-              " touchstart->contextmenu#tap click->contextmenu#tap click@window->contextmenu#hide",
+              " touchstart->contextmenu#tap:passive click->contextmenu#tap click@window->contextmenu#hide",
             class:
               # "flex items-center p-1 text-gray-400 rounded-md hover:text-gray-900 border h-7 -mr-0.5 pl-3",
               "flex items-center rounded-md ring-1 ring-gray-100 bg-white px-2 py-1 text-gray-400 hover:text-gray-600 focus:outline-none focus:ring-1 focus:ring-sky-500",

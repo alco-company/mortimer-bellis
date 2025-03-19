@@ -110,7 +110,7 @@ class CalendarComponent < ApplicationComponent
       div(class: "relative") do
         button(
           type: "button",
-          data: { action: "touchstart->calendar#toggleView click->calendar#toggleView click@window->calendar#hideView" },
+          data: { action: "touchstart->calendar#toggleView:passive click->calendar#toggleView click@window->calendar#hideView" },
           class:
             "flex items-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50",
           id: "menu-button",
@@ -152,7 +152,7 @@ class CalendarComponent < ApplicationComponent
   def mobile_view_picker
     div(class: "relative ml-6 md:hidden") do
       button(type: "button",
-        data: { action: "touchstart->calendar#toggleMobileView click->calendar#toggleMobileView click@window->calendar#hideMobileView" },
+        data: { action: "touchstart->calendar#toggleMobileView:passive click->calendar#toggleMobileView click@window->calendar#hideMobileView" },
         class: "-mx-2 flex items-center rounded-full border border-transparent p-2 text-gray-400 hover:text-gray-500",
         id: "menu-0-button",
         aria_expanded: "false",

@@ -198,7 +198,7 @@ class Contextmenu < Phlex::HTML
       label: I18n.t("more"),
       visible_label: false,
       data: { contextmenu_target: "button" },
-      action: "touchstart->contextmenu#tap click->contextmenu#tap click@window->contextmenu#hide", &block)
+      action: "touchstart->contextmenu#tap:passive click->contextmenu#tap click@window->contextmenu#hide", &block)
 
       data[:action] = action if action
       button(
