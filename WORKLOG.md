@@ -1,120 +1,14 @@
 # WORKLOG
 
-# fonts to use: Inter, Helvetica, Futura, Garamond, Times New Roman, Bodoni, Baskerville, Century Expanded
-# <https://www.somanycode.com/awesome/awesome-ruby/> listing for many projects and gems
-
-# all the samples for client features - https://github.com/GoogleChrome/samples/tree/gh-pages
-
-## tools
-
-- setup monitoring with https://levelup.gitconnected.com/ruby-on-rails-monitor-you-app-logs-with-grafana-loki-fb33dc79dab7
-- if you need to add components before/after a Phlex component view_template - look at https://github.com/mbajur/phlex-hookable
-- missing a tools - look at https://notchtools.com/
-- if VUE components are required - look at inertiajs.com
-- look at modularization using ideas / patterns from https://diversepixel.medium.com/rails-architecture-best-practices-and-building-scalable-applications-ruby-deep-dive-11-7cc514766728
-- use Bullet to erradicate N+1 queries - IMPORTANT
-
-## Rescue tools
-
-## Ideas
-
-refactor app using ideas from https://medium.com/@HasstrupEzekiel/context-based-programming-in-rails-0ce951a59c36
-
-consider printing PDF's with https://medium.com/@ihcnemed/rails-the-ultimate-guide-to-printing-anything-as-pdf-27fc4fa1e700 
-
-https://anemone.mortimer.pro/oauth2/authorize?client_id=1&redirect_uri=https://anemone.mortimer.pro/oauth2/callback&response_type=code&scope=openid+profile+email+phone+address+roles+offline_access
-
-https://anemone.mortimer.pro/oauth2/token
-https://anemone.mortimer.pro/api/v1/contacts
-
-https://nordhealth.design/templates/application/#
-
-setup CI deployment with Kamal - https://www.rickpeyton.com/posts/step-by-step-guide-to-deploying-rails-8-with-kamal-and-github-actions-2
-PWA: https://onrails.blog/2021/03/02/rails-pwas-using-turbo-hhnpwa-7/
-NATIVE: https://blog.corsego.com/navigating-turbo-native, https://www.youtube.com/watch?v=TDQ2wtmgeKw
-3CX: https://www.3cx.com/docs/crm-integration/
-
-osascript = <<END
-tell application "Messages"
-  set targetBuddy to "#{phone_number}"
-  set targetService to id of 1st account whose service whose service type = iMessage
-  set theBuddy to participant targetBuddy of account id targetService
-  set message to "#{message}"
-  send message to theBuddy
-end tell
-END
-`osascript -e '#{osascript}'`
-
-
-- add customer has balance marker
-{
-  "Collection"=> [
-   {"Number"=>22099, "ContactName"=>"SOPHUS FUGLSANG. EXPORT-MALTFABRIK A/S", "ContactGuid"=>"2e7bd2c1-761b-44e2-94be-d93151a45e13", "Date"=>"2024-11-01", "TotalExclVatInDkk"=>9494.4},
-   {"Number"=>22098, "ContactName"=>"SILKEBORG SOGN MENIGHEDSRÅD", "ContactGuid"=>"f2f84fd5-853d-4420-9a8a-1531795a4adf", "Date"=>"2024-11-01", "TotalExclVatInDkk"=>450.0},
-   {"Number"=>22097, "ContactName"=>"Nordthy A/S", "ContactGuid"=>"228f7848-1201-4034-aba9-ed18e3393542", "Date"=>"2024-11-01", "TotalExclVatInDkk"=>78075.0},
-   {"Number"=>22096, "ContactName"=>"Nordthy A/S", "ContactGuid"=>"228f7848-1201-4034-aba9-ed18e3393542", "Date"=>"2024-11-01", "TotalExclVatInDkk"=>5400.0},
-   ...
-   {"Number"=>21936, "ContactName"=>"JON KATBORG ApS", "ContactGuid"=>"d7bc214e-719b-42ba-9125-664a6e2aff20", "Date"=>"2024-08-29", "TotalExclVatInDkk"=>225.0}
-  ],
-  "Pagination"=>{
-    "MaxPageSizeAllowed"=>1000,
-    "PageSize"=>500,
-    "Result"=>26,
-    "ResultWithoutFilter"=>26,
-    "Page"=>0
-  }
-}
-
-- investigate into refactoring the render - use https://fly.io/ruby-dispatch/component-driven-development-on-rails-with-phlex/
-- switch to Nokolexbor (from Nokogiri) for parsing HTML like when scraping
-- use Hotwire for downloading PDF's
-- use Ruby Patterns as explained in https://medium.com/@slimbennasrallah_89177/ruby-on-rails-design-patterns-101-d99f43adc2b3
-- use materialized views for most index actions - https://medium.com/@michal.a.rudzki/utilizing-materialized-views-power-in-ruby-on-rails-bcd2332604bb
-- consider https://bunny.net/ for image optimization and CDN as CloudFlare substitute
-- use passwordless authentication - https://blog.saeloun.com/2024/11/26/passwordless-authentication-using-webauth/
-- adding cache strategy (using fastest cache technology ATM) -- se https://blog.appsignal.com/2024/01/17/speed-up-your-ruby-on-rails-application-with-litecache.html
-- loading skeleton frames on all lists - using https://www.driftingruby.com/episodes/skeleton-frames
-- add editor to content - https://github.com/avo-hq/marksmith
-- run spinner on submitting forms - https://github.com/edudepetris/rails-8-turbo-morph-and-stream/commit/ff69db6050f8ace429fb05ac926a01031bcb67c3
-- tasks in tree structure - https://www.codemancers.com/blog/maintaining-a-tree-structure-in-rails-with-the-ancestry-gem/
-- consider https://terminalwire.com/articles/superview
-- make sidebar present like https://nordhealth.design/templates/application/#
-- pickup the mobile moving - ask if driving - enter odometer
-- this is probably not necessary: format.turbo_stream { render turbo_stream: turbo_stream.remove(dom_id(@resource)) }
-- pwa-installation.js + joy of rails
-- have a second look at background_jobs - see https://bluetickconsultants.medium.com/rails-8-and-active-job-enhancements-whats-new-for-developers-9e6046a2c5ce
-- upgrade Tailwind to 4.0 - https://www.zolkos.com/2024/11/30/upgrading-to-tailwind4
-- <https://railsdesigner.com/preview-images-with-hotwire>
-
-## BUGS
-
-- add breaks and included_in_duration to payroll_period#manual_punch
-- redesign punch and add work_schedule to payroll_period#manual_punch
-- TODO - fix mugshot (see users/registrations_controller)
-- validate punches before deleting punch_clocks !!
-- invoices
-- team status https://localhost:3000/pos/punch_clock.20?api_key=arbjQmRVrVpLU4fzYSSSQc31
-- location status (like user, team) - missing
-- user status - https://localhost:3000/pos/users?api_key=mVunTFDgFVud5qJAHgrHbp4P
-- fix bug in deleting invoices
-- gå alle åbne opgaver igennem
-- check that import users still works
-- handle Dinero::Service.refresh_token error better - inform user to re-authenticate service
-- check all icon files - for PWA and all
-- timer (play) på desktop
-- ret notifikation til notice for 'din konto er godkendt'
-- åbne opgaver - klik på profil så sker der ikke noget
-- create invoicing service
-- toggle switch on products and customers for (auto) sync with invoicing service
-- add hidden 'date' on time_material to allow for query
-- redraw projects (after new project does not list projects)
-- redraw provided_services (after new provided_service does not list provided_services)
-- show price when picking product
-- translate new project name validation - error is wrong if double projects same name
-- validation on time_materials is not optimal/working
-- add checkbox when loading more items on a list
-
 ## CHANGELOG
+
+### 21/3/2025
+
+- add new SSL self-signed certificate using mkcert
+
+### 20/3/2025
+
+- upgraded workbench to Apple Macbook Air M4
 
 ### 19/3/2025
 

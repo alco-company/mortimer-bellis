@@ -247,3 +247,13 @@ https://courses.bigbinaryacademy.com/learn-rubyonrails/
 ### CSRF 
 
 https://bloggie.io/@kinopyo/sending-non-get-requests-with-fetch-javascript-api-in-rails
+
+### SSL - self-signed certificates, more
+
+https://deanin.com/blog/https-certificates-for-localhost/#google_vignette
+https://getgrav.org/blog/macos-sequoia-apache-ssl
+
+### Spinners 
+
+* using spinners to make users aware that something is happening https://medium.com/unagi/hotwire-turbo-frames-add-seamless-loading-spinners-in-rails-7d4339792f91
+* 
