@@ -5,6 +5,7 @@
 ### 21/3/2025
 
 - add new SSL self-signed certificate using mkcert
+- remove .DS_Store files from repo
 
 ### 20/3/2025
 
