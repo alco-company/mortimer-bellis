@@ -6,6 +6,7 @@
 
 - add new SSL self-signed certificate using mkcert
 - remove .DS_Store files from repo
+- redraw provided_services (after new provided_service does not list provided_services)
 
 ### 20/3/2025
 

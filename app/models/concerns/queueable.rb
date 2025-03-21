@@ -100,9 +100,9 @@ module Queueable
     def set_parm(o, v)
       vs=v.split(":")
       case vs[0]
-      when "me"; o[:user] = User.find(vs[1]) rescue Current.user
+      when "me"; o[:user] = User.find(vs[1]) rescue Current.get_user
       when "tenant"; o[:tenant] = Current.tenant
-      when "team"; o[:team] = Team.find(vs[1]) rescue Current.user.team
+      when "team"; o[:team] = Team.find(vs[1]) rescue Current.get_user.team
       when "self"; o[:record] = self
       else o[vs[0].strip.to_sym] =  evaled_params(vs)
       end
@@ -149,7 +149,7 @@ module Queueable
     #
     def persist(job_id, next_run_at)
       update_columns job_id: job_id, next_run_at: next_run_at
-      Current.tenant ||= self.tenant
+      Current.get_tenant ||= self.tenant
       # broadcast_update
       [ job_id, next_run_at ]
     end
