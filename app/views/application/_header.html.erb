@@ -46,11 +46,14 @@
               <span class="absolute -inset-1"></span>
               </button>
             </span>
-          <% end %>
+          <% end if @batch&.batch_set? %>
         </p>
       </div>
 
       <div class="mt-0 flex items-center sm:ml-6 sm:flex-shrink-0 sm:justify-start">
+        <% if params[:controller] == "background_jobs" && Current.get_user.superadmin? %>
+          <%= link_to( show_background_job_toggle_label, toggle_background_jobs_url, data: { turbo_stream: true}, class: "mort-btn-primary", role: "menuitem", tabindex: "-1", id: "user-menu-item-0")  %>
+        <% end %>
         <% case params[:controller]
            when "calls"; %><%= link_to("New Call", new_call_path, data: { turbo_stream: true}, class: "mort-btn-primary", role: "menuitem", tabindex: "-1", id: "user-menu-item-0")  %>
         <% when "users"; %><%= link_to("Invite New User", users_invitations_new_url, data: { turbo_stream: false}, class: "mort-btn-primary", role: "menuitem", tabindex: "-1", id: "user-menu-item-0") unless Current.user.user?  %>

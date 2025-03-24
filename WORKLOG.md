@@ -5,6 +5,7 @@
 ### 24/3/2025
 
 - handle Dinero::Service.refresh_token error better - inform user to re-authenticate service
+- stop/start background_jobs
 
 ### 21/3/2025
 

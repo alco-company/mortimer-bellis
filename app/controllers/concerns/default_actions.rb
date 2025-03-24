@@ -25,6 +25,14 @@ module DefaultActions
       #   redirect_to root_path, alert: I18n.t("errors.messages.something_went_wrong", error: e.message)
     end
 
+    # enable/disable some model feature
+    # like starting/stopping background_jobs
+    def toggle
+      posthog_capture
+      resource_class.toggle
+      render turbo_stream: turbo_stream.replace("#{Current.tenant.id}_list_header", partial: "application/header")
+    end
+
     # GET /users/lookup
     # renders a lookup partial used by <SELECT>
     def lookup

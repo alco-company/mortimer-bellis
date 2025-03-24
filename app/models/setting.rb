@@ -69,6 +69,7 @@ class Setting < ApplicationRecord
       when "default_time_material_over_time"; [ "1", "TimeMaterial" ]
       when "validate_time_material_done"; [ "false", "TimeMaterial" ]
       when "limit_time_to_quarters"; [ "false", "TimeMaterial" ]
+      when "run"; [ "true", "BackgroundJob" ]
       else [ "true", "User" ]
       end
       self.create tenant: tenant, key: k[0], setable_type: setable_type, value: value
@@ -78,6 +79,7 @@ class Setting < ApplicationRecord
   def self.available_keys
     [
       [ "delegate_time_materials", I18n.t("settings.keys.delegate_time_materials") ],
+      [ "run", I18n.t("settings.keys.run_background_jobs") ],
       [ "limit_time_to_quarters", I18n.t("settings.keys.limit_time_to_quarters") ],
       [ "default_time_material_state", I18n.t("settings.keys.default_time_material_state") ],
       [ "default_time_material_about", I18n.t("settings.keys.default_time_material_about") ],

@@ -113,7 +113,11 @@ Rails.application.routes.draw do
       get "show_dashboard"
     end
   end
-  resources :background_jobs
+  resources :background_jobs do
+    collection do
+      get "toggle"
+    end
+  end
   resources :pages do
     collection do
       get "help"

@@ -14,6 +14,7 @@
 # end
 #
 class BackgroundJob < ApplicationRecord
+  include Settingable
   include Tenantable
   include Queueable
 
@@ -122,5 +123,15 @@ class BackgroundJob < ApplicationRecord
 
   def self.form(resource:, editable: true)
     BackgroundJobs::Form.new resource: resource, editable: editable
+  end
+
+  def self.toggle
+    bj = Tenant.first.background_jobs.first || Tenant.first.background_jobs.build
+    zting = Tenant.first.settings.where(setable_type: "BackgroundJob", setable_id: nil, key: "run").take || Tenant.first.settings.create(setable_type: "BackgroundJob", setable_id: nil, key: "run", value: "true")
+    if bj.shouldnt?(:run)
+      zting.update value: "true"
+    else
+      zting.update value: "false"
+    end
   end
 end

@@ -58,6 +58,7 @@ da:
       validate_time_material_done: Valider at alle felter er udfyldt før en t/m post kan markeres som 'færdig'
       limit_time_to_quarters: Begræns tidsforbrug til kvart timer
       show_all_time_material_posts: Vis alle brugeres t/m poster
+      run_background_jobs: Kør baggrundsopgaver
 
     tables:
       background_jobs: Baggrundsopgaver

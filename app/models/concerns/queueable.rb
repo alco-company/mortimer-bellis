@@ -47,6 +47,9 @@ module Queueable
     def plan_job(first = true)
       begin
         t = active? ? self.next_run(schedule, first) : nil
+        if next_run_at && t
+          t = Time.at(t).in_time_zone("UTC") < Time.at(next_run_at).in_time_zone("UTC") ? t : next_run_at
+        end
         t ? run_job(t) : persist(nil, nil)
       rescue => exception
         say "BackgroundJob.plan_job failed due to #{exception}"
@@ -66,6 +69,7 @@ module Queueable
     #
     def run_job(t = nil)
       begin
+        return if shouldnt?(:run)
         o = set_parms
         w = job_klass.constantize
         id = t ? (w.set(wait_until: Time.at(t).in_time_zone("UTC")).perform_later(**o)).job_id : (w.perform_later(**o)).job_id
@@ -94,15 +98,17 @@ module Queueable
       unless params.blank?
         params.split(",").each { |v| set_parm(o, v) }
       end
+      o[:tenant] ||= tenant
+      o[:user] ||= user
       o
     end
 
     def set_parm(o, v)
       vs=v.split(":")
       case vs[0]
-      when "me"; o[:user] = User.find(vs[1]) rescue Current.get_user
-      when "tenant"; o[:tenant] = Current.tenant
-      when "team"; o[:team] = Team.find(vs[1]) rescue Current.get_user.team
+      when "me"; o[:user] = User.find(vs[1]) rescue user
+      when "tenant"; o[:tenant] = tenant
+      when "team"; o[:team] = Team.find(vs[1]) rescue user.team
       when "self"; o[:record] = self
       else o[vs[0].strip.to_sym] =  evaled_params(vs)
       end
@@ -149,7 +155,6 @@ module Queueable
     #
     def persist(job_id, next_run_at)
       update_columns job_id: job_id, next_run_at: next_run_at
-      Current.get_tenant ||= self.tenant
       # broadcast_update
       [ job_id, next_run_at ]
     end
