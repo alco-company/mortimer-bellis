@@ -7,6 +7,7 @@
 - handle Dinero::Service.refresh_token error better - inform user to re-authenticate service
 - stop/start background_jobs
 - only read .env.development when Rails.env.development?
+- make jobs always run _later
 
 ### 21/3/2025
 

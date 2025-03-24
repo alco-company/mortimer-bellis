@@ -109,7 +109,11 @@ class User < ApplicationRecord
     if tenant.users.count == 1 || step == "delete_account"
       TenantRegistrationService.call(tenant, {}, destroy: true)
     else
-      UserMailer.with(user: self).user_farewell.deliver
+      begin
+        UserMailer.with(user: self).user_farewell.deliver_later
+      rescue => e
+        UserMailer.error_report(e.to_s, "User#remove - failed for #{self&.email}").deliver_later
+      end
       destroy!
     end
   end
@@ -208,13 +212,13 @@ class User < ApplicationRecord
 
     case action
     when :punch_reminder
-      UserNotifier.with(record: self, current_user: Current.user, title: title, message: msg, delegator: self.name).deliver(recipient)
+      UserNotifier.with(record: self, current_user: Current.user, title: title, message: msg, delegator: self.name).deliver_later(recipient)
     when :destroy_all
       title ||= I18n.t("notifiers.no_title")
       msg ||=   I18n.t("notifiers.no_msg")
-      UserNotifier.with(record: self, current_user: Current.user, title: title, message: msg, delegator: self.name).deliver(recipient)
+      UserNotifier.with(record: self, current_user: Current.user, title: title, message: msg, delegator: self.name).deliver_later(recipient)
     else
-      UserNotifier.with(record: self, current_user: Current.user, title: title, message: msg, delegator: self.name).deliver(recipient)
+      UserNotifier.with(record: self, current_user: Current.user, title: title, message: msg, delegator: self.name).deliver_later(recipient)
     end
   rescue => e
     UserMailer.error_report(e.to_s, "User#notify - failed for #{self&.id}").deliver_later
