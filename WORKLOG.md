@@ -2,6 +2,10 @@
 
 ## CHANGELOG
 
+### 24/3/2025
+
+- handle Dinero::Service.refresh_token error better - inform user to re-authenticate service
+
 ### 21/3/2025
 
 - add new SSL self-signed certificate using mkcert

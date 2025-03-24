@@ -1,7 +1,7 @@
 class Dinero::Service < SaasService
   attr_accessor :settings, :provided_service
 
-  def initialize(provided_service: nil, settings: nil, user: Current.user)
+  def initialize(provided_service: nil, settings: nil, user: Current.get_user)
     Current.system_user = user
     @provided_service = provided_service || Current.get_tenant.provided_services.by_name("Dinero").first || ProvidedService.new
     @settings = settings || @provided_service&.service_params_hash || empty_params
