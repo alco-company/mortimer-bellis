@@ -14,4 +14,4 @@ ENV["PORT"] ||= "3000"
 ENV["RUBY_DEBUG_OPEN"]="true"
 ENV["RUBY_DEBUG_LAZY"]="true"
 
-exec 'foreman start -f Procfile.dev "$@"'
+exec 'foreman start -e .env.development -f Procfile.dev "$@"'
