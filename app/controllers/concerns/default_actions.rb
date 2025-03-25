@@ -6,7 +6,7 @@ module DefaultActions
     def index
       posthog_capture
       params.permit![:url] = resources_url
-      @pagy, @records = pagy(resources)
+      @pagy, @records = pagy_keyset(resources)
       r = @records.pluck(:id).sort
       @ids_range = "#{r.first}..#{r.last}"
       @replace = params.permit![:replace] || false

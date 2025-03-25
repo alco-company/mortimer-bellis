@@ -2,6 +2,10 @@
 
 ## CHANGELOG
 
+### 25/3/2025
+
+- update Pagy to allow faster infinite scroll with pagy_keyset
+
 ### 24/3/2025
 
 - handle Dinero::Service.refresh_token error better - inform user to re-authenticate service
