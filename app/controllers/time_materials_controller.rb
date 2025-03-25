@@ -16,6 +16,7 @@ class TimeMaterialsController < MortimerController
   def index
     # tell user about his uncompleted tasks
     # Current.user.notify(action: :tasks_remaining, title: t("tasks.remaining.title"), msg: t("tasks.remaining.msg", count: Current.user.tasks.first_tasks.uncompleted.count)) unless Current.user.notified?(:tasks_remaining)
+    @resources = resources.order(date: :desc)
     super
   end
 

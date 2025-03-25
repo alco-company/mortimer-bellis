@@ -10,8 +10,6 @@ class List < ApplicationComponent
     @order_by = order_by
     @group_by = group_by
     @records = records
-    @records = records.order(order_by) if order_by
-    @records = records.group(group_by) if group_by
     @order_key = order_by ? order_by.keys.first : :created_at
     @initial = initial
     @replace = replace

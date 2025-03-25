@@ -5,6 +5,8 @@
 ### 25/3/2025
 
 - update Pagy to allow faster infinite scroll with pagy_keyset
+- fix collateral bug - keyset pagination returns array, not AR set
+
 
 ### 24/3/2025
 
