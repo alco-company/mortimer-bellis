@@ -1,4 +1,10 @@
 class ProductsController < MortimerController
+  #
+  def update
+    params[:product][:base_amount_value] = resource_params[:base_amount_value].split(" ").last.gsub(",", ".") rescue 0
+    super
+  end
+
   private
 
     # Only allow a list of trusted parameters through.

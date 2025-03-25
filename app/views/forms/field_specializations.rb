@@ -89,6 +89,13 @@ module FieldSpecializations
     end
   end
 
+  class MoneyField < Superform::Rails::Components::InputComponent
+    def field_attributes
+      field.value = @attributes[:value] ? @attributes[:value] : I18n.t("number.currency.format.unit") + " " + field.value
+      @attributes.keys.include?(:class) ? super : super.merge(class: "mort-form-text")
+    end
+  end
+
   class NumberField < Superform::Rails::Components::InputComponent
     def field_attributes
       field.value = @attributes[:value] if @attributes[:value]
@@ -346,6 +353,9 @@ module FieldSpecializations
     end
     def datetime(**attributes)
       DateTimeField.new(self, attributes: attributes)
+    end
+    def money(**attributes)
+      MoneyField.new(self, attributes: attributes)
     end
     def number(**attributes)
       NumberField.new(self, attributes: attributes)
