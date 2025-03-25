@@ -10,6 +10,7 @@
 - translate new project name validation - error is wrong if double projects same name
 - add checkbox when loading more items on a list - if @batch exists
 - check that import users still works - they don't - hide function
+- show Tenant name unless superadmin
 
 ### 24/3/2025
 

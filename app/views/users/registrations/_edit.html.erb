@@ -46,6 +46,11 @@
                           <%= f.label :global_queries %><br />
                           <%= f.check_box :global_queries, class: "mort-form-text" %>
                         </div>
+                      <% else %>
+                        <div class="mort-field">
+                          <%= f.label :tenant %><br />
+                          <%= resource.tenant.name %>
+                        </div>
                       <% end %>
 
                       <div class="mort-field">
