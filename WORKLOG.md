@@ -11,6 +11,7 @@
 - add checkbox when loading more items on a list - if @batch exists
 - check that import users still works - they don't - hide function
 - show Tenant name unless superadmin
+- Orb/Docker issues - use port 8080 + Docker in development too
 
 ### 24/3/2025
 
