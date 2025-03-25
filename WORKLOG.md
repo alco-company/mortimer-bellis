@@ -9,6 +9,7 @@
 - show dropdown for unit and format currency on product form and list
 - translate new project name validation - error is wrong if double projects same name
 
+
 ### 24/3/2025
 
 - handle Dinero::Service.refresh_token error better - inform user to re-authenticate service

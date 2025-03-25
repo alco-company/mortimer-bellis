@@ -23,7 +23,7 @@ class ListItems::ListItem < ApplicationComponent
   end
 
   def html_list
-    div(id: (dom_id resource), class: "flex justify-between gap-x-6 mb-1 px-2 py-5 bg-gray-50") do
+    div(id: (dom_id resource), class: "flex justify-between gap-x-6 mb-1 px-2 py-5 bg-gray-50", data: { controller: "list-item" }) do
       div(class: "flex grow min-w-0 gap-x-4") do
         show_left_mugshot
         div(class: "min-w-0 flex-auto") do
@@ -100,7 +100,7 @@ class ListItems::ListItem < ApplicationComponent
 
   def show_left_mugshot
     div(class: "flex items-center") do
-      input(type: "checkbox", name: "batch[ids][]", value: resource.id, class: "hidden batch mort-form-checkbox mr-2")
+      input(type: "checkbox", name: "batch[ids][]", value: resource.id, id: "batch_#{resource.id}", class: "hidden batch mort-form-checkbox mr-2")
       mugshot(resource.user, css: "hidden sm:block h-12 w-12 flex-none rounded-full bg-gray-50")
     end
   end
