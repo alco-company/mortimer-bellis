@@ -96,9 +96,9 @@ class Contextmenu < Phlex::HTML
           label: I18n.t(".delete_all")) :
         div(class: "block px-3 py-1 text-sm leading-6 text-gray-400") { I18n.t(".delete_all") }
       hr
-      link2(url: helpers.new_modal_url(modal_form: "import", resource_class: resource_class.to_s.underscore, modal_next_step: "preview"),
-        action: "click->contextmenu#hide",
-        label: I18n.t(".import")) if resource_class.to_s == "User"
+      # link2(url: helpers.new_modal_url(modal_form: "import", resource_class: resource_class.to_s.underscore, modal_next_step: "preview"),
+      #   action: "click->contextmenu#hide",
+      #   label: I18n.t(".import")) if resource_class.to_s == "User"
       link2(url: helpers.new_modal_url(modal_form: "upload_dinero",
         resource_class: resource_class.to_s.underscore,
         search: request.query_parameters.dig(:search),
