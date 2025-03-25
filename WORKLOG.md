@@ -7,6 +7,7 @@
 - update Pagy to allow faster infinite scroll with pagy_keyset
 - fix collateral bug - keyset pagination returns array, not AR set
 - show dropdown for unit and format currency on product form and list
+- translate new project name validation - error is wrong if double projects same name
 
 ### 24/3/2025
 

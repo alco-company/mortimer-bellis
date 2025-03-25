@@ -51,3 +51,7 @@ da:
     show:
       title: projekt
       back: Tilbage
+
+    errors:
+      messages:
+        name_exist: "Projektet findes allerede"

@@ -19,7 +19,7 @@ class Project < ApplicationRecord
   scope :by_actual_minutes, ->(actual_minutes) { where("actual_minutes LIKE ?", "%#{actual_minutes}%") if actual_minutes.present? }
 
 
-  validates :name, presence: true, uniqueness: { scope: :tenant_id, message: I18n.t("locations.errors.messages.name_exist") }
+  validates :name, presence: true, uniqueness: { scope: :tenant_id, message: I18n.t("projects.errors.messages.name_exist") }
 
   def self.filtered(filter)
     flt = filter.filter

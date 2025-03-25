@@ -1240,7 +1240,7 @@ da:
 
 
   errors:
-    format: "%{attribute} %{message}"
+    format: "%{attribute}: %{message}"
     messages:
       something_went_wrong: "<pre class='text-xs'>%{error}</pre><br/>Noget gik galt - vi er blevet orienteret, men beskriv gerne situationen i en mail til info@mortimer.pro"
       user_registration_failed: "Bruger registreringen mislykkedes - fejl: %{error}"
