@@ -9,7 +9,7 @@
 #           <path fill-rule="evenodd" d="M9 3.5a5.5 5.5 0 1 0 0 11 5.5 5.5 0 0 0 0-11ZM2 9a7 7 0 1 1 12.452 4.391l3.328 3.329a.75.75 0 1 1-1.06 1.06l-3.329-3.328A7 7 0 0 1 2 9Z" clip-rule="evenodd" />
 #         </svg>
 #       </div>
-#       <input id="search-field" name="search-field" class="block size-full border-transparent py-2 pl-8 pr-3 text-gray-900 focus:border-transparent focus:outline-none focus:ring-0 sm:text-sm" placeholder="Search transactions" type="search">
+#       <input id="search-field" name="search-field" class="block size-full border-transparent py-2 pl-8 pr-3 text-gray-900 focus:border-transparent focus:outline-hidden focus:ring-0 sm:text-sm" placeholder="Search transactions" type="search">
 #     </div>
 #   </form>
 # </div>

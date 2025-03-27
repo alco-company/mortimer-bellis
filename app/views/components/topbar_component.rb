@@ -11,7 +11,7 @@ class TopbarComponent < ApplicationComponent
   # top navigation with menu button, search, notifications, and profile
   def view_template
     # topbar for mobile & desktop
-    div(data: { controller: "navigation" }, class: "sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 bg-gradient-to-r #{gradient} bg-white px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8") do
+    div(data: { controller: "navigation" }, class: "sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 bg-gradient-to-r #{gradient} bg-white px-4 shadow-xs sm:gap-x-6 sm:px-6 lg:px-8") do
       mobile_menu_button if Current.user
       # separator
       div(class: "h-6 w-px bg-gray-900/10 lg:hidden", aria_hidden: "true") { }
@@ -38,7 +38,7 @@ class TopbarComponent < ApplicationComponent
   # top navigation with menu button, search, notifications, and profile
   def old_view_template
     # topbar for mobile & desktop
-    div(data: { controller: "navigation" }, class: "sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 bg-gradient-to-r from-cyan-200 to-sky-600 bg-white px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8") do
+    div(data: { controller: "navigation" }, class: "sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 bg-gradient-to-r from-cyan-200 to-sky-600 bg-white px-4 shadow-xs sm:gap-x-6 sm:px-6 lg:px-8") do
       mobile_menu_button
       # separator
       div(class: "h-6 w-px bg-gray-900/10 lg:hidden", aria_hidden: "true") { }
@@ -69,14 +69,14 @@ class TopbarComponent < ApplicationComponent
     end
 
     def mobile_menu_button
-      button(type: "button", class: "border-r border-gray-200 px-4 text-gray-400 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-cyan-500 lg:hidden", data: { action: "mobilesidebar#show" }) do
+      button(type: "button", class: "border-r border-gray-200 px-4 text-gray-400 focus:outline-hidden focus:ring-2 focus:ring-inset focus:ring-cyan-500 lg:hidden", data: { action: "mobilesidebar#show" }) do
         span(class: "sr-only") { "Open sidebar" }
         render Icons::Hamburger2.new cls: "h-6 w-6 text-sky-900 hover:text-sky-400 hover:rotate-90"
       end
     end
 
     def reload_button
-      button(type: "button", class: "text-sky-200 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-cyan-500 md:hidden", data: { action: "mobilesidebar#reload" }) do
+      button(type: "button", class: "text-sky-200 focus:outline-hidden focus:ring-2 focus:ring-inset focus:ring-cyan-500 md:hidden", data: { action: "mobilesidebar#reload" }) do
         span(class: "sr-only") { "Open sidebar" }
         render Icons::Reload.new cls: "h-6 w-6 text-sky-200 hover:text-sky-400 hover:rotate-90"
       end

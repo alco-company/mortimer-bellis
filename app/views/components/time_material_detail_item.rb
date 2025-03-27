@@ -64,7 +64,7 @@ class TimeMaterialDetailItem < Phlex::HTML
         #   div(
         #     data_contextmenu_target: "popup",
         #     class:
-        #       "hidden absolute right-0 z-10 mt-2 w-auto min-w-18 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none",
+        #       "hidden absolute right-0 z-10 mt-2 w-auto min-w-18 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-hidden",
         #     role: "menu",
         #     aria_orientation: "vertical",
         #     aria_labelledby: "options-menu-0-button",
@@ -183,7 +183,7 @@ class TimeMaterialDetailItem < Phlex::HTML
     #     a(
     #       href: "#",
     #       class:
-    #         "hidden rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:block"
+    #         "hidden rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:block"
     #     ) do
     #       plain "View details"
     #       span(class: "sr-only") { ", Purchased Hardware" }
@@ -250,7 +250,7 @@ class TimeMaterialDetailItem < Phlex::HTML
     #     a(
     #       href: "#",
     #       class:
-    #         "hidden rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:block"
+    #         "hidden rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:block"
     #     ) do
     #       plain "View details"
     #       span(class: "sr-only") { ", Purchased Hardware" }
@@ -327,7 +327,7 @@ class TimeMaterialDetailItem < Phlex::HTML
     #     a(
     #       href: "#",
     #       class:
-    #         "hidden rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:block"
+    #         "hidden rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:block"
     #     ) do
     #       plain "View details"
     #       span(class: "sr-only") { ", Purchased Hardware" }

@@ -27,7 +27,7 @@ class Notifications::NotificationBell < ApplicationComponent
   end
 end
 # <!-- notifications bell -->
-# <button type="button" class="relative rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2">
+# <button type="button" class="relative rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-hidden focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2">
 #   <span class="absolute -inset-1.5"></span>
 #   <span class="sr-only">View notifications</span>
 #   <svg class="size-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">

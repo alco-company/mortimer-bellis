@@ -232,8 +232,15 @@ class User < ApplicationRecord
     name.split(" ").map { |n| n[0] }.join.upcase
   end
 
-  def self.form(resource:, editable: true)
-    Users::Form.new resource: resource, editable: editable, enctype: "multipart/form-data"
+  def self.form(resource:, editable: true, registration: false)
+    registration ?
+      Users::Registrations::Form.new(resource: resource,
+        editable: editable,
+        enctype: "multipart/form-data",
+        class: "group mort-form", method: :put,
+        data: { form_target: "form", profile_target: "buttonForm", controller: "profile password-strength" })
+      :
+      Users::Form.new(resource: resource, editable: editable, enctype: "multipart/form-data")
   end
 
   def add_role

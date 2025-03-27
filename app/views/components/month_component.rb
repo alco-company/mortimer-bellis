@@ -20,7 +20,7 @@ class MonthComponent < CalendarComponent
   def month_view
     # Month view
     form(action: "POST", url: events_url) do
-      div(class: "shadow ring-1 ring-black ring-opacity-5 lg:flex lg:flex-auto lg:flex-col") do
+      div(class: "shadow-sm ring-1 ring-black ring-opacity-5 lg:flex lg:flex-auto lg:flex-col") do
         month_header
         div(
           class: "flex bg-gray-200 text-xs leading-6 text-gray-700 lg:flex-auto"
@@ -34,7 +34,7 @@ class MonthComponent < CalendarComponent
   end
 
   def month_header
-    div(class: "grid grid-cols-7 gap-px border-b border-gray-300 bg-gray-200 text-center text-xs font-semibold leading-6 text-gray-700 lg:flex-none") do
+    div(class: "grid grid-cols-7 gap-px border-b border-slate-100 bg-gray-200 text-center text-xs font-semibold leading-6 text-gray-700 lg:flex-none") do
       div(class: "flex justify-center bg-white py-2") do
         span { I18n.t("calendar.weekday.monday.firstletter") }
         span(class: "sr-only sm:not-sr-only") { I18n.t("calendar.weekday.monday.second_thirdletter") }

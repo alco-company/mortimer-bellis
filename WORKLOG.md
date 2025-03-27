@@ -2,6 +2,10 @@
 
 ## CHANGELOG
 
+### 27/3/2025
+
+- upgrading Tailwind to v4
+
 ### 25/3/2025
 
 - update Pagy to allow faster infinite scroll with pagy_keyset

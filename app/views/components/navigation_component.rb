@@ -41,7 +41,7 @@ class NavigationComponent < ApplicationComponent
   #     type: "button",
   #     data: { action: "click->navigation#toggleMenu" },
   #     class:
-  #       "relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-sky-700 hover:text-white focus:outline-none focus:ring-1 focus:ring-inset focus:ring-cyan-300",
+  #       "relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-sky-700 hover:text-white focus:outline-hidden focus:ring-1 focus:ring-inset focus:ring-cyan-300",
   #     aria_controls: "mobile-menu",
   #     aria_expanded: "false"
   #   ) do
@@ -142,7 +142,7 @@ class NavigationComponent < ApplicationComponent
   #   #       action: "touchstart->navigation#tapNotificationDrop click->navigation#tapNotificationDrop click@window->navigation#hideNotificationDrop"
   #   #     },
   #   #     class:
-  #   #       "relative rounded-full bg-transparent p-1 text-blue-300 hover:text-white focus:outline-none focus:ring-1 focus:ring-white focus:ring-offset-1 focus:ring-offset-gray-800",
+  #   #       "relative rounded-full bg-transparent p-1 text-blue-300 hover:text-white focus:outline-hidden focus:ring-1 focus:ring-white focus:ring-offset-1 focus:ring-offset-gray-800",
   #   #     id: "user-notifications-button",
   #   #     aria_expanded: "false",
   #   #     aria_haspopup: "true"
@@ -153,7 +153,7 @@ class NavigationComponent < ApplicationComponent
   #   #   end
   #   #   div(
   #   #     class:
-  #   #       "hidden absolute right-8 z-10 mt-2 w-96 text-sm px-2 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none",
+  #   #       "hidden absolute right-8 z-10 mt-2 w-96 text-sm px-2 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-hidden",
   #   #     role: "menu",
   #   #     data: { navigation_target: "viewNotifications" },
   #   #     aria_orientation: "vertical",

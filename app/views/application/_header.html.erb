@@ -1,6 +1,6 @@
 <%= turbo_frame_tag "#{Current.user.id}_list_header" do %>
   <!-- Page Header -->
-  <div data-controller="header" class="border-b border-gray-200 pb-5">
+  <div data-controller="header" class="border-b border-slate-100 pb-5">
     <div class="flex items-center sm:justify-between">
       <div class="sm:w-0 flex-1">
         <input name="batch[all]" type="hidden" value="0" autocomplete="off">
@@ -25,7 +25,7 @@
           <% when 'teams' %>
             <%# TODO must implement when we release punches  link_to_team_users_status('all') %>
           <% end %>
-          <%= link_to filter_url(@filter, filter: {url: resources_url}), data: { turbo_method: :delete }, class: "group relative ml-2 h-3.5 w-3.5 rounded-sm hover:bg-gray-500/20" do %>
+          <%= link_to filter_url(@filter, filter: {url: resources_url}), data: { turbo_method: :delete }, class: "group relative ml-2 h-3.5 w-3.5 rounded-xs hover:bg-gray-500/20" do %>
             <span class=" <%= "hidden" unless any_filters? %> inline-flex items-center rounded-md bg-gray-50 px-1.5 py-0.5 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10">
               <%= t("filters.filtered") %>
               <span class="sr-only">Remove</span>
@@ -36,7 +36,7 @@
               </button>
             </span>
           <% end if any_filters? %>
-          <%= link_to batch_url(@batch, batch: {url: resources_url+"?replace=true", action: :destroy}), data: { turbo_method: :delete }, class: "group relative ml-2 h-3.5 w-3.5 rounded-sm hover:bg-gray-500/20" do %>
+          <%= link_to batch_url(@batch, batch: {url: resources_url+"?replace=true", action: :destroy}), data: { turbo_method: :delete }, class: "group relative ml-2 h-3.5 w-3.5 rounded-xs hover:bg-gray-500/20" do %>
             <span class=" <%= "hidden" unless @batch&.batch_set? %> inline-flex items-center rounded-md bg-gray-50 px-1.5 py-0.5 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10">
               <%= t("filters.batched") %>
               <span class="sr-only">Remove</span>
@@ -56,9 +56,9 @@
         <% end %>
         <% case params[:controller]
            when "calls"; %><%= link_to("New Call", new_call_path, data: { turbo_stream: true}, class: "mort-btn-primary", role: "menuitem", tabindex: "-1", id: "user-menu-item-0")  %>
-        <% when "users"; %><%= link_to("Invite New User", users_invitations_new_url, data: { turbo_stream: false}, class: "mort-btn-primary", role: "menuitem", tabindex: "-1", id: "user-menu-item-0") unless Current.user.user?  %>
+        <% when "users"; %><%= link_to( t("profile.invite_new_user"), users_invitations_new_url, data: { turbo_stream: false}, class: "mort-btn-primary mr-2", role: "menuitem", tabindex: "-1", id: "user-menu-item-0") unless Current.user.user?  %>
         <% else; %>
-        <%= link_to(new_resource_url, class: "-my-2 flex items-center rounded-md p-2 text-gray-400 hover:text-gray-600 focus:outline-none focus:ring-1 focus:ring-sky-200", data: { turbo_frame: "form" }) do %>
+        <%= link_to(new_resource_url, class: "-my-2 flex items-center rounded-md p-2 text-gray-400 hover:text-gray-600 focus:outline-hidden focus:ring-1 focus:ring-sky-200", data: { turbo_frame: "form" }) do %>
             <span class="sr-only">Add new</span>
             <span class="inline-flex items-center rounded-md bg-white px-1.5 py-0.5 text-xs font-medium text-gray-600 sm:ring-1 ring-inset ring-gray-500/10">
               <%= render Icons::Add.new cls: "h-6 text-gray-400" %>

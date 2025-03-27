@@ -14,6 +14,7 @@ class Users::RegistrationsController < MortimerController
   # rewriting update method to allow for turbo drive/stream update
   #
   def update
+    @resource = Current.user
     unless params[:user][:mugshot].present?
       mugshot = resource.mugshot
     end
@@ -50,7 +51,7 @@ class Users::RegistrationsController < MortimerController
       # set_minimum_password_length
       flash.now[:warning] = t(".validation_errors")
       render turbo_stream: [
-        turbo_stream.update("form", partial: "users/registrations/edit", locals: { resource: resource }),
+        turbo_stream.update("form", partial: "application/edit", locals: { resource: resource }),
         turbo_stream.replace("flash_container", partial: "application/flash_message", locals: { tenant: Current.get_tenant, messages: flash, user: Current.get_user })
       ]
       flash.clear

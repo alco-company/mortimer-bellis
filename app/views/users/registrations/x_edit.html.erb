@@ -15,7 +15,7 @@
             data-transition-leave-end="translate-x-full"                  
             class="pointer-events-auto mt-0 w-screen max-w-md overscroll-none">
             <div class="flex h-full flex-col overflow-x-hidden overflow-y-scroll bg-white shadow-xl">
-              <div class="sticky z-20 bg-white top-0 py-5 pl-4 pr-4 sm:pr-6 sm:pl-6 border-b">
+              <div class="sticky z-20 bg-white top-0 py-5 pl-4 pr-4 sm:pr-6 sm:pl-6 border-b border-slate-100">
                 <div class="flex items-start justify-between">
                   
                   <%= render CancelSaveForm.new cancel_url: "/", title: ""  %>
@@ -26,11 +26,11 @@
                 <div class="pl-4 pr-4 sm:pr-6 sm:pl-6 pb-1 pt-1 sm:pt-0">
 
 
-                  <div data-controller="profile password-strength" class="mx-auto w-72 sm:w-96">
-                    <h1 class="font-bold text-gray-200 text-2xl"> <%= t("users.edit_profile.name") %> </h1>
+                  <div data-controller="profile password-strength" class="mx-auto w-72 sm:w-96 mt-4">
+                    <h1> <%= t("users.edit_profile.name") %> </h1>
 
-                    <h3>Mortimer version:
-                      <span class="text-xs font-thin"><%= ENV["MORTIMER_VERSION"] %></span>
+                    <h3 class="text-xs text-slate-200">Mortimer version:
+                      <span class="text-xs text-slate-200 font-thin"><%= ENV["MORTIMER_VERSION"] %></span>
                     </h3>
 
                     <%= form_for(resource, as: resource_name, url: users_registrations_url(), data: { form_target: "form", profile_target: "buttonForm" }, html: { class: "group mort-form", method: :put }) do |f| %>
@@ -68,7 +68,7 @@
                         <%= f.file_field :mugshot, class: "mort-form-file" %>
                         <%= f.hidden_field :mugshot, value: f.object.mugshot.signed_id if f.object.mugshot.attached? %>
                         <% if resource.mugshot.attached? && resource.mugshot.persisted? %>
-                          <div class="w-auto max-w-32 relative border rounded-md shadow px-3 mt-4 flex">
+                          <div class="w-auto max-w-32 relative border rounded-md shadow-sm px-3 mt-4 flex">
                             <%= image_tag resource.mugshot %>          
                             <%= link_to(
                                 new_modal_url(modal_form: "delete", id: resource.id, attachment: "mugshot", resource_class: "user", modal_next_step: "accept"),
@@ -115,7 +115,7 @@
                         <div class="">Currently waiting confirmation for: <%= resource.email %></div>
                       <% end %>
 
-                      <div class="p-4 rounded-md shadow-sm bg-sky-100">
+                      <div class="p-4 rounded-md shadow-xs bg-sky-100">
                         <i class="text-xs"> <%= I18n.t("users.registrations.edit.sign_up.leave_empty") %></i>
 
                         <div class="mort-field">

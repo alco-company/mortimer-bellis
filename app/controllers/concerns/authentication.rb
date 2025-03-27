@@ -25,7 +25,7 @@ module Authentication
     def require_authentication
       if resume_session
         verify_otp_status
-        request_confirmation unless Current.session.user.confirmed?
+        request_confirmation unless Current.user.confirmed?
       else
         request_authentication
       end

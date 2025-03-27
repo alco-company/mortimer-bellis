@@ -46,7 +46,7 @@ class Contextmenu < Phlex::HTML
   end
 
   def more_button_list
-    a_button css: "flex items-center rounded-md ring-1 ring-gray-100 px-2 py-1 text-gray-400 hover:text-gray-600 focus:outline-none focus:ring-1 focus:ring-sky-500",
+    a_button css: "flex items-center rounded-md ring-1 ring-gray-100 px-2 py-1 text-gray-400 hover:text-gray-600 focus:outline-hidden focus:ring-1 focus:ring-sky-500",
       label: I18n.t("more"),
       visible_label: true
   end
@@ -74,7 +74,7 @@ class Contextmenu < Phlex::HTML
         transition_leave_start: "transform opacity-100 scale-100",
         transition_leave_end: "transform opacity-0 scale-95"
       },
-      class: "hidden absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none",
+      class: "hidden absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-hidden",
       role: "menu",
       aria_orientation: "vertical",
       aria_labelledby: "options-menu-0-button",
@@ -130,7 +130,7 @@ class Contextmenu < Phlex::HTML
         transition_leave_end: "transform opacity-0 scale-95"
       },
       class:
-        "hidden absolute right-0 z-10 mt-2 w-auto min-w-18 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none",
+        "hidden absolute right-0 z-10 mt-2 w-auto min-w-18 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-hidden",
       role: "menu",
       aria_orientation: "vertical",
       aria_labelledby: "options-menu-0-button",
@@ -194,7 +194,7 @@ class Contextmenu < Phlex::HTML
     end
 
     def a_button(
-      css: "flex items-center rounded-md ring-1 ring-gray-100 bg-transparent px-2 py-1 text-gray-400 hover:text-gray-600 focus:outline-none focus:ring-1 focus:ring-sky-500",
+      css: "flex items-center rounded-md ring-1 ring-gray-100 bg-transparent px-2 py-1 text-gray-400 hover:text-gray-600 focus:outline-hidden focus:ring-1 focus:ring-sky-500",
       label: I18n.t("more"),
       visible_label: false,
       data: { contextmenu_target: "button" },

@@ -16,7 +16,7 @@
       <% if @button_only %>
       <%= form.hidden_field :button_only, value: true %>
       <% end %>
-      <%= form.password_field :password, id: "password", class: "block shadow rounded-md border border-gray-200 outline-none w-sm", autofocus: true, autocomplete: false, placeholder: t("devise.second_factor.password_placeholder") %>
+      <%= form.password_field :password, id: "password", class: "block shadow-sm rounded-md border border-gray-200 outline-hidden w-sm", autofocus: true, autocomplete: false, placeholder: t("devise.second_factor.password_placeholder") %>
       <%= form.submit t("devise.second_factor.confirm"), class: "mort-btn-primary" %>
       </div>
     </div>

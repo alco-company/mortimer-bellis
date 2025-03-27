@@ -7,8 +7,8 @@ class ApplicationForm < Superform::Rails::Form
   attr_accessor :resource, :cancel_url, :title, :edit_url,  :editable, :api_key, :model, :fields
 
   def initialize(resource:, editable: nil, **options)
-    options[:data] = { form_target: "form" }
-    options[:class] = "mort-form"
+    options[:data] ||= { form_target: "form" }
+    options[:class] ||= "mort-form"
     super(resource, **options)
     @resource = @model = resource
     @fields = options[:fields] || []

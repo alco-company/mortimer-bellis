@@ -10,11 +10,11 @@ class Projects::Form < ApplicationForm
       },
       display_value: @resource.customer_name), "mort-field" # Customer.all.select(:id, :name).take(9)
 
-    # row field(:customer_id).select(Customer.by_tenant.order(name: :asc).select(:id, :name), prompt: I18n.t(".select_customer"), class: "mort-form-text")
+    # row field(:customer_id).select(Customer.by_tenant.order(name: :asc).select(:id, :name), prompt: I18n.t(".select_customer"), class: "mort-form-select")
     row field(:description).input()
-    row field(:start_date).datetime(class: "mort-form-text")
-    row field(:end_date).datetime(class: "mort-form-text")
-    row field(:state).select(Project.project_states, class: "mort-form-text")
+    row field(:start_date).datetime(class: "mort-form-datetime")
+    row field(:end_date).datetime(class: "mort-form-datetime")
+    row field(:state).select(Project.project_states, class: "mort-form-select")
     row field(:budget).input()
     row field(:is_billable).boolean(class: "mort-form-bool")
     row field(:is_separate_invoice).boolean(class: "mort-form-bool")

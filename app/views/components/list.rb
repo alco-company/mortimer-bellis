@@ -94,7 +94,7 @@ class List < ApplicationComponent
     turbo_stream.replace("#{user.id}_list_header", partial: "application/header", locals: { batch_form: batch_form })
 
     # turbo_frame_tag "#{user.id}_list_header" do
-    #   button_to helpers.filter_url(@filter, url: resources_url), method: :delete, class: "group relative ml-2 h-3.5 w-3.5 rounded-sm hover:bg-gray-500/20", data: { turbo_stream: true } do
+    #   button_to helpers.filter_url(@filter, url: resources_url), method: :delete, class: "group relative ml-2 h-3.5 w-3.5 rounded-xs hover:bg-gray-500/20", data: { turbo_stream: true } do
     #     span(
     #       class:
     #         %(#{"hidden" if !@filter } inline-flex items-center rounded-md bg-gray-50 px-1.5 py-0.5 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10)

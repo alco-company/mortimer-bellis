@@ -911,6 +911,7 @@ da:
         locked_at: Låst den
         failed_attempts: Mislykkede forsøg
         blocked_from_punching: Blokeret for stempling
+        tenant_id: Konto
         tenant:
           one: Konto
           name: Konto
@@ -928,6 +929,7 @@ da:
         user_name: Brugernavn
         password: Adgangskode
         password_confirmation: Bekræft adgangskode
+        current_password: Nuværende adgangskode
         otp_attempt: 2FA kode
         otp_required_for_login: 2FA påkrævet
         otp_enabled: 2FA aktiveret

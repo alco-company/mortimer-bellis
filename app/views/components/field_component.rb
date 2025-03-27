@@ -139,7 +139,7 @@ class FieldComponent < Phlex::HTML
           data_action: " click->boolean#toggle",
           data_boolean_target: "button",
           class:
-            "group relative inline-flex h-6 w-10 flex-shrink-0 cursor-pointer items-center justify-center rounded-full focus:outline-none focus:ring-1 focus:ring-sky-200 focus:ring-offset-1",
+            "group relative inline-flex h-6 w-10 flex-shrink-0 cursor-pointer items-center justify-center rounded-full focus:outline-hidden focus:ring-1 focus:ring-sky-200 focus:ring-offset-1",
           role: "switch",
           aria_checked: "false"
         ) do
@@ -165,7 +165,7 @@ class FieldComponent < Phlex::HTML
             aria_hidden: "true",
             data_boolean_target: "handle",
             class:
-              "translate-x-0 pointer-events-none absolute left-0 inline-block h-5 w-5 transform rounded-full border border-gray-200 bg-white shadow ring-0 transition-transform duration-200 ease-in-out"
+              "translate-x-0 pointer-events-none absolute left-0 inline-block h-5 w-5 transform rounded-full border border-gray-200 bg-white shadow-sm ring-0 transition-transform duration-200 ease-in-out"
           )
         end
       end

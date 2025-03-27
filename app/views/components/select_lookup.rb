@@ -25,7 +25,7 @@ class SelectLookup < ApplicationComponent
         #
         # options
         #
-        ul(class: "absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg focus:outline-none sm:text-sm",
+        ul(class: "absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg focus:outline-hidden sm:text-sm",
           id: "%s_lookup_container" % div_id,
           data: { lookup_target: "optionsList" },
           role: "listbox"

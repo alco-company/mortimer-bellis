@@ -95,7 +95,7 @@ class Filters::Form < ApplicationForm
         name: "tabs",
         data: { action: "filter#selectTab" },
         class:
-          "block mt-2 w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-sky-200 focus:outline-none focus:ring-sky-200 sm:text-sm"
+          "block mt-2 w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-sky-200 focus:outline-hidden focus:ring-sky-200 sm:text-sm"
       ) do
         option(data: { id: "dates" }, selected: "selected")  { I18n.t("filters.tabs.titles.date") }
         option(data: { id: "fields" }) { I18n.t("filters.tabs.titles.field") }
@@ -104,7 +104,7 @@ class Filters::Form < ApplicationForm
       end
     end
     div(class: "hidden sm:block") do
-      div(class: "border-b border-gray-200") do
+      div(class: "border-b border-slate-100") do
         nav(class: "-mb-px flex space-x-8", aria_label: "Tabs") do
           comment do
             %(Current: "border-sky-200 text-sky-200", Default: "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700")

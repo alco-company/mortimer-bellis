@@ -22,6 +22,8 @@ da:
     validation_errors: Der er fejl i det indtastede
     enter_password: Indtast din nye adgangskode
     reenter_password: Gentag din nye adgangskode
+    enter_current_password: Indtast din nuværende adgangskode
+
     create:
       post: Bruger blev oprettet
     update:

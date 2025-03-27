@@ -14,7 +14,7 @@ class DashboardTask < ApplicationComponent
     li(class: "overflow-hidden rounded-xl border border-gray-200", data: { controller: "hidden-description" }) do
       div(
         class:
-          "flex justify-between items-center gap-x-4 border-b border-gray-900/5 bg-gray-50 p-2"
+          "flex justify-between items-center gap-x-4 border-b border-slate-100 bg-gray-50 p-2"
       ) do
         url, turbo = url.include?("/") ? [ url, false ] : helpers.send(url)
         div(class: "flex text-sm/6 text-gray-900") do
@@ -74,13 +74,13 @@ class DashboardTask < ApplicationComponent
       end
       div(
         class:
-          "absolute right-0 z-10 mt-0.5 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none",
+          "absolute right-0 z-10 mt-0.5 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-hidden",
         role: "menu",
         aria_orientation: "vertical",
         aria_labelledby: "options-menu-0-button",
         tabindex: "-1"
       ) do
-        comment { %(Active: "bg-gray-50 outline-none", Not Active: "") }
+        comment { %(Active: "bg-gray-50 outline-hidden", Not Active: "") }
         a(
           href: "#",
           class: "block px-3 py-1 text-sm/6 text-gray-900",

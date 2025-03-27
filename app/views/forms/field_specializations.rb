@@ -120,18 +120,18 @@ module FieldSpecializations
           value: attributes[:display_value],
           id: dom.id.gsub(/_id$/, "_name"),
           name: dom.name.gsub(/_id\]/, "_name]"),
-          class: css, # "w-full rounded-md border-0 bg-white py-1.5 pl-3 pr-12 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-1 focus:ring-inset focus:ring-sky-200 sm:text-sm sm:leading-6",
+          class: css, # "w-full rounded-md border-0 bg-white py-1.5 pl-3 pr-12 text-gray-900 shadow-xs ring-1 ring-inset ring-gray-300 focus:ring-1 focus:ring-inset focus:ring-sky-200 sm:text-sm sm:leading-6",
           role: attributes[:role] || "combobox",
           autocomplete: "off",
           aria_controls: "options",
           aria_expanded: "false"
         )
         hide = @collection.any? ? "" : "hidden"
-        button(type: "button", data: { lookup_target: "optionsIcon", action: "click->lookup#toggleOptions" }, class: "#{hide} absolute w-10 inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:ring-1 focus:ring-inset focus:ring-sky-200 focus:outline-none") do
+        button(type: "button", data: { lookup_target: "optionsIcon", action: "click->lookup#toggleOptions" }, class: "#{hide} absolute w-10 inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:ring-1 focus:ring-inset focus:ring-sky-200 focus:outline-hidden") do
           render Icons::ChevronUpDown.new css: "h-5 w-5 text-gray-400"
         end
         hide = (!hide.blank? && field.value.nil?) ? "" : "hidden"
-        button(type: "button", data: { lookup_target: "searchIcon", action: "click->lookup#search" }, class: "#{hide} absolute w-10 inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:ring-1 focus:ring-inset focus:ring-sky-200 focus:outline-none") do
+        button(type: "button", data: { lookup_target: "searchIcon", action: "click->lookup#search" }, class: "#{hide} absolute w-10 inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:ring-1 focus:ring-inset focus:ring-sky-200 focus:outline-hidden") do
           render Icons::Search.new cls: "text-gray-400 right-2 top-0 h-full w-5 absolute pointer-events-none"
         end
         collection = @collection[0] rescue []
@@ -146,13 +146,40 @@ module FieldSpecializations
   end
 
   class SelectField < Superform::Rails::Components::SelectField
+    def field_attributes
+      @attributes.keys.include?(:class) ? super : super.merge(class: "mort-form-select")
+    end
+
+    #
+    def view_template(&)
+      div(class: "grid grid-cols-1") do
+        select(**attributes) do
+          options(*@collection)
+        end
+        svg(
+          class:
+            "pointer-events-none col-start-1 row-start-1 mr-2 size-5 self-center justify-self-end text-gray-500 sm:size-4",
+          viewbox: "0 0 16 16",
+          fill: "currentColor",
+          aria_hidden: "true",
+          data_slot: "icon"
+        ) do |s|
+          s.path(
+            fill_rule: "evenodd",
+            d:
+              "M4.22 6.22a.75.75 0 0 1 1.06 0L8 8.94l2.72-2.72a.75.75 0 1 1 1.06 1.06l-3.25 3.25a.75.75 0 0 1-1.06 0L4.22 7.28a.75.75 0 0 1 0-1.06Z",
+            clip_rule: "evenodd"
+          )
+        end
+      end
+    end
     protected
       def map_options(collection)
         OptionMapper.new(collection)
       end
   end
 
-  class EnumSelectField < Superform::Rails::Components::SelectField
+  class EnumSelectField < SelectField
     def options(*collection)
       collection.flatten!
       map_options(collection).each do |key, value|
@@ -189,7 +216,7 @@ module FieldSpecializations
       div(class: "mort-field") do
         input(**attributes)
         if field.value.attached?
-          div(class: "w-auto max-w-32 relative border rounded-md shadow px-3 mt-3") do
+          div(class: "w-auto max-w-32 relative border border-slate-100 rounded-md shadow-sm px-3 mt-3") do
             img(src: url_for(field.value), class: "mort-img m-2")
             div(class: "absolute top-0 right-0 w-8 h-8 rounded-lg bg-white/75") do
               link_to(
@@ -225,7 +252,7 @@ module FieldSpecializations
           type: "button",
           data: { action: (attributes[:disabled] ? "" : "click->boolean#toggle"), boolean_target: "button" },
           class:
-            "group relative inline-flex h-6 w-10 flex-shrink-0 cursor-pointer items-center justify-center rounded-full focus:outline-none focus:ring-1 focus:ring-sky-200 focus:ring-offset-1",
+            "group relative inline-flex h-6 w-10 flex-shrink-0 cursor-pointer items-center justify-center rounded-full focus:outline-hidden focus:ring-1 focus:ring-sky-200 focus:ring-offset-1",
           role: "switch",
           aria_checked: "false"
         ) do
@@ -246,7 +273,7 @@ module FieldSpecializations
             aria_hidden: "true",
             data: { boolean_target: "handle" },
             class:
-              "#{setHandle} pointer-events-none absolute left-0 inline-block h-5 w-5 transform rounded-full border border-gray-200 bg-white shadow ring-0 transition-transform duration-200 ease-in-out"
+              "#{setHandle} pointer-events-none absolute left-0 inline-block h-5 w-5 transform rounded-full border border-gray-200 bg-white shadow-sm ring-0 transition-transform duration-200 ease-in-out"
           )
         end
       end
@@ -361,6 +388,10 @@ module FieldSpecializations
       NumberField.new(self, attributes: attributes)
     end
     def input(**attributes)
+      InputField.new(self, attributes: attributes)
+    end
+    def password(**attributes)
+      attributes.merge!(type: "password")
       InputField.new(self, attributes: attributes)
     end
   end

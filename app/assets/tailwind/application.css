@@ -1,0 +1,335 @@
+@import 'tailwindcss';
+
+@config '../../../config/tailwind.config.js';
+
+@theme {
+  --color-mortimer: #0284c7;    /* old was "#1f9cd8" */
+}
+
+@layer components {
+
+  .mort-btn-punch-in {
+    @apply flex justify-center rounded-md bg-green-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-xs hover:bg-green-500 hover:cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600;
+  }
+
+  .mort-btn-punch-break {
+    @apply flex justify-center rounded-md bg-yellow-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-xs hover:bg-yellow-500 hover:cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-600;
+  }
+
+  .mort-btn-punch-out {
+    @apply flex justify-center rounded-md bg-red-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-xs hover:bg-red-500 hover:cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600;
+  }
+
+  .mort-btn-start-time-material {
+    @apply flex justify-center rounded-md bg-sky-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-xs hover:bg-sky-500 hover:cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-200;
+  }
+
+  .mort-btn-primary {
+    @apply flex justify-center rounded-md bg-sky-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-xs hover:bg-sky-500 hover:cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-200;
+  }
+
+  .mort-btn-save {
+    @apply flex justify-center rounded-md bg-green-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-xs hover:bg-green-500 hover:cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600;
+  }
+
+  .mort-btn-secondary {
+    @apply flex justify-center rounded-md bg-sky-400 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-xs hover:bg-sky-500 hover:cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-200;
+  }
+
+  .mort-btn-cancel {
+    @apply flex justify-center rounded-md bg-gray-200 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-xs hover:bg-gray-300 hover:cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600;
+  }
+
+  .mort-btn-warning {
+    @apply flex justify-center rounded-md bg-yellow-600 px-3 py-1.5 text-sm font-semibold leading-6 text-yellow-200 shadow-xs hover:bg-yellow-500 hover:cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-600;
+  }
+
+  .mort-btn-alert {
+    @apply flex justify-center rounded-md bg-red-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-xs hover:bg-red-500 hover:cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600;
+  }
+
+  .mort-form {
+    @apply pb-20;
+  }
+
+  .mort-form-text {
+    /* @apply block shadow-sm rounded-md border border-gray-200 focus:outline-hidden px-3 py-2 mt-2 w-full focus-visible:border-sky-200; */
+    @apply w-full rounded-md border-0 bg-white py-1.5 pl-3 text-gray-900 shadow-xs ring-1 ring-inset ring-gray-300 focus:ring-1 focus:ring-inset focus:ring-sky-200 focus:outline-2 focus:-outline-offset-2 focus:outline-sky-200 sm:text-sm sm:leading-6;
+  }
+
+  .mort-form-date {
+    /* @apply block shadow-sm rounded-md border border-gray-200 focus:outline-hidden px-3 py-2 mt-2 w-full focus-visible:border-sky-200; */
+    @apply w-full rounded-md border-0 bg-white py-1.5 px-3 text-gray-900 shadow-xs ring-1 ring-inset ring-gray-300 focus:ring-1 focus:ring-inset focus:ring-sky-200 focus:outline-2 focus:-outline-offset-2 focus:outline-sky-200 sm:text-sm sm:leading-6;
+  }
+
+  .mort-form-datetime {
+    /* @apply block shadow-sm rounded-md border border-gray-200 focus:outline-hidden px-3 py-2 mt-2 w-full focus-visible:border-sky-200; */
+    @apply w-full rounded-md border-0 bg-white py-1.5 px-3 text-gray-900 shadow-xs ring-1 ring-inset ring-gray-300 focus:ring-1 focus:ring-inset focus:ring-sky-200 focus:outline-2 focus:-outline-offset-2 focus:outline-sky-200 sm:text-sm sm:leading-6;
+  }
+
+  .mort-form-select {
+    @apply col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pr-8 pl-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-sky-200 sm:text-sm/6
+    /* @apply block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-1 focus:ring-sky-200 sm:text-sm sm:leading-6; */
+  }
+
+  .mort-form-file {
+    @apply block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-sky-50 file:text-sky-700 hover:file:bg-sky-100;
+  }
+
+  .mort-form-bool {
+    @apply block px-3 py-2 mt-2;
+  }
+
+  .mort-form-checkbox {
+    @apply size-6 rounded-md border-0 bg-white py-1.5 pl-3 text-gray-900 shadow-xs ring-1 ring-inset ring-gray-300 focus:ring-1 focus:ring-inset focus:ring-sky-200 sm:text-sm sm:leading-6;
+  }
+
+  .mort-filter-field {
+    @apply block shadow-xs rounded-md border border-gray-200 outline-hidden px-3 py-2 w-5/6;
+  }
+
+  .mort-nav-link {
+    /* bg-gray-900 text-white block rounded-md px-3 py-2 text-base font-medium */
+    @apply bg-transparent text-white hover:text-sky-500 block rounded-md px-3 py-2 text-base font-medium;
+  }
+
+  .mort-link-primary {
+    /* bg-gray-900 text-white block rounded-md px-3 py-2 text-base font-medium */
+    @apply bg-transparent text-sky-500 hover:text-sky-700 text-base font-medium;
+  }
+
+  .mort-link-error {
+    /* bg-gray-900 text-white block rounded-md px-3 py-2 text-base font-medium */
+    @apply bg-transparent text-red-500 hover:text-red-700 text-base font-medium;
+  }
+
+  .mort-field {
+    @apply my-5;
+
+    & label {
+      @apply text-xs font-medium text-gray-400;
+    }
+
+    & em {
+      @apply text-xs font-light text-gray-400;
+    }
+  }
+
+  .mort-active-arrow {
+    @apply text-gray-500 text-xs;
+  }
+
+  .mort-passive-arrow {
+    @apply text-gray-300 text-xs;
+  }
+
+  .mort-err-resume {
+    @apply font-bold mb-2;
+  }
+
+  .mort-flash-error {
+    @apply inline-block bg-red-100 text-red-700;
+  }
+
+  .mort-flash-border-error {
+    @apply border border-red-400 ring-red-600;
+  }
+
+  .mort-flash-warning {
+    @apply inline-block bg-yellow-100 text-yellow-700;
+  }
+
+  .mort-flash-alert {
+    @apply inline-block bg-yellow-100 text-yellow-700;
+  }
+
+  .mort-flash-border-warning {
+    @apply border border-yellow-400 ring-yellow-600;
+  }
+
+  .mort-flash-border-alert {
+    @apply border border-yellow-400 ring-yellow-600;
+  }
+
+  .mort-flash-info {
+    @apply inline-block bg-sky-100 text-sky-700;
+  }
+
+  .mort-flash-timedout {
+    @apply inline-block bg-sky-100 text-sky-700;
+  }
+
+  .mort-flash-border-info {
+    @apply border border-sky-400 ring-sky-600;
+  }
+
+  .mort-flash-border-timedout {
+    @apply border border-sky-400 ring-sky-600;
+  }
+
+  .mort-flash-notice {
+    @apply inline-block bg-sky-100 text-sky-700;
+  }
+
+  .mort-flash-border-notice {
+    @apply border border-sky-200 ring-sky-600;
+  }
+
+  .mort-flash-success {
+    @apply inline-block bg-green-50 text-green-500;
+  }
+
+  .mort-flash-border-success {
+    @apply border border-green-400 ring-green-600;
+  }
+
+  .mort-state-in {
+    @apply bg-green-100 text-green-800;
+  }
+
+  .mort-state-out {
+    @apply bg-red-100 text-red-800;
+  }
+
+  .mort-state-break {
+    @apply bg-yellow-100 text-yellow-800;
+  }
+
+  .mort-state-sick {
+    @apply bg-red-100 text-red-800;
+  }
+
+  .mort-state-iam_sick {
+    @apply bg-red-100 text-red-800;
+  }
+
+  .mort-state-child_sick {
+    @apply bg-red-100 text-red-800;
+  }
+
+  .mort-state-nursing_sick {
+    @apply bg-red-100 text-red-800;
+  }
+
+  .mort-state-lost_work_sick {
+    @apply bg-red-100 text-red-800;
+  }
+
+  .mort-state-p56_sick {
+    @apply bg-red-100 text-red-800;
+  }
+
+  .mort-state-free {
+    @apply bg-sky-100 text-sky-800;
+  }
+
+  .mort-state-rr_free {
+    @apply bg-sky-100 text-sky-800;
+  }
+
+  .mort-state-senior_free {
+    @apply bg-sky-100 text-sky-800;
+  }
+
+  .mort-state-unpaid_free {
+    @apply bg-sky-100 text-sky-800;
+  }
+
+  .mort-state-maternity_free {
+    @apply bg-sky-100 text-sky-800;
+  }
+
+  .mort-state-leave_free {
+    @apply bg-sky-100 text-sky-800;
+  }
+
+  .mort-state-archived {
+    @apply bg-gray-100 text-gray-800;
+  }
+
+  .mort-tm-line-customer {
+    @apply text-sm font-semibold text-gray-900;
+  }
+
+  .mort-tm-line-product {
+    @apply text-xs font-semibold text-gray-700;
+  }
+
+  #error_explanation {
+    @apply text-red-600 text-sm my-4;
+  }
+
+}
+
+hr {
+  border-color: var(--color-slate-100);
+}
+
+h1 {
+  @apply font-bold text-slate-400 text-2xl;
+}
+
+.scrollbar-hide {
+  /* Hide scrollbar for IE, Edge and Firefox */
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
+
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  &::-webkit-scrollbar {
+    display: none;
+    /* Chrome, Safari and Opera */
+  }
+}
+
+/* https: //github.com/tailwindlabs/tailwindcss/discussions/10909 */
+html {
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+}
+/* fix iOS Safari scroll quirk */
+html.lock-scroll,
+body.lock-scroll {
+  overflow: hidden;
+  height: 100%;
+}
+
+dialog {
+  &::backdrop {
+    @apply bg-sky-300/20
+  }
+
+}
+
+.button_to {
+  @apply mb-0;
+}
+
+.pagy {
+  @apply flex space-x-1 font-thin text-sm text-sky-600;
+
+  a:not(.gap) {
+    @apply block rounded-lg px-3 py-1 bg-sky-200;
+  }
+
+  a:not(.gap):hover {
+    @apply bg-sky-300 cursor-pointer;
+  }
+
+  a:not(.gap):not([href]) {
+    /* disabled links */
+    @apply text-gray-300 bg-sky-100 cursor-default;
+  }
+
+  a:not(.gap).current {
+    @apply text-white bg-sky-400 font-semibold;
+  }
+
+  label {
+    /* @apply inline-block whitespace-nowrap bg-sky-200 rounded-lg px-3 py-0.5; */
+
+    input {
+      @apply bg-sky-100 border-none rounded-md;
+    }
+  }
+}

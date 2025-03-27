@@ -14,7 +14,7 @@ class ToggleButton < ApplicationComponent
       type: "button",
       data: { toggle_button_target: "toggle", action: "click->toggle-button#toggle" },
       class:
-        "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent #{ @toggled_on ? "bg-sky-200" : "bg-gray-200" } transition-colors duration-200 ease-in-out focus:outline-none focus:ring-1 focus:ring-sky-200 focus:ring-offset-1",
+        "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent #{ @toggled_on ? "bg-sky-200" : "bg-gray-200" } transition-colors duration-200 ease-in-out focus:outline-hidden focus:ring-1 focus:ring-sky-200 focus:ring-offset-1",
       role: "switch",
       aria_checked: @toggled_on ? "true" : "false",
       aria_labelledby: "annual-billing-label"
@@ -24,7 +24,7 @@ class ToggleButton < ApplicationComponent
         data: { toggle_button_target: "toggleSpan" },
         aria_hidden: "true",
         class:
-          "pointer-events-none inline-block h-5 w-5 translate-x-0 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+          "pointer-events-none inline-block h-5 w-5 translate-x-0 transform rounded-full bg-white shadow-sm ring-0 transition duration-200 ease-in-out"
       )
     end
 

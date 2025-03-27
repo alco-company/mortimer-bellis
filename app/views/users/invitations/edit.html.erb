@@ -5,7 +5,7 @@
   <div class="flex flex-shrink-0 items-center">
   <%= render_logo %>
   </div>
-  <h1 class="font-bold text-gray-200 text-2xl"> <%= t("devise.invitations.edit.header") %> </h1>
+  <h1> <%= t("devise.invitations.edit.header") %> </h1>
 
   <div class="text-gray-600 text-sm"><%== t("devise.invitations.edit.description") %></div>
     <%= form_for(resource, as: resource_name, url: invitation_path(resource_name), html: { method: :put, data: { turbo: false} }) do |f| %>

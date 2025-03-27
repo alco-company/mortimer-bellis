@@ -9,7 +9,7 @@ class TimeMaterials::Form < ApplicationForm
       if Current.user.can?(:delegate_time_materials)
         div(class: "my-1 grid grid-cols-4 gap-x-1 md:gap-x-4 gap-y-1 ") do
           div(class: "my-0 col-span-4 xs:col-span-2") do
-            row field(:date).date(class: "mort-form-text"), "mort-field my-0"
+            row field(:date).date(class: "mort-form-date"), "mort-field my-0"
           end
           div(class: "my-0 col-span-4 xs:col-span-2") do
             row field(:user_id).select(User.by_tenant.order(name: :asc).select(:id, :name), class: "mort-form-select my-0"), "mort-field my-0"
@@ -17,7 +17,7 @@ class TimeMaterials::Form < ApplicationForm
         end
       else
         div(class: "mt-1") do
-          row field(:date).date(class: "mort-form-text")
+          row field(:date).date(class: "mort-form-date")
         end
       end
       #
@@ -179,7 +179,7 @@ class TimeMaterials::Form < ApplicationForm
                 row field(:quantity).input(), "mort-field my-1"
               end
               div(class: "col-span-2") do
-                row field(:unit).select(@resource.units, class: "mort-form-text text-sm"), "mort-field my-1"
+                row field(:unit).select(@resource.units, class: "mort-form-select text-sm"), "mort-field my-1"
               end
             end
             div(class: "col-span-4 grid gap-x-2 grid-cols-5") do
@@ -221,10 +221,10 @@ class TimeMaterials::Form < ApplicationForm
             end
             div(class: "col-span-4 grid gap-x-2 grid-cols-4") do
               div(class: "col-span-4") do
-                row field(:odo_from_time).datetime(class: "mort-form-text"), "mort-field my-1"
+                row field(:odo_from_time).datetime(class: "mort-form-datetime"), "mort-field my-1"
               end
               div(class: "col-span-4") do
-                row field(:odo_to_time).datetime(class: "mort-form-text"), "mort-field my-1"
+                row field(:odo_to_time).datetime(class: "mort-form-datetime"), "mort-field my-1"
               end
             end
           end
@@ -313,11 +313,11 @@ class TimeMaterials::Form < ApplicationForm
   def show_possible_issues
     entry = InvoiceItemValidator.new(@resource)
     if entry.valid?
-      div(class: "text-sm mt-2 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative") do
+      div(class: "text-sm mt-2 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-sm relative") do
         p() { I18n.t("invoice_item.issues.no_issues") }
       end
     else
-      div(class: "text-sm mt-2 bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded relative") do
+      div(class: "text-sm mt-2 bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded-sm relative") do
         ul(class: "grid gap-y-2") do
           entry.errors.each do |error|
             li() { unsafe_raw "<strong>%s</strong> - %s" % [ I18n.t("activerecord.attributes.time_material.#{error.attribute}"), error.type ] }

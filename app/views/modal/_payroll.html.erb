@@ -13,11 +13,11 @@
         <%= form.hidden_field :modal_form, value: 'payroll' %>
         <%= form.hidden_field :resource_class, value: 'punch_card' %>
         <%= form.label :last_payroll_at, t('modal.payroll.last_payroll_at') %>
-        <%= form.date_field :last_payroll_at, autofocus: true, required: true, class: "mort-form-text" %>
+        <%= form.date_field :last_payroll_at, autofocus: true, required: true, class: "mort-form-date" %>
 
         <div class="relative flex items-start mt-3">
               <div class="flex h-6 items-center">
-                <input id="update_payroll" aria-describedby="comments-description" name="update_payroll" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-sky-600 focus:ring-sky-600">
+                <input id="update_payroll" aria-describedby="comments-description" name="update_payroll" type="checkbox" class="h-4 w-4 rounded-sm border-gray-300 text-sky-600 focus:ring-sky-600">
               </div>
               <div class="ml-3 text-sm leading-6">
                 <label for="update_payroll" class="font-medium text-gray-900"><%= t('punch_cards.modal.update_payroll') %></label>

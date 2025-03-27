@@ -21,7 +21,7 @@ class CalendarComponent < ApplicationComponent
   end
 
   def show_header(element)
-    header(class: "flex items-center justify-between border-b border-gray-200 px-6 py-4 lg:flex-none") do
+    header(class: "flex items-center justify-between border-b border-slate-100 px-6 py-4 lg:flex-none") do
       element_caption
       div(class: "flex items-center") do
         period_navigator()
@@ -81,7 +81,7 @@ class CalendarComponent < ApplicationComponent
     when "year"
       [ "#{url}?view=#{view}&date=#{date - 1.year}", I18n.t("calendar.navigation.previous_year"), I18n.t("calendar.navigation.next_year"), "#{url}?view=#{view}&date=#{date + 1.year}" ]
     end
-    div(class: "relative flex items-center rounded-md bg-white shadow-sm md:items-stretch") do
+    div(class: "relative flex items-center rounded-md bg-white shadow-xs md:items-stretch") do
       link_to(pe_url, class: "flex h-9 w-12 items-center justify-center rounded-l-md border-y border-l border-gray-300 pr-1 text-gray-400 hover:text-gray-500 focus:relative md:w-9 md:pr-0 md:hover:bg-gray-50") do
         span(class: "sr-only") { pe }
         svg(class: "h-5 w-5", viewbox: "0 0 20 20", fill: "currentColor", aria_hidden: "true") do |s|
@@ -112,7 +112,7 @@ class CalendarComponent < ApplicationComponent
           type: "button",
           data: { action: "touchstart->calendar#toggleView:passive click->calendar#toggleView click@window->calendar#hideView" },
           class:
-            "flex items-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50",
+            "flex items-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-inset ring-gray-300 hover:bg-gray-50",
           id: "menu-button",
           aria_expanded: "false",
           aria_haspopup: "true"
@@ -125,7 +125,7 @@ class CalendarComponent < ApplicationComponent
         # comment do %(Dropdown menu, show/hide based on menu state. Entering: "transition ease-out duration-100" From: "transform opacity-0 scale-95" To: "transform opacity-100 scale-100" Leaving: "transition ease-in duration-75" From: "transform opacity-100 scale-100" To: "transform opacity-0 scale-95") end
         div(
           class:
-            "hidden absolute right-0 z-10 mt-3 w-36 origin-top-right overflow-hidden rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none",
+            "hidden absolute right-0 z-10 mt-3 w-36 origin-top-right overflow-hidden rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-hidden",
           role: "menu",
           data: { calendar_target: "view_dropdown" },
           aria_orientation: "vertical",
@@ -163,7 +163,7 @@ class CalendarComponent < ApplicationComponent
         end
       end
       # %(Dropdown menu, show/hide based on menu state. Entering: "transition ease-out duration-100" From: "transform opacity-0 scale-95" To: "transform opacity-100 scale-100" Leaving: "transition ease-in duration-75" From: "transform opacity-100 scale-100" To: "transform opacity-0 scale-95")
-      div(class: "hidden absolute right-0 z-10 mt-3 w-36 origin-top-right divide-y divide-gray-100 overflow-hidden rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none",
+      div(class: "hidden absolute right-0 z-10 mt-3 w-36 origin-top-right divide-y divide-gray-100 overflow-hidden rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-hidden",
         role: "menu",
         data: { calendar_target: "mobile_view_dropdown" },
         aria_orientation: "vertical",
@@ -240,7 +240,7 @@ class CalendarComponent < ApplicationComponent
 
   def show_weekday_headers(cls = "")
     wd = %w[ monday tuesday wednesday thursday friday saturday sunday ]
-    div(class: "sticky top-0 z-30 flex-none bg-white shadow ring-1 ring-black ring-opacity-5 sm:pr-8 #{cls}") do
+    div(class: "sticky top-0 z-30 flex-none bg-white shadow-sm ring-1 ring-black ring-opacity-5 sm:pr-8 #{cls}") do
       div(class: "grid grid-cols-7 text-sm leading-6 text-gray-500 sm:hidden") do
         (0..6).each do |i|
           dt = date.beginning_of_week
@@ -402,7 +402,7 @@ class CalendarComponent < ApplicationComponent
       end
       dt = Date.new(date.year, month, 1).at_beginning_of_week
       weekday_header
-      div(class: "isolate mt-2 grid grid-cols-7 gap-px rounded-lg bg-gray-200 text-sm shadow ring-1 ring-gray-200") do
+      div(class: "isolate mt-2 grid grid-cols-7 gap-px rounded-lg bg-gray-200 text-sm shadow-sm ring-1 ring-gray-200") do
         # Always include: "py-1.5 hover:bg-gray-100 focus:z-10"
         # Is current month, include: "bg-white text-gray-900"
         # Is not current month, include: "bg-gray-50 text-gray-400"

@@ -14,7 +14,8 @@ export default class extends Controller {
   observer = null
 
   disconnect() {
-    this.observer.disconnect();
+    if (this.observer)
+      this.observer.disconnect();
   }
 
   connect() {

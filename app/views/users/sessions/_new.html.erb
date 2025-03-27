@@ -3,7 +3,7 @@
     <div class="flex flex-shrink-0 items-center justify-between">
     <%= render_logo %>
     </div>
-    <h1 class="font-bold text-gray-200 text-2xl"> <%= t("#{ resource_class.table_name}.sign_in.title") %> </h1>
+    <h1> <%= t("#{ resource_class.table_name}.sign_in.title") %> </h1>
 
     <%= render partial: "users/shared/error_messages", locals: {resource: resource} %>
 
