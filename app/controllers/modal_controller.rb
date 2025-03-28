@@ -202,7 +202,7 @@ class ModalController < MortimerController
 
     def process_destroy_all
       begin
-        DeleteAllJob.perform_now tenant: Current.tenant, user: Current.user, resource_class: resource_class.to_s,
+        DeleteAllJob.perform_later tenant: Current.tenant, user: Current.user, resource_class: resource_class.to_s,
           ids: resources.pluck(:id),
           batch: @batch,
           user_ids: (resource_class.first.respond_to?(:user_id) ? resources.pluck(:user_id).uniq : User.by_tenant.by_role(:user).pluck(:id)) rescue nil

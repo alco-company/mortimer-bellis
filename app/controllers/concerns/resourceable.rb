@@ -122,8 +122,9 @@ module Resourceable
 
   def find_resource
     r = resource_class.where(id: get_resource_id)&.take || resource_class.new
-    redirect_to "/", alert: I18n.t("errors.messages.no_permission") and return unless Current.user.allowed_to?(params.dig(:action), r) || !r.persisted?
-    r
+    # return r if !r.persisted?
+    # redirect_to "/", alert: I18n.t("errors.messages.no_permission") and return unless Current.user.allowed_to?(params.dig(:action), r) || !r.persisted?
+    # r
   rescue
     Rails.logger.info "ERROR! >>>>>>>>>>>>> Resourceable#find_resource: #{r.inspect}"
     redirect_to "/", alert: I18n.t("errors.messages.not_found", model: resource_class.to_s) and return

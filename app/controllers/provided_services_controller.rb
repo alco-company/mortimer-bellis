@@ -20,8 +20,7 @@ class ProvidedServicesController < MortimerController
     end
 
     def create_callback
-      if @resource&.name.downcase =~ /^dinero/
-        BackgroundJob.create tenant_id: Current.tenant.id, user_id: Current.user.id, job_klass: "RefreshErpTokenJob", state: :un_planned, schedule: "1 */3 * * *", params: ""
-      end
+      return true unless @resource&.name.downcase =~ /^dinero/
+      BackgroundJob.create tenant_id: Current.tenant.id, user_id: Current.user.id, job_klass: "RefreshErpTokenJob", state: :un_planned, schedule: "1 */3 * * *", params: ""
     end
 end

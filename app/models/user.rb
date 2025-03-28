@@ -261,6 +261,7 @@ class User < ApplicationRecord
   # called from ressourceable.rb
   #
   def allowed_to?(action, record)
+    return true unless record.persisted?
     case role
     when "superadmin"
       true

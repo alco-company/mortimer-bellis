@@ -9,8 +9,8 @@ class Broadcasters::Resource
     @params = params
     @target = target
     @resource_class = resource.class rescue nil
-    @tenant = resource.respond_to?(:tenant) ? resource.tenant : Current.get_tenant rescue nil
     @user = user
+    @tenant = resource.respond_to?(:tenant) ? resource.tenant : user.tenant rescue nil
     @resources_stream = stream || "%s_%s" % [ tenant&.id, resource_class.to_s.underscore.pluralize ] rescue nil
     @partial = partial || resource
   end

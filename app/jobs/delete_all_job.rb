@@ -32,8 +32,10 @@ class DeleteAllJob < ApplicationJob
             r.destroy
             Broadcasters::Resource.new(t).destroy
           rescue => e
-            Broadcasters::Resource.new(t).flash error: "DeleteAllJob failed on #{rc}##{t.id}: #{e.message}"
+            Broadcasters::Resource.new(t).flash error: "DeleteAllJob failed on #{rc}##{t.id}: #{e.message}", user: @user
           end
+        else
+          Broadcasters::Resource.new(t).flash warning: "DeleteAllJob failed on #{rc}##{t.id} because you do not have permission", user: @user
         end
       end
       notify_all user_ids, tmp_resource
