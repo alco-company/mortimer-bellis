@@ -2,6 +2,12 @@
 
 ## CHANGELOG
 
+- provided_services list not updated on create service
+
+### 28/3/2025
+
+- 'Vælg' button visible even when no items selected and function not selected
+
 ### 27/3/2025
 
 - upgrading Tailwind to v4
