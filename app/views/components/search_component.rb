@@ -19,17 +19,19 @@ class SearchComponent < Phlex::HTML
 
   def initialize(params: {})
     @params = params
+    @color = Rails.env.production? ? "sky-600" : "pink-600"
   end
 
   def view_template
     search = params.dig(:search) || ""
-    form(class: "relative flex flex-1 pt-2", action: "#", method: "GET") do
+    form(class: "relative flex flex-1", action: "#", method: "GET") do
       label(for: "search-field", class: "sr-only") { "Search" }
-      render Icons::Search.new cls: "pointer-events-none absolute top-1 left-0 h-full w-5 text-sky-100"
+      render Icons::Search.new cls: "pointer-events-none absolute top-0 left-0 h-full w-5 text-#{@color}"
+      render Icons::Ai.new cls: "h-8 top-4 w-8 absolute right-0 text-#{@color}/20"
       input(
         id: "search-field",
         class:
-          "block h-full w-full border-0 py-0 pl-8 pr-0 text-gray-900 bg-transparent placeholder:text-sky-100 focus:ring-0 sm:text-sm",
+          "block h-full w-full border-0 py-0 pl-8 pr-0 text-#{@color} bg-transparent placeholder:text-slate-200 focus:ring-0 text-sm md:text-lg",
         placeholder: I18n.t("topbar.search.placeholder"),
         type: "search",
         name: "search",

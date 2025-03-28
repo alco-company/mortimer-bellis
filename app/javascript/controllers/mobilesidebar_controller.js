@@ -15,7 +15,8 @@ export default class extends Controller {
     enter(this.panelTarget);
   }
 
-  hide() {
+  hide(event) {
+    event.target.closest("li").classList.add("bg-sky-100");
     Promise.all([
       leave(this.backdropTarget),
       leave(this.closeButtonTarget),

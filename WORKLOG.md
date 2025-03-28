@@ -9,6 +9,7 @@
 - provided_services list not updated on create service
 - fix ring-black
 - filter does not post on tapping 'check'
+- position search better and prepare for 'AI' button
 
 ### 27/3/2025
 

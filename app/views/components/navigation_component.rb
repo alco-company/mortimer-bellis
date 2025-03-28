@@ -153,7 +153,7 @@ class NavigationComponent < ApplicationComponent
   #   #   end
   #   #   div(
   #   #     class:
-  #   #       "hidden absolute right-8 z-10 mt-2 w-96 text-sm px-2 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-slate-100 focus:outline-hidden",
+  #   #       "hidden absolute right-8 z-10 mt-2 w-96 text-sm px-2 origin-top-right rounded-md  py-1 shadow-lg ring-1 ring-slate-100 focus:outline-hidden",
   #   #     role: "menu",
   #   #     data: { navigation_target: "viewNotifications" },
   #   #     aria_orientation: "vertical",
@@ -240,10 +240,10 @@ class NavigationComponent < ApplicationComponent
 
     def current_item?(url)
       return request.path.split("?")[0] == "/" ? "bg-gray-50" : "" if url == "/"
-      request.path.split("?")[0].include?(url) ? "bg-gray-50" : ""
+      request.path.split("?")[0].include?(url) ? "bg-sky-100" : ""
     end
 
-    def menu_item(item:, url:, css: "group flex gap-x-3 rounded-md bg-white p-2 text-sm font-semibold leading-6 text-gray-700  hover:bg-gray-50", icon: nil)
+    def menu_item(item:, url:, css: "group flex gap-x-3 rounded-md  p-2 text-sm font-semibold leading-6 text-sky-400 hover:text-sky-800 hover:bg-gray-50", icon: nil)
       # %(Current: "bg-gray-50", Default: "hover:bg-gray-50")
       css = "#{css} #{current_item?(url)}"
       li do
@@ -276,7 +276,7 @@ class NavigationComponent < ApplicationComponent
             type: "button",
             data: { action: "click->menu#toggleSubmenu" },
             class:
-              "flex w-full items-center gap-x-3 rounded-md p-2 text-left text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50",
+              "flex w-full items-center gap-x-3 rounded-md p-2 text-left text-sm font-semibold leading-6 text-sky-400 hover:text-sky-800 hover:bg-gray-50",
             aria_controls: "sub-menu-1",
             aria_expanded: "false"
           ) do
@@ -304,7 +304,7 @@ class NavigationComponent < ApplicationComponent
           ul(class: "submenu #{hidden_sub?(item)} mt-1 px-0", id: "sub-menu-1") do
             item[:submenu].each do |key, i|
               next if key == :tenants && !Current.user.superadmin?
-              menu_item(item: i[:title], url: i[:url], css: "group flex gap-x-3 rounded-md bg-white p-2 text-sm font-semibold leading-6 text-gray-700  hover:bg-gray-50", icon: i[:icon])
+              menu_item(item: i[:title], url: i[:url], css: "group flex gap-x-3 rounded-md  p-2 text-sm font-semibold leading-6 text-sky-400 hover:text-sky-800 hover:bg-gray-50", icon: i[:icon])
             end
           end
         end
@@ -313,7 +313,7 @@ class NavigationComponent < ApplicationComponent
     end
 
     def settings_and_integrations
-      li(class: "fixed bottom-0 left-0 w-76 mt-auto bg-white/90 z-40", data: { menu_target: "setting" }) do
+      li(class: "fixed bottom-0 left-0 w-76 mt-auto /90 z-40", data: { menu_target: "setting" }) do
         div(class: "flex items-center gap-x-0 ml-2") do
           a(
             href: settings_url,
@@ -345,7 +345,7 @@ class NavigationComponent < ApplicationComponent
     end
 
     def render_icon(icon, cls = nil)
-      cls ||= "h-6 text-gray-900 hover:text-gray-500"
+      cls ||= "h-6 text-sky-300 group-hover:text-sky-600"
       render "Icons::#{icon.camelcase}".constantize.new cls: cls
     end
 end

@@ -10,6 +10,7 @@ class Icons::Search < Phlex::HTML
       class: cls,
       viewbox: "0 0 20 20",
       fill: "currentColor",
+      # strike: "currentColor",
       aria_hidden: "true",
       data_slot: "icon"
     ) do |s|
