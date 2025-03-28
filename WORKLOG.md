@@ -8,6 +8,7 @@
 - 'Vælg' button visible even when no items selected and function not selected
 - provided_services list not updated on create service
 - fix ring-black
+- filter does not post on tapping 'check'
 
 ### 27/3/2025
 

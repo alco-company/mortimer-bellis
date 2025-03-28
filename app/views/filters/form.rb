@@ -63,7 +63,7 @@ class Filters::Form < ApplicationForm
   attr_accessor :resource, :cancel_url, :title, :edit_url, :api_key, :model, :fields, :params, :url, :filter_form, :filtered_model
 
   def initialize(resource:, url:, filter_form:, params:, **options)
-    options[:data] = { controller: "filter" }
+    options[:data] ||= { form_target: "form", controller: "filter" }
     options[:class] = "mort-form"
     super(resource: resource, **options)
     @resource = @model = resource
