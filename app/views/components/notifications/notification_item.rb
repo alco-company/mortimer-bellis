@@ -76,7 +76,7 @@ class Notifications::NotificationItem < Phlex::HTML
         transition_leave_start: "transform opacity-100 scale-100",
         transition_leave_end: "transform opacity-0 scale-95"
       },
-      class: "hidden absolute right-9 top-0 z-10 w-48 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-hidden",
+      class: "hidden absolute right-9 top-0 z-10 w-48 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-slate-100 focus:outline-hidden",
       role: "menu",
       aria_orientation: "vertical",
       aria_labelledby: "options-menu-0-button",

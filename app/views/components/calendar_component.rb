@@ -125,7 +125,7 @@ class CalendarComponent < ApplicationComponent
         # comment do %(Dropdown menu, show/hide based on menu state. Entering: "transition ease-out duration-100" From: "transform opacity-0 scale-95" To: "transform opacity-100 scale-100" Leaving: "transition ease-in duration-75" From: "transform opacity-100 scale-100" To: "transform opacity-0 scale-95") end
         div(
           class:
-            "hidden absolute right-0 z-10 mt-3 w-36 origin-top-right overflow-hidden rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-hidden",
+            "hidden absolute right-0 z-10 mt-3 w-36 origin-top-right overflow-hidden rounded-md bg-white shadow-lg ring-1 ring-slate-100 focus:outline-hidden",
           role: "menu",
           data: { calendar_target: "view_dropdown" },
           aria_orientation: "vertical",
@@ -163,7 +163,7 @@ class CalendarComponent < ApplicationComponent
         end
       end
       # %(Dropdown menu, show/hide based on menu state. Entering: "transition ease-out duration-100" From: "transform opacity-0 scale-95" To: "transform opacity-100 scale-100" Leaving: "transition ease-in duration-75" From: "transform opacity-100 scale-100" To: "transform opacity-0 scale-95")
-      div(class: "hidden absolute right-0 z-10 mt-3 w-36 origin-top-right divide-y divide-gray-100 overflow-hidden rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-hidden",
+      div(class: "hidden absolute right-0 z-10 mt-3 w-36 origin-top-right divide-y divide-gray-100 overflow-hidden rounded-md bg-white shadow-lg ring-1 ring-slate-100 focus:outline-hidden",
         role: "menu",
         data: { calendar_target: "mobile_view_dropdown" },
         aria_orientation: "vertical",
@@ -240,7 +240,7 @@ class CalendarComponent < ApplicationComponent
 
   def show_weekday_headers(cls = "")
     wd = %w[ monday tuesday wednesday thursday friday saturday sunday ]
-    div(class: "sticky top-0 z-30 flex-none bg-white shadow-sm ring-1 ring-black ring-opacity-5 sm:pr-8 #{cls}") do
+    div(class: "sticky top-0 z-30 flex-none bg-white shadow-sm ring-1 ring-slate-100 sm:pr-8 #{cls}") do
       div(class: "grid grid-cols-7 text-sm leading-6 text-gray-500 sm:hidden") do
         (0..6).each do |i|
           dt = date.beginning_of_week

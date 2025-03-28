@@ -20,7 +20,7 @@ class MonthComponent < CalendarComponent
   def month_view
     # Month view
     form(action: "POST", url: events_url) do
-      div(class: "shadow-sm ring-1 ring-black ring-opacity-5 lg:flex lg:flex-auto lg:flex-col") do
+      div(class: "shadow-sm ring-1 ring-slate-100 lg:flex lg:flex-auto lg:flex-col") do
         month_header
         div(
           class: "flex bg-gray-200 text-xs leading-6 text-gray-700 lg:flex-auto"

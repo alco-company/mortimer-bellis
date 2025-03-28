@@ -153,7 +153,7 @@ class NavigationComponent < ApplicationComponent
   #   #   end
   #   #   div(
   #   #     class:
-  #   #       "hidden absolute right-8 z-10 mt-2 w-96 text-sm px-2 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-hidden",
+  #   #       "hidden absolute right-8 z-10 mt-2 w-96 text-sm px-2 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-slate-100 focus:outline-hidden",
   #   #     role: "menu",
   #   #     data: { navigation_target: "viewNotifications" },
   #   #     aria_orientation: "vertical",
