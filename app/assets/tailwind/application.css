@@ -4,6 +4,22 @@
 
 @theme {
   --color-mortimer: #0284c7;    /* old was "#1f9cd8" */
+  --font-inter: Inter, sans-serif;
+  --font-sans: Inter, sans-serif;
+}
+
+@layer theme {
+  :host, :root, html {
+    font-family: var(--font-inter);
+    font-feature-settings: "liga" 1, "calt" 1;
+  }
+
+  @supports (font-variation-settings: normal) {
+    :root {
+      --font-inter: InterVariable, sans-serif;
+      --font-sans: InterVariable, sans-serif;
+    }
+  }
 }
 
 @layer components {
