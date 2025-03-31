@@ -257,6 +257,7 @@ class Dinero::Service < SaasService
       when "post"; HTTParty.post(url, body: params, headers: headers)
       when "put"; HTTParty.put(url, body: params, headers: headers)
       end
+      report_error(work, res.response.code, res, url, headers, params, method, "pre-call inspektion")
 
       case true
       when res.response.code == "200"; { ok: res }

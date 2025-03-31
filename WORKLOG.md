@@ -10,6 +10,7 @@
 - align list_item
 - hunting down Dinero Service issue
 - hunting down Dinero Service issue II
+- hunting down Dinero Service issue III
 
 ### 28/3/2025
 
