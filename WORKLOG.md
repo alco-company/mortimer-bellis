@@ -12,6 +12,7 @@
 - hunting down Dinero Service issue II
 - hunting down Dinero Service issue III
 - hunting down Dinero Service issue - "200" is now 200
+- hunting down Dinero Service issue IV
 
 ### 28/3/2025
 

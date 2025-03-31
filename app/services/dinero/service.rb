@@ -257,7 +257,7 @@ class Dinero::Service < SaasService
       when "post"; HTTParty.post(url, body: params, headers: headers)
       when "put"; HTTParty.put(url, body: params, headers: headers)
       end
-      # report_error(work, res.response.code, res, url, headers, params, method, "pre-call inspektion")
+      report_error(work, res.response.code, res, url, headers, params, method, "pre-call inspektion")
 
       case true
       when res.response.code.to_i == 200; { ok: res }
@@ -276,7 +276,7 @@ class Dinero::Service < SaasService
       begin
         Rails.logger.info "------------------------------------"
         Rails.logger.info "Dinero::Service.#{work} - #{msg}"
-        Rails.logger.info "code: #{code}"
+        Rails.logger.info "code: >#{code}<"
         Rails.logger.info "response: #{response}"
         Rails.logger.info "url: #{url}"
         Rails.logger.info "headers: #{headers}"
