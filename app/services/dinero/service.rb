@@ -260,9 +260,9 @@ class Dinero::Service < SaasService
       case true
       when res.response.code == "200"; { ok: res }
       when res.response.code == "201"; { ok: res }
-      when res["code"].to_i < 200; report_error(work, res.response.code, res); { error: res }
+      when res["code"].to_i < 200; report_error(work, res.response.code, res, url, headers, params, method); { error: res }
       else
-        report_error(work, res.response.code, res.response)
+        report_error(work, res.response.code, res.response, url, headers, params, method)
         { error: res.response.code }
       end
     rescue => err
@@ -270,7 +270,14 @@ class Dinero::Service < SaasService
       { error: err.to_s }
     end
 
-    def report_error(work, code, response = "")
+    def report_error(work, code, response = "", url = "", headers = "", params = "", method = "")
+      Rails.logger.info "------------------------------------"
+      Rails.logger.info "Dinero::Service.#{work} failed with code: #{code} and response: #{response}"
+      Rails.logger.info "url: #{url}"
+      Rails.logger.info "headers: #{headers}"
+      Rails.logger.info "params: #{params}"
+      Rails.logger.info "method: #{method}"
+      Rails.logger.info "------------------------------------"
       UserMailer.error_report(code, "Dinero::Service.#{work} #{response}").deliver_later
     end
 

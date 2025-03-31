@@ -8,6 +8,7 @@
 
 - add Inter font back in with Tailwind 4
 - align list_item
+- hunting down Dinero Service issue
 
 ### 28/3/2025
 
