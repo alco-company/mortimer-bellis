@@ -77,14 +77,16 @@ class ListItems::ListItem < ApplicationComponent
   def show_matter_link
     show_matter_mugshot
     if user&.global_queries? && resource.respond_to?(:tenant)
-      span(class: "hidden md:inline text-xs mr-2") { show_resource_link(resource.tenant) }
+      span(class: "hidden md:inline text-xs mr-2 truncate ") { show_resource_link(resource.tenant) }
     end unless resource_class == Tenant
-    link_to(resource_url,
-      class: "truncate hover:underline",
-      data: { turbo_action: "advance", turbo_frame: "form" },
-      tabindex: -1) do
-      span(class: "2xs:hidden") { show_secondary_info }
-      plain resource.name
+    span(class: "md:inline text-xs truncate") do
+      link_to(resource_url,
+        class: "truncate hover:underline inline grow flex-nowrap",
+        data: { turbo_action: "advance", turbo_frame: "form" },
+        tabindex: -1) do
+        span(class: "2xs:hidden") { show_secondary_info }
+        plain resource.name
+      end
     end
   end
 

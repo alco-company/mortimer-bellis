@@ -92,12 +92,14 @@ class ListItems::TimeMaterial < ListItems::ListItem
     if resource&.user&.global_queries?
       span(class: "hidden md:inline text-xs mr-2 truncate") { show_resource_link(resource.tenant) }
     end
-    link_to(edit_resource_url,
-      class: " hover:underline truncate",
-      data: { turbo_action: "advance", turbo_frame: "form" },
-      tabindex: -1) do
-      span(class: "2xs:hidden") { show_time_material_quantative unless resource.active? }
-      span(class: " truncate") { resource.name }
+    span(class: "md:inline text-xs truncate") do
+      link_to(edit_resource_url,
+        class: "truncate hover:underline inline grow flex-nowrap",
+        data: { turbo_action: "advance", turbo_frame: "form" },
+        tabindex: -1) do
+        span(class: "2xs:hidden") { show_time_material_quantative unless resource.active? }
+        span(class: " truncate") { resource.name }
+      end
     end
   end
 

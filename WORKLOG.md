@@ -7,6 +7,7 @@
 ### 31/3/2025
 
 - add Inter font back in with Tailwind 4
+- align list_item
 
 ### 28/3/2025
 

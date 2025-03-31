@@ -62,12 +62,14 @@ class ListItems::User < ListItems::ListItem
       span(class: "hidden md:inline text-xs mr-2") { show_resource_link(resource.tenant) }
     end unless resource_class == Tenant
     lbl = resource.name.blank? ? "" : resource.email
-    link_to(resource_url,
-      class: "truncate hover:underline",
-      data: { turbo_action: "advance", turbo_frame: "form" },
-      tabindex: -1) do
-      span(class: "2xs:hidden") { show_secondary_info }
-      plain lbl
+    span(class: "md:inline text-xs truncate") do
+      link_to(resource_url,
+        class: "truncate hover:underline inline grow flex-nowrap",
+        data: { turbo_action: "advance", turbo_frame: "form" },
+        tabindex: -1) do
+        span(class: "2xs:hidden") { show_secondary_info }
+        plain lbl
+      end
     end
   end
 
