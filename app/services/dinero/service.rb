@@ -159,11 +159,7 @@ class Dinero::Service < SaasService
         client_secret: ENV["DINERO_APP_SECRET"]
       }
 
-      safe_response "code_to_token", url, headers, "post", params
-      # if res["error"].present?
-      #   raise "Dinero::Service.code_to_token: %s" % res["error"].to_s
-      # end
-      # res
+      safe_response("code_to_token", url, headers, "post", params)
     end
 
     def build_query(start_date: nil, end_date: nil, all:, page:, pageSize:, fields:, status_filter:)
@@ -251,18 +247,18 @@ class Dinero::Service < SaasService
     #   { error: code }
     #
     def safe_response(work, url, headers, method = "get", params = {})
-      # report_error(work, "", "", url, headers, params, method, "pre-call inspektion")
       res = case method
       when "get"; HTTParty.get(url, headers: headers)
       when "post"; HTTParty.post(url, body: params, headers: headers)
       when "put"; HTTParty.put(url, body: params, headers: headers)
       end
       report_error(work, res.response.code, res, url, headers, params, method, "pre-call inspektion")
+      return { ok: res } if res.response.code.to_i == 200
+      return { ok: res } if res.response.code.to_i == 201
 
-      case true
-      when res.response.code.to_i == 200; { ok: res }
-      when res.response.code.to_i == 201; { ok: res }
-      when res["code"].to_i < 200; report_error(work, res.response.code, res, url, headers, params, method); { error: res }
+      if res["code"].to_i < 200
+        report_error(work, res["code"], res, url, headers, params, method)
+        { error: res }
       else
         report_error(work, res.response.code, res.response, url, headers, params, method)
         { error: res.response.code }
