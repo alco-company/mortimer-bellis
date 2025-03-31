@@ -251,6 +251,7 @@ class Dinero::Service < SaasService
     #   { error: code }
     #
     def safe_response(work, url, headers, method = "get", params = {})
+      report_error(work, "", "", url, headers, params, method, "pre-call inspektion")
       res = case method
       when "get"; HTTParty.get(url, headers: headers)
       when "post"; HTTParty.post(url, body: params, headers: headers)
@@ -270,9 +271,11 @@ class Dinero::Service < SaasService
       { error: err.to_s }
     end
 
-    def report_error(work, code, response = "", url = "", headers = "", params = "", method = "")
+    def report_error(work, code, response = "", url = "", headers = "", params = "", method = "", msg = "failed with code:")
       Rails.logger.info "------------------------------------"
-      Rails.logger.info "Dinero::Service.#{work} failed with code: #{code} and response: #{response}"
+      Rails.logger.info "Dinero::Service.#{work} - #{msg}"
+      Rails.logger.info "code: #{code}"
+      Rails.logger.info "response: #{response}"
       Rails.logger.info "url: #{url}"
       Rails.logger.info "headers: #{headers}"
       Rails.logger.info "params: #{params}"
