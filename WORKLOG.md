@@ -4,6 +4,10 @@
 
 - toggle switch on products and customers for (auto) sync with invoicing service
 
+### 1/4/2025
+
+- set verify=none to battle SSL error on localhost
+
 ### 31/3/2025
 
 - add Inter font back in with Tailwind 4
