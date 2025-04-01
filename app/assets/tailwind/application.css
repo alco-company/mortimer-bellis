@@ -321,6 +321,10 @@ dialog {
   @apply mb-0;
 }
 
+.current_list_item {
+  @apply border-l-2 border-sky-400;
+}
+
 .pagy {
   @apply flex space-x-1 font-thin text-sm text-sky-600;
 
