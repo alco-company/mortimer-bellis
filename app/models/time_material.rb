@@ -1,7 +1,56 @@
+#
+#
+# Transition TimeMaterial
+#
+# 1. add defaults (implement using settings)
+# 2. add validations depending upon state
+# 3. add conversion table - -
+#
+# state                         draft   active  paused  finished  pushed_to_erp   error_on_push   archived        default_state             fx 'draft'
+#
+# FIELDS:
+#
+# date                                                  x
+# user_id                                               x                                                         delegate_time_materials   true
+# about                                                                                                           default_about             'ongoing task'
+# hour_time                             s               x                                                         default_hours             0
+# minute_time                           s               x                                                         default_minutes           fx 15
+# rate                                                  x                                                         default_rate              fx 500.00
+# over_time                                             x                                                         default_over_time         fx {base: 100, quarter: 125, fifty: 150, three_quarter: 175, 100percent:200} (%)
+#
+#
+# product_id                                            x         y                                               allow_create_product
+# comment
+# quantity                                              x         y
+# unit                                                  x         y
+# unit_price                                            x         y
+# discount
+#
+# customer_name                                         x                                                         allow_create_customer
+# customer_id                                           x         y
+# project_name                                          x                                                         allow_create_project
+# project_id                                            x
+#
+# is_invoice                  [ 'y', 'n' ]
+# is_separate                 [ 'y', 'n' ]
+
+# VALIDATIONS:
+#
+# validate_draft
+# validate_active                       set_time_spent
+# validate_paused                       set_time_spent
+# validate_finished                     set_time_spent  finishable?
+# validate_pushed_to_erp                                          pushable?
+# validate_error_on_push
+# validate_archived
+#
+
+
 class TimeMaterial < ApplicationRecord
   include Tenantable
   include TimeMaterialStateable
   include Settingable
+  include Unitable
 
   attr_accessor :hour_time, :minute_time
 
@@ -9,6 +58,9 @@ class TimeMaterial < ApplicationRecord
   belongs_to :project, optional: true
   belongs_to :product, optional: true
   belongs_to :user
+
+  # notifications
+  has_many :notification_mentions, as: :record, dependent: :destroy, class_name: "Noticed::Event"
 
   scope :by_fulltext, ->(query) { includes([ :customer, :project, :product ]).references([ :customers, :projects, :products ]).where("customers.name LIKE :query OR projects.name like :query or products.name like :query or products.product_number like :query or about LIKE :query OR product_name LIKE :query OR comment LIKE :query", query: "%#{query}%") if query.present? }
   scope :by_about, ->(about) { where("about LIKE ?", "%#{about}%") if about.present? }
@@ -27,6 +79,11 @@ class TimeMaterial < ApplicationRecord
 
   validates :about, presence: true, if: [ Proc.new { |c| c.comment.blank? && c.product_name.blank? } ]
 
+  def has_insufficient_data?
+    (project_name.present? && project_id.blank?) ||
+    (customer_name.present? && customer_id.blank?) ||
+    (product_name.present? && product_id.blank?)
+  end
   # def self.filtered(filter)
   #   flt = filter.collect_filters self
   #   flt = filter.filter
@@ -95,8 +152,13 @@ class TimeMaterial < ApplicationRecord
   end
 
   def self.named_scope(scope)
-    (User[:name].matches("%#{scope}%")).
-    or(User[:team_id].in(Team.arel_table.project(:id).where(Team[:name].matches("%#{scope}%"))))
+    TimeMaterial.arel_table[:user_id].
+    in(
+      User.arel_table.project(:id).where(
+        User[:name].matches("%#{scope}%").
+        or(User[:team_id].in(Team.arel_table.project(:id).where(Team[:name].matches("%#{scope}%"))))
+      )
+    )
   end
 
   def self.associations
@@ -147,7 +209,6 @@ class TimeMaterial < ApplicationRecord
 
   def hour_time=(val)
     return if val.blank?
-
     self.time = "#{val}:00" if self.time.blank?
     self.time = "%s:%s" % [ val, self.time.split(":")[1] ] if self.time.include?(":")
     self.time = "%s:%s" % [ val, self.time.split(",")[1] ] if self.time.include?(",")
@@ -164,7 +225,6 @@ class TimeMaterial < ApplicationRecord
 
   def minute_time=(val)
     return if val.blank?
-
     self.time = "00:#{val}" if self.time.blank?
     self.time = "%s:%s" % [ self.time.split(":")[0], val ] if self.time.include?(":")
     self.time = "%s:%s" % [ self.time.split(",")[0], val ] if self.time.include?(",")
@@ -177,30 +237,6 @@ class TimeMaterial < ApplicationRecord
 
   def self.form(resource:, editable: true)
     TimeMaterials::Form.new resource: resource, editable: editable
-  end
-
-  def units
-    [
-      [ "hours", I18n.t("time_material.units.hours") ],
-      [ "parts", I18n.t("time_material.units.parts") ],
-      [ "km", I18n.t("time_material.units.km") ],
-      [ "day", I18n.t("time_material.units.day") ],
-      [ "week", I18n.t("time_material.units.week") ],
-      [ "month", I18n.t("time_material.units.month") ],
-      [ "kilogram", I18n.t("time_material.units.kilogram") ],
-      [ "cubicMetre", I18n.t("time_material.units.cubicMetre") ],
-      [ "set", I18n.t("time_material.units.set") ],
-      [ "litre", I18n.t("time_material.units.litre") ],
-      [ "box", I18n.t("time_material.units.box") ],
-      [ "case", I18n.t("time_material.units.case") ],
-      [ "carton", I18n.t("time_material.units.carton") ],
-      [ "metre", I18n.t("time_material.units.metre") ],
-      [ "package", I18n.t("time_material.units.package") ],
-      [ "shipment", I18n.t("time_material.units.shipment") ],
-      [ "squareMetre", I18n.t("time_material.units.squareMetre") ],
-      [ "session", I18n.t("time_material.units.session") ],
-      [ "tonne", I18n.t("time_material.units.tonne") ]
-    ]
   end
 
   def self.overtimes
@@ -281,7 +317,7 @@ class TimeMaterial < ApplicationRecord
       else hours += 1; 0
       end
     end
-    "%s:%s" % [ hours, minutes ]
+    "%02d:%02d" % [ hours.to_i, minutes.to_i ] rescue "00:00"
   end
 
   def set_ptime(ht, mt)
@@ -336,5 +372,29 @@ class TimeMaterial < ApplicationRecord
     # # we'll use the project field for adding a comment in the top of the invoice
     # # or use the project.name !resource.project_name.blank? && resource.project.name
     # true
+  end
+
+
+  def prepare_tm(resource_params)
+    if resource_params[:state].present? &&
+      resource_params[:state] == "done" &&
+      Current.user.default(:validate_time_material_done, true) == "true"
+
+      if resource_params[:played].present?
+        resource_params.delete(:played)
+        return true
+      end
+      unless values_ready_for_push?
+        errors.add(:base, errors.full_messages.join(", "))
+        return false
+      end
+      valid?
+    else
+      true
+    end
+  rescue => e
+    # debug-ger
+    UserMailer.error_report(e.to_s, "TimeMaterial#prepare_tm - failed with params: #{resource_params}").deliver_later
+    false
   end
 end

@@ -4,6 +4,7 @@ da:
       delete_all: 
         title: Slet alle kunder
         instruction: Er du sikker på, at du vil slette alle kunder?
+        instruction_selected: Er du sikker på, at du vil slette alle %{count} udvalgte kunder?
       delete:
         title: Slet denne kunde
         instruction: Er du sikker på, at du vil slette kunde %{name}?

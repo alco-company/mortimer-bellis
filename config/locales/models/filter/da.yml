@@ -1,17 +1,20 @@
 da:
   filter:
-    title: Filter
     modal:
       delete_all: 
         title: Slet alle filtre
         instruction: Er du sikker på, at du vil slette alle filtre?
+        instruction_selected: Er du sikker på, at du vil slette alle %{count} udvalgte filtre?
+
       delete:
         title: Slet dette filter
         instruction: Er du sikker på, at du vil slette filteret %{name}?
         button: Slet
 
   filters:
+    title: Filter
     filter_for: Filter for %{model}
+    drop_date_filtering: Drop dato filtrering
     filtered: Filtreret
     batched: Udvalgte
     default_filter: Filter

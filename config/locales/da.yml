@@ -62,6 +62,7 @@ da:
   session_done_days: "%{days} dage, %{hours} timer og %{minutes} minutter"
   session_expired: "Din session er udløbet - log venligst ind igen"
   sign_out_in_session_expires_shortly: "Overvej snart at logge ud/ind igen, din session udløber om under 10 minutter"
+  old_csrf: Din session indeholder en ældre CSRF nøgle - prøv venligst igen
 
   weekdays: Ugedage
   monday: Mandag
@@ -108,6 +109,17 @@ da:
     stone: Granit
     black: Sort
     white: Hvid
+
+  dashboard:
+    modal:
+      delete_all: 
+        title: Slet alle overblik
+        instruction: Er du sikker på, at du vil slette alle overblik?
+        instruction_selected: Er du sikker på, at du vil slette alle %{count} udvalgte overblik?
+      delete:
+        title: Slet denne overblik
+        instruction: Er du sikker på, at du vil slette overblik %{name}?
+        button: Slet
 
   dashboards:
     list:
@@ -571,7 +583,7 @@ da:
       lead:
         created_at: Oprettet den
         updated_at: Opdateret den
-        email_address: Email adresse
+        email: Email adresse
         trial_ends_at: Prøveperioden slutter
         converted_at: Kunde fra    
       location:
@@ -899,20 +911,28 @@ da:
         locked_at: Låst den
         failed_attempts: Mislykkede forsøg
         blocked_from_punching: Blokeret for stempling
+        tenant_id: Konto
         tenant:
           one: Konto
           name: Konto
         invited_by: 
           name: Blev inviteret af
+        invitations_count: Antal invitationer
+        invitation_token: Invitationstoken
+        invitation_created_at: Invitation oprettet den
+        invitation_sent_at: Invitation sendt den
+        invitation_accepted_at: Invitation accepteret den
+        invitation_limit: Max antal invitationer
         email: Emailadresse
         mugshot: Profil billede
         role: Rolle
         user_name: Brugernavn
         password: Adgangskode
         password_confirmation: Bekræft adgangskode
+        current_password: Nuværende adgangskode
         otp_attempt: 2FA kode
         otp_required_for_login: 2FA påkrævet
-        two_factor_app_enabled: 2FA aktiveret
+        otp_enabled: 2FA aktiveret
         encrypted_password: Krypteret adgangskode
         confirmed_at: Bekræftet den
         confirmation_sent_at: Bekræftelse sendt den
@@ -1222,7 +1242,7 @@ da:
 
 
   errors:
-    format: "%{attribute} %{message}"
+    format: "%{attribute}: %{message}"
     messages:
       something_went_wrong: "<pre class='text-xs'>%{error}</pre><br/>Noget gik galt - vi er blevet orienteret, men beskriv gerne situationen i en mail til info@mortimer.pro"
       user_registration_failed: "Bruger registreringen mislykkedes - fejl: %{error}"

@@ -16,6 +16,7 @@
         <%= form.hidden_field :step, value: @step %>
         <%= form.hidden_field :all, value: !@resource.id.present? %>
         <%= form.hidden_field :attachment, value: @attachment %>
+        <%= form.hidden_field :search, value: @search %>
         <%= form.hidden_field :id, value: @resource&.id %>
         <%= form.hidden_field :url, value: @url %>
         <!-- <div class="relative flex items-start mt-3">

@@ -1,5 +1,5 @@
 class EmployeesController < MortimerController
-  skip_before_action :authenticate_user!, only: [ :signup ]
+  skip_before_action :require_authentication, only: [ :signup ]
 
   def new
     @resource.locale = Current.user.locale

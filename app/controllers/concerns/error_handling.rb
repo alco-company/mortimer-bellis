@@ -12,8 +12,8 @@ module ErrorHandling
       rescue_from ActionController::UnknownFormat, with: -> { render_404  }
       rescue_from ActiveRecord::RecordNotFound,        with: -> { render_404 }
       rescue_from ActionController::UrlGenerationError, with: -> { render_404 }
-      rescue_from ActionController::InvalidAuthenticityToken, with: -> { render_404 }
     end
+    rescue_from ActionController::InvalidAuthenticityToken, with: :handle_bad_csrf_token
 
     # def blackholed
     #   render_404
@@ -25,6 +25,15 @@ module ErrorHandling
         # format.all { render nothing: true, status: 404 }
         # format.all { head :ok }
         format.all { render_not_found  }
+      end
+    end
+
+    def render_40x
+      respond_to do |format|
+        # format.html { render template: 'errors/not_found', status: 404 }
+        # format.all { render nothing: true, status: 404 }
+        # format.all { head :ok }
+        format.all { redirect_to root_path, warning: t("old_csrf")  }
       end
     end
 
@@ -40,6 +49,17 @@ module ErrorHandling
     def blackholed
       # `sudo route add #{request.remote_ip} gw 127.0.0.1 lo`
       head :ok
+    end
+
+    def handle_bad_csrf_token
+      if request.path == "/session"
+        flash[:alert] = I18n.t("session_expired")
+      else
+        flash[:alert] = I18n.t("old_csrf")
+      end
+      render turbo_stream: [
+        turbo_stream.replace("flash_container", partial: "application/flash_message", locals: { tenant: Current.get_tenant, messages: flash, user: Current.get_user })
+      ] and return
     end
   end
 end

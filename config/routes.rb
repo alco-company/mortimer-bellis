@@ -1,29 +1,46 @@
 Rails.application.routes.draw do
   get "home/show"
   # -------- AUTHENTICATION ROUTES --------
-  use_doorkeeper do
-    controllers applications: "oauth/applications"
+  # use_doorkeeper do
+  #   controllers applications: "oauth/applications"
+  # end
+  get "/users/sign_in", to: "users/sessions#new"
+  get "/users/login", to: "users/sessions#new"
+
+  namespace :tenants do
+    resource :registrations
   end
 
-  devise_for :users, controllers: {
-    invitations: "users/invitations",
-    registrations: "users/registrations",
-    sessions: "users/sessions",
-    confirmations: "users/confirmations",
-    passwords: "users/passwords",
-    unlocks: "users/unlocks",
-    omniauth_callbacks: "users/omniauth_callbacks"
-  }
+  namespace :users do
+    resource :session
+    resources :passwords, param: :token
+    resources :confirmations, only: [ :new, :create, :update ] do
+      get :confirm, on: :collection, to: "confirmations#update"
+    end
+    resource :registrations
+    resource :otp
+    get "/auth/entra_id/callback", to: "omniauth_callbacks#entra_id"
+    get "invitations/new", to: "invitations#new"
+    post "invitations", to: "invitations#create"
+    get "invitations/accept", to: "invitations#edit"
+  end
+
+  resources :users do
+    resources :calendars
+    member do
+      post :archive
+    end
+  end
 
   # called by JS on client side to check if the session is still valid
   get "check_session", to: "sessions#check"
 
   # 2FA routes
-  get "auth/edit/2fa/app/init" => "users/second_factor#initiate_new_app", as: :init_new_user_two_factor_app
-  post "auth/edit/2fa/app/new" => "users/second_factor#new_app", as: :new_user_two_factor_app
-  post "auth/edit/2fa/app" => "users/second_factor#create_app", as: :create_user_two_factor_app
-  get "auth/edit/2fa/app/destroy" => "users/second_factor#new_destroy_app", as: :new_destroy_user_two_factor_app
-  post "auth/edit/2fa/app/destroy" => "users/second_factor#destroy_app", as: :destroy_user_two_factor_app
+  # get "auth/edit/2fa/app/init" => "users/second_factor#initiate_new_app", as: :init_new_user_otp
+  # post "auth/edit/2fa/app/new" => "users/second_factor#new_app", as: :new_user_otp
+  # post "auth/edit/2fa/app" => "users/second_factor#create_app", as: :create_user_otp
+  # get "auth/edit/2fa/app/destroy" => "users/second_factor#new_destroy_app", as: :new_destroy_user_otp
+  # post "auth/edit/2fa/app/destroy" => "users/second_factor#destroy_app", as: :destroy_user_otp
 
 
   post "web_push_subscriptions" => "noticed/web_push/subscriptions#create", as: :web_push_subscriptions
@@ -33,17 +50,17 @@ Rails.application.routes.draw do
   mount MissionControl::Jobs::Engine, at: "/solid_queue_jobs"
 
   # -------- API ROUTES & 3RD PARTY --------
-  namespace :api do
-    namespace :v1 do
-      resources :tickets
-      resources :contacts do
-        collection do
-          get "lookup"
-        end
-      end
-      get "hello" => "hello_world#hello"
-    end
-  end
+  # namespace :api do
+  #   namespace :v1 do
+  #     resources :tickets
+  #     resources :contacts do
+  #       collection do
+  #         get "lookup"
+  #       end
+  #     end
+  #     get "hello" => "hello_world#hello"
+  #   end
+  # end
 
   post "dinero/callback" => "dinero#callback", as: :dinero_callback
 
@@ -96,19 +113,14 @@ Rails.application.routes.draw do
       get "show_dashboard"
     end
   end
-  resources :background_jobs
+  resources :background_jobs do
+    collection do
+      get "toggle"
+    end
+  end
   resources :pages do
     collection do
       get "help"
-    end
-  end
-  resources :users do
-    resources :calendars
-    collection do
-      get "sign_in_success"
-    end
-    member do
-      post :archive
     end
   end
   resources :punches do
@@ -169,6 +181,7 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "dashboards#show_dashboard"
-  # root "time_materials#index"
-  root "home#show"
+  root "time_materials#index"
+
+  # root "home#show"
 end

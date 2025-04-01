@@ -9,12 +9,11 @@ class SyncErpJob < ApplicationJob
   #
   def perform(**args)
     super(**args)
-    user = args[:user]
     resource_class = args[:resource_class]
     startDate = nil
     endDate = nil
-    user_time_zone(user.time_zone) do
-      ds = Dinero::Service.new
+    user_time_zone(@user.time_zone) do
+      ds = Dinero::Service.new user: @user
       case resource_class.to_s
       when "Customer"; fields="Name,ContactGuid,ExternalReference,IsPerson,Street,ZipCode,City,CountryKey,Phone,Email,Webpage,AttPerson,VatNumber,EanNumber,PaymentConditionType,PaymentConditionNumberOfDays,IsMember,MemberNumber,CompanyStatus,VatRegionKey,IsDebitor,IsCreditor,InvoiceMailOutOptionKey"
       when "Product"; fields="Name,ProductGuid,ProductNumber,Quantity,Unit,AccountNumber,BaseAmountValue,BaseAmountValueInclVat,TotalAmount,TotalAmountInclVat,ExternalReference"

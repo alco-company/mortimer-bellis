@@ -57,10 +57,41 @@ class Setting < ApplicationRecord
     "#{key}"
   end
 
+  def self.create_defaults_for_new(tenant)
+    # create default settings for new tenant
+    self.available_keys.each do |k|
+      value, setable_type = case k[0]
+      when "default_time_material_state"; [ "draft", "TimeMaterial" ]
+      when "default_time_material_about"; [ I18n.t("time_material.default_assigned_about"), "TimeMaterial" ]
+      when "default_time_material_hour_time"; [ "0", "TimeMaterial" ]
+      when "default_time_material_minute_time"; [ "15", "TimeMaterial" ]
+      when "default_time_material_rate"; [ "500", "TimeMaterial" ]
+      when "default_time_material_over_time"; [ "1", "TimeMaterial" ]
+      when "validate_time_material_done"; [ "false", "TimeMaterial" ]
+      when "limit_time_to_quarters"; [ "false", "TimeMaterial" ]
+      when "run"; [ "true", "BackgroundJob" ]
+      else [ "true", "User" ]
+      end
+      self.create tenant: tenant, key: k[0], setable_type: setable_type, value: value
+    end
+  end
+
   def self.available_keys
     [
       [ "delegate_time_materials", I18n.t("settings.keys.delegate_time_materials") ],
+      [ "run", I18n.t("settings.keys.run_background_jobs") ],
       [ "limit_time_to_quarters", I18n.t("settings.keys.limit_time_to_quarters") ],
+      [ "default_time_material_state", I18n.t("settings.keys.default_time_material_state") ],
+      [ "default_time_material_about", I18n.t("settings.keys.default_time_material_about") ],
+      [ "default_time_material_hour_time", I18n.t("settings.keys.default_time_material_hour_time") ],
+      [ "default_time_material_minute_time", I18n.t("settings.keys.default_time_material_minute_time") ],
+      [ "default_time_material_rate", I18n.t("settings.keys.default_time_material_rate") ],
+      [ "default_time_material_over_time", I18n.t("settings.keys.default_time_material_over_time") ],
+      [ "allow_create_time_material", I18n.t("settings.keys.allow_create_time_material") ],
+      [ "allow_create_product", I18n.t("settings.keys.allow_create_product") ],
+      [ "allow_create_customer", I18n.t("settings.keys.allow_create_customer") ],
+      [ "allow_create_project", I18n.t("settings.keys.allow_create_project") ],
+      [ "validate_time_material_done", I18n.t("settings.keys.validate_time_material_done") ],
       [ "show_all_time_material_posts", I18n.t("settings.keys.show_all_time_material_posts") ]
     ]
   end

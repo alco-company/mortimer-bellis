@@ -9,19 +9,24 @@ export default class extends Controller {
     "counter",
     "odofrom",
     "odoto",
-    "mileage"
+    "mileage",
+    "listlabel"
   ]
 
   static values = {
     time: Number,
-    interval: 1000
+    interval: 1000,
+    reload: 60000
   }
 
   initialize() {
     this.interval = null;
+    this.reload = null;
   }
 
   connect() {
+    this.token = document.querySelector('meta[name="csrf-token"]').content;
+
     try {      
       if (this.counterTarget.dataset.state == "active") {
         this.startTimer();
@@ -29,9 +34,6 @@ export default class extends Controller {
     } catch (error) {
       
     }
-    this.token = document.querySelector(
-      'meta[name="csrf-token"]'
-    ).content;    
   }
 
   disconnect() {
@@ -74,12 +76,27 @@ export default class extends Controller {
       let sec = Math.floor(this.timeValue - (hours * 3600) - (minuts * 60));
       this.counterTarget.innerText = hours.toString().padStart(2, "0") + ":" + minuts.toString().padStart(2, "0") + ":" + sec.toString().padStart(2, "0");
     }, this.intervalValue);
+    this.reload = setInterval(() => {
+      console.log(` reload: ${this.listlabelTarget.dataset.reloadUrl}`);
+      fetch(this.listlabelTarget.dataset.reloadUrl, {
+        method: "GET",
+        headers: {
+          "X-CSRF-Token": this.token,
+          "Content-Type": "text/vnd.turbo.stream.html",
+        },
+      });
+    }, this.reloadValue);
   }
+  
 
   stopTimer() {
     if (this.interval) {
       clearInterval(this.interval);
       this.interval = null;
+    }
+    if (this.reload) {
+      clearInterval(this.reload);
+      this.reload = null;
     }
   }
 

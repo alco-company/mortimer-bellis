@@ -7,10 +7,12 @@ class TenantMailer < ApplicationMailer
     @pw = params[:pw]
     @tenant = params[:tenant]
     @resource = @tenant.users.first
-    @url = new_user_session_url
+    @url = new_users_session_url
     I18n.with_locale(locale) do
       mail to: @rcpt, subject: I18n.t("tenant.mailer.welcome.subject")
     end
+  rescue => e
+    UserMailer.error_report(e.to_s, "TenantMailer#welcome - failed for #{params[:tenant]&.id}").deliver_later
   end
 
 
@@ -31,8 +33,8 @@ class TenantMailer < ApplicationMailer
   end
 
   def report_state
-    Current.tenant = params[:tenant]
-    rcpt =  email_address_with_name Current.tenant.email, Current.tenant.name
+    @tenant = params[:tenant]
+    rcpt =  email_address_with_name @tenant.email, @tenant.name
     params[:tmpfiles].each_with_index do |tmpfile, i|
       attachments["report_state_#{i}.pdf"] = File.read(tmpfile)
 

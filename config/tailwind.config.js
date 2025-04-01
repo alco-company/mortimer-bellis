@@ -1,5 +1,5 @@
-const defaultTheme = require('tailwindcss/defaultTheme')
-let colors = require("tailwindcss/colors");
+//const defaultTheme = require('tailwindcss/defaultTheme')
+//let colors = require("tailwindcss/colors");
 
 function withOpacity(variableName) {
   return ({ opacityValue }) => {
@@ -30,32 +30,32 @@ module.exports = {
       },
       fontSize: {
         "2xs": "0.625rem", // 10px
-        xs: "0.75rem", // 12px
-        sm: "0.875rem", // 14px
-        base: "1rem", // 16px
-        lg: "1.125rem", // 18px
-        xl: "1.25rem", // 20px
-        "2xl": "1.5rem", // 24px
-        "3xl": "1.875rem", // 30px
-        "4xl": "2.25rem", // 36px
-        "5xl": "3rem", // 48px
-        "6xl": "4rem", // 64px
-        "7xl": "4.5rem", // 64px
-        "8xl": "5rem", // 64px
-        "9xl": "5.5rem", // 64px
+        // xs: "0.75rem", // 12px
+        // sm: "0.875rem", // 14px
+        // base: "1rem", // 16px
+        // lg: "1.125rem", // 18px
+        // xl: "1.25rem", // 20px
+        // "2xl": "1.5rem", // 24px
+        // "3xl": "1.875rem", // 30px
+        // "4xl": "2.25rem", // 36px
+        // "5xl": "3rem", // 48px
+        // "6xl": "4rem", // 64px
+        // "7xl": "4.5rem", // 64px
+        // "8xl": "5rem", // 64px
+        // "9xl": "5.5rem", // 64px
       },
-      fontFamily: {
-        sans: ["Inter var", ...defaultTheme.fontFamily.sans],
-      },
-      colors: {
-        mortimer: "#0284c7", // old was "#1f9cd8",
-        neutral: colors.slate,
-        positive: colors.green,
-        urge: colors.violet,
-        warning: colors.yellow,
-        info: colors.blue,
-        critical: colors.red,
-      },
+      // fontFamily: {
+      //   sans: ["Inter var", ...defaultTheme.fontFamily.sans],
+      // },
+      // colors: {
+      //   mortimer: "#0284c7", // old was "#1f9cd8",
+      //   neutral: colors.slate,
+      //   positive: colors.green,
+      //   urge: colors.violet,
+      //   warning: colors.yellow,
+      //   info: colors.blue,
+      //   critical: colors.red,
+      // },
       textColor: {
         skin: {
           primary: withOpacity("--color-primary"),
@@ -112,9 +112,9 @@ module.exports = {
   },
   plugins: [
     // require("a17t"),
-    require("@tailwindcss/forms"),
-    require("@tailwindcss/aspect-ratio"),
-    require("@tailwindcss/typography"),
-    require("@tailwindcss/container-queries"),
+    // require("@tailwindcss/forms"),
+    // require("@tailwindcss/aspect-ratio"),
+    // require("@tailwindcss/typography"),
+    // require("@tailwindcss/container-queries"),
   ],
 };

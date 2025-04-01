@@ -4,7 +4,7 @@ class HeaderProfile < Phlex::HTML
 
   def view_template
     comment { "Page header" }
-    div(class: "bg-white sm:shadow sm:mx-2 sm:border-t sm:border-gray-50", data: { controller: "profile" }) do
+    div(class: "bg-white sm:shadow-sm sm:mx-2 sm:border-t sm:border-gray-50") do # , data: { controller: "profile" } when we will enableNotifications here once more
       div(class: "px-4 sm:px-6 lg:mx-auto lg:max-w-6xl lg:px-8") do
         div(
           class:
@@ -89,7 +89,7 @@ class HeaderProfile < Phlex::HTML
             end
           end
           # div(class: "mt-6 flex space-x-3 md:ml-4 md:mt-0") do
-          #   link_to(I18n.t("profile.invite_new_user"), helpers.new_user_invitation_path, class: "mort-btn-primary", role: "menuitem", tabindex: "-1", id: "user-menu-item-0") unless Current.user.user?
+          #   link_to(I18n.t("profile.invite_new_user"), helpers.users_invitations_new_url, class: "mort-btn-primary", role: "menuitem", tabindex: "-1", id: "user-menu-item-0") unless Current.user.user?
           # end
           # div(class: "mort-field ml-2 ") do
           #   form(class: "group m-0", data: { profile_target: "buttonForm" }) do

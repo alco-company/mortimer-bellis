@@ -1,10 +1,13 @@
 class ModalController < MortimerController
   before_action :set_vars, only: [ :new, :show, :create, :destroy, :update ]
-  skip_before_action :authenticate_user!, only: [ :destroy ]
-  skip_before_action :check_session_length, only: [ :destroy ]
+  before_action :set_batch
+  before_action :set_filter # , only: %i[ new index destroy ] # new b/c of modal
+  before_action :set_resources # , only: %i[ index destroy ]
+  before_action :set_resources_stream
 
   def new
     # resource
+    @resource = find_resource
     case resource_class.to_s.underscore
     when "calendar"; process_calendar_new
     when "event"; process_event_new
@@ -42,7 +45,7 @@ class ModalController < MortimerController
 
   #
   def destroy
-    (authenticate_user! && check_session_length) || verify_api_key
+    params[:action] = "destroy"
     params[:all] == "true" ? process_destroy_all : process_destroy
   end
 
@@ -51,28 +54,11 @@ class ModalController < MortimerController
     def set_vars
       @modal_form = params[:modal_form]
       @attachment = params[:attachment]
-      resource()
       @step = params[:step]
       @url = params[:url] || resources_url
       @view = params[:view] || "month"
+      @search = params[:search]
     end
-
-    # def resource
-    #   if params[:id].present?
-    #     @resource = resource_class.find(params[:id]) rescue resource_class.new
-    #   else
-    #     @resource = resource_class.new
-    #   end
-    # end
-
-    # def resource_class
-    #   @resource_class ||= case params[:resource_class]
-    #   # when "invitations"; UserInvitation
-    #   when "notifications"; Noticed::Notification
-    #   when "doorkeeper/application"; Oauth::Application
-    #   else; params[:resource_class].classify.constantize rescue nil
-    #   end
-    # end
 
     #
     # --------------------------- NEW --------------------------------
@@ -115,6 +101,7 @@ class ModalController < MortimerController
 
     def process_other_new
       @step = params[:modal_next_step] || "accept"
+      @ids = @filter.filter != {} || @batch&.batch_set? || @search.present? ? resources.pluck(:id) : []
     end
 
     #
@@ -183,11 +170,12 @@ class ModalController < MortimerController
     end
 
     def process_time_material_create
-      DineroUploadJob.perform_later tenant: Current.tenant, user: Current.user, date: Date.current, provided_service: "Dinero"
+      ids = @filter.filter != {} || @batch&.batch_set? || @search.present? ? resources.pluck(:id) : nil
+      DineroUploadJob.perform_later tenant: Current.tenant, user: Current.user, date: Date.current, provided_service: "Dinero", ids: ids
       flash.now[:success] = t("time_material.uploading_to_erp")
       render turbo_stream: [
         turbo_stream.close_remote_modal { },
-        turbo_stream.replace("flash_container", partial: "application/flash_message")
+        turbo_stream.replace("flash_container", partial: "application/flash_message", locals: { tenant: Current.get_tenant, messages: flash, user: Current.get_user })
       ]
     end
 
@@ -214,11 +202,10 @@ class ModalController < MortimerController
 
     def process_destroy_all
       begin
-        set_filter resource_class.to_s.underscore.pluralize
-        set_resources
-        DeleteAllJob.perform_later tenant: Current.tenant, resource_class: resource_class.to_s,
-          ids: @resources.pluck(:id),
-          user_ids: (resource_class.first.respond_to?(:user_id) ? @resources.pluck(:user_id).uniq : User.by_tenant.by_role(:user).pluck(:id)) rescue nil
+        DeleteAllJob.perform_later tenant: Current.tenant, user: Current.user, resource_class: resource_class.to_s,
+          ids: resources.pluck(:id),
+          batch: @batch,
+          user_ids: (resource_class.first.respond_to?(:user_id) ? resources.pluck(:user_id).uniq : User.by_tenant.by_role(:user).pluck(:id)) rescue nil
         @url.gsub!(/\/\d+$/, "") if @url.match?(/\d+$/)
         flash[:success] = t("delete_all_later")
         respond_to do |format|
@@ -282,40 +269,13 @@ class ModalController < MortimerController
       render_to_string "employees/report_state", layout: "pdf", formats: :pdf
     end
 
-    # def resources_url(**options)
-    #   return url_for(controller: resource_class.to_s.underscore.pluralize, action: :index, **options) if options.delete(:rewrite).present?
-    #   @resources_url ||= url_for(controller: resource_class.to_s.underscore.pluralize, action: :index, **options)
-    # end
+  # def any_filters?
+  #   return false if @filter.nil? or params.dig(:controller).split("/").last == "filters" or params.dig(:action) == "lookup"
+  #   # !@filter.id.nil?
+  #   @filter.persisted?
+  # end
 
-    # def set_resources
-    #   @resources = any_filters? ? @filter.do_filter(resource_class) : resource_class.by_tenant()
-    #   @resources = any_sorts? ? resource_class.ordered(@resources, params[:s], params[:d]) : @resources.order(created_at: :desc)
-    # end
-
-    # def set_filter(view = params[:controller].split("/").last)
-    #   @filter_form = resource_class.to_s.underscore.pluralize
-    #   @filter = Filter.where(tenant: Current.tenant).where(view: view).take || Filter.new
-    #   @filter.filter ||= {}
-    # end
-
-    def set_resource_class
-      @resource_class = params.dig(:resource_class).classify.constantize
-    rescue => e
-      redirect_to "/", alert: I18n.t("errors.resources.resource_class.not_found", ctrl: params.dig(:resource_class), reason: e.to_s) and return
-    end
-
-    def verify_api_key
-      return false unless params.dig(:api_key) && @resource && @resource.respond_to?(:access_token)
-      @resource.access_token == params.dig(:api_key) || redirect_to(new_user_session_path)
-    end
-
-    def any_filters?
-      return false if @filter.nil? or params.dig(:controller).split("/").last == "filters" or params.dig(:action) == "lookup"
-      # !@filter.id.nil?
-      @filter.persisted?
-    end
-
-    def any_sorts?
-      params.dig :s
-    end
+  # def any_sorts?
+  #   params.dig :s
+  # end
 end

@@ -1,7 +1,7 @@
 class Invoices::Form < ApplicationForm
   def view_template(&)
-    row field(:customer_id).select(Customer.by_tenant.order(name: :asc).select(:id, :name), prompt: I18n.t(".select_customer"), class: "mort-form-text")
-    # row field(:project_id).select(Project.by_tenant.by_customer().order(name: :asc).select(:id, :name), prompt: I18n.t(".select_project"), class: "mort-form-text")
+    row field(:customer_id).select(Customer.by_tenant.order(name: :asc).select(:id, :name), prompt: I18n.t(".select_customer"), class: "mort-form-select")
+    # row field(:project_id).select(Project.by_tenant.by_customer().order(name: :asc).select(:id, :name), prompt: I18n.t(".select_project"), class: "mort-form-select")
     row field(:invoice_number).input().focus
     row field(:currency).input()
     row field(:invoice_number).input()

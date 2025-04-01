@@ -1,4 +1,5 @@
 class Contextmenu < Phlex::HTML
+  include Phlex::Rails::Helpers::Request
   include Phlex::Rails::Helpers::Routes
   include Phlex::Rails::Helpers::LinkTo
   include Phlex::Rails::Helpers::ButtonTo
@@ -45,7 +46,7 @@ class Contextmenu < Phlex::HTML
   end
 
   def more_button_list
-    a_button css: "flex items-center rounded-md ring-1 ring-gray-100 px-2 py-1 text-gray-400 hover:text-gray-600 focus:outline-none focus:ring-1 focus:ring-sky-500",
+    a_button css: "flex items-center rounded-md ring-1 ring-gray-100 px-2 py-1 text-gray-400 hover:text-gray-600 focus:outline-hidden focus:ring-1 focus:ring-sky-500",
       label: I18n.t("more"),
       visible_label: true
   end
@@ -73,28 +74,35 @@ class Contextmenu < Phlex::HTML
         transition_leave_start: "transform opacity-100 scale-100",
         transition_leave_end: "transform opacity-0 scale-95"
       },
-      class: "hidden absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none",
+      class: "hidden absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-slate-100 focus:outline-hidden",
       role: "menu",
       aria_orientation: "vertical",
       aria_labelledby: "options-menu-0-button",
       tabindex: "-1"
     ) do
       #  Active: "bg-gray-100 text-gray-900", Not Active: "text-gray-700"
-      link2 url: helpers.filtering_url(), data: { action: "click->contextmenu#hide", turbo_frame: "form" }, label: I18n.t(".filter.title")
+      link2 url: helpers.filtering_url(), data: { action: "click->contextmenu#hide", turbo_frame: "form" }, label: I18n.t("filters.title")
       a_button action: "click->list#toggleBatch click->contextmenu#hide", css: "flex justify-between px-4 py-2 text-sm text-gray-700 hover:text-gray-900" do
         plain I18n.t(".batch")
       end
 
       resource_class.any? ?
-        link2(url: helpers.new_modal_url(modal_form: "delete", resource_class: resource_class.to_s.underscore, modal_next_step: "accept"),
+        link2(url: helpers.new_modal_url(modal_form: "delete",
+          all: true,
+          resource_class: resource_class.to_s.underscore,
+          modal_next_step: "accept",
+          search: request.query_parameters.dig(:search)),
           action: "click->contextmenu#hide",
           label: I18n.t(".delete_all")) :
         div(class: "block px-3 py-1 text-sm leading-6 text-gray-400") { I18n.t(".delete_all") }
       hr
-      link2(url: helpers.new_modal_url(modal_form: "import", resource_class: resource_class.to_s.underscore, modal_next_step: "preview"),
-        action: "click->contextmenu#hide",
-        label: I18n.t(".import")) if resource_class.to_s == "User"
-      link2(url: helpers.new_modal_url(modal_form: "upload_dinero", resource_class: resource_class.to_s.underscore, modal_next_step: "preview"),
+      # link2(url: helpers.new_modal_url(modal_form: "import", resource_class: resource_class.to_s.underscore, modal_next_step: "preview"),
+      #   action: "click->contextmenu#hide",
+      #   label: I18n.t(".import")) if resource_class.to_s == "User"
+      link2(url: helpers.new_modal_url(modal_form: "upload_dinero",
+        resource_class: resource_class.to_s.underscore,
+        search: request.query_parameters.dig(:search),
+        modal_next_step: "preview"),
         action: "click->contextmenu#hide",
         label: I18n.t(".upload to ERP")) if resource_class.to_s == "TimeMaterial"
       link2 url: helpers.resources_url() + ".csv",
@@ -122,7 +130,7 @@ class Contextmenu < Phlex::HTML
         transition_leave_end: "transform opacity-0 scale-95"
       },
       class:
-        "hidden absolute right-0 z-10 mt-2 w-auto min-w-18 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none",
+        "hidden absolute right-0 z-10 mt-2 w-auto min-w-18 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-hidden",
       role: "menu",
       aria_orientation: "vertical",
       aria_labelledby: "options-menu-0-button",
@@ -186,11 +194,11 @@ class Contextmenu < Phlex::HTML
     end
 
     def a_button(
-      css: "flex items-center rounded-md ring-1 ring-gray-100 bg-transparent px-2 py-1 text-gray-400 hover:text-gray-600 focus:outline-none focus:ring-1 focus:ring-sky-500",
+      css: "flex items-center rounded-md ring-1 ring-gray-100 bg-transparent px-2 py-1 text-gray-400 hover:text-gray-600 focus:outline-hidden focus:ring-1 focus:ring-sky-500",
       label: I18n.t("more"),
       visible_label: false,
       data: { contextmenu_target: "button" },
-      action: "touchstart->contextmenu#tap click->contextmenu#tap click@window->contextmenu#hide", &block)
+      action: "touchstart->contextmenu#tap:passive click->contextmenu#tap click@window->contextmenu#hide", &block)
 
       data[:action] = action if action
       button(

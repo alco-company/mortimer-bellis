@@ -3,17 +3,27 @@ class ListItems::ListItem < ApplicationComponent
   include Phlex::Rails::Helpers::DOMID
   include Phlex::Rails::Helpers::ImageTag
 
-  attr_reader :resource, :params, :user
+  attr_reader :resource, :params, :user, :format
 
   # links is an array of links to be rendered in the contextmenu - edit, delete/show
-  def initialize(resource:, params:, user: nil)
+  def initialize(resource:, params:, user: nil, format: :html)
     @resource = resource
     @params = params
     @user = user
+    @format = format
   end
 
   def view_template
-    div(id: (dom_id resource), class: "flex justify-between gap-x-6 mb-1 px-2 py-5 bg-gray-50") do
+    case format
+    when :html        ; html_list
+    when :pdf         ; pdf_list
+    when :pdf_header  ; pdf_list_header
+    else              ; raise "Unsupported format"
+    end
+  end
+
+  def html_list
+    div(id: (dom_id resource), class: "flex justify-between gap-x-6 mb-1 px-2 py-5 bg-gray-50", data: { controller: "list-item" }) do
       div(class: "flex grow min-w-0 gap-x-4") do
         show_left_mugshot
         div(class: "min-w-0 flex-auto") do
@@ -39,6 +49,25 @@ class ListItems::ListItem < ApplicationComponent
     end
   end
 
+  def pdf_list
+    tr do
+      td { show_recipient_link }
+      td { show_matter_link }
+      td { show_secondary_info }
+      td { show_time_info }
+    end
+  end
+
+  def pdf_list_header
+    thead(class: "flex items-center justify-between gap-x-6 py-5") do
+      th(class: "text-sm font-semibold leading-6 text-gray-900") { "Recipient" }
+      th(class: "text-sm font-semibold leading-6 text-gray-900") { "Matter" }
+      th(class: "text-sm font-semibold leading-6 text-gray-900") { "Secondary Info" }
+      th(class: "text-sm font-semibold leading-6 text-gray-900") { "Time Info" }
+    end
+  end
+
+
   def show_recipient_link
     link_to resource_url, data: { turbo_action: "advance", turbo_frame: "form", tabindex: "-1" }, class: "hover:underline" do
       plain resource.name
@@ -48,14 +77,16 @@ class ListItems::ListItem < ApplicationComponent
   def show_matter_link
     show_matter_mugshot
     if user&.global_queries? && resource.respond_to?(:tenant)
-      span(class: "hidden md:inline text-xs mr-2") { show_resource_link(resource.tenant) }
+      span(class: "hidden md:inline text-xs mr-2 truncate ") { show_resource_link(resource.tenant) }
     end unless resource_class == Tenant
-    link_to(resource_url,
-      class: "truncate hover:underline",
-      data: { turbo_action: "advance", turbo_frame: "form" },
-      tabindex: -1) do
-      span(class: "2xs:hidden") { show_secondary_info }
-      plain resource.name
+    span(class: "md:inline text-xs truncate") do
+      link_to(resource_url,
+        class: "truncate hover:underline inline grow flex-nowrap",
+        data: { turbo_action: "advance", turbo_frame: "form" },
+        tabindex: -1) do
+        span(class: "2xs:hidden") { show_secondary_info }
+        plain resource.name
+      end
     end
   end
 
@@ -71,7 +102,7 @@ class ListItems::ListItem < ApplicationComponent
 
   def show_left_mugshot
     div(class: "flex items-center") do
-      input(type: "checkbox", name: "batch[ids][]", value: resource.id, class: "hidden batch mort-form-checkbox mr-2")
+      input(type: "checkbox", name: "batch[ids][]", value: resource.id, id: "batch_#{resource.id}", class: "hidden batch mort-form-checkbox mr-2")
       mugshot(resource.user, css: "hidden sm:block h-12 w-12 flex-none rounded-full bg-gray-50")
     end
   end

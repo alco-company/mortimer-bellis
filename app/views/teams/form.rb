@@ -2,10 +2,10 @@ class Teams::Form < ApplicationForm
   def view_template(&)
     div(data: { controller: "employee" }) do
       row field(:name).input().focus
-      row field(:color).select(Team.colors, prompt: I18n.t(".select_team_color"), class: "mort-form-text")
-      view_only field(:punches_settled_at).date(class: "mort-form-text")
-      row field(:locale).select(Team.locales, prompt: I18n.t(".select_team_locale"), class: "mort-form-text")
-      row field(:time_zone).select(Team.time_zones_for_phlex, class: "mort-form-text")
+      row field(:color).select(Team.colors, prompt: I18n.t(".select_team_color"), class: "mort-form-select")
+      view_only field(:punches_settled_at).date(class: "mort-form-date")
+      row field(:locale).select(Team.locales, prompt: I18n.t(".select_team_locale"), class: "mort-form-select")
+      row field(:time_zone).select(Team.time_zones_for_phlex, class: "mort-form-select")
       row field(:blocked).boolean(class: "mort-form-bool"), "mort-field flex justify-end flex-row-reverse items-center"
       div do
         div(class: "mort-btn-secondary", data: { action: "click->employee#toggleAdvanced" }) { I18n.t("teams.advanced_configuration") }
@@ -18,14 +18,14 @@ class Teams::Form < ApplicationForm
         row field(:email).input()
         row field(:cell_phone).input()
         row field(:pbx_extension).input()
-        p(class: "text-lg font-medium border-b-2 border-gray-400") { I18n.t("teams.contract_template_details") }
+        p(class: "text-lg font-medium border-b-2 border-slate-100") { I18n.t("teams.contract_template_details") }
         row field(:contract_minutes).input(placeholder: "160:20")
         row field(:contract_days_per_payroll).input(placeholder: "0")
         row field(:contract_days_per_week).input(placeholder: "5")
         row field(:hour_pay).input()
         row field(:ot1_add_hour_pay).input()
         row field(:ot2_add_hour_pay).input()
-        row field(:tmp_overtime_allowed).datetime(class: "mort-form-text")
+        row field(:tmp_overtime_allowed).datetime(class: "mort-form-datetime")
         row field(:eu_state).input()
         row field(:allowed_ot_minutes).input()
       end

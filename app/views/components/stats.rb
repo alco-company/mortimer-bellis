@@ -15,7 +15,7 @@ class Stats < ApplicationComponent
       div(class: @css) do
         stats.each do |stat|
           div(
-            class: "grid overflow-hidden items-center justify-center rounded-lg bg-white px-4 py-5 shadow sm:p-6"
+            class: "grid overflow-hidden items-center justify-center rounded-lg bg-white px-4 py-5 shadow-sm sm:p-6"
           ) do
             div(class: "place-self-center truncate text-sm font-medium text-gray-500") do
               stat[:title]

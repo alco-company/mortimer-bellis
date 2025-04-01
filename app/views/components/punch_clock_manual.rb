@@ -160,7 +160,7 @@ class PunchClockManual < ApplicationComponent
           end
         end
       end
-      div(class: "hidden mt-4 divide-y divide-gray-200 border-b border-t border-gray-200", data: { pos_employee_target: "weekDays" }) do
+      div(class: "hidden mt-4 divide-y divide-gray-200 border-b border-t border-slate-100", data: { pos_employee_target: "weekDays" }) do
         %w[monday tuesday wednesday thursday friday saturday sunday].each do |day|
           div(class: "relative flex items-start py-4") do
             div(class: "min-w-0 flex-1 text-sm leading-6") do
@@ -170,7 +170,7 @@ class PunchClockManual < ApplicationComponent
               ) { helpers.t(day) }
             end
             div(class: "ml-3 flex h-6 items-center") do
-              input(id: "#{day}_checkbox", name: "punch[days][]", type: "checkbox", value: day, class: "h-4 w-4 rounded border-gray-300 text-sky-600 focus:ring-sky-600", checked: (day != "saturday" && day != "sunday"))
+              input(id: "#{day}_checkbox", name: "punch[days][]", type: "checkbox", value: day, class: "h-4 w-4 rounded-sm border-gray-300 text-sky-600 focus:ring-sky-600", checked: (day != "saturday" && day != "sunday"))
             end
           end
         end
@@ -230,7 +230,7 @@ class PunchClockManual < ApplicationComponent
         action: action,
         pos_employee_target: "#{reason}Button"
       },
-      class: "bg-gray-200 aria-checked:bg-sky-600 relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-1 focus:ring-sky-600 focus:ring-offset-1",
+      class: "bg-gray-200 aria-checked:bg-sky-600 relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-hidden focus:ring-1 focus:ring-sky-600 focus:ring-offset-1",
       role: "switch",
       aria_checked: enabled ? "true" : "false"
     ) do
@@ -242,7 +242,7 @@ class PunchClockManual < ApplicationComponent
         },
         aria_hidden: "true",
         class:
-          "#{klass} pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+          "#{klass} pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-sm ring-0 transition duration-200 ease-in-out"
       )
     end
   end

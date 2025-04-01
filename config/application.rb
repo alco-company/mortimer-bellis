@@ -6,6 +6,8 @@ require "rails/all"
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
+Dotenv::Rails.files [ ".env.development" ] if Rails.env.development?
+
 module Mortimer
   class Application < Rails::Application
     # config.secret_key_base = ENV.fetch("SECRET_KEY_BASE")

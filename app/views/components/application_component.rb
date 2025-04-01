@@ -3,6 +3,8 @@
 class ApplicationComponent < Phlex::HTML
   include Phlex::Rails::Helpers::Routes
 
+  attr_accessor :params
+
   if Rails.env.development?
     def before_template
       comment { "Before #{self.class.name}" }
@@ -30,8 +32,8 @@ class ApplicationComponent < Phlex::HTML
     end if item
   end
 
-  def new_resource_url
-    url_for(controller: params_ctrl, action: :new)
+  def new_resource_url(**options)
+    url_for(controller: params_ctrl, action: :new, **options)
   end
 
   def resource_url(**options)

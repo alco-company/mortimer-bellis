@@ -92,6 +92,7 @@ da:
       delete_all: 
         title: Slet alle kalendere
         instruction: Er du sikker på, at du vil slette alle kalendere?
+        instruction_selected: Er du sikker på, at du vil slette alle %{count} udvalgte kalendere?
       delete:
         title: Slet denne kalender
         instruction: Er du sikker på, at du vil slette kalenderen %{name}?

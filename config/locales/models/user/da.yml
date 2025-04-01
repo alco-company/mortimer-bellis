@@ -4,6 +4,7 @@ da:
       delete_all: 
         title: Slet alle brugere
         instruction: Er du sikker på, at du vil slette alle brugere?
+        instruction_selected: Er du sikker på, at du vil slette alle %{count} udvalgte brugere?
       delete:
         title: Slet denne bruger
         instruction: Er du sikker på, at du vil slette brugeren %{name}?
@@ -21,6 +22,8 @@ da:
     validation_errors: Der er fejl i det indtastede
     enter_password: Indtast din nye adgangskode
     reenter_password: Gentag din nye adgangskode
+    enter_current_password: Indtast din nuværende adgangskode
+
     create:
       post: Bruger blev oprettet
     update:
@@ -75,6 +78,8 @@ da:
       sign_up: Opret en ny konto
 
     registrations:
+      updated: Din profil er blevet opdateret
+      validation_errors: "Der opstod fejl under opdateringen af brugeren."
       new:
         create: Opret kontoen
         sign_up:
@@ -162,6 +167,7 @@ da:
       send_paranoid_instructions: "Hvis din email adresse eksisterer i vores database, vil du modtage en email med instruktioner om hvordan du bekræfter din email-adresse om et par minutter."
     failure:
       already_authenticated: "Du er allerede logget ind."
+      already_confirmed: "Din konto er allerede bekræftet - eller det link du har brugt er i stykker."
       inactive: "Din konto er endnu ikke aktiveret."
       invalid: "Forkert email adresse eller adgangskode"
       locked: "Din konto er låst. Vi har sendt dig en email med instruktioner om hvordan du låser den op."
@@ -234,6 +240,7 @@ da:
 
     second_factor:
       otp_code: "2 faktor kode"
+      authentication_title: "2 Faktor Autentificering"
       authenticator_app: "Autentificerings app"
       enabled: "Din to-faktor autentificering er aktiveret."
       already_enabled: "Din to-faktor autentificering er allerede aktiveret."
@@ -242,6 +249,7 @@ da:
       enable: "Aktiver"
       disable_2fa: "Deaktiver 2FA"
       enable_2fa: "Aktiver 2FA"
+      enable_2fa_introduction: "For at aktivere 2FA skal du downloade en autentificerings app, fx Google Authenticator, scanne QR koden herunder. Derefter skal du indtaste den genererede kode (fx 231312)."
       title: "Bekræft din identitet"
       password_placeholder: "Adgangskode"
       bad_password: "Din adgangskode er forkert"
@@ -264,8 +272,12 @@ da:
       send_paranoid_instructions: "Hvis din email adresse eksisterer i vores database, vil du modtage et link til at nulstille din adgangskode om et par minutter."
       update_now: "Opdatér adgangskoden - og tryk på 'Skift adgangskoden' (gør du ikke det, vil din adgangskode ikke blive ændret)."
       updated: "Din adgangskode er blevet ændret korrekt. Du er nu logget ind."
-      updated_not_active: "Din adgangskode er blevet ændret korrekt."
+      updated_not_active: "Din adgangskode er blevet ændret korrekt. Log ind med din nye adgangskode."
+      passwords_not_matching: "Adgangskoderne er ikke ens."
     registrations:
+      email_taken: "Email adressen er allerede tilknyttet en anden konto."
+      email_ok: "Email adressen er ledig."
+      failed: "Der opstod en fejl under oprettelsen af din konto."
       destroyed: "Farvel! Din konto er blevet annulleret korrekt. Det ville glæde os at se dig tilbage."
       signed_up: "Velkommen! Du er blevet oprettet korrekt."
       signed_up_but_inactive: "Du er blevet oprettet korrekt. Dog kunne vi ikke logge dig ind, da din konto endnu ikke er aktiveret."

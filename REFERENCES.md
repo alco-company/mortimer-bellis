@@ -41,9 +41,12 @@ contributions to Open Source Software have in each their own way made a crucial 
 * Working With TimeZones [Elle Meredith](https://thoughtbot.com/blog/its-about-time-zones)
 * (man)handling Turbo Frames [Radan Skoric](https://radanskoric.com/articles/update-full-page-on-form-in-frame-submit)
 * Setting Up TOTP Two-Factor Authentication in Ruby on Rails Application [Mikołaj Bogucki](https://blog.lunarlogic.com/2024/setting-up-totp-two-factor-authentication-in-rails)
+* Correctly resizing PWA icons [Jon Henshaw](https://coywolf.pro/webdev/how-to-create-pwa-icons-that-look-correct-on-all-platforms-and-devices/)
+* Automating the generation of PWA Icons [Dominik Fiala](https://dev.to/dominikfiala/hassle-free-pwa-icons-and-splash-screen-generation-3c24)
 
 ## Resources
 
+* [Maskable Icons - by Tiger Oakes](https://maskable.app/editor)
 * [How To GraphQL](https://www.howtographql.com/)
 * [Sidekiq and Redis example](https://www.digitalocean.com/community/tutorials/how-to-add-sidekiq-and-redis-to-a-ruby-on-rails-application)
 * [A Goldchest of Rails tips and tricks](https://til.hashrocket.com/rails)
@@ -144,6 +147,7 @@ https://github.com/mailchimp/email-blueprints
 
 ### Push notifications
 
+https://github.com/pushpad/web-push
 https://github.com/rpush/rpush
 https://www.colby.so/posts/user-notifications-with-rails-noticed-and-hotwire
 
@@ -239,3 +243,17 @@ https://guides.rubyonrails.org/security.html#content-security-policy-header
 ### Tutorials, Lessons, Courses
 
 https://courses.bigbinaryacademy.com/learn-rubyonrails/
+
+### CSRF 
+
+https://bloggie.io/@kinopyo/sending-non-get-requests-with-fetch-javascript-api-in-rails
+
+### SSL - self-signed certificates, more
+
+https://deanin.com/blog/https-certificates-for-localhost/#google_vignette
+https://getgrav.org/blog/macos-sequoia-apache-ssl
+
+### Spinners 
+
+* using spinners to make users aware that something is happening https://medium.com/unagi/hotwire-turbo-frames-add-seamless-loading-spinners-in-rails-7d4339792f91
+* 

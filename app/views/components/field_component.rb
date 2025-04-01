@@ -5,13 +5,14 @@ class FieldComponent < Phlex::HTML
 
   attr_accessor :model, :model_name, :field, :filter, :value, :selected, :selected_text, :editable
 
-  def initialize(model:, field:, filter: Filter.new, value: nil, selected: nil, editable: false, &block)
+  def initialize(model:, field:, filter: Filter.new, value: nil, selected: nil, selected_text: nil, editable: false, &block)
     @model = model
     @field = field
     @filter = filter
     @editable = editable
     @value = value
     @selected = selected
+    @selected_text = selected_text
     set_variables
   end
 
@@ -138,7 +139,7 @@ class FieldComponent < Phlex::HTML
           data_action: " click->boolean#toggle",
           data_boolean_target: "button",
           class:
-            "group relative inline-flex h-6 w-10 flex-shrink-0 cursor-pointer items-center justify-center rounded-full focus:outline-none focus:ring-1 focus:ring-sky-200 focus:ring-offset-1",
+            "group relative inline-flex h-6 w-10 flex-shrink-0 cursor-pointer items-center justify-center rounded-full focus:outline-hidden focus:ring-1 focus:ring-sky-200 focus:ring-offset-1",
           role: "switch",
           aria_checked: "false"
         ) do
@@ -164,7 +165,7 @@ class FieldComponent < Phlex::HTML
             aria_hidden: "true",
             data_boolean_target: "handle",
             class:
-              "translate-x-0 pointer-events-none absolute left-0 inline-block h-5 w-5 transform rounded-full border border-gray-200 bg-white shadow ring-0 transition-transform duration-200 ease-in-out"
+              "translate-x-0 pointer-events-none absolute left-0 inline-block h-5 w-5 transform rounded-full border border-gray-200 bg-white shadow-sm ring-0 transition-transform duration-200 ease-in-out"
           )
         end
       end

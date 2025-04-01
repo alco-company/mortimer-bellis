@@ -21,6 +21,7 @@ class Filter < ApplicationRecord
   belongs_to :user, optional: true
   scope :by_user, ->(user = Current.user) { where(user: user) if user.present? }
   scope :by_view, ->(view) { where(view: view) if view.present? }
+  scope :by_fulltext, ->(query) { where("view LIKE :query OR name LIKE :query", query: "%#{query}%") if query.present? }
 
   def self.filterable_fields(model = self)
     f = column_names - [
@@ -52,8 +53,8 @@ class Filter < ApplicationRecord
     filter_for_associations model
     relation.where(conditions.reduce(:and))
   rescue => e
-    debugger
-    # UserMailer.error_report(e.message, "Filter#do_filter failed ").deliver_later
+    # debug-ger
+    UserMailer.error_report(e.message, "Filter#do_filter failed ").deliver_later
     relation
   end
 
@@ -148,8 +149,13 @@ class Filter < ApplicationRecord
   end
 
   def self.named_scope(scope)
-    (User[:name].matches("%#{scope}%")).
-    or(User[:team_id].in(Team.arel_table.project(:id).where(Team[:name].matches("%#{scope}%"))))
+    TimeMaterial.arel_table[:user_id].
+    in(
+      User.arel_table.project(:id).where(
+        User[:name].matches("%#{scope}%").
+        or(User[:team_id].in(Team.arel_table.project(:id).where(Team[:name].matches("%#{scope}%"))))
+      )
+    )
   end
 
   # def self.user_scope(scope)

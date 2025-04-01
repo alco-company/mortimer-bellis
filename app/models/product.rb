@@ -1,5 +1,6 @@
 class Product < ApplicationRecord
   include Tenantable
+  include Unitable
 
   scope :by_fulltext, ->(query) { where("name LIKE :query OR product_number LIKE :query OR quantity LIKE :query OR unit LIKE :query OR base_amount_value LIKE :query OR account_number LIKE :query OR external_reference LIKE :query", query: "%#{query}%") if query.present? }
   scope :by_name, ->(name) { where("name LIKE ?", "%#{name}%") if name.present? }
@@ -14,7 +15,7 @@ class Product < ApplicationRecord
   validates :base_amount_value, presence: true
   validates :quantity, presence: true
   validates :unit, presence: true # hours, parts, km, day, week, month, kilogram, cubicMetre, set, litre, box, case, carton, metre, package, shipment, squareMetre, session, tonne, unit, other
-  validates :account_number, presence: true
+  # validates :account_number, presence: true
 
   def self.filtered(filter)
     flt = filter.filter
@@ -74,7 +75,7 @@ class Product < ApplicationRecord
 
   def self.add_from_erp(item)
     return false unless item["Name"].present?
-    product = Product.find_or_create_by(tenant: Current.tenant, erp_guid: item["ProductGuid"])
+    product = Product.find_or_create_by(tenant: Current.get_tenant, erp_guid: item["ProductGuid"])
     product.name = item["Name"]
     product.product_number = item["ProductNumber"]
     product.quantity = item["Quantity"]

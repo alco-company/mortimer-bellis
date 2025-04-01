@@ -1,4 +1,14 @@
 da:
+  product:
+    modal:
+      delete_all: 
+        title: Slet alle produkter
+        instruction: Er du sikker på, at du vil slette alle produkter?
+        instruction_selected: Er du sikker på, at du vil slette alle %{count} udvalgte produkter?
+      delete:
+        title: Slet dette produkt
+        instruction: Er du sikker på, at du vil slette produktet %{name}?
+        button: Slet
 
   products:
     validation_errors: Der er fejl i det indtastede

@@ -1,98 +1,181 @@
 # WORKLOG
 
-# fonts to use: Inter, Helvetica, Futura, Garamond, Times New Roman, Bodoni, Baskerville, Century Expanded
-# <https://www.somanycode.com/awesome/awesome-ruby/> listing for many projects and gems
-
-# all the samples for client features - https://github.com/GoogleChrome/samples/tree/gh-pages
-
-## tools
-
-- setup monitoring with https://levelup.gitconnected.com/ruby-on-rails-monitor-you-app-logs-with-grafana-loki-fb33dc79dab7
-- if you need to add components before/after a Phlex component view_template - look at https://github.com/mbajur/phlex-hookable
-- missing a tools - look at https://notchtools.com/
-- if VUE components are required - look at inertiajs.com
-- look at modularization using ideas / patterns from https://diversepixel.medium.com/rails-architecture-best-practices-and-building-scalable-applications-ruby-deep-dive-11-7cc514766728
-- use Bullet to erradicate N+1 queries - IMPORTANT
-
-## Rescue tools
-
-## Ideas
-
-https://anemone.mortimer.pro/oauth2/authorize?client_id=1&redirect_uri=https://anemone.mortimer.pro/oauth2/callback&response_type=code&scope=openid+profile+email+phone+address+roles+offline_access
-
-https://anemone.mortimer.pro/oauth2/token
-https://anemone.mortimer.pro/api/v1/contacts
-
-https://nordhealth.design/templates/application/#
-
-setup CI deployment with Kamal - https://www.rickpeyton.com/posts/step-by-step-guide-to-deploying-rails-8-with-kamal-and-github-actions-2
-PWA: https://onrails.blog/2021/03/02/rails-pwas-using-turbo-hhnpwa-7/
-NATIVE: https://blog.corsego.com/navigating-turbo-native, https://www.youtube.com/watch?v=TDQ2wtmgeKw
-3CX: https://www.3cx.com/docs/crm-integration/
-
-osascript = <<END
-tell application "Messages"
-  set targetBuddy to "#{phone_number}"
-  set targetService to id of 1st account whose service whose service type = iMessage
-  set theBuddy to participant targetBuddy of account id targetService
-  set message to "#{message}"
-  send message to theBuddy
-end tell
-END
-`osascript -e '#{osascript}'`
-
-## BUGS
-
-- [ ] add breaks and included_in_duration to payroll_period#manual_punch
-- [ ] redesign punch and add work_schedule to payroll_period#manual_punch
-- fix error on employee_invitation#create -> returns turbo_frame in clear text - not HTML - at least on iPad
-- <https://railsdesigner.com/preview-images-with-hotwire>
-
 ## CHANGELOG
 
-- add customer has balance marker
-{
-  "Collection"=> [
-   {"Number"=>22099, "ContactName"=>"SOPHUS FUGLSANG. EXPORT-MALTFABRIK A/S", "ContactGuid"=>"2e7bd2c1-761b-44e2-94be-d93151a45e13", "Date"=>"2024-11-01", "TotalExclVatInDkk"=>9494.4},
-   {"Number"=>22098, "ContactName"=>"SILKEBORG SOGN MENIGHEDSRÅD", "ContactGuid"=>"f2f84fd5-853d-4420-9a8a-1531795a4adf", "Date"=>"2024-11-01", "TotalExclVatInDkk"=>450.0},
-   {"Number"=>22097, "ContactName"=>"Nordthy A/S", "ContactGuid"=>"228f7848-1201-4034-aba9-ed18e3393542", "Date"=>"2024-11-01", "TotalExclVatInDkk"=>78075.0},
-   {"Number"=>22096, "ContactName"=>"Nordthy A/S", "ContactGuid"=>"228f7848-1201-4034-aba9-ed18e3393542", "Date"=>"2024-11-01", "TotalExclVatInDkk"=>5400.0},
-   ...
-   {"Number"=>21936, "ContactName"=>"JON KATBORG ApS", "ContactGuid"=>"d7bc214e-719b-42ba-9125-664a6e2aff20", "Date"=>"2024-08-29", "TotalExclVatInDkk"=>225.0}
-  ],
-  "Pagination"=>{
-    "MaxPageSizeAllowed"=>1000,
-    "PageSize"=>500,
-    "Result"=>26,
-    "ResultWithoutFilter"=>26,
-    "Page"=>0
-  }
-}
+- toggle switch on products and customers for (auto) sync with invoicing service
 
-- use passwordless authentication - https://blog.saeloun.com/2024/11/26/passwordless-authentication-using-webauth/
-- adding cache strategy (using fastest cache technology ATM) -- se https://blog.appsignal.com/2024/01/17/speed-up-your-ruby-on-rails-application-with-litecache.html
-- loading skeleton frames on all lists - using https://www.driftingruby.com/episodes/skeleton-frames
-- add editor to content - https://github.com/avo-hq/marksmith
-- run spinner on submitting forms - https://github.com/edudepetris/rails-8-turbo-morph-and-stream/commit/ff69db6050f8ace429fb05ac926a01031bcb67c3
-- TODO - fit mugshot (see users/registrations_controller)
-- tasks in tree structure - https://www.codemancers.com/blog/maintaining-a-tree-structure-in-rails-with-the-ancestry-gem/
-- make sidebar present like https://nordhealth.design/templates/application/#
-- this is probably not necessary: format.turbo_stream { render turbo_stream: turbo_stream.remove(dom_id(@resource)) }
-- pwa-installation.js + joy of rails
-- consider https://bunny.net/ for image optimization and CDN as CloudFlare substitute
-- pickup the mobile moving - ask if driving - enter odometer
-- consider https://terminalwire.com/articles/superview
-- fix bug on sending email invitation to new user
-- validate punches before deleting punch_clocks !!
-- invoices
-- team status https://localhost:3000/pos/punch_clock.20?api_key=arbjQmRVrVpLU4fzYSSSQc31
-- location status (like user, team) - missing
-- user status - https://localhost:3000/pos/users?api_key=mVunTFDgFVud5qJAHgrHbp4P
-- fix bug in deleting invoices
+### 1/4/2025
+
+- set verify=none to battle SSL error on localhost
+- report on Dinero Service errors
+
+### 31/3/2025
+
+- add Inter font back in with Tailwind 4
+- align list_item
+- hunting down Dinero Service issue
+- hunting down Dinero Service issue II
+- hunting down Dinero Service issue III
+- hunting down Dinero Service issue - "200" is now 200
+- hunting down Dinero Service issue IV
+- hunting down Dinero Service issue V
+
+### 28/3/2025
+
+- 'Vælg' button visible even when no items selected and function not selected
+- provided_services list not updated on create service
+- fix ring-black
+- filter does not post on tapping 'check'
+- position search better and prepare for 'AI' button
+
+### 27/3/2025
+
+- upgrading Tailwind to v4
+
+### 25/3/2025
+
+- update Pagy to allow faster infinite scroll with pagy_keyset
+- fix collateral bug - keyset pagination returns array, not AR set
+- show dropdown for unit and format currency on product form and list
+- translate new project name validation - error is wrong if double projects same name
+- add checkbox when loading more items on a list - if @batch exists
+- check that import users still works - they don't - hide function
+- show Tenant name unless superadmin
+- Orb/Docker issues - use port 8080 + Docker in development too
+
+### 24/3/2025
+
 - handle Dinero::Service.refresh_token error better - inform user to re-authenticate service
+- stop/start background_jobs
+- only read .env.development when Rails.env.development?
+- make jobs always run _later
+
+### 21/3/2025
+
+- add new SSL self-signed certificate using mkcert
+- remove .DS_Store files from repo
+- redraw provided_services (after new provided_service does not list provided_services)
+
+### 20/3/2025
+
+- upgraded workbench to Apple Macbook Air M4
+
+### 19/3/2025
+
+- make Dinero authorization work with new Current.user model
+- make Dinero SyncERP work with new Current.user model
+- set flash for FlashComponent
+- set :passive on touchstart addEventListeners
+- Missing target element "backdrop" for "notificationcenter" controller
+- missing da.time_material.default_assigned_about
+- handle errors on mailers
+
+### 18/3/2025
+
+- use email address on new users on list
+- translation missing on invitation email - new user
+- do not show error on /users/session/new
+- send invitation - describe how to separate more new users
+- hide user secondline on list users - or show name
+- set production API key for Dinero
+- add defaults for hour/minute/price/more
+- error 'end_date' on SyncERP
+- find_user dinero_controller
+
+### 17/3/2025
+
+- add translation for button on upload to Dinero
+- use filter and batch and search on upload
+- totp missing
+
+### 7/3/2025
+
+- stop registrations/new with missing pw
+- clear flash messages after streaming
+- fix bug on web_push_notifications
+
+### 6/3/2025
+
+- remove odometer validations (comment for now)
+- settings update wrong list_item (user?)
+- show current search in topbar
+- by_tenant or by_user on time_materials depending on :show_all_time_material_posts setting
+- :allow_create_time_material
+- show warning icon on insufficient_data on time_material
+- fix bug on delete_all
+- fix tenant and user (Current.)
+
+### 5/3/2025
+
+- add default settings for time_material
+- handle playing time_materials better
+
+### 4/3/2025
+
+- fix profile update not working
+- fix profile update not working II
+- fix profile update not working III
+- upon confirmation set user state
+
+### 3/3/2025
+
+- foreign key constraint on tenant delete
+- cannot delete own account/tenant
+- fix bug on user invitation
+- kill tenant later
+- revert favicon to previous
+- fjern password på tenant registration email confirmation
+- do not validate account_number on products
+- mark rescues on time_material view
+- if email exist - tell user on sign_up
+- show user status on list
+
+### 1/3/2025
+
+- add new splash screens
+- add missing artwork
+- add manifest and header
+- slet konti og brugere
+
+### 27/2/2025
+
+- move from Devise to Rails 8.0.0 authentication - day 3 - comment entire API
+- drop change field names 20250225170102_change_fields
+- fix error on login - bad migrations
+- fix bug set_resource
+- remove icons - start all over
+
+### 26/2/2025
+
+- move from Devise to Rails 8.0.0 authentication - day 2 - minus 2FA
+
+### 25/2/2025
+
+- icon files remove third shot
+- move from Devise to Rails 8.0.0 authentication - day 1
+
+### 21/2/2025
+
 - check all icon files - for PWA and all
-- timer på desktop
-- check that import users still works
+- check all icon files - for PWA and all - second shot
+- check all icon files - for PWA and all - third shot
+
+### 20/2/2025
+
+- fix _pdf partials for all models
+- fix deleting selected items on all models
+- fix other batch actions on all models
+- truncate on time_materials header
+
+### 18/2/2024
+
+- drop date filtering
+- allow 2. open on fields on filtering
+
+### 17/2/2025
+
+- fix bug on selecting time_materials on users.name, more
+- fix bug "expected :page in 1..1; got 2"
 
 ### 14/2/2025 (12-14/2/2025)
 

@@ -11,10 +11,21 @@ export default class extends Controller {
   ]
 
   registration = null
+  observer = null
+
+  disconnect() {
+    if (this.observer)
+      this.observer.disconnect();
+  }
 
   connect() {
     navigator.serviceWorker.register("/service-worker.js").then(
       (reg) => {
+        this.observer = new MutationObserver((mutationRecords) => {
+          console.log(mutationRecords); // console.log(the changes)
+          // execute your code here.
+          console.log('BØH')
+        });
         this.registration = reg;
         if (!this.registration) return;
         this.showPromptForNotifications();
@@ -24,6 +35,12 @@ export default class extends Controller {
       }
     );
   }
+
+  enableNotificationsTargetConnected(element) {
+    // console.log('fisk 2')
+    this.buttonFormTarget.ariaBusy = false;
+  }
+
 
   enable(event) {
     event.preventDefault()
@@ -42,34 +59,52 @@ export default class extends Controller {
 
   disable(event) {
     event.preventDefault()
-    console.log("Disable notifications")
     if (!this.registration) return;
 
+    const csrfToken = document.querySelector("[name='csrf-token']").content;
     let r = this.registration
     let en = this.enableNotificationsTarget
     let dn = this.disableNotificationsTarget
+    let elem = document.getElementById("enable_notifications");
 
-    this.registration.pushManager.getSubscription().then(
+    // observe everything except attributes
+    this.observer.observe(elem, {
+      childList: true, // observe direct children
+      subtree: true, // and lower descendants too
+      characterDataOldValue: true, // pass old data to callback
+    });
+
+    this.registration.pushManager.getSubscription()
+    .then(
       async function (subscription) {
         if (!subscription) return;
 
         await fetch("/web_push_subscriptions?unsubscribe=true", {
           method: "POST",
           headers: {
+            "X-CSRF-Token": csrfToken,
+            "Accept": "text/vnd.turbo-stream.html",
             "Content-Type": "application/json",
           },
           body: JSON.stringify(subscription),
-        }).then((response) => {
-          if (response.ok) {
-            subscription.unsubscribe()
-            r = null
-            leave(dn).then(() => {
-              enter(en)
-            })
-          }
-        }).catch(function (e) {
-          console.log("Server unsubscription setup failed", e);
         })
+        .then((r) => r.text())
+        .then((html) => {
+          Turbo.renderStreamMessage(html);
+        })
+          
+        // .then((response) => {
+        //   if (response.ok) {
+        //     subscription.unsubscribe();
+        //     r = null;
+        //     leave(dn).then(() => {
+        //       enter(en);
+        //     });
+        //   }
+        // })
+        // .catch(function (e) {
+        //   console.log("Server unsubscription setup failed", e);
+        // });
       })
   }
 
@@ -93,6 +128,7 @@ export default class extends Controller {
   // Setup the subscription with the push server - provided the user has granted permission
   async setupSubscription(subscription = null) {
     if (Notification.permission !== "granted" && !subscription) return;
+    const csrfToken = document.querySelector("[name='csrf-token']").content;
 
     if (!subscription) {
       let vapid = new Uint8Array(
@@ -108,18 +144,23 @@ export default class extends Controller {
     await fetch("/web_push_subscriptions", {
       method: "POST",
       headers: {
+        "X-CSRF-Token": csrfToken,
+        "Accept": "text/vnd.turbo-stream.html",
         "Content-Type": "application/json",
       },
       body: JSON.stringify(subscription),
-    }).then((response) => {
-      if (response.ok) {
-        leave(this.enableNotificationsTarget).then(() => {
-          enter(this.disableNotificationsTarget);
-          this.buttonFormTarget.ariaBusy = false;
-        });
-      } else {
-        console.log("Subscription setup failed");
-      }
+    })
+    .then(r => r.text())
+    .then((html) => {
+      Turbo.renderStreamMessage(html);
+      // if (response.ok) {
+      //   leave(this.enableNotificationsTarget).then(() => {
+      //     enter(this.disableNotificationsTarget);
+      //     this.buttonFormTarget.ariaBusy = false;
+      //   });
+      // } else {
+      //   console.log("Subscription setup failed");
+      // }
     });
   }
 }

@@ -50,8 +50,26 @@ class ListItems::User < ListItems::ListItem
   # otp_required_for_login
 
   def show_recipient_link
+    lbl = resource.name.blank? ? resource.email : resource.name
     link_to user_url(resource), data: { turbo_action: "advance", turbo_frame: "form", tabindex: "-1" }, class: "hover:underline" do
-      plain resource.name
+      plain lbl
+    end
+  end
+
+  def show_matter_link
+    show_matter_mugshot
+    if user&.global_queries? && resource.respond_to?(:tenant)
+      span(class: "hidden md:inline text-xs mr-2") { show_resource_link(resource.tenant) }
+    end unless resource_class == Tenant
+    lbl = resource.name.blank? ? "" : resource.email
+    span(class: "md:inline text-xs truncate") do
+      link_to(resource_url,
+        class: "truncate hover:underline inline grow flex-nowrap",
+        data: { turbo_action: "advance", turbo_frame: "form" },
+        tabindex: -1) do
+        span(class: "2xs:hidden") { show_secondary_info }
+        plain lbl
+      end
     end
   end
 
@@ -68,5 +86,12 @@ class ListItems::User < ListItems::ListItem
 
   def show_secondary_info
     plain "%s %s " % [ resource.sign_in_count, resource.last_sign_in_at ]
+  end
+
+  def show_time_info
+    span(class: "text-xs text-sky-300 mr-2") { WORK_STATE_H[resource.state] }
+    span(class: "truncate") do
+      plain I18n.l resource.created_at, format: :date
+    end
   end
 end

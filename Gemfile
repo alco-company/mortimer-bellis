@@ -19,6 +19,7 @@ gem "turbo-rails"
 gem "stimulus-rails"
 # Use Tailwind CSS [https://github.com/rails/tailwindcss-rails]
 gem "tailwindcss-rails"
+gem "tailwindcss-ruby", "4.0.17"
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem "jbuilder"
 # Use Redis adapter to run Action Cable in production
@@ -28,7 +29,7 @@ gem "jbuilder"
 # gem "kredis"
 
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
-# gem "bcrypt", "~> 3.1.7"
+gem "bcrypt", "~> 3.1.7"
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "tzinfo-data", platforms: %i[ windows jruby ]
@@ -97,10 +98,6 @@ gem "activerecord-enhancedsqlite3-adapter", "~> 0.8.0"
 
 gem "get_process_mem", "~> 1.0.0"
 
-gem "devise", "~> 4.9"
-
-gem "devise_invitable", "~> 2.0"
-
 gem "redcarpet", "~> 3.6"
 
 gem "httparty", "~> 0.22.0"
@@ -118,14 +115,13 @@ gem "noticed", "~> 2.4"
 gem "x", "~> 0.14.1"
 
 gem "omniauth", "~> 2.1"
-
 gem "omniauth-entra-id", "~> 3.0"
 gem "omniauth-rails_csrf_protection", "~> 1.0"
 
 gem "web-push", "~> 3.0"
 
-gem "devise-two-factor", "~> 6.1"
-
 gem "doorkeeper", "~> 5.8"
 
 gem "posthog-ruby", "~> 2.5"
+
+gem "active_model_otp"

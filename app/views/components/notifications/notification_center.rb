@@ -65,7 +65,7 @@ class Notifications::NotificationCenter < ApplicationComponent
                     end
                   end
                 end
-                div(class: "border-b border-gray-200") do
+                div(class: "border-b border-slate-100") do
                   div(class: "px-6") do
                     comment { "Tab component" }
                     nav(class: "-mb-px flex space-x-6") do
@@ -97,7 +97,7 @@ class Notifications::NotificationCenter < ApplicationComponent
     def tab_link(text, href, css)
       a(
         href: href,
-        class: "whitespace-nowrap border-b-2  px-1 pb-4 text-sm font-medium #{css}"
+        class: "whitespace-nowrap border-b-2  border-slate-100 px-1 pb-4 text-sm font-medium #{css}"
       ) { text }
     end
 end

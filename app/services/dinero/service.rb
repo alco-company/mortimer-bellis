@@ -1,8 +1,9 @@
 class Dinero::Service < SaasService
   attr_accessor :settings, :provided_service
 
-  def initialize(provided_service: nil, settings: nil)
-    @provided_service = provided_service || Current.tenant.provided_services.by_name("Dinero").first || ProvidedService.new
+  def initialize(provided_service: nil, settings: nil, user: Current.get_user)
+    Current.system_user = user
+    @provided_service = provided_service || Current.get_tenant.provided_services.by_name("Dinero").first || ProvidedService.new
     @settings = settings || @provided_service&.service_params_hash || empty_params
     @settings["organizationId"] = @provided_service.organizationID || 0
   end
@@ -26,13 +27,13 @@ class Dinero::Service < SaasService
   end
 
   def auth_url(path)
-    return unless Current.tenant
+    return unless Current.get_tenant
     host = "https://connect.visma.com/connect/authorize"
     params = {
       client_id: ENV["DINERO_APP_ID"],
       response_type: "code",
       response_mode: "form_post",
-      state: Base64.encode64({ pos_token: Current.user.pos_token, path: path }.to_json),
+      state: Base64.encode64({ pos_token: Current.get_user.pos_token, path: path }.to_json),
       scope: "dineropublicapi:read dineropublicapi:write offline_access",
       redirect_uri: ENV["DINERO_APP_CALLBACK"]
     }
@@ -91,7 +92,7 @@ class Dinero::Service < SaasService
     else
       return false
     end
-    query = build_query(start_date: start_date, all: all, page: page, pageSize: pageSize, fields: fields, status_filter: status_filter)
+    query = build_query(start_date: start_date, end_date: end_date, all: all, page: page, pageSize: pageSize, fields: fields, status_filter: status_filter)
     list = get "/#{api_version}/#{settings["organizationId"]}/#{tbl}?#{query.to_query}"
     if list[:error].present?
       return false
@@ -158,14 +159,10 @@ class Dinero::Service < SaasService
         client_secret: ENV["DINERO_APP_SECRET"]
       }
 
-      safe_response "code_to_token", url, headers, "post", params
-      # if res["error"].present?
-      #   raise "Dinero::Service.code_to_token: %s" % res["error"].to_s
-      # end
-      # res
+      safe_response("code_to_token", url, headers, "post", params)
     end
 
-    def build_query(start_date:, all:, page:, pageSize:, fields:, status_filter:)
+    def build_query(start_date: nil, end_date: nil, all:, page:, pageSize:, fields:, status_filter:)
       query = {}
       unless start_date.nil?
         query[:startDate] = start_date
@@ -187,6 +184,7 @@ class Dinero::Service < SaasService
     def get(path, headers = {})
       refresh_token if token_expired? || settings["access_token"].nil?
       headers["Authorization"] = "Bearer %s" % settings["access_token"]
+
       safe_response "get", "https://api.dinero.dk#{path}", headers
     end
 
@@ -202,6 +200,7 @@ class Dinero::Service < SaasService
       refresh_token if token_expired? || settings["access_token"].nil?
       headers["Authorization"] = "Bearer %s" % settings["access_token"]
       headers["Content-Type"] = "application/json"
+
       safe_response "put", "https://api.dinero.dk#{path}", headers, "put", params
     end
 
@@ -253,21 +252,30 @@ class Dinero::Service < SaasService
       when "post"; HTTParty.post(url, body: params, headers: headers)
       when "put"; HTTParty.put(url, body: params, headers: headers)
       end
+      return { ok: res } if res.response.code.to_i == 200
+      return { ok: res } if res.response.code.to_i == 201
+      report_error(work, res.response.code, res, url, headers, params, method, "response not ok (200/201)")
 
-      case true
-      when res.response.code == "200"; { ok: res }
-      when res.response.code == "201"; { ok: res }
-      when res["code"].to_i < 200; report_error(work, res.response.code, res); { error: res }
-      else
-        report_error(work, res.response.code, res.response)
-        { error: res.response.code }
-      end
+      return { error: res } if res["code"].present? and res["code"].to_i > 0
+      { error: res.response.code }
     rescue => err
       UserMailer.error_report(err.to_s, "Dinero::Service.#{work} failed on #{method} with params: #{params} and headers: #{headers}").deliver_later
       { error: err.to_s }
     end
 
-    def report_error(work, code, response = "")
+    def report_error(work, code, response = "", url = "", headers = "", params = "", method = "", msg = "failed with code:")
+      begin
+        Rails.logger.error "------------------------------------"
+        Rails.logger.error "Dinero::Service.#{work} - #{msg}"
+        Rails.logger.error "code: >#{code}<"
+        Rails.logger.error "response: #{response}"
+        Rails.logger.error "url: #{url}"
+        Rails.logger.error "headers: #{headers}"
+        Rails.logger.error "params: #{params}"
+        Rails.logger.error "method: #{method}"
+        Rails.logger.error "------------------------------------"
+      rescue
+      end
       UserMailer.error_report(code, "Dinero::Service.#{work} #{response}").deliver_later
     end
 

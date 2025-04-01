@@ -11,6 +11,7 @@ class Tenant < ApplicationRecord
   include Serviceable
 
   has_many :background_jobs, dependent: :destroy
+  has_many :batches, dependent: :destroy
   has_many :calls, dependent: :destroy
   has_many :customers, dependent: :destroy
   has_many :dashboards, dependent: :destroy
@@ -83,7 +84,7 @@ class Tenant < ApplicationRecord
   # make it possible to handle model deletion differently from model to model
   # eg TenantRegistrationService.call(tenant, destroy: true)
   def remove(step = nil)
-    TenantRegistrationService.call(self, destroy: true)
+    TenantRegistrationService.call(self, {}, destroy: true)
   end
 
   def has_this_access_token(token)
@@ -130,7 +131,7 @@ class Tenant < ApplicationRecord
     {
       colleagues: {
         title: I18n.t("tasks.first_tasks.colleagues.title"),
-        link: "/users/invitation/new",
+        link: "/users/invitations/new",
         priority: -1
       },
       dinero: {
@@ -145,12 +146,12 @@ class Tenant < ApplicationRecord
       },
       profile: {
         title: I18n.t("tasks.first_tasks.profile.title"),
-        link: "/users/edit",
+        link: "/users/registrations/edit",
         priority: -4
       },
       notifications: {
         title: I18n.t("tasks.first_tasks.notifications.title"),
-        link: "/users/edit",
+        link: "/users/registrations/edit",
         priority: -5
       }
     }

@@ -63,7 +63,7 @@ class Filters::Form < ApplicationForm
   attr_accessor :resource, :cancel_url, :title, :edit_url, :api_key, :model, :fields, :params, :url, :filter_form, :filtered_model
 
   def initialize(resource:, url:, filter_form:, params:, **options)
-    options[:data] = { controller: "filter" }
+    options[:data] ||= { form_target: "form", controller: "filter" }
     options[:class] = "mort-form"
     super(resource: resource, **options)
     @resource = @model = resource
@@ -95,7 +95,7 @@ class Filters::Form < ApplicationForm
         name: "tabs",
         data: { action: "filter#selectTab" },
         class:
-          "block mt-2 w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-sky-200 focus:outline-none focus:ring-sky-200 sm:text-sm"
+          "block mt-2 w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-sky-200 focus:outline-hidden focus:ring-sky-200 sm:text-sm"
       ) do
         option(data: { id: "dates" }, selected: "selected")  { I18n.t("filters.tabs.titles.date") }
         option(data: { id: "fields" }) { I18n.t("filters.tabs.titles.field") }
@@ -104,7 +104,7 @@ class Filters::Form < ApplicationForm
       end
     end
     div(class: "hidden sm:block") do
-      div(class: "border-b border-gray-200") do
+      div(class: "border-b border-slate-100") do
         nav(class: "-mb-px flex space-x-8", aria_label: "Tabs") do
           comment do
             %(Current: "border-sky-200 text-sky-200", Default: "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700")
@@ -179,6 +179,7 @@ class Filters::Form < ApplicationForm
     div(class: "", data_filter_target: "tabs", id: "dates") do
       div do
         date_attr = resource.filter["date"] ? resource.filter["date"]["attribute"] : ""
+        button(class: "mort-btn-primary mt-4", data: { action: "click->filter#clearDate" }) { I18n.t("filters.drop_date_filtering") }
         div(class: "mort-field") do
           label(class: "mr-2 text-nowrap text-gray-400", for: "") do
             I18n.t("filters.period.title")

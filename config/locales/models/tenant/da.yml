@@ -4,6 +4,7 @@ da:
       delete_all: 
         title: Slet alle konti
         instruction: Er du sikker på, at du vil slette alle konti?
+        instruction_selected: Er du sikker på, at du vil slette alle %{count} udvalgte konti?
       delete:
         title: Slet denne konto
         instruction: Er du sikker på, at du vil slette kontoen %{name}?
@@ -15,7 +16,7 @@ da:
         subject: Velkommen til M O R T I M E R
         hello: Velkommen %{name},
         we_created_an_tenant: "Vi har oprettet en konto til jer på  M O R T I M E R.<br>For at logge på, skal du <a href='%{url}'>klikke her</a> og bruge de nedenstående oplysninger.<p>Du kan rette adgangskoden (faktisk vil vi gerne hvis du gør det), når du er logget korrekt ind:"
-        confirmation_instruction: "Brugernavn: %{email}<br>Adgangskode: %{pw}"
+        confirmation_instruction: "Brugernavn: %{email}"
         ignore: "Hvis du ikke har bedt om en konto, kan du ignorere denne e-mail, og så beklager vi ulejligheden."
         regards: Med venlig hilsen,
 
@@ -60,6 +61,23 @@ da:
     errors:
       messages:
         name_exist: "Kontoen findes allerede"
+
+
+    registrations:
+      new:
+        create: Opret kontoen
+        sign_up:
+          title: Opret en ny konto
+          leave_empty: "Lad være tom, hvis du ikke vil ændre adgangskoden"
+          minimum: "(mindst %{count} tegn)"
+      edit:
+        sign_up:
+          current_password: Nuværende adgangskode
+          leave_empty: "Lad være tom, hvis du ikke vil ændre adgangskoden"
+          minimum: "(mindst %{count} tegn)"
+          need_current_password: "Du skal indtaste din nuværende adgangskode for at ændre den."
+        
+
         
     tenant_mailer:
       report_state:

@@ -14,7 +14,6 @@ export default class extends Controller {
   connect() {
     this.backdropTarget.classList.add("bg-black", "bg-opacity-50");
     this.backdropTarget.classList.remove("hidden");
-    console.log(this.backdropTarget);
   }
 
 

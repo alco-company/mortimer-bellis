@@ -9,18 +9,9 @@ class User < ApplicationRecord
 
   belongs_to :team
 
-  # Include default devise modules. Others available are:
-  # :database_authenticatable, :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
-  # :two_factor_authenticatable, :two_factor_backupable, otp_secret_encryption_key: ENV["OTP_KEY"]
-  devise :two_factor_authenticatable
-  devise :omniauthable, omniauth_providers: %i[ entra_id ]
-  devise :timeoutable, timeout_in: 7.days #  ((Time.now.end_of_week - 1.day) - Time.now).minutes
-  devise :invitable, :registerable,
-         :recoverable, :rememberable, :validatable,
-         :confirmable, :trackable, :lockable
-
   has_many :background_jobs
-  has_many :filters
+  has_many :batches, dependent: :destroy
+  has_many :filters, dependent: :destroy
   has_many :user_invitations, class_name: "User", as: :invited_by
 
   has_many :notifications, as: :recipient, dependent: :destroy, class_name: "Noticed::Notification"
@@ -42,6 +33,55 @@ class User < ApplicationRecord
   enum :role, { user: 0, admin: 1, superadmin: 2 }
   has_one_attached :mugshot
   has_secure_token :pos_token
+
+  has_secure_password
+
+  # OTP
+  has_one_time_password
+  attr_accessor :otp_code_token
+  #
+
+  has_secure_token :confirmation_token
+  has_secure_token :invitation_token
+  has_many :sessions, dependent: :destroy
+  belongs_to :invited_by, polymorphic: true, optional: true
+
+  validates :email, presence: true, uniqueness: true, format: { with: URI::MailTo::EMAIL_REGEXP }
+  # validates :password, presence: true
+  validates :pincode,
+    numericality: { only_integer: true, in: 1000..9999, unless: ->(u) { u.pincode.blank? } },
+    uniqueness: { scope: :tenant_id, message: I18n.t("users.errors.messages.pincode_exist_for_tenant"), unless: ->(u) { u.pincode.blank? } }
+
+  normalizes :email, with: ->(e) { e.strip.downcase }
+
+  def confirm!
+    update!(confirmed_at: Time.current, confirmation_token: nil)
+  end
+
+  def confirmed?
+    confirmed_at.present?
+  end
+
+  def send_confirmation_instructions
+    regenerate_confirmation_token
+    UserMailer.confirmation_instructions(self).deliver_later
+  end
+
+  def qr_code
+    require "rqrcode"
+    totp = ROTP::TOTP.new(otp_secret_key, issuer: "Mortimer")
+    qrcode = RQRCode::QRCode.new(totp.provisioning_uri(email))
+    qrcode.as_svg(
+      color: "000",
+      shape_rendering: "crispEdges",
+      module_size: 3,
+      standalone: true,
+      use_path: true
+    )
+  end
+
+  attr_accessor :invitees, :invitation_message
+
 
   scope :by_tenant, ->() {
     if Current.user.present?
@@ -65,15 +105,15 @@ class User < ApplicationRecord
   scope :by_time_zone, ->(time_zone) { where("time_zone LIKE ?", "%#{time_zone}%") if time_zone.present? }
   scope :by_team_users, ->(team) { where(id: team.users.pluck(:id)) if team.present? }
 
-  validates :pincode,
-    numericality: { only_integer: true, in: 1000..9999, unless: ->(u) { u.pincode.blank? } },
-    uniqueness: { scope: :tenant_id, message: I18n.t("users.errors.messages.pincode_exist_for_tenant"), unless: ->(u) { u.pincode.blank? } }
-
   def remove(step = nil)
     if tenant.users.count == 1 || step == "delete_account"
-      TenantRegistrationService.call(tenant, destroy: true)
+      TenantRegistrationService.call(tenant, {}, destroy: true)
     else
-      UserMailer.with(user: self).user_farewell.deliver
+      begin
+        UserMailer.with(user: self).user_farewell.deliver_later
+      rescue => e
+        UserMailer.error_report(e.to_s, "User#remove - failed for #{self&.email}").deliver_later
+      end
       destroy!
     end
   end
@@ -142,8 +182,8 @@ class User < ApplicationRecord
       # "consumed_timestep",
       # "otp_required_for_login",
       "otp_secret"
-      # "two_factor_app_enabled",
-      # "two_factor_app_enabled_at"
+      # "otp_enabled",
+      # "otp_enabled_at"
     ]
     f = f - [
       "reset_password_sent_at",
@@ -160,7 +200,7 @@ class User < ApplicationRecord
       "invitation_accepted_at",
       "hired_at",
       "last_punched_at",
-      "two_factor_app_enabled_at",
+      "otp_enabled_at",
       "created_at",
       "updated_at"
     ] if model == self
@@ -172,14 +212,16 @@ class User < ApplicationRecord
 
     case action
     when :punch_reminder
-      UserNotifier.with(record: self, current_user: Current.user, title: title, message: msg, delegator: self.name).deliver(recipient)
+      UserNotifier.with(record: self, current_user: Current.user, title: title, message: msg, delegator: self.name).deliver_later(recipient)
     when :destroy_all
       title ||= I18n.t("notifiers.no_title")
       msg ||=   I18n.t("notifiers.no_msg")
-      UserNotifier.with(record: self, current_user: Current.user, title: title, message: msg, delegator: self.name).deliver(recipient)
+      UserNotifier.with(record: self, current_user: Current.user, title: title, message: msg, delegator: self.name).deliver_later(recipient)
     else
-      UserNotifier.with(record: self, current_user: Current.user, title: title, message: msg, delegator: self.name).deliver(recipient)
+      UserNotifier.with(record: self, current_user: Current.user, title: title, message: msg, delegator: self.name).deliver_later(recipient)
     end
+  rescue => e
+    UserMailer.error_report(e.to_s, "User#notify - failed for #{self&.id}").deliver_later
   end
 
   def notified?(action)
@@ -190,8 +232,15 @@ class User < ApplicationRecord
     name.split(" ").map { |n| n[0] }.join.upcase
   end
 
-  def self.form(resource:, editable: true)
-    Users::Form.new resource: resource, editable: editable, enctype: "multipart/form-data"
+  def self.form(resource:, editable: true, registration: false)
+    registration ?
+      Users::Registrations::Form.new(resource: resource,
+        editable: editable,
+        enctype: "multipart/form-data",
+        class: "group mort-form", method: :put,
+        data: { form_target: "form", profile_target: "buttonForm", controller: "profile password-strength" })
+      :
+      Users::Form.new(resource: resource, editable: editable, enctype: "multipart/form-data")
   end
 
   def add_role
@@ -212,6 +261,7 @@ class User < ApplicationRecord
   # called from ressourceable.rb
   #
   def allowed_to?(action, record)
+    return true unless record.persisted?
     case role
     when "superadmin"
       true

@@ -5,6 +5,7 @@ da:
       delete_all: 
         title: Slet alle udvidelser/integrationer
         instruction: Er du sikker på, at du vil slette alle udvidelser/integrationer?
+        instruction_selected: Er du sikker på, at du vil slette alle %{count} udvalgte udvidelser/integrationer?
       delete:
         title: Slet denne udvidelse/integration
         instruction: Er du sikker på, at du vil slette udvidelsen/integrationen %{name}?

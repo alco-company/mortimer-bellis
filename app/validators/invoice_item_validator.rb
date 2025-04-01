@@ -34,9 +34,9 @@ class InvoiceItemValidator
   validate :quantity_format
   validate :rate_format
   validate :time_format
-  validate :kilometers_format
+  # validate :kilometers_format
   validate :comment_required_if_no_fields
-  validate :mutual_exclusivity_of_time_quantity_and_kilometers
+  # validate :mutual_exclusivity_of_time_quantity_and_kilometers
   validate :product_must_exist
   validate :customer_must_exist
   validate :project_name_creates_project_if_not_found
@@ -117,27 +117,27 @@ class InvoiceItemValidator
     end
   end
 
-  def kilometers_format
-    if kilometers.present? && kilometers !~ /\A\d{1,8}\z/
-      errors.add(:kilometers, tr("format_wrong_number_digits")) # 0000..0
-    end
-  end
+  # def kilometers_format
+  #   if kilometers.present? && kilometers !~ /\A\d{1,8}\z/
+  #     errors.add(:kilometers, tr("format_wrong_number_digits")) # 0000..0
+  #   end
+  # end
 
   def comment_required_if_no_fields
-    if time_blank? && quantity.blank? && kilometers.blank? && comment.blank?
+    if time_blank? && quantity.blank? && comment.blank? # && kilometers.blank?
       errors.add(:comment, tr("cannot_be_blank_when_time_quantity_km_blank"))
     end
   end
 
-  def mutual_exclusivity_of_time_quantity_and_kilometers
-    if time_present? && (kilometers.present? || quantity.present?)
-      errors.add(:time, tr("km_quantity_must_blank"))
-    elsif quantity.present? && (time_present? || kilometers.present?)
-      errors.add(:quantity, tr("time_km_must_blank"))
-    elsif kilometers.present? && (time_present? || quantity.present?)
-      errors.add(:kilometers, "time_quantity_must_blank")
-    end
-  end
+  # def mutual_exclusivity_of_time_quantity_and_kilometers
+  #   if time_present? && (kilometers.present? || quantity.present?)
+  #     errors.add(:time, tr("km_quantity_must_blank"))
+  #   elsif quantity.present? && (time_present? || kilometers.present?)
+  #     errors.add(:quantity, tr("time_km_must_blank"))
+  #   elsif kilometers.present? && (time_present? || quantity.present?)
+  #     errors.add(:kilometers, "time_quantity_must_blank")
+  #   end
+  # end
 
   def product_must_exist
     if product_id.present? && !Product.by_tenant.find(product_id)

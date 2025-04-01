@@ -6,7 +6,7 @@ module DefaultActions
     def index
       posthog_capture
       params.permit![:url] = resources_url
-      @pagy, @records = pagy(resources)
+      @pagy, @records = pagy_keyset(resources)
       r = @records.pluck(:id).sort
       @ids_range = "#{r.first}..#{r.last}"
       @replace = params.permit![:replace] || false
@@ -18,9 +18,19 @@ module DefaultActions
         format.csv { send_csv }
       end
 
-    rescue => e
-      UserMailer.error_report(e.to_s, "DefaultActions#index - failed with params: #{params}").deliver_later
-      redirect_to root_path, alert: I18n.t("errors.messages.something_went_wrong", error: e.message)
+    rescue Pagy::OverflowError => e
+      head :ok
+      # rescue => e
+      #   UserMailer.error_report(e.to_s, "DefaultActions#index - failed with params: #{params}").deliver_later
+      #   redirect_to root_path, alert: I18n.t("errors.messages.something_went_wrong", error: e.message)
+    end
+
+    # enable/disable some model feature
+    # like starting/stopping background_jobs
+    def toggle
+      posthog_capture
+      resource_class.toggle
+      render turbo_stream: turbo_stream.replace("#{Current.tenant.id}_list_header", partial: "application/header")
     end
 
     # GET /users/lookup
@@ -74,8 +84,8 @@ module DefaultActions
     #
     def new
       posthog_capture
-      @resource.tenant_id = Current.tenant.id if resource_class.has_attribute? :tenant_id
-      @resource.user_id = Current.user.id if resource_class.has_attribute? :user_id
+      resource.tenant_id = Current.tenant.id if resource_class.has_attribute? :tenant_id
+      resource.user_id = Current.user.id if resource_class.has_attribute? :user_id
 
     rescue => e
       UserMailer.error_report(e.to_s, "DefaultActions#new - failed with params: #{params}").deliver_later
@@ -102,30 +112,30 @@ module DefaultActions
     #
     def create
       posthog_capture
-      @resource = resource_class.new(resource_params)
-      @resource.tenant_id = Current.tenant.id if resource_class.has_attribute? :tenant_id
-      @resource.user_id = Current.user.id if resource_class.has_attribute?(:user_id) && !resource_params[:user_id].present?
+      new_resource(resource_params)
+      resource.tenant_id = Current.tenant.id if resource_class.has_attribute? :tenant_id
+      resource.user_id = Current.user.id if resource_class.has_attribute?(:user_id) && !resource_params[:user_id].present?
 
       respond_to do |format|
-        if before_create_callback && @resource.save && create_callback
-          Broadcasters::Resource.new(@resource, params.permit!).create
-          @resource.notify action: :create
+        if before_create_callback && resource.save && create_callback
+          Broadcasters::Resource.new(resource, params.permit!).create
+          resource.notify action: :create
           flash[:success] = t(".post")
           format.turbo_stream { render turbo_stream: [
             turbo_stream.update("form", ""),
-            turbo_stream.replace("flash_container", partial: "application/flash_message")
+            turbo_stream.replace("flash_container", partial: "application/flash_message", locals: { tenant: Current.get_tenant, messages: flash, user: Current.get_user })
             # special
-          ] }
+          ] ; flash.clear}
           format.html { redirect_to resources_url, success: t(".post") }
-          format.json { render :show, status: :created, location: @resource }
+          format.json { render :show, status: :created, location: resource }
         else
           flash.now[:warning] = t(".validation_errors")
           format.turbo_stream { render turbo_stream: [
             turbo_stream.update("form", partial: "new"),
-            turbo_stream.replace("flash_container", partial: "application/flash_message")
-          ] }
+            turbo_stream.replace("flash_container", partial: "application/flash_message", locals: { tenant: Current.get_tenant, messages: flash, user: Current.get_user })
+          ] ; flash.clear}
           format.html { render :new, status: :unprocessable_entity, warning: t(".warning") }
-          format.json { render json: @resource.errors, status: :unprocessable_entity }
+          format.json { render json: resource.errors, status: :unprocessable_entity }
         end
       end
 
@@ -143,24 +153,24 @@ module DefaultActions
     def update
       posthog_capture
       respond_to do |format|
-        if before_update_callback && @resource.update(resource_params) && update_callback
-          Broadcasters::Resource.new(@resource, params.permit!).replace
-          @resource.notify action: :update
+        if before_update_callback && resource.update(resource_params) && update_callback
+          Broadcasters::Resource.new(resource, params.permit!).replace
+          resource.notify action: :update
           flash[:success] = t(".post")
           format.turbo_stream { render turbo_stream: [
             turbo_stream.update("form", ""),
-            turbo_stream.replace("flash_container", partial: "application/flash_message")
-          ] }
+            turbo_stream.replace("flash_container", partial: "application/flash_message", locals: { tenant: Current.get_tenant, messages: flash, user: Current.get_user })
+          ] ; flash.clear}
           format.html { redirect_to resources_url, success: t(".post") }
-          format.json { render :show, status: :ok, location: @resource }
+          format.json { render :show, status: :ok, location: resource }
         else
           flash[:warning] = t(".validation_errors")
           format.turbo_stream { render turbo_stream: [
             turbo_stream.update("form", partial: "edit"),
-            turbo_stream.replace("flash_container", partial: "application/flash_message")
-          ] }
+            turbo_stream.replace("flash_container", partial: "application/flash_message", locals: { tenant: Current.get_tenant, messages: flash, user: Current.get_user })
+          ] ; flash.clear}
           format.html { render :edit, status: :unprocessable_entity, warning: t(".warning") }
-          format.json { render json: @resource.errors, status: :unprocessable_entity }
+          format.json { render json: resource.errors, status: :unprocessable_entity }
         end
       end
 
@@ -173,7 +183,7 @@ module DefaultActions
     def destroy
       posthog_capture
       if params[:all].present? && params[:all] == "true"
-        DeleteAllJob.perform_now tenant: Current.tenant, resource_class: resource_class.to_s, sql_resources: @resources.to_sql
+        DeleteAllJob.perform_later tenant: Current.tenant, resource_class: resource_class.to_s, sql_resources: @resources.to_sql
         Current.tenant.notify action: :destroy, msg: "All #{resource_class.name.underscore.pluralize} was deleted in the background"
         respond_to do |format|
           format.html { redirect_to resources_url, success: t("delete_all_later") }
@@ -182,8 +192,8 @@ module DefaultActions
       else
         if params[:attachment]
           case params[:attachment]
-          when "logo"; @resource.logo.purge
-          when "mugshot"; @resource.mugshot.purge
+          when "logo"; resource.logo.purge
+          when "mugshot"; resource.mugshot.purge
           end
           redirect_back fallback_location: root_path, success: t(".attachment_deleted")
         else
@@ -191,13 +201,13 @@ module DefaultActions
           begin
             ActiveRecord::Base.connected_to(role: :writing) do
               # All code in this block will be connected to the reading role.
-              eval(cb) && @resource.notify(action: :destroy) && Broadcasters::Resource.new(@resource).destroy if @resource.destroy!
+              eval(cb) && resource.notify(action: :destroy) && Broadcasters::Resource.new(resource).destroy if resource.destroy!
             end
           rescue => error
             say error
           end
           respond_to do |format|
-            format.turbo_stream { render turbo_stream: turbo_stream.remove(dom_id(@resource)) }
+            format.turbo_stream { render turbo_stream: turbo_stream.remove(dom_id(resource)); flash.clear }
             format.html { redirect_to resources_url, status: 303, success: t(".post") }
             format.json { head :no_content }
           end
@@ -276,7 +286,8 @@ module DefaultActions
       end
 
       def send_pdf
-        send_file resource_class.pdf_file(html_content), filename: "#{resource_class.name.pluralize.downcase}-#{Date.today}.pdf"
+        # send_file resource_class.pdf_file(html_content), filename: "#{resource_class.name.pluralize.downcase}-#{Date.today}.pdf"
+        resource_class.pdf_file(html_content, filename: "#{resource_class.name.pluralize.downcase}-#{Date.today}.pdf", context: self)
       end
 
       def send_csv

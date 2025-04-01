@@ -10,7 +10,7 @@ class Employees::Profile < ApplicationForm
       end
       div(
         class:
-          "mt-10 space-y-8 border-b border-gray-900/10 pb-12 sm:space-y-0 sm:divide-y sm:divide-gray-900/10 sm:border-t sm:pb-0"
+          "mt-10 space-y-8 border-b border-slate-100 pb-12 sm:space-y-0 sm:divide-y sm:divide-gray-900/10 sm:border-t sm:pb-0"
       ) do
         row field(:name).input()
         row field(:description).input()
@@ -24,13 +24,13 @@ class Employees::Profile < ApplicationForm
       end
       div(
         class:
-          "mt-10 space-y-8 border-b border-gray-900/10 pb-12 sm:space-y-0 sm:divide-y sm:divide-gray-900/10 sm:border-t sm:pb-0"
+          "mt-10 space-y-8 border-b border-slate-100 pb-12 sm:space-y-0 sm:divide-y sm:divide-gray-900/10 sm:border-t sm:pb-0"
       ) do
         row field(:email).input()
         row field(:cell_phone).input()
-        row field(:birthday).date(class: "mort-form-text")
-        row field(:locale).select(User.locales, prompt: I18n.t(".select_user_locale"), class: "mort-form-text")
-        row field(:time_zone).select(ActiveSupport::TimeZone.all.collect { |tz| [ "(GMT#{ActiveSupport::TimeZone.seconds_to_utc_offset(tz.utc_offset)}) #{tz.name}", tz.tzinfo.name ] }, class: "mort-form-text")
+        row field(:birthday).date(class: "mort-form-date")
+        row field(:locale).select(User.locales, prompt: I18n.t(".select_user_locale"), class: "mort-form-select")
+        row field(:time_zone).select(ActiveSupport::TimeZone.all.collect { |tz| [ "(GMT#{ActiveSupport::TimeZone.seconds_to_utc_offset(tz.utc_offset)}) #{tz.name}", tz.tzinfo.name ] }, class: "mort-form-select")
       end
     end
   end

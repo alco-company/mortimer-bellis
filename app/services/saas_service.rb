@@ -18,16 +18,16 @@ class SaasService
   # service_params - hash of params to be persisted in the database, eg { access_token: "", refresh_token: "", expires_in: 0 }
   #
   def add_service(name, service_params)
-    ps = ProvidedService.find_by(tenant: Current.tenant, service: self.class.to_s, name: name)
+    ps = ProvidedService.find_by(tenant: Current.get_tenant, service: self.class.to_s, name: name)
     ps.nil? ? create_service(name, service_params) : update_service(ps, service_params)
   end
 
   private
     def create_service(name, service_params)
-      ProvidedService.create(tenant: Current.tenant, authorized_by: Current.user, name: name, service: self.class.to_s, service_params: service_params)
+      ProvidedService.create(tenant: Current.get_tenant, authorized_by: Current.get_user, name: name, service: self.class.to_s, service_params: service_params)
     end
 
     def update_service(ps, service_params)
-      ps.update(service_params: service_params, authorized_by: Current.user)
+      ps.update(service_params: service_params, authorized_by: Current.get_user)
     end
 end

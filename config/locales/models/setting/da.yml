@@ -4,6 +4,7 @@ da:
       delete_all: 
         title: Slet alle Indstillinger
         instruction: Er du sikker på, at du vil slette alle indstillinger?
+        instruction_selected: Er du sikker på, at du vil slette alle %{count} udvalgte indstillinger?
       delete:
         title: Slet denne indstilling
         instruction: Er du sikker på, at du vil slette indstillingen %{name}?
@@ -44,8 +45,20 @@ da:
 
     keys:
       delegate_time_materials: Delegér tid og materialer
-      show_all_time_material_posts: Vis alle brugeres t/m poster
+      default_time_material_state: Standard status for ny tid og materialer post
+      default_time_material_about: Standard tekst for ny tid og materialer post
+      default_time_material_hour_time: Standard timer for ny tid og materialer post
+      default_time_material_minute_time: Standard minutter for ny tid og materialer post
+      default_time_material_rate: Standard pris for ny tid og materialer post
+      default_time_material_over_time: Standard overtid for ny tid og materialer post
+      allow_create_time_material: Tillad bruger at oprette tid og materialer
+      allow_create_product: Tillad bruger at oprette produkter på tid og materialer
+      allow_create_customer: Tillad bruger at oprette kunder på tid og materialer
+      allow_create_project: Tillad bruger at oprette projekter på tid og materialer
+      validate_time_material_done: Valider at alle felter er udfyldt før en t/m post kan markeres som 'færdig'
       limit_time_to_quarters: Begræns tidsforbrug til kvart timer
+      show_all_time_material_posts: Vis alle brugeres t/m poster
+      run_background_jobs: Kør baggrundsopgaver
 
     tables:
       background_jobs: Baggrundsopgaver

@@ -2,32 +2,37 @@
 
   <h1 class="text-xl"><%= t("pages.help.title") %></h1>
   <p class="mt-4"><%= t("pages.help.paragraph") %></p>
-  <p class="p-4 mt-4 rounded-md border">
+  <p class="p-4 mt-4 rounded-md border border-slate-100">
 
-    <%- if controller_name != 'sessions' %>
-      <%= link_to I18n.t("devise.login"), new_session_path("user", locale: I18n.locale), class: "mort-link-primary" %><br />
+    <% if controller_name != 'sessions' %>
+      <%= link_to I18n.t("devise.login"), new_users_session_url("user", locale: I18n.locale), class: "mort-link-primary" %>
+      <br />
     <% end %>
 
-    <%- if controller_name != 'registrations' %>
-      <%= link_to I18n.t("devise.sign_up"), new_registration_path("user", locale: I18n.locale), class: "mort-link-primary" %><br />
+    <% if controller_name != 'registrations' %>
+      <%= link_to I18n.t("devise.sign_up"), new_tenants_registrations_url(resource: "Tenant", locale: I18n.locale), class: "mort-link-primary" %>
+      <br />
     <% end %>
 
-    <%- if controller_name != 'passwords' && controller_name != 'registrations' %>
-      <%= link_to I18n.t("devise.forgot_password"), new_password_path("user", locale: I18n.locale), class: "mort-link-primary" %><br />
+    <% if controller_name != 'passwords' && controller_name != 'registrations' %>
+      <%= link_to I18n.t("devise.forgot_password"), new_users_password_url(resource: "User", locale: I18n.locale), class: "mort-link-primary" %>
+      <br />
     <% end %>
 
-    <%- if controller_name != 'confirmations' %>
-      <%= link_to I18n.t("devise.missing_confirmation_email"), new_confirmation_path("user", locale: I18n.locale), class: "mort-link-primary" %><br />
+    <% if controller_name != 'confirmations' %>
+      <%= link_to I18n.t("devise.missing_confirmation_email"), new_users_confirmation_url("user", locale: I18n.locale), class: "mort-link-primary" %>
+      <br />
     <% end %>
 
-    <%- if controller_name != 'unlocks' %>
-      <%= link_to I18n.t("devise.missing_unlock_email"), new_unlock_path("user", locale: I18n.locale), class: "mort-link-primary" %><br />
-    <% end %>
+    <%# if controller_name != 'unlocks' %>
+      <%#= link_to I18n.t("devise.missing_unlock_email"), new_users_unlock_url("user", locale: I18n.locale), class: "mort-link-primary" %>
+      <%#= br /> %>
+    <%# end %>
 
   </p>
   <h1 class="mt-4 mb-2 text-lg"><%= t("pages.help.answers") %></h1>
   <!-- Accordion Item 1 -->
-  <div class="border-b border-slate-200">
+  <div class="border-b border-slate-100">
     <button onclick="toggleAccordion(1)" class="w-full flex justify-between items-center py-5 text-slate-800">
       <span> <%= t("pages.help.what_is.question") %> </span>
       <span id="icon-1" class="text-slate-800 transition-transform duration-300">
@@ -44,7 +49,7 @@
   </div>
   
   <!-- Accordion Item 2 -->
-  <div class="border-b border-slate-200">
+  <div class="border-b border-slate-100">
     <button onclick="toggleAccordion(2)" class="w-full flex justify-between items-center py-5 text-slate-800">
       <span> <%= t("pages.help.how_to_use.question") %></span>
       <span id="icon-2" class="text-slate-800 transition-transform duration-300">
@@ -61,7 +66,7 @@
   </div>
   
   <!-- Accordion Item 3 -->
-  <div class="border-b border-slate-200">
+  <div class="border-b border-slate-100">
     <button onclick="toggleAccordion(3)" class="w-full flex justify-between items-center py-5 text-slate-800">
       <span> <%= t("pages.help.what_to_use_for.question") %></span>
       <span id="icon-3" class="text-slate-800 transition-transform duration-300">

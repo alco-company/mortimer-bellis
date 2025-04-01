@@ -3,7 +3,8 @@ da:
     modal:
       delete_all: 
         title: Slet alle hold
-        instruction: Er du sikker på, at du vil slette alle hold?
+        instruction: Er du sikker på, at du vil slette alle %{count} hold?
+        instruction_selected: Er du sikker på, at du vil slette alle %{count} udvalgte hold?
       delete:
         title: Slet dette hold
         instruction: Er du sikker på, at du vil slette holdet %{name}?

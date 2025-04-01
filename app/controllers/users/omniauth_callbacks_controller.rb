@@ -1,14 +1,7 @@
-# frozen_string_literal: true
-
-class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
-  include TimezoneLocale
-  # You should configure your model like this:
-  # devise :omniauthable, omniauth_providers: [:twitter]
-
-  # You should also create an action method in this controller like this:
-  # def twitter
-  # end
-
+class Users::OmniauthCallbacksController < ApplicationController
+  include Authentication
+  allow_unauthenticated_access
+  #
   # request.env["omniauth.auth"]["extra"]["raw_info"] =>
   # {"aud"=>"00000003-0000-0000-c000-000000000000",
   # "iss"=>"https://sts.windows.net/d4c705d3-d11d-4373-ad79-0e18a0fa8725/",
@@ -52,37 +45,16 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
     user = User.find_by(email: email)
     if user
       user.update(confirmed_at: Time.current) if user.confirmed_at.nil?
-      User.accept_invitation!(invitation_token: user.invitation_token) if user.invitation_accepted_at.nil?
+      # TODO make invitations
+      # User.accept_invitation!(invitation_token: user.invitation_token) if user.invitation_accepted_at.nil?
       flash[:notice] = t("devise.omniauth_callbacks.success", kind: "Microsoft Entra ID", email: email)
-      sign_in_and_redirect user, event: :authentication
+      start_new_session_for user
+      Current.session.entraID!
+      redirect_to after_authentication_url
     else
       reason = t("devise.omniauth_callbacks.user_not_found", email: email)
-      flash[:warning] = t("devise.omniauth_callbacks.failure", kind: "Microsoft Entra ID", reason: reason)
-      redirect_to new_user_session_url
+      flash[:alert] = t("devise.omniauth_callbacks.failure", kind: "Microsoft Entra ID", reason: reason)
+      redirect_to new_users_session_url
     end
-  end
-
-  # More info at:
-  # https://github.com/heartcombo/devise#omniauth
-
-  # GET|POST /resource/auth/twitter
-  # def passthru
-  #   super
-  # end
-
-  # GET|POST /users/auth/twitter/callback
-  # def failure
-  #   super
-  # end
-
-  # protected
-
-  # The path used when OmniAuth fails
-  def after_omniauth_failure_path_for(scope)
-    super(scope)
-  end
-
-  def after_sign_in_path_for(resource)
-    time_materials_url
   end
 end

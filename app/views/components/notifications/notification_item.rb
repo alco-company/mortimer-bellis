@@ -44,10 +44,10 @@ class Notifications::NotificationItem < Phlex::HTML
             type: "button",
             data_contextmenu_target: "button",
             data_action:
-              " touchstart->contextmenu#tap click->contextmenu#tap click@window->contextmenu#hide",
+              " touchstart->contextmenu#tap:passive click->contextmenu#tap click@window->contextmenu#hide",
             class:
               # "flex items-center p-1 text-gray-400 rounded-md hover:text-gray-900 border h-7 -mr-0.5 pl-3",
-              "flex items-center rounded-md ring-1 ring-gray-100 bg-white px-2 py-1 text-gray-400 hover:text-gray-600 focus:outline-none focus:ring-1 focus:ring-sky-500",
+              "flex items-center rounded-md ring-1 ring-gray-100 bg-white px-2 py-1 text-gray-400 hover:text-gray-600 focus:outline-hidden focus:ring-1 focus:ring-sky-500",
             id: "options-menu-0-button",
             aria_expanded: "false",
             aria_haspopup: "true"
@@ -76,7 +76,7 @@ class Notifications::NotificationItem < Phlex::HTML
         transition_leave_start: "transform opacity-100 scale-100",
         transition_leave_end: "transform opacity-0 scale-95"
       },
-      class: "hidden absolute right-9 top-0 z-10 w-48 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none",
+      class: "hidden absolute right-9 top-0 z-10 w-48 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-slate-100 focus:outline-hidden",
       role: "menu",
       aria_orientation: "vertical",
       aria_labelledby: "options-menu-0-button",
@@ -84,7 +84,7 @@ class Notifications::NotificationItem < Phlex::HTML
     ) do
       div(class: "py-1", role: "none") do
         comment do
-          %(Active: "bg-gray-100 text-gray-900 outline-none", Not Active: "text-gray-700")
+          %(Active: "bg-gray-100 text-gray-900 outline-hidden", Not Active: "text-gray-700")
         end
         a(
           href: "#",
@@ -138,7 +138,7 @@ class Notifications::NotificationItem < Phlex::HTML
           href: helpers.notification_url(notification),
           data: { turbo_stream: true },
           class:
-            "hidden rounded-md bg-white px-2.5 py-1.5 text-xs font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:block"
+            "hidden rounded-md bg-white px-2.5 py-1.5 text-xs font-semibold text-gray-900 shadow-xs ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:block"
         ) do
           plain I18n.t("mark_as_read")
           span(class: "sr-only") {  }
@@ -174,7 +174,7 @@ class Notifications::NotificationItem < Phlex::HTML
           end
           div(
             class:
-              "hidden absolute right-0 z-10 mt-2 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none",
+              "hidden absolute right-0 z-10 mt-2 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-hidden",
             role: "menu",
             aria_orientation: "vertical",
             aria_labelledby: "options-menu-0-button",

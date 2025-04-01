@@ -4,15 +4,27 @@ class Broadcasters::Resource
 
   attr_reader :tenant, :resource, :resource_class, :resources_stream, :params, :target, :user, :partial
 
-  def initialize(resource, params = {}, target = "record_list", user = Current.user, stream = nil, partial = nil)
+  def initialize(resource, params = {}, target = "record_list", user = Current.get_user, stream = nil, partial = nil)
     @resource = resource
     @params = params
     @target = target
     @resource_class = resource.class rescue nil
-    @tenant = resource.respond_to?(:tenant) ? resource.tenant : Current.tenant rescue nil
     @user = user
-    @resources_stream = stream || "%s_%s" % [ tenant&.id, @resource_class.to_s.underscore.pluralize ] rescue nil
+    @tenant = resource.respond_to?(:tenant) ? resource.tenant : user.tenant rescue nil
+    @resources_stream = stream || "%s_%s" % [ tenant&.id, resource_class.to_s.underscore.pluralize ] rescue nil
     @partial = partial || resource
+  end
+
+  ## TODO - use Broadcasters::Resource.new(resource)#flash instead of flash[:*] in controllers, elsewhere
+  def flash *args
+    fl = args[0] || {}
+    return unless tenant
+    Turbo::StreamsChannel.broadcast_action_later_to(
+      resources_stream,
+      target: "flash_container",
+      action: :replace,
+      partial: "application/flash_message", locals: { tenant: tenant, messages: fl, user: user }
+    )
   end
 
   def create

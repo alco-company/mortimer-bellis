@@ -12,16 +12,16 @@ module Tenantable
 
     scope :by_tenant, ->(acc = nil) {
       return where(tenant: acc) unless acc.nil?
-      if Current.user.present?
-        case Current.user.role
+      if Current.get_user.present?
+        case Current.get_user.role
         when "superadmin"
-          Current.user.global_queries? ? all : where(tenant: Current.tenant)
+          Current.get_user.global_queries? ? all : where(tenant: Current.get_tenant)
         when "admin", "user"
-          where(tenant: Current.tenant)
+          where(tenant: Current.get_tenant)
         end
       else
-        if Current.tenant.present?
-          where(tenant: Current.tenant)
+        if Current.get_tenant.present?
+          where(tenant: Current.get_tenant)
         else
           all
         end

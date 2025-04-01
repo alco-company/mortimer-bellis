@@ -19,7 +19,7 @@ module SecondFactor
         # return Failure(InvalidPassword.new) # <-- instead you could raise
       end
 
-      if user.two_factor_app_enabled
+      if user.otp_enabled
         raise Errors::TwoFactorAlreadyEnabledError.new
         # return Failure(YouAlreadyHaveSecondFactorAppEnabled.new) # <-- instead you could raise
       end

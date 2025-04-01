@@ -10,7 +10,7 @@ class ToastComponent < ApplicationComponent
   end
 
   def view_template
-    # @apply fixed z-40 left-12 bottom-10 mb-5 py-2 px-3 font-medium rounded-sm inline-block bg-yellow-100 border border-yellow-400 text-yellow-700;
+    # @apply fixed z-40 left-12 bottom-10 mb-5 py-2 px-3 font-medium rounded-xs inline-block bg-yellow-100 border border-yellow-400 text-yellow-700;
 
     # %(Notification panel, dynamically insert this into the live region when it needs to be displayed
     # Entering: "transform ease-out duration-300 transition"
@@ -19,10 +19,11 @@ class ToastComponent < ApplicationComponent
     # Leaving: "transition ease-in duration-100"
     #   From: "opacity-100"
     #   To: "opacity-0")
+
     div(
       data_controller: "notice",
       class:
-        "pointer-events-auto w-full max-w-sm overflow-hidden rounded-lg mort-flash-#{type} mort-flash-border-#{type} shadow-lg ring-1 ring-black ring-opacity-5"
+        "pointer-events-auto w-full max-w-sm overflow-hidden rounded-lg mort-flash-#{type} mort-flash-border-#{type} shadow-lg ring-1 ring-opacity-5"
     ) do
       div(class: "p-4") do
         div(class: "flex items-start") do
@@ -38,7 +39,7 @@ class ToastComponent < ApplicationComponent
               type: "button",
               data: { action: "click->notice#close" },
               class:
-                "inline-flex rounded-md mort-flash-#{type} hover:text-gray-500 focus:outline-none focus:ring-1 focus:ring-sky-600 focus:ring-offset-1"
+                "inline-flex rounded-md mort-flash-#{type} hover:text-gray-500 focus:outline-hidden focus:ring-1 focus:ring-sky-600 focus:ring-offset-1"
             ) do
               span(class: "sr-only") { "Close" }
               icon("close")

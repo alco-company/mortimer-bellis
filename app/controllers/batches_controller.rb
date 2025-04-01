@@ -10,7 +10,13 @@ class BatchesController < ApplicationController
     Batch.find(params.expect(:id)).destroy
     redirect_to url, notice: "Batch was successfully destroyed."
   end
+
   protected
+    #
+    # the tricky part about PATCH /batches/:id is that
+    # some url like /customers will update the batch
+    # and this is how we fix this
+    #
     def method_for_action(action_name)
       super || batch_method
     end
@@ -48,8 +54,10 @@ class BatchesController < ApplicationController
 
     def url
       url = params.dig(:url) || params.dig(:batch, :url)
+      url.gsub!(/search=.[^&]*/, "")
       url += "?replace=true"
-      url or url_for(controller: resource_class.to_s.tableize, action: :index)
+      url.gsub!(/\?\?/, "?")
+      url or url_for(controller: resource_class.table_name, action: :index)
     end
 
     # Only allow a list of trusted parameters through.
@@ -62,7 +70,7 @@ class BatchesController < ApplicationController
       params[:batch][:ids] = if params.dig(:batch, :all) == "1"
         []
       else
-        range = eval params.dig(:batch, :ids_range) rescue 0..10_000_000_000_000
+        range = eval(params.dig(:batch, :ids_range)) rescue 0..10_000_000_000_000
         ids_old = @batch&.ids.blank? ? [] : @batch&.ids.split(",").collect { |i| i.to_i }.sort
         ids_new = params.dig(:batch, :ids).collect { |i| i.to_i }.sort
         params[:batch][:ids] = ids_old.filter { |i| range.include? i }.empty? ? ids_old + ids_new : ids_new

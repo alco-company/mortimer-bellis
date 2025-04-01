@@ -61,6 +61,7 @@ env:
     - SMTP_PORT
     - SMTP_AUTHENTICATION
     - SMTP_HOST
+    - MORTIMER_VERSION
   clear:
     # Run the Solid Queue Supervisor inside the web server's Puma process to do jobs.
     # When you start using multiple servers, you should split out job processing to a dedicated machine.
@@ -72,7 +73,6 @@ env:
     SMTP_DOMAIN: mortimer.pro
     SMTP_ENABLE_STARTTLS_AUTO: 'false'
     SSL_DOMAIN: app.mortimer.pro
-    MORTIMER_VERSION: '1.0.9'
     DINERO_APP_CALLBACK: 'https://app.mortimer.pro/dinero/callback'
 
 

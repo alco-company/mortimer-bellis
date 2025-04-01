@@ -1,7 +1,7 @@
 module Resourceable
   extend ActiveSupport::Concern
 
-  attr_reader :resource, :resources, :resource_class # , :filter, :filter_form, :url
+  attr_reader :resource, :resource_name, :resources, :resource_class, :collection # , :filter, :filter_form, :url
 
   included do
     def resource
@@ -16,9 +16,17 @@ module Resourceable
       @resource_class ||= set_resource_class
     end
 
+    def resource_name
+      @resource_name ||= resource_class.name.underscore
+    end
+
     # Use callbacks to share common setup or constraints between actions.
     def set_resource
-      @resource = params.dig(:id) ? find_resource : resource_class.new
+      @resource = get_resource_id ? find_resource : new_resource
+    end
+
+    def new_resource(params = nil)
+      params.nil? ? @resource = resource_class.new : @resource = resource_class.new(params)
     end
 
     def set_resources_stream
@@ -42,7 +50,13 @@ module Resourceable
     def set_resource_class
       ctrl = params.dig(:controller).split("/").last
       case ctrl
-      # when "invitations"; UserInvitation
+      when "modal"; params.dig(:resource_class).classify.constantize
+      when "otps"; User
+      when "invitations"; User
+      when "passwords"; User
+      when "sessions"; User
+      when "registrations"; User
+      when "confirmations"; User
       when "notifications"; Noticed::Notification
       when "applications"; Oauth::Application
       else; ctrl.classify.constantize
@@ -52,7 +66,9 @@ module Resourceable
     end
 
     def set_filter
-      @filter_form = params_ctrl.split("/").last
+      # @filter_form = params_ctrl.split("/").last
+      # @filter_form = @filter_form == "modal" ? resource_class.table_name : @filter_form
+      @filter_form = resource_class.table_name
       @url = resources_url
       @filter = Filter.by_user.by_view(@filter_form).take || Filter.new
       @filter.filter ||= {}
@@ -84,6 +100,9 @@ module Resourceable
       options[:search] = params.permit![:search] if params.permit![:search].present?
       return url_for(controller: params_ctrl, action: :index, **options) if options.delete(:rewrite).present?
       @resources_url ||= url_for(controller: params_ctrl, action: :index, **options)
+    rescue => e
+      Rails.logger.error("Error generating resources_url: #{e.message}")
+      root_url
     end
 
     def filtering_url
@@ -99,6 +118,22 @@ module Resourceable
     def pos_delete_all_url(date: nil)
       url_for(controller: params_ctrl, id: 1, action: :show, all: true, date: date, api_key: @resource.access_token)
     end
+  end
+
+  def find_resource
+    r = resource_class.where(id: get_resource_id)&.take || resource_class.new
+    # return r if !r.persisted?
+    # redirect_to "/", alert: I18n.t("errors.messages.no_permission") and return unless Current.user.allowed_to?(params.dig(:action), r) || !r.persisted?
+    # r
+  rescue
+    Rails.logger.info "ERROR! >>>>>>>>>>>>> Resourceable#find_resource: #{r.inspect}"
+    redirect_to "/", alert: I18n.t("errors.messages.not_found", model: resource_class.to_s) and return
+  end
+
+  def get_resource_id
+    params&.dig(:id) || params&.dig(resource_class.to_s.underscore.to_sym, :id)
+  rescue
+    nil
   end
 
   private
@@ -126,15 +161,6 @@ module Resourceable
       rc_params.dig :id
     end
 
-    def find_resource
-      r = resource_class.find(params.dig(:id))
-      redirect_to "/", alert: I18n.t("errors.messages.no_permission") and return unless Current.user.allowed_to?(params.dig(:action), r)
-      r
-    rescue
-      resource_class.new
-      # redirect_to "/", alert: I18n.t("errors.messages.not_found", model: resource_class.to_s) and return
-    end
-
     # @resources = any_filters? ? @filter.do_filter(resource_class) : parent_or_class
     # @resources = case resource_class.to_s
     # when "TimeMaterial"; Current.user.can?(:show_all_time_material_posts) ? @resources : @resources.by_user()
@@ -144,15 +170,15 @@ module Resourceable
     # end
     # @resources = any_sorts? ? @resources.ordered(params_s, params_d) : resource_class.set_order(@resources) rescue @resources
     class ResourceableResource
-      attr_accessor :resource_class, :request_path, :params, :collection, :parent, :filter, :batch
+      attr_accessor :rc, :request_path, :params, :collection, :parent, :filter, :batch
 
-      def initialize(resource_class, request_path, params, filter = nil, batch = nil)
-        @resource_class = resource_class
+      def initialize(rc, request_path, params, filter = nil, batch = nil)
+        @rc = rc
         @request_path = request_path
         @params = params
         @filter = filter
         @batch = batch
-        @collection = resource_class.all
+        @collection = rc.all
       end
 
       def parent_or_class
@@ -161,7 +187,7 @@ module Resourceable
       end
 
       def filtered
-        @collection = @filter.do_filter(resource_class, collection) if any_filters?
+        @collection = @filter.do_filter(rc, collection) if any_filters?
         self
       end
 
@@ -171,7 +197,7 @@ module Resourceable
       end
 
       def searched
-        @collection = params.dig(:search) ? collection.by_tenant().by_fulltext(params.dig(:search)) : collection.by_tenant()
+        @collection = params.dig(:search) ? collection.by_fulltext(params.dig(:search)) : collection
         self
       end
 
@@ -187,9 +213,11 @@ module Resourceable
       private
 
         def resource_resources
-          case resource_class.to_s
-          when "Oauth::Application"; resource_class.all
-          else; resource_class.by_tenant
+          case rc.to_s
+          when "TimeMaterial"; Current.user.can?(:show_all_time_material_posts) ? rc.by_tenant() : rc.by_user()
+          when "Noticed::Notification"; Current.user.notifications.unread.includes(event: :record)
+          when "Oauth::Application"; rc.all
+          else; rc.by_tenant
           end
         end
 
@@ -202,6 +230,8 @@ module Resourceable
           (request_path =~ /\/(team|employee|tenant|calendar)s\/(\d+)\/(calendars|events)/).nil? ? false : true
         end
 
+        #
+        # TODO how do we show invoices/11/invoice_items
         def parent_resources
           parent.send params_ctrl
         end
