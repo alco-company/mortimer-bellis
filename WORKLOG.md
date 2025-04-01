@@ -7,6 +7,7 @@
 ### 1/4/2025
 
 - set verify=none to battle SSL error on localhost
+- report on Dinero Service errors
 
 ### 31/3/2025
 

@@ -252,17 +252,12 @@ class Dinero::Service < SaasService
       when "post"; HTTParty.post(url, body: params, headers: headers)
       when "put"; HTTParty.put(url, body: params, headers: headers)
       end
-      report_error(work, res.response.code, res, url, headers, params, method, "pre-call inspektion")
       return { ok: res } if res.response.code.to_i == 200
       return { ok: res } if res.response.code.to_i == 201
+      report_error(work, res.response.code, res, url, headers, params, method, "response not ok (200/201)")
 
-      if res["code"].to_i < 200
-        report_error(work, res["code"], res, url, headers, params, method)
-        { error: res }
-      else
-        report_error(work, res.response.code, res.response, url, headers, params, method)
-        { error: res.response.code }
-      end
+      return { error: res } if res["code"].present? and res["code"].to_i > 0
+      { error: res.response.code }
     rescue => err
       UserMailer.error_report(err.to_s, "Dinero::Service.#{work} failed on #{method} with params: #{params} and headers: #{headers}").deliver_later
       { error: err.to_s }
@@ -270,15 +265,15 @@ class Dinero::Service < SaasService
 
     def report_error(work, code, response = "", url = "", headers = "", params = "", method = "", msg = "failed with code:")
       begin
-        Rails.logger.info "------------------------------------"
-        Rails.logger.info "Dinero::Service.#{work} - #{msg}"
-        Rails.logger.info "code: >#{code}<"
-        Rails.logger.info "response: #{response}"
-        Rails.logger.info "url: #{url}"
-        Rails.logger.info "headers: #{headers}"
-        Rails.logger.info "params: #{params}"
-        Rails.logger.info "method: #{method}"
-        Rails.logger.info "------------------------------------"
+        Rails.logger.error "------------------------------------"
+        Rails.logger.error "Dinero::Service.#{work} - #{msg}"
+        Rails.logger.error "code: >#{code}<"
+        Rails.logger.error "response: #{response}"
+        Rails.logger.error "url: #{url}"
+        Rails.logger.error "headers: #{headers}"
+        Rails.logger.error "params: #{params}"
+        Rails.logger.error "method: #{method}"
+        Rails.logger.error "------------------------------------"
       rescue
       end
       UserMailer.error_report(code, "Dinero::Service.#{work} #{response}").deliver_later
