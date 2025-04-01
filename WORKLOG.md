@@ -1,8 +1,7 @@
 # WORKLOG
 
 ## CHANGELOG
-
-- toggle switch on products and customers for (auto) sync with invoicing service
+- add Stripe integration for payment links
 
 ### 1/4/2025
 
@@ -12,6 +11,7 @@
 - use '+' on lists to open new item form
 - use ',' to edit current_list_item and use ArrowDown / -Up to navigate list_items
 - fix forms after changing lists
+- fix tenants delete_account - on tenant and admin user
 
 ### 31/3/2025
 

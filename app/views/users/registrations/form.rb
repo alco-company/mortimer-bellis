@@ -1,6 +1,7 @@
 class Users::Registrations::Form < ApplicationForm
   include Phlex::Rails::Helpers::TurboFrameTag
   include Phlex::Rails::Helpers::ImageTag
+  include Phlex::Rails::Helpers::T
 
   def view_template(&)
     div(class: "mx-auto w-72 sm:w-96 mt-4") do
@@ -27,6 +28,7 @@ class Users::Registrations::Form < ApplicationForm
         render TwoFactorField.new
       end
       set_password
+      delete_account
     end
   end
 
@@ -71,6 +73,40 @@ class Users::Registrations::Form < ApplicationForm
         )
         i(class: "text-xs") do
           I18n.t("users.registrations.edit.sign_up.need_current_password")
+        end
+      end
+    end
+  end
+
+  def delete_account
+    div(class: "mt-6 p-4 rounded-md shadow-xs bg-red-100") do
+      if (Current.user.admin? or Current.user.superadmin?) && (Current.user.id > 1)
+        h2(class: "font-bold text-2xl") { t("users.edit_profile.cancel.title") }
+        div do
+          p(class: "text-sm") do
+            t("users.edit_profile.cancel.unhappy").html_safe
+          end
+          p do
+            link_to(
+              new_modal_url(modal_form: "delete_account", id: Current.user.id, resource_class: "user", modal_next_step: "delete_account", url: "/"),
+              data: {
+                turbo_stream: true
+              },
+              class: "mort-btn-alert mt-4",
+              role: "deleteitem",
+              tabindex: "-1"
+            ) do
+              plain I18n.t(".delete")
+              span(class: " sr-only") do
+                begin
+                  plain resource.name
+                rescue StandardError
+                  ""
+                end
+              end
+            end
+            # = button_to t("users.edit_profile.cancel.action"), registration_path(resource_name), data: { confirm: "Are you sure?", turbo_confirm: "Are you sure?" }, method: :delete, class: "mort-btn-alert mort-field"
+          end
         end
       end
     end
