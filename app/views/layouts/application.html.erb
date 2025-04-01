@@ -38,18 +38,18 @@
             <%#= render activity_list_smallest_breakpoint_only %>
             <%#= render activity_list_small_and_up %>
 
-            <!-- Before Sidebar Form -->
-            <div class="overscroll-none">
-              <%= turbo_frame_tag "form" %>
-            </div>
-            <!-- End Sidebar Form -->
-
             <%= render Notifications::NotificationCenter.new(recipient: Current.user)  if Current.user %>
 
           </div>
         </main>
       </div>
     </div>
+
+    <!-- Before Sidebar Form -->
+    <div class="overscroll-none">
+      <%= turbo_frame_tag "form" %>
+    </div>
+    <!-- End Sidebar Form -->
 
     <%# 
     in honor of Tailwind not being able to know 'tags' in advance

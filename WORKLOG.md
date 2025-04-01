@@ -11,6 +11,7 @@
 - allow ',75' as money input on products
 - use '+' on lists to open new item form
 - use ',' to edit current_list_item and use ArrowDown / -Up to navigate list_items
+- fix forms after changing lists
 
 ### 31/3/2025
 
