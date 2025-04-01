@@ -8,6 +8,7 @@
 
 - set verify=none to battle SSL error on localhost
 - report on Dinero Service errors
+- allow ',75' as money input on products
 
 ### 31/3/2025
 

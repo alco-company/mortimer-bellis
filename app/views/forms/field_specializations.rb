@@ -91,7 +91,7 @@ module FieldSpecializations
 
   class MoneyField < Superform::Rails::Components::InputComponent
     def field_attributes
-      field.value = @attributes[:value] ? @attributes[:value] : I18n.t("number.currency.format.unit") + " " + field.value
+      field.value = @attributes[:value] ? @attributes[:value] : (I18n.t("number.currency.format.unit") + " " + field.value rescue "")
       @attributes.keys.include?(:class) ? super : super.merge(class: "mort-form-text")
     end
   end
