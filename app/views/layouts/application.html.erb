@@ -18,7 +18,7 @@
     <!-- streams for notifications, menu, profile -->
     <%= turbo_stream_from Current.notification_stream if Current.user %>
 
-    <div class="min-h-full" data-controller="mobilesidebar menu page">
+    <div class="min-h-full" data-controller="mobilesidebar menu page" data-action="keydown@window->page#keydown">
       <!-- bg-sky-100 text-sky-600 text-pink-600 text-sky-600/20 text-pink-600/20 -->
       <%= render MobileSidebarComponent.new if Current.user %>
 
