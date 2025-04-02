@@ -92,6 +92,7 @@ class ListItems::TimeMaterial < ListItems::ListItem
     if resource&.user&.global_queries?
       span(class: "hidden md:inline text-xs mr-2 truncate") { show_resource_link(resource.tenant) }
     end
+    span(class: "md:inline text-xs font-bold truncate mr-2") { "%s:" % resource.user.name }
     span(class: "md:inline text-xs truncate") do
       link_to(edit_resource_url,
         class: "truncate hover:underline inline grow flex-nowrap",
