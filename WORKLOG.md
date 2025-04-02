@@ -10,6 +10,7 @@
 - use password change from email version
 - default overtime = 0
 - 2. line time/material -> name: about
+- fjern API adgang
 
 ### 1/4/2025
 

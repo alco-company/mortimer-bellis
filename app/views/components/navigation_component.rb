@@ -231,7 +231,7 @@ class NavigationComponent < ApplicationComponent
             tasks: { title: "tasks", url: "/tasks", icon: "task" },
             teams: { title: "teams", url: "/teams", icon: "team" },
             tenants: { title: "tenants", url: "/tenants", icon: "tenant" },
-            oauths: { title: "oauth_applications", url: "/oauth/applications", icon: "oauth" },
+            # oauths: { title: "oauth_applications", url: "/oauth/applications", icon: "oauth" },
             users: { title: "users", url: "/users", icon: "user" }
           }
         }
