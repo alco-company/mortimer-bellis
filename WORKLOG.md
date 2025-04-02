@@ -14,6 +14,7 @@
 - ryk CVR op under navn, tilføj stjerne ved CVR, lav streg under CVR - for at vise adskil nødvendige fra resten
 - ved slet af profil avatar - form below menuline
 - kan ikke lukke menuen på mobil
+- indstillinger alle tekster på dansk
 
 ### 1/4/2025
 
