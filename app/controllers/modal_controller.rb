@@ -226,7 +226,11 @@ class ModalController < MortimerController
           when "logo"; @resource.logo.purge
           when "mugshot"; @resource.mugshot.purge
           end
-          redirect_back fallback_location: root_path, success: t(".attachment_deleted")
+          render turbo_stream: [
+            turbo_stream.close_remote_modal { },
+            turbo_stream.replace("attachment", "")
+          ]
+          # redirect_back fallback_location: root_path, success: t(".attachment_deleted")
         else
           cb = get_cb_eval_after_destroy(resource)
           r = resource_class.build resource.attributes

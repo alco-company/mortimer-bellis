@@ -59,7 +59,7 @@ class HeaderProfile < Phlex::HTML
                     if Current.user.user?
                       plain Current.user.tenant.name
                     else
-                      link_to Current.user.tenant.name, helpers.edit_tenant_path(Current.user.tenant), class: "mort-link-primary", data: { turbo_action: "advance", turbo_frame: "form" }
+                      link_to Current.user.tenant.name, helpers.edit_tenant_path(Current.user.tenant), class: "mort-link-primary", data: { turbo_stream: true, turbo_action: "advance", turbo_frame: "form" }
                     end
                   end
                   render SessionInformation.new Current.user

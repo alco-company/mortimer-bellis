@@ -216,7 +216,7 @@ module FieldSpecializations
       div(class: "mort-field") do
         input(**attributes)
         if field.value.attached?
-          div(class: "w-auto max-w-32 relative border border-slate-100 rounded-md shadow-sm px-3 mt-3") do
+          div(id: "attachment", class: "w-auto max-w-32 relative border border-slate-100 rounded-md shadow-sm px-3 mt-3") do
             img(src: url_for(field.value), class: "mort-img m-2")
             div(class: "absolute top-0 right-0 w-8 h-8 rounded-lg bg-white/75") do
               link_to(
