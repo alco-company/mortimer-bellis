@@ -66,7 +66,7 @@ class Setting < ApplicationRecord
       when "default_time_material_hour_time"; [ "0", "TimeMaterial" ]
       when "default_time_material_minute_time"; [ "15", "TimeMaterial" ]
       when "default_time_material_rate"; [ "500", "TimeMaterial" ]
-      when "default_time_material_over_time"; [ "1", "TimeMaterial" ]
+      when "default_time_material_over_time"; [ "0", "TimeMaterial" ]
       when "validate_time_material_done"; [ "false", "TimeMaterial" ]
       when "limit_time_to_quarters"; [ "false", "TimeMaterial" ]
       when "run"; [ "true", "BackgroundJob" ]

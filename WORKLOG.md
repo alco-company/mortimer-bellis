@@ -8,6 +8,8 @@
 
 - flyt password-change ud i andet vindue - hide at first
 - use password change from email version
+- default overtime = 0
+
 
 ### 1/4/2025
 
