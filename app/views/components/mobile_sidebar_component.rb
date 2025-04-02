@@ -43,7 +43,7 @@ class MobileSidebarComponent < ApplicationComponent
             ) do
             button(
               type: "button",
-              data: { action: "click->mobilesidebar#hide" },
+              data: { action: "click->mobilesidebar#hideSidebar" },
               class: "relative ml-1 flex size-10 items-center justify-center rounded-full focus:outline-hidden focus:ring-2 focus:ring-inset focus:ring-white"
             ) do
               span(class: "absolute -inset-0.5")

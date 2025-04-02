@@ -25,4 +25,22 @@ export default class extends Controller {
       this.containerTarget.classList.add("hidden");
     });
   }
+
+  hideSidebar() {
+    Promise.all([
+      leave(this.backdropTarget),
+      leave(this.closeButtonTarget),
+      leave(this.panelTarget),
+    ]).then(() => {
+      this.containerTarget.classList.add("hidden");
+    });
+  }
+
+  toggleSidebar() {
+    if (this.containerTarget.classList.contains("hidden")) {
+      this.show();
+    } else {
+      this.hideSidebar();
+    }
+  }
 }
