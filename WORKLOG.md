@@ -1,7 +1,12 @@
 # WORKLOG
 
 ## CHANGELOG
+
 - add Stripe integration for payment links
+
+### 2/4/2025
+
+- flyt password-change ud i andet vindue - hide at first
 
 ### 1/4/2025
 

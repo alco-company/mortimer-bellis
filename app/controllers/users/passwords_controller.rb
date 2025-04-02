@@ -22,6 +22,11 @@ class Users::PasswordsController < MortimerController
   end
 
   def edit
+    # respond_to do |format|
+    #   format.turbo_stream { }
+    #   format.html         { render :edit }
+    # end
+    render :edit
   end
 
   def update
@@ -40,7 +45,12 @@ class Users::PasswordsController < MortimerController
       params.expect(user: [ :password, :password_confirmation ])
     end
     def set_user_by_token
-      @user = User.find_by_password_reset_token!(params[:token])
+      if params[:token] == "-1"
+        require_authentication
+        @user = Current.user
+      else
+        @user = User.find_by_password_reset_token!(params[:token])
+      end
     rescue ActiveSupport::MessageVerifier::InvalidSignature
       redirect_to new_users_password_url, alert: I18n.t("devise.passwords.no_token")
     end

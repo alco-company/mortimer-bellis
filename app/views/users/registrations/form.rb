@@ -27,7 +27,7 @@ class Users::Registrations::Form < ApplicationForm
       div(class: "mort-field") do
         render TwoFactorField.new
       end
-      set_password
+      # set_password
       delete_account
     end
   end
