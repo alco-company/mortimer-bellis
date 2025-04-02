@@ -79,8 +79,8 @@ class Users::Registrations::Form < ApplicationForm
   end
 
   def delete_account
-    div(class: "mt-6 p-4 rounded-md shadow-xs bg-red-100") do
-      if (Current.user.admin? or Current.user.superadmin?) && (Current.user.id > 1)
+    if (Current.user.admin? or Current.user.superadmin?) && (Current.user.id > 1)
+      div(class: "mt-6 p-4 rounded-md shadow-xs bg-red-100") do
         h2(class: "font-bold text-2xl") { t("users.edit_profile.cancel.title") }
         div do
           p(class: "text-sm") do

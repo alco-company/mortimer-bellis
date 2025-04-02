@@ -84,7 +84,7 @@ module FieldSpecializations
   #
   class InputField < Superform::Rails::Components::InputComponent
     def field_attributes
-      field.value = @attributes[:value] if @attributes[:value]
+      field.value = @attributes[:value] if @attributes[:value].present?
       @attributes.keys.include?(:class) ? super : super.merge(class: "mort-form-text")
     end
   end

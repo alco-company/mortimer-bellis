@@ -3,11 +3,12 @@ class Tenants::Form < ApplicationForm
 
   def view_template(&)
     row field(:name).input().focus
-    row field(:email).input()
+    row field(:tax_number).input(required: true, placeholder: "12345678"), "mort-field", " <span class='text-red-500'>*</span>"
+    row field(:email).input(), "mort-field", " <span class='text-red-500'>*</span>"
+    hr
     row field(:color).select(Tenant.colors, prompt: I18n.t(".select_tenant_color"), class: "mort-form-select")
     row field(:logo).file(class: "mort-form-file")
     # row field(:pp_identification).input()
-    row field(:tax_number).input()
     row field(:locale).select(Tenant.locales, prompt: I18n.t(".select_tenant_locale"), class: "mort-form-select")
     # row field(:country).input()
     row field(:time_zone).select(Tenant.time_zones_for_phlex, class: "mort-form-select")
@@ -16,8 +17,8 @@ class Tenants::Form < ApplicationForm
   end
 
   def delete_account
-    div(class: "mt-6 p-4 rounded-md shadow-xs bg-red-100") do
-      if (Current.user.admin? or Current.user.superadmin?) && (Current.user.id > 1)
+    if (Current.user.admin? or Current.user.superadmin?) && (Current.user.id > 1)
+      div(class: "mt-6 p-4 rounded-md shadow-xs bg-red-100") do
         h2(class: "font-bold text-2xl") { t("users.edit_profile.cancel.title") }
         div do
           p(class: "text-sm") do

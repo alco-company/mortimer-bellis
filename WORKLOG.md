@@ -11,6 +11,7 @@
 - default overtime = 0
 - 2. line time/material -> name: about
 - fjern API adgang
+- ryk CVR op under navn, tilføj stjerne ved CVR, lav streg under CVR - for at vise adskil nødvendige fra resten
 
 ### 1/4/2025
 
