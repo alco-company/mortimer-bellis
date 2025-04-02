@@ -91,7 +91,8 @@ class ProfileDropmenuComponent < ApplicationComponent
           I18n.t("topbar.profile.change_password"),
           edit_users_password_url(-1),
           class: "block px-3 py-1 text-sm leading-6 text-gray-900",
-          data: { turbo_action: "advance" },
+          # data: { turbo_action: "advance", turbo_frame: "form"  },
+          target: "_top",
           role: "menuitem",
           tabindex: "-1",
           id: "user-menu-item-1")

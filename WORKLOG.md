@@ -7,6 +7,7 @@
 ### 2/4/2025
 
 - flyt password-change ud i andet vindue - hide at first
+- use password change from email version
 
 ### 1/4/2025
 
