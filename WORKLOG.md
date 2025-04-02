@@ -15,6 +15,7 @@
 - ved slet af profil avatar - form below menuline
 - kan ikke lukke menuen på mobil
 - indstillinger alle tekster på dansk
+- sign in with Microsoft + logo
 
 ### 1/4/2025
 
