@@ -3,7 +3,7 @@
 ## CHANGELOG
 
 - add Stripe integration for payment links
-- keep contextmenu above the fold
+
 
 ### 3/4/2025
 
@@ -12,6 +12,7 @@
 - scroll i ny form fanger listen bagved - II (remove pulltorefresh)
 - reload by tapping list 'title'
 - add hidden 'wdate' on time_material to allow for query
+- keep contextmenu above the fold
 
 ### 2/4/2025
 
