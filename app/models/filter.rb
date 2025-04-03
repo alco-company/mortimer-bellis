@@ -71,7 +71,7 @@ class Filter < ApplicationRecord
       today = DateTime.current.beginning_of_day
       case filter["date"]["fixed_range"]
       when "today"     ; conditions << tbl[date_attr].eq(today)
-      when "yesterday" ; conditions << tbl[date_attr].gt(today - 1.day)
+      when "yesterday" ; conditions << tbl[date_attr].eq(today - 1.day)
       when "this_week" ; conditions << tbl[date_attr].gteq(today.at_beginning_of_week)
       when "last_week" ; conditions << tbl[date_attr].between(today.at_beginning_of_week - 7.days..today.at_beginning_of_week)
       when "this_month"; conditions << tbl[date_attr].gteq(today.beginning_of_month)

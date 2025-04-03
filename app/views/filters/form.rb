@@ -188,7 +188,7 @@ class Filters::Form < ApplicationForm
             filtered_model.columns.each do |col|
               next if col.name =~ /^odo/
               option(value: col.name, selected: date_attr == col.name) { I18n.t("activerecord.attributes.#{filtered_model.to_s.underscore}.#{col.name}") } if %w[ date datetime time ].include? col.type.to_s
-              option(value: col.name, selected: date_attr == col.name) { I18n.t("activerecord.attributes.#{filtered_model.to_s.underscore}.#{col.name}") } if col.name =~ /^date/
+              # option(value: col.name, selected: date_attr == col.name) { I18n.t("activerecord.attributes.#{filtered_model.to_s.underscore}.#{col.name}") } if col.name =~ /^date/
             end
           end
         end
