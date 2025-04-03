@@ -8,6 +8,7 @@
 
 - provided_service/new - gemt under folden
 - scroll i ny form fanger listen bagved - I
+- scroll i ny form fanger listen bagved - II (remove pulltorefresh)
 
 ### 2/4/2025
 

@@ -1,5 +1,5 @@
 import { Controller } from "@hotwired/stimulus"
-import PullToRefresh from "pulltorefreshjs";
+// import PullToRefresh from "pulltorefreshjs";
 
 // Connects to data-controller="page"
 export default class extends Controller {
@@ -7,13 +7,13 @@ export default class extends Controller {
 
     const standalone = window.matchMedia("(display-mode: standalone)").matches;
 
-    if (standalone) {
-      PullToRefresh.init({
-        onRefresh() {
-          window.location.reload();
-        },
-      });
-    }    
+    // if (standalone) {
+    //   PullToRefresh.init({
+    //     onRefresh() {
+    //       window.location.reload();
+    //     },
+    //   });
+    // }    
     // Ensure we have a fixed height container for scrolling
     const listContainer = document.getElementById("record_list");
     if (listContainer) {
