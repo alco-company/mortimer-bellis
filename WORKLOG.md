@@ -4,6 +4,10 @@
 
 - add Stripe integration for payment links
 
+### 3/4/2025
+
+- provided_service/new - gemt under folden
+
 ### 2/4/2025
 
 - flyt password-change ud i andet vindue - hide at first
