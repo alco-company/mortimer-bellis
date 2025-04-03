@@ -79,14 +79,12 @@ class List < ApplicationComponent
       render partial: "date", locals: { date: date }
     end
 
-    rcount = records.count - 3
     records.each do |record|
-      rcount-= 1
       if record.send(@order_key).to_date != date
         date = (record.send(@order_key)).to_date
         render partial: "date", locals: { date: date }
       end if order_by
-      render "ListItems::#{resource_class}".classify.constantize.new(resource: record, params: params, user: user, scroll: rcount==0)
+      render "ListItems::#{resource_class}".classify.constantize.new(resource: record, params: params, user: user)
     end
   end
 

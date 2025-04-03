@@ -3,15 +3,14 @@ class ListItems::ListItem < ApplicationComponent
   include Phlex::Rails::Helpers::DOMID
   include Phlex::Rails::Helpers::ImageTag
 
-  attr_reader :resource, :params, :user, :format, :scroll
+  attr_reader :resource, :params, :user, :format
 
   # links is an array of links to be rendered in the contextmenu - edit, delete/show
-  def initialize(resource:, params:, user: nil, format: :html, scroll: false)
+  def initialize(resource:, params:, user: nil, format: :html)
     @resource = resource
     @params = params
     @user = user
     @format = format
-    @scroll = scroll
   end
 
   def view_template
@@ -25,7 +24,7 @@ class ListItems::ListItem < ApplicationComponent
 
   def html_list
     div(id: (dom_id resource), class: "list_item relative bg-gray-50", data: { list_target: "item", controller: "list-item" }) do
-      div(class: "flex grow min-w-0 gap-x-4", data: shouldScroll) do
+      div(class: "flex grow min-w-0 gap-x-4") do
         show_left_mugshot
         div(class: "min-w-0 flex-auto") do
           p(class: "text-sm font-semibold leading-6 text-gray-900 truncate") do
@@ -142,9 +141,5 @@ class ListItems::ListItem < ApplicationComponent
   def this_user?(user_id)
     return false if Current.user.blank?
     resource.user_id == user_id && user_id == user.id
-  end
-
-  def shouldScroll
-    scroll ? { list_target: "scroll" } : {}
   end
 end

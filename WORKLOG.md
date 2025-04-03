@@ -16,6 +16,7 @@
 - fix mugshot (see users/registrations_controller)
 - fix first list item contextmenu positioning
 - infinite scrolling broken, thx Adam Wathan & Tailwind 4 >:(
+- missing initialization of a variable
 
 ### 2/4/2025
 

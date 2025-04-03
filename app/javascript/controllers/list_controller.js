@@ -6,7 +6,12 @@ export default class extends Controller {
     "item",
   ]
 
-  firstListItemSet = false
+  firstListItemSet = null
+
+  connect() {
+    this.firstListItemSet = false
+  }
+
 
   itemTargetConnected(element) {
     if (!this.firstListItemSet) {
