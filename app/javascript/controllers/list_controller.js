@@ -18,4 +18,8 @@ export default class extends Controller {
       checkbox.classList.remove('hidden')
     })
   }
+
+  reload(event) {
+    window.location.reload();
+  }
 }

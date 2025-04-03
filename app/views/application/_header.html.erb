@@ -5,7 +5,7 @@
       <div class="sm:w-0 flex-1">
         <input name="batch[all]" type="hidden" value="0" autocomplete="off">
         <input class="hidden batch mort-form-checkbox ml-2" type="checkbox" value="1" checked="checked" name="batch[all]" id="batch_all">
-        <span id="message-heading" class="text-base font-semibold leading-6 pl-6 text-gray-900"><%= t("#{ resource_class.table_name}.list.title") %></span>
+        <span id="message-heading" data-action="click->list#reload" class="cursor-pointer text-base font-semibold leading-6 pl-6 text-gray-900"><%= t("#{ resource_class.table_name}.list.title") %></span>
         <p class=" mt-1 truncate pl-2 text-sm text-gray-500">
           <% case @filter_form %>
           <% when "background_jobs" %>
