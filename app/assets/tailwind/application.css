@@ -66,6 +66,7 @@
 
   .mort-form {
     @apply pb-20;
+    overscroll-behavior: none;
   }
 
   .mort-form-text {
