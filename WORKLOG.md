@@ -13,6 +13,7 @@
 - reload by tapping list 'title'
 - add hidden 'wdate' on time_material to allow for query
 - keep contextmenu above the fold
+- fix mugshot (see users/registrations_controller)
 
 ### 2/4/2025
 
