@@ -14,6 +14,7 @@
 - add hidden 'wdate' on time_material to allow for query
 - keep contextmenu above the fold
 - fix mugshot (see users/registrations_controller)
+- fix first list item contextmenu positioning
 
 ### 2/4/2025
 
