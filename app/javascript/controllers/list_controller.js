@@ -8,12 +8,6 @@ export default class extends Controller {
 
   firstListItemSet = false
 
-  connect() {
-  }
-
-  initialize() {
-  }
-
   itemTargetConnected(element) {
     if (!this.firstListItemSet) {
       this.firstListItemSet = true
@@ -24,8 +18,6 @@ export default class extends Controller {
       }
     }
   }
-
-
 
   toggleBatch(event) {
     const checkboxes = document.querySelectorAll('.batch')

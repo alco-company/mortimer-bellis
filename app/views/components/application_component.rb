@@ -52,8 +52,7 @@ class ApplicationComponent < Phlex::HTML
 
   def resources_url(**options)
     options[:search] = params.expect(:search) if params[:search].present?
-    return url_for(controller: params_ctrl, action: :index, **options) if options.delete(:rewrite).present?
-    @resources_url ||= url_for(controller: params_ctrl, action: :index, **options)
+    url_for(controller: params_ctrl, action: :index, **options)
   end
 
   def resource_class
