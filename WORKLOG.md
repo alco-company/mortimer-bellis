@@ -7,6 +7,7 @@
 ### 4/4/2025
 
 - prepare block in tenant profile + modal
+- move methods to application_form (shared on user and tenant)
 
 ### 3/4/2025
 
