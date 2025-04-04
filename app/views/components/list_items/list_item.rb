@@ -23,7 +23,7 @@ class ListItems::ListItem < ApplicationComponent
   end
 
   def html_list
-    div(id: (dom_id resource), class: "flex justify-between gap-x-6 mb-1 px-2 py-5 bg-gray-50", data: { controller: "list-item" }) do
+    div(id: (dom_id resource), class: "list_item relative bg-gray-50", data: { list_target: "item", controller: "list-item" }) do
       div(class: "flex grow min-w-0 gap-x-4") do
         show_left_mugshot
         div(class: "min-w-0 flex-auto") do

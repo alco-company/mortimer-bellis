@@ -79,6 +79,12 @@ class TimeMaterial < ApplicationRecord
 
   validates :about, presence: true, if: [ Proc.new { |c| c.comment.blank? && c.product_name.blank? } ]
 
+  before_save :set_wdate
+
+  def set_wdate
+    self.wdate = Date.parse date unless date.blank?
+  end
+
   def has_insufficient_data?
     (project_name.present? && project_id.blank?) ||
     (customer_name.present? && customer_id.blank?) ||
@@ -136,6 +142,7 @@ class TimeMaterial < ApplicationRecord
     f = f - [
       "date",
       "paused_at",
+      "wdate",
       "created_at",
       "updated_at",
       "started_at"

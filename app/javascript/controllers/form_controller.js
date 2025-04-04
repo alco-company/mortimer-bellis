@@ -29,7 +29,7 @@ export default class extends Controller {
   }
 
   keydown(e) {
-    // e.preventDefault();
+    e.stopPropagation();
     switch(e.key) {
       case "Escape":
         leave(this.backdropTarget);

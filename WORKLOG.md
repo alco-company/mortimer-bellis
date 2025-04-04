@@ -2,12 +2,48 @@
 
 ## CHANGELOG
 
-- toggle switch on products and customers for (auto) sync with invoicing service
+- add Stripe integration for payment links
+
+### 4/4/2025
+
+- prepare block in tenant profile + modal
+- move methods to application_form (shared on user and tenant)
+
+### 3/4/2025
+
+- provided_service/new - gemt under folden
+- scroll i ny form fanger listen bagved - I
+- scroll i ny form fanger listen bagved - II (remove pulltorefresh)
+- reload by tapping list 'title'
+- add hidden 'wdate' on time_material to allow for query
+- keep contextmenu above the fold
+- fix mugshot (see users/registrations_controller)
+- fix first list item contextmenu positioning
+- infinite scrolling broken, thx Adam Wathan & Tailwind 4 >:(
+- missing initialization of a variable
+
+### 2/4/2025
+
+- flyt password-change ud i andet vindue - hide at first
+- use password change from email version
+- default overtime = 0
+- 2. line time/material -> name: about
+- fjern API adgang
+- ryk CVR op under navn, tilføj stjerne ved CVR, lav streg under CVR - for at vise adskil nødvendige fra resten
+- ved slet af profil avatar - form below menuline
+- kan ikke lukke menuen på mobil
+- indstillinger alle tekster på dansk
+- sign in with Microsoft + logo
 
 ### 1/4/2025
 
 - set verify=none to battle SSL error on localhost
 - report on Dinero Service errors
+- allow ',75' as money input on products
+- use '+' on lists to open new item form
+- use ',' to edit current_list_item and use ArrowDown / -Up to navigate list_items
+- fix forms after changing lists
+- fix tenants delete_account - on tenant and admin user
 
 ### 31/3/2025
 

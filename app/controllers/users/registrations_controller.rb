@@ -3,6 +3,7 @@
 # is solely for the Current.user themselves
 #
 class Users::RegistrationsController < MortimerController
+  before_action :resize_mugshot, only: [ :create, :update ]
   # GET /resource/edit
   def edit
     @resource = resource.persisted? ? resource : Current.user
@@ -15,9 +16,6 @@ class Users::RegistrationsController < MortimerController
   #
   def update
     @resource = Current.user
-    unless params[:user][:mugshot].present?
-      mugshot = resource.mugshot
-    end
     if params[:user][:role].present? &&
       !Current.user.superadmin? &&
       [ 0, "0", "superadmin", "Superadmin", "SUPERADMIN" ].include?(params[:user][:role])
@@ -29,7 +27,8 @@ class Users::RegistrationsController < MortimerController
     resource_updated = update_resource(resource, user_params)
     # yield resource if block_given?
     if resource_updated
-      resource.mugshot = mugshot if mugshot && mugshot.attachable?
+      resource.mugshot = params[:user][:mugshot] if params[:user][:mugshot].present?
+      resource.save
       # set_flash_message_for_update(resource, prev_unconfirmed_email)
       flash[:notice] = I18n.t("users.registrations.updated")
       render turbo_stream: [
@@ -77,7 +76,9 @@ class Users::RegistrationsController < MortimerController
   protected
 
   def update_resource(resource, params)
-    params[:password].blank? && params[:password_confirmation].blank? ? update_now(resource, params) : update_access(resource, params)
+    # params[:password].blank? && params[:password_confirmation].blank? ?
+    update_now(resource, params)
+    #  : update_access(resource, params)
   end
 
   def update_access(resource, params)
@@ -89,14 +90,14 @@ class Users::RegistrationsController < MortimerController
   end
 
   def update_now(resource, params)
-    resize_before_save(params[:mugshot], 100, 100)
+    # resize_before_save(params[:mugshot], 100, 100)
     unless Current.user.user?
       # resource.update role: params[:role] if params[:role].present?
       resource.update global_queries: params[:global_queries] if params[:global_queries].present?
       resource.update tenant_id: params[:tenant_id] if params[:tenant_id].present?
     end
     resource.update name: params[:name],
-      mugshot: params[:mugshot],
+      # mugshot: params[:mugshot],
       pincode: params[:pincode],
       locale: params[:locale],
       time_zone: params[:time_zone]
@@ -113,21 +114,6 @@ class Users::RegistrationsController < MortimerController
     "Unknown Tenant Name"
   end
 
-  def resize_before_save(image_param, width, height)
-    return unless image_param
-
-    begin
-      ImageProcessing::MiniMagick
-        .source(image_param)
-        .resize_to_fit(width, height)
-        .call(destination: image_param.tempfile.path)
-    rescue StandardError => _e
-      # Do nothing. If this is catching, it probably means the
-      # file type is incorrect, which can be caught later by
-      # model validations.
-    end
-  end
-
   private
     def user_params
       params.expect(user: [ :tenant_id, :global_queries, :name, :pincode, :email, :mugshot, :locale, :time_zone, :password, :password_confirmation, :current_password ])
@@ -135,5 +121,10 @@ class Users::RegistrationsController < MortimerController
 
     def clean_up_passwords(resource)
       resource.password = resource.password_confirmation = nil
+    end
+
+    def resize_mugshot
+      return unless params[:user][:mugshot].present?
+      resize_before_save(params[:user][:mugshot], 40, 80)
     end
 end

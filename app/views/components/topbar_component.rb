@@ -69,7 +69,7 @@ class TopbarComponent < ApplicationComponent
     end
 
     def mobile_menu_button
-      button(type: "button", class: "border-r border-gray-200 px-4 text-gray-400 focus:outline-hidden focus:ring-2 focus:ring-inset focus:ring-cyan-500 lg:hidden", data: { action: "mobilesidebar#show" }) do
+      button(type: "button", class: "border-r border-gray-200 px-4 text-gray-400 focus:outline-hidden focus:ring-2 focus:ring-inset focus:ring-cyan-500 lg:hidden", data: { action: "mobilesidebar#toggleSidebar" }) do
         span(class: "sr-only") { "Open sidebar" }
         render Icons::Hamburger2.new cls: "h-6 w-6 text-sky-900 hover:text-sky-400 hover:rotate-90"
       end

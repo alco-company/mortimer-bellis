@@ -222,6 +222,7 @@ da:
       placeholder: Søg...
     profile:
       your_profile: Din profil
+      change_password: Skift adgangskode
       sign_out: Log ud
 
   modal:
@@ -874,6 +875,7 @@ da:
         started_at: Startet kl
         paused_at: Parkeret kl
         time_spent: Forbrugt tid
+        wdate: Arbejdsdato
         is_done: færdig?
         is_invoice: Opgaven skal faktureres
         is_free: per kulance

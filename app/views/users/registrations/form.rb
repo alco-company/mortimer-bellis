@@ -1,6 +1,7 @@
 class Users::Registrations::Form < ApplicationForm
   include Phlex::Rails::Helpers::TurboFrameTag
   include Phlex::Rails::Helpers::ImageTag
+  include Phlex::Rails::Helpers::T
 
   def view_template(&)
     div(class: "mx-auto w-72 sm:w-96 mt-4") do
@@ -26,7 +27,9 @@ class Users::Registrations::Form < ApplicationForm
       div(class: "mort-field") do
         render TwoFactorField.new
       end
-      set_password
+      # set_password
+      buy_product
+      delete_account
     end
   end
 

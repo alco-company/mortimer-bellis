@@ -248,7 +248,7 @@ class TimeMaterials::Form < ApplicationForm
             end
           end
         end
-        textarea(id: "time_material_about", name: "time_material[about]", class: "mort-form-text") do
+        textarea(id: "time_material_about", name: "time_material[about]", class: "mort-form-text", autofocus: true) do
           plain resource.about
         end
       end

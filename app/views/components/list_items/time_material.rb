@@ -2,7 +2,7 @@ class ListItems::TimeMaterial < ListItems::ListItem
   def html_list
     @insufficient_data = resource.has_insufficient_data?
     comment { "bg-green-200 bg-yellow-200" }
-    div(id: (dom_id resource), class: "relative flex justify-between gap-x-6 mb-1 px-2 py-5 rounded-xs #{ background }", data: { controller: "time-material" }) do
+    div(id: (dom_id resource), class: "list_item relative #{ background }", data: { list_target: "item", controller: "time-material" }) do
       div(class: "flex grow min-w-0 gap-x-4", data: time_material_controller?) do
         show_left_mugshot
         div(class: "min-w-0 flex-auto") do
@@ -92,6 +92,7 @@ class ListItems::TimeMaterial < ListItems::ListItem
     if resource&.user&.global_queries?
       span(class: "hidden md:inline text-xs mr-2 truncate") { show_resource_link(resource.tenant) }
     end
+    span(class: "md:inline text-xs font-bold truncate mr-2") { "%s:" % resource.user.name }
     span(class: "md:inline text-xs truncate") do
       link_to(edit_resource_url,
         class: "truncate hover:underline inline grow flex-nowrap",

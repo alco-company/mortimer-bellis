@@ -66,6 +66,7 @@
 
   .mort-form {
     @apply pb-20;
+    overscroll-behavior: none;
   }
 
   .mort-form-text {
@@ -285,6 +286,14 @@ h1 {
   @apply font-bold text-slate-400 text-2xl;
 }
 
+.list_item {
+  @apply flex justify-between gap-x-6 mb-1 px-2 py-5 rounded-xs;
+}
+
+.list_context_menu {
+  @apply absolute right-4 z-10 mt-2 w-auto min-w-18 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-hidden;
+}
+
 .scrollbar-hide {
   /* Hide scrollbar for IE, Edge and Firefox */
   -ms-overflow-style: none;
@@ -319,6 +328,10 @@ dialog {
 
 .button_to {
   @apply mb-0;
+}
+
+.current_list_item {
+  @apply border-l-2 border-sky-400;
 }
 
 .pagy {

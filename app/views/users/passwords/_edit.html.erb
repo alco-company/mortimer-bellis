@@ -1,0 +1,36 @@
+<%= turbo_frame_tag "form" do  %>
+  <div class="mx-auto w-72 sm:w-96">
+    <h1> <%= t(".change_password") %> </h1>
+
+    <%= form_for(resource, as: resource_name, url: users_password_url, html: { method: :put, data: { controller: "password-strength" } }) do |f| %>
+      <%= render "users/shared/error_messages", resource: resource %>
+      <%= f.hidden_field :reset_password_token %>
+
+      <div class="mort-field">
+        <%= f.label :password %>
+        <% if @minimum_password_length %>
+        <em ><%= t(".sign_up.minimum", count: @minimum_password_length) %></em>
+        <% end %><br />
+        <%= f.password_field :password, 
+          autofocus: true, 
+          required: true,
+          placeholder: I18n.t("users.enter_password"),
+          maxlength: 72,
+          "data-password-strength-target": :password,
+          "data-action": "input->password-strength#updateStrength",
+          class: "mort-form-text" %>
+        <div data-password-strength-target="strengthIndicator" class="mt-0 pl-3 text-xs"></div>
+      </div>
+
+      <div class="mort-field">
+        <%= f.label :password_confirmation %><br />
+        <%= f.password_field :password_confirmation, placeholder: I18n.t("users.reenter_password"), class: "mort-form-text"  %>
+      </div>
+
+      <div class="actions mort-field">
+        <%= f.submit t(".change_password_action"), class: "mort-btn-primary" %>
+      </div>
+    <% end %>
+
+  </div>
+<% end %>

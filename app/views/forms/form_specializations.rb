@@ -27,10 +27,11 @@ module FormSpecializations
       end
     end
 
-    def row(component, outer_class = "mort-field")
+    def row(component, outer_class = "mort-field", label_suffix = "")
       div(class: outer_class) do
         render(component.field.label) do
           plain I18n.t("activerecord.attributes.#{component.field.parent.key}.#{component.field.key}")
+          plain label_suffix.html_safe
           # span(class: "text-sm font-light") do
           # end
         end unless component.class == ApplicationForm::HiddenField

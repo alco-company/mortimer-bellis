@@ -18,7 +18,7 @@
     <!-- streams for notifications, menu, profile -->
     <%= turbo_stream_from Current.notification_stream if Current.user %>
 
-    <div class="min-h-full" data-controller="mobilesidebar menu page">
+    <div class="min-h-full" data-controller="mobilesidebar menu page" data-action="keydown@window->page#keydown">
       <!-- bg-sky-100 text-sky-600 text-pink-600 text-sky-600/20 text-pink-600/20 -->
       <%= render MobileSidebarComponent.new if Current.user %>
 
@@ -28,8 +28,7 @@
         <%= render_topbar params: params %>
         <main id="main-element" class="flex-1 pb-8">
           <%#= render user_top_profile %>
-
-          <div class="md:px-4 mt-8">
+          <div class="sticky top-20 md:px-4">
             <%#= render page_overview %>
 
             <%#= render page_title %>
@@ -39,18 +38,18 @@
             <%#= render activity_list_smallest_breakpoint_only %>
             <%#= render activity_list_small_and_up %>
 
-            <!-- Before Sidebar Form -->
-            <div class="overscroll-none">
-              <%= turbo_frame_tag "form" %>
-            </div>
-            <!-- End Sidebar Form -->
-
             <%= render Notifications::NotificationCenter.new(recipient: Current.user)  if Current.user %>
 
           </div>
         </main>
       </div>
     </div>
+
+    <!-- Before Sidebar Form -->
+    <div class="overscroll-none">
+      <%= turbo_frame_tag "form" %>
+    </div>
+    <!-- End Sidebar Form -->
 
     <%# 
     in honor of Tailwind not being able to know 'tags' in advance

@@ -39,4 +39,70 @@ class ApplicationForm < Superform::Rails::Form
       UserMailer.error_report(err.to_s, "Phlex::SGML format_object error with object #{ object.class }").deliver_later
     end
   end
+
+  def buy_product
+    return unless Current.user.admin? or Current.user.superadmin?
+    div(class: "mt-6 p-4 rounded-md shadow-xs bg-purple-100") do
+      h2(class: "font-bold text-2xl text-purple-800") { t("users.edit_profile.buy_product.title") }
+      div do
+        p(class: "text-sm text-purple-600") do
+          t("users.edit_profile.buy_product.current_status").html_safe
+        end
+        p do
+          link_to(
+            new_modal_url(modal_form: "buy_product", id: Current.user.id, resource_class: "tenant", modal_next_step: "pick_product", url: "/"),
+            data: {
+              turbo_stream: true
+            },
+            class: "mort-btn-primary hover:bg-purple-500 bg-purple-600 mt-4",
+            role: "buyitem",
+            tabindex: "-1"
+          ) do
+            plain I18n.t("users.edit_profile.buy_product.manage_status")
+            span(class: " sr-only") do
+              begin
+                plain resource.name
+              rescue StandardError
+                ""
+              end
+            end
+          end
+        end
+      end
+    end
+  end
+
+  def delete_account
+    if (Current.user.admin? or Current.user.superadmin?) && (Current.user.id > 1)
+      div(class: "mt-6 p-4 rounded-md shadow-xs bg-red-100") do
+        h2(class: "font-bold text-2xl") { t("users.edit_profile.cancel.title") }
+        div do
+          p(class: "text-sm") do
+            t("users.edit_profile.cancel.unhappy").html_safe
+          end
+          p do
+            link_to(
+              new_modal_url(modal_form: "delete_account", id: Current.user.id, resource_class: "user", modal_next_step: "delete_account", url: "/"),
+              data: {
+                turbo_stream: true
+              },
+              class: "mort-btn-alert mt-4",
+              role: "deleteitem",
+              tabindex: "-1"
+            ) do
+              plain I18n.t(".delete")
+              span(class: " sr-only") do
+                begin
+                  plain resource.name
+                rescue StandardError
+                  ""
+                end
+              end
+            end
+            # = button_to t("users.edit_profile.cancel.action"), registration_path(resource_name), data: { confirm: "Are you sure?", turbo_confirm: "Are you sure?" }, method: :delete, class: "mort-btn-alert mort-field"
+          end
+        end
+      end
+    end
+  end
 end

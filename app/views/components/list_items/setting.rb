@@ -12,7 +12,7 @@ class ListItems::Setting < ListItems::ListItem
 
   def show_recipient_link
     link_to setting_url(resource), data: { turbo_action: "advance", turbo_frame: "form", tabindex: "-1" }, class: "hover:underline" do
-      plain resource.key
+      plain I18n.t("settings.keys.#{resource.key}")
     end
   end
 

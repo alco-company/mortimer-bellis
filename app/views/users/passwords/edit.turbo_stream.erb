@@ -1,0 +1,3 @@
+<%= turbo_stream.replace "form" do %>
+  <%= render partial: "edit", locals: { resource: @user, resource_class: User, resource_name: "user" } %>
+<% end %>

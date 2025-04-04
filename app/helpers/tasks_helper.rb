@@ -10,6 +10,6 @@ module TasksHelper
   end
 
   def edit_current_tenant_profile
-    [ "/tenants/#{Current.tenant.id}/edit", false ]
+    [ "/tenants/#{Current.tenant.id}/edit", true ]
   end
 end

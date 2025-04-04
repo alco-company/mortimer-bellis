@@ -108,9 +108,13 @@ da:
       title: Rediger profil
       name: Redigér din profil
       update: Opdater profil
+      buy_product:
+        title: "Betal for Mortimer"
+        current_status: "Lige nu bruger du %{tenant_license_free,essential_or_pro}.<p class='mt-2 text-sm text-purple-600'> Vil du ændre på det?</p>"
+        manage_status: "Vedligehold"
       cancel:
         title: Slet min konto
-        unhappy: Er du utilfreds med vores service, eller har du bare ikke brug for det længere? Trykker du på [slet] knappen her nedenfor, vil din konto blive slettet. Vi vil være kede af at skulle sige farvel, men respekterer naturligvis dit valg.
+        unhappy: "Er du utilfreds med vores service, eller har du bare ikke brug for det længere?<p class='text-sm mt-2'> Trykker du på <strong>[ slet ]</strong> knappen her nedenfor, vil din konto, med alle oprettede brugere og deres data, blive slettet. </p><p class='text-sm mt-2'>Vi vil være kede af at skulle sige farvel, men respekterer naturligvis dit valg.</p>"
         action: Slet!
 
     errors:
