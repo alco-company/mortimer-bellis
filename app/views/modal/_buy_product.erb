@@ -1,0 +1,104 @@
+<%= form_with(url: modal_index_url, method: :post, multipart: true) do |form| %>
+  <div class="sm:flex sm:items-start">
+    <div class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-purple-100 sm:mx-0 sm:h-10 sm:w-10">
+
+      <svg class="h-6 w-6 text-purple-700" fill="currentColor"  xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"  stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+        <path d="M280-80q-33 0-56.5-23.5T200-160q0-33 23.5-56.5T280-240q33 0 56.5 23.5T360-160q0 33-23.5 56.5T280-80Zm400 0q-33 0-56.5-23.5T600-160q0-33 23.5-56.5T680-240q33 0 56.5 23.5T760-160q0 33-23.5 56.5T680-80ZM246-720l96 200h280l110-200H246Zm-38-80h590q23 0 35 20.5t1 41.5L692-482q-11 20-29.5 31T622-440H324l-44 80h480v80H280q-45 0-68-39.5t-2-78.5l54-98-144-304H40v-80h130l38 80Zm134 280h280-280Z"/>
+      </svg>
+    </div>
+    <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
+      <h3 class="text-base font-semibold leading-6 text-gray-900" id="modal_title"> <%= t("tenant.modal.buy_product.title") %></h3>
+      <div class="mt-2">
+        <p class="text-sm text-gray-500 pb-3"> <%== t("tenant.modal.buy_product.instruction") %></p>
+
+        <%= form.hidden_field :modal_form, value: @modal_form %>
+        <%= form.hidden_field :resource_class, value: @resource_class %>
+        <%= form.hidden_field :step, value: @step %>
+        <%= form.hidden_field :search, value: @search %>
+
+        <fieldset>
+          <legend class="text-sm/6 font-semibold text-gray-900"><%= t("tenant.modal.buy_product.pick_a_license") %></legend>
+          <div class="mt-6 grid grid-cols-1 gap-y-6 sm:grid-cols-3 sm:gap-x-4">
+            <!-- Active: "border-indigo-600 ring-2 ring-indigo-600", Not Active: "border-gray-300" -->
+            <label aria-label="Essential License" aria-description="Last message sent 2 weeks ago to 1200 users" class="relative flex cursor-pointer rounded-lg border-1 border-purple-100 hover:ring-2 hover:ring-purple-400 bg-white p-4 shadow-xs focus:outline-hidden">
+              <input type="radio" name="license" value="essential" class="sr-only">
+              <span class="flex flex-1">
+                <span class="flex flex-col">
+                  <span class="block text-sm font-medium text-gray-900">Essential </span>
+
+                  <span class="mt-1 flex items-center text-xs text-gray-500">&nbsp;</span>
+                  <span class="mt-1 flex items-center text-xs text-gray-500">&#8734; users</span>
+                  <span class="mt-1 flex items-center text-xs text-gray-500">&#8734; time/material</span>
+                  <span class="mt-1 flex items-center text-xs text-gray-500">&#8734; customers</span>
+                  <span class="mt-1 flex items-center text-xs text-gray-500">&#8734; products</span>
+                  <span class="mt-1 flex items-center text-xs text-gray-500">CSV data export</span>
+                  <span class="mt-1 flex items-center text-xs text-gray-500">E-mail support</span>
+                  <!-- <span class="mt-6 text-sm font-medium text-gray-900">1200 users</span> -->
+                </span>
+              </span>
+              <!-- Not Checked: "invisible" -->
+              <svg class="size-5 text-gray-200" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm3.857-9.809a.75.75 0 0 0-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 1 0-1.06 1.061l2.5 2.5a.75.75 0 0 0 1.137-.089l4-5.5Z" clip-rule="evenodd" />
+              </svg>
+              <!--
+                Active: "border", Not Active: "border-1 border-purple-100"
+                Checked: "border-indigo-600", Not Checked: "border-transparent"
+              -->
+              <span class="pointer-events-none absolute -inset-px rounded-lg border-1 border-purple-100" aria-hidden="true"></span>
+            </label>
+            <!-- Active: "border-indigo-600 ring-2 ring-indigo-600", Not Active: "border-gray-300" -->
+            <label aria-label="Pro License" aria-description="Last message sent 4 days ago to 2740 users" class="relative flex cursor-pointer rounded-lg border-1 border-purple-100 hover:ring-2 hover:ring-purple-400 bg-white p-4 shadow-xs focus:outline-hidden">
+              <input type="radio" name="license" value="pro" class="sr-only">
+              <span class="flex flex-1">
+                <span class="flex flex-col">
+                  <span class="block text-sm font-medium text-gray-900">Pro </span>
+
+                  <span class="mt-1 flex items-center text-xs text-gray-500">All from Essential</span>
+                  <span class="mt-1 flex items-center text-xs text-gray-500">&#8734; projects</span>
+                  <span class="mt-1 flex items-center text-xs text-gray-500">&#8734; teams</span>
+                  <span class="mt-1 flex items-center text-xs text-gray-500">&#8734; locations</span>
+                  <span class="mt-1 flex items-center text-xs text-gray-500">Microsoft SSO</span>
+                  <span class="mt-1 flex items-center text-xs text-gray-500">Dinero integration</span>
+                  <span class="mt-1 flex items-center text-xs text-gray-500">Account support</span>
+                </span>
+              </span>
+              <!-- Not Checked: "invisible" -->
+              <svg class="size-5 text-gray-200" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm3.857-9.809a.75.75 0 0 0-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 1 0-1.06 1.061l2.5 2.5a.75.75 0 0 0 1.137-.089l4-5.5Z" clip-rule="evenodd" />
+              </svg>
+              <!--
+                Active: "border", Not Active: "border-1 border-purple-100"
+                Checked: "border-indigo-600", Not Checked: "border-transparent"
+              -->
+              <span class="pointer-events-none absolute -inset-px rounded-lg border-1 border-purple-100" aria-hidden="true"></span>
+            </label>
+            <!-- Active: "border-indigo-600 ring-2 ring-indigo-600", Not Active: "border-gray-300" -->
+            <label aria-label="Free License" aria-description="Last message sent an hour ago to 621 users" class="relative flex cursor-pointer rounded-lg border-1 border-purple-100 hover:ring-2 hover:ring-purple-400 bg-white p-4 shadow-xs focus:outline-hidden">
+              <input type="radio" name="license" value="free" class="sr-only">
+              <span class="flex flex-1">
+                <span class="flex flex-col">
+                  <span class="block text-sm font-medium text-gray-900">Ambassador</span>
+                  <span class="mt-1 flex items-center text-xs text-gray-500">Apply here</span>
+                  <span class="mt-6 text-xs font-medium text-gray-900">few seats left</span>
+                </span>
+              </span>
+              <!-- Not Checked: "invisible" -->
+              <svg class="size-5 text-gray-200" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm3.857-9.809a.75.75 0 0 0-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 1 0-1.06 1.061l2.5 2.5a.75.75 0 0 0 1.137-.089l4-5.5Z" clip-rule="evenodd" />
+              </svg>
+              <!--
+                Active: "border", Not Active: "border-1 border-purple-100"
+                Checked: "border-indigo-600", Not Checked: "border-transparent"
+              -->
+              <span class="pointer-events-none absolute -inset-px rounded-lg border-1 border-purple-100" aria-hidden="true"></span>
+            </label>
+          </div>
+        </fieldset>
+      </div>
+    </div>
+  </div>
+  <div class="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
+    <%= form.button t("tenant.modal.buy_product.accept"), class: "mort-btn-primary bg-purple-600 sm:ml-3" %>
+    <%= button_tag t(:cancel), form: "dialog_form", formmethod: :dialog, class: "mort-btn-cancel" %>
+  </div>
+<% end %>

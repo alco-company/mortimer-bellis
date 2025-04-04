@@ -1,6 +1,11 @@
 da:
   tenant:
     modal:
+      buy_product:
+        title: "Betal for Mortimer"
+        instruction: "Vælg produktet, som du vil købe"
+        free_license_description: "Du bruger lige nu Mortimer med en gratis licens, som kun giver mulighed for at oprette en konto, og oprette brugere, men ikke bruge systemet."
+        accept: "Det er mit valg"
       delete_all: 
         title: Slet alle konti
         instruction: Er du sikker på, at du vil slette alle konti?

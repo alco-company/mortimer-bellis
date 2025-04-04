@@ -28,6 +28,7 @@ class Users::Registrations::Form < ApplicationForm
         render TwoFactorField.new
       end
       # set_password
+      buy_product
       delete_account
     end
   end
@@ -73,6 +74,37 @@ class Users::Registrations::Form < ApplicationForm
         )
         i(class: "text-xs") do
           I18n.t("users.registrations.edit.sign_up.need_current_password")
+        end
+      end
+    end
+  end
+
+  def buy_product
+    div(class: "mt-6 p-4 rounded-md shadow-xs bg-purple-100") do
+      h2(class: "font-bold text-2xl text-purple-800") { t("users.edit_profile.buy_product.title") }
+      div do
+        p(class: "text-sm text-purple-600") do
+          t("users.edit_profile.buy_product.current_status").html_safe
+        end
+        p do
+          link_to(
+            new_modal_url(modal_form: "buy_product", id: Current.user.id, resource_class: "tenant", modal_next_step: "pick_product", url: "/"),
+            data: {
+              turbo_stream: true
+            },
+            class: "mort-btn-primary bg-purple-600 mt-4",
+            role: "buyitem",
+            tabindex: "-1"
+          ) do
+            plain I18n.t("users.edit_profile.buy_product.manage_status")
+            span(class: " sr-only") do
+              begin
+                plain resource.name
+              rescue StandardError
+                ""
+              end
+            end
+          end
         end
       end
     end

@@ -4,6 +4,9 @@
 
 - add Stripe integration for payment links
 
+### 4/4/2025
+
+- prepare block in tenant profile + modal
 
 ### 3/4/2025
 
