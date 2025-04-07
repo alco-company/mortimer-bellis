@@ -6,6 +6,7 @@
 
 - add Stripe integration for payment links
 - fix tenant send_invoice email
+- fix bug in resourceables - resources_url
 
 ### 4/4/2025
 

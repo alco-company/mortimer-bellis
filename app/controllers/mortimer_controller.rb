@@ -17,6 +17,7 @@ class MortimerController < BaseController
   layout :resolve_layout
 
   def resolve_layout
+    return "application" if params[:controller] =~ /password/
     case params[:action]
     when "edit"; "edit"
     else; "application"
