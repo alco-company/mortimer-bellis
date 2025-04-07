@@ -9,6 +9,7 @@
 - fix bug in resourceables - resources_url
 - fix bug in _form_content - params[:controller] missing for some reason
 - fix bug in field_specializations - include? not available to nil
+- sneak in on the time_material issue
 
 ### 4/4/2025
 

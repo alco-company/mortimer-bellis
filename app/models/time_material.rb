@@ -77,7 +77,7 @@ class TimeMaterial < ApplicationRecord
 
   # validates :about, presence: true
 
-  validates :about, presence: true, if: [ Proc.new { |c| c.comment.blank? && c.product_name.blank? } ]
+  # validates :about, presence: true, if: [ Proc.new { |c| c.comment.blank? && c.product_name.blank? } ]
 
   before_save :set_wdate
 
@@ -203,6 +203,7 @@ class TimeMaterial < ApplicationRecord
     when product_name.blank?; product_name
     when about.blank?; about
     when comment.blank?; comment
+    else; Current.user.default(:default_time_material_about, "ongoing task")
     end
   end
 
