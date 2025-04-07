@@ -20,7 +20,7 @@ class TenantMailer < ApplicationMailer
     @email = params[:recipient]
     @pdf = params[:invoice_pdf]
     # attachments["invoice.pdf"] = File.read(@pdf)
-    mail to: @email, subject: "Invoice"
+    mail to: @email, subject: "Mortimer Invoice"
   end
 
 

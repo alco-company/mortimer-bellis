@@ -55,7 +55,7 @@ class Stripe::Service < SaasService
         end
       end
 
-      TenantMailer.send_invoice(tenant: Current.get_tenant, user: Current.get_user, recipient: Current.get_tenant.email, invoice_pdf: invoice.invoice_pdf).deliver_later
+      TenantMailer.with(tenant: Current.get_tenant, user: Current.get_user, recipient: Current.get_tenant.email, invoice_pdf: invoice.invoice_pdf).send_invoice.deliver_later
       Current.get_tenant.update license_changed_at: Time.current,
         license_expires_at: Time.at(invoice.lines.data.first.period.end).utc
       true

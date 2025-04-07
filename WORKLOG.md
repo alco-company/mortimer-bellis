@@ -5,6 +5,7 @@
 ### 7/4/2025
 
 - add Stripe integration for payment links
+- fix tenant send_invoice email
 
 ### 4/4/2025
 
