@@ -23,8 +23,8 @@
               <!-- Main -->
               <div>
                 <div class="pl-4 pr-4 sm:pr-6 sm:pl-6 pb-1 pt-1 sm:pt-0 scrollbar-hide">
-                  <% if (params["controller"].include?("users") rescue false) %>
-                    <%= render resource_class.form resource: resource, editable: true, registration: (params["controller"].include?("registrations") rescue false) %> <!-- #, fields: [:slug] -->
+                  <% if (params["controller"].present? && params["controller"].include?("users")) %>
+                    <%= render resource_class.form resource: resource, editable: true, registration: params["controller"].include?("registrations") %> <!-- #, fields: [:slug] -->
                   <% else %>
                     <%= render resource_class.form resource: resource, editable: true %> <!-- #, fields: [:slug] -->
                   <% end %>

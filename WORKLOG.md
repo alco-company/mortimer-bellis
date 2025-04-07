@@ -7,6 +7,7 @@
 - add Stripe integration for payment links
 - fix tenant send_invoice email
 - fix bug in resourceables - resources_url
+- fix bug in _form_content - params[:controller] missing for some reason
 
 ### 4/4/2025
 
