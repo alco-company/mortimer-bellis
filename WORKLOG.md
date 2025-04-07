@@ -8,6 +8,7 @@
 - fix tenant send_invoice email
 - fix bug in resourceables - resources_url
 - fix bug in _form_content - params[:controller] missing for some reason
+- fix bug in field_specializations - include? not available to nil
 
 ### 4/4/2025
 

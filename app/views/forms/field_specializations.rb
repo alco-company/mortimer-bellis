@@ -85,21 +85,21 @@ module FieldSpecializations
   class InputField < Superform::Rails::Components::InputComponent
     def field_attributes
       field.value = @attributes[:value] if @attributes[:value].present?
-      @attributes.keys.include?(:class) ? super : super.merge(class: "mort-form-text")
+      @attributes.keys&.include?(:class) ? super : super.merge(class: "mort-form-text")
     end
   end
 
   class MoneyField < Superform::Rails::Components::InputComponent
     def field_attributes
       field.value = @attributes[:value] ? @attributes[:value] : (I18n.t("number.currency.format.unit") + " " + field.value rescue "")
-      @attributes.keys.include?(:class) ? super : super.merge(class: "mort-form-text")
+      @attributes.keys&.include?(:class) ? super : super.merge(class: "mort-form-text")
     end
   end
 
   class NumberField < Superform::Rails::Components::InputComponent
     def field_attributes
       field.value = @attributes[:value] if @attributes[:value]
-      @attributes.keys.include?(:class) ? super.merge(type: "number") : super.merge(class: "mort-form-text", type: "number")
+      @attributes.keys&.include?(:class) ? super.merge(type: "number") : super.merge(class: "mort-form-text", type: "number")
     end
   end
 
@@ -147,7 +147,7 @@ module FieldSpecializations
 
   class SelectField < Superform::Rails::Components::SelectField
     def field_attributes
-      @attributes.keys.include?(:class) ? super : super.merge(class: "mort-form-select")
+      @attributes.keys&.include?(:class) ? super : super.merge(class: "mort-form-select")
     end
 
     #
@@ -183,7 +183,7 @@ module FieldSpecializations
     def options(*collection)
       collection.flatten!
       map_options(collection).each do |key, value|
-        option(selected: field.value.include?(key), value: key) { value }
+        option(selected: field.value&.include?(key), value: key) { value }
       end
     end
   end
@@ -191,7 +191,7 @@ module FieldSpecializations
   class MultipleSelectField < Superform::Rails::Components::SelectField
     def options(*collection)
       map_options(collection).each do |key, value|
-        option(selected: field.value.include?(key), value: key) { value }
+        option(selected: field.value&.include?(key), value: key) { value }
       end
     end
   end
@@ -209,7 +209,7 @@ module FieldSpecializations
     include Phlex::Rails::Helpers::LinkTo
 
     def field_attributes
-      @attributes.keys.include?(:multiple) ? super.merge(type: "file", accept: "image/*", multiple: true) : super.merge(type: "file", accept: "image/*")
+      @attributes.keys&.include?(:multiple) ? super.merge(type: "file", accept: "image/*", multiple: true) : super.merge(type: "file", accept: "image/*")
     end
 
     def view_template(&)
@@ -241,7 +241,7 @@ module FieldSpecializations
 
   class BooleanField < Superform::Rails::Components::CheckboxComponent
     def field_attributes
-      @attributes.keys.include?(:class) ? super.merge(type: "boolean") : super.merge(class: "mort-form-text", type: "boolean")
+      @attributes.keys&.include?(:class) ? super.merge(type: "boolean") : super.merge(class: "mort-form-text", type: "boolean")
     end
     def view_template(&)
       field.value = attributes[:value] if attributes[:value]
@@ -320,7 +320,7 @@ module FieldSpecializations
 
   class TimeField < InputField
     def field_attributes
-      @attributes.keys.include?(:class) ? super.merge(type: "time") : super.merge(class: "mort-form-text", type: "time")
+      @attributes.keys&.include?(:class) ? super.merge(type: "time") : super.merge(class: "mort-form-text", type: "time")
     end
     def view_template(&)
       input(**attributes, value: field.value&.strftime("%H:%M"))
@@ -329,7 +329,7 @@ module FieldSpecializations
 
   class DateField < InputField
     def field_attributes
-      @attributes.keys.include?(:class) ? super.merge(type: "date") : super.merge(class: "mort-form-text", type: "date")
+      @attributes.keys&.include?(:class) ? super.merge(type: "date") : super.merge(class: "mort-form-text", type: "date")
     end
     def view_template(&)
       fld = field.value.class == String ? field.value : field.value&.strftime("%Y-%m-%d") rescue nil
@@ -338,7 +338,7 @@ module FieldSpecializations
   end
   class DateTimeField < InputField
     def field_attributes
-      @attributes.keys.include?(:class) ? super.merge(type: "datetime-local") : super.merge(class: "mort-form-text", type: "datetime-local")
+      @attributes.keys&.include?(:class) ? super.merge(type: "datetime-local") : super.merge(class: "mort-form-text", type: "datetime-local")
     end
     def view_template(&)
       input(**attributes, value: field.value&.strftime("%Y-%m-%dT%H:%M"))
