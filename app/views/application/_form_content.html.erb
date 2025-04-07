@@ -23,6 +23,7 @@
               <!-- Main -->
               <div>
                 <div class="pl-4 pr-4 sm:pr-6 sm:pl-6 pb-1 pt-1 sm:pt-0 scrollbar-hide">
+                  <% Rails.logger.warn params %>
                   <% if (params["controller"].present? && params["controller"].include?("users")) %>
                     <%= render resource_class.form resource: resource, editable: true, registration: params["controller"].include?("registrations") %> <!-- #, fields: [:slug] -->
                   <% else %>
