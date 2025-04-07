@@ -125,3 +125,5 @@ gem "doorkeeper", "~> 5.8"
 gem "posthog-ruby", "~> 2.5"
 
 gem "active_model_otp"
+
+gem "stripe", "~> 14.0"

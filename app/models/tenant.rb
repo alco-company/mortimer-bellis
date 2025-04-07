@@ -43,6 +43,8 @@ class Tenant < ApplicationRecord
   validates :name, presence: true, uniqueness: { message: I18n.t("tenants.errors.messages.name_exist") }
   validates :email, presence: true
 
+  enum :license, { free: 0, ambassador: 1, essential: 2, pro: 3 }
+
   def self.filtered(filter)
     flt = filter.filter
 
@@ -154,6 +156,23 @@ class Tenant < ApplicationRecord
         link: "/users/registrations/edit",
         priority: -5
       }
+    }
+  end
+
+  def license_expires_shortly?
+    license_expires_at.present? && license_expires_at < 1.week.from_now
+  end
+
+  def licenses(lic = nil)
+    if lic.present?
+      self.license=lic.to_i
+      return self.license
+    end
+    {
+      free: I18n.t("tenants.licenses.free"),
+      ambassador: I18n.t("tenants.licenses.ambassador"),
+      essential: I18n.t("tenants.licenses.essential"),
+      pro: I18n.t("tenants.licenses.pro")
     }
   end
 end

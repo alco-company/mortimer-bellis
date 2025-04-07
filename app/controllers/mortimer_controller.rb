@@ -14,6 +14,15 @@ class MortimerController < BaseController
   include DefaultActions
   include TimezoneLocale
 
+  layout :resolve_layout
+
+  def resolve_layout
+    case params[:action]
+    when "edit"; "edit"
+    else; "application"
+    end
+  end
+
   #
   # called by models that have a mugshot
   # on create and update actions

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="<%= I18n.locale %>" class="h-full bg-white scrollbar-hide">
+  <head>
+    <%= render partial: "layouts/generic_header" %>
+    <%= render partial: "layouts/mobile_header" %>
+    <!-- Before Turbo -->
+    <%= turbo_refreshes_with method: :morph, scroll: :preserve %>
+    <!-- End Turbo -->
+    <%= web_push_public_key_meta_tag %>
+  </head>
+  <body id="body" class="h-full" style="height: 100vh;" >
+    <!-- stream for this user -->
+    <%= turbo_stream_from "#{Current.user.id}_user_stream" if Current.user %>
+
+    <!-- tooltip -->
+    <%= turbo_frame_tag "tooltip", class: "absolute", target: "_top" %>
+
+    <!-- streams for notifications, menu, profile -->
+    <%= turbo_stream_from Current.notification_stream if Current.user %>
+
+    <div class="min-h-full" data-controller="mobilesidebar menu page" data-action="keydown@window->page#keydown">
+      <!-- bg-sky-100 text-sky-600 text-pink-600 text-sky-600/20 text-pink-600/20 -->
+      <%= render MobileSidebarComponent.new if Current.user %>
+
+      <%= render SidebarComponent.new if Current.user %>
+
+      <div data-controller="notificationcenter" data-menu-target="topmain" class="flex flex-1 flex-col <%= 'lg:pl-64' if Current.user %>">
+        <%= render_topbar params: params %>
+        <main id="main-element" class="flex-1 pb-8">
+          <%#= render user_top_profile %>
+          <div class="sticky top-20 md:px-4">
+            <%#= render page_overview %>
+
+            <%#= render page_title %>
+
+
+            <%#= render activity_list_smallest_breakpoint_only %>
+            <%#= render activity_list_small_and_up %>
+
+            <%= render Notifications::NotificationCenter.new(recipient: Current.user)  if Current.user %>
+
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <!-- Before Sidebar Form -->
+    <div class="overscroll-none">
+      <%= turbo_frame_tag "form" do %>
+          <%= yield %>
+      <% end %>
+    </div>
+    <!-- End Sidebar Form -->
+
+    <%# 
+    in honor of Tailwind not being able to know 'tags' in advance
+    span(class: "hidden mort-flash-info mort-flash-error mort-flash-success mort-flash-warning mort-flash-notice mort-flash-timedout mort-flash-alert") 
+    span(class: "hidden border-gray-500 border-red-500 border-fuchsia-500 border-sky-200 border-green-500 border-yellow-500 border-sky-500 border-orange-500 border-lime-500 border-cyan-500 border-pink-500 border-amber-500 border-stone-500")
+    %>
+    <%= render FlashComponent.new  messages: flash %>
+
+    <!-- Before ModalContainer -->
+    <remote-modal-container></remote-modal-container>
+    <!-- End ModalContainer -->
+
+    <!--
+    <div class="fixed top-0 left-0 w-full h-full pointer-events-none z-[-1]">
+      <div class="absolute top-0 left-[10px] w-[1px] h-full bg-red-800"></div>
+      <div class="absolute top-0 left-[100px] w-[1px] h-full bg-red-800"></div>
+      <div class="absolute top-0 left-[200px] w-[1px] h-full bg-red-800"></div>
+      <div class="absolute top-0 left-[300px] w-[1px] h-full bg-red-800"></div>
+      <div class="absolute top-0 left-[400px] w-[1px] h-full bg-red-800"></div>
+      <div class="absolute top-0 left-[500px] w-[1px] h-full bg-red-800"></div>
+      <div class="absolute top-0 left-[600px] w-[1px] h-full bg-red-800"></div>
+      <div class="absolute top-0 left-[700px] w-[1px] h-full bg-red-800"></div>
+      <div class="absolute top-0 left-[800px] w-[1px] h-full bg-red-800"></div>
+      <div class="absolute top-0 left-[900px] w-[1px] h-full bg-red-800"></div>
+      <div class="absolute top-0 left-[1000px] w-[1px] h-full bg-red-800"></div>
+    </div>
+    -->
+
+
+
+  </body>
+  <% if Current.user %>
+    <script>
+      setInterval(() => {
+        fetch('<%= check_session_path %>', { method: 'GET', credentials: 'same-origin' })
+          .then(response => {
+            console.log('Session check response', response.status);
+            if (response.redirected) {
+              window.location.href = '<%= new_users_session_url %>';
+            }
+          })
+          .catch(error => console.error('Session check failed', error));
+      //}, 60000); // 15 min in milliseconds
+      }, 900000); // 15 min in milliseconds
+    </script>
+  <% end %>
+
+</html>

@@ -2,6 +2,8 @@
 
 ## CHANGELOG
 
+### 7/4/2025
+
 - add Stripe integration for payment links
 
 ### 4/4/2025

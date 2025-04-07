@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_04_03_080951) do
+ActiveRecord::Schema[8.1].define(version: 2025_04_04_114425) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -657,6 +657,9 @@ ActiveRecord::Schema[8.1].define(version: 2025_04_03_080951) do
     t.string "tax_number"
     t.string "country"
     t.string "access_token"
+    t.integer "license", default: 0
+    t.datetime "license_expires_at"
+    t.datetime "license_changed_at"
   end
 
   create_table "time_materials", force: :cascade do |t|

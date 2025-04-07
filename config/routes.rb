@@ -64,6 +64,9 @@ Rails.application.routes.draw do
 
   post "dinero/callback" => "dinero#callback", as: :dinero_callback
 
+  # Stripe integration
+  get "stripe/payment" => "stripe/payment#new", as: :stripe_payment_new
+
   # -------- END API ROUTES & 3RD PARTY --------
 
   concern :lookupable do

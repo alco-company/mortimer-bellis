@@ -6,6 +6,8 @@ da:
         instruction: "Vælg produktet, som du vil købe"
         free_license_description: "Du bruger lige nu Mortimer med en gratis licens, som kun giver mulighed for at oprette en konto, og oprette brugere, men ikke bruge systemet."
         accept: "Det er mit valg"
+        payment_successfully_confirmed: "Betalingen blev bekræftet"
+        payment_not_confirmed: "Betalingen blev ikke bekræftet"
       delete_all: 
         title: Slet alle konti
         instruction: Er du sikker på, at du vil slette alle konti?
@@ -27,6 +29,11 @@ da:
 
   tenants:
     validation_errors: Der er fejl i det indtastede
+    licenses:
+      free: Gratis
+      ambassador: Ambassadør
+      essential: Essential
+      pro: Pro
 
     create:
       post: Kontoen blev oprettet

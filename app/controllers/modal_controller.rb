@@ -13,6 +13,7 @@ class ModalController < MortimerController
     when "event"; process_event_new
     when "employee"; process_employee_new
     when "punch_card"; process_punch_card_new
+    when "tenant"; process_tenant_new
     else; process_other_new
     end
   end
@@ -32,6 +33,7 @@ class ModalController < MortimerController
     when "punch_card"; process_punch_card_create
     when "event"; process_event_create
     when "time_material"; process_time_material_create
+    when "tenant"; process_tenant_create
     else; process_other_create
     end
   end
@@ -99,6 +101,10 @@ class ModalController < MortimerController
       end
     end
 
+    def process_tenant_new
+      @step = "get_pay_link"
+    end
+
     def process_other_new
       @step = params[:modal_next_step] || "accept"
       @ids = @filter.filter != {} || @batch&.batch_set? || @search.present? ? resources.pluck(:id) : []
@@ -126,6 +132,18 @@ class ModalController < MortimerController
 
     #
     # --------------------------- CREATE --------------------------------
+
+    #  {"authenticity_token"=>"[FILTERED]", "modal_form"=>"buy_product", "resource_class"=>"Tenant", "step"=>"pick_product", "search"=>"", "tenant"=>{"license"=>"pro"}, "button"=>""}
+    def process_tenant_create
+      case params[:step]
+      when "get_pay_link"
+        license = Tenant.new.licenses(params[:tenant][:license])
+        price = params[:tenant][:invoice_yearly] == "1" ? "yr" : "mth"
+        url = Stripe::Service.new.payment_link product: license, price: price, url: stripe_payment_new_url(ui: Current.user.id)
+        render turbo_stream: turbo_stream.replace("modal_container", partial: "modal/stripe_checkout", locals: { url: url })
+      end
+    end
+
     def process_employee_create
       case params[:step]
       when "preview"

@@ -67,6 +67,11 @@ export default class extends Controller {
     dialog.close();
   }
 
+  closeModal(e) {
+    const modal = document.getElementById("new_form_modal");
+    modal.close();
+  }
+
   close(e) {
     this.removeScrollBlock()
     // e.preventDefault();

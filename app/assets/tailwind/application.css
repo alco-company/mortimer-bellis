@@ -362,3 +362,11 @@ dialog {
     }
   }
 }
+
+label.tenant-license:has(input[type="radio"]:checked) {
+  @apply border-2 border-purple-700 bg-purple-50;
+
+  svg {
+    @apply text-purple-700;
+  }
+}
