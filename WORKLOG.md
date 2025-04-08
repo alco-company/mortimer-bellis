@@ -2,11 +2,14 @@
 
 ## CHANGELOG
 
+- fix first line in list contextmenu on turbo_stream.append
+
 ### 8/4/2025
 
 - add Ambassador to the buy_product - and fix emails
 - fix license dates = nil issue
 - fix missing STRIPE_SECRET_KEY
+- missing expected params
 
 ### 7/4/2025
 
