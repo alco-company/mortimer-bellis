@@ -8,13 +8,13 @@ class TenantLicense < ApplicationComponent
     return unless Current.get_user.admin? or Current.get_user.superadmin?
     turbo_frame_tag "tenant_license" do
       p(class: "text-sm text-purple-600") do
-        t("users.edit_profile.buy_product.current_status", license: "Mortimer #{Current.get_tenant.license.titleize}").html_safe
+        t("users.edit_profile.buy_product.current_status", license: license_title).html_safe
       end
       p(class: "text-xs text-purple-600") do
-        t("users.edit_profile.buy_product.license_expiring", expiring: I18n.l(Current.get_tenant.license_expires_at, format: :short)).html_safe
+        t("users.edit_profile.buy_product.license_expiring", expiring: license_ex).html_safe
       end
       p(class: "text-xs text-purple-600") do
-        t("users.edit_profile.buy_product.license_changed", changed: I18n.l(Current.get_tenant.license_changed_at, format: :short)).html_safe
+        t("users.edit_profile.buy_product.license_changed", changed: license_changed).html_safe
       end
 
       if Current.get_tenant.license_expires_shortly? or Current.get_tenant.license == "free"
@@ -40,5 +40,23 @@ class TenantLicense < ApplicationComponent
         end
       end
     end
+  end
+
+  def license_title
+    "Mortimer #{Current.get_tenant.license&.titleize}"
+  rescue
+    "N/A"
+  end
+
+  def license_ex
+    I18n.l(Current.get_tenant.license_expires_at, format: :short)
+  rescue
+    "N/A"
+  end
+
+  def license_changed
+    I18n.l(Current.get_tenant.license_changed_at, format: :short)
+  rescue
+    "N/A"
   end
 end
