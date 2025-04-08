@@ -27,13 +27,13 @@
                   <span class="block text-sm font-medium text-gray-900">Essential</span>
 
                   <span class="mt-1 flex items-center text-xs text-gray-500">&nbsp;</span>
-                  <span class="mt-1 flex items-center text-xs text-gray-500">&#8734; users</span>
-                  <span class="mt-1 flex items-center text-xs text-gray-500">&#8734; time/material</span>
-                  <span class="mt-1 flex items-center text-xs text-gray-500">&#8734; customers</span>
-                  <span class="mt-1 flex items-center text-xs text-gray-500">&#8734; products</span>
-                  <span class="mt-1 flex items-center text-xs text-gray-500">CSV data export</span>
-                  <span class="mt-4 flex items-center text-xs text-gray-500">E-mail support</span>
-                  <span class="mt-6 flex items-center text-xs text-gray-500">€ 1,00/user/month</span>
+                  <span class="mt-1 flex items-center text-xs text-gray-500">&#8734; <%= t("tenant.modal.buy_product.users") %></span>
+                  <span class="mt-1 flex items-center text-xs text-gray-500">&#8734; <%= t("tenant.modal.buy_product.time_material") %></span>
+                  <span class="mt-1 flex items-center text-xs text-gray-500">&#8734; <%= t("tenant.modal.buy_product.customers") %></span>
+                  <span class="mt-1 flex items-center text-xs text-gray-500">&#8734; <%= t("tenant.modal.buy_product.products") %></span>
+                  <span class="mt-1 flex items-center text-xs text-gray-500"><%= t("tenant.modal.buy_product.csv_data_export") %></span>
+                  <span class="mt-4 flex items-center text-xs text-gray-500"><%= t("tenant.modal.buy_product.e_mail_support") %></span>
+                  <span class="mt-6 flex items-center text-xs text-gray-500"><%= t("tenant.modal.buy_product.essential_price") %></span>
                   <!-- <span class="mt-6 text-sm font-medium text-gray-900">1200 users</span> -->
                 </span>
               </span>
@@ -54,14 +54,14 @@
                 <span class="flex flex-col">
                   <span class="block text-sm font-medium text-gray-900">Pro</span>
 
-                  <span class="mt-1 flex items-center text-xs text-gray-500">All from Essential</span>
-                  <span class="mt-1 flex items-center text-xs text-gray-500">&#8734; projects</span>
-                  <span class="mt-1 flex items-center text-xs text-gray-500">&#8734; teams</span>
-                  <span class="mt-1 flex items-center text-xs text-gray-500">&#8734; locations</span>
-                  <span class="mt-1 flex items-center text-xs text-gray-500">Microsoft SSO</span>
-                  <span class="mt-1 flex items-center text-xs text-gray-500">Dinero integration</span>
-                  <span class="mt-4 flex items-center text-xs text-gray-500">Account support</span>
-                  <span class="mt-6 flex items-center text-xs text-gray-500">€ 3,00/user/month</span>
+                  <span class="mt-1 flex items-center text-xs text-gray-500"><%= t("tenant.modal.buy_product.all_from_essential") %></span>
+                  <span class="mt-1 flex items-center text-xs text-gray-500">&#8734; <%= t("tenant.modal.buy_product.projects") %></span>
+                  <span class="mt-1 flex items-center text-xs text-gray-500">&#8734; <%= t("tenant.modal.buy_product.teams") %></span>
+                  <span class="mt-1 flex items-center text-xs text-gray-500">&#8734; <%= t("tenant.modal.buy_product.locations") %></span>
+                  <span class="mt-1 flex items-center text-xs text-gray-500"><%= t("tenant.modal.buy_product.microsoft_sso") %></span>
+                  <span class="mt-1 flex items-center text-xs text-gray-500"><%= t("tenant.modal.buy_product.dinero_integration") %></span>
+                  <span class="mt-4 flex items-center text-xs text-gray-500"><%= t("tenant.modal.buy_product.account_support") %></span>
+                  <span class="mt-6 flex items-center text-xs text-gray-500"><%= t("tenant.modal.buy_product.pro_price") %></span>
                 </span>
               </span>
               <!-- Not Checked: "invisible" -->
@@ -80,8 +80,8 @@
               <span class="flex flex-1">
                 <span class="flex flex-col">
                   <span class="block text-sm font-medium text-gray-900">Ambassador</span>
-                  <span class="mt-1 flex items-center text-xs text-gray-500">Apply here</span>
-                  <span class="mt-6 text-xs font-medium text-gray-900">few seats left</span>
+                  <span class="mt-1 flex items-center text-xs text-gray-500"><%= t("tenant.modal.buy_product.apply_for_ambassador") %></span>
+                  <span class="mt-6 text-xs font-medium text-gray-900"><%= t("tenant.modal.buy_product.few_seats_left") %></span>
                 </span>
               </span>
               <!-- Not Checked: "invisible" -->
@@ -108,8 +108,8 @@
             <span aria-hidden="true" data-boolean-target="handle" class="pointer-events-none absolute left-0 inline-block h-5 w-5 transform rounded-full border border-gray-200 bg-white shadow-sm ring-0 transition-transform duration-200 ease-in-out translate-x-0"></span>
           </button>
           <span class="ml-3 text-sm" id="annual-billing-label">
-            <span class="font-medium text-gray-900">Annual billing</span>
-            <span class="text-gray-500">(Save 16%)</span>
+            <span class="font-medium text-gray-900"><%= t("tenant.modal.buy_product.annual_billing") %></span>
+            <span class="text-gray-500"><%= t("tenant.modal.buy_product.save_percent", percent: 16) %></span>
           </span>
         </div>
       </div>

@@ -23,6 +23,11 @@ class TenantMailer < ApplicationMailer
     mail to: @email, subject: "Mortimer Invoice"
   end
 
+  def send_ambassador_request
+    @tenant = params[:tenant]
+    @email = params[:recipient]
+    mail to: @email, subject: "Mortimer Ambassador Request"
+  end
 
   # params:
   # :rcpt is the recipient (object) that has two methods: email, and :name

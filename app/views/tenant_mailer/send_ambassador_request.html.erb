@@ -358,27 +358,24 @@
             <tr>
               <td class="p-12 sm:px-6 text-base text-slate-700 bg-white rounded-sm shadow-xs">
                 <h1 class="m-0 mb-6 text-base sm:leading-8 text-black font-semibold">
-                  <%= I18n.t("tenant.mailer.send_invoice.hello", name: @tenant.name) %>
+                    Ambassador Request from <%= @tenant.name %> 
                 </h1>
                 <p class="m-0 leading-6">
-                  <%== t("tenant.mailer.send_invoice.confirmed_license", license: "Mortimer #{@tenant.license}") %>
-                </p>
-                <div role="separator" class="false bg-slate-200" style="height: 1px; line-height: 1px; margin: 0; margin-top: 32px; margin-bottom: 32px">&zwj;</div>
-                <p class="m-0 text-sm text-gray-500">
-                  <%== t("tenant.mailer.send_invoice.license_subscription_renewal", renewal_date: I18n.l(@tenant.license_expires_at, format: :short)) %>
+                    The tenant <%= @tenant.name %> has requested to become an ambassador. 
                 </p>
                 <p class="m-0 leading-6">
-                  <%== t("tenant.mailer.send_invoice.we_created_an_invoice_for_you", url: @pdf) %>
+                    You may contact them at <%= @tenant.email %>.
                 </p>
+                <div role="separator" class="false bg-slate-200" style="height: 1px; line-height: 1px; margin: 0; margin-top: 32px; margin-bottom: 32px">&zwj;</div>
                 <div class="my-8 text-sm">
-                  <%= I18n.t("tenant.mailer.send_invoice.regards") %>
+                  <%= I18n.t("tenant.mailer.send_ambassador_request.regards") %>
                   <br>
                   <strong class="text-sky-700 text-xl">
                     M O R T I M E R
                   </strong>
                   <br>
                   <br>
-                  <span class="text-sm italic text-gray-500">the team at Mortimer</span>
+                  <span class="text-sm italic text-gray-500">Mortimer System Message</span>
                 </div>
               </td>
             </tr>

@@ -2,12 +2,35 @@ da:
   tenant:
     modal:
       buy_product:
+        hello: "Hej %{name},"
         title: "Betal for Mortimer"
-        instruction: "Vælg produktet, som du vil købe"
+        instruction: "Vælg mellem Essential, Pro eller Ambassador - og markér om du vil betale én gang om året (kun relevant for Essential og Pro)"
+        pick_a_license: "Vælg en licens"
         free_license_description: "Du bruger lige nu Mortimer med en gratis licens, som kun giver mulighed for at oprette en konto, og oprette brugere, men ikke bruge systemet."
         accept: "Det er mit valg"
         payment_successfully_confirmed: "Betalingen blev bekræftet"
         payment_not_confirmed: "Betalingen blev ikke bekræftet"
+        users: brugere
+        time_material: tid/materialer
+        customers: kunder
+        products: produkter
+        csv_data_export: CSV eksport
+        e_mail_support: email support
+        essential_price: € 1/bruger/mdr
+        all_from_essential: Alt fra Essential
+        projects: projekter
+        teams: hold
+        locations: arbejdssteder
+        microsoft_sso: Microsoft SSO
+        dinero_integration: Dinero integration
+        account_support: account support
+        pro_price: € 3/bruger/mdr
+        apply_for_ambassador: Markér denne licens, hvis du gerne vil være ambassadør for Mortimer - så hører du fra os.
+        few_seats_left: Få pladser tilbage
+        annual_billing: Betal én gang om året
+        save_percent: Spar %{percent}%
+        we_got_notified_you_will_hear_from_us_soon: "Vi har modtaget din anmodning, og vil snart kontakte dig."
+
       delete_all: 
         title: Slet alle konti
         instruction: Er du sikker på, at du vil slette alle konti?
@@ -25,6 +48,16 @@ da:
         we_created_an_tenant: "Vi har oprettet en konto til jer på  M O R T I M E R.<br>For at logge på, skal du <a href='%{url}'>klikke her</a> og bruge de nedenstående oplysninger.<p>Du kan rette adgangskoden (faktisk vil vi gerne hvis du gør det), når du er logget korrekt ind:"
         confirmation_instruction: "Brugernavn: %{email}"
         ignore: "Hvis du ikke har bedt om en konto, kan du ignorere denne e-mail, og så beklager vi ulejligheden."
+        regards: Med venlig hilsen,
+      send_ambassador_request:
+        regards: Med venlig hilsen,
+      send_invoice:
+        hello: "Hej %{name},"
+        page_title: "Betal for Mortimer"
+        preheader: Invoice email from  M O R T I M E R  - maybe Europe's easiest and cheapest time tracking system
+        confirmed_license: Du har nu valgt at betale for Mortimer. Du har valgt en %{license} licens, og det vil vi gerne sige mange tak for!
+        license_subscription_renewal: Dit abonnement på licensen udløber %{renewal_date} - da skal du senest forny den for at fortsætte med at bruge de funktioner licensen giver adgang til.
+        we_created_an_invoice_for_you: "Vi har oprettet en faktura for dig, som du kan hente her: <a href='%{url}'>PDF faktura</a>"
         regards: Med venlig hilsen,
 
   tenants:

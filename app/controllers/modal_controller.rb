@@ -137,10 +137,24 @@ class ModalController < MortimerController
     def process_tenant_create
       case params[:step]
       when "get_pay_link"
-        license = Tenant.new.licenses(params[:tenant][:license])
-        price = params[:tenant][:invoice_yearly] == "1" ? "yr" : "mth"
-        url = Stripe::Service.new.payment_link product: license, price: price, url: stripe_payment_new_url(ui: Current.user.id)
-        render turbo_stream: turbo_stream.replace("modal_container", partial: "modal/stripe_checkout", locals: { url: url })
+        if params[:tenant][:license] == "1" # "ambassador"
+          Current.get_tenant.update license: "ambassador", license_changed_at: Time.current, license_expires_at: Time.current + 1.month
+          TenantMailer.with(tenant: Current.get_tenant, user: Current.get_user, recipient: "info@mortimer.pro").send_ambassador_request.deliver_later
+
+          flash[:success] = t("tenant.modal.buy_product.we_got_notified_you_will_hear_from_us_soon")
+          render turbo_stream: [
+            turbo_stream.replace("new_form_modal", ""),
+            turbo_stream.replace("tenant_license", partial: "modal/tenant_license"),
+            turbo_stream.replace("flash_container", partial: "application/flash_message", locals: { tenant: Current.get_tenant, messages: flash, user: Current.get_user })
+            # special
+          ]
+          flash.clear
+        else
+          license = Tenant.new.licenses(params[:tenant][:license])
+          price = params[:tenant][:invoice_yearly] == "1" ? "yr" : "mth"
+          url = Stripe::Service.new.payment_link product: license, price: price, url: stripe_payment_new_url(ui: Current.user.id)
+          render turbo_stream: turbo_stream.replace("modal_container", partial: "modal/stripe_checkout", locals: { url: url })
+        end
       end
     end
 

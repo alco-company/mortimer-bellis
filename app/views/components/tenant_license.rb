@@ -1,4 +1,4 @@
-class TenantLicense < ApplicationForm
+class TenantLicense < ApplicationComponent
   include Phlex::Rails::Helpers::TurboFrameTag
   include Phlex::Rails::Helpers::LinkTo
   include Phlex::Rails::Helpers::Routes
@@ -8,13 +8,13 @@ class TenantLicense < ApplicationForm
     return unless Current.get_user.admin? or Current.get_user.superadmin?
     turbo_frame_tag "tenant_license" do
       p(class: "text-sm text-purple-600") do
-        t("users.edit_profile.buy_product.current_status", license: "Mortimer #{Current.get_tenant.licenses(Current.get_tenant.license)}").html_safe
+        t("users.edit_profile.buy_product.current_status", license: "Mortimer #{Current.get_tenant.license.titleize}").html_safe
       end
-      p(class: "text-sm text-purple-600") do
-        t("users.edit_profile.buy_product.license_expiring", expiring: Current.get_tenant.license_expires_at).html_safe
+      p(class: "text-xs text-purple-600") do
+        t("users.edit_profile.buy_product.license_expiring", expiring: I18n.l(Current.get_tenant.license_expires_at, format: :short)).html_safe
       end
-      p(class: "text-sm text-purple-600") do
-        t("users.edit_profile.buy_product.license_changed", changed: Current.get_tenant.license_changed_at).html_safe
+      p(class: "text-xs text-purple-600") do
+        t("users.edit_profile.buy_product.license_changed", changed: I18n.l(Current.get_tenant.license_changed_at, format: :short)).html_safe
       end
 
       if Current.get_tenant.license_expires_shortly? or Current.get_tenant.license == "free"

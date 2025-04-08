@@ -49,7 +49,7 @@ class ApplicationForm < Superform::Rails::Form
         row field(:license_expires_at).date(class: "mort-form-date"), "mort-field my-0"
         row field(:license_changed_at).date(class: "mort-form-date"), "mort-field my-0"
       end
-      render TenantLicense.new resource: resource
+      render TenantLicense.new
     end
   end
 

@@ -2,6 +2,10 @@
 
 ## CHANGELOG
 
+### 8/4/2025
+
+- add Ambassador to the buy_product - and fix emails
+
 ### 7/4/2025
 
 - add Stripe integration for payment links
