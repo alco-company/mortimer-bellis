@@ -86,9 +86,11 @@ class TimeMaterial < ApplicationRecord
   end
 
   def has_insufficient_data?
-    (project_name.present? && project_id.blank?) ||
-    (customer_name.present? && customer_id.blank?) ||
-    (product_name.present? && product_id.blank?)
+    hid = false
+    hid = true if project_name.present? && project_id.blank? && Current.get_user.cannot?(:allow_create_project)
+    hid = true if customer_name.present? && customer_id.blank? && Current.get_user.cannot?(:allow_create_customer)
+    hid = true if product_name.present? && product_id.blank? && Current.get_user.cannot?(:allow_create_product)
+    hid
   end
   # def self.filtered(filter)
   #   flt = filter.collect_filters self
@@ -386,7 +388,7 @@ class TimeMaterial < ApplicationRecord
   def prepare_tm(resource_params)
     if resource_params[:state].present? &&
       resource_params[:state] == "done" &&
-      Current.user.default(:validate_time_material_done, true) == "true"
+      Current.user.should?(:validate_time_material_done)
 
       if resource_params[:played].present?
         resource_params.delete(:played)

@@ -3,10 +3,10 @@ class TimeMaterialsController < MortimerController
     super
     resource.customer_name = TimeMaterial.by_exact_user(Current.user).last&.customer_name
     resource.state =         Current.user.default(:default_time_material_state, "draft")
-    resource.about =         Current.user.default(:default_time_material_about, "ongoing task")
-    resource.hour_time =     Current.user.default(:default_time_material_hour_time, 0)
-    resource.minute_time =   Current.user.default(:default_time_material_minute_time, 15)
-    resource.rate =          Current.user.default(:default_time_material_rate, "500,00")
+    resource.about =         Current.user.default(:default_time_material_about, "")
+    resource.hour_time =     Current.user.default(:default_time_material_hour_time, "")
+    resource.minute_time =   Current.user.default(:default_time_material_minute_time, "")
+    resource.rate =          Current.user.default(:default_time_material_rate, "")
     resource.over_time =     Current.user.default(:default_time_material_over_time, 0)
 
     resource.date = Time.current.to_date
@@ -112,7 +112,7 @@ class TimeMaterialsController < MortimerController
         started_at: Time.current,
         time_spent: 0,
         date: Time.current.to_date,
-        about: t("time_material.current_task")
+        about: "" # t("time_material.current_task")
       }
       params.delete(:play)
       params[:played] = true

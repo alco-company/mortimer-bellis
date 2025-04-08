@@ -140,6 +140,7 @@ class InvoiceItemValidator
   # end
 
   def product_must_exist
+    return true unless Current.get_user.cannot?(:allow_create_product)
     if product_id.present? && !Product.by_tenant.find(product_id)
       errors.add(:product, tr("must_exist"))
     end

@@ -13,6 +13,7 @@
 - add registered users to licens qty
 - fix last line in list contextmenu
 - react to [Delete] on current_list_item and [Enter] on delete modal
+- 2. try on fixing time_material
 
 ### 7/4/2025
 
