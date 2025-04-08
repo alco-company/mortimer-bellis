@@ -5,7 +5,7 @@ class Stripe::Service < SaasService
     Current.system_user = user
     @provided_service = provided_service || Current.get_tenant.provided_services.by_name("Stripe").first || ProvidedService.new
     @settings = settings || @provided_service&.service_params_hash || empty_params
-    # @settings["api_key"] = @provided_service.organizationID || 0
+    @settings = empty_params if @settings["api_key"].blank?
   end
 
   def empty_params

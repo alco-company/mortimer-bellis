@@ -6,6 +6,7 @@
 
 - add Ambassador to the buy_product - and fix emails
 - fix license dates = nil issue
+- fix missing STRIPE_SECRET_KEY
 
 ### 7/4/2025
 
