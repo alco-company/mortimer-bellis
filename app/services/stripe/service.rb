@@ -22,7 +22,7 @@ class Stripe::Service < SaasService
     Stripe.api_key = settings["api_key"]
     url += "&ci={CHECKOUT_SESSION_ID}"
 
-    prices = Stripe::Price.list({ limit: 3 })
+    prices = Stripe::Price.list({ limit: 4 })
     price = prices.select { |p| p.lookup_key =~ /#{product}_#{price}/ }.first
     pl = Stripe::PaymentLink.create({
       line_items: [

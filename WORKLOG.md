@@ -10,6 +10,7 @@
 - fix license dates = nil issue
 - fix missing STRIPE_SECRET_KEY
 - missing expected params
+- get 4 products from Stripe
 
 ### 7/4/2025
 
