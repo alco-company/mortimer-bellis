@@ -28,7 +28,7 @@ class Stripe::Service < SaasService
       line_items: [
         {
           price: price.id,
-          quantity: 1
+          quantity: get_qty
         }
       ],
       after_completion: {
@@ -63,4 +63,13 @@ class Stripe::Service < SaasService
       false
     end
   end
+
+  private
+
+    def get_qty
+      q = Current.get_tenant.users.count
+      q > 0 ? q : 1
+    rescue
+      1
+    end
 end
