@@ -27,6 +27,7 @@ export default class extends Controller {
     switch(e.key) {
       case "+":         document.getElementById("new_list_item").click(); break;
       case ",":         this.editCurrentListItem(); break;
+      case "Delete":    this.deleteCurrentListItem(); break;
       case "ArrowUp": this.findPreviousListItem(); break;
       case "ArrowDown": this.findNextListItem(); break;
       case "Escape":    break;
@@ -43,6 +44,17 @@ export default class extends Controller {
       current = current
         .querySelectorAll("div")[6]
         .querySelectorAll("a[href$='edit'")[0]
+      if (current) current.click();
+    }
+  }
+
+  deleteCurrentListItem() {
+    let current = document.getElementsByClassName("current_list_item")[0] || document.getElementById("record_list").children[0]
+    if (current) {
+      current.classList.contains("current_list_item") ? current : current.classList.add("current_list_item")
+      current = current
+        .querySelectorAll("div")[6]
+        .querySelectorAll("a[href*='delete'")[0]
       if (current) current.click();
     }
   }

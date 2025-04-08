@@ -2,7 +2,7 @@ import { Controller } from "@hotwired/stimulus"
 
 // Connects to data-controller="modal"
 export default class extends Controller {
-  static targets = ["backdrop", "dialog", "dismiss"];
+  static targets = ["backdrop", "dialog", "dismiss", "submitForm"];
 
   connect() {
     // this.element.dataset.action = "modal#show";
@@ -45,6 +45,20 @@ export default class extends Controller {
     // this.dialogTarget.classList.remove(...this.dialogEnteringClass.split(" "));
     // this.dialogTarget.classList.remove(...this.dialogLeavingClass.split(" "));
     this.removeScrollBlock()
+  }
+
+  keydown(e) {
+    e.stopPropagation();
+    switch(e.key) {
+      case "Escape":
+        this.close(e);
+        break;
+      case "Enter":
+        this.submitFormTarget.click();
+        break;
+      default:
+        console.log(`[modal_controller] you pressed ${e.key}`);
+    }
   }
 
   removeScrollBlock(){
