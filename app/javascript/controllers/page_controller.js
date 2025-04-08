@@ -17,8 +17,8 @@ export default class extends Controller {
     // Ensure we have a fixed height container for scrolling
     const listContainer = document.getElementById("record_list");
     if (listContainer) {
-      listContainer.style.maxHeight = "calc(100vh - 180px)"; // Adjust 200px based on your header/footer height
-      listContainer.style.height = "calc(100vh - 180px)"; // 
+      listContainer.style.maxHeight = "calc(100vh - 170px)"; // Adjust 200px based on your header/footer height
+      listContainer.style.height = "calc(100vh - 170px)"; // 
       listContainer.style.overflowY = "auto";
     }
   }

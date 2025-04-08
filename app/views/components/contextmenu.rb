@@ -130,7 +130,7 @@ class Contextmenu < Phlex::HTML
         transition_leave_end: "transform opacity-0 scale-95"
       },
       class:
-        "hidden bottom-6 list_context_menu",
+        "hidden top-0 list_context_menu",
       role: "menu",
       aria_orientation: "vertical",
       aria_labelledby: "options-menu-0-button",

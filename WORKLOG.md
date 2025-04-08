@@ -2,7 +2,6 @@
 
 ## CHANGELOG
 
-- fix first line in list contextmenu on turbo_stream.append
 
 ### 8/4/2025
 
@@ -12,6 +11,7 @@
 - missing expected params
 - get 4 products from Stripe
 - add registered users to licens qty
+- fix last line in list contextmenu
 
 ### 7/4/2025
 
