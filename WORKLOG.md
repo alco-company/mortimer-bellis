@@ -6,6 +6,7 @@
 ### 9/4/2025
 
 - allow default_time_material_date to be evaluated
+- fix bug on list paint
 
 ### 8/4/2025
 

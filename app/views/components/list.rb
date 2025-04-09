@@ -31,7 +31,7 @@ class List < ApplicationComponent
 
   def html_list(&block)
     if initial
-      list_records
+      # list_records
       # turbo_frame_tag "pagination", src: resources_url(format: :turbo_stream), loading: "lazy"
       # div(id: "record_list", class: "scrollbar-hide") { }
     else
