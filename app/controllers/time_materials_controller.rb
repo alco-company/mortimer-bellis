@@ -8,9 +8,8 @@ class TimeMaterialsController < MortimerController
     resource.minute_time =   Current.user.default(:default_time_material_minute_time, "")
     resource.rate =          Current.user.default(:default_time_material_rate, "")
     resource.over_time =     Current.user.default(:default_time_material_over_time, 0)
-
-    resource.date = Time.current.to_date
-    resource.user_id = Current.user.id
+    resource.date =          eval Current.user.default(:default_time_material_date, "Time.current.to_date")
+    resource.user_id =       Current.user.id
   end
 
   def index
@@ -111,8 +110,8 @@ class TimeMaterialsController < MortimerController
         user_id: Current.user.id,
         started_at: Time.current,
         time_spent: 0,
-        date: Time.current.to_date,
-        about: "" # t("time_material.current_task")
+        date: eval(Current.user.default(:default_time_material_date, "Time.current.to_date.yesterday")),
+        about: Current.user.default(:default_time_material_about, "")
       }
       params.delete(:play)
       params[:played] = true
@@ -185,16 +184,16 @@ class TimeMaterialsController < MortimerController
         :time_spent,
         :started_at,
         :paused_at,
+        # :odo_from,
+        # :odo_to,
+        # :kilometers,
+        # :trip_purpose,
+        # :odo_from_time,
+        # :odo_to_time,
         :is_invoice,
         :is_free,
         :is_offer,
-        :is_separate,
-        :odo_from,
-        :odo_to,
-        :kilometers,
-        :trip_purpose,
-        :odo_from_time,
-        :odo_to_time
+        :is_separate
       ])
     end
 

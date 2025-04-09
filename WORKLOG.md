@@ -2,6 +2,10 @@
 
 ## CHANGELOG
 
+- fix validation on time_material
+### 9/4/2025
+
+- allow default_time_material_date to be evaluated
 
 ### 8/4/2025
 
