@@ -8,7 +8,7 @@ class Users::Registrations::Form < ApplicationForm
       h1 { I18n.t("users.edit_profile.name") }
       plain helpers.mortimer_version
 
-      if Current.user.superadmin?
+      if user.superadmin?
         row field(:tenant_id).select(Tenant.all.order(name: :asc).select(:id, :name), prompt: I18n.t(".select_tenant"), class: "mort-form-select")
         row field(:global_queries).boolean(class: "mort-form-bool")
       else

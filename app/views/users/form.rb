@@ -1,7 +1,7 @@
 class Users::Form < ApplicationForm
   def view_template(&)
     view_only field("tenant.name").input()
-    if model.superadmin? and not Current.user.superadmin?
+    if model.superadmin? and not user.superadmin?
       view_only field(:name).input()
       view_only field(:email).input()
       view_only field(:mugshot).file(class: "mort-form-text")
@@ -17,7 +17,7 @@ class Users::Form < ApplicationForm
       row field(:time_zone).select(User.time_zones_for_phlex, class: "mort-form-select")
     end
     role_select
-    if Current.user.superadmin?
+    if user.superadmin?
       row field(:remember_created_at).datetime(class: "mort-form-datetime")
       row field(:current_sign_in_ip).input()
       row field(:confirmation_token).input()
@@ -42,10 +42,10 @@ class Users::Form < ApplicationForm
   end
 
   def role_select
-    if Current.user.id == model.id or Current.user.user?
+    if user.id == model.id or user.user?
       return view_only field(:role).enum_select(User.roles.keys, class: "mort-form-select")
     end
-    if Current.user.superadmin?
+    if user.superadmin?
       row field(:role).enum_select(User.roles.keys, class: "mort-form-select")
     else
       return view_only field(:role).enum_select(User.roles.keys, class: "mort-form-select") if model.superadmin?

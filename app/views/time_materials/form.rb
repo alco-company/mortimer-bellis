@@ -6,7 +6,7 @@ class TimeMaterials::Form < ApplicationForm
       end
       # date_field
       # user
-      if Current.user.can?(:delegate_time_materials)
+      if user.can?(:delegate_time_materials)
         div(class: "my-1 grid grid-cols-4 gap-x-1 md:gap-x-4 gap-y-1 ") do
           div(class: "my-0 col-span-4 xs:col-span-2") do
             row field(:date).date(class: "mort-form-date"), "mort-field my-0"
@@ -161,7 +161,7 @@ class TimeMaterials::Form < ApplicationForm
         div(class: " pb-2") do
           div(class: "mt-2 grid grid-cols-4 gap-x-4 gap-y-1") do
             div(class: "col-span-4") do
-              row field(:product_id).lookup(class: "mort-form-text #{ field_id_error(resource.product_name, resource.product_id, Current.user.cannot?(:allow_create_product)) }",
+              row field(:product_id).lookup(class: "mort-form-text #{ field_id_error(resource.product_name, resource.product_id, user.cannot?(:allow_create_product)) }",
                 data: {
                   url: "/products/lookup",
                   div_id: "time_material_product_id",
@@ -311,7 +311,7 @@ class TimeMaterials::Form < ApplicationForm
   end
 
   def show_possible_issues
-    entry = InvoiceItemValidator.new(@resource, user)
+    entry = InvoiceItemValidator.new(@resource, @resource.user)
     if entry.valid?
       div(class: "text-sm mt-2 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-sm relative") do
         p() { I18n.t("invoice_item.issues.no_issues") }
