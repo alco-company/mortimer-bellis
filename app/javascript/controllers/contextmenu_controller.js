@@ -30,7 +30,8 @@ export default class extends Controller {
   show() {
     this.buttonTarget.setAttribute('aria-expanded', 'true');
     this.buttonTarget.classList.add('active');
-    if (this.lastItemInList(this.buttonTarget.closest(".list_item"))) {
+    let list_items = document.querySelectorAll(".list_context_menu")
+    if (this.lastItemInList(this.buttonTarget.closest(".list_item")) && list_items.length > 3) {
       this.popupTarget.classList.remove("top-0");
       this.popupTarget.classList.add("bottom-6");
     }
