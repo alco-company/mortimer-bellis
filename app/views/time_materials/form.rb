@@ -176,7 +176,7 @@ class TimeMaterials::Form < ApplicationForm
             end
             div(class: "col-span-4 grid gap-x-2 grid-cols-4") do
               div(class: "col-span-2") do
-                row field(:quantity).input(), "mort-field my-1"
+                row field(:quantity).input(), "mort-field my-1  #{ field_relation_error(resource.product_id, resource.quantity) }"
               end
               div(class: "col-span-2") do
                 row field(:unit).select(@resource.units, class: "mort-form-select text-sm"), "mort-field my-1"
@@ -184,7 +184,7 @@ class TimeMaterials::Form < ApplicationForm
             end
             div(class: "col-span-4 grid gap-x-2 grid-cols-5") do
               div(class: "col-span-3") do
-                row field(:unit_price).input(), "mort-field my-1"
+                row field(:unit_price).input(), "mort-field my-1  #{ field_relation_error(resource.product_id, resource.unit_price) }"
               end
               div(class: "col-span-2") do
                 row field(:discount).input(placeholder: I18n.t("time_material.discount.placeholder")), "mort-field my-1"
@@ -329,6 +329,12 @@ class TimeMaterials::Form < ApplicationForm
 
   def field_id_error(value, dependant, allowed = true)
     if !value.blank? and dependant.blank? and allowed
+      "border-1 border-red-500"
+    end
+  end
+
+  def field_relation_error(other_value, value)
+    if !other_value.blank? and value.blank?
       "border-1 border-red-500"
     end
   end

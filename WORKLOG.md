@@ -10,6 +10,7 @@
 - fix validation on time_material
 - missing user on form init
 - set user on form init
+- validate quantity and unit_price on time_material
 
 ### 8/4/2025
 
