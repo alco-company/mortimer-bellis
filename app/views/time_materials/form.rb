@@ -311,7 +311,7 @@ class TimeMaterials::Form < ApplicationForm
   end
 
   def show_possible_issues
-    entry = InvoiceItemValidator.new(@resource)
+    entry = InvoiceItemValidator.new(@resource, user)
     if entry.valid?
       div(class: "text-sm mt-2 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-sm relative") do
         p() { I18n.t("invoice_item.issues.no_issues") }

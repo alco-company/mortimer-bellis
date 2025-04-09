@@ -8,6 +8,7 @@
 - fix bug on list paint
 - fix contextmenu position
 - fix validation on time_material
+- missing user on form init
 
 ### 8/4/2025
 
