@@ -161,7 +161,7 @@ class TimeMaterials::Form < ApplicationForm
         div(class: " pb-2") do
           div(class: "mt-2 grid grid-cols-4 gap-x-4 gap-y-1") do
             div(class: "col-span-4") do
-              row field(:product_id).lookup(class: "mort-form-text",
+              row field(:product_id).lookup(class: "mort-form-text #{ field_id_error(resource.product_name, resource.product_id, Current.user.cannot?(:allow_create_product)) }",
                 data: {
                   url: "/products/lookup",
                   div_id: "time_material_product_id",
@@ -266,7 +266,7 @@ class TimeMaterials::Form < ApplicationForm
   end
 
   def customer_field
-    row field(:customer_id).lookup(class: "mort-form-text",
+    row field(:customer_id).lookup(class: "mort-form-text #{field_id_error(resource.customer_name, resource.customer_id, resource.is_invoice?)}",
       data: {
         url: "/customers/lookup",
         div_id: "time_material_customer_id",
@@ -277,7 +277,7 @@ class TimeMaterials::Form < ApplicationForm
   end
 
   def project_field
-    row field(:project_id).lookup(class: "mort-form-text",
+    row field(:project_id).lookup(class: "mort-form-text #{field_id_error(resource.project_name, resource.project_id)}",
       data: {
         url: "/projects/lookup",
         div_id: "time_material_project_id",
@@ -302,7 +302,7 @@ class TimeMaterials::Form < ApplicationForm
         fieldset do
           legend(class: "text-sm font-semibold leading-6 text-gray-900") { I18n.t("time_material.invoicing.lead") }
           div(class: "mt-1 space-y-1") do
-            row field(:is_invoice).boolean(data: { time_material_target: "invoice" }, class: "my-auto mort-form-bool"), "mort-field my-1 flex justify-end flex-row-reverse items-center"
+            row field(:is_invoice).boolean(data: { time_material_target: "invoice" }, class: "my-auto mort-form-bool "), "mort-field #{field_bool_error(resource.is_invoice, resource.customer_id)} my-1 flex justify-end flex-row-reverse items-center"
             row field(:is_separate).boolean(class: "my-auto mort-form-bool"), "mort-field my-1 flex justify-end flex-row-reverse items-center"
           end
         end
@@ -324,6 +324,18 @@ class TimeMaterials::Form < ApplicationForm
           end
         end
       end
+    end
+  end
+
+  def field_id_error(value, dependant, allowed = true)
+    if !value.blank? and dependant.blank? and allowed
+      "border-1 border-red-500"
+    end
+  end
+
+  def field_bool_error(value, dependant, allowed = true)
+    if value and dependant.blank? and allowed
+      "border-1 border-red-500"
     end
   end
 

@@ -1,39 +1,60 @@
 #
 #
-# Transition TimeMaterial
+# t.integer "state", default: 0             draft active paused finished  pushed_to_erp error_on_push archived      default_state               fx 'draft'
 #
-# 1. add defaults (implement using settings)
-# 2. add validations depending upon state
-# 3. add conversion table - -
+# t.integer "tenant_id", null: false                                                                                Current.get_tenant
+# t.integer "user_id", null: false                                                                                  | delegate_time_materials   true
+#                                                                                                                   | Current.get_user.id
 #
-# state                         draft   active  paused  finished  pushed_to_erp   error_on_push   archived        default_state             fx 'draft'
+# t.string "date"                                                                                                   default_date                today
+# t.string "time"
+# t.datetime "paused_at"
+# t.datetime "started_at"
+# t.integer "time_spent"
+# t.date "wdate"
+# hour_time                                                                                                         default_hours               fx 0
+# minute_time                                                                                                       default_minutes             fx 15
 #
-# FIELDS:
+# t.string "about"                                                        |                                         default_time_material_about fx 'ongoing task'
+# t.text "comment"                                                        |
 #
-# date                                                  x
-# user_id                                               x                                                         delegate_time_materials   true
-# about                                                                                                           default_about             'ongoing task'
-# hour_time                             s               x                                                         default_hours             0
-# minute_time                           s               x                                                         default_minutes           fx 15
-# rate                                                  x                                                         default_rate              fx 500.00
-# over_time                                             x                                                         default_over_time         fx {base: 100, quarter: 125, fifty: 150, three_quarter: 175, 100percent:200} (%)
+# t.string "customer_name"                                                                                          allow_create_customer
+# t.string "customer_id"                                                  required
 #
+# t.string "project_name"                                                                                           allow_create_project
+# t.string "project_id"
 #
-# product_id                                            x         y                                               allow_create_product
-# comment
-# quantity                                              x         y
-# unit                                                  x         y
-# unit_price                                            x         y
-# discount
+# t.string "product_name"                                                 |                                         allow_create_product
+# t.string "product_id"                                                   | either
 #
-# customer_name                                         x                                                         allow_create_customer
-# customer_id                                           x         y
-# project_name                                          x                                                         allow_create_project
-# project_id                                            x
-#
-# is_invoice                  [ 'y', 'n' ]
-# is_separate                 [ 'y', 'n' ]
+# t.string "quantity"                                                     required                                  default_quantity            fx 1
+# t.string "rate"                                                         required                                  default_rate                fx 500.00
+# t.integer "over_time", default: 0                                                                                 default_over_time           fx {base: 100, quarter: 125, fifty: 150, three_quarter: 175, 100percent:200} (%)
+# t.string "discount"                                                     required                                  default_discount            fx 0.00
+# t.string "unit_price"                                                   required
+# t.string "unit"                                                         required
 
+# t.string "pushed_erp_timestamp"
+# t.string "erp_guid"
+# t.text "push_log"
+
+# t.boolean "is_invoice"
+# t.boolean "is_free"
+# t.boolean "is_offer"
+# t.boolean "is_separate"
+
+# t.datetime "created_at", null: false
+# t.datetime "updated_at", null: false
+
+# currently not implemented
+# t.integer "odo_from"
+# t.integer "odo_to"
+# t.integer "kilometers"
+# t.string "trip_purpose"
+# t.datetime "odo_from_time"
+# t.datetime "odo_to_time"
+
+#
 # VALIDATIONS:
 #
 # validate_draft
@@ -65,7 +86,7 @@ class TimeMaterial < ApplicationRecord
   scope :by_fulltext, ->(query) { includes([ :customer, :project, :product ]).references([ :customers, :projects, :products ]).where("customers.name LIKE :query OR projects.name like :query or products.name like :query or products.product_number like :query or about LIKE :query OR product_name LIKE :query OR comment LIKE :query", query: "%#{query}%") if query.present? }
   scope :by_about, ->(about) { where("about LIKE ?", "%#{about}%") if about.present? }
   scope :by_exact_user, ->(user) { where("user_id= ?", "%#{user.id}%") if user.present? }
-  scope :weekdays, -> { where("cast(strftime('%w', date) as integer) BETWEEN 1 AND 5") }
+  scope :weekdays, -> { where("cast(strftime('%w', wdate) as integer) BETWEEN 1 AND 5") }
 
   # # PostgreSQL
   # scope :weekdays_only_in_timezone, ->(timezone) {
@@ -76,7 +97,6 @@ class TimeMaterial < ApplicationRecord
 
 
   # validates :about, presence: true
-
   # validates :about, presence: true, if: [ Proc.new { |c| c.comment.blank? && c.product_name.blank? } ]
 
   before_save :set_wdate
@@ -90,8 +110,12 @@ class TimeMaterial < ApplicationRecord
     hid = true if project_name.present? && project_id.blank? && Current.get_user.cannot?(:allow_create_project)
     hid = true if customer_name.present? && customer_id.blank? && Current.get_user.cannot?(:allow_create_customer)
     hid = true if product_name.present? && product_id.blank? && Current.get_user.cannot?(:allow_create_product)
+    hid = true if is_invoice? && customer_id.blank?
     hid
+  rescue
+    false
   end
+
   # def self.filtered(filter)
   #   flt = filter.collect_filters self
   #   flt = filter.filter
@@ -200,13 +224,15 @@ class TimeMaterial < ApplicationRecord
   end
 
   def name
-    about
+    # about
     case false
     when product_name.blank?; product_name
     when about.blank?; about
     when comment.blank?; comment
-    else; Current.user.default(:default_time_material_about, "ongoing task")
+    else; user.default(:default_time_material_about, I18n.t("time_material.default_assigned_about"))
     end
+  rescue
+    ""
   end
 
   def hour_time
@@ -358,8 +384,8 @@ class TimeMaterial < ApplicationRecord
   #
   # make sure this record is good for pushing to the ERP
   #
-  def values_ready_for_push?
-    entry = InvoiceItemValidator.new(self)
+  def pushable?
+    entry = InvoiceItemValidator.new(self, user)
     return true if entry.valid?
     self.project = entry.project if entry.project.present?
     self.errors.add(:base, entry.errors.full_messages.join(", "))
@@ -388,13 +414,13 @@ class TimeMaterial < ApplicationRecord
   def prepare_tm(resource_params)
     if resource_params[:state].present? &&
       resource_params[:state] == "done" &&
-      Current.user.should?(:validate_time_material_done)
+      Current.get_user.should?(:validate_time_material_done)
 
       if resource_params[:played].present?
         resource_params.delete(:played)
         return true
       end
-      unless values_ready_for_push?
+      unless pushable?
         errors.add(:base, errors.full_messages.join(", "))
         return false
       end

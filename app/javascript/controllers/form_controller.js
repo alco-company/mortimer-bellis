@@ -49,8 +49,8 @@ export default class extends Controller {
       // case "q":
       //   this.closeForm(e);
       //   break;
-      default:
-        console.log(`[form_controller] you pressed ${e.key}`);
+      // default:
+      //   console.log(`[form_controller] you pressed ${e.key}`);
     }
   }
 

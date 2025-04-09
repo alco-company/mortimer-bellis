@@ -58,7 +58,7 @@ class Dinero::InvoiceDraft
   def can_resource_be_pushed?(resource)
     return false if resource.nil?
     return false unless resource.is_invoice?
-    unless resource.values_ready_for_push?
+    unless resource.pushable?
       resource.cannot_be_pushed!
       return false
     end
