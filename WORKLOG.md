@@ -2,6 +2,10 @@
 
 ## CHANGELOG
 
+### 10/4/2025
+
+- first step into AI territory - define Anthropic service
+
 ### 9/4/2025
 
 - allow default_time_material_date to be evaluated
