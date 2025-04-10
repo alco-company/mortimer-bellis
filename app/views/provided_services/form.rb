@@ -10,6 +10,8 @@ class ProvidedServices::Form < ApplicationForm
     row field(:account_for_one_off).input()
     # row field(:product_for_hardware).input()
     hr
-    view_only field(:service_params).textarea(class: "mort-form-text"), " overflow-clip max-w-md"
+    resource.name =~ /inero/ ?
+      view_only(field(:service_params).textarea(class: "mort-form-text"), " overflow-clip max-w-md") :
+      row(field(:service_params).textarea(class: "mort-form-text"), " overflow-clip max-w-md")
   end
 end

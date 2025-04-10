@@ -6,7 +6,7 @@ class TenantsController < MortimerController
 
     # Only allow a list of trusted parameters through.
     def resource_params
-      params.expect(tenant: [ :id, :name, :country, :color, :email, :tax_number, :logo, :pp_identification, :locale, :time_zone ])
+      params.expect(tenant: [ :id, :name, :country, :color, :email, :tax_number, :logo, :pp_identification, :locale, :time_zone, :license, :license_expires_at, :license_changed_at ])
     end
 
     def authorize

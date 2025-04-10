@@ -409,6 +409,9 @@ da:
         country: Land - for at få vist korrekte nationale helligdage
         logo: Logo (80 x 40)
         color: Farve
+        license: Licens
+        license_expires_at: Udløber den
+        license_changed_at: Opdateret den
       asset:
         created_at: Oprettet den
         updated_at: Opdateret den

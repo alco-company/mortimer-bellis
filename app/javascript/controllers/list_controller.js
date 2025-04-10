@@ -6,23 +6,21 @@ export default class extends Controller {
     "item",
   ]
 
-  firstListItemSet = null
-
   connect() {
-    this.firstListItemSet = false
   }
 
 
-  itemTargetConnected(element) {
-    if (!this.firstListItemSet) {
-      this.firstListItemSet = true
-      let ctx = element.querySelectorAll(".list_context_menu")[0]
-      if (ctx){
-        ctx.classList.remove("bottom-6");
-        ctx.classList.add("top-0")
-      }
-    }
-  }
+  // itemTargetConnected(element) {
+  //   if (!this.firstListItemSet) {
+  //     this.firstListItemSet = true
+  //     let ctxs = document.querySelectorAll(".list_context_menu")
+  //     if (ctxs.length > 0){
+  //       let ctx = ctxs[ ctxs.length - 1 ]
+  //       ctx.classList.remove("top-0");
+  //       ctx.classList.add("bottom-6");
+  //     }
+  //   }
+  // }
 
   toggleBatch(event) {
     const checkboxes = document.querySelectorAll('.batch')

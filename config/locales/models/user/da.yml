@@ -110,7 +110,9 @@ da:
       update: Opdater profil
       buy_product:
         title: "Betal for Mortimer"
-        current_status: "Lige nu bruger du %{tenant_license_free,essential_or_pro}.<p class='mt-2 text-sm text-purple-600'> Vil du ændre på det?</p>"
+        current_status: "Lige nu bruger du %{license}"
+        license_expiring: "Udløber %{expiring}"
+        license_changed: "Opdateret %{changed}"
         manage_status: "Vedligehold"
       cancel:
         title: Slet min konto

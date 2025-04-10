@@ -5,6 +5,7 @@ class Dinero::Service < SaasService
     Current.system_user = user
     @provided_service = provided_service || Current.get_tenant.provided_services.by_name("Dinero").first || ProvidedService.new
     @settings = settings || @provided_service&.service_params_hash || empty_params
+    @settings = empty_params if @settings["access_token"].blank?
     @settings["organizationId"] = @provided_service.organizationID || 0
   end
 

@@ -1,10 +1,11 @@
 class ApplicationForm < Superform::Rails::Form
   include Phlex::Rails::Helpers::Pluralize
   include Phlex::Rails::Helpers::LinkTo
+  include Phlex::Rails::Helpers::TurboFrameTag
   include FieldSpecializations
   include FormSpecializations
 
-  attr_accessor :resource, :cancel_url, :title, :edit_url,  :editable, :api_key, :model, :fields
+  attr_accessor :resource, :cancel_url, :title, :edit_url,  :editable, :api_key, :model, :fields, :user
 
   def initialize(resource:, editable: nil, **options)
     options[:data] ||= { form_target: "form" }
@@ -15,6 +16,9 @@ class ApplicationForm < Superform::Rails::Form
     @fields = @fields.any? ? @fields : model.class.attribute_types.keys
     @editable = editable
     @api_key = options[:api_key] || ""
+    @user = options[:user].present? ? options[:user] :
+      resource.respond_to?(:user) && resource.user.present? ? resource.user :
+      Current.get_user
   end
 
   def view_template(&)
@@ -41,39 +45,19 @@ class ApplicationForm < Superform::Rails::Form
   end
 
   def buy_product
-    return unless Current.user.admin? or Current.user.superadmin?
     div(class: "mt-6 p-4 rounded-md shadow-xs bg-purple-100") do
       h2(class: "font-bold text-2xl text-purple-800") { t("users.edit_profile.buy_product.title") }
-      div do
-        p(class: "text-sm text-purple-600") do
-          t("users.edit_profile.buy_product.current_status").html_safe
-        end
-        p do
-          link_to(
-            new_modal_url(modal_form: "buy_product", id: Current.user.id, resource_class: "tenant", modal_next_step: "pick_product", url: "/"),
-            data: {
-              turbo_stream: true
-            },
-            class: "mort-btn-primary hover:bg-purple-500 bg-purple-600 mt-4",
-            role: "buyitem",
-            tabindex: "-1"
-          ) do
-            plain I18n.t("users.edit_profile.buy_product.manage_status")
-            span(class: " sr-only") do
-              begin
-                plain resource.name
-              rescue StandardError
-                ""
-              end
-            end
-          end
-        end
+      if user.superadmin?
+        row field(:license).enum_select(Tenant.licenses.keys, class: "mort-form-select")
+        row field(:license_expires_at).date(class: "mort-form-date"), "mort-field my-0"
+        row field(:license_changed_at).date(class: "mort-form-date"), "mort-field my-0"
       end
+      render TenantLicense.new
     end
   end
 
   def delete_account
-    if (Current.user.admin? or Current.user.superadmin?) && (Current.user.id > 1)
+    if (user.admin? or user.superadmin?) && (user.id > 1)
       div(class: "mt-6 p-4 rounded-md shadow-xs bg-red-100") do
         h2(class: "font-bold text-2xl") { t("users.edit_profile.cancel.title") }
         div do
@@ -82,7 +66,7 @@ class ApplicationForm < Superform::Rails::Form
           end
           p do
             link_to(
-              new_modal_url(modal_form: "delete_account", id: Current.user.id, resource_class: "user", modal_next_step: "delete_account", url: "/"),
+              new_modal_url(modal_form: "delete_account", id: user.id, resource_class: "user", modal_next_step: "delete_account", url: "/"),
               data: {
                 turbo_stream: true
               },

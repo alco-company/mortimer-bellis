@@ -2,7 +2,40 @@
 
 ## CHANGELOG
 
+### 10/4/2025
+
+- first step into AI territory - define Anthropic service
+
+### 9/4/2025
+
+- allow default_time_material_date to be evaluated
+- fix bug on list paint
+- fix contextmenu position
+- fix validation on time_material
+- missing user on form init
+- set user on form init
+- validate quantity and unit_price on time_material
+
+### 8/4/2025
+
+- add Ambassador to the buy_product - and fix emails
+- fix license dates = nil issue
+- fix missing STRIPE_SECRET_KEY
+- missing expected params
+- get 4 products from Stripe
+- add registered users to licens qty
+- fix last line in list contextmenu
+- react to [Delete] on current_list_item and [Enter] on delete modal
+- 2. try on fixing time_material
+
+### 7/4/2025
+
 - add Stripe integration for payment links
+- fix tenant send_invoice email
+- fix bug in resourceables - resources_url
+- fix bug in _form_content - params[:controller] missing for some reason
+- fix bug in field_specializations - include? not available to nil
+- sneak in on the time_material issue
 
 ### 4/4/2025
 

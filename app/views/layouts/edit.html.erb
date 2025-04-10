@@ -33,7 +33,6 @@
 
             <%#= render page_title %>
 
-            <%= yield %>
 
             <%#= render activity_list_smallest_breakpoint_only %>
             <%#= render activity_list_small_and_up %>
@@ -47,7 +46,9 @@
 
     <!-- Before Sidebar Form -->
     <div class="overscroll-none">
-      <%= turbo_frame_tag "form" %>
+      <%= turbo_frame_tag "form" do %>
+          <%= yield %>
+      <% end %>
     </div>
     <!-- End Sidebar Form -->
 

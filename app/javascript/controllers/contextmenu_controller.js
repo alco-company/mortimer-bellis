@@ -30,6 +30,11 @@ export default class extends Controller {
   show() {
     this.buttonTarget.setAttribute('aria-expanded', 'true');
     this.buttonTarget.classList.add('active');
+    let list_items = document.querySelectorAll(".list_context_menu")
+    if (this.lastItemInList(this.buttonTarget.closest(".list_item")) && list_items.length > 3) {
+      this.popupTarget.classList.remove("top-0");
+      this.popupTarget.classList.add("bottom-6");
+    }
     enter(this.popupTarget);
     // this.popupTarget.classList.remove('hidden');
   }
@@ -58,4 +63,9 @@ export default class extends Controller {
       return
     }
   }  
+
+  lastItemInList(item) {
+    let records = document.getElementById("record_list").children
+    return records[records.length - 1] == item
+  }
 }

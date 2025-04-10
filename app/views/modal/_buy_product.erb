@@ -18,21 +18,22 @@
 
         <fieldset>
           <legend class="text-sm/6 font-semibold text-gray-900"><%= t("tenant.modal.buy_product.pick_a_license") %></legend>
-          <div class="mt-6 grid grid-cols-1 gap-y-6 sm:grid-cols-3 sm:gap-x-4">
+          <div id="radios" class="mt-6 grid grid-cols-1 gap-y-6 sm:grid-cols-3 sm:gap-x-4">
             <!-- Active: "border-indigo-600 ring-2 ring-indigo-600", Not Active: "border-gray-300" -->
-            <label aria-label="Essential License" aria-description="Last message sent 2 weeks ago to 1200 users" class="relative flex cursor-pointer rounded-lg border-1 border-purple-100 hover:ring-2 hover:ring-purple-400 bg-white p-4 shadow-xs focus:outline-hidden">
-              <input type="radio" name="license" value="essential" class="sr-only">
+            <label for="essential-radio" aria-label="Essential License" aria-description="Last message sent 2 weeks ago to 1200 users" class="tenant-license relative flex cursor-pointer rounded-lg border-1 border-purple-100 active:ring-2 active:ring-purple-600 hover:ring-2 hover:ring-purple-400 bg-white p-4 shadow-xs focus:outline-hidden">
+              <input type="radio" name="tenant[license]" id="essential-radio" value="2" class="sr-only">
               <span class="flex flex-1">
                 <span class="flex flex-col">
-                  <span class="block text-sm font-medium text-gray-900">Essential </span>
+                  <span class="block text-sm font-medium text-gray-900">Essential</span>
 
                   <span class="mt-1 flex items-center text-xs text-gray-500">&nbsp;</span>
-                  <span class="mt-1 flex items-center text-xs text-gray-500">&#8734; users</span>
-                  <span class="mt-1 flex items-center text-xs text-gray-500">&#8734; time/material</span>
-                  <span class="mt-1 flex items-center text-xs text-gray-500">&#8734; customers</span>
-                  <span class="mt-1 flex items-center text-xs text-gray-500">&#8734; products</span>
-                  <span class="mt-1 flex items-center text-xs text-gray-500">CSV data export</span>
-                  <span class="mt-1 flex items-center text-xs text-gray-500">E-mail support</span>
+                  <span class="mt-1 flex items-center text-xs text-gray-500">&#8734; <%= t("tenant.modal.buy_product.users") %></span>
+                  <span class="mt-1 flex items-center text-xs text-gray-500">&#8734; <%= t("tenant.modal.buy_product.time_material") %></span>
+                  <span class="mt-1 flex items-center text-xs text-gray-500">&#8734; <%= t("tenant.modal.buy_product.customers") %></span>
+                  <span class="mt-1 flex items-center text-xs text-gray-500">&#8734; <%= t("tenant.modal.buy_product.products") %></span>
+                  <span class="mt-1 flex items-center text-xs text-gray-500"><%= t("tenant.modal.buy_product.csv_data_export") %></span>
+                  <span class="mt-4 flex items-center text-xs text-gray-500"><%= t("tenant.modal.buy_product.e_mail_support") %></span>
+                  <span class="mt-6 flex items-center text-xs text-gray-500"><%= t("tenant.modal.buy_product.essential_price") %></span>
                   <!-- <span class="mt-6 text-sm font-medium text-gray-900">1200 users</span> -->
                 </span>
               </span>
@@ -47,19 +48,20 @@
               <span class="pointer-events-none absolute -inset-px rounded-lg border-1 border-purple-100" aria-hidden="true"></span>
             </label>
             <!-- Active: "border-indigo-600 ring-2 ring-indigo-600", Not Active: "border-gray-300" -->
-            <label aria-label="Pro License" aria-description="Last message sent 4 days ago to 2740 users" class="relative flex cursor-pointer rounded-lg border-1 border-purple-100 hover:ring-2 hover:ring-purple-400 bg-white p-4 shadow-xs focus:outline-hidden">
-              <input type="radio" name="license" value="pro" class="sr-only">
+            <label for="pro-radio" aria-label="Pro License" aria-description="Last message sent 4 days ago to 2740 users" class="tenant-license relative flex cursor-pointer rounded-lg border-1 border-purple-100 hover:ring-2 hover:ring-purple-400 bg-white p-4 shadow-xs focus:outline-hidden">
+              <input type="radio" name="tenant[license]" id="pro-radio" value="3" class="sr-only">
               <span class="flex flex-1">
                 <span class="flex flex-col">
-                  <span class="block text-sm font-medium text-gray-900">Pro </span>
+                  <span class="block text-sm font-medium text-gray-900">Pro</span>
 
-                  <span class="mt-1 flex items-center text-xs text-gray-500">All from Essential</span>
-                  <span class="mt-1 flex items-center text-xs text-gray-500">&#8734; projects</span>
-                  <span class="mt-1 flex items-center text-xs text-gray-500">&#8734; teams</span>
-                  <span class="mt-1 flex items-center text-xs text-gray-500">&#8734; locations</span>
-                  <span class="mt-1 flex items-center text-xs text-gray-500">Microsoft SSO</span>
-                  <span class="mt-1 flex items-center text-xs text-gray-500">Dinero integration</span>
-                  <span class="mt-1 flex items-center text-xs text-gray-500">Account support</span>
+                  <span class="mt-1 flex items-center text-xs text-gray-500"><%= t("tenant.modal.buy_product.all_from_essential") %></span>
+                  <span class="mt-1 flex items-center text-xs text-gray-500">&#8734; <%= t("tenant.modal.buy_product.projects") %></span>
+                  <span class="mt-1 flex items-center text-xs text-gray-500">&#8734; <%= t("tenant.modal.buy_product.teams") %></span>
+                  <span class="mt-1 flex items-center text-xs text-gray-500">&#8734; <%= t("tenant.modal.buy_product.locations") %></span>
+                  <span class="mt-1 flex items-center text-xs text-gray-500"><%= t("tenant.modal.buy_product.microsoft_sso") %></span>
+                  <span class="mt-1 flex items-center text-xs text-gray-500"><%= t("tenant.modal.buy_product.dinero_integration") %></span>
+                  <span class="mt-4 flex items-center text-xs text-gray-500"><%= t("tenant.modal.buy_product.account_support") %></span>
+                  <span class="mt-6 flex items-center text-xs text-gray-500"><%= t("tenant.modal.buy_product.pro_price") %></span>
                 </span>
               </span>
               <!-- Not Checked: "invisible" -->
@@ -73,13 +75,13 @@
               <span class="pointer-events-none absolute -inset-px rounded-lg border-1 border-purple-100" aria-hidden="true"></span>
             </label>
             <!-- Active: "border-indigo-600 ring-2 ring-indigo-600", Not Active: "border-gray-300" -->
-            <label aria-label="Free License" aria-description="Last message sent an hour ago to 621 users" class="relative flex cursor-pointer rounded-lg border-1 border-purple-100 hover:ring-2 hover:ring-purple-400 bg-white p-4 shadow-xs focus:outline-hidden">
-              <input type="radio" name="license" value="free" class="sr-only">
+            <label for="ambassador-radio" aria-label="Ambassador License" aria-description="Last message sent an hour ago to 621 users" class="tenant-license relative flex cursor-pointer rounded-lg border-1 border-purple-100 hover:ring-2 hover:ring-purple-400 bg-white p-4 shadow-xs focus:outline-hidden">
+              <input type="radio" name="tenant[license]" id="ambassador-radio" value="1" class="sr-only">
               <span class="flex flex-1">
                 <span class="flex flex-col">
                   <span class="block text-sm font-medium text-gray-900">Ambassador</span>
-                  <span class="mt-1 flex items-center text-xs text-gray-500">Apply here</span>
-                  <span class="mt-6 text-xs font-medium text-gray-900">few seats left</span>
+                  <span class="mt-1 flex items-center text-xs text-gray-500"><%= t("tenant.modal.buy_product.apply_for_ambassador") %></span>
+                  <span class="mt-6 text-xs font-medium text-gray-900"><%= t("tenant.modal.buy_product.few_seats_left") %></span>
                 </span>
               </span>
               <!-- Not Checked: "invisible" -->
@@ -94,6 +96,22 @@
             </label>
           </div>
         </fieldset>
+        <div class="flex items-center mt-4 mort-form-bool" data-controller="boolean">
+          <input name="tenant[invoice_yearly]" data-tenant-target="invoice_yearly" data-boolean-target="input" type="hidden" value="0">
+          <button type="button" data-action="click->boolean#toggle" data-boolean-target="button" class="group relative inline-flex h-6 w-10 flex-shrink-0 cursor-pointer items-center justify-center rounded-full focus:outline-hidden focus:ring-1 focus:ring-purple-200 focus:ring-offset-1" role="switch" aria-checked="false">
+            <span class="sr-only">Pay this service annually</span>
+            <span aria-hidden="true" class="pointer-events-none absolute h-full w-full rounded-md bg-white"></span>
+            <!-- Enabled: &quot;bg-sky-600&quot;, Not Enabled: &quot;bg-gray-200&quot; -->
+            <!-- bg-purple-600 for Tailwind to pick it up-->
+            <span aria-hidden="true" data-boolean-target="indicator" data-color="bg-purple-600" class="pointer-events-none absolute mx-auto h-4 w-9 rounded-full transition-colors duration-200 ease-in-out bg-gray-200"></span>
+            <!-- Enabled: &quot;translate-x-5&quot;, Not Enabled: &quot;translate-x-0&quot; -->
+            <span aria-hidden="true" data-boolean-target="handle" class="pointer-events-none absolute left-0 inline-block h-5 w-5 transform rounded-full border border-gray-200 bg-white shadow-sm ring-0 transition-transform duration-200 ease-in-out translate-x-0"></span>
+          </button>
+          <span class="ml-3 text-sm" id="annual-billing-label">
+            <span class="font-medium text-gray-900"><%= t("tenant.modal.buy_product.annual_billing") %></span>
+            <span class="text-gray-500"><%= t("tenant.modal.buy_product.save_percent", percent: 16) %></span>
+          </span>
+        </div>
       </div>
     </div>
   </div>
