@@ -2,9 +2,14 @@
 
 ## CHANGELOG
 
+### 11/4/2025
+
+- trying to fix bug in index views (testing if it is pertaining to order_by)
+
 ### 10/4/2025
 
 - first step into AI territory - define Anthropic service
+- switch to Mailjet for sending emails from mortimer.pro
 
 ### 9/4/2025
 
