@@ -47,5 +47,7 @@ module Mortimer
       Noticed::Event.include Noticed::EventExtensions
       Noticed::Notification.include Noticed::NotificationExtensions
     end
+
+    config.action_mailer.delivery_method = :mailersend
   end
 end

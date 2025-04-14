@@ -2,6 +2,10 @@
 
 ## CHANGELOG
 
+### 14/4/2025
+
+- switching to Mailersend for sending emails from mortimer.pro
+
 ### 11/4/2025
 
 - trying to fix bug in index views (testing if it is pertaining to order_by)

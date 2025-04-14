@@ -9,7 +9,12 @@ class TenantMailer < ApplicationMailer
     @resource = @tenant.users.first
     @url = new_users_session_url
     I18n.with_locale(locale) do
-      mail to: @rcpt, subject: I18n.t("tenant.mailer.welcome.subject")
+      mail to: @rcpt,
+        subject: I18n.t("tenant.mailer.welcome.subject"),
+        delivery_method: :mailersend,
+        delivery_method_options: {
+          api_key: ENV["MAILERSEND_API_TOKEN"]
+        }
     end
   rescue => e
     UserMailer.error_report(e.to_s, "TenantMailer#welcome - failed for #{params[:tenant]&.id}").deliver_later
@@ -20,13 +25,23 @@ class TenantMailer < ApplicationMailer
     @email = params[:recipient]
     @pdf = params[:invoice_pdf]
     # attachments["invoice.pdf"] = File.read(@pdf)
-    mail to: @email, subject: "Mortimer Invoice"
+    mail to: @email,
+      subject: "Mortimer Invoice",
+      delivery_method: :mailersend,
+      delivery_method_options: {
+        api_key: ENV["MAILERSEND_API_TOKEN"]
+      }
   end
 
   def send_ambassador_request
     @tenant = params[:tenant]
     @email = params[:recipient]
-    mail to: @email, subject: "Mortimer Ambassador Request"
+    mail to: @email,
+      subject: "Mortimer Ambassador Request",
+      delivery_method: :mailersend,
+      delivery_method_options: {
+        api_key: ENV["MAILERSEND_API_TOKEN"]
+      }
   end
 
   # params:

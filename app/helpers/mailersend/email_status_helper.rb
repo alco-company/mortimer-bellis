@@ -1,0 +1,2 @@
+module Mailersend::EmailStatusHelper
+end
