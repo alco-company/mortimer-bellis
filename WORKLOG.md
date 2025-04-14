@@ -6,6 +6,7 @@
 
 - switching to Mailersend for sending emails from mortimer.pro
 - fix mailersend setting
+- fix mailersend setting II
 
 ### 11/4/2025
 
