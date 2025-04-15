@@ -17,6 +17,11 @@
           class: "mort-form-text" %>
         <div data-email-taken-target="emailTakenMessage" class="mt-0 pl-3 text-xs"></div>
       </div>
+      <%#= real people should not fill this in and expect good things - do not remove this or risk form bot signups %>
+      <div aria-hidden="true" style="position: absolute; left: -5000px;">        
+        <input type="text" name="user[realname]" tabindex="-1" value="">
+      </div>     
+
 
       <div class="mort-field">
         <%= f.label :password %>
