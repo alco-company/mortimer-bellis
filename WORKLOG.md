@@ -2,6 +2,10 @@
 
 ## CHANGELOG
 
+### 15/4/2025
+
+- don't show buy_pproduct unless user.admin? or user.superadmin?
+
 ### 14/4/2025
 
 - switching to Mailersend for sending emails from mortimer.pro

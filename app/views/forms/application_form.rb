@@ -45,6 +45,7 @@ class ApplicationForm < Superform::Rails::Form
   end
 
   def buy_product
+    return unless user.admin? or user.superadmin?
     div(class: "mt-6 p-4 rounded-md shadow-xs bg-purple-100") do
       h2(class: "font-bold text-2xl text-purple-800") { t("users.edit_profile.buy_product.title") }
       if user.superadmin?
