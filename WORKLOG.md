@@ -5,6 +5,7 @@
 ### 15/4/2025
 
 - don't show buy_pproduct unless user.admin? or user.superadmin?
+- collect email webhook and prepare to process
 
 ### 14/4/2025
 
