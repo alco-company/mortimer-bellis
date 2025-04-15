@@ -1245,6 +1245,24 @@ da:
       month: Måned
       year: År
 
+  time:
+    am: ''
+    formats:
+      default: "%e. %B %Y, %H.%M"
+      long: "%A d. %e. %B %Y, %H.%M"
+      date_long: "%A d. %e. %B %Y"
+      weekday_date: "%A den %e. %B, %Y"
+      ultra_short: "%H:%M"
+      short: "%e. %b %Y, %H.%M"
+      date_text: "%e. %B %Y"
+      short_iso: "%Y-%m-%d"
+      date: "%d/%m/%Y"
+      dm: "%d/%m"
+      time_day_date: "kl %H:%M, %A den %d. %B, %Y"
+      week_number: "%W"
+      short_week_number: "%w"
+      day_summary: "%A d. %e. %B %Y"
+    pm: ''
 
   errors:
     format: "%{attribute}: %{message}"
@@ -1369,20 +1387,3 @@ da:
       last_word_connector: " og "
       two_words_connector: " og "
       words_connector: ", "
-  time:
-    am: ''
-    formats:
-      default: "%e. %B %Y, %H.%M"
-      long: "%A d. %e. %B %Y, %H.%M"
-      date_long: "%A d. %e. %B %Y"
-      weekday_date: "%A den %e. %B, %Y"
-      ultra_short: "%H:%M"
-      short: "%e. %b %Y, %H.%M"
-      date_text: "%e. %B %Y"
-      short_iso: "%Y-%m-%d"
-      date: "%d/%m/%Y"
-      dm: "%d/%m"
-      time_day_date: "kl %H:%M, %A den %d. %B, %Y"
-      week_number: "%W"
-      short_week_number: "%w"
-    pm: ''

@@ -198,8 +198,8 @@ class TimeMaterial < ApplicationRecord
     [ [ Customer, Project, Product ], [] ]
   end
 
-  def self.set_order(resources, field = :date, direction = :desc)
-    resources.ordered(field, direction)
+  def self.set_order(resources, field = :wdate, direction = :desc)
+    resources.ordered(field, direction).order(created_at: :desc)
   end
 
   def list_item(links: [], context:)

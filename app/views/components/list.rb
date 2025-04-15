@@ -11,7 +11,7 @@ class List < ApplicationComponent
     @order_by = order_by
     @group_by = group_by
     @records = records
-    @order_key = order_by ? order_by.keys.first : :created_at
+    @order_by = order_by ? order_by.keys.first : nil
     @initial = initial
     @replace = replace
     @filter = filter.persisted? rescue false
@@ -76,13 +76,13 @@ class List < ApplicationComponent
 
   def list_records
     if order_by && records.any?
-      fld = records.first.send(@order_key)
+      fld = records.first.send(order_by)
       render partial: "date", locals: { field: fld }
     end
 
     records.each do |record|
-      if record.send(@order_key) != fld
-        fld = (record.send(@order_key))
+      if record.send(order_by) != fld
+        fld = (record.send(order_by))
         render partial: "date", locals: { field: fld }
       end if order_by
       render "ListItems::#{resource_class}".classify.constantize.new(resource: record, params: params, user: user)
