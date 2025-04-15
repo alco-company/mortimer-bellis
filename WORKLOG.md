@@ -6,6 +6,7 @@
 
 - don't show buy_pproduct unless user.admin? or user.superadmin?
 - collect email webhook and prepare to process
+- when material - reset time to blank
 
 ### 14/4/2025
 

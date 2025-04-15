@@ -80,7 +80,7 @@ class InvoiceItemValidator
   def discount_requires_conditions
     if discount.present?
       errors.add(:discount, tr("product_name_quantity_must_be_set")) if product_name.blank? || quantity.blank?
-      unless discount =~ /\A\d*[,.]?\d{2}%?\z/
+      unless discount =~ /\A\d*[,.]?\d{0,2}%?\z/
         errors.add(:discount, tr("format_wrong_number")) #  0[,.]00 or 0[,.]00%
       end
     end

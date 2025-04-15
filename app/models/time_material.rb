@@ -412,6 +412,19 @@ class TimeMaterial < ApplicationRecord
 
 
   def prepare_tm(resource_params)
+    # if product/material
+    if resource_params[:product_name].present? or resource_params[:product_id].present?
+      resource_params[:hour_time] = ""
+      resource_params[:time] = ""
+      resource_params[:minute_time] = ""
+      self.time = ""
+      self.hour_time = ""
+      self.minute_time = ""
+      self.rate = ""
+      resource_params[:rate] = ""
+      resource_params[:over_time] = ""
+      self.over_time = 0
+    end
     if resource_params[:state].present? &&
       resource_params[:state] == "done" &&
       Current.get_user.should?(:validate_time_material_done)
@@ -424,9 +437,10 @@ class TimeMaterial < ApplicationRecord
         errors.add(:base, errors.full_messages.join(", "))
         return false
       end
-      valid?
+      return resource_params if valid?
+      false
     else
-      true
+      resource_params
     end
   rescue => e
     # debug-ger
