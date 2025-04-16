@@ -8,6 +8,7 @@
 - when editing material - don't show time
 - deleting customers - tell user that all jobs/projects will get deleted too
 - check rebate on invoice_items
+- fix index action - remove empty date lines
 
 ### 15/4/2025
 
