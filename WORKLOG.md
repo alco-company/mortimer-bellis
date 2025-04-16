@@ -5,6 +5,7 @@
 ### 16/4/2025
 
 - make profil accessable when on dashboard
+- when editing material - don't show time
 
 ### 15/4/2025
 

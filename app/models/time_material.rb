@@ -271,6 +271,10 @@ class TimeMaterial < ApplicationRecord
     false
   end
 
+  def is_time?
+    product_id.blank? && product_name.blank?
+  end
+
   def self.form(resource:, editable: true)
     TimeMaterials::Form.new resource: resource, editable: editable
   end
