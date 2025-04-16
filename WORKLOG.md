@@ -9,6 +9,7 @@
 - deleting customers - tell user that all jobs/projects will get deleted too
 - check rebate on invoice_items
 - fix index action - remove empty date lines
+- allow mobile users to copy 2FA QR code for authenticator
 
 ### 15/4/2025
 

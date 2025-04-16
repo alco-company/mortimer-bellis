@@ -69,12 +69,13 @@
                       </div>
                     </div>
                     <h3 class="text-base font-semibold leading-6 text-gray-900"><%= t("devise.second_factor.2_scan_or_enter_the_code") %></h3>
-                    <div class="flex justify-center items-left w-full flex-col space-y-3 mt-3 ml-4">
+                    <div onclick="navigator.clipboard.writeText('<%= @qr_code_as_text.gsub(' ', '') %>')" class="cursor-pointer text-sm flex justify-center items-left w-full flex-col space-y-3 mt-3 ml-4">
                       <div class="text-white w-32 pl-1">
-                        <%= raw(@qr_code) %> <!-- see controller file below for qr code generation example -->
+                        <%= raw(@qr_code) %> 
                       </div>
-                      <div class="font-medium">
-                        <%= @otp_secret %>
+                      <div class="text-black w-48 pl-1">
+                        <span class="text-xs"><%= t("devise.second_factor.copy_and_paste") %></span>
+                        <div class="text-sm" ><%= @qr_code_as_text %></div> 
                       </div>
                     </div>
                     <h3 class="text-base font-semibold leading-6 text-gray-900 mt-5"><%= t("devise.second_factor.3_enter_the_generated_code") %></h3>

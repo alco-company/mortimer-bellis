@@ -256,6 +256,7 @@ da:
       disable_2fa: "Deaktiver 2FA"
       enable_2fa: "Aktiver 2FA"
       enable_2fa_introduction: "For at aktivere 2FA skal du downloade en autentificerings app, fx Google Authenticator, scanne QR koden herunder. Derefter skal du indtaste den genererede kode (fx 231312)."
+      copy_and_paste: "tap for at kopiere koden."
       title: "Bekræft din identitet"
       password_placeholder: "Adgangskode"
       bad_password: "Din adgangskode er forkert"

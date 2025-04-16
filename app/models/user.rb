@@ -80,6 +80,10 @@ class User < ApplicationRecord
     )
   end
 
+  def qr_code_as_text
+    otp_secret_key.scan(/.{1,4}/).join(" ").upcase
+  end
+
   attr_accessor :invitees, :invitation_message
 
 
