@@ -21,7 +21,6 @@ export default class extends Controller {
   }
 
   showTab(i) {
-    alert(`${this.index} ${i}`)
     this.tabPanelTargets.forEach((el, i) => {
       if (i == this.index) {
         el.classList.remove("hidden");

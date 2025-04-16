@@ -73,7 +73,7 @@ class TimeMaterial < ApplicationRecord
   include Settingable
   include Unitable
 
-  attr_accessor :hour_time, :minute_time
+  attr_accessor :hour_time, :minute_time, :calculated_unit_price
 
   belongs_to :customer, optional: true
   belongs_to :project, optional: true
@@ -432,6 +432,15 @@ class TimeMaterial < ApplicationRecord
     if resource_params[:state].present? &&
       resource_params[:state] == "done" &&
       Current.get_user.should?(:validate_time_material_done)
+
+      if resource_params[:discount].present?
+        resource_params[:discount] = case resource_params[:discount]
+        when "0"; ""
+        when "0%"; 0
+        when "100%"; 100
+        else resource_params[:discount].to_f
+        end
+      end
 
       if resource_params[:played].present?
         resource_params.delete(:played)
