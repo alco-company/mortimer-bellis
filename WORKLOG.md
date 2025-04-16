@@ -2,9 +2,13 @@
 
 ## CHANGELOG
 
+### 16/4/2025
+
+- make profil accessable when on dashboard
+
 ### 15/4/2025
 
-- don't show buy_pproduct unless user.admin? or user.superadmin?
+- don't show buy_product unless user.admin? or user.superadmin?
 - collect email webhook and prepare to process
 - when material - reset time to blank
 - time/material - show dates desc
