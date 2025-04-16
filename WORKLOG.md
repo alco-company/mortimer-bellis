@@ -6,6 +6,7 @@
 
 - make profil accessable when on dashboard
 - when editing material - don't show time
+- deleting customers - tell user that all jobs/projects will get deleted too
 
 ### 15/4/2025
 
