@@ -24,6 +24,7 @@ da:
     archived: Posten er blevet arkiveret
     unarchived: Posten er taget ud af arkivet (igen)
     insufficient_data: Manglende data
+    billed: Faktureret
     states:
       draft: Kladde
       active: Aktiv
