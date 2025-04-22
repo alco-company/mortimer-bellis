@@ -7,6 +7,7 @@
 - show user that they tapped the code to copy
 - show invoiced ikon when uploaded to Dinero
 - only download customers
+- control sync contacts with setting
 
 ### 16/4/2025
 
