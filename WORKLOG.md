@@ -2,6 +2,10 @@
 
 ## CHANGELOG
 
+### 22/4/2025
+
+- show user that they tapped the code to copy
+
 ### 16/4/2025
 
 - make profil accessable when on dashboard

@@ -8,7 +8,10 @@ export default class extends Controller {
   ]
 
   connect() {
-    this.updateStrength()
+    try {
+      if (this.passwordTarget)
+        this.updateStrength();
+    } catch (error) { }
   }
 
 
