@@ -8,6 +8,7 @@
 - show invoiced ikon when uploaded to Dinero
 - only download customers
 - control sync contacts with setting
+- lay the ground for calls (and show edit current_list_item)
 
 ### 16/4/2025
 
