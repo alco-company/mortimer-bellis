@@ -100,7 +100,7 @@ gem "get_process_mem", "~> 1.0.0"
 
 gem "redcarpet", "~> 3.6"
 
-gem "httparty", "~> 0.22.0"
+gem "httparty", "~> 0.23.1"
 
 gem "psych", "~> 5.2.0"
 
