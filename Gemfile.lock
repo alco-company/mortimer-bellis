@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/rails/rails.git
-  revision: d2ffa44a576f8d0444a6a704bbd8fcf80ddfea90
+  revision: 22a61df687a5408a37ed0b9dcf73c08b250dc9be
   branch: main
   specs:
     actioncable (8.1.0.alpha)
@@ -306,7 +306,7 @@ GEM
     multipart-post (2.4.1)
     net-http (0.5.0)
       uri
-    net-imap (0.5.2)
+    net-imap (0.5.7)
       date
       net-protocol
     net-protocol (0.2.2)
@@ -315,7 +315,7 @@ GEM
       net-ssh (>= 2.6.5, < 8.0.0)
     net-sftp (4.0.0)
       net-ssh (>= 5.0.0, < 8.0.0)
-    net-smtp (0.5.0)
+    net-smtp (0.5.1)
       net-protocol
     net-ssh (7.3.0)
     nio4r (2.7.4)
@@ -531,7 +531,8 @@ GEM
       jwt (~> 2.0)
       openssl (~> 3.0)
     webrick (1.9.0)
-    websocket-driver (0.7.6)
+    websocket-driver (0.7.7)
+      base64
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
     x (0.14.1)
