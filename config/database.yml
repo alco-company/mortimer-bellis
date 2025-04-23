@@ -16,7 +16,6 @@ default: &default
 development:
   writer:
     <<: *default
-    pool: 1
     database: storage/development.sqlite3
   reader:
     <<: *default
