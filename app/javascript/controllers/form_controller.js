@@ -33,8 +33,11 @@ export default class extends Controller {
     if (e.metaKey){
       switch (e.key) {
         case "c":
-          alert("new call")
+          alert("new call");
           this.newCall(e);
+          break;
+        case "Enter":
+          this.submitForm(e);
           break;
         // case "c":
         //   this.clearForm(e);

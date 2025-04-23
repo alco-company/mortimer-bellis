@@ -2,6 +2,11 @@
 
 ## CHANGELOG
 
+
+### 23/4/2025
+
+- allow meta + Enter to submit forms
+
 ### 22/4/2025
 
 - show user that they tapped the code to copy
