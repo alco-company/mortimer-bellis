@@ -496,7 +496,7 @@ GEM
     superform (0.5.0)
       phlex-rails (~> 1.0)
       zeitwerk (~> 2.6)
-    tailwindcss-rails (4.2.1)
+    tailwindcss-rails (4.2.2)
       railties (>= 7.0.0)
       tailwindcss-ruby (~> 4.0)
     tailwindcss-ruby (4.0.17)
