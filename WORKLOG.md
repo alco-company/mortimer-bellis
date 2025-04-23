@@ -7,6 +7,7 @@
 
 - allow meta + Enter to submit forms
 - make PDF work in production (missing firewall rule) + in development
+- Enter and Escape to show and close forms on lists
 
 ### 22/4/2025
 

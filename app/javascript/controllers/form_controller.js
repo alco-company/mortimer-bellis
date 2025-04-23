@@ -29,12 +29,22 @@ export default class extends Controller {
   }
 
   keydown(e) {
+    console.log(`[form_controller] you pressed ${e.key}`);
     e.stopPropagation();
     if (e.metaKey){
       switch (e.key) {
         case "c":
           alert("new call");
           this.newCall(e);
+          break;
+        case "e":
+          let form = document.getElementById("form");
+          if (form.children.length > 0) {
+            form = form.querySelectorAll("div")[9].querySelectorAll("a");
+            if (form.length > 0) {
+              form[0].click();
+            }
+          }
           break;
         case "Enter":
           this.submitForm(e);

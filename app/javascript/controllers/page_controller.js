@@ -70,6 +70,11 @@ export default class extends Controller {
           this.showCurrentListItem();
           break;
         case "Escape":
+          let form = document.getElementById("form");
+          form = form.querySelectorAll("div")[8].querySelectorAll("a");
+          if (form.length > 0) {
+            form[0].click();
+          }
           break;
         default:
           console.log(`[page_controller] you pressed ${e.key}`);
