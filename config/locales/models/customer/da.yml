@@ -3,11 +3,11 @@ da:
     modal:
       delete_all: 
         title: Slet alle kunder
-        instruction: Er du sikker på, at du vil slette alle kunder?
-        instruction_selected: Er du sikker på, at du vil slette alle %{count} udvalgte kunder?
+        instruction: "Er du sikker på, at du vil slette alle kunder <p class='text-sm text-gray-500'>[BEMÆRK: tid/materialer, projekter, produkter hørende til kunderne slettes også]?"
+        instruction_selected: "Er du sikker på, at du vil slette alle %{count} udvalgte kunder  <p class='text-sm text-gray-500'>[BEMÆRK: tid/materialer, projekter, produkter hørende til kunderne slettes også]?"
       delete:
         title: Slet denne kunde
-        instruction: Er du sikker på, at du vil slette kunde %{name}?
+        instruction: "Er du sikker på, at du vil slette kunde %{name}  <p class='text-sm text-gray-500'>[BEMÆRK: tid/materialer, projekter, produkter hørende til kunden slettes også]?"
         button: Slet
 
   customers:

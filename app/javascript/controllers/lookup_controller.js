@@ -32,11 +32,20 @@ export default class extends Controller {
   }
 
   keyDown(e) {
-    switch(e.key) {
-      case "Escape": e.stopPropagation(); this.toggleOptions(e); break;
-      case "Enter": e.stopPropagation(); this.search(e); break; //this.searchIconTarget.click(); break;
-      case "ArrowDown": e.stopPropagation(); this.searchIconTarget.click(); break;
-      // default: console.log(`[lookup_controller key_down] you pressed ${e.key}`);
+    if (e.metaKey) {
+      switch (e.key) {
+        case "Enter":
+          // will propagate to form_controller and hence submit the form
+          break;
+        // default: console.log(`[lookup_controller key_down] you pressed ${e.key}`);
+      }
+    } else {
+      switch(e.key) {
+        case "Escape": e.stopPropagation(); this.toggleOptions(e); break;
+        case "Enter": e.stopPropagation(); this.search(e); break; //this.searchIconTarget.click(); break;
+        case "ArrowDown": e.stopPropagation(); this.searchIconTarget.click(); break;
+        // default: console.log(`[lookup_controller key_down] you pressed ${e.key}`);
+      }
     }
   }
 
@@ -133,17 +142,14 @@ export default class extends Controller {
   }
 
   focusFirstItem(e) {
-    console.log(this.optionsListTarget.getElementsByTagName("LI")[0]);
     this.optionsListTarget.getElementsByTagName("LI")[0].focus();
   }
 
   focusNextItem(e) {
-    console.log(e.target.nextElementSibling);
     e.target.nextElementSibling.focus();
   }
 
   focusPreviousItem(e) {
-    console.log(e.target.previousElementSibling);
     e.target.previousElementSibling.focus();
   }
 }

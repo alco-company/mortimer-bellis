@@ -2,9 +2,53 @@
 
 ## CHANGELOG
 
+
+### 23/4/2025
+
+- allow meta + Enter to submit forms
+- make PDF work in production (missing firewall rule) + in development
+- Enter and Escape to show and close forms on lists
+
+### 22/4/2025
+
+- show user that they tapped the code to copy
+- show invoiced ikon when uploaded to Dinero
+- only download customers
+- control sync contacts with setting
+- lay the ground for calls (and show edit current_list_item)
+
+### 16/4/2025
+
+- make profil accessable when on dashboard
+- when editing material - don't show time
+- deleting customers - tell user that all jobs/projects will get deleted too
+- check rebate on invoice_items
+- fix index action - remove empty date lines
+- allow mobile users to copy 2FA QR code for authenticator
+
+### 15/4/2025
+
+- don't show buy_product unless user.admin? or user.superadmin?
+- collect email webhook and prepare to process
+- when material - reset time to blank
+- time/material - show dates desc
+- make robots unwelcome
+- filter - test dates
+
+### 14/4/2025
+
+- switching to Mailersend for sending emails from mortimer.pro
+- fix mailersend setting
+- fix mailersend setting II
+
+### 11/4/2025
+
+- trying to fix bug in index views (testing if it is pertaining to order_by)
+
 ### 10/4/2025
 
 - first step into AI territory - define Anthropic service
+- switch to Mailjet for sending emails from mortimer.pro
 
 ### 9/4/2025
 

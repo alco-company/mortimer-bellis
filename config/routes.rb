@@ -67,6 +67,10 @@ Rails.application.routes.draw do
   # Stripe integration
   get "stripe/payment" => "stripe/payment#new", as: :stripe_payment_new
 
+  # Mailersend webhook
+  post "mailersend/email_status" => "mailersend/email_status#create", as: :mailersend_email_status
+
+
   # -------- END API ROUTES & 3RD PARTY --------
 
   concern :lookupable do

@@ -205,19 +205,17 @@ class Dinero::InvoiceDraft
   end
 
   def a_product(line, date)
-    q = ("%.2f" % line.quantity.gsub(",", ".")).to_f rescue 0.0
-    d = ("%.2f" % line.discount.gsub(",", ".")).to_f rescue 0.0
-    p = line.unit_price.blank? ? line.product.base_amount_value : ("%.2f" % line.unit_price.gsub(",", ".")).to_f
+    line.calculated_unit_price = line.unit_price.blank? ? line.product.base_amount_value : ("%.2f" % line.unit_price.gsub(",", ".")).to_f
     initials = line.user&.initials rescue "-"
     {
-      "productGuid" => (line.product.erp_guid rescue raise "Product not found - productGuid"),     #   "102eb2e1-d732-4915-96f7-dac83512f16d",
-      "comments" =>    "%s, %s: %s" % [ date, initials, line.comment ],
-      "quantity" =>    q,
-      "accountNumber" => (line.product.account_number.to_i rescue raise "Product not found - accountNumber"),
-      "unit" =>        (line.product.unit rescue raise "Product not found - unit"),
-      "discount" =>    d,
-      "lineType" =>    "Product",                 # or Text - in which case only description should be set
-      "baseAmountValue" => p
+      "productGuid"     => (line.product.erp_guid rescue raise "productGuid missing - pull products from Dinero first!"),     #   "102eb2e1-d732-4915-96f7-dac83512f16d",
+      "comments"        => "%s, %s: %s" % [ date, initials, line.comment ],
+      "quantity"        => quantified(line),
+      "accountNumber"   => (line.product.account_number.to_i rescue raise "accountNumber missing - pull products from Dinero first!"),
+      "unit"            => (line.product.unit rescue raise "unit missing - pull products from Dinero first!"),
+      "discount"        => discounted(line),
+      "lineType"        => "Product",                 # or Text - in which case only description should be set
+      "baseAmountValue" => line.calculated_unit_price
     }
 
   rescue => err
@@ -233,20 +231,19 @@ class Dinero::InvoiceDraft
 
   # a product we just invented - no data exists in the system
   def a_one_off(line, date)
-    q = ("%.2f" % line.quantity.gsub(",", ".")).to_f rescue 0.0
-    d = ("%.2f" % line.discount.gsub(",", ".")).to_f rescue 0.0
-    p = line.unit_price.blank? ? 0.0 : ("%.2f" % line.unit_price.gsub(",", ".")).to_f
+    # d = ("%.2f" % line.discount.gsub(",", ".")).to_f rescue 0.0
+    line.calculated_unit_price = line.unit_price.blank? ? 0.0 : ("%.2f" % line.unit_price.gsub(",", ".")).to_f
     initials = line.user&.initials rescue "-"
     {
-      "productGuid" => nil,
-      "description" => line.product_name,
-      "comments" =>    "%s, %s: %s" % [ date, initials, line.comment ],
-      "quantity" =>   q,
-      "accountNumber" => settings["defaultAccountNumber"].to_i,
-      "unit" =>        "parts",
-      "discount" =>    d,
-      "lineType" =>    "Product",                 # or Text - in which case only description should be set
-      "baseAmountValue" => p
+      "productGuid"     => nil,
+      "description"     => line.product_name,
+      "comments"        => "%s, %s: %s" % [ date, initials, line.comment ],
+      "quantity"        => quantified(line),
+      "accountNumber"   => settings["defaultAccountNumber"].to_i,
+      "unit"            => "parts",
+      "discount"        => discounted(line),
+      "lineType"        => "Product",                 # or Text - in which case only description should be set
+      "baseAmountValue" => line.calculated_unit_price
     }
 
   rescue => err
@@ -284,18 +281,17 @@ class Dinero::InvoiceDraft
     nbr = settings["productForMileage"]
     prod = Product.where("product_number like ?", nbr).first
     raise "Product not found %s - set products in Dinero Service" % nbr unless prod
-    q = line.kilometers.to_f rescue 0.0
-    p = prod.base_amount_value
+    line.calculated_unit_price = prod.base_amount_value
     initials = line.user&.initials rescue "-"
     {
-      "productGuid" => prod.erp_guid,             #   "102eb2e1-d732-4915-96f7-dac83512f16d",
-      "comments" =>    "%s, %s: %s" % [ date, initials, line.about ],
-      "quantity" =>    q,
-      "accountNumber" => prod.account_number.to_i,
-      "unit" =>        prod.unit,
-      "discount" =>    0.0,                       # "%.2f" % line.discount.gsub("%", "").to_f,
-      "lineType" =>    "Product",                 # or Text - in which case only description should be set
-      "baseAmountValue" => p
+      "productGuid"     => prod.erp_guid,             #   "102eb2e1-d732-4915-96f7-dac83512f16d",
+      "comments"        => "%s, %s: %s" % [ date, initials, line.about ],
+      "quantity"        => quantified(line, line.kilometers&.to_f),
+      "accountNumber"   => prod.account_number.to_i,
+      "unit"            => prod.unit,
+      "discount"        => discounted(line),                       # "%.2f" % line.discount.gsub("%", "").to_f,
+      "lineType"        => "Product",                 # or Text - in which case only description should be set
+      "baseAmountValue" => line.calculated_unit_price
     }
 
   rescue => err
@@ -316,19 +312,19 @@ class Dinero::InvoiceDraft
     when "2"; settings["productForOverTime100"]
     end
     prod = Product.where("product_number like ?", nbr).first
-    raise "Product not found %s - set products in Dinero Service" % nbr unless prod
-    q = line.calc_time_to_decimal
-    p = line.rate.blank? ? prod.base_amount_value : ("%.2f" % line.rate.gsub(",", ".")).to_f
+    raise "Product %s not found - pull products from Dinero first!" % nbr unless prod
+    line.calculated_unit_price = line.rate.blank? ? prod.base_amount_value : ("%.2f" % line.rate.gsub(",", ".")).to_f
+    line.discount = "0"
     initials = line.user&.initials rescue "-"
     {
-      "productGuid" => prod.erp_guid,             #   "102eb2e1-d732-4915-96f7-dac83512f16d",
-      "comments" =>    "%s, %s: %s" % [ date, initials, line.about ],
-      "quantity" =>    q,
-      "accountNumber" => prod.account_number.to_i,
-      "unit" =>        prod.unit,
-      "discount" =>    0.0,                       # "%.2f" % line.discount.gsub("%", "").to_f,
-      "lineType" =>    "Product",                 # or Text - in which case only description should be set
-      "baseAmountValue" => p
+      "productGuid"     => prod.erp_guid,             #   "102eb2e1-d732-4915-96f7-dac83512f16d",
+      "comments"        => "%s, %s: %s" % [ date, initials, line.about ],
+      "quantity"        => quantified(line, line.calc_time_to_decimal),
+      "accountNumber"   => prod.account_number.to_i,
+      "unit"            => prod.unit,
+      "discount"        => discounted(line),
+      "lineType"        => "Product",                 # or Text - in which case only description should be set
+      "baseAmountValue" => line.calculated_unit_price
     }
 
   rescue => err
@@ -354,6 +350,34 @@ class Dinero::InvoiceDraft
       f.write("\n")
       f.write(lines.to_json)
     end
+  end
+
+  def quantified(line, value = nil)
+    return 1.0 if line.quantity.blank? && value.blank?
+    v = value.nil? ? line.quantity : value
+    l = v.to_s.gsub(",", ".")
+    ("%.2f" % l).to_f
+  rescue
+    1.0
+  end
+
+  # "%.2f" % line.discount.gsub("%", "").to_f,
+  # d = ("%.2f" % line.discount.gsub(",", ".")).to_f
+  def discounted(line)
+    return 0.0 if line.discount.blank?
+    l = case line.discount
+    when /%/; line.discount.gsub("%", "").gsub(",", ".")
+    else calculated_discount(line)
+    end
+    ("%.2f" % l).to_f
+  rescue
+    0.0
+  end
+
+  def calculated_discount(line)
+    line.discount.gsub(",", ".").to_f / line.calculated_unit_price * 100
+  rescue
+    0
   end
 
   # used for testing the Dinero service initially

@@ -1,2 +1,2 @@
 <%= turbo_stream.remove "pagination" %>
-<%= render List.new records: @records, pagy: @pagy, replace: @replace, filter: @filter, params: params, order_by: {date: :desc}, user: Current.user %>
+<%= render List.new records: @records, pagy: @pagy, replace: @replace, filter: @filter, params: params, order_by: {wdate: :desc}, user: Current.user %>

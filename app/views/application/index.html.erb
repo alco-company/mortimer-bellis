@@ -8,7 +8,6 @@
     <%= form.hidden_field :ids_range, value: @ids_range %>
     <div id="record_list" class="scrollbar-hide">
       <%= render List.new records: @records, pagy: @pagy, initial: true, params: params, user: Current.user %>
-      <%= turbo_frame_tag "pagination", src: resources_url(page: @pagy.next, format: :turbo_stream), loading: "lazy" %>
     </div>
   </div>
 <% end %>

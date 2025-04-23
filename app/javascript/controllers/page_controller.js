@@ -24,14 +24,81 @@ export default class extends Controller {
   }
 
   keydown(e) {
-    switch(e.key) {
-      case "+":         document.getElementById("new_list_item").click(); break;
-      case ",":         this.editCurrentListItem(); break;
-      case "Delete":    this.deleteCurrentListItem(); break;
-      case "ArrowUp": this.findPreviousListItem(); break;
-      case "ArrowDown": this.findNextListItem(); break;
-      case "Escape":    break;
-      default:        console.log(`[page_controller] you pressed ${e.key}`);
+    if (e.metaKey){
+      switch (e.key) {
+        case "c":
+          this.newCall(e);
+          break;
+        case "e":
+          let form = document.getElementById("form");
+          if (form.children.length > 0) {
+            form
+              .querySelectorAll("div")[9]
+              .querySelectorAll("a")[0]
+              .click();
+          } else {
+            this.editCurrentListItem();
+          }
+          break;
+        // case "c":
+        //   this.clearForm(e);
+        //   break;
+        // case "q":
+        //   this.closeForm(e);
+        //   break;
+        // default:
+        //   console.log(`[form_controller] you pressed ${e.key}`);
+      }
+    } else {
+      switch (e.key) {
+        case "+":
+          document.getElementById("new_list_item").click();
+          break;
+        case ",":
+          this.editCurrentListItem();
+          break;
+        case "Delete":
+          this.deleteCurrentListItem();
+          break;
+        case "ArrowUp":
+          this.findPreviousListItem();
+          break;
+        case "ArrowDown":
+          this.findNextListItem();
+          break;
+        case "Enter":
+          this.showCurrentListItem();
+          break;
+        case "Escape":
+          let form = document.getElementById("form");
+          form = form.querySelectorAll("div")[8].querySelectorAll("a");
+          if (form.length > 0) {
+            form[0].click();
+          }
+          break;
+        default:
+          console.log(`[page_controller] you pressed ${e.key}`);
+      }
+    }
+  }
+
+  newCall() {
+    let url = "/calls/new";
+    fetch(url)
+      .then((r) => r.text())
+      .then((html) => Turbo.renderStreamMessage(html));
+  }
+
+  // find the edit_url like this
+  // 
+  showCurrentListItem() {
+    let current = document.getElementsByClassName("current_list_item")[0] || document.getElementById("record_list").children[0]
+    if (current) {
+      current.classList.contains("current_list_item") ? current : current.classList.add("current_list_item")
+      current = current
+        .querySelectorAll("div")[2]
+        .querySelectorAll("a")[0]
+      if (current) current.click();
     }
   }
 

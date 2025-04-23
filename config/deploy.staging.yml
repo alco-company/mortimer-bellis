@@ -43,6 +43,8 @@ registry:
 # Remember to run `kamal env push` after making changes!
 env:
   secret:
+    - MAILERSEND_API_WEBHOOK_SECRET
+    - MAILERSEND_API_TOKEN
     - SECRET_KEY_BASE
     - RAILS_MASTER_KEY
     - DINERO_APP_ID

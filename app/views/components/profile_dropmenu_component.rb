@@ -21,7 +21,7 @@ class ProfileDropmenuComponent < ApplicationComponent
             contextmenu_target: "button",
             action: "touchstart->contextmenu#tap:passive click@window->contextmenu#hide click->contextmenu#tap"
           },
-         class: "-m-1.5 flex items-center p-1.5",
+         class: "-m-1.5 flex items-center p-1.5 cursor-pointer",
         id: "user-menu-button",
         aria_expanded: "false",
         aria_haspopup: "true"

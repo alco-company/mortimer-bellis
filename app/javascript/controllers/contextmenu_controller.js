@@ -40,15 +40,14 @@ export default class extends Controller {
   }
 
   hide(event) {
+    // event.stopPropagation();
     try {      
       if (
         event &&
-        (this.popupTarget.contains(event.target) ||
-          this.buttonTarget.contains(event.target))
+        (this.popupTarget.contains(event.target) )
       ) {
         // changed your solution with crispinheneise's recommendation and added additional check:
         // event.preventDefault();
-        console.log("event.target.tagName: ", event.target.tagName);
         if( event.target.tagName != 'A' && event.target.tagName != 'BUTTON' ) {
           return;
         }
@@ -65,7 +64,11 @@ export default class extends Controller {
   }  
 
   lastItemInList(item) {
-    let records = document.getElementById("record_list").children
-    return records[records.length - 1] == item
+    try {
+      let records = document.getElementById("record_list").children
+      return records[records.length - 1] == item
+    } catch (error) {
+      return false
+    }
   }
 }

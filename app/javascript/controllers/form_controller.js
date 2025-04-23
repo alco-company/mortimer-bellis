@@ -29,28 +29,47 @@ export default class extends Controller {
   }
 
   keydown(e) {
+    console.log(`[form_controller] you pressed ${e.key}`);
     e.stopPropagation();
-    switch(e.key) {
-      case "Escape":
-        leave(this.backdropTarget);
-        leave(this.panelTarget).then(() => {
-          this.cancelFormTarget.click()
-        });
-        break;
-      case "Enter":
-        this.submitForm(e);
-        break;
-      // case "e":
-      //   this.editForm(e);
-      //   break;
-      // case "c":
-      //   this.clearForm(e);
-      //   break;
-      // case "q":
-      //   this.closeForm(e);
-      //   break;
-      // default:
-      //   console.log(`[form_controller] you pressed ${e.key}`);
+    if (e.metaKey){
+      switch (e.key) {
+        case "c":
+          alert("new call");
+          this.newCall(e);
+          break;
+        case "e":
+          let form = document.getElementById("form");
+          if (form.children.length > 0) {
+            form = form.querySelectorAll("div")[9].querySelectorAll("a");
+            if (form.length > 0) {
+              form[0].click();
+            }
+          }
+          break;
+        case "Enter":
+          this.submitForm(e);
+          break;
+        // case "c":
+        //   this.clearForm(e);
+        //   break;
+        // case "q":
+        //   this.closeForm(e);
+        //   break;
+        // default:
+        //   console.log(`[form_controller] you pressed ${e.key}`);
+      }
+    } else {
+      switch (e.key) {
+        case "Escape":
+          leave(this.backdropTarget);
+          leave(this.panelTarget).then(() => {
+            this.cancelFormTarget.click();
+          });
+          break;
+        case "Enter":
+          this.submitForm(e);
+          break;
+      }
     }
   }
 
@@ -62,6 +81,13 @@ export default class extends Controller {
   //   }
   //   document.getElementById('form').innerHTML = ""
   // }
+
+  newCall() {
+    let url = "/calls/new";
+    fetch(url)
+      .then((r) => r.text())
+      .then((html) => Turbo.renderStreamMessage(html));
+  }
 
   editForm(e) {
     e.preventDefault();

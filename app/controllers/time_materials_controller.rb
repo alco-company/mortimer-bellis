@@ -15,7 +15,7 @@ class TimeMaterialsController < MortimerController
   def index
     # tell user about his uncompleted tasks
     # Current.user.notify(action: :tasks_remaining, title: t("tasks.remaining.title"), msg: t("tasks.remaining.msg", count: Current.user.tasks.first_tasks.uncompleted.count)) unless Current.user.notified?(:tasks_remaining)
-    @resources = resources.order(date: :desc)
+    @resources = resources.order(wdate: :desc)
     super
   end
 
@@ -71,7 +71,10 @@ class TimeMaterialsController < MortimerController
         time_spent = (Time.current.to_i - resource.started_at.to_i) + resource.time_spent
         resource.update time_spent: time_spent, paused_at: nil, started_at: Time.current
       end
-      resource.prepare_tm resource_params
+      r = resource.prepare_tm resource_params
+      return false if r == false
+      resource_params = r
+      true
     end
 
     def create_callback
@@ -85,7 +88,10 @@ class TimeMaterialsController < MortimerController
         time_spent = (Time.current.to_i - resource.started_at.to_i) + resource.time_spent
         resource.update time_spent: time_spent, paused_at: nil, started_at: Time.current
       end
-      resource.prepare_tm resource_params
+      r = resource.prepare_tm resource_params
+      return false if r == false
+      resource_params = r
+      true
     end
 
     def update_callback
@@ -93,9 +99,10 @@ class TimeMaterialsController < MortimerController
     end
 
     def set_time
+      return true if resource_params[:product_name].present? or resource_params[:product_id].present?
       if resource_params[:state].present? && resource_params[:state] == "done" # done!
-        ht = params[:time_material][:hour_time] # && resource.hour_time=0
-        mt = params[:time_material][:minute_time] # && resource.minute_time=0
+        ht = resource_params[:hour_time] # && resource.hour_time=0
+        mt = resource_params[:minute_time] # && resource.minute_time=0
         resource.update time: resource.sanitize_time(ht, mt) unless ht.blank? || mt.blank?
       end
       true

@@ -70,14 +70,14 @@ class Filter < ApplicationRecord
     unless filter["date"]["fixed_range"].blank?
       today = DateTime.current.beginning_of_day
       case filter["date"]["fixed_range"]
-      when "today"     ; conditions << tbl[date_attr].eq(today)
-      when "yesterday" ; conditions << tbl[date_attr].eq(today - 1.day)
+      when "today"     ; conditions << tbl[date_attr].gteq(today)
+      when "yesterday" ; conditions << tbl[date_attr].between(today - 1.day..today - 1.second)
       when "this_week" ; conditions << tbl[date_attr].gteq(today.at_beginning_of_week)
-      when "last_week" ; conditions << tbl[date_attr].between(today.at_beginning_of_week - 7.days..today.at_beginning_of_week)
+      when "last_week" ; conditions << tbl[date_attr].between(today.at_beginning_of_week - 7.days..today.at_beginning_of_week - 1.second)
       when "this_month"; conditions << tbl[date_attr].gteq(today.beginning_of_month)
-      when "last_month"; conditions << tbl[date_attr].between(today.beginning_of_month - 1.month..today.beginning_of_month)
+      when "last_month"; conditions << tbl[date_attr].between(today.beginning_of_month - 1.month..today.beginning_of_month - 1.second)
       when "this_year" ; conditions << tbl[date_attr].gteq(today.beginning_of_year)
-      when "last_year" ; conditions << tbl[date_attr].between(today.beginning_of_year - 1.year..today.beginning_of_year)
+      when "last_year" ; conditions << tbl[date_attr].between(today.beginning_of_year - 1.year..today.beginning_of_year - 1.second)
       end
     end
     unless filter["date"]["custom_from"].blank?

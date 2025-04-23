@@ -202,7 +202,7 @@ module Resourceable
       end
 
       def sorted
-        @collection = any_sorts? ? collection.ordered(params.dig(:s), params.dig(:d)) : collection.set_order(collection) rescue collection
+        @collection = any_sorts? ? collection.ordered(params.dig(:s), params.dig(:d)) : collection.set_order(collection) rescue collection.order(id: :desc)
         self
       end
 

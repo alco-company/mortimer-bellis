@@ -308,6 +308,62 @@ h1 {
   }
 }
 
+.clipboard-button {
+  display: none;
+}
+
+.clipboard--supported .clipboard-button {
+  display: initial;
+}
+
+.pulse_button {
+  position: relative;
+  background-color: white;
+  border-radius: 4em;
+  /*color: white;*/
+  padding: 0.8em 1.8em;
+  cursor: pointer;
+  user-select: none;
+  cursor: pointer;
+  transition-duration: 0.4s;
+  -webkit-transition-duration: 0.4s;
+  /* Safari */
+}
+
+.pulse_button:hover {
+  transition-duration: 0.1s;
+  background-color: #eee;
+}
+
+.pulse_button:after {
+  content: "";
+  display: block;
+  position: absolute;
+  border-radius: 4em;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: all 0.5s;
+  box-shadow: 0 0 10px 40px #bbb;
+}
+
+.pulse_button:active:after {
+  box-shadow: 0 0 0 0 white;
+  position: absolute;
+  border-radius: 4em;
+  left: 0;
+  top: 0;
+  opacity: 1;
+  transition: 0s;
+}
+
+.pulse_button:active {
+  top: 1px;
+}
+
+
 /* https: //github.com/tailwindlabs/tailwindcss/discussions/10909 */
 html {
   font-feature-settings: "cv02", "cv03", "cv04", "cv11";

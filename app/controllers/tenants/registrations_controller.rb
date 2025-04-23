@@ -3,6 +3,7 @@
 #
 class Tenants::RegistrationsController < MortimerController
   allow_unauthenticated_access only: %i[new show create]
+  before_action :forget_robots, only: :create
   # resume_session only: :new
 
   def new
@@ -197,5 +198,11 @@ class Tenants::RegistrationsController < MortimerController
       user_params[:password].present? &&
       user_params[:password_confirmation].present? &&
       user_params[:password] == user_params[:password_confirmation]
+    end
+
+    def forget_robots
+      if params[:user][:realname].present?
+        redirect_to root_path, alert: I18n.t("users.user_registration_was_robot", success: "robots are welcome here") and return
+      end
     end
 end

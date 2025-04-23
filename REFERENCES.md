@@ -256,4 +256,8 @@ https://getgrav.org/blog/macos-sequoia-apache-ssl
 ### Spinners 
 
 * using spinners to make users aware that something is happening https://medium.com/unagi/hotwire-turbo-frames-add-seamless-loading-spinners-in-rails-7d4339792f91
+
+### Service Objects
+
+* service objects are great for '7 good deeds' programming - https://medium.com/@sulmanweb/service-objects-level-up-your-rails-architecture-8791099656e1 
 * 

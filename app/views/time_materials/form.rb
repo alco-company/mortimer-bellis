@@ -1,6 +1,6 @@
 class TimeMaterials::Form < ApplicationForm
   def view_template(&)
-    div(class: "overflow-y-auto", data: { controller: "time-material tabs", tabs_index: "0" }) do
+    div(class: "overflow-y-auto", data: { controller: "time-material tabs", tabs_index: @resource.is_time? ? "0" : "1" }) do
       if model.cannot_be_pushed?
         show_possible_issues
       end
@@ -65,13 +65,13 @@ class TimeMaterials::Form < ApplicationForm
       type: "button",
       data: { tabs_target: "tab", action: "tabs#change" },
       value: 0,
-      class: "flex justify-center tab-header w-1/3 border-b-2 border-transparent p-2 pt-1 text-center text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700",
+      class: "flex justify-center tab-header w-1/3 border-b-2 border-transparent p-2 pt-1 text-center text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700  #{'hidden' unless @resource.is_time?}",
       role: "switch",
       aria_checked: "false") do
         # comment do
         #   %(Current: "text-sky-500", Default: "text-gray-400 group-hover:text-gray-500")
         # end
-        render Icons::Person.new(cls: "-ml-0.5 mr-2 h-5 w-5 text-sky-500 group-hover:text-sky-500 pointer-events-none", data: { time_material_target: "timetab" })
+        render Icons::Person.new(cls: "-ml-0.5 mr-2 h-5 w-5 text-gray-400 group-hover:text-gray-500 pointer-events-none", data: { time_material_target: "timetab" })
         span(class: "pointer-events-none") { I18n.t("time_material.type.time") }
     end
   end
@@ -122,7 +122,7 @@ class TimeMaterials::Form < ApplicationForm
   # over_time
   #
   def show_time_tab
-    div(id: "time", data: { tabs_target: "tabPanel" }, class: "time-material-type time tab ") do
+    div(id: "time", data: { tabs_target: "tabPanel" }, class: "time-material-type time tab #{'hidden' unless @resource.is_time?}") do
       div(class: "space-y-2 ") do
         div(class: "pb-2") do
           div(class: "mt-2 grid grid-cols-11 gap-x-1 sm:gap-x-4 gap-y-1 ") do
@@ -156,7 +156,7 @@ class TimeMaterials::Form < ApplicationForm
   # discount
   #
   def show_material_tab
-    div(id: "material", data: { tabs_target: "tabPanel" }, class: "time-material-type material tab hidden") do
+    div(id: "material", data: { tabs_target: "tabPanel" }, class: "time-material-type material tab #{'hidden' if @resource.is_time?}") do
       div(class: "space-y-2") do
         div(class: " pb-2") do
           div(class: "mt-2 grid grid-cols-4 gap-x-4 gap-y-1") do

@@ -11,7 +11,7 @@ class List < ApplicationComponent
     @order_by = order_by
     @group_by = group_by
     @records = records
-    @order_key = order_by ? order_by.keys.first : :created_at
+    @order_by = order_by ? order_by.keys.first : nil
     @initial = initial
     @replace = replace
     @filter = filter.persisted? rescue false
@@ -34,6 +34,7 @@ class List < ApplicationComponent
       # list_records
       # turbo_frame_tag "pagination", src: resources_url(format: :turbo_stream), loading: "lazy"
       # div(id: "record_list", class: "scrollbar-hide") { }
+      replace_list
     else
       @replace ? replace_list : append_list
     end
@@ -69,20 +70,20 @@ class List < ApplicationComponent
     replace_list_header
     turbo_stream.replace "record_list" do
       div(id: "record_list", class: "scrollbar-hide") { }
-      append_list
     end
+    append_list
   end
 
   def list_records
     if order_by && records.any?
-      date = (records.first.send(@order_key)).to_date
-      render partial: "date", locals: { date: date }
+      fld = records.first.send(order_by)
+      render partial: "date", locals: { field: fld }
     end
 
     records.each do |record|
-      if record.send(@order_key).to_date != date
-        date = (record.send(@order_key)).to_date
-        render partial: "date", locals: { date: date }
+      if record.send(order_by) != fld
+        fld = (record.send(order_by))
+        render partial: "date", locals: { field: fld }
       end if order_by
       render "ListItems::#{resource_class}".classify.constantize.new(resource: record, params: params, user: user)
     end

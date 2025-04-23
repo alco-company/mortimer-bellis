@@ -72,7 +72,7 @@ class ListItems::TimeMaterial < ListItems::ListItem
     return "bg-green-200" if resource.active?
     return "bg-orange-200" if resource.paused?
     return "bg-gray-50" if !resource.pushed_to_erp? and !resource.cannot_be_pushed?
-    return "bg-gray-200" if resource.pushed_to_erp?
+    # return "bg-gray-200" if resource.pushed_to_erp?
     return "bg-yellow-400/50" if resource.cannot_be_pushed?
     "bg-gray-50"
   end
@@ -116,9 +116,10 @@ class ListItems::TimeMaterial < ListItems::ListItem
         plain (I18n.l(resource.date.to_datetime, format: :date) rescue unsafe_raw(I18n.t("time_material.no_date")))
       end
       if resource.is_invoice?
-        span(class: "hidden 2xs:inline-flex w-fit items-center rounded-md bg-green-50 mr-1 px-1 xs:px-2 py-0 xs:py-0.5 text-2xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20 truncate") do
-          render Icons::Money.new(cls: "text-green-500 h-4 w-4")
-          span(class: "hidden ml-2 md:inline") { I18n.t("time_material.billable") }
+        color = resource.pushed_to_erp? ? "bg-green-700 text-green-50" : "bg-green-50 text-green-700"
+        span(class: "hidden 2xs:inline-flex w-fit items-center rounded-md #{color} mr-1 px-1 xs:px-2 py-0 xs:py-0.5 text-2xs font-medium ring-1 ring-inset ring-green-600/20 truncate") do
+          render Icons::Money.new(cls: "#{color} h-4 w-4")
+          span(class: "hidden ml-2 md:inline") { resource.pushed_to_erp? ? I18n.t("time_material.billed") : I18n.t("time_material.billable") }
         end
       end
       if @insufficient_data

@@ -2,6 +2,7 @@ class Users::OtpsController < MortimerController
   def new
     @user = Current.user
     @qr_code = @user.qr_code
+    @qr_code_as_text = @user.qr_code_as_text
     @warning = ""
   end
 
