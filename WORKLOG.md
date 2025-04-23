@@ -6,6 +6,7 @@
 ### 23/4/2025
 
 - allow meta + Enter to submit forms
+- make PDF work in production (missing firewall rule) + in development
 
 ### 22/4/2025
 

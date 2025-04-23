@@ -10,7 +10,6 @@ class BuildPdfJob < ApplicationJob
   def perform(**args)
     super(**args)
     url = "http://#{ENV["PDF_HOST"]}:8080"
-    # url = "http://#{ENV["PDF_HOST"]}:32770" if Rails.env.development?
     options = {
       headers: {
         "ContentType" => "multipart/form-data"
@@ -25,6 +24,7 @@ class BuildPdfJob < ApplicationJob
     end
     true
   rescue StandardError => e
+    UserMailer.error_report(e.to_s, "BuildPdfJob#perform").deliver_later
     false
   end
 end
