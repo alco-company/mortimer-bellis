@@ -10,8 +10,10 @@
 - don't use meta-c for calls/new!
 - no fat border on flash'es
 - /users/invitations/new
+- 2FA hangs as task on dashboard
 - activate notifications link dead
 - only show buy_product on tenant
+- invitations look for , and space
 
 ### 23/4/2025
 

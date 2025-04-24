@@ -8,6 +8,7 @@ class Users::InvitationsController < MortimerController
     msg = invite_params[:invitation_message]
     count = 0
     invite_params[:invitees].split(/[ ,;]/).each do |invitee|
+      next unless invitee =~ /\A[a-zA-Z0-9.!\#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+\z/
       invitee_user = User.new email: invitee, tenant: Current.user.tenant, password: SecureRandom.hex(8), locale: Current.user.locale, time_zone: Current.user.time_zone, invited_by: Current.user, invitation_sent_at: Time.now
       if invitee_user.valid? && invitee_user.save
         Current.user.update invitations_count: Current.user.invitations_count + 1
