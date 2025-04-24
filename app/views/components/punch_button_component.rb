@@ -13,8 +13,9 @@ class PunchButtonComponent < ApplicationComponent
 
   def view_template
     div(id: "punch_button", class: "fixed flex gap-x-4 z-20 right-4 bottom-6") do
+      return unless %w[ambassador].include?(Current.tenant.license)
       case state
-      when "out", "break"; punch_in
+      when "out", "break", "confirmed"; punch_in
       when "in"
         punch_break
         punch_out

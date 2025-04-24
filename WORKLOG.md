@@ -17,6 +17,7 @@
 - video record setting up integration to Dinero
 - 4-5 basic videos with basic features
 - allow admins access to more admin menu items
+- show punch in/out/break if license == ambassador
 
 ### 23/4/2025
 
