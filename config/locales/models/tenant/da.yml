@@ -45,7 +45,7 @@ da:
         preheader: "Velkomst email fra  M O R T I M E R  - måske Europa's enkleste og billigste tidsregistreringssystem"
         subject: Velkommen til M O R T I M E R
         hello: Velkommen %{name},
-        we_created_an_tenant: "Vi har oprettet en konto til jer på  M O R T I M E R.<br>For at logge på, skal du <a href='%{url}'>klikke her</a> og bruge de nedenstående oplysninger.<p>Du kan rette adgangskoden (faktisk vil vi gerne hvis du gør det), når du er logget korrekt ind:"
+        we_created_an_tenant: "Vi har oprettet en konto til jer på  M O R T I M E R.<br>For at logge på, skal du <a href='https://app.mortimer.pro'>klikke her</a> og den nedenstående oplysning.<p>Du bør rette adgangskoden, når du er logget korrekt ind (faktisk vil vi endnu hellere at du straks efter første login vælger at føje 2FA til din konto):"
         confirmation_instruction: "Brugernavn: %{email}"
         ignore: "Hvis du ikke har bedt om en konto, kan du ignorere denne e-mail, og så beklager vi ulejligheden."
         regards: Med venlig hilsen,

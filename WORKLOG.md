@@ -2,7 +2,6 @@
 
 ## CHANGELOG
 
-
 ### 24/4/2025
 
 - add keyboard shotcuts modal help
@@ -14,6 +13,7 @@
 - activate notifications link dead
 - only show buy_product on tenant
 - invitations look for , and space
+- send account welcome email when email confirmed
 
 ### 23/4/2025
 

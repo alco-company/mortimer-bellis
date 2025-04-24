@@ -12,8 +12,7 @@ class TenantRegistrationService
       user = User.new tenant_id: tenant.id, email: user_params[:email], role: "admin", password: user_params[:password], locale: "da", time_zone: "Europe/Copenhagen"
       if user.save
         user.send_confirmation_instructions
-        TenantMailer.with(tenant: tenant, pw: user_params[:password]).welcome.deliver_later
-        UserMailer.with(user: user).welcome.deliver_later
+        UserMailer.with(user: user).welcome.deliver_later # tell monitor@alco.dk that this user has registered
         create_defaults_for_new tenant, user
         return user
       end

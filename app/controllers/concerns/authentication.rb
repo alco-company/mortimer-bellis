@@ -54,6 +54,7 @@ module Authentication
     end
 
     def start_new_session_for(user)
+      welcome_tenant(user)
       user.sessions.create!(user_agent: request.user_agent, ip_address: request.remote_ip, authentication_strategy: "password").tap do |session|
         Current.session = session
         Current.user.update(sign_in_count: Current.user.sign_in_count + 1,
@@ -77,5 +78,11 @@ module Authentication
       Current.user.update(current_sign_in_at: nil, current_sign_in_ip: nil)
       Current.session.destroy
       cookies.delete(:session_id)
+    end
+
+    def welcome_tenant(user)
+      if user == user.tenant.users.first && user.sign_in_count == 0
+        TenantMailer.with(tenant: user.tenant).welcome.deliver_later
+      end
     end
 end
