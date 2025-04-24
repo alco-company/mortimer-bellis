@@ -105,6 +105,9 @@ class ModalController < MortimerController
       @step = "get_pay_link"
     end
 
+    def process_help_new
+    end
+
     def process_other_new
       @step = params[:modal_next_step] || "accept"
       @ids = @filter.filter != {} || @batch&.batch_set? || @search.present? ? resources.pluck(:id) : []

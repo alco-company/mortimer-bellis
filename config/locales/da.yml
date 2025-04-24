@@ -256,6 +256,7 @@ da:
     holidays: Helligdage
     invoices: Fakturaer
     invoice_items: Fakturalinjer
+    integrations: Integrationer
     kiosks: Kiosker
     locations: Arbejdssteder
     login: Log ind
@@ -268,6 +269,7 @@ da:
     punches: Stemplinger
     punch_cards: Stempelkort
     punch_clocks: Stempelure
+    settings: Indstillinger
     teams: Hold
     tenant: Konto
     tenants: Konti

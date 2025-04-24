@@ -30,7 +30,7 @@ class NavigationComponent < ApplicationComponent
             li(class: "h-22") { unsafe_raw "&nbsp;" }
           end
         end
-        settings_and_integrations unless Current.user&.user?
+        help_and_shortcuts
       end
     end
   end
@@ -231,6 +231,8 @@ class NavigationComponent < ApplicationComponent
             tasks: { title: "tasks", url: "/tasks", icon: "task" },
             teams: { title: "teams", url: "/teams", icon: "team" },
             tenants: { title: "tenants", url: "/tenants", icon: "tenant" },
+            provided_services: { title: "integrations", url: "/provided_services", icon: "extension" },
+            settings: { title: "settings", url: "/settings", icon: "setting" },
             # oauths: { title: "oauth_applications", url: "/oauth/applications", icon: "oauth" },
             users: { title: "users", url: "/users", icon: "user" }
           }
@@ -312,33 +314,40 @@ class NavigationComponent < ApplicationComponent
     rescue
     end
 
-    def settings_and_integrations
-      li(class: "fixed bottom-0 left-0 w-76 mt-auto /90 z-40", data: { menu_target: "setting" }) do
-        div(class: "flex items-center gap-x-0 ml-2") do
+    def help_and_shortcuts
+      li() do
+        div(data: { menu_target: "setting" }, class: "fixed flex flex-col bottom-0 left-0 mt-auto bg-white w-64 border-t border-gray-200 ") do
+          # a(
+          #   href: settings_url,
+          #   class:
+          #     "py-3 text-sm font-semibold text-gray-900 hover:bg-gray-50"
+          # ) do
+          #   render_icon("setting")
+          # end
+          # a(
+          #   href: provided_services_url,
+          #   class:
+          #     " py-3 text-sm font-semibold text-gray-900 hover:bg-gray-50"
+          # ) do
+          #   render_icon("extension")
+          # end
           a(
-            href: settings_url,
+            data: { turbo_stream: "true" },
+            role: "menuitem",
+            tabindex: "-1",
+            href: new_modal_url(resource_class: "page", modal_form: "keyboard"),
             class:
-              "flex items-center gap-x-1 pr-3 py-3 text-sm font-semibold leading-6 text-gray-900 hover:bg-gray-50"
+              "px-2 py-3 text-sm font-semibold text-gray-900 hover:bg-gray-50"
           ) do
-            render_icon("setting")
-            # render Icons::Setting.new
-          end
-          a(
-            href: provided_services_url,
-            class:
-              "flex items-center gap-x-1 p-3 text-sm font-semibold leading-6 text-gray-900 hover:bg-gray-50"
-          ) do
-            render_icon("extension")
-            # render Icons::Extension.new
+            render_icon("keyboard")
           end
           a(
             href: "https://mortimer.pro/help",
             target: "_blank",
             class:
-              "flex items-center gap-x-1 p-3 text-sm font-semibold leading-6 text-gray-900 hover:bg-gray-50"
+              " px-2 py-3 text-sm font-semibold text-gray-900 hover:bg-gray-50"
           ) do
             render_icon("help", "h-6 text-red-500")
-            # render Icons::Help.new cls: "h-6 text-red-500"
           end
         end
       end
