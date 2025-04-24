@@ -22,7 +22,7 @@ class NavigationComponent < ApplicationComponent
         li(class: "") do
           ul(role: "list", class: "-mx-2 space-y-1") do
             @menu.each do |key, item|
-              item[:submenu] ? sub_menu(key, item) : menu_item(item: item[:title], url: item[:url], icon: item[:icon])
+              item[:submenu] ? sub_menu(key, item) : menu_item(item: item, icon: item[:icon])
             end
             li(class: "h-22") { unsafe_raw "&nbsp;" }
             li(class: "h-22") { unsafe_raw "&nbsp;" }
@@ -184,31 +184,33 @@ class NavigationComponent < ApplicationComponent
   private
 
     def default_menu
-      return {
-        dashboard: { title: "dashboard", url: "/dashboards/show_dashboard", icon: "home" },
-        time_material: { title: "time_material", url: "/time_materials", icon: "time_material" },
-        # calendar: { title: "calendar", url: "/calendars", icon: "calendar" },
-        # reports: { title: "Reports", url: "/pages", icon: "home" },
-        manage: { title: "manage",
-          submenu: {
-            # background_jobs: { title: "background_jobs", url: "/background_jobs", icon: "background_job" },
-            customers: { title: "customers", url: "/customers", icon: "customer" },
-            # dashboards: { title: "dashboards", url: "/dashboards", icon: "home" },
-            # invoices: { title: "invoices", url: "/invoices", icon: "invoice" },
-            # invoice_items: { title: "invoice_items", url: "/invoice_items", icon: "invoice_item" },
-            # kiosks: { title: "kiosks", url: "/punch_clocks", icon: "punch_clock" },
-            # locations: { title: "locations", url: "/locations", icon: "location" },
-            products: { title: "products", url: "/products", icon: "product" },
-            projects: { title: "projects", url: "/projects", icon: "project" },
-            # punches: { title: "punches", url: "/punches", icon: "punch" },
-            # reports: { title: "Reports", url: "/reports", icon: "home" },
-            # teams: { title: "teams", url: "/teams", icon: "team" },
-            # tenants: { title: "tenants", url: "/tenants", icon: "tenant" },
-            # oauths: { title: "oauth_applications", url: "/oauth/applications", icon: "oauth" },
-            users: { title: "users", url: "/users", icon: "user" }
-          }
-        }
-      } unless Current.user.superadmin?
+      # return {
+      #   dashboard: { title: "dashboard", url: "/dashboards/show_dashboard", icon: "home" },
+      #   time_material: { title: "time_material", url: "/time_materials", icon: "time_material" },
+      #   # calendar: { title: "calendar", url: "/calendars", icon: "calendar" },
+      #   # reports: { title: "Reports", url: "/pages", icon: "home" },
+      #   manage: { title: "manage",
+      #     submenu: {
+      #       # background_jobs: { title: "background_jobs", url: "/background_jobs", icon: "background_job" },
+      #       customers: { title: "customers", url: "/customers", icon: "customer" },
+      #       # dashboards: { title: "dashboards", url: "/dashboards", icon: "home" },
+      #       # invoices: { title: "invoices", url: "/invoices", icon: "invoice" },
+      #       # invoice_items: { title: "invoice_items", url: "/invoice_items", icon: "invoice_item" },
+      #       # kiosks: { title: "kiosks", url: "/punch_clocks", icon: "punch_clock" },
+      #       # locations: { title: "locations", url: "/locations", icon: "location" },
+      #       products: { title: "products", url: "/products", icon: "product" },
+      #       projects: { title: "projects", url: "/projects", icon: "project" },
+      #       # punches: { title: "punches", url: "/punches", icon: "punch" },
+      #       # reports: { title: "Reports", url: "/reports", icon: "home" },
+      #       # teams: { title: "teams", url: "/teams", icon: "team" },
+      #       # tenants: { title: "tenants", url: "/tenants", icon: "tenant" },
+      #       provided_services: { title: "integrations", url: "/provided_services", icon: "extension" },
+      #       settings: { title: "settings", url: "/settings", icon: "setting" },
+      #       # oauths: { title: "oauth_applications", url: "/oauth/applications", icon: "oauth" },
+      #       users: { title: "users", url: "/users", icon: "user" }
+      #     }
+      #   }
+      # } unless Current.user.superadmin?
       {
         dashboard: { title: "dashboard", url: "/dashboards/show_dashboard", icon: "home" },
         time_material: { title: "time_material", url: "/time_materials", icon: "time_material" },
@@ -216,20 +218,20 @@ class NavigationComponent < ApplicationComponent
         # reports: { title: "Reports", url: "/pages", icon: "home" },
         manage: { title: "manage",
           submenu: {
-            background_jobs: { title: "background_jobs", url: "/background_jobs", icon: "background_job" },
+            background_jobs: { title: "background_jobs", url: "/background_jobs", icon: "background_job", license: "pro" },
             customers: { title: "customers", url: "/customers", icon: "customer" },
-            dashboards: { title: "dashboards", url: "/dashboards", icon: "home" },
-            filters: { title: "filters", url: "/filters", icon: "filter" },
-            invoices: { title: "invoices", url: "/invoices", icon: "invoice" },
-            invoice_items: { title: "invoice_items", url: "/invoice_items", icon: "invoice_item" },
-            kiosks: { title: "kiosks", url: "/punch_clocks", icon: "punch_clock" },
-            locations: { title: "locations", url: "/locations", icon: "location" },
+            dashboards: { title: "dashboards", url: "/dashboards", icon: "home", license: "pro" },
+            filters: { title: "filters", url: "/filters", icon: "filter", license: "pro" },
+            invoices: { title: "invoices", url: "/invoices", icon: "invoice", license: "pro" },
+            invoice_items: { title: "invoice_items", url: "/invoice_items", icon: "invoice_item", license: "pro" },
+            kiosks: { title: "kiosks", url: "/punch_clocks", icon: "punch_clock", license: "pro" },
+            locations: { title: "locations", url: "/locations", icon: "location", license: "pro" },
             products: { title: "products", url: "/products", icon: "product" },
-            projects: { title: "projects", url: "/projects", icon: "project" },
-            punches: { title: "punches", url: "/punches", icon: "punch" },
+            projects: { title: "projects", url: "/projects", icon: "project", license: "pro" },
+            punches: { title: "punches", url: "/punches", icon: "punch", license: "pro" },
             # reports: { title: "Reports", url: "/reports", icon: "home" },
-            tasks: { title: "tasks", url: "/tasks", icon: "task" },
-            teams: { title: "teams", url: "/teams", icon: "team" },
+            tasks: { title: "tasks", url: "/tasks", icon: "task", license: "pro" },
+            teams: { title: "teams", url: "/teams", icon: "team", license: "pro" },
             tenants: { title: "tenants", url: "/tenants", icon: "tenant" },
             provided_services: { title: "integrations", url: "/provided_services", icon: "extension" },
             settings: { title: "settings", url: "/settings", icon: "setting" },
@@ -245,15 +247,18 @@ class NavigationComponent < ApplicationComponent
       request.path.split("?")[0].include?(url) ? "bg-sky-100" : ""
     end
 
-    def menu_item(item:, url:, css: "group flex gap-x-3 rounded-md  p-2 text-sm font-semibold leading-6 text-sky-400 hover:text-sky-800 hover:bg-gray-50", icon: nil)
+    def menu_item(item:, icon: nil)
       # %(Current: "bg-gray-50", Default: "hover:bg-gray-50")
+      url = item[:url]
+      css = "group flex gap-x-3 rounded-md  p-2 text-sm font-semibold leading-6 text-sky-400 hover:text-sky-800 hover:bg-gray-50"
       css = "#{css} #{current_item?(url)}"
+      title = item[:title]
       li do
         a(href: url, class: css, data: { action: "click->mobilesidebar#hide" }) do
           render_icon(icon) if icon
-          span(class: "", data: { menu_target: "menuitem" }) { I18n.t("menu.#{item}") }
+          span(class: "", data: { menu_target: "menuitem" }) { I18n.t("menu.#{title}") }
         end
-      end
+      end if %w[ambassador pro].include?(Current.tenant.license) || item[:license].blank?
     end
 
     def expanded_sub?(item)
@@ -306,7 +311,7 @@ class NavigationComponent < ApplicationComponent
           ul(class: "submenu #{hidden_sub?(item)} mt-1 px-0", id: "sub-menu-1") do
             item[:submenu].each do |key, i|
               next if key == :tenants && !Current.user.superadmin?
-              menu_item(item: i[:title], url: i[:url], css: "group flex gap-x-3 rounded-md  p-2 text-sm font-semibold leading-6 text-sky-400 hover:text-sky-800 hover:bg-gray-50", icon: i[:icon])
+              menu_item(item: i, icon: i[:icon])
             end
           end
         end

@@ -14,6 +14,9 @@
 - only show buy_product on tenant
 - invitations look for , and space
 - send account welcome email when email confirmed
+- video record setting up integration to Dinero
+- 4-5 basic videos with basic features
+- allow admins access to more admin menu items
 
 ### 23/4/2025
 
