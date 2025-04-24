@@ -34,8 +34,8 @@ export default class extends Controller {
     if (e.metaKey){
       switch (e.key) {
         case "c":
-          alert("new call");
-          this.newCall(e);
+          if (e.shiftKey)
+             this.newCall(e);
           break;
         case "e":
           let form = document.getElementById("form");
