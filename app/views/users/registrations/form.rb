@@ -28,7 +28,7 @@ class Users::Registrations::Form < ApplicationForm
         render TwoFactorField.new
       end
       # set_password
-      buy_product
+      # buy_product
       delete_account
     end
   end

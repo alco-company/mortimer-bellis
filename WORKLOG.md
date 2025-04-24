@@ -9,6 +9,9 @@
 - refactor navigation sidebar
 - don't use meta-c for calls/new!
 - no fat border on flash'es
+- /users/invitations/new
+- activate notifications link dead
+- only show buy_product on tenant
 
 ### 23/4/2025
 
