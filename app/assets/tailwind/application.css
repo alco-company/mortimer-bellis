@@ -149,7 +149,7 @@
   }
 
   .mort-flash-border-error {
-    @apply border border-red-400 ring-red-600;
+    @apply border-0 border-red-400 ring-red-600 ring-0;
   }
 
   .mort-flash-warning {
@@ -161,11 +161,11 @@
   }
 
   .mort-flash-border-warning {
-    @apply border border-yellow-400 ring-yellow-600;
+    @apply border-0 border-yellow-400 ring-yellow-600 ring-0;
   }
 
   .mort-flash-border-alert {
-    @apply border border-yellow-400 ring-yellow-600;
+    @apply border-0 border-yellow-400 ring-yellow-600 ring-0;
   }
 
   .mort-flash-info {
@@ -177,11 +177,11 @@
   }
 
   .mort-flash-border-info {
-    @apply border border-sky-400 ring-sky-600;
+    @apply border-0 border-sky-400 ring-sky-600 ring-0;
   }
 
   .mort-flash-border-timedout {
-    @apply border border-sky-400 ring-sky-600;
+    @apply border-0 border-sky-400 ring-sky-600 ring-0;
   }
 
   .mort-flash-notice {
@@ -189,7 +189,7 @@
   }
 
   .mort-flash-border-notice {
-    @apply border border-sky-200 ring-sky-600;
+    @apply border-0 border-sky-200 ring-sky-600 ring-0;
   }
 
   .mort-flash-success {
@@ -197,7 +197,7 @@
   }
 
   .mort-flash-border-success {
-    @apply border border-green-400 ring-green-600;
+    @apply border-0 border-green-400 ring-green-600 ring-0;
   }
 
   .mort-state-in {

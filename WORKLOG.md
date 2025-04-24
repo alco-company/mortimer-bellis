@@ -2,13 +2,13 @@
 
 ## CHANGELOG
 
-- no fat border on flash'es
 
 ### 24/4/2025
 
 - add keyboard shotcuts modal help
 - refactor navigation sidebar
 - don't use meta-c for calls/new!
+- no fat border on flash'es
 
 ### 23/4/2025
 
