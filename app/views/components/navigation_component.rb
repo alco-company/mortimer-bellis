@@ -316,6 +316,7 @@ class NavigationComponent < ApplicationComponent
 
     def help_and_shortcuts
       li() do
+        comment { "w-24 max-w-24 border-t border-gray-200 w-64" }
         div(data: { menu_target: "setting" }, class: "fixed flex flex-col bottom-0 left-0 mt-auto bg-white w-64 border-t border-gray-200 ") do
           # a(
           #   href: settings_url,

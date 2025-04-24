@@ -2,11 +2,11 @@
 
 ## CHANGELOG
 
-- refactor navigation sidebar
 
 ### 24/4/2025
 
 - add keyboard shotcuts modal help
+- refactor navigation sidebar
 
 ### 23/4/2025
 

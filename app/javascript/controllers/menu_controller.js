@@ -16,30 +16,36 @@ export default class extends Controller {
     let i = 0;
     if (localStorage.getItem("collapsed") === "true") {
       this.topmainTarget.classList.remove("lg:pl-64");
-      try { this.settingTargets.forEach((e) => e.classList.remove("px-6") ) } catch (e) {}
       this.topmainTarget.classList.add("lg:pl-24");
+      this.settingTarget.classList.remove("w-64"); 
+      this.settingTarget.classList.add("w-24", "max-w-24");
       this.sidebarTarget.classList.add("w-24", "max-w-24");
       this.menuitemTargets.forEach((e) => { e.classList.add("lg:hidden"); });
       for (i of document.getElementsByClassName("collapse-sidebar")) {
         i.classList.add("rotate-180");
       }
+    } else {
+      this.settingTarget.classList.remove("w-24", "max-w-24");
+      this.settingTarget.classList.add("w-64");
     }
   }
 
   toggleSidebar(e) {
     let i = 0;
+    // going wide
     if (localStorage.getItem("collapsed") === "true") {
+      this.settingTarget.classList.remove("w-24", "max-w-24");
+      this.settingTarget.classList.add("w-64");
       this.topmainTarget.classList.remove("lg:pl-24");
       this.topmainTarget.classList.add("lg:pl-64");
       this.sidebarTarget.classList.remove("w-24", "max-w-24");
       for (i of document.getElementsByClassName("collapse-sidebar")) {
         i.classList.remove("rotate-180");
       }
-      try {
-        this.settingTargets.forEach((e) => e.classList.add("px-6"));
-      } catch (e) {}
       this.menuitemTargets.forEach((e) => { e.classList.remove("lg:hidden"); });
       localStorage.setItem("collapsed", "false");
+
+    // going narrow
     } else {
       this.topmainTarget.classList.remove("lg:pl-64");
       this.topmainTarget.classList.add("lg:pl-24");
@@ -47,9 +53,8 @@ export default class extends Controller {
       for (i of document.getElementsByClassName("collapse-sidebar")) {
         i.classList.add("rotate-180");
       }
-      try {
-        this.settingTargets.forEach((e) => e.classList.remove("px-6"));
-      } catch (e) {}
+      this.settingTarget.classList.remove("w-64");
+      this.settingTarget.classList.add("w-24", "max-w-24");
       this.menuitemTargets.forEach((e) => { e.classList.add("lg:hidden"); });
       localStorage.setItem("collapsed", "true");
     }
