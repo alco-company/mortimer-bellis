@@ -10,6 +10,7 @@
 - fix 302 on GET "/modal/new?modal_form=keyboard&resource_class=page" - debug
 - fix 302 on GET "/modal/new?modal_form=keyboard&resource_class=page" - debug 2
 - fix error on keyboard modal
+- strategy for informing users on updates - https://whimsical.com/development-production-cycle-NDRwNWV3TGE4R2cFGkMRtK
 
 ### 24/4/2025
 
