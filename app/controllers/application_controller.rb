@@ -14,7 +14,7 @@ class ApplicationController < ActionController::Base
   #
   # will redirect_to root_path if a 404 is encountered
   #
-  # include ErrorHandling
+  include ErrorHandling
 
   include PostHogging
 

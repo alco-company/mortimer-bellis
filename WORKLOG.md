@@ -9,6 +9,7 @@
 - fixing (No route matches [GET] "/apple-touch-icon.png"):
 - fix 302 on GET "/modal/new?modal_form=keyboard&resource_class=page" - debug
 - fix 302 on GET "/modal/new?modal_form=keyboard&resource_class=page" - debug 2
+- fix error on keyboard modal
 
 ### 24/4/2025
 

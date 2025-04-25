@@ -63,6 +63,10 @@ da:
   session_expired: "Din session er udløbet - log venligst ind igen"
   sign_out_in_session_expires_shortly: "Overvej snart at logge ud/ind igen, din session udløber om under 10 minutter"
   old_csrf: Din session indeholder en ældre CSRF nøgle - prøv venligst igen
+  routing_error: Routing fejl - endpoint mangler eller defineret forkert
+  unknown_format: Ukendt format (kendte formater er html, turbo_stream, csv, pdf og json)
+  record_not_found: Posten blev ikke fundet
+  url_generation_error: Det lykkedes ikke at danne den ønskede URL
 
   weekdays: Ugedage
   monday: Mandag
