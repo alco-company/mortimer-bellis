@@ -2,6 +2,10 @@
 
 ## CHANGELOG
 
+### 25/4/2025
+
+- try to set asset_path correct on images
+
 ### 24/4/2025
 
 - add keyboard shotcuts modal help
