@@ -5,6 +5,7 @@
 ### 25/4/2025
 
 - try to set asset_path correct on images
+- try to set asset_path correct on images 2
 
 ### 24/4/2025
 
