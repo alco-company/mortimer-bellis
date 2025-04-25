@@ -14,6 +14,7 @@ class ModalController < MortimerController
     when "employee"; process_employee_new
     when "punch_card"; process_punch_card_new
     when "tenant"; process_tenant_new
+    when "page"; process_help_new
     else; process_other_new
     end
   end
@@ -55,11 +56,11 @@ class ModalController < MortimerController
 
     def set_vars
       @modal_form = params[:modal_form]
-      @attachment = params[:attachment]
-      @step = params[:step]
-      @url = params[:url] || resources_url
+      @attachment = params[:attachment] rescue nil
+      @step = params[:step] || "accept" rescue ""
+      @url = params[:url] || resources_url rescue root_url
       @view = params[:view] || "month"
-      @search = params[:search]
+      @search = params[:search] || ""
     end
 
     #

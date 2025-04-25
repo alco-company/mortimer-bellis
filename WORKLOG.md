@@ -7,6 +7,7 @@
 - try to set asset_path correct on images
 - try to set asset_path correct on images 2
 - fixing (No route matches [GET] "/apple-touch-icon.png"):
+- fix 302 on GET "/modal/new?modal_form=keyboard&resource_class=page" - debug
 
 ### 24/4/2025
 

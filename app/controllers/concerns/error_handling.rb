@@ -7,11 +7,11 @@ module ErrorHandling
     #
     # You want to get exceptions in development, but not in production.
     unless Rails.application.config.consider_all_requests_local
-      rescue_from ActionController::RoutingError, with: -> { render_404  }
+      rescue_from ActionController::RoutingError, with: -> { render_404(:routing_error)  }
       # rescue_from ActionController::UnknownController, with: -> { render_404  }
-      rescue_from ActionController::UnknownFormat, with: -> { render_404  }
-      rescue_from ActiveRecord::RecordNotFound,        with: -> { render_404 }
-      rescue_from ActionController::UrlGenerationError, with: -> { render_404 }
+      rescue_from ActionController::UnknownFormat, with: -> { render_404(:unknown_format)  }
+      rescue_from ActiveRecord::RecordNotFound,        with: -> { render_404(:record_not_found) }
+      rescue_from ActionController::UrlGenerationError, with: -> { render_404(:url_generation_error) }
     end
     rescue_from ActionController::InvalidAuthenticityToken, with: :handle_bad_csrf_token
 
@@ -19,12 +19,12 @@ module ErrorHandling
     #   render_404
     # end
 
-    def render_404
+    def render_404(e)
       respond_to do |format|
         # format.html { render template: 'errors/not_found', status: 404 }
         # format.all { render nothing: true, status: 404 }
         # format.all { head :ok }
-        format.all { render_not_found  }
+        format.all { render_not_found(e)  }
       end
     end
 
@@ -37,9 +37,10 @@ module ErrorHandling
       end
     end
 
-    def render_not_found
+    def render_not_found(e)
       # flash[:warning] = flash.now[:warning] = t("page_not_found")
-      redirect_to root_path, warning: t("page_not_found")
+      UserMailer.error_report("RenderNotFound", "ErrorHandling#render_404 - #{e} failed with params: #{params}").deliver_later
+      redirect_to root_path, warning: t(e)
       # render turbo_stream: turbo_stream.replace( "flash", partial: 'shared/notifications' ), status: 404
     end
 
