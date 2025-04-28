@@ -277,6 +277,7 @@ class TimeMaterials::Form < ApplicationForm
   end
 
   def project_field
+    return unless %w[ambassador pro].include?(Current.get_tenant.license) || Current.get_tenant.license.blank? || Current.user.superadmin?
     row field(:project_id).lookup(class: "mort-form-text #{field_id_error(resource.project_name, resource.project_id)}",
       data: {
         url: "/projects/lookup",
