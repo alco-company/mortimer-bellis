@@ -430,34 +430,49 @@ class TimeMaterial < ApplicationRecord
       self.over_time = 0
     end
     if resource_params[:state].present? &&
-      resource_params[:state] == "done" &&
-      Current.get_user.should?(:validate_time_material_done)
+      resource_params[:state] == "done"
 
-      if resource_params[:discount].present?
-        resource_params[:discount] = case resource_params[:discount]
-        when "0"; ""
-        when "0%"; 0
-        when "100%"; 100
-        else resource_params[:discount].to_f
+      resource_params = create_customer(resource_params) if resource_params[:customer_name].present? && resource_params[:customer_id].blank?
+      resource_params = create_project(resource_params) if resource_params[:project_name].present? && resource_params[:project_id].blank?
+      if Current.get_user.should?(:validate_time_material_done)
+        if resource_params[:discount].present?
+          resource_params[:discount] = case resource_params[:discount]
+          when "0"; ""
+          when "0%"; 0
+          when "100%"; 100
+          else resource_params[:discount].to_f
+          end
         end
-      end
 
-      if resource_params[:played].present?
-        resource_params.delete(:played)
-        return true
+        if resource_params[:played].present?
+          resource_params.delete(:played)
+          return true
+        end
+        unless pushable?
+          errors.add(:base, errors.full_messages.join(", "))
+          return false
+        end
+        return false unless valid?
       end
-      unless pushable?
-        errors.add(:base, errors.full_messages.join(", "))
-        return false
-      end
-      return resource_params if valid?
-      false
-    else
-      resource_params
     end
+    resource_params
   rescue => e
     # debug-ger
     UserMailer.error_report(e.to_s, "TimeMaterial#prepare_tm - failed with params: #{resource_params}").deliver_later
     false
+  end
+
+  def create_customer(resource_params)
+    return resource_params unless Current.get_user.can?(:allow_create_customer)
+    customer = Customer.find_or_create_by(tenant: Current.get_tenant, name: resource_params[:customer_name], is_person: true)
+    resource_params[:customer_id] = customer.id
+    resource_params
+  end
+
+  def create_project(resource_params)
+    return resource_params unless Current.get_user.can?(:allow_create_project)
+    project = Project.find_or_create_by(tenant: Current.get_tenant, name: resource_params[:project_name], customer_id: resource_params[:customer_id])
+    resource_params[:project_id] = project.id
+    resource_params
   end
 end

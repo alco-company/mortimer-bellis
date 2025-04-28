@@ -65,16 +65,17 @@ class TimeMaterialsController < MortimerController
   private
 
     def before_create_callback
-      if resource.active?
-        resource.time_spent ||= 0
-        resource.started_at ||= Time.current
-        time_spent = (Time.current.to_i - resource.started_at.to_i) + resource.time_spent
-        resource.update time_spent: time_spent, paused_at: nil, started_at: Time.current
-      end
+      active_time_material
       r = resource.prepare_tm resource_params
       return false if r == false
-      resource_params = r
+      resource_params(r)
       true
+    end
+
+    def resource_create
+      resource.customer_id = resource_params[:customer_id]
+      resource.project_id = resource_params[:project_id]
+      resource.save
     end
 
     def create_callback
@@ -82,20 +83,24 @@ class TimeMaterialsController < MortimerController
     end
 
     def before_update_callback
+      active_time_material
+      r = resource.prepare_tm resource_params
+      return false if r == false
+      resource_params(r)
+      true
+    end
+
+    def update_callback
+      set_time
+    end
+
+    def active_time_material
       if resource.active?
         resource.time_spent ||= 0
         resource.started_at ||= Time.current
         time_spent = (Time.current.to_i - resource.started_at.to_i) + resource.time_spent
         resource.update time_spent: time_spent, paused_at: nil, started_at: Time.current
       end
-      r = resource.prepare_tm resource_params
-      return false if r == false
-      resource_params = r
-      true
-    end
-
-    def update_callback
-      set_time
     end
 
     def set_time
@@ -154,9 +159,13 @@ class TimeMaterialsController < MortimerController
     # end
 
     # Only allow a list of trusted parameters through.
-    def resource_params
+    def resource_params(rp = nil)
       return params unless params[:time_material].present?
 
+      # set params if rp
+      if rp
+        params[:time_material] = rp
+      end
       #
       # TODO make odo work
       #
