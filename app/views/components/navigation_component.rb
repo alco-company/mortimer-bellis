@@ -258,7 +258,7 @@ class NavigationComponent < ApplicationComponent
           render_icon(icon) if icon
           span(class: "", data: { menu_target: "menuitem" }) { I18n.t("menu.#{title}") }
         end
-      end if %w[ambassador pro].include?(Current.tenant.license) || item[:license].blank?
+      end if %w[ambassador pro].include?(Current.tenant.license) || item[:license].blank? || Current.user.superadmin?
     end
 
     def expanded_sub?(item)

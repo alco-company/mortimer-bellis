@@ -5,6 +5,7 @@
 ### 28/4/2025
 
 - allow user to 'auto' create projects, customers on time_material cards
+- fix menu (show all if info@mortimer.pro)
 
 ### 25/4/2025
 
