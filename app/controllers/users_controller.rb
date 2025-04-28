@@ -1,5 +1,4 @@
 class UsersController < MortimerController
-  before_action :authorize
   skip_before_action :require_authentication, only: [ :sign_in_success ]
   skip_before_action :authorize, only: [ :sign_in_success ]
 
@@ -78,9 +77,5 @@ class UsersController < MortimerController
     def update_callback
       params[:user].delete(:mugshot)
       true
-    end
-
-    def authorize
-      redirect_to(root_path, alert: t(:unauthorized)) if current_user.user?
     end
 end

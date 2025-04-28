@@ -7,6 +7,7 @@
 - allow user to 'auto' create projects, customers on time_material cards
 - fix menu (show all if info@mortimer.pro)
 - don't show project on license free form
+- authorize all controllers
 
 ### 25/4/2025
 

@@ -205,4 +205,8 @@ class Tenants::RegistrationsController < MortimerController
         redirect_to root_path, alert: I18n.t("users.user_registration_was_robot", success: "robots are welcome here") and return
       end
     end
+
+    def authorize_controller
+      true
+    end
 end

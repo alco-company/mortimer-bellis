@@ -44,13 +44,18 @@ class Users::OmniauthCallbacksController < ApplicationController
     email = request.env["omniauth.auth"]["extra"]["raw_info"]["email"]
     user = User.find_by(email: email)
     if user
-      user.update(confirmed_at: Time.current) if user.confirmed_at.nil?
-      # TODO make invitations
-      # User.accept_invitation!(invitation_token: user.invitation_token) if user.invitation_accepted_at.nil?
-      flash[:notice] = t("devise.omniauth_callbacks.success", kind: "Microsoft Entra ID", email: email)
-      start_new_session_for user
-      Current.session.entraID!
-      redirect_to after_authentication_url
+      if %(ambassdor pro).include? user.tenant.license
+        user.update(confirmed_at: Time.current) if user.confirmed_at.nil?
+        # TODO make invitations
+        # User.accept_invitation!(invitation_token: user.invitation_token) if user.invitation_accepted_at.nil?
+        flash[:notice] = t("devise.omniauth_callbacks.success", kind: "Microsoft Entra ID", email: email)
+        start_new_session_for user
+        Current.session.entraID!
+        redirect_to after_authentication_url
+      else
+        flash[:alert] = t("devise.omniauth_callbacks.wrong_license")
+        redirect_to new_users_session_url, alert: t("devise.omniauth_callbacks.wrong_license")
+      end
     else
       reason = t("devise.omniauth_callbacks.user_not_found", email: email)
       flash[:alert] = t("devise.omniauth_callbacks.failure", kind: "Microsoft Entra ID", reason: reason)

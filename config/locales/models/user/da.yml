@@ -271,6 +271,7 @@ da:
 
     omniauth_callbacks:
       user_not_found: "vi ikke kunne finde en bruger med den email adresse (%{email}), som du har brugt til at logge ind med."
+      wrong_license: "du har ikke tilladelse til at bruge denne form for log ind. Det kræver Ambassadør eller Pro licens"
       failure: "Kunne ikke godkende dig fra %{kind} fordi %{reason}."
       success: "Godkendte dig fra %{kind} kontoen %{email}."
     passwords:
