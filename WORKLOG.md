@@ -6,6 +6,7 @@
 
 - forgot a few controllers pert. to authorize
 - fix list bottom blank "bar"
+- fix missing params[:url]
 
 ### 28/4/2025
 

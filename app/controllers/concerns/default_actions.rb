@@ -5,7 +5,7 @@ module DefaultActions
     # GET /users or /users.json
     def index
       posthog_capture
-      params.permit![:url] = resources_url
+      params[:url] = resources_url
       @pagy, @records = pagy_keyset(resources)
       r = @records.pluck(:id).sort
       @ids_range = "#{r.first}..#{r.last}"
