@@ -7,6 +7,7 @@
 - forgot a few controllers pert. to authorize
 - fix list bottom blank "bar"
 - fix missing params[:url]
+- run rubocop a and brakeman repeatedly (33 ignores only half decent)
 
 ### 28/4/2025
 

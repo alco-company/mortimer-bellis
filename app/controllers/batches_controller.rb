@@ -48,7 +48,7 @@ class BatchesController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_batch
       @batch = Batch.find(params.expect(:id))
-      @resource_class = @batch.entity.constantize
+      @resource_class = @batch.class # entity.constantize
       @batch&.persist(batch_params)
     end
 
@@ -70,10 +70,21 @@ class BatchesController < ApplicationController
       params[:batch][:ids] = if params.dig(:batch, :all) == "1"
         []
       else
-        range = eval(params.dig(:batch, :ids_range)) rescue 0..10_000_000_000_000
+        range = get_ids_range
         ids_old = @batch&.ids.blank? ? [] : @batch&.ids.split(",").collect { |i| i.to_i }.sort
         ids_new = params.dig(:batch, :ids).collect { |i| i.to_i }.sort
         params[:batch][:ids] = ids_old.filter { |i| range.include? i }.empty? ? ids_old + ids_new : ids_new
       end
+    end
+
+    def get_ids_range
+      rg = params.dig(:batch, :ids_range).split("..")
+      if rg.count == 2
+        (rg.first.to_i..rg.last.to_i).class == Range ? (rg.first.to_i..rg.last.to_i) : 0..10_000_000_000_000
+      else
+        raise "not a range"
+      end
+    rescue
+      0..10_000_000_000_000
     end
 end

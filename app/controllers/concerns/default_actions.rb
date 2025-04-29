@@ -9,7 +9,7 @@ module DefaultActions
       @pagy, @records = pagy_keyset(resources)
       r = @records.pluck(:id).sort
       @ids_range = "#{r.first}..#{r.last}"
-      @replace = params.permit![:replace] || false
+      @replace = params.dig(:replace) || false
 
       respond_to do |format|
         format.html { }
@@ -38,7 +38,7 @@ module DefaultActions
     def lookup
       posthog_capture
       set_query
-      lookup_options = "%s_lookup_options" % params.permit![:div_id]
+      lookup_options = "%s_lookup_options" % params.dig(:div_id)
       respond_to do |format|
         format.turbo_stream {
           render turbo_stream: turbo_stream.replace(
@@ -47,7 +47,7 @@ module DefaultActions
             locals: {
               lookup_options: lookup_options,
               resources: @resources,
-              div_id: params.permit![:div_id]
+              div_id: params.dig(:div_id)
             }
           )
         }
@@ -284,17 +284,17 @@ module DefaultActions
         when "Project"
           unless params[:customer_id].blank?
             resource_class.by_tenant()
-              .where("customer_id = ?", params.permit![:customer_id])
-              .where(params.permit![:q].blank? ? "1=1" : "name LIKE ?", "%#{params.permit![:q]}%")
+              .where("customer_id = ?", params.dig(:customer_id))
+              .where(params.dig(:q).blank? ? "1=1" : "name LIKE ?", "%#{params.dig(:q)}%")
               .limit(10)
           else
             resource_class.by_tenant()
-              .where(params.permit![:q].blank? ? "1=1" : "name LIKE ?", "%#{params.permit![:q]}%")
+              .where(params.dig(:q).blank? ? "1=1" : "name LIKE ?", "%#{params.dig(:q)}%")
               .limit(10)
           end
         else
           resource_class.by_tenant()
-            .where(params.permit![:q].blank? ? "1=1" : "name LIKE ?", "%#{params.permit![:q]}%")
+            .where(params.dig(:q).blank? ? "1=1" : "name LIKE ?", "%#{params.dig(:q)}%")
             .limit(10)
         end
 

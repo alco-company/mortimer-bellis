@@ -8,7 +8,7 @@ class TimeMaterialsController < MortimerController
     resource.minute_time =   Current.user.default(:default_time_material_minute_time, "")
     resource.rate =          Current.user.default(:default_time_material_rate, "")
     resource.over_time =     Current.user.default(:default_time_material_over_time, 0)
-    resource.date =          eval Current.user.default(:default_time_material_date, "Time.current.to_date")
+    resource.date =          get_default_time_material_date "Time.current.to_date"
     resource.user_id =       Current.user.id
   end
 
@@ -20,7 +20,7 @@ class TimeMaterialsController < MortimerController
   end
 
   def show
-    if params.permit![:reload].present? and resource.active?
+    if params.dig(:reload).present? and resource.active?
       resource.time_spent ||= 0
       resource.started_at ||= Time.current
       time_spent = (Time.current.to_i - resource.started_at.to_i) + resource.time_spent
@@ -28,7 +28,7 @@ class TimeMaterialsController < MortimerController
       Broadcasters::Resource.new(resource.reload, { controller: "time_materials" }, Current.user).replace
       head :ok
     else
-      params.permit![:pause].present? ? pause_resume : super
+      params.dig(:pause).present? ? pause_resume : super
     end
   end
 
@@ -122,7 +122,7 @@ class TimeMaterialsController < MortimerController
         user_id: Current.user.id,
         started_at: Time.current,
         time_spent: 0,
-        date: eval(Current.user.default(:default_time_material_date, "Time.current.to_date.yesterday")),
+        date: get_default_time_material_date("Time.current.to_date.yesterday"),
         about: Current.user.default(:default_time_material_about, "")
       }
       params.delete(:play)
@@ -131,7 +131,7 @@ class TimeMaterialsController < MortimerController
 
     def pause_resume
       if resource.user == Current.user or Current.user.admin? or Current.user.superadmin?
-        params.permit![:pause] == "pause" ? pause : resume
+        params.dig(:pause) == "pause" ? pause : resume
         Broadcasters::Resource.new(resource, params).replace
         respond_to do |format|
           format.html { render turbo_stream: [ turbo_stream.replace("flash_container", partial: "application/flash_message", locals: { tenant: Current.get_tenant, messages: flash, user: Current.get_user }) ] }
@@ -225,5 +225,17 @@ class TimeMaterialsController < MortimerController
     def resume
       resource.update state: 1, started_at: Time.current, paused_at: nil
       flash.now[:success] = t("time_material.resumed")
+    end
+
+    def get_default_time_material_date(default_date)
+      dt=Current.get_user.default(:default_time_material_date, default_date)
+      if dt =~ /.to_date/
+        parts = dt.split(".")
+        eval(parts.join(".")).class == Date ? eval(parts.join(".")) : eval(default_date)
+      else
+        raise "no date expected"
+      end
+    rescue
+      eval(default_date)
     end
 end

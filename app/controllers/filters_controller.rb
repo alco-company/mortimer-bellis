@@ -63,7 +63,7 @@ class FiltersController < MortimerController
     #     "controller"=>"filters", "action"=>"create"} }
     def filter_params
       # params.expect(filter: [ :url, :filter_form, :filter_preset, :tenant_id, :name, date: [], field: [], scope: [] ])
-      params.require(:filter).permit!
+      params.expect(:filter).permit!
     end
 
     def create_params

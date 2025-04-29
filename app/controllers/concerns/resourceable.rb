@@ -48,9 +48,15 @@ module Resourceable
     end
 
     def set_resource_class
+      if params.dig(:resource_class).present?
+        model = params.dig(:resource_class).classify.constantize
+        _m = model.new
+      else
+        model = nil
+      end
       ctrl = params.dig(:controller).split("/").last
       case ctrl
-      when "modal"; params.dig(:resource_class).classify.constantize
+      when "modal"; model
       when "otps"; User
       when "invitations"; User
       when "passwords"; User
@@ -59,7 +65,7 @@ module Resourceable
       when "confirmations"; User
       when "notifications"; Noticed::Notification
       when "applications"; Oauth::Application
-      else; ctrl.classify.constantize
+      else; model || ctrl.classify.constantize
       end
     rescue => e
       redirect_to "/", alert: I18n.t("errors.resources.resource_class.not_found", ctrl: params.dig(:controller), reason: e.to_s) and return
@@ -97,9 +103,8 @@ module Resourceable
     # to skip using the memoized url
     #
     def resources_url(**options)
-      options[:search] = params.permit![:search] if params.permit![:search].present?
-      url_for(controller: params_ctrl, action: :index, **options) # if options.delete(:rewrite).present?
-      # @resources_url ||= url_for(controller: params_ctrl, action: :index, **options)
+      options[:search] = params.dig(:search) if params.dig(:search).present?
+      url_for(controller: params_ctrl, action: :index, **options)
     rescue => e
       Rails.logger.error("Error generating resources_url: #{e.message}")
       root_url
@@ -121,44 +126,42 @@ module Resourceable
   end
 
   def find_resource
-    r = resource_class.where(id: get_resource_id)&.take || resource_class.new
-    # return r if !r.persisted?
-    # redirect_to "/", alert: I18n.t("errors.messages.no_permission") and return unless Current.user.allowed_to?(params.dig(:action), r) || !r.persisted?
-    # r
+    resource_class.where(id: get_resource_id)&.take || resource_class.new
   rescue
-    Rails.logger.info "ERROR! >>>>>>>>>>>>> Resourceable#find_resource: #{r.inspect}"
+    Rails.logger.info "ERROR! >>>>>>>>>>>>> Resourceable#find_resource: #{params.inspect}"
     redirect_to "/", alert: I18n.t("errors.messages.not_found", model: resource_class.to_s) and return
   end
 
   def get_resource_id
-    params&.dig(:id) || params&.dig(resource_class.to_s.underscore.to_sym, :id)
+    params_id
   rescue
+    Rails.logger.info "ERROR! >>>>>>>>>>>>> Resourceable#get_resource_id: #{params.inspect}"
     nil
   end
 
   private
-    def rc_params
-      params.permit! # (:id, :s, :d, :page, :format, :_method, :commit, :authenticity_token, :controller)
-    end
+    # def rc_params
+    #   params.permit! # (:id, :s, :d, :page, :format, :_method, :commit, :authenticity_token, :controller)
+    # end
 
     def params_ctrl
-      rc_params.dig :controller
+      params.dig :controller
     end
 
     def params_s
-      rc_params.dig :s
+      params.dig :s
     end
 
     def params_d
-      rc_params.dig :d
+      params.dig :d
     end
 
-    def params_parent(ref)
-      params.permit(:team_id, :user_id, :tenant_id)[ref]
-    end
+    # def params_parent(ref)
+    #   params.permit(:team_id, :user_id, :tenant_id)[ref]
+    # end
 
     def params_id
-      rc_params.dig :id
+      params&.dig(:id) || params.dig(resource_class.to_s.underscore.to_sym, :id)
     end
 
     # @resources = any_filters? ? @filter.do_filter(resource_class) : parent_or_class
