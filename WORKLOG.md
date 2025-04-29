@@ -2,6 +2,10 @@
 
 ## CHANGELOG
 
+### 29/4/2025
+
+- forgot a few controllers pert. to authorize
+
 ### 28/4/2025
 
 - allow user to 'auto' create projects, customers on time_material cards
