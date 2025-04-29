@@ -8,6 +8,7 @@
 - fix list bottom blank "bar"
 - fix missing params[:url]
 - run rubocop a and brakeman repeatedly (33 ignores only half decent)
+- upgrade Brakeman
 
 ### 28/4/2025
 
