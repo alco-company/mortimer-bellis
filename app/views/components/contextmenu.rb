@@ -28,7 +28,8 @@ class Contextmenu < Phlex::HTML
   end
 
   def contextmenu_button
-    resource.respond_to?(:archived?) && resource.archived? ? archived_button : more_button
+    # resource.respond_to?(:archived?) && resource.archived? ? archived_button : more_button
+    more_button
   end
 
   def archived_button
@@ -138,21 +139,22 @@ class Contextmenu < Phlex::HTML
     ) do
       comment { %(Active: "bg-gray-50", Not Active: "") }
       # archive employee
-      if resource_class.to_s == "User" || (resource_class.to_s == "TimeMaterial" && (resource.pushed_to_erp? || resource.archived?))
-        button_to((helpers.archive_resource_url(resource)),
-          class: "flex justify-between px-4 py-2 text-sm text-gray-700 mb-0",
-          role: "menuitem",
-          data: { turbo_action: "advance", turbo_frame: "_top" },
-          tabindex: "-1") do
-          resource.archived? ?
-            plain(I18n.t(".unarchive")) :
-            plain(I18n.t(".archive"))
-          span(class: "sr-only") do
-            plain ", "
-            plain resource.name rescue ""
-          end
-        end
-      end
+      # on roadmap for now
+      # if resource_class.to_s == "User" || (resource_class.to_s == "TimeMaterial" && (resource.pushed_to_erp? || resource.archived?))
+      #   button_to((helpers.archive_resource_url(resource)),
+      #     class: "flex justify-between px-4 py-2 text-sm text-gray-700 mb-0",
+      #     role: "menuitem",
+      #     data: { turbo_action: "advance", turbo_frame: "_top" },
+      #     tabindex: "-1") do
+      #     resource.archived? ?
+      #       plain(I18n.t(".unarchive")) :
+      #       plain(I18n.t(".archive"))
+      #     span(class: "sr-only") do
+      #       plain ", "
+      #       plain resource.name rescue ""
+      #     end
+      #   end
+      # end
       # edit resource
       link2(url: (@links[0] || helpers.edit_resource_url(id: resource.id)),
         data: { turbo_action: "advance", turbo_frame: @turbo_frame },

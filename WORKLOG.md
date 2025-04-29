@@ -12,6 +12,7 @@
 - fix menu (show all if info@mortimer.pro)
 - don't show project on license free form
 - authorize all controllers
+- comment 'archive' as menu option for now
 
 ### 25/4/2025
 
