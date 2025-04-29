@@ -61,7 +61,7 @@ class List < ApplicationComponent
   def append_list
     turbo_stream.append "record_list" do
       list_records
-      next_pagy_page
+      # next_pagy_page
     end
   end
 
@@ -80,11 +80,13 @@ class List < ApplicationComponent
       render partial: "date", locals: { field: fld }
     end
 
+    count = records.count
     records.each do |record|
       if record.send(order_by) != fld
         fld = (record.send(order_by))
         render partial: "date", locals: { field: fld }
       end if order_by
+      next_pagy_page if (count -= 1) < 2
       render "ListItems::#{resource_class}".classify.constantize.new(resource: record, params: params, user: user)
     end
   end

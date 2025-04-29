@@ -2,7 +2,7 @@
 <%= turbo_stream_from @resources_stream %>
 <%= form_with model: @batch, id: "batch_form", data: { controller: "list" } do |form| %>
   <%= render partial: "header", locals: { batch_form: form } %>
-  <div id="list" role="list" class="mb-16">
+  <div id="list" role="list" class="">
     <%= form.hidden_field :id%>
     <%= form.hidden_field :entity %>
     <%= form.hidden_field :ids_range, value: @ids_range %>

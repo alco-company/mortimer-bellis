@@ -5,6 +5,7 @@
 ### 29/4/2025
 
 - forgot a few controllers pert. to authorize
+- fix list bottom blank "bar"
 
 ### 28/4/2025
 
