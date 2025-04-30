@@ -44,7 +44,7 @@ class Users::OmniauthCallbacksController < ApplicationController
     email = request.env["omniauth.auth"]["extra"]["raw_info"]["email"]
     user = User.find_by(email: email)
     if user
-      if %(ambassdor pro).include? user.tenant.license
+      if %(ambassador pro).include? user.tenant.license
         user.update(confirmed_at: Time.current) if user.confirmed_at.nil?
         # TODO make invitations
         # User.accept_invitation!(invitation_token: user.invitation_token) if user.invitation_accepted_at.nil?

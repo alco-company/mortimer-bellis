@@ -2,6 +2,10 @@
 
 ## CHANGELOG
 
+### 30/4/2025
+
+- fix two-factor-app (entraID)
+
 ### 29/4/2025
 
 - forgot a few controllers pert. to authorize
