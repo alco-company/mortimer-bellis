@@ -5,6 +5,7 @@
 ### 30/4/2025
 
 - fix two-factor-app (entraID)
+- fix users/invitations/edit - accepting invitation
 
 ### 29/4/2025
 

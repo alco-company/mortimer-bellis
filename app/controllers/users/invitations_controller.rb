@@ -1,5 +1,6 @@
 class Users::InvitationsController < MortimerController
   skip_before_action :require_authentication, only: [ :edit ]
+  skip_before_action :authorize, only: [ :edit ]
 
   def new
   end
