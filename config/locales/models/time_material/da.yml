@@ -1,5 +1,7 @@
 da:
   upload to ERP: Upload til Dinero
+  sync with ERP: Synkronisér med Dinero
+  sync all with ERP: Synkronisér alt
   time_material:
     no_time_spent: Der er ikke logget tid
     no_date: <i class="text-red-400">Bemærk! Der er ikke valgt en dato</i>

@@ -82,9 +82,10 @@ class Contextmenu < Phlex::HTML
       tabindex: "-1"
     ) do
       #  Active: "bg-gray-100 text-gray-900", Not Active: "text-gray-700"
-      link2 url: helpers.filtering_url(), data: { action: "click->contextmenu#hide", turbo_frame: "form" }, label: I18n.t("filters.title")
-      a_button action: "click->list#toggleBatch click->contextmenu#hide", css: "flex justify-between px-4 py-2 text-sm text-gray-700 hover:text-gray-900" do
-        plain I18n.t(".batch")
+      link2 url: helpers.filtering_url(), data: { action: "click->contextmenu#hide", turbo_frame: "form" }, label: I18n.t("filters.title"), icon: "filter"
+      a_button action: "click->list#toggleBatch click->contextmenu#hide", css: "flex justify-between w-full px-4 py-2 text-sm text-gray-700 hover:text-gray-900" do
+        render_icon "select"
+        span { I18n.t(".batch") }
       end
 
       resource_class.any? ?
@@ -94,6 +95,7 @@ class Contextmenu < Phlex::HTML
           modal_next_step: "accept",
           search: request.query_parameters.dig(:search)),
           action: "click->contextmenu#hide",
+          icon: "trash",
           label: I18n.t(".delete_all")) :
         div(class: "block px-3 py-1 text-sm leading-6 text-gray-400") { I18n.t(".delete_all") }
       hr
@@ -105,12 +107,21 @@ class Contextmenu < Phlex::HTML
         search: request.query_parameters.dig(:search),
         modal_next_step: "preview"),
         action: "click->contextmenu#hide",
+        icon: "ArrowsHunting",
         label: I18n.t(".upload to ERP")) if resource_class.to_s == "TimeMaterial"
+      link2(url: erp_pull_link,
+        data: { turbo_prefetch: "false" },
+        action: "click->contextmenu#hide",
+        icon: "ArrowsHunting",
+        label: I18n.t(".sync with ERP")) if %(Customer Product Invoice).include? resource_class.to_s
+
       link2 url: helpers.resources_url() + ".csv",
         data: { turbo_frame: "_top" },
+        icon: "download",
         label: I18n.t(".export")
       link2 url: helpers.resources_url() + ".pdf",
         data: { turbo_frame: "_top" },
+        icon: "pdf",
         label: I18n.t(".pdf")
     end
   end
@@ -158,8 +169,15 @@ class Contextmenu < Phlex::HTML
       # edit resource
       link2(url: (@links[0] || helpers.edit_resource_url(id: resource.id)),
         data: { turbo_action: "advance", turbo_frame: @turbo_frame },
+        icon: "edit",
         label: I18n.t(".edit")) unless (resource_class.to_s == "TimeMaterial" && resource.pushed_to_erp?) || resource.respond_to?(:archived?) && resource.archived?
       # delete resource
+      link2(url: erp_pull_link,
+        data: { turbo_prefetch: "false" },
+        action: "click->contextmenu#hide",
+        icon: "ArrowsHunting",
+        label: I18n.t(".sync all with ERP")) if %(ProvidedService).include? resource_class.to_s
+
       delete_record
     end
   end
@@ -173,20 +191,21 @@ class Contextmenu < Phlex::HTML
       end
     else
       link2 url: helpers.new_modal_url(modal_form: "delete", id: resource.id, resource_class: resource_class.to_s.underscore, modal_next_step: "accept", url: @links[1]),
-        label: I18n.t(".delete")
+        label: I18n.t(".delete"), icon: "trash"
     end
   end
 
   private
 
-    def link2(url:, label:, action: nil, data: { turbo_stream: true }, css: "flex justify-between px-4 py-2 text-sm text-gray-700 hover:text-gray-900")
+    def link2(url:, label:, action: nil, data: { turbo_stream: true }, icon: nil, css: "flex justify-between px-4 py-2 text-sm text-gray-700 hover:text-gray-900")
       data[:action] = action if action
       link_to url,
         data: data,
         class: css,
         role: "menuitem",
         tabindex: "-1" do
-        plain label
+        render_icon icon
+        span(class: "text-nowrap pl-2") { label }
         span(class: "sr-only") do
           plain label
           plain " "
@@ -220,6 +239,20 @@ class Contextmenu < Phlex::HTML
           span(class: "text-2xs hidden sm:inline") { label } if visible_label
           render Icons::More.new if @alter
         end
+      end
+    end
+
+    def render_icon(icon)
+      return if icon.blank?
+      render "Icons::#{icon.camelcase}".constantize.new(cls: "h-4 w-4 text-gray-400")
+    end
+
+    def erp_pull_link
+      case resource_class.to_s
+      when "Customer"; helpers.erp_pull_customers_url
+      when "Product"; helpers.erp_pull_products_url
+      when "Invoice"; helpers.erp_pull_invoices_url
+      when "ProvidedService"; helpers.erp_pull_provided_services_url
       end
     end
 end

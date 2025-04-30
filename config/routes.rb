@@ -104,7 +104,7 @@ Rails.application.routes.draw do
   resources :projects, concerns: [ :lookupable ]
 
 
-  resources :provided_services
+  resources :provided_services, concerns: [ :erp_pullable ]
   resources :settings
   resources :events
   resources :notifications
