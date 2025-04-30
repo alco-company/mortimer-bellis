@@ -6,6 +6,7 @@
 
 - fix two-factor-app (entraID)
 - fix users/invitations/edit - accepting invitation
+- favicon som prod idag
 
 ### 29/4/2025
 
