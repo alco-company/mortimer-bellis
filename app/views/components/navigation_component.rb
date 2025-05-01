@@ -357,6 +357,14 @@ class NavigationComponent < ApplicationComponent
             ) do
               render_icon("help", "h-6 text-red-500")
             end
+            a(
+              href: "https://mortimer.pro/contact",
+              target: "_blank",
+              class:
+                " px-2 py-3 text-sm font-semibold text-gray-900 hover:bg-gray-50"
+            ) do
+              render_icon("support_agent", "h-6 text-sky-500")
+            end
           end
         end
       end

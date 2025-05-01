@@ -2,14 +2,18 @@
 
 ## CHANGELOG
 
+### 1/5/2024
+
+- no keyboard shortcut icon on mobile
+- converting unpermitted params failing
+- link to contact form on mortimer.pro
+
 ### 30/4/2025
 
 - fix two-factor-app (entraID)
 - fix users/invitations/edit - accepting invitation
 - favicon as prod today
 - sync as arrows-hunting on context + provided_service
-- no keyboard shortcut icon on mobile
-- converting unpermitted params failing
 
 ### 29/4/2025
 
