@@ -31,10 +31,8 @@ class NavigationComponent < ApplicationComponent
             li(class: "h-22") { unsafe_raw "&nbsp;" }
           end
         end
-        if Current.get_user.tasks.uncompleted.any?
-          li(data: { menu_target: "progress" }, class: "fixed bottom-13 w-[240px] bg-slate-50") do
-            render Account::Progress.new
-          end
+        li(data: { menu_target: "progress" }, class: "fixed bottom-13 w-[240px] bg-slate-50") do
+          render Account::Progress.new if Current.get_user.tasks.uncompleted.any?
         end
         help_and_shortcuts
       end

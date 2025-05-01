@@ -10,6 +10,7 @@
 - align buy product options properly
 - show open tasks like reflect
 - make invitations page more resilient to input
+- when no open tasks menu_controller.js misses 'progress' target
 
 ### 30/4/2025
 
