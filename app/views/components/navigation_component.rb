@@ -1,3 +1,4 @@
+
 # frozen_string_literal: true
 
 class NavigationComponent < ApplicationComponent
@@ -28,6 +29,11 @@ class NavigationComponent < ApplicationComponent
             li(class: "h-22") { unsafe_raw "&nbsp;" }
             li(class: "h-22") { unsafe_raw "&nbsp;" }
             li(class: "h-22") { unsafe_raw "&nbsp;" }
+          end
+        end
+        if Current.get_user.tasks.uncompleted.any?
+          li(data: { menu_target: "progress" }, class: "fixed bottom-13 w-[240px] bg-slate-50") do
+            render Account::Progress.new
           end
         end
         help_and_shortcuts
@@ -324,7 +330,7 @@ class NavigationComponent < ApplicationComponent
       li(class: "fixed bottom-0") do
         comment { "w-24 max-w-24 w-64" }
         ul(role: "list", class: "-mx-2 space-y-1") do
-          div(data: { menu_target: "setting" }, class: " flex flex-row mt-auto bg-white w-64  ") do
+          div(data: { menu_target: "setting" }, class: " flex flex-row mt-auto  w-64  ") do
             # a(
             #   href: settings_url,
             #   class:

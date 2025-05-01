@@ -1,14 +1,71 @@
 class DashboardTask < ApplicationComponent
   include Phlex::Rails::Helpers::LinkTo
 
-  attr_accessor :task, :show_options
+  attr_accessor :task, :show_options, :menu
 
-  def initialize(task:, show_options: false)
+  def initialize(task:, show_options: false, menu: false)
     @task = task
     @show_options = show_options
+    @menu = menu
   end
 
   def view_template
+    menu ? menu_task : dashboard_task
+  end
+
+  def menu_task
+    list_task(task)
+    # li do
+    #   whitespace
+    #   comment { "Current Step" }
+    #   whitespace
+    #   a(href: "#", class: "flex items-start", aria_current: "step") do
+    #     whitespace
+    #     span(
+    #       class:
+    #         "relative flex size-5 shrink-0 items-center justify-center",
+    #       aria_hidden: "true"
+    #     ) do
+    #       whitespace
+    #       span(class: "absolute size-4 rounded-full bg-sky-200")
+    #       whitespace
+    #       span(class: "relative block size-2 rounded-full bg-sky-600")
+    #       whitespace
+    #     end
+    #     whitespace
+    #     span(class: "ml-3 text-sm font-medium text-sky-600") do
+    #       "Profile information"
+    #     end
+    #     whitespace
+    #   end
+    # end
+    # li do
+    #   whitespace
+    #   comment { "Upcoming Step" }
+    #   whitespace
+    #   a(href: "#", class: "group") do
+    #     div(class: "flex items-start") do
+    #       div(
+    #         class:
+    #           "relative flex size-5 shrink-0 items-center justify-center",
+    #         aria_hidden: "true"
+    #       ) do
+    #         div(
+    #           class:
+    #             "size-2 rounded-full bg-gray-300 group-hover:bg-gray-400"
+    #         )
+    #       end
+    #       p(
+    #         class:
+    #           "ml-3 text-sm font-medium text-gray-500 group-hover:text-gray-900"
+    #       ) { "Theme" }
+    #     end
+    #     whitespace
+    #   end
+    # end
+  end
+
+  def dashboard_task
     url, help = task.link.split(/,| |;/)
     help ||= "https://mortimer.pro/help"
     li(class: "overflow-hidden rounded-xl border border-gray-200", data: { controller: "hidden-description" }) do
@@ -100,6 +157,62 @@ class DashboardTask < ApplicationComponent
         ) do
           plain "Edit"
           span(class: "sr-only") { ", Tuple" }
+        end
+      end
+    end
+  end
+
+  def list_task(task)
+    task.completed? ? completed_task(task) : incomplete_task(task)
+  end
+
+  private
+
+  def completed_task(task)
+    url, help = task.link.split(/,| |;/)
+    help ||= "https://mortimer.pro/help"
+    url, turbo = url.include?("/") ? [ url, true ] : helpers.send(url)
+    li(class: "relative") do
+      comment { "Complete Step" }
+      link_to(url, class: "relative flex text-sm group", data: { turbo_stream: turbo }) do
+        span(class: "flex items-start") do
+          span(class: "relative flex size-5 shrink-0 items-center justify-center") do
+            svg(class: "size-full text-gray-500 group-hover:text-gray-900",
+              viewbox: "0 0 20 20",
+              fill: "currentColor",
+              aria_hidden: "true",
+              data_slot: "icon") do |s|
+              s.path(fill_rule: "evenodd",
+                d: "M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm3.857-9.809a.75.75 0 0 0-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 1 0-1.06 1.061l2.5 2.5a.75.75 0 0 0 1.137-.089l4-5.5Z",
+                clip_rule: "evenodd"
+              )
+            end
+          end
+          span(class: "ml-3 flex min-w-0 flex-col") do
+            span(class: "text-sm font-medium text-gray-500 group-hover:text-gray-900") { task.name }
+          end
+        end
+      end
+    end
+  end
+
+  def incomplete_task(task)
+    url, help = task.link.split(/,| |;/)
+    help ||= "https://mortimer.pro/help"
+    url, turbo = url.include?("/") ? [ url, true ] : helpers.send(url)
+    li(class: "relative") do
+      comment { "Upcoming Step" }
+      link_to(url, class: "relative flex text-sm group", data: { turbo_stream: turbo, turbo: turbo }) do
+        span(class: "flex items-start") do
+          span(class: "ml-0.5 flex h-8 mt-0.5 items-start", aria_hidden: "true") do
+            span(class: "relative z-10 flex size-4 items-center justify-center rounded-full border-1 border-gray-300 bg-white group-hover:border-sky-400") do
+              span(class: "size-1 rounded-full bg-transparent group-hover:bg-sky-300")
+            end
+          end
+          span(class: "ml-3.5 flex min-w-0 flex-col") do
+            span(class: "text-sm font-medium text-gray-500 group-hover:text-sky-400") { task.name }
+            span(class: "text-xs text-gray-500 group-hover:text-sky-400") { task.description }
+          end
         end
       end
     end

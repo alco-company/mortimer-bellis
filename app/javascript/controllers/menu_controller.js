@@ -9,7 +9,8 @@ export default class extends Controller {
     "menuitem",
     "topmain",
     "tsb",
-    "setting"
+    "setting",
+    "progress"
   ];
 
   connect() {
@@ -21,6 +22,7 @@ export default class extends Controller {
       this.settingTarget.classList.add("w-24");
       this.settingTarget.classList.add("max-w-24");
       this.sidebarTarget.classList.add("w-24", "max-w-24");
+      this.progressTarget.classList.add("hidden");
       this.menuitemTargets.forEach((e) => { e.classList.add("lg:hidden"); });
       for (i of document.getElementsByClassName("collapse-sidebar")) {
         i.classList.add("rotate-180");
@@ -44,6 +46,7 @@ export default class extends Controller {
         i.classList.remove("rotate-180");
       }
       this.menuitemTargets.forEach((e) => { e.classList.remove("lg:hidden"); });
+      this.progressTarget.classList.remove("hidden");
       localStorage.setItem("collapsed", "false");
 
     // going narrow
@@ -58,6 +61,7 @@ export default class extends Controller {
       this.settingTarget.classList.add("w-24");
       this.settingTarget.classList.add("max-w-24");
       this.menuitemTargets.forEach((e) => { e.classList.add("lg:hidden"); });
+      this.progressTarget.classList.add("hidden");
       localStorage.setItem("collapsed", "true");
     }
   }

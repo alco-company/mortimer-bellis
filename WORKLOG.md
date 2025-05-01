@@ -8,6 +8,7 @@
 - converting unpermitted params failing
 - link to contact form on mortimer.pro
 - align buy product options properly
+- show open tasks like reflect
 
 ### 30/4/2025
 
