@@ -7,7 +7,7 @@
 - no keyboard shortcut icon on mobile
 - converting unpermitted params failing
 - link to contact form on mortimer.pro
-- link to discord on buy_product
+- align buy product options properly
 
 ### 30/4/2025
 

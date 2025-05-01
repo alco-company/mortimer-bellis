@@ -23,16 +23,17 @@
             <label for="essential-radio" aria-label="Essential License" aria-description="Last message sent 2 weeks ago to 1200 users" class="tenant-license relative flex cursor-pointer rounded-lg border-1 border-purple-100 active:ring-2 active:ring-purple-600 hover:ring-2 hover:ring-purple-400 bg-white p-4 shadow-xs focus:outline-hidden">
               <input type="radio" name="tenant[license]" id="essential-radio" value="2" class="sr-only">
               <span class="flex flex-1">
-                <span class="flex flex-col">
+                <span class="flex flex-col place-content-between">
                   <span class="block text-sm font-medium text-gray-900">Essential</span>
-
                   <span class="mt-1 flex items-center text-xs text-gray-500">&nbsp;</span>
-                  <span class="mt-1 flex items-center text-xs text-gray-500">&#8734; <%= t("tenant.modal.buy_product.users") %></span>
-                  <span class="mt-1 flex items-center text-xs text-gray-500">&#8734; <%= t("tenant.modal.buy_product.time_material") %></span>
-                  <span class="mt-1 flex items-center text-xs text-gray-500">&#8734; <%= t("tenant.modal.buy_product.customers") %></span>
-                  <span class="mt-1 flex items-center text-xs text-gray-500">&#8734; <%= t("tenant.modal.buy_product.products") %></span>
-                  <span class="mt-1 flex items-center text-xs text-gray-500"><%= t("tenant.modal.buy_product.csv_data_export") %></span>
-                  <span class="mt-4 flex items-center text-xs text-gray-500"><%= t("tenant.modal.buy_product.e_mail_support") %></span>
+                  <span>
+                    <span class="mt-1 flex items-center text-xs text-gray-500">&#8734; <%= t("tenant.modal.buy_product.users") %></span>
+                    <span class="mt-1 flex items-center text-xs text-gray-500">&#8734; <%= t("tenant.modal.buy_product.time_material") %></span>
+                    <span class="mt-1 flex items-center text-xs text-gray-500">&#8734; <%= t("tenant.modal.buy_product.customers") %></span>
+                    <span class="mt-1 flex items-center text-xs text-gray-500">&#8734; <%= t("tenant.modal.buy_product.products") %></span>
+                    <span class="mt-1 flex items-center text-xs text-gray-500"><%= t("tenant.modal.buy_product.csv_data_export") %></span>
+                    <span class="mt-4 flex items-center text-xs text-gray-500"><%= t("tenant.modal.buy_product.e_mail_support") %></span>
+                  </span>
                   <span class="mt-6 flex items-center text-xs text-gray-500"><%= t("tenant.modal.buy_product.essential_price") %></span>
                   <!-- <span class="mt-6 text-sm font-medium text-gray-900">1200 users</span> -->
                 </span>
@@ -51,16 +52,15 @@
             <label for="pro-radio" aria-label="Pro License" aria-description="Last message sent 4 days ago to 2740 users" class="tenant-license relative flex cursor-pointer rounded-lg border-1 border-purple-100 hover:ring-2 hover:ring-purple-400 bg-white p-4 shadow-xs focus:outline-hidden">
               <input type="radio" name="tenant[license]" id="pro-radio" value="3" class="sr-only">
               <span class="flex flex-1">
-                <span class="flex flex-col">
+                <span class="flex flex-col place-content-between">
                   <span class="block text-sm font-medium text-gray-900">Pro</span>
-
                   <span class="mt-1 flex items-center text-xs text-gray-500"><%= t("tenant.modal.buy_product.all_from_essential") %></span>
-                  <span class="mt-1 flex items-center text-xs text-gray-500">&#8734; <%= t("tenant.modal.buy_product.projects") %></span>
-                  <span class="mt-1 flex items-center text-xs text-gray-500">&#8734; <%= t("tenant.modal.buy_product.teams") %></span>
-                  <span class="mt-1 flex items-center text-xs text-gray-500">&#8734; <%= t("tenant.modal.buy_product.locations") %></span>
-                  <span class="mt-1 flex items-center text-xs text-gray-500"><%= t("tenant.modal.buy_product.microsoft_sso") %></span>
-                  <span class="mt-1 flex items-center text-xs text-gray-500"><%= t("tenant.modal.buy_product.dinero_integration") %></span>
-                  <span class="mt-4 flex items-center text-xs text-gray-500"><%= t("tenant.modal.buy_product.account_support") %></span>
+                  <span>
+                    <span class="mt-1 flex items-center text-xs text-gray-500">&#8734; <%= t("tenant.modal.buy_product.projects") %></span>
+                    <span class="mt-1 flex items-center text-xs text-gray-500">&#8734; <%= t("tenant.modal.buy_product.teams") %></span>
+                    <span class="mt-1 flex items-center text-xs text-gray-500"><%= t("tenant.modal.buy_product.microsoft_sso") %></span>
+                    <span class="mt-1 flex items-center text-xs text-gray-500"><%= t("tenant.modal.buy_product.dinero_integration") %></span>
+                  </span>
                   <span class="mt-6 flex items-center text-xs text-gray-500"><%= t("tenant.modal.buy_product.pro_price") %></span>
                 </span>
               </span>
@@ -78,10 +78,10 @@
             <label for="ambassador-radio" aria-label="Ambassador License" aria-description="Last message sent an hour ago to 621 users" class="tenant-license relative flex cursor-pointer rounded-lg border-1 border-purple-100 hover:ring-2 hover:ring-purple-400 bg-white p-4 shadow-xs focus:outline-hidden">
               <input type="radio" name="tenant[license]" id="ambassador-radio" value="1" class="sr-only">
               <span class="flex flex-1">
-                <span class="flex flex-col">
+                <span class="flex flex-col place-content-between">
                   <span class="block text-sm font-medium text-gray-900">Ambassador</span>
                   <span class="mt-1 flex items-center text-xs text-gray-500"><%= t("tenant.modal.buy_product.apply_for_ambassador") %></span>
-                  <span class="mt-6 text-xs font-medium text-gray-900"><%= t("tenant.modal.buy_product.few_seats_left") %></span>
+                  <span class="mt-6 text-xs font-medium text-lime-300"><%= t("tenant.modal.buy_product.few_seats_left") %></span>
                 </span>
               </span>
               <!-- Not Checked: "invisible" -->

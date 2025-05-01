@@ -16,7 +16,7 @@ da:
         products: produkter
         csv_data_export: CSV eksport
         e_mail_support: email support
-        essential_price: € 1/bruger/mdr
+        essential_price: € 2/bruger/mdr
         all_from_essential: Alt fra Essential
         projects: projekter
         teams: hold
@@ -24,7 +24,7 @@ da:
         microsoft_sso: Microsoft SSO
         dinero_integration: Dinero integration
         account_support: account support
-        pro_price: € 3/bruger/mdr
+        pro_price: € 4/bruger/mdr
         apply_for_ambassador: Markér denne licens, hvis du gerne vil være ambassadør for Mortimer - så hører du fra os.
         few_seats_left: Få pladser tilbage
         annual_billing: Betal én gang om året
