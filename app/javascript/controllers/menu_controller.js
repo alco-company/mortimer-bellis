@@ -18,7 +18,8 @@ export default class extends Controller {
       this.topmainTarget.classList.remove("lg:pl-64");
       this.topmainTarget.classList.add("lg:pl-24");
       this.settingTarget.classList.remove("w-64"); 
-      this.settingTarget.classList.add("w-24", "max-w-24");
+      this.settingTarget.classList.add("w-24");
+      this.settingTarget.classList.add("max-w-24");
       this.sidebarTarget.classList.add("w-24", "max-w-24");
       this.menuitemTargets.forEach((e) => { e.classList.add("lg:hidden"); });
       for (i of document.getElementsByClassName("collapse-sidebar")) {
@@ -54,7 +55,8 @@ export default class extends Controller {
         i.classList.add("rotate-180");
       }
       this.settingTarget.classList.remove("w-64");
-      this.settingTarget.classList.add("w-24", "max-w-24");
+      this.settingTarget.classList.add("w-24");
+      this.settingTarget.classList.add("max-w-24");
       this.menuitemTargets.forEach((e) => { e.classList.add("lg:hidden"); });
       localStorage.setItem("collapsed", "true");
     }
@@ -83,6 +85,10 @@ export default class extends Controller {
         collection[i].classList.add("hidden");
     }
     submenu.classList.toggle("hidden");
+      this.settingTarget.classList.remove("w-64");
+      this.settingTarget.classList.add("w-24");
+      this.settingTarget.classList.add("max-w-24");
+
   }
 
   // openMobileSidebar(e) {

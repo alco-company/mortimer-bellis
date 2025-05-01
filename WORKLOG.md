@@ -8,6 +8,7 @@
 - fix users/invitations/edit - accepting invitation
 - favicon as prod today
 - sync as arrows-hunting on context + provided_service
+- no keyboard shortcut icon on mobile
 
 ### 29/4/2025
 

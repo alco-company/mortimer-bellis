@@ -321,40 +321,42 @@ class NavigationComponent < ApplicationComponent
     end
 
     def help_and_shortcuts
-      li() do
-        comment { "w-24 max-w-24 border-t border-gray-200 w-64" }
-        div(data: { menu_target: "setting" }, class: "fixed flex flex-col bottom-0 left-0 mt-auto bg-white w-64 border-t border-gray-200 ") do
-          # a(
-          #   href: settings_url,
-          #   class:
-          #     "py-3 text-sm font-semibold text-gray-900 hover:bg-gray-50"
-          # ) do
-          #   render_icon("setting")
-          # end
-          # a(
-          #   href: provided_services_url,
-          #   class:
-          #     " py-3 text-sm font-semibold text-gray-900 hover:bg-gray-50"
-          # ) do
-          #   render_icon("extension")
-          # end
-          a(
-            data: { turbo_stream: "true" },
-            role: "menuitem",
-            tabindex: "-1",
-            href: new_modal_url(resource_class: "page", modal_form: "keyboard"),
-            class:
-              "px-2 py-3 text-sm font-semibold text-gray-900 hover:bg-gray-50"
-          ) do
-            render_icon("keyboard")
-          end
-          a(
-            href: "https://mortimer.pro/help",
-            target: "_blank",
-            class:
-              " px-2 py-3 text-sm font-semibold text-gray-900 hover:bg-gray-50"
-          ) do
-            render_icon("help", "h-6 text-red-500")
+      li(class: "fixed bottom-0") do
+        comment { "w-24 max-w-24 w-64" }
+        ul(role: "list", class: "-mx-2 space-y-1") do
+          div(data: { menu_target: "setting" }, class: " flex flex-row mt-auto bg-white w-64  ") do
+            # a(
+            #   href: settings_url,
+            #   class:
+            #     "py-3 text-sm font-semibold text-gray-900 hover:bg-gray-50"
+            # ) do
+            #   render_icon("setting")
+            # end
+            # a(
+            #   href: provided_services_url,
+            #   class:
+            #     " py-3 text-sm font-semibold text-gray-900 hover:bg-gray-50"
+            # ) do
+            #   render_icon("extension")
+            # end
+            a(
+              data: { turbo_stream: "true" },
+              role: "menuitem",
+              tabindex: "-1",
+              href: new_modal_url(resource_class: "page", modal_form: "keyboard"),
+              class:
+                "hidden px-2 py-3 text-sm font-semibold text-gray-900 hover:bg-gray-50 md:block"
+            ) do
+              render_icon("keyboard")
+            end
+            a(
+              href: "https://mortimer.pro/help",
+              target: "_blank",
+              class:
+                " px-2 py-3 text-sm font-semibold text-gray-900 hover:bg-gray-50"
+            ) do
+              render_icon("help", "h-6 text-red-500")
+            end
           end
         end
       end
