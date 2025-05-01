@@ -35,7 +35,7 @@ class Broadcasters::Resource
       target: target,
       action: :prepend,
       partial: partial,
-      locals: { resource_class.to_s.underscore => resource, params: params, user: user }
+      locals: { resource_class.to_s.underscore => resource, params: params.to_unsafe_h, user: user }
     )
   end
 
@@ -46,7 +46,7 @@ class Broadcasters::Resource
       target: dom_id(resource),
       action: :replace,
       partial: partial,
-      locals: { resource_class.to_s.underscore => resource, params: params, user: user }
+      locals: { resource_class.to_s.underscore => resource, params: params.to_unsafe_h, user: user }
     )
   end
 

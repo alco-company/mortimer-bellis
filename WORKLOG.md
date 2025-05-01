@@ -9,6 +9,7 @@
 - favicon as prod today
 - sync as arrows-hunting on context + provided_service
 - no keyboard shortcut icon on mobile
+- converting unpermitted params failing
 
 ### 29/4/2025
 
