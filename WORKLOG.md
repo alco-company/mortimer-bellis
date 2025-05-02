@@ -2,7 +2,11 @@
 
 ## CHANGELOG
 
-### 1/5/2024
+### 2/5/2025
+
+- add turnstiled gem for counter 'attack of the bots'
+
+### 1/5/2025
 
 - no keyboard shortcut icon on mobile
 - converting unpermitted params failing
