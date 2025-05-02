@@ -5,6 +5,7 @@
 ### 2/5/2025
 
 - add turnstiled gem for counter 'attack of the bots'
+- buy_product small refactor
 
 ### 1/5/2025
 
