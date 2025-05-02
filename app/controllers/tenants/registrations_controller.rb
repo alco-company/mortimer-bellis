@@ -4,7 +4,7 @@
 class Tenants::RegistrationsController < MortimerController
   allow_unauthenticated_access only: %i[new show create]
   before_action :forget_robots, only: :create
-  verify_turnstile_request only: %i[create]
+  # verify_turnstile_request only: %i[create]
   # resume_session only: :new
 
   def new

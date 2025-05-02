@@ -4,7 +4,7 @@
 #
 class Users::RegistrationsController < MortimerController
   before_action :resize_mugshot, only: [ :create, :update ]
-  verify_turnstile_request only: %i[create]
+  # verify_turnstile_request only: %i[create]
 
   # GET /resource/edit
   def edit
