@@ -4,7 +4,7 @@ class HeaderProfile < Phlex::HTML
 
   def view_template
     comment { "Page header" }
-    div(class: "bg-white sm:shadow-sm sm:mx-2 sm:border-t sm:border-gray-50") do # , data: { controller: "profile" } when we will enableNotifications here once more
+    div(class: "") do # , data: { controller: "profile" } when we will enableNotifications here once more
       div(class: "px-4 sm:px-6 lg:mx-auto lg:max-w-6xl lg:px-8") do
         div(
           class:

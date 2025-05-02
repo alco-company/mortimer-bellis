@@ -163,6 +163,14 @@ class Tenant < ApplicationRecord
     license_expires_at.present? && license_expires_at < 1.week.from_now
   end
 
+  def license_valid?
+    license_expires_at.present? && license_expires_at > Time.now
+  end
+
+  def license_expired?
+    !license_valid?
+  end
+
   def licenses(lic = nil)
     if lic.present?
       self.license=lic.to_i

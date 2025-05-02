@@ -7,6 +7,7 @@
 - add turnstiled gem for counter 'attack of the bots'
 - buy_product small refactor
 - pause turnstiled
+- new dashboard - sketch
 
 ### 1/5/2025
 
