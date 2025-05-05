@@ -5,7 +5,7 @@ class TenantLicense < ApplicationComponent
   include Phlex::Rails::Helpers::T
 
   def view_template
-    return unless Current.get_user.admin? or Current.get_user.superadmin?
+    # return unless Current.get_user.admin? or Current.get_user.superadmin?
     turbo_frame_tag "tenant_license" do
       p(class: "text-sm text-purple-600") do
         t("users.edit_profile.buy_product.current_status", license: license_title).html_safe

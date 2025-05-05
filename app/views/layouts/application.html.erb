@@ -9,7 +9,7 @@
     <%= web_push_public_key_meta_tag %>
     <%= yield :head %>
   </head>
-  <body id="body" class="h-full" style="height: 100vh;" >
+  <body id="body" class="h-full" style="height: 100vh;" data-controller="service-worker" >
     <!-- stream for this user -->
     <%= turbo_stream_from "#{Current.user.id}_user_stream" if Current.user %>
 
@@ -79,5 +79,5 @@
       }, 900000); // 15 min in milliseconds
     </script>
   <% end %>
-
+  <%= yield :foot %>
 </html>

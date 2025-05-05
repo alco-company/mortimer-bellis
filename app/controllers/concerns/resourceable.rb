@@ -65,6 +65,7 @@ module Resourceable
       when "confirmations"; User
       when "notifications"; Noticed::Notification
       when "applications"; Oauth::Application
+      when "time_material_stats"; TimeMaterial
       else; model || ctrl.classify.constantize
       end
     rescue => e

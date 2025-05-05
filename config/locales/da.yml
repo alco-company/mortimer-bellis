@@ -125,6 +125,23 @@ da:
         instruction: Er du sikker på, at du vil slette overblik %{name}?
         button: Slet
 
+    stats:
+      title: Registreringer
+      billed_hours: Fakturerbare timer
+      drafted_hours: Kladde timer
+      year: dette år
+      month: denne måned
+      week: denne uge
+      today: i dag
+
+    license_type:
+      expires: Din licens udløber %{expires}
+      manage: Vedligehold din licens
+
+    integrations:
+      title: Integrationer
+      none_title: Ingen integrationer
+
   dashboards:
     list:
       title: Overblik

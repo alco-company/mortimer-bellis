@@ -3,7 +3,7 @@ import "@hotwired/turbo-rails"
 import "controllers"
 // import PullToRefresh from "pulltorefreshjs"
 import "custom_stream_actions"
-
+import "custom/companion"
 
 const standalone = true //window.matchMedia("(display-mode: standalone)").matches
 

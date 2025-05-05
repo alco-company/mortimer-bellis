@@ -2,6 +2,12 @@
 
 ## CHANGELOG
 
+- finish up navigation 
+
+### 5/5/2025
+
+- finish up the dashboard
+
 ### 2/5/2025
 
 - add turnstiled gem for counter 'attack of the bots'

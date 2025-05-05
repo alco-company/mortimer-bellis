@@ -87,6 +87,17 @@ class TimeMaterial < ApplicationRecord
   scope :by_about, ->(about) { where("about LIKE ?", "%#{about}%") if about.present? }
   scope :by_exact_user, ->(user) { where("user_id= ?", "%#{user.id}%") if user.present? }
   scope :weekdays, -> { where("cast(strftime('%w', wdate) as integer) BETWEEN 1 AND 5") }
+  scope :billed, -> { where("is_invoice = ?", 1).where(state: [ :done, :pushed_to_erp ]) }
+  scope :drafted, -> { where(state: [ :draft, :active, :paused ]) }
+  scope :by_state, ->(state) { where("state = ?", state) if state.present? }
+  scope :by_customer, ->(customer) { where("customer_id = ?", customer.id) if customer.present? }
+  scope :by_project, ->(project) { where("project_id = ?", project.id) if project.present? }
+  scope :by_product, ->(product) { where("product_id = ?", product.id) if product.present? }
+  scope :by_user, ->(user) { where("user_id = ?", user.id) if user.present? }
+  scope :by_date, ->(date) { where("wdate = ?", date) if date.present? }
+
+  # # SQLite
+  # scope :weekdays_only, -> { where("strftime('%w', created_at) BETWEEN 1 AND 5") }
 
   # # PostgreSQL
   # scope :weekdays_only_in_timezone, ->(timezone) {

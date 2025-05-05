@@ -6,13 +6,7 @@
       <div class="relative lg:col-span-3">
         <div class="absolute inset-px rounded-lg bg-white lg:rounded-tl-[2rem]"></div>
         <div class="relative flex h-full flex-col overflow-hidden rounded-[calc(var(--radius-lg)+1px)] p-6">
-          <div class="flex items-center">
-            <img src="your-logo.png" alt="Logo" class="h-10 w-10 mr-4">
-            <div>
-              <h3 class="text-lg font-bold text-slate-700">God eftermiddag, Andreas</h3>
-              <p class="text-sm text-gray-500">Du loggede ind kl torsdag d. 1. maj 2025, 10.26 og din session udløber om 5 dage, 21 timer og 47 minutter</p>
-            </div>
-          </div>
+          <%= render HeaderProfile.new %>
         </div>
         <div class="pointer-events-none absolute inset-px rounded-lg shadow-sm ring-1 ring-black/5 lg:rounded-tl-[2rem]"></div>
       </div>
@@ -20,32 +14,29 @@
       <!-- Pomodoro Timer -->
       <div class="relative lg:col-span-3">
         <div class="absolute inset-px rounded-lg bg-white lg:rounded-tr-[2rem]"></div>
-        <div class="relative flex h-full flex-col overflow-hidden rounded-[calc(var(--radius-lg)+1px)] p-6">
-          <h3 class="text-lg font-bold text-slate-700 mb-4">Pomodoro Timer</h3>
+        <div data-controller="pomodoro" class="relative flex h-full flex-col overflow-hidden rounded-[calc(var(--radius-lg)+1px)] p-6">
+          <audio id="myAudio">
+            <source src="https://cdn.glitch.com/80b71f2c-7aba-4044-9906-6b497988e08b%2Fpomodoro-tune.mp3?v=1609915412652" type="audio/mpeg">
+          </audio>
+          <h3 class="text-lg font-bold text-sky-700 mb-4">Pomodoro Timer</h3>
           <div class="mb-4 text-center">
-            <span class="text-4xl font-bold text-slate-700">25:00</span>
+            <span data-pomodoro-target="pomodorotimer" id="pomodoro-timer" class="text-4xl font-bold text-sky-700">25:00</span>
             <div class="mt-2 text-xs text-gray-500">Focus Time</div>
           </div>
           <div class="flex justify-center space-x-2">
-            <button class="rounded-full bg-slate-700 px-4 py-2 text-white text-sm hover:bg-slate-800">Start</button>
-            <button class="rounded-full bg-slate-700 px-4 py-2 text-white text-sm hover:bg-slate-800">Pause</button>
-            <button class="rounded-full bg-slate-700 px-4 py-2 text-white text-sm hover:bg-slate-800">Reset</button>
+            <button data-action="click->pomodoro#start" class="rounded-full bg-sky-700 px-4 py-2 text-white text-sm hover:bg-sky-800">Start</button>
+            <button data-action="click->pomodoro#pause" class="rounded-full bg-sky-700 px-4 py-2 text-white text-sm hover:bg-sky-800">Pause</button>
+            <button data-action="click->pomodoro#restart" class="rounded-full bg-sky-700 px-4 py-2 text-white text-sm hover:bg-sky-800">Reset</button>
           </div>
         </div>
         <div class="pointer-events-none absolute inset-px rounded-lg shadow-sm ring-1 ring-black/5 lg:rounded-tr-[2rem]"></div>
       </div>
 
       <!-- Open Tasks -->
+
       <div class="relative lg:col-span-2">
         <div class="absolute inset-px rounded-lg bg-white"></div>
-        <div class="relative flex h-full flex-col overflow-hidden rounded-[calc(var(--radius-lg)+1px)] p-6">
-          <h3 class="text-lg font-bold text-slate-700 mb-2">Open Tasks</h3>
-          <ul class="list-disc pl-5 text-slate-700 space-y-2 text-sm">
-            <li>Update project plan</li>
-            <li>Review pull requests</li>
-            <li>Prepare demo presentation</li>
-          </ul>
-        </div>
+        <%= render Account::Progress.new if Current.get_user.tasks.uncompleted.any? %>
         <div class="pointer-events-none absolute inset-px rounded-lg shadow-sm ring-1 ring-black/5"></div>
       </div>
 
@@ -54,11 +45,11 @@
         <div class="absolute inset-px rounded-lg bg-white"></div>
         <div class="relative flex h-full flex-col overflow-hidden rounded-[calc(var(--radius-lg)+1px)] p-6">
           <div class="mb-2 flex">
-            <h3 class="text-lg font-bold text-slate-700">Product Roadmap</h3>
+            <h3 class="text-lg font-bold text-sky-700">Product Roadmap</h3>
             <button class="ml-auto inline-block rounded-full bg-gray-100 px-2 py-1 text-xs text-gray-500 hover:bg-gray-100">🚀</button>
           </div>
           <ul class="list-disc pl-5 text-slate-700 space-y-2 text-sm">
-            <li><span class="font-semibold">Q1:</span> Launch MVP</li>
+            <li class="text-emerald-700 opacity-50"><span class="font-semibold ">Q1:</span> Launch MVP</li>
             <li><span class="font-semibold">Q2:</span> Improve UI/UX</li>
             <li><span class="font-semibold">Q3:</span> Add integrations</li>
             <li><span class="font-semibold">Q4:</span> Prepare to scale</li>
@@ -72,11 +63,24 @@
         <div class="absolute inset-px rounded-lg bg-white"></div>
         <div class="relative flex h-full flex-col overflow-hidden rounded-[calc(var(--radius-lg)+1px)] p-6">
           <div class="mb-2 flex items-center">
-            <div class="flex flex-col">
-              <h3 class="text-lg font-bold text-slate-700">Last sync:</h3>
-              <span class="text-sm text-gray-500">02 / 05 / 2025</span>
+            <div class="flex w-full flex-col">
+              <% if Current.get_tenant.provided_services.any? %>
+                <h3 class="text-lg font-bold text-sky-700"><%= t("dashboard.integrations.title") %></h3>
+                <ul>
+                  <% Current.get_tenant.provided_services.each do |ps| %>
+                    <li class="flex space-x-2 items-center place-content-between lg:items-start lg:flex-col xl:flex-row">
+                      <div class="flex lg:flex-col 3xl:flex-row">
+                        <span class="text-slate-700 truncate "> <%= ps.name %></span>
+                        <span class="text-slate-700 whitespace-nowrap"> <%= l(ps.last_sync_at, format: :short) rescue "-" %></span>
+                      </div>
+                      <%= link_to t("provided_service.sync_now"), provided_service_url(ps), class: "rounded-full bg-sky-700 px-4 py-2 text-2xs text-white hover:bg-sky-800" %>
+                    </li>
+                  <% end %>
+                </ul>
+              <% else %>
+                <h3 class="text-lg font-bold text-sky-700"><%= t("dashboard.integrations.none_title") %></h3>
+              <% end %>
             </div>
-            <button class="ml-auto rounded-full bg-slate-700 px-4 py-2 text-sm text-white hover:bg-slate-800">Force Sync</button>
           </div>
         </div>
         <div class="pointer-events-none absolute inset-px rounded-lg shadow-sm ring-1 ring-black/5"></div>
@@ -87,31 +91,17 @@
         <div class="absolute inset-px rounded-lg bg-white"></div>
         <div class="relative flex h-full flex-col overflow-hidden rounded-[calc(var(--radius-lg)+1px)] p-6">
           <div class="flex items-center mb-4">
-            <h3 class="text-lg font-bold text-slate-700">Registreringer</h3>
-            <div class="ml-auto inline-block shadow rounded px-2 py-1 text-xs text-gray-500">
-              <select class="bg-transparent focus:outline-none text-gray-700">
-                <option value="1">Monthly</option>
-                <option value="1">Yearly</option>
-                <option value="1">Weekly</option>
+            <h3 class="text-lg font-bold text-sky-700"><%= t("dashboard.stats.title")  %></h3>
+            <div data-controller="time-material-stats" class="ml-auto inline-block shadow rounded px-2 py-1 text-xs text-gray-500">
+              <select id="range_view" name="range_view" data-action="change->time-material-stats#changeRangeView" data-time-material-target="rangeView" class="bg-transparent focus:outline-none text-gray-700">
+                <option selected if range_view == "year"value="year"><%= t("dashboard.stats.year")  %></option>
+                <option selected if range_view == "month"value="month"><%= t("dashboard.stats.month")  %></option>
+                <option selected if range_view == "week" value="week"><%= t("dashboard.stats.week")  %></option>
+                <option selected if range_view == "today" value="today"><%= t("dashboard.stats.today") %></option>
               </select>
             </div>
           </div>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div class="shadow rounded p-4">
-              <h4 class="text-xs text-gray-500 mb-1">Faktureret</h4>
-              <div class="flex items-center">
-                <span class="mr-2 text-xl font-bold text-slate-700">68 t. 30 m.</span>
-                <span class="px-2 py-0.5 bg-gray-100 text-xs text-slate-700 rounded-full">+2.5%</span>
-              </div>
-            </div>
-            <div class="shadow rounded p-4">
-              <h4 class="text-xs text-gray-500 mb-1">Kladde</h4>
-              <div class="flex items-center">
-                <span class="mr-2 text-xl font-bold text-slate-700">22 t. 15 min.</span>
-                <span class="px-2 py-0.5 bg-gray-100 text-xs text-slate-700 rounded-full">+13.5%</span>
-              </div>
-            </div>
-          </div>
+          <%= render partial: "time_material_stats" %>
         </div>
         <div class="pointer-events-none absolute inset-px rounded-lg shadow-sm ring-1 ring-black/5"></div>
       </div>
@@ -121,10 +111,14 @@
         <div class="absolute inset-px rounded-lg bg-white"></div>
         <div class="relative flex h-full flex-col overflow-hidden rounded-[calc(var(--radius-lg)+1px)] p-6">
           <div class="mb-2 flex">
-            <h3 class="text-lg font-bold text-slate-700">License type:</h3>
-            <span class="text-lg font-bold text-slate-700 pl-2">Free trial</span>
+            <h3 class="text-lg font-bold text-sky-700">License type:</h3>
+            <span class="text-lg font-bold text-sky-700 pl-2"><%= Current.get_tenant.license %></span>
           </div>
-          <p class="text-slate-700 text-sm">You're currently on a free trial of Pro</p>
+          <% unless Current.get_tenant.license == "ambassador" %>
+          <% expire = l(Current.get_tenant.license_expires_at, format: :short) rescue "-" %>
+            <p class="text-slate-700 text-sm"><%= t("dashboard.license_type.expires", expires: expire).html_safe %></p>
+            <%= link_to t("dashboard.license_type.manage"), edit_tenant_url(Current.get_tenant), class: "mt-4 rounded-full bg-sky-700 px-4 py-2 text-2xs text-white hover:bg-sky-800" %>
+          <% end %>
         </div>
         <div class="pointer-events-none absolute inset-px rounded-lg shadow-sm ring-1 ring-black/5"></div>
       </div>
@@ -133,8 +127,8 @@
       <div class="relative lg:col-span-6">
         <div class="absolute inset-px rounded-lg bg-white lg:rounded-b-[2rem]"></div>
         <div class="relative flex h-full flex-col overflow-hidden rounded-[calc(var(--radius-lg)+1px)] lg:rounded-b-[calc(2rem+1px)] p-6">
-          <h3 class="text-lg font-bold text-slate-700 mb-2">Quote of the Day</h3>
-          <p class="text-slate-700 italic text-sm">“The key is in not spending time, but in investing it.” — Stephen R. Covey</p>
+          <h3 class="text-lg font-bold text-sky-700 mb-2">Quote of the Day</h3>
+          <p class="text-slate-700 italic text-sm"><%= "%s - %s" % [@quote[:quote], @quote[:author]] %></p>
         </div>
         <div class="pointer-events-none absolute inset-px rounded-lg shadow-sm ring-1 ring-black/5 lg:rounded-b-[2rem]"></div>
       </div>
