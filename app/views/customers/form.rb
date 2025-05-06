@@ -7,6 +7,7 @@ class Customers::Form < ApplicationForm
     row field(:vat_number).input()
     row field(:is_debitor).boolean(class: "mort-form-bool")
     row field(:is_creditor).boolean(class: "mort-form-bool")
+    row field(:hourly_rate).input()
     row field(:street).input()
     row field(:zipcode).input()
     row field(:city).input()

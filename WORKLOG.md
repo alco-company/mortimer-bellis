@@ -2,8 +2,6 @@
 
 ## CHANGELOG
 
-- allow user to set hour_rate on project
-
 ### 6/5/2025
 
 - turbolink to the tenants/1/edit + navigation fix
@@ -11,7 +9,7 @@
 - bug in stats
 - wrong range in stats
 - overtime not presented when selected
-
+- allow user to set hour_rate on project, and customer
 
 ### 5/5/2025
 

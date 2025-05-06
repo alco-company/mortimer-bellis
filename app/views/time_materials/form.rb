@@ -1,6 +1,9 @@
 class TimeMaterials::Form < ApplicationForm
   def view_template(&)
-    div(class: "overflow-y-auto", data: { controller: "time-material tabs", tabs_index: @resource.is_time? ? "0" : "1" }) do
+    div(class: "overflow-y-auto", data: {
+      controller: "time-material tabs",
+      time_material_products_value: TimeMaterial.overtimes_products,
+      tabs_index: @resource.is_time? ? "0" : "1" }) do
       if model.cannot_be_pushed?
         show_possible_issues
       end
@@ -139,7 +142,8 @@ class TimeMaterials::Form < ApplicationForm
             rate_field I18n.t("time_material.rate.hourly")
             #
             div(class: "col-span-4") do
-              row field(:over_time).select(TimeMaterial.overtimes, class: "mort-form-select"), "mort-field my-1"
+              div(class: "hidden", id: "time_values", data: {})
+              row field(:over_time).select(TimeMaterial.overtimes, data: { action: "change->time-material#updateOverTime" }, class: "mort-form-select"), "mort-field my-1"
             end
           end
         end

@@ -1,5 +1,18 @@
 class CustomersController < MortimerController
   private
+
+    def resource_create
+      if resource_params[:hourly_rate].present?
+        resource.hourly_rate = resource_params[:hourly_rate].gsub(",", ".")
+      end
+      resource.save
+    end
+
+    def before_update_callback
+      params[:customer][:hourly_rate] = resource_params[:hourly_rate].gsub(",", ".") if resource_params[:hourly_rate].present?
+      true
+    end
+
     # Only allow a list of trusted parameters through.
     def resource_params
       params.expect(customer: [
@@ -25,6 +38,7 @@ class CustomersController < MortimerController
         :member_number,
         :company_status,
         :vat_region_key,
+        :hourly_rate,
         :invoice_mail_out_option_key
       ])
     end

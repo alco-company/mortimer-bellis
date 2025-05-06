@@ -491,6 +491,7 @@ da:
         is_member: Er det et medlem (af Dinero)
         is_debitor: Er debitor
         is_creditor: Er kreditor
+        hourly_rate: Timepris
         street: Gade/vej
         zipcode: Postnr
         city: By

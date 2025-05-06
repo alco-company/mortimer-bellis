@@ -297,6 +297,14 @@ class TimeMaterial < ApplicationRecord
     ]
   end
 
+  def self.overtimes_products
+    h = []
+    Current.get_user.tenant.time_products.each do |p|
+      h << p.base_amount_value.to_s
+    end
+    h.to_json
+  end
+
   def self.trip_purposes
     [
       [ "service", I18n.t("time_material.trip_purposes.service") ],

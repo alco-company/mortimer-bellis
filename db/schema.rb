@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_05_06_072946) do
+ActiveRecord::Schema[8.1].define(version: 2025_05_06_125051) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
@@ -96,6 +96,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_05_06_072946) do
     t.string "email"
     t.string "erp_guid"
     t.string "external_reference"
+    t.decimal "hourly_rate", precision: 11, scale: 2, default: "0.0", null: false
     t.string "invoice_mail_out_option_key"
     t.boolean "is_creditor"
     t.boolean "is_debitor"

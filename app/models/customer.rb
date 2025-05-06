@@ -117,4 +117,16 @@ class Customer  < ApplicationRecord
   rescue => error
     UserMailer.error_report(error.message, "Customer#add_from_erp failed ").deliver_later
   end
+
+  def select_data_attributes
+    {
+      lookup_target: "item",
+      lookup_customer_id: id,
+      lookup_customer_name: name,
+      lookup_customer_hourly_rate: hourly_rate,
+      value: id,
+      display_value: name,
+      action: "keydown->lookup#optionKeydown click->lookup#selectOption"
+    }
+  end
 end
