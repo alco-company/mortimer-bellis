@@ -1,4 +1,6 @@
 class TimeMaterialStatsController < MortimerController
+  skip_before_action :authorize, only: [ :index ]
+
   def index
     @range_view = params[:range_view] || "week"
     respond_to do |format|

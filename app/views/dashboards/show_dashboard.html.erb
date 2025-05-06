@@ -89,17 +89,7 @@
       <!-- Stats -->
       <div class="relative lg:col-span-3">
         <div class="absolute inset-px rounded-lg bg-white"></div>
-        <div class="relative flex h-full flex-col overflow-hidden rounded-[calc(var(--radius-lg)+1px)] p-6">
-          <div class="flex items-center mb-4">
-            <h3 class="text-lg font-bold text-sky-700"><%= t("dashboard.stats.title")  %></h3>
-            <div data-controller="time-material-stats" class="ml-auto inline-block shadow rounded px-2 py-1 text-xs text-gray-500">
-              <%= select_tag :range_view, 
-                options_for_select( [[t("dashboard.stats.today"),"today"], [t("dashboard.stats.week"), "week"], [t("dashboard.stats.month"), "month"], [t("dashboard.stats.year") , "year"]], @range_view), 
-                data: { action: "change->time-material-stats#changeRangeView", time_material_target: "rangeView"}, class: "bg-transparent focus:outline-none text-gray-700" %>
-            </div>
-          </div>
-          <%= render partial: "time_material_stats" %>
-        </div>
+        <%= render partial: "time_material_stats"  %>
         <div class="pointer-events-none absolute inset-px rounded-lg shadow-sm ring-1 ring-black/5"></div>
       </div>
 

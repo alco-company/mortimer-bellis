@@ -6,6 +6,7 @@
 
 - turbolink to the tenants/1/edit + navigation fix
 - ass fix + added registered_minutes to time_material
+- bug in stats
 
 ### 5/5/2025
 

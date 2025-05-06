@@ -29,7 +29,6 @@ module DashboardsHelper
   end
 
   def calc_minutes(now, last = false)
-    # debugger
     if last
       mins = case @range_view
       when "today"; @time_materials.where("wdate = ?", now).sum(:registered_minutes)
