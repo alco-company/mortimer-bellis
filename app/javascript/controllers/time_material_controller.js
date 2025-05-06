@@ -16,7 +16,8 @@ export default class extends Controller {
   static values = {
     time: Number,
     interval: 1000,
-    reload: 60000
+    reload: 60000,
+    products: Array
   }
 
   initialize() {
@@ -100,6 +101,12 @@ export default class extends Controller {
     }
   }
 
+  updateOverTime(e) {
+    if (this.productsValue.length >= e.currentTarget.value) {
+      document.getElementById("time_material_rate").value = this.productsValue[e.currentTarget.value];
+    }
+  }
+
   customerChange(e) {
     if (e.currentTarget.value === "") {
       e.target.previousSibling.value = "";
@@ -108,6 +115,9 @@ export default class extends Controller {
     } else {
       if (this.invoiceTarget.value == 0)
         this.invoiceTarget.nextElementSibling.click();
+      if ( document.querySelector("#time_material_customer_id").dataset.lookupCustomerHourlyRate ) {
+        document.getElementById("time_material_rate").value = document.querySelector( "#time_material_customer_id" ).dataset.lookupCustomerHourlyRate;
+      }
     }
   }
 
@@ -126,6 +136,10 @@ export default class extends Controller {
       document.querySelector(
         "#time_material_project_id"
       ).dataset.lookupCustomerName;
+      if (document.querySelector("#time_material_project_id").dataset.lookupProjectHourlyRate) {
+        document.getElementById("time_material_rate").value = 
+          document.querySelector("#time_material_project_id").dataset.lookupProjectHourlyRate;
+      }
     }
   }
 

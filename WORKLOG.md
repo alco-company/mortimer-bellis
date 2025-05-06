@@ -2,12 +2,16 @@
 
 ## CHANGELOG
 
+- allow user to set hour_rate on project
+
 ### 6/5/2025
 
 - turbolink to the tenants/1/edit + navigation fix
 - ass fix + added registered_minutes to time_material
 - bug in stats
 - wrong range in stats
+- overtime not presented when selected
+
 
 ### 5/5/2025
 
