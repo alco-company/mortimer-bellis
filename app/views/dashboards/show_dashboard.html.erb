@@ -115,9 +115,11 @@
             <span class="text-lg font-bold text-sky-700 pl-2"><%= Current.get_tenant.license %></span>
           </div>
           <% unless Current.get_tenant.license == "ambassador" %>
-          <% expire = l(Current.get_tenant.license_expires_at, format: :short) rescue "-" %>
-            <p class="text-slate-700 text-sm"><%= t("dashboard.license_type.expires", expires: expire).html_safe %></p>
-            <%= link_to t("dashboard.license_type.manage"), edit_tenant_url(Current.get_tenant), class: "mt-4 rounded-full bg-sky-700 px-4 py-2 text-2xs text-white hover:bg-sky-800" %>
+            <div class="mb-2 flex items-center place-content-between">
+              <% expire = l(Current.get_tenant.license_expires_at, format: :short) rescue "-" %>
+              <p class="text-slate-700 text-sm"><%= t("dashboard.license_type.expires", expires: expire).html_safe %></p>
+              <%= link_to t("dashboard.license_type.manage"), edit_tenant_url(Current.get_tenant), class: "rounded-full bg-sky-700 px-4 py-2 text-2xs text-white hover:bg-sky-800", data: { turbo_stream: true } %>
+            </div>
           <% end %>
         </div>
         <div class="pointer-events-none absolute inset-px rounded-lg shadow-sm ring-1 ring-black/5"></div>

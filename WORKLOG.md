@@ -2,11 +2,14 @@
 
 ## CHANGELOG
 
-- finish up navigation 
+### 6/5/2025
+
+- turbolink to the tenants/1/edit + navigation fix
 
 ### 5/5/2025
 
 - finish up the dashboard
+- don't give up the missing background sync
 
 ### 2/5/2025
 

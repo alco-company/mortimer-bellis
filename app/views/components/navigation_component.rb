@@ -153,7 +153,7 @@ class NavigationComponent < ApplicationComponent
     end
 
     def help_and_shortcuts
-      li(class: "fixed bottom-0") do
+      li(class: "fixed bottom-0 bg-linear-to-r from-60% from-white to-90% to-transparent") do
         comment { "w-24 max-w-24 w-64" }
         ul(role: "list", class: "-mx-2 space-y-1") do
           div(data: { menu_target: "setting" }, class: " flex flex-row mt-auto  w-64  ") do
