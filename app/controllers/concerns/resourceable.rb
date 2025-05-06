@@ -124,20 +124,20 @@ module Resourceable
     def pos_delete_all_url(date: nil)
       url_for(controller: params_ctrl, id: 1, action: :show, all: true, date: date, api_key: @resource.access_token)
     end
-  end
 
-  def find_resource
-    resource_class.where(id: get_resource_id)&.take || resource_class.new
-  rescue
-    Rails.logger.info "ERROR! >>>>>>>>>>>>> Resourceable#find_resource: #{params.inspect}"
-    redirect_to "/", alert: I18n.t("errors.messages.not_found", model: resource_class.to_s) and return
-  end
+    def find_resource
+      resource_class.where(id: get_resource_id)&.take || resource_class.new
+    rescue
+      Rails.logger.info "ERROR! >>>>>>>>>>>>> Resourceable#find_resource: #{params.inspect}"
+      redirect_to "/", alert: I18n.t("errors.messages.not_found", model: resource_class.to_s) and return
+    end
 
-  def get_resource_id
-    params_id
-  rescue
-    Rails.logger.info "ERROR! >>>>>>>>>>>>> Resourceable#get_resource_id: #{params.inspect}"
-    nil
+    def get_resource_id
+      params_id
+    rescue
+      Rails.logger.info "ERROR! >>>>>>>>>>>>> Resourceable#get_resource_id: #{params.inspect}"
+      nil
+    end
   end
 
   private
@@ -206,7 +206,7 @@ module Resourceable
       end
 
       def sorted
-        @collection = any_sorts? ? collection.ordered(params.dig(:s), params.dig(:d)) : collection.set_order(collection) rescue collection.order(id: :desc)
+        @collection = any_sorts? ? collection.ordered(params.dig(:s), params.dig(:d)) : collection.set_order(collection) rescue collection&.order(id: :desc)
         self
       end
 

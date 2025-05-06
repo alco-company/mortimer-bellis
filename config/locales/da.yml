@@ -338,7 +338,10 @@ da:
     truncate: "..."
     more: "mere"
   profile:
-    overview: Åbne opgaver
+    open_tasks: Åbne opgaver
+    no_tasks: Ingen åbne opgaver
+    no_tasks_message: Der er ingen åbne opgaver, som du bør tage dig af, for at indstille Mortimer til at fungere optimalt.
+
     invite_new_user: Invitér ny bruger
     invite_new_ user: Invitér ny medarbejder
 

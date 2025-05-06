@@ -94,13 +94,14 @@ class ListItems::TimeMaterial < ListItems::ListItem
     end
     span(class: "md:inline text-xs font-bold truncate mr-2") { "%s:" % resource.user.name }
     span(class: "md:inline text-xs truncate") do
-      link_to(edit_resource_url,
-        class: "truncate hover:underline inline grow flex-nowrap",
-        data: { turbo_action: "advance", turbo_frame: "form" },
-        tabindex: -1) do
-        span(class: "2xs:hidden") { show_time_material_quantative unless resource.active? }
-        span(class: " truncate") { resource.name }
-      end
+      # link_to(edit_resource_url,
+      #   class: "truncate hover:underline inline grow flex-nowrap",
+      #   data: { turbo_action: "advance", turbo_frame: "form" },
+      #   tabindex: -1) do
+      #   span(class: "2xs:hidden") { show_time_material_quantative unless resource.active? }
+      #   span(class: " truncate") { resource.name }
+      # end
+      span(class: " truncate") { resource.name }
     end
   end
 

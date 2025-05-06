@@ -93,7 +93,6 @@ class TimeMaterial < ApplicationRecord
   scope :by_customer, ->(customer) { where("customer_id = ?", customer.id) if customer.present? }
   scope :by_project, ->(project) { where("project_id = ?", project.id) if project.present? }
   scope :by_product, ->(product) { where("product_id = ?", product.id) if product.present? }
-  scope :by_user, ->(user) { where("user_id = ?", user.id) if user.present? }
   scope :by_date, ->(date) { where("wdate = ?", date) if date.present? }
 
   # # SQLite

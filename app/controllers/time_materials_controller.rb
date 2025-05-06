@@ -15,7 +15,7 @@ class TimeMaterialsController < MortimerController
   def index
     # tell user about his uncompleted tasks
     # Current.user.notify(action: :tasks_remaining, title: t("tasks.remaining.title"), msg: t("tasks.remaining.msg", count: Current.user.tasks.first_tasks.uncompleted.count)) unless Current.user.notified?(:tasks_remaining)
-    @resources = resources.order(wdate: :desc)
+    @resources = resources&.order(wdate: :desc)
     super
   end
 
@@ -105,10 +105,13 @@ class TimeMaterialsController < MortimerController
 
     def set_time
       return true if resource_params[:product_name].present? or resource_params[:product_id].present?
-      if resource_params[:state].present? && resource_params[:state] == "done" # done!
-        ht = resource_params[:hour_time] # && resource.hour_time=0
-        mt = resource_params[:minute_time] # && resource.minute_time=0
-        resource.update time: resource.sanitize_time(ht, mt) unless ht.blank? || mt.blank?
+      ht = resource_params[:hour_time] # && resource.hour_time=0
+      mt = resource_params[:minute_time] # && resource.minute_time=0
+      unless ht.blank? || mt.blank?
+        tm = resource.sanitize_time(ht, mt)
+        rmin = ht.to_i * 60 + mt.to_i
+        resource.update registered_minutes: rmin
+        resource.update time: tm if resource.done?
       end
       true
     end

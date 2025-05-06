@@ -32,17 +32,17 @@ module DashboardsHelper
     # debugger
     if last
       mins = case @range_view
-      when "today"; @time_materials.where("wdate = ?", now).sum(:time)
-      when "week"; @time_materials.where("wdate >= ? and wdate <?", now.beginning_of_week, now.end_of_week).sum(:time)
-      when "month"; @time_materials.where("wdate >= ? and wdate <?", now.beginning_of_month, now.end_of_month).sum(:time)
-      when "year"; @time_materials.where("wdate >= ? and wdate <?", now.beginning_of_year, now.end_of_year).sum(:time)
+      when "today"; @time_materials.where("wdate = ?", now).sum(:registered_minutes)
+      when "week"; @time_materials.where("wdate >= ? and wdate <=?", now.beginning_of_week, now).sum(:registered_minutes)
+      when "month"; @time_materials.where("wdate >= ? and wdate <=?", now.beginning_of_month, now).sum(:registered_minutes)
+      when "year"; @time_materials.where("wdate >= ? and wdate <=?", now.beginning_of_year, now).sum(:registered_minutes)
       end
     else
       mins = case @range_view
-      when "today"; @time_materials.where("wdate = ?", now).sum(:time)
-      when "week"; @time_materials.where("wdate >= ?", now.beginning_of_week).sum(:time)
-      when "month"; @time_materials.where("wdate >= ?", now.beginning_of_month).sum(:time)
-      when "year"; @time_materials.where("wdate >= ?", now.beginning_of_year).sum(:time)
+      when "today"; @time_materials.where("wdate = ?", now).sum(:registered_minutes)
+      when "week"; @time_materials.where("wdate >= ?", now.beginning_of_week).sum(:registered_minutes)
+      when "month"; @time_materials.where("wdate >= ?", now.beginning_of_month).sum(:registered_minutes)
+      when "year"; @time_materials.where("wdate >= ?", now.beginning_of_year).sum(:registered_minutes)
       end
     end
     mins = mins.to_i

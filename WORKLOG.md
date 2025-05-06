@@ -5,6 +5,7 @@
 ### 6/5/2025
 
 - turbolink to the tenants/1/edit + navigation fix
+- ass fix + added registered_minutes to time_material
 
 ### 5/5/2025
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_05_02_125758) do
+ActiveRecord::Schema[8.1].define(version: 2025_05_06_072946) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
@@ -692,6 +692,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_05_02_125758) do
     t.string "pushed_erp_timestamp"
     t.string "quantity"
     t.string "rate"
+    t.integer "registered_minutes"
     t.datetime "started_at"
     t.integer "state", default: 0
     t.integer "tenant_id", null: false

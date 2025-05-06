@@ -6,7 +6,7 @@ class Broadcasters::Resource
 
   def initialize(resource, params = {}, target = "record_list", user = Current.get_user, stream = nil, partial = nil)
     @resource = resource
-    @params = params
+    @params = params.respond_to?(:to_unsafe_h) ? params.to_unsafe_h : params
     @target = target
     @resource_class = resource.class rescue nil
     @user = user
@@ -35,7 +35,7 @@ class Broadcasters::Resource
       target: target,
       action: :prepend,
       partial: partial,
-      locals: { resource_class.to_s.underscore => resource, params: params.to_unsafe_h, user: user }
+      locals: { resource_class.to_s.underscore => resource, params: params, user: user }
     )
   end
 
@@ -46,7 +46,7 @@ class Broadcasters::Resource
       target: dom_id(resource),
       action: :replace,
       partial: partial,
-      locals: { resource_class.to_s.underscore => resource, params: params.to_unsafe_h, user: user }
+      locals: { resource_class.to_s.underscore => resource, params: params, user: user }
     )
   end
 

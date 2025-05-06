@@ -35,8 +35,8 @@
       <!-- Open Tasks -->
 
       <div class="relative lg:col-span-2">
-        <div class="absolute inset-px rounded-lg bg-white"></div>
-        <%= render Account::Progress.new if Current.get_user.tasks.uncompleted.any? %>
+        <div class="absolute inset-px rounded-lg bg-white"></div>  
+        <%= render Account::Progress.new  %>
         <div class="pointer-events-none absolute inset-px rounded-lg shadow-sm ring-1 ring-black/5"></div>
       </div>
 
@@ -93,12 +93,9 @@
           <div class="flex items-center mb-4">
             <h3 class="text-lg font-bold text-sky-700"><%= t("dashboard.stats.title")  %></h3>
             <div data-controller="time-material-stats" class="ml-auto inline-block shadow rounded px-2 py-1 text-xs text-gray-500">
-              <select id="range_view" name="range_view" data-action="change->time-material-stats#changeRangeView" data-time-material-target="rangeView" class="bg-transparent focus:outline-none text-gray-700">
-                <option selected if range_view == "year"value="year"><%= t("dashboard.stats.year")  %></option>
-                <option selected if range_view == "month"value="month"><%= t("dashboard.stats.month")  %></option>
-                <option selected if range_view == "week" value="week"><%= t("dashboard.stats.week")  %></option>
-                <option selected if range_view == "today" value="today"><%= t("dashboard.stats.today") %></option>
-              </select>
+              <%= select_tag :range_view, 
+                options_for_select( [[t("dashboard.stats.today"),"today"], [t("dashboard.stats.week"), "week"], [t("dashboard.stats.month"), "month"], [t("dashboard.stats.year") , "year"]], @range_view), 
+                data: { action: "change->time-material-stats#changeRangeView", time_material_target: "rangeView"}, class: "bg-transparent focus:outline-none text-gray-700" %>
             </div>
           </div>
           <%= render partial: "time_material_stats" %>
