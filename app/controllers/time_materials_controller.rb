@@ -1,15 +1,15 @@
 class TimeMaterialsController < MortimerController
   def new
     super
-    resource.customer_name = TimeMaterial.by_exact_user(Current.user).last&.customer_name
-    resource.state =         Current.user.default(:default_time_material_state, "draft")
-    resource.about =         Current.user.default(:default_time_material_about, "")
-    resource.hour_time =     Current.user.default(:default_time_material_hour_time, "")
-    resource.minute_time =   Current.user.default(:default_time_material_minute_time, "")
-    resource.rate =          Current.user.default(:default_time_material_rate, 0)
+    resource.customer_name = TimeMaterial.by_exact_user(Current.get_user).last&.customer_name
+    resource.state =         Current.get_user.default(:default_time_material_state, "draft")
+    resource.about =         Current.get_user.default(:default_time_material_about, "")
+    resource.hour_time =     Current.get_user.default(:default_time_material_hour_time, "")
+    resource.minute_time =   Current.get_user.default(:default_time_material_minute_time, "")
+    resource.rate =          Current.get_tenant.time_products.first.base_amount_value || Current.get_user.default(:default_time_material_rate, 0)
     resource.over_time =     Current.user.default(:default_time_material_over_time, 0)
     resource.date =          get_default_time_material_date "Time.current.to_date"
-    resource.user_id =       Current.user.id
+    resource.user_id =       Current.get_user.id
   end
 
   def index

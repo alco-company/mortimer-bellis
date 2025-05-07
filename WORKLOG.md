@@ -18,6 +18,7 @@
 - narrow new_entries 'by_tenant'
 - set integer/double values on customer/product
 - set product rates in order by value
+- set rates on new time_material post
 
 ### 6/5/2025
 
