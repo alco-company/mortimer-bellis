@@ -7,6 +7,7 @@
 - ambassador/pro - ingen arbejdssteder, kiosker, stemplinger, opgaver
 - essential = email support / pro det samme som essential
 - free tier = pro
+- finish up navigation
 
 
 ### 6/5/2025

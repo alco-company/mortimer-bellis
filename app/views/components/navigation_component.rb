@@ -103,7 +103,7 @@ class NavigationComponent < ApplicationComponent
 
     def hidden_sub?(item)
       item[:submenu].each do |key, i|
-        return "block" if request.path.split("?")[0].include?(i[:url])
+        return "block" if request.path.split("?")[0].include?(i[:url]) && request.path != "/dashboards/show_dashboard"
       end
       "hidden"
     end
