@@ -15,7 +15,7 @@ module Serviceable
     def time_products
       return [] unless has_service("Dinero")
       es = provided_services.where(name: "Dinero").first
-      products.where product_number: [ es.product_for_time, es.product_for_overtime, es.product_for_overtime_100 ]
+      products.where(product_number: [ es.product_for_time, es.product_for_overtime, es.product_for_overtime_100 ]).order :base_amount_value
     end
   end
 

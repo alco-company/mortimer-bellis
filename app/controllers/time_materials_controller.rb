@@ -6,7 +6,7 @@ class TimeMaterialsController < MortimerController
     resource.about =         Current.user.default(:default_time_material_about, "")
     resource.hour_time =     Current.user.default(:default_time_material_hour_time, "")
     resource.minute_time =   Current.user.default(:default_time_material_minute_time, "")
-    resource.rate =          Current.user.default(:default_time_material_rate, "")
+    resource.rate =          Current.user.default(:default_time_material_rate, 0)
     resource.over_time =     Current.user.default(:default_time_material_over_time, 0)
     resource.date =          get_default_time_material_date "Time.current.to_date"
     resource.user_id =       Current.user.id
