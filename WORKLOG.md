@@ -14,6 +14,7 @@
 - do not overwrite comment when adding to invoice
 - allow user to upload customers - if they do not exist
 - allow user to upload products - if they do not exist - and create 3 products for new tenants
+- forgot to add transmit_log to product
 
 ### 6/5/2025
 
