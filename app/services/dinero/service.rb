@@ -115,7 +115,7 @@ class Dinero::Service < SaasService
       pull resource_class: resource_class, organizationId: organizationId, all: all, page: query[:page].to_i + 1, pageSize: query[:pageSize].to_i, fields: fields, start_date: start_date, end_date: end_date
     end
     if can_create
-      new_entries = resource_class.where(erp_guid: nil)
+      new_entries = resource_class.by_tenant.where(erp_guid: nil)
       process(type: tbl.to_sym, data: { records: new_entries })
     end
     true

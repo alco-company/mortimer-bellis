@@ -26,5 +26,6 @@ class Customers::Form < ApplicationForm
     row field(:company_status).input()
     row field(:vat_region_key).input()
     row field(:invoice_mail_out_option_key,).input()
+    view_only field(:transmit_log).input()
   end
 end
