@@ -11,7 +11,7 @@
 - don't autoexpan menu when switch to dashboard
 - make user form great again
 - allow user på create customers & projects on time_material form
-
+- do not overwrite comment when adding to invoice
 
 ### 6/5/2025
 

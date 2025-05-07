@@ -207,7 +207,7 @@ class ModalController < MortimerController
 
     def process_time_material_create
       ids = @filter.filter != {} || @batch&.batch_set? || @search.present? ? resources.pluck(:id) : nil
-      DineroUploadJob.perform_later tenant: Current.tenant, user: Current.user, date: Date.current, provided_service: "Dinero", ids: ids
+      DineroUploadJob.perform_now tenant: Current.tenant, user: Current.user, date: Date.current, provided_service: "Dinero", ids: ids
       flash.now[:success] = t("time_material.uploading_to_erp")
       render turbo_stream: [
         turbo_stream.close_remote_modal { },
