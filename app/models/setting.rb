@@ -66,8 +66,8 @@ class Setting < ApplicationRecord
       when "default_time_material_about"; [ I18n.t("time_material.default_assigned_about"), "TimeMaterial" ]
       when "default_time_material_hour_time"; [ "0", "TimeMaterial" ]
       when "default_time_material_minute_time"; [ "15", "TimeMaterial" ]
-      when "default_time_material_rate"; [ "500", "TimeMaterial" ]
-      when "default_time_material_over_time"; [ "0", "TimeMaterial" ]
+      # when "default_time_material_rate"; [ "500", "TimeMaterial" ]
+      # when "default_time_material_over_time"; [ "0", "TimeMaterial" ]
       when "validate_time_material_done"; [ "false", "TimeMaterial" ]
       when "limit_time_to_quarters"; [ "false", "TimeMaterial" ]
       when "run"; [ "true", "BackgroundJob" ]
@@ -87,8 +87,8 @@ class Setting < ApplicationRecord
       [ "default_time_material_about", I18n.t("settings.keys.default_time_material_about") ],
       [ "default_time_material_hour_time", I18n.t("settings.keys.default_time_material_hour_time") ],
       [ "default_time_material_minute_time", I18n.t("settings.keys.default_time_material_minute_time") ],
-      [ "default_time_material_rate", I18n.t("settings.keys.default_time_material_rate") ],
-      [ "default_time_material_over_time", I18n.t("settings.keys.default_time_material_over_time") ],
+      # [ "default_time_material_rate", I18n.t("settings.keys.default_time_material_rate") ],
+      # [ "default_time_material_over_time", I18n.t("settings.keys.default_time_material_over_time") ],
       [ "allow_create_time_material", I18n.t("settings.keys.allow_create_time_material") ],
       [ "allow_create_product", I18n.t("settings.keys.allow_create_product") ],
       [ "allow_create_customer", I18n.t("settings.keys.allow_create_customer") ],

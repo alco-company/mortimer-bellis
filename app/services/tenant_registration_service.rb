@@ -43,5 +43,7 @@ class TenantRegistrationService
     PunchClock.find_or_create_by tenant: tenant, name: I18n.t("punch_clocks.default_punch_clock"), location: location
     #
     Setting.create_defaults_for_new tenant
+    #
+    Product.create_defaults_for_new tenant
   end
 end

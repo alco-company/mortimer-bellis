@@ -27,9 +27,9 @@ class Dinero::Service < SaasService
     in :customer
       return if data[:records].empty?
       Dinero::Customer.new(self).process(data[:records])
-    # in :product
-    #   return if data[:records].empty?
-    #   Dinero::Product.new(self).process(data[:records])
+    in :product
+      return if data[:records].empty?
+      Dinero::Product.new(self).process(data[:records])
     else
       false
     end
@@ -95,9 +95,9 @@ class Dinero::Service < SaasService
   #
   def pull(resource_class:, all: false, page: 0, pageSize: 100, fields: nil, status_filter: nil, start_date: nil, end_date: nil, just_consume: false)
     case resource_class.to_s
-    when "Customer"; tbl = "contacts"; api_version = "v2"
-    when "Product"; tbl = "products"; api_version = "v1"
-    when "Invoice"; tbl = "invoices"; api_version = "v1"
+    when "Customer"; tbl = "contacts"; api_version = "v2"; can_create = Current.get_user.can? :allow_create_customer
+    when "Product"; tbl = "products"; api_version = "v1"; can_create = Current.get_user.can? :allow_create_product
+    when "Invoice"; tbl = "invoices"; api_version = "v1"; can_create = false
     else
       return false
     end
@@ -114,9 +114,9 @@ class Dinero::Service < SaasService
     if list[:ok].parsed_response["Pagination"]["ResultWithoutFilter"].to_i > (query[:pageSize].to_i * (query[:page].to_i + 1))
       pull resource_class: resource_class, organizationId: organizationId, all: all, page: query[:page].to_i + 1, pageSize: query[:pageSize].to_i, fields: fields, start_date: start_date, end_date: end_date
     end
-    if Current.get_user.can? :allow_create_customer
-      new_customers = Customer.where(erp_guid: nil)
-      process(type: :customer, data: { records: new_customers })
+    if can_create
+      new_entries = resource_class.where(erp_guid: nil)
+      process(type: tbl.to_sym, data: { records: new_entries })
     end
     true
   rescue => err
@@ -145,9 +145,15 @@ class Dinero::Service < SaasService
   end
 
   def create_customer(params:)
-    return mocked_push_invoice(params) if Rails.env.test?
+    return mocked_push_customer(params) if Rails.env.test?
     customer = post "/v1/#{settings["organizationId"]}/contacts", params.to_json
     customer
+  end
+
+  def create_product(params:)
+    return mocked_push_product(params) if Rails.env.test?
+    product = post "/v1/#{settings["organizationId"]}/products", params.to_json
+    product
   end
 
   private

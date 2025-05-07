@@ -12,6 +12,9 @@ da:
 
   products:
     validation_errors: Der er fejl i det indtastede
+    default_time: Konsulent tid
+    default_time_50: Konsulent tid 50% overtid
+    default_time_100: Konsulent tid 100% overtid
 
     create:
       post: Produktet blev oprettet
