@@ -24,7 +24,7 @@ class Dinero::Customer
         "seNumber":                     nil,
         "pNumber":                      nil,
         "paymentConditionType":         customer.payment_condition_type,
-        "paymentConditionNumberOfDays": customer.payment_condition_number_of_days,
+        "paymentConditionNumberOfDays": customer.payment_condition_number_of_days.to_i,
         "isPerson":                     customer.is_person,
         "isMember":                     false,
         "memberNumber":                 nil, # customer.member_number,
@@ -35,7 +35,7 @@ class Dinero::Customer
       }
       result = ds.create_customer(params: data)
       if result[:ok].present?
-        customer.update erp_guid: result[:ok]["ContactGuid"]
+        customer.update transmit_log: "", erp_guid: result[:ok]["ContactGuid"]
       else
         customer.update transmit_log: result[:error].to_s
         Rails.logger.error("Error creating customer: #{result[:error]}")

@@ -16,6 +16,7 @@
 - allow user to upload products - if they do not exist - and create 3 products for new tenants
 - forgot to add transmit_log to product
 - narrow new_entries 'by_tenant'
+- set integer/double values on customer/product
 
 ### 6/5/2025
 
