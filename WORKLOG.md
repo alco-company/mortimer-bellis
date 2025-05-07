@@ -10,6 +10,7 @@
 - finish up navigation
 - don't autoexpan menu when switch to dashboard
 - make user form great again
+- allow user på create customers & projects on time_material form
 
 
 ### 6/5/2025

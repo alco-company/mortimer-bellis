@@ -443,7 +443,7 @@ class Dinero::InvoiceDraft
       all: true,
       pageSize: 500,
       status_filter: "Draft",
-      fields: "guid,contactGuid,externalReference",
+      fields: "guid,contactGuid,externalReference,date,comment",
       just_consume: true
     )
 
