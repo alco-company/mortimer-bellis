@@ -971,8 +971,8 @@ da:
         confirmation_sent_at: Bekræftelse sendt den
         confirmation_token: Bekræftelsestoken
         receive_notifications: Modtager notifikationer
-        last_sign_in_ip: sidst logget ind fra
-        current_sign_in_ip: nuværende login fra
+        last_sign_in_ip: sidst logget ind fra IP adressen
+        current_sign_in_ip: nuværende login fra IP adressen
         current_sign_in_at: nuværende login
         last_sign_in_at: sidst logget ind
         sign_in_count: antal logins

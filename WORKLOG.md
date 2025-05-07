@@ -9,6 +9,7 @@
 - free tier = pro
 - finish up navigation
 - don't autoexpan menu when switch to dashboard
+- make user form great again
 
 
 ### 6/5/2025

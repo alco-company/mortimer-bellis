@@ -18,18 +18,18 @@ class Users::Form < ApplicationForm
     end
     role_select
     if user.superadmin?
-      row field(:remember_created_at).datetime(class: "mort-form-datetime")
+      # row field(:remember_created_at).datetime(class: "mort-form-datetime")
       row field(:current_sign_in_ip).input()
-      row field(:confirmation_token).input()
-      row field(:confirmation_sent_at).datetime(class: "mort-form-datetime")
+      view_only field(:confirmation_token).input()
+      view_only field(:confirmation_sent_at).datetime(class: "mort-form-datetime")
       row field(:confirmed_at).datetime(class: "mort-form-datetime")
       row field(:invitation_limit).input()
     end
     view_only field(:reset_password_sent_at).datetime(class: "mort-form-datetime")
     view_only field(:current_sign_in_at).datetime(class: "mort-form-datetime")
     view_only field(:invitations_count).input()
-    view_only field(:encrypted_password).input()
-    view_only field(:reset_password_token).input()
+    # view_only field(:encrypted_password).input()
+    # view_only field(:reset_password_token).input()
     view_only field(:sign_in_count).input()
     view_only field(:last_sign_in_at).datetime(class: "mort-form-datetime")
     view_only field(:last_sign_in_ip).input()
