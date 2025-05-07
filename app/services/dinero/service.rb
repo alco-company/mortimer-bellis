@@ -24,6 +24,14 @@ class Dinero::Service < SaasService
     in :invoice_draft
       return if data[:records].empty? or data[:date].blank?
       Dinero::InvoiceDraft.new(self).process(data[:records], data[:date])
+    in :customer
+      return if data[:records].empty?
+      Dinero::Customer.new(self).process(data[:records])
+    # in :product
+    #   return if data[:records].empty?
+    #   Dinero::Product.new(self).process(data[:records])
+    else
+      false
     end
   end
 
@@ -106,6 +114,10 @@ class Dinero::Service < SaasService
     if list[:ok].parsed_response["Pagination"]["ResultWithoutFilter"].to_i > (query[:pageSize].to_i * (query[:page].to_i + 1))
       pull resource_class: resource_class, organizationId: organizationId, all: all, page: query[:page].to_i + 1, pageSize: query[:pageSize].to_i, fields: fields, start_date: start_date, end_date: end_date
     end
+    if Current.get_user.can? :allow_create_customer
+      new_customers = Customer.where(erp_guid: nil)
+      process(type: :customer, data: { records: new_customers })
+    end
     true
   rescue => err
     UserMailer.error_report(err.to_s, "SyncERP - Dinero::Service.pull").deliver_later
@@ -130,6 +142,12 @@ class Dinero::Service < SaasService
     invoice = put "/v1.2/#{settings["organizationId"]}/invoices/#{guid}", params.to_json
     return invoice if invoice[:error].present?
     invoice[:ok]
+  end
+
+  def create_customer(params:)
+    return mocked_push_invoice(params) if Rails.env.test?
+    customer = post "/v1/#{settings["organizationId"]}/contacts", params.to_json
+    customer
   end
 
   private

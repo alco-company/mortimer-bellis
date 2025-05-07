@@ -12,7 +12,7 @@ module ExportPdf
       html_filename = Rails.root.join("tmp", "#{Current.user.id}_pdf_input.html")
       pdf_filename = Rails.root.join("tmp", "#{Current.user.id}_output.pdf")
       File.open(html_filename, "wb") { |f| f.write(html) }
-      unless BuildPdfJob.perform_now(tenant: Current.tenant, user: Current.user, html: html_filename, pdf: pdf_filename, filename: filename, context: context)
+      unless BuildPdfJob.perform_later(tenant: Current.tenant, user: Current.user, html: html_filename, pdf: pdf_filename, filename: filename, context: context)
         pdf_filename= nil
       else
         context.send_file pdf_filename, type: "application/pdf", filename: filename

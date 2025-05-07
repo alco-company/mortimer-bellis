@@ -3,7 +3,6 @@ class Customers::Form < ApplicationForm
     row field(:name).input().focus
     row field(:external_reference).input()
     row field(:is_person).boolean(class: "mort-form-bool")
-    row field(:is_member).boolean(class: "mort-form-bool")
     row field(:vat_number).input()
     row field(:is_debitor).boolean(class: "mort-form-bool")
     row field(:is_creditor).boolean(class: "mort-form-bool")
@@ -19,7 +18,11 @@ class Customers::Form < ApplicationForm
     row field(:ean_number).input()
     row field(:payment_condition_type).input()
     row field(:payment_condition_number_of_days).input()
-    row field(:member_number).input()
+    #
+    # only used by unions
+    # row field(:is_member).boolean(class: "mort-form-bool")
+    # row field(:member_number).input()
+    #
     row field(:company_status).input()
     row field(:vat_region_key).input()
     row field(:invoice_mail_out_option_key,).input()

@@ -56,7 +56,7 @@ module DefaultActions
 
     def erp_pull
       posthog_capture
-      SyncErpJob.perform_later tenant: Current.tenant, user: Current.user, resource_class: resource_class
+      SyncErpJob.perform_now tenant: Current.tenant, user: Current.user, resource_class: resource_class
       redirect_to resources_url, success: t(".erp_pull")
     end
 

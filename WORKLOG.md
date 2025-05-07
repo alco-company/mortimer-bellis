@@ -12,6 +12,7 @@
 - make user form great again
 - allow user på create customers & projects on time_material form
 - do not overwrite comment when adding to invoice
+- allow user to upload customers - if they do not exist
 
 ### 6/5/2025
 
