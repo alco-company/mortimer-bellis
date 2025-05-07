@@ -2,6 +2,13 @@
 
 ## CHANGELOG
 
+### 7/5/2025
+
+- ambassador/pro - ingen arbejdssteder, kiosker, stemplinger, opgaver
+- essential = email support / pro det samme som essential
+- free tier = pro
+
+
 ### 6/5/2025
 
 - turbolink to the tenants/1/edit + navigation fix

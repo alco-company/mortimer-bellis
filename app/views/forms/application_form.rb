@@ -52,7 +52,7 @@ class ApplicationForm < Superform::Rails::Form
       if user.superadmin?
         row field(:license).enum_select(Tenant.licenses.keys, class: "mort-form-select")
         row field(:license_expires_at).date(class: "mort-form-date"), "mort-field"
-        row field(:license_changed_at).date(class: "mort-form-date"), "mort-field my-4"
+        view_only field(:license_changed_at).date(class: "mort-form-date"), "mort-field my-4"
       end
       render TenantLicense.new
     end

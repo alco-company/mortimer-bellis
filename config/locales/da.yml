@@ -136,6 +136,7 @@ da:
 
     license_type:
       expires: Din licens udløber %{expires}
+      expired: Din licens udløb %{expires}
       manage: Vedligehold din licens
 
     integrations:

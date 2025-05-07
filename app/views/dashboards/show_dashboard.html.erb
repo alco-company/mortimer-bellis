@@ -103,9 +103,13 @@
           </div>
           <% unless Current.get_tenant.license == "ambassador" %>
             <div class="mb-2 flex items-center place-content-between">
-              <% expire = l(Current.get_tenant.license_expires_at, format: :short) rescue "-" %>
-              <p class="text-slate-700 text-sm"><%= t("dashboard.license_type.expires", expires: expire).html_safe %></p>
-              <%= link_to t("dashboard.license_type.manage"), edit_tenant_url(Current.get_tenant), class: "rounded-full bg-sky-700 px-4 py-2 text-2xs text-white hover:bg-sky-800", data: { turbo_stream: true } %>
+              <% 
+                expire = l(Current.get_tenant.license_expires_at, format: :short) rescue "-"
+                txt, color = Current.get_tenant.license_expires_at < Time.current ? ["dashboard.license_type.expired", "red"] : ["dashboard.license_type.expires", "sky"]
+              %>
+              <!-- bg-red-700 bg-sky-700 bg-red-800 bg-sky-800 text-red-700 -->
+              <p class="text-slate-700 text-sm"><%= t(txt, expires: expire).html_safe %></p>
+              <%= link_to t("dashboard.license_type.manage"), edit_tenant_url(Current.get_tenant), class: "rounded-full bg-#{color}-700 px-4 py-2 text-2xs text-white hover:bg-#{color}-800", data: { turbo_stream: true } %>
             </div>
           <% end %>
         </div>

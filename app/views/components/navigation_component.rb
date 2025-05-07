@@ -50,10 +50,10 @@ class NavigationComponent < ApplicationComponent
         # reports: { title: "Reports", url: "/pages", icon: "home" },
         manage: { title: "manage",
           submenu: {
-            background_jobs: { title: "background_jobs", url: "/background_jobs", icon: "background_job", license: "ambassador pro" },
+            background_jobs: { title: "background_jobs", url: "/background_jobs", icon: "background_job", license: "super" },
             customers: { title: "customers", url: "/customers", icon: "customer" },
             dashboards: { title: "dashboards", url: "/dashboards", icon: "home", license: "super" },
-            filters: { title: "filters", url: "/filters", icon: "filter", license: "ambassador pro" },
+            filters: { title: "filters", url: "/filters", icon: "filter", license: "super" },
             invoices: { title: "invoices", url: "/invoices", icon: "invoice", license: "ambassador pro" },
             invoice_items: { title: "invoice_items", url: "/invoice_items", icon: "invoice_item", license: "ambassador pro" },
             kiosks: { title: "kiosks", url: "/punch_clocks", icon: "punch_clock", license: "super" },
@@ -62,7 +62,7 @@ class NavigationComponent < ApplicationComponent
             projects: { title: "projects", url: "/projects", icon: "project", license: "ambassador pro" },
             punches: { title: "punches", url: "/punches", icon: "punch", license: "super" },
             # reports: { title: "Reports", url: "/reports", icon: "home" },
-            tasks: { title: "tasks", url: "/tasks", icon: "task", license: "ambassador pro" },
+            tasks: { title: "tasks", url: "/tasks", icon: "task", license: "super" },
             teams: { title: "teams", url: "/teams", icon: "team", license: "ambassador pro" },
             tenants: { title: "tenants", url: "/tenants", icon: "tenant", license: "super" },
             provided_services: { title: "integrations", url: "/provided_services", icon: "extension", license: "ambassador pro" },
@@ -91,7 +91,7 @@ class NavigationComponent < ApplicationComponent
           render_icon(icon) if icon
           span(class: "", data: { menu_target: "menuitem" }) { I18n.t("menu.#{title}") }
         end
-      end # if (item[:license].include?(Current.tenant.license) && license_valid) || Current.user.superadmin?
+      end if Current.user.superadmin? || licensed?(item)
     end
 
     def expanded_sub?(item)
@@ -148,7 +148,7 @@ class NavigationComponent < ApplicationComponent
             end
           end
         end
-      end
+      end if Current.user.superadmin? || licensed?(item)
     rescue
     end
 
@@ -200,6 +200,15 @@ class NavigationComponent < ApplicationComponent
           end
         end
       end
+    end
+
+    def licensed?(item)
+      return false if item[:license] == "super"
+      return true if item[:title] == "dashboard"
+      return false unless license_valid
+      return true if Current.user.tenant.license == "free"
+      return true if item[:submenu]
+      item[:license].include? Current.user.tenant.license
     end
 
     def render_icon(icon, cls = nil)

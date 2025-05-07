@@ -13,10 +13,10 @@ module Authorize
     when "dashboards", "time_materials"; true
     # when "background_jobs"; current_user.superadmin? ? true : false
     when "customers", "products", "settings", "provided_services"; current_user.admin? ? true : false
-    when "filters", "invoices", "invoice_items", "locations", "projects", "teams"; current_user.admin? && %(ambassador pro).include?(Current.get_tenant.license) ? true : false
+    when "invoices", "invoice_items", "projects", "teams"; current_user.admin? && %(free ambassador pro).include?(Current.get_tenant.license) ? true : false
     when "users/invitations"; %(ambassador essential pro).include?(Current.get_tenant.license) && current_user.admin? ? true : false
-    when "users"; %(ambassador essential pro).include?(Current.get_tenant.license) && current_user.admin? ? true : false
-    when "background_jobs", "punches", "punch_clocks", "tasks"; %(ambassador pro).include?(Current.get_tenant.license) ? true : false
+    when "users"; %(free ambassador essential pro).include?(Current.get_tenant.license) && current_user.admin? ? true : false
+    # when "background_jobs", "punches", "punch_clocks", "tasks"; %(ambassador pro).include?(Current.get_tenant.license) ? true : false
     else authorize_controller
     end
     ret ? true : redirect_to(root_path, alert: t(:unauthorized))
