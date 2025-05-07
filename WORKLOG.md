@@ -8,6 +8,7 @@
 - essential = email support / pro det samme som essential
 - free tier = pro
 - finish up navigation
+- don't autoexpan menu when switch to dashboard
 
 
 ### 6/5/2025
