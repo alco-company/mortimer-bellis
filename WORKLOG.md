@@ -9,6 +9,7 @@
 - fake products if necessary
 - allow task calls to break free of turbo_frame
 - update tasks list on dashboard when done
+- FOREIGN KEY CONSTRAINT on KillTenantJob - debug
 
 ### 7/5/2025
 
