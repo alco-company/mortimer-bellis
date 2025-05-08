@@ -7,6 +7,7 @@
 - expire free license after 30.days
 - make calls to time products more resilient
 - fake products if necessary
+- allow task calls to break free of turbo_frame
 
 
 ### 7/5/2025

@@ -16,4 +16,8 @@ module TasksHelper
   def invite_new_user
     [ "/users/invitations/new", false ]
   end
+
+  def show_products
+    [ "/products", false ]
+  end
 end
