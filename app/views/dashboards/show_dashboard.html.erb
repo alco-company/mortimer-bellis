@@ -105,7 +105,7 @@
             <div class="mb-2 flex items-center place-content-between">
               <% 
                 expire = l(Current.get_tenant.license_expires_at, format: :short) rescue "-"
-                txt, color = Current.get_tenant.license_expires_at < Time.current ? ["dashboard.license_type.expired", "red"] : ["dashboard.license_type.expires", "sky"]
+                txt, color = (Current.get_tenant.license_expires_at < Time.current rescue true) ? ["dashboard.license_type.expired", "red"] : ["dashboard.license_type.expires", "sky"]
               %>
               <!-- bg-red-700 bg-sky-700 bg-red-800 bg-sky-800 text-red-700 -->
               <p class="text-slate-700 text-sm"><%= t(txt, expires: expire).html_safe %></p>

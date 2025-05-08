@@ -123,6 +123,7 @@ module DefaultActions
           flash[:success] = t(".post")
           format.turbo_stream { render turbo_stream: [
             turbo_stream.update("form", ""),
+            turbo_stream.replace("#{Current.get_user.id}_progress", partial: "dashboards/progress"),
             turbo_stream.replace("flash_container", partial: "application/flash_message", locals: { tenant: Current.get_tenant, messages: flash, user: Current.get_user })
             # special
           ] ; flash.clear}
@@ -159,6 +160,7 @@ module DefaultActions
           flash[:success] = t(".post")
           format.turbo_stream { render turbo_stream: [
             turbo_stream.update("form", ""),
+            turbo_stream.replace("#{Current.get_user.id}_progress", partial: "dashboards/progress"),
             turbo_stream.replace("flash_container", partial: "application/flash_message", locals: { tenant: Current.get_tenant, messages: flash, user: Current.get_user })
           ] ; flash.clear}
           format.html { redirect_to resources_url, success: t(".post") }

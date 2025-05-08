@@ -8,7 +8,7 @@
 - make calls to time products more resilient
 - fake products if necessary
 - allow task calls to break free of turbo_frame
-
+- update tasks list on dashboard when done
 
 ### 7/5/2025
 
