@@ -6,6 +6,8 @@
 
 - expire free license after 30.days
 - make calls to time products more resilient
+- fake products if necessary
+
 
 ### 7/5/2025
 
