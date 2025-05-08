@@ -45,5 +45,7 @@ class TenantRegistrationService
     Setting.create_defaults_for_new tenant
     #
     Product.create_defaults_for_new tenant
+    #
+    tenant.update(license: "free", license_expires_at: 30.days.from_now)
   end
 end

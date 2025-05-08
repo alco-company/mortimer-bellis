@@ -2,6 +2,10 @@
 
 ## CHANGELOG
 
+### 8/5/2025
+
+- expire free license after 30.days
+
 ### 7/5/2025
 
 - ambassador/pro - ingen arbejdssteder, kiosker, stemplinger, opgaver
