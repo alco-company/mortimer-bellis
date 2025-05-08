@@ -511,6 +511,7 @@ da:
         invoice_mail_out_option_key: Faktura udsendelse
         contact_person: Kontaktperson
         description: Beskrivelse
+        transmit_log: Dinero sync status
       dashboard:
         created_at: Oprettet den
         updated_at: Opdateret den
@@ -692,6 +693,7 @@ da:
         total_amount_incl_vat: Total salg inkl. moms
         account_number: Salgskonto nummer
         external_reference: Ekstern reference
+        transmit_log: Dinero sync status
       project:
         created_at: Oprettet den
         updated_at: Opdateret den

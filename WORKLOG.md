@@ -5,6 +5,7 @@
 ### 8/5/2025
 
 - expire free license after 30.days
+- make calls to time products more resilient
 
 ### 7/5/2025
 
