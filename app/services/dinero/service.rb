@@ -24,10 +24,10 @@ class Dinero::Service < SaasService
     in :invoice_draft
       return if data[:records].empty? or data[:date].blank?
       Dinero::InvoiceDraft.new(self).process(data[:records], data[:date])
-    in :customer
+    in :contacts
       return if data[:records].empty?
       Dinero::Customer.new(self).process(data[:records])
-    in :product
+    in :products
       return if data[:records].empty?
       Dinero::Product.new(self).process(data[:records])
     else
