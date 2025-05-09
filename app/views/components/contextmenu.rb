@@ -102,23 +102,35 @@ class Contextmenu < Phlex::HTML
       # link2(url: helpers.new_modal_url(modal_form: "import", resource_class: resource_class.to_s.underscore, modal_next_step: "preview"),
       #   action: "click->contextmenu#hide",
       #   label: I18n.t(".import")) if resource_class.to_s == "User"
-      link2(url: helpers.new_modal_url(modal_form: "upload_dinero",
+      if Current.get_tenant.provided_services.by_name("Dinero").any?
+        link2(url: helpers.new_modal_url(modal_form: "upload_dinero",
+          resource_class: resource_class.to_s.underscore,
+          search: request.query_parameters.dig(:search),
+          modal_next_step: "preview"),
+          action: "click->contextmenu#hide",
+          icon: "ArrowsHunting",
+          label: I18n.t(".upload to ERP")) if resource_class.to_s == "TimeMaterial"
+        link2(url: erp_pull_link,
+          data: { turbo_prefetch: "false" },
+          action: "click->contextmenu#hide",
+          icon: "ArrowsHunting",
+          label: I18n.t(".sync with ERP")) if %(Customer Product Invoice).include? resource_class.to_s
+      else
+        div(class: "block px-3 py-1 text-sm leading-6 text-gray-400") { I18n.t(".upload to ERP") } if resource_class.to_s == "TimeMaterial"
+        div(class: "block px-3 py-1 text-sm leading-6 text-gray-400") { I18n.t(".sync with ERP") } if %(Customer Product Invoice).include? resource_class.to_s
+      end
+      link2 url: helpers.new_modal_url(modal_form: "export",
+        all: true,
         resource_class: resource_class.to_s.underscore,
-        search: request.query_parameters.dig(:search),
-        modal_next_step: "preview"),
+        modal_next_step: "setup",
+        search: request.query_parameters.dig(:search)),
         action: "click->contextmenu#hide",
-        icon: "ArrowsHunting",
-        label: I18n.t(".upload to ERP")) if resource_class.to_s == "TimeMaterial"
-      link2(url: erp_pull_link,
-        data: { turbo_prefetch: "false" },
-        action: "click->contextmenu#hide",
-        icon: "ArrowsHunting",
-        label: I18n.t(".sync with ERP")) if %(Customer Product Invoice).include? resource_class.to_s
-
-      link2 url: helpers.resources_url() + ".csv",
-        data: { turbo_frame: "_top" },
         icon: "download",
         label: I18n.t(".export")
+      # link2 url: helpers.resources_url() + ".csv",
+      #   data: { turbo_frame: "_top" },
+      #   icon: "download",
+      #   label: I18n.t(".export")
       link2 url: helpers.resources_url() + ".pdf",
         data: { turbo_frame: "_top" },
         icon: "pdf",

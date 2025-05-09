@@ -15,6 +15,14 @@ module ModalHelper
       end
   end
 
+  def export_modal_title
+    "Eksportér"
+  end
+
+  def export_modal_instruction
+    "instruktion"
+  end
+
   def delete_account_modal_title
     I18n.t("modal.destroy.account.title")
   end

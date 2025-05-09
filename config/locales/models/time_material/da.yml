@@ -88,6 +88,11 @@ da:
         title: Slet denne tid/materiale
         instruction: Er du sikker på, at du vil slette denne tid/materiale %{name}?
         button: Slet
+      export:
+        title: Eksporter tid/materialer
+        instruction: Er du sikker på, at du vil eksportere de valgte/alle tid/materialer?
+        instruction_selected: Er du sikker på, at du vil eksportere alle %{count} udvalgte tid/materialer?
+        button: Eksportér
       upload_dinero:
         button: Overfør til Dinero
         title: Dan fakturalinjer i Dinero

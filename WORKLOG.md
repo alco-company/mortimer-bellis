@@ -7,6 +7,7 @@
 - fixed foreign key 'for now' (dropped to sqlite shell and 'delete from tenants...')
 - better validate of customer for upload to Dinero
 - issue with contacts vs customers ^^
+- add modal with choice on export; archive & report & column select - UI part only
 
 ### 8/5/2025
 
