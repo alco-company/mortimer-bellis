@@ -284,7 +284,7 @@ class ModalController < MortimerController
         end
       rescue => e
         say "ERROR on destroy: #{e.message}"
-        redirect_to resources_url, status: 303, error: t("something_went_wrong", error: e.message)
+        redirect_to show_dashboard_dashboards_url, status: 303, error: t("something_went_wrong", error: e.message)
       end
     end
 

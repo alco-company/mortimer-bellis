@@ -2,6 +2,11 @@
 
 ## CHANGELOG
 
+### 9/5/2025
+
+- fixed foreign key 'for now' (dropped to sqlite shell and 'delete from tenants...')
+- better validate of customer for upload to Dinero
+
 ### 8/5/2025
 
 - expire free license after 30.days
