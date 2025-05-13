@@ -17,7 +17,7 @@
         <%= form.hidden_field :search, value: params.dig(:search) %>
         <%= form.hidden_field :url, value: @url %>
 
-        <div class="">
+        <!-- <div class="">
           <div class="mort-field my-1 flex justify-end flex-row-reverse items-center">
             <label for="time_material_is_separate">Arkivér efterfølgende</label>
             <div class="my-auto mort-form-bool" data-controller="boolean">
@@ -25,23 +25,23 @@
               <button type="button" data-action="click->boolean#toggle" data-boolean-target="button" class="group relative inline-flex h-6 w-10 flex-shrink-0 cursor-pointer items-center justify-center rounded-full focus:outline-hidden focus:ring-1 focus:ring-sky-200 focus:ring-offset-1" role="switch" aria-checked="false">
                 <span class="sr-only">Use setting</span>
                 <span aria-hidden="true" class="pointer-events-none absolute h-full w-full rounded-md bg-white"></span>
-                <!-- Enabled: &quot;bg-sky-600&quot;, Not Enabled: &quot;bg-gray-200&quot; -->
+                Enabled: &quot;bg-sky-600&quot;, Not Enabled: &quot;bg-gray-200&quot;
                 <span aria-hidden="true" data-boolean-target="indicator" class="bg-gray-200 pointer-events-none absolute mx-auto h-4 w-9 rounded-full transition-colors duration-200 ease-in-out"></span>
-                <!-- Enabled: &quot;translate-x-5&quot;, Not Enabled: &quot;translate-x-0&quot; -->
+                Enabled: &quot;translate-x-5&quot;, Not Enabled: &quot;translate-x-0&quot;
                 <span aria-hidden="true" data-boolean-target="handle" class="translate-x-0 pointer-events-none absolute left-0 inline-block h-5 w-5 transform rounded-full border border-gray-200 bg-white shadow-sm ring-0 transition-transform duration-200 ease-in-out"></span>
               </button>
             </div>
           </div>
-        </div>
-        <div class="mort-field">
+        </div>-->
+        <!-- <div class="mort-field">
           <%= form.label :export_type, t("#{@resource_class.to_s.underscore}.modal.export.export_type"), class: "font-medium text-gray-900" %>
           <div class="grid grid-cols-1">
             <%= form.select :export_type, options_for_select([["CSV", "csv"], ["Excel", "xlsx"]]), { include_blank: false }, { class: "mort-form-select" } %>
             <svg class="pointer-events-none col-start-1 row-start-1 mr-2 size-5 self-center justify-self-end text-gray-500 sm:size-4" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" data-slot="icon"><path fill-rule="evenodd" d="M4.22 6.22a.75.75 0 0 1 1.06 0L8 8.94l2.72-2.72a.75.75 0 1 1 1.06 1.06l-3.25 3.25a.75.75 0 0 1-1.06 0L4.22 7.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd"></path></svg>
           </div>
-        </div>
+        </div> -->
 
-        <p class="mt-4">
+        <!-- <p class="mt-4">
           <%= form.label :export_type, t("#{@resource_class.to_s.underscore}.modal.export.export_fields"), class: "font-medium text-gray-900" %>
           <fieldset>
             <legend class="sr-only">field selection</legend>
@@ -59,14 +59,14 @@
                   </div>
                   <div class="text-sm/6">
                     <label for="comments" class="font-medium text-gray-900"><%= key %></label>
-                    <!-- <span id="comments-description" class="text-gray-500"><span class="sr-only">New comments </span>so you always know what's happening.</span>-->
+                    <span id="comments-description" class="text-gray-500"><span class="sr-only">New comments </span>so you always know what's happening.</span>
                   </div>
                 </div>
               <% end %>
             </div>
           </fieldset>
         </p>
-        <!-- <div class="relative flex items-start mt-3">
+        <div class="relative flex items-start mt-3">
           <div class="ml-3 text-sm leading-6">
             <label for="import_model" class="font-medium text-gray-900"><%= t("#{@resource_class.to_s.underscore}.modal.import.label") %></label>
             <p id="comments-description" class="text-gray-500"><%= t("#{@resource_class.to_s.underscore}.modal.import.description") %></p>

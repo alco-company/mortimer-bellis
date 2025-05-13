@@ -2,6 +2,10 @@
 
 ## CHANGELOG
 
+### 13/5/2025
+
+- allow free licensees to use projects
+
 ### 9/5/2025
 
 - fixed foreign key 'for now' (dropped to sqlite shell and 'delete from tenants...')
