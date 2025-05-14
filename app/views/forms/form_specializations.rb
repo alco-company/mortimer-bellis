@@ -28,12 +28,19 @@ module FormSpecializations
     end
 
     def row(component, outer_class = "mort-field", label_suffix = "")
-      div(class: outer_class) do
+      div(class: outer_class, data: { controller: "input" }) do
         render(component.field.label) do
-          plain I18n.t("activerecord.attributes.#{component.field.parent.key}.#{component.field.key}")
-          plain label_suffix.html_safe
-          # span(class: "text-sm font-light") do
-          # end
+          div(class: "relative") do
+            span { I18n.t("activerecord.attributes.#{component.field.parent.key}.#{component.field.key}") }
+            span { label_suffix.html_safe }
+            if component.send(:attributes).keys&.include?(:help)
+              button(type: "button", data: { action: "click->input#help", src: component.send(:attributes)[:help] }, class: "absolute inset-y-0 right-0 -top-1 flex items-center") do
+                render Icons::Help.new css: "h-5 w-5 text-gray-400 rotate-15 hover:rotate-30 hover:text-gray-600"
+              end
+            end
+            # span(class: "text-sm font-light") do
+            # end
+          end
         end unless component.class == ApplicationForm::HiddenField
         @editable ?
           render(component) :

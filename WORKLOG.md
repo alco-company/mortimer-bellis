@@ -6,6 +6,7 @@
 
 - set country_key as select - and validate
 - prepare system_test for login_as using has_secure_password not Devise
+- add '?' to integration organizationID - https://mortimer.pro/dk/vejledninger/dinerointegration
 
 ### 13/5/2025
 
