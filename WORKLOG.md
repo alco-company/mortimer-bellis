@@ -8,6 +8,7 @@
 - prepare system_test for login_as using has_secure_password not Devise
 - add '?' to integration organizationID - https://mortimer.pro/dk/vejledninger/dinerointegration
 - change argument from cls to css for Icons::*
+- fill in Time/Time50/Time100 on Dinero integration - and '1000' 
 
 ### 13/5/2025
 
