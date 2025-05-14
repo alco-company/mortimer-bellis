@@ -2,6 +2,10 @@
 
 ## CHANGELOG
 
+### 14/5/2025
+
+- set country_key as select - and validate
+
 ### 13/5/2025
 
 - allow free licensees to use projects

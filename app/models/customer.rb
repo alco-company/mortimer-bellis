@@ -1,5 +1,6 @@
 class Customer  < ApplicationRecord
   include Tenantable
+  include Countryable
 
   has_many :projects, dependent: :destroy
   has_many :invoices, dependent: :destroy
@@ -17,6 +18,16 @@ class Customer  < ApplicationRecord
 
   validates :name, presence: true, uniqueness: { scope: :tenant_id, message: I18n.t("customers.errors.messages.name_exist") }
   validates :vat_number, presence: true, uniqueness: { scope: :tenant_id, message: I18n.t("customers.errors.messages.vat_number_exist") }, if: -> { !is_person? }
+  # validates :payment_condition_type, presence: true, if: -> { !is_person? }
+  # validates :payment_condition_number_of_days, presence: true, if: -> { !is_person? }
+  # validates :street, presence: true
+  # validates :zipcode, presence: true
+  # validates :city, presence: true
+  # validates :phone, presence: true
+  # validates :email, presence: true
+  validates :country_key, presence: true
+  # validates :vat_region_key, presence: true
+
 
   def self.filtered(filter)
     flt = filter.filter

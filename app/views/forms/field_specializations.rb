@@ -19,6 +19,8 @@ module FieldSpecializations
           enumerable_list(colr).each(&options)
         in [Localeable::Locale, *] => locl
           enumerable_list(locl).each(&options)
+        in [Countryable::Country, *] => ctry
+          enumerable_list(ctry).each(&options)
         in [[ String, /^\([+-]\d{1,2}\:\d\d\)$/ ], *] => arr
           timezone_list(arr).each(&options)
         in [[ String, String ], *] => arr

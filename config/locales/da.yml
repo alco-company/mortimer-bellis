@@ -94,6 +94,18 @@ da:
     header:
       sync_with_ERP: Synkroniser med ERP
   
+  select_country: Vælg land
+  country:
+    dk: Danmark
+    se: Sverige
+    no: Norge
+    fi: Finland
+    de: Tyskland
+    fr: Frankrig
+    gb: England
+    us: USA
+    pl: Polen
+
   colors:
     red: Rød
     fuchsia: Fuchsia

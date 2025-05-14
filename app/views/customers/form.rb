@@ -10,7 +10,7 @@ class Customers::Form < ApplicationForm
     row field(:street).input()
     row field(:zipcode).input()
     row field(:city).input()
-    row field(:country_key).input()
+    row field(:country_key).select(Customer.country_keys, prompt: I18n.t(".select_country"), class: "mort-form-select")
     row field(:phone).input()
     row field(:email).input()
     row field(:webpage).input()

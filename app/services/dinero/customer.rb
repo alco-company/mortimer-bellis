@@ -162,13 +162,13 @@ class Dinero::Customer
     # customer.is_person
     # customer.member_number
     return false if customer.name.blank?
-    return false if customer.payment_condition_number_of_days.nil? || !customer.payment_condition_number_of_days.to_i.is_a?(Integer)
-    return false unless %w[Netto NettoCash CurrentMonthOut].include?(customer.payment_condition_type)
+    # return false if customer.payment_condition_number_of_days.nil? || !customer.payment_condition_number_of_days.to_i.is_a?(Integer)
+    # return false unless %w[Netto NettoCash CurrentMonthOut].include?(customer.payment_condition_type)
     # customer.phone
     # customer.street
     # customer.tenant_id
     # customer.transmit_log
-    return false if customer.is_person && customer.vat_number.blank?
+    return false if !customer.is_person && customer.vat_number.blank?
     customer.vat_region_key
     true
   end
