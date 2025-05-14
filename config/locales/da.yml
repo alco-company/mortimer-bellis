@@ -998,6 +998,7 @@ da:
         team_id: "Hold/arbejdsgruppe"
         country: Land - for at få vist korrekte nationale helligdage - (overstyr hold land)
         pincode: Pinkode
+        hourly_rate: Timepris
         color: Farve
         payroll_user_ident: Løn nummer
         punching_absence: Stempler kun fravær

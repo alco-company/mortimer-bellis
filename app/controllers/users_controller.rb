@@ -66,14 +66,34 @@ class UsersController < MortimerController
 
     # Only allow a list of trusted parameters through.
     def resource_params
-      params.expect(user: [ :tenant_id, :name, :pincode, :email, :role, :mugshot, :locale, :time_zone, :team_id ])
+      params.expect(user: [ :tenant_id, :name, :pincode, :hourly_rate, :email, :role, :mugshot, :locale, :time_zone, :team_id ])
     end
 
+    def resource_create
+      if resource_params[:hourly_rate].present?
+        resource.hourly_rate = resource_params[:hourly_rate].gsub(",", ".")
+      else
+        resource.hourly_rate = 0.0
+      end
+      resource.save
+    end
+
+    # after the fact clean-ups
     def create_callback
       params[:user].delete(:mugshot)
       true
     end
 
+    def before_update_callback
+      if resource_params[:hourly_rate].present?
+        params[:user][:hourly_rate] = resource_params[:hourly_rate].gsub(",", ".")
+      else
+        params[:user][:hourly_rate] = 0.0
+      end
+      true
+    end
+
+    # after the fact clean-ups
     def update_callback
       params[:user].delete(:mugshot)
       true

@@ -9,6 +9,7 @@
 - add '?' to integration organizationID - https://mortimer.pro/dk/vejledninger/dinerointegration
 - change argument from cls to css for Icons::*
 - fill in Time/Time50/Time100 on Dinero integration - and '1000' 
+- don't write price if blank on project / customer - and link user and price
 
 ### 13/5/2025
 

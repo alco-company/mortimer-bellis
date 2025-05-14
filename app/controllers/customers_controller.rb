@@ -4,12 +4,18 @@ class CustomersController < MortimerController
     def resource_create
       if resource_params[:hourly_rate].present?
         resource.hourly_rate = resource_params[:hourly_rate].gsub(",", ".")
+      else
+        resource.hourly_rate = 0.0
       end
       resource.save
     end
 
     def before_update_callback
-      params[:customer][:hourly_rate] = resource_params[:hourly_rate].gsub(",", ".") if resource_params[:hourly_rate].present?
+      if resource_params[:hourly_rate].present?
+        params[:customer][:hourly_rate] = resource_params[:hourly_rate].gsub(",", ".")
+      else
+        params[:customer][:hourly_rate] = 0.0
+      end
       true
     end
 

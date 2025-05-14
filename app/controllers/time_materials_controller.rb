@@ -6,8 +6,8 @@ class TimeMaterialsController < MortimerController
     resource.about =         Current.get_user.default(:default_time_material_about, "")
     resource.hour_time =     Current.get_user.default(:default_time_material_hour_time, "")
     resource.minute_time =   Current.get_user.default(:default_time_material_minute_time, "")
-    resource.rate =          Current.get_tenant.time_products.first.base_amount_value || Current.get_user.default(:default_time_material_rate, 0)
-    resource.over_time =     Current.user.default(:default_time_material_over_time, 0)
+    resource.rate =          get_hourly_rate
+    # resource.over_time =     Current.user.default(:default_time_material_over_time, 0)
     resource.date =          get_default_time_material_date "Time.current.to_date"
     resource.user_id =       Current.get_user.id
   end
@@ -240,5 +240,10 @@ class TimeMaterialsController < MortimerController
       end
     rescue
       eval(default_date)
+    end
+
+    def get_hourly_rate
+      return Current.get_user.hourly_rate if Current.get_user.hourly_rate != 0
+      Current.get_tenant.time_products.first.base_amount_value || Current.get_user.default(:default_time_material_rate, 0)
     end
 end

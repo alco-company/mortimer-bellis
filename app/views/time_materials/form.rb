@@ -296,7 +296,7 @@ class TimeMaterials::Form < ApplicationForm
 
   def rate_field(lbl, css = "col-span-3", fld_name = "rate")
     div(class: css) do
-      row field(fld_name.to_sym).input(), "mort-field my-1"
+      row field(fld_name.to_sym).input(data: { action: "change->time-material##{fld_name}Change" }), "mort-field my-1"
     end
   end
 
