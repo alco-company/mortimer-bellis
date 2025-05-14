@@ -21,7 +21,7 @@ class SidebarComponent < ApplicationComponent
       div(class: "flex h-16 shrink-0 items-center") do
         render LogoComponent.new
         button(class: "hidden lg:grid grow w-full justify-items-end", data: { menu_target: "tsb", action: "click->menu#toggleSidebar" }) {
-          render Icons::ChevronLeft.new cls: "h-6 w-6 text-gray-400 collapse-sidebar", id: "collapseSidebar"
+          render Icons::ChevronLeft.new css: "h-6 w-6 text-gray-400 collapse-sidebar", id: "collapseSidebar"
         }
       end
       render NavigationComponent.new

@@ -1,6 +1,6 @@
 <%- if controller_name == 'sessions' %>
   <%= button_to "/auth/entra_id", method: :post, class: "mort-btn-primary", data: { turbo: false }  do %>
-    <%= render Icons::Microsoft.new cls: "h-6 w-6 mr-4" %>
+    <%= render Icons::Microsoft.new css: "h-6 w-6 mr-4" %>
     <%= I18n.t("devise.sign_in_with", provider: "Microsoft")  %>
   <% end %>
   <hr class="my-2">

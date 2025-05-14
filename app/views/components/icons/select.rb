@@ -1,8 +1,8 @@
 class Icons::Select < Phlex::HTML
   attr_accessor :cls
 
-  def initialize(cls: "h-6")
-    @cls = cls
+  def initialize(css: "h-6")
+    @cls = css
   end
 
   def view_template

@@ -26,8 +26,8 @@ class SearchComponent < Phlex::HTML
     search = params.dig(:search) || ""
     form(class: "relative flex flex-1", action: "#", method: "GET") do
       label(for: "search-field", class: "sr-only") { "Search" }
-      render Icons::Search.new cls: "pointer-events-none absolute top-0 left-0 h-full w-5 text-#{@color}"
-      render Icons::Ai.new cls: "h-8 top-4 w-8 absolute right-0 text-#{@color}/20"
+      render Icons::Search.new css: "pointer-events-none absolute top-0 left-0 h-full w-5 text-#{@color}"
+      render Icons::Ai.new css: "h-8 top-4 w-8 absolute right-0 text-#{@color}/20"
       input(
         id: "search-field",
         class:

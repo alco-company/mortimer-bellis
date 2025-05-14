@@ -256,7 +256,7 @@ class Contextmenu < Phlex::HTML
 
     def render_icon(icon)
       return if icon.blank?
-      render "Icons::#{icon.camelcase}".constantize.new(cls: "h-4 w-4 text-gray-400")
+      render "Icons::#{icon.camelcase}".constantize.new(css: "h-4 w-4 text-gray-400")
     end
 
     def erp_pull_link

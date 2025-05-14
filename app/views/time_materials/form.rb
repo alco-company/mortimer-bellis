@@ -74,7 +74,7 @@ class TimeMaterials::Form < ApplicationForm
         # comment do
         #   %(Current: "text-sky-500", Default: "text-gray-400 group-hover:text-gray-500")
         # end
-        render Icons::Person.new(cls: "-ml-0.5 mr-2 h-5 w-5 text-gray-400 group-hover:text-gray-500 pointer-events-none", data: { time_material_target: "timetab" })
+        render Icons::Person.new(css: "-ml-0.5 mr-2 h-5 w-5 text-gray-400 group-hover:text-gray-500 pointer-events-none", data: { time_material_target: "timetab" })
         span(class: "pointer-events-none") { I18n.t("time_material.type.time") }
     end
   end
@@ -93,7 +93,7 @@ class TimeMaterials::Form < ApplicationForm
         # comment do
         #   %(Current: "text-sky-500", Default: "text-gray-400 group-hover:text-gray-500")
         # end
-        render Icons::Building.new(cls: "-ml-0.5 mr-2 h-5 w-5 text-gray-400 group-hover:text-gray-500 pointer-events-none", data: { time_material_target: "materialtab" })
+        render Icons::Building.new(css: "-ml-0.5 mr-2 h-5 w-5 text-gray-400 group-hover:text-gray-500 pointer-events-none", data: { time_material_target: "materialtab" })
         span(class: "pointer-events-none") { I18n.t("time_material.type.material") }
     end
   end
@@ -112,7 +112,7 @@ class TimeMaterials::Form < ApplicationForm
         # comment do
         #   %(Current: "text-sky-500", Default: "text-gray-400 group-hover:text-gray-500")
         # end
-        render Icons::Transportation.new(cls: "-ml-0.5 mr-2 h-5 w-5 text-gray-400 group-hover:text-gray-500 pointer-events-none", data: { time_material_target: "mileagetab" })
+        render Icons::Transportation.new(css: "-ml-0.5 mr-2 h-5 w-5 text-gray-400 group-hover:text-gray-500 pointer-events-none", data: { time_material_target: "mileagetab" })
         span(class: "pointer-events-none") { I18n.t("time_material.type.mileage") }
     end
   end

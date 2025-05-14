@@ -42,7 +42,7 @@ class CancelSaveForm < ApplicationComponent
       ) do
         span(class: "pointer-events-none absolute -inset-2.5")
         span(class: "pointer-events-none sr-only") { "Go back to List" }
-        render Icons::Cancel.new(cls: "h-6 w-6 text-gray-400")
+        render Icons::Cancel.new(css: "h-6 w-6 text-gray-400")
       end
   end
 
@@ -61,7 +61,7 @@ class CancelSaveForm < ApplicationComponent
       ) do
         span(class: "pointer-events-none absolute -inset-2.5")
         span(class: "pointer-events-none sr-only") { "Edit content" }
-        render Icons::Edit.new(cls: "h-6 w-6 text-sky-600 ")
+        render Icons::Edit.new(css: "h-6 w-6 text-sky-600 ")
       end
     end
   end
@@ -75,7 +75,7 @@ class CancelSaveForm < ApplicationComponent
     ) do
       span(class: "absolute -inset-2.5")
       span(class: "sr-only") { "Save content" }
-      render Icons::Checkmark.new cls: "h-6 w-6 text-green-500"
+      render Icons::Checkmark.new css: "h-6 w-6 text-green-500"
     end
   end
 end

@@ -20,7 +20,7 @@ class Notifications::NotificationBell < ApplicationComponent
         # span(class: "absolute -inset-1.5") - will bar the entire topbar :o
         span(class: "sr-only") { "View notifications" }
         div(id: "notification_bell") do
-          render Icons::Bell.new cls: "h-6 text-sky-300 hover:text-sky-600 #{swing}"
+          render Icons::Bell.new css: "h-6 text-sky-300 hover:text-sky-600 #{swing}"
         end
       end
     end

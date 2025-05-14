@@ -210,6 +210,6 @@ class NavigationComponent < ApplicationComponent
 
     def render_icon(icon, cls = nil)
       cls ||= "h-6 text-sky-300 group-hover:text-sky-600"
-      render "Icons::#{icon.camelcase}".constantize.new cls: cls
+      render "Icons::#{icon.camelcase}".constantize.new css: cls
     end
 end

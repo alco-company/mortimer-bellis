@@ -134,7 +134,7 @@ module FieldSpecializations
         end
         hide = (!hide.blank? && field.value.nil?) ? "" : "hidden"
         button(type: "button", data: { lookup_target: "searchIcon", action: "click->lookup#search" }, class: "#{hide} absolute w-10 inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:ring-1 focus:ring-inset focus:ring-sky-200 focus:outline-hidden") do
-          render Icons::Search.new cls: "text-gray-400 right-2 top-0 h-full w-5 absolute pointer-events-none"
+          render Icons::Search.new css: "text-gray-400 right-2 top-0 h-full w-5 absolute pointer-events-none"
         end
         collection = @collection[0] rescue []
         render SelectLookup.new(collection: collection, div_id: field.dom.id, field_value: field.value)

@@ -28,7 +28,7 @@ class PunchButtonComponent < ApplicationComponent
       input(type: "hidden", name: "punch[punch_clock_id]", value: punch_clock_id)
       input(type: "hidden", name: "punch[state]", value: "break")
       input(type: "hidden", name: "punch[user_id]", value: user&.id)
-      render Icons::Pause.new cls: "h-8 w-8 text-white"
+      render Icons::Pause.new css: "h-8 w-8 text-white"
     end
   end
 
@@ -37,7 +37,7 @@ class PunchButtonComponent < ApplicationComponent
       input(type: "hidden", name: "punch[punch_clock_id]", value: punch_clock_id)
       input(type: "hidden", name: "punch[state]", value: "out")
       input(type: "hidden", name: "punch[user_id]", value: user&.id)
-      render Icons::Stop.new cls: "h-8 w-8 text-white"
+      render Icons::Stop.new css: "h-8 w-8 text-white"
     end
   end
 
@@ -46,7 +46,7 @@ class PunchButtonComponent < ApplicationComponent
       input(type: "hidden", name: "punch[punch_clock_id]", value: punch_clock_id)
       input(type: "hidden", name: "punch[state]", value: "in")
       input(type: "hidden", name: "punch[user_id]", value: user&.id)
-      render Icons::Play.new cls: "h-8 w-8 text-white"
+      render Icons::Play.new css: "h-8 w-8 text-white"
     end
   end
 end
