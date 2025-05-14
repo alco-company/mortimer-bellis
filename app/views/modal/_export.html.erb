@@ -1,8 +1,8 @@
 <% url = resource.id.present? ? modal_url(resource) : modal_url(resource_class.first) %>
-<%= form_with(url: url, method: :delete, multipart: true) do |form| %>
+<%= form_with(url: url, method: :put, multipart: true) do |form| %>
   <div class="sm:flex sm:items-start">
     <div class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full text-sky-500 bg-sky-100 sm:mx-0 sm:h-10 sm:w-10">
-      <%= render Icons::Download.new cls: "h-6 text-sky-500" %>
+      <%= render Icons::Download.new css: "h-6 text-sky-500" %>
     </div>
     <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
       <h3 class="text-base font-semibold leading-6 text-gray-900" id="modal_title"> <%= export_modal_title %></h3>

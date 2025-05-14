@@ -10,6 +10,7 @@
 - change argument from cls to css for Icons::*
 - fill in Time/Time50/Time100 on Dinero integration - and '1000' 
 - don't write price if blank on project / customer - and link user and price
+- don't delete using export!
 
 ### 13/5/2025
 
