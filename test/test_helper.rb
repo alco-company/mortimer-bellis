@@ -34,7 +34,7 @@ ENV["RAILS_ENV"] ||= "test"
 require_relative "../config/environment"
 require "rails/test_help"
 require "minitest/autorun"
-
+require "test_helpers/test_password_helper"
 #
 # NOT WORKING as of 2024-09-13
 #
@@ -63,7 +63,8 @@ module ActiveSupport
 
     # Add more helper methods to be used by all tests here...
     # include Devise::Test::ControllerHelpers
-    include Devise::Test::IntegrationHelpers
+    # include Devise::Test::IntegrationHelpers
     # include SignInHelper
+    include TestPasswordHelper
   end
 end

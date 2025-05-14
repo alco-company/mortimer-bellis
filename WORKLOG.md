@@ -5,6 +5,7 @@
 ### 14/5/2025
 
 - set country_key as select - and validate
+- prepare system_test for login_as using has_secure_password not Devise
 
 ### 13/5/2025
 
