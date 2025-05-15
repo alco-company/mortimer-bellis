@@ -49,6 +49,9 @@ class TimeMaterials::Form < ApplicationForm
       #
       invoicing
 
+      #
+      show_comments
+
       # url = @resource.id.nil? ? time_materials_url : time_material_url(@resource)
       # render TimeMaterialForm.new time_material: @resource, url: url
       if @resource.pushed_to_erp?
@@ -301,7 +304,7 @@ class TimeMaterials::Form < ApplicationForm
   end
 
   def invoicing
-    div(class: "pb-12") do
+    div(class: "pb-4") do
       div(class: "mt-1 space-y-1") do
         row field(:state).select(TimeMaterial.time_material_states, class: "my-auto mort-form-select"), "mort-field" # , "flex justify-end flex-row-reverse items-center"
         fieldset do
@@ -378,6 +381,32 @@ class TimeMaterials::Form < ApplicationForm
     else
       days, hours, minutes, _seconds = @resource.calc_hrs_minutes(time_spent)
       "#{days}d #{hours}h #{minutes}m"
+    end
+  end
+
+  def show_comments
+    return unless Current.get_user.should? :allow_comments_on_time_material
+    div(class: "col-span-full") do
+      div(class: "mort-field my-0") do
+        div(class: "flex justify-between", data: { controller: "time-material" }) do
+          label(for: "time_material_task_comment") do
+            span { I18n.t("time_material.task_comment.lbl") }
+          end
+        end
+        textarea(id: "time_material_task_comment", name: "time_material[task_comment]", class: "mort-form-text") do
+          plain resource.comment
+        end
+      end
+      div(class: "mort-field my-0") do
+        div(class: "flex justify-between", data: { controller: "time-material" }) do
+          label(for: "time_material_location_comment") do
+            span { I18n.t("time_material.location_comment.lbl") }
+          end
+        end
+        textarea(id: "time_material_location_comment", name: "time_material[location_comment]", class: "mort-form-text") do
+          plain resource.location_comment
+        end
+      end
     end
   end
 end

@@ -2,6 +2,10 @@
 
 ## CHANGELOG
 
+### 15/5/2025
+
+- add 2 fields to time_material for task and location comment
+
 ### 14/5/2025
 
 - set country_key as select - and validate

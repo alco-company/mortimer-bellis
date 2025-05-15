@@ -27,6 +27,10 @@ da:
     unarchived: Posten er taget ud af arkivet (igen)
     insufficient_data: Manglende data
     billed: Faktureret
+    task_comment:
+      lbl: Tasks
+    location_comment:
+      lbl: Locations
     states:
       draft: Kladde
       active: Aktiv
