@@ -6,6 +6,7 @@
 
 - export CSV w/selected fields
 - prepare DB for tags
+- make PDF work - kind'a
 
 ### 15/5/2025
 
