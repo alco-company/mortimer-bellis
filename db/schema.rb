@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_05_14_135701) do
+ActiveRecord::Schema[8.1].define(version: 2025_05_15_092455) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
@@ -596,6 +596,34 @@ ActiveRecord::Schema[8.1].define(version: 2025_05_14_135701) do
     t.index ["key"], name: "index_solid_queue_semaphores_on_key", unique: true
   end
 
+  create_table "taggings", force: :cascade do |t|
+    t.string "context"
+    t.datetime "created_at", null: false
+    t.integer "tag_id", null: false
+    t.integer "taggable_id", null: false
+    t.string "taggable_type", null: false
+    t.integer "tagger_id", null: false
+    t.index ["tag_id", "taggable_id", "taggable_type", "context"], name: "idx_on_tag_id_taggable_id_taggable_type_context_c1f328cb83", unique: true
+    t.index ["tag_id"], name: "index_taggings_on_tag_id"
+    t.index ["taggable_type", "taggable_id"], name: "index_taggings_on_taggable"
+    t.index ["tagger_id"], name: "index_taggings_on_tagger_id"
+  end
+
+  create_table "tags", force: :cascade do |t|
+    t.string "category"
+    t.string "context"
+    t.integer "count", default: 0
+    t.datetime "created_at", null: false
+    t.integer "created_by_id", null: false
+    t.string "name"
+    t.integer "tenant_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["created_by_id"], name: "index_tags_on_created_by_id"
+    t.index ["tenant_id", "category", "name"], name: "index_tags_on_tenant_id_and_category_and_name", unique: true
+    t.index ["tenant_id", "context", "name"], name: "index_tags_on_tenant_id_and_context_and_name", unique: true
+    t.index ["tenant_id"], name: "index_tags_on_tenant_id"
+  end
+
   create_table "tasks", force: :cascade do |t|
     t.boolean "archived"
     t.datetime "completed_at"
@@ -681,6 +709,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_05_14_135701) do
     t.boolean "is_offer"
     t.boolean "is_separate"
     t.integer "kilometers"
+    t.text "location_comment"
     t.integer "odo_from"
     t.datetime "odo_from_time"
     t.integer "odo_to"
@@ -698,6 +727,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_05_14_135701) do
     t.integer "registered_minutes"
     t.datetime "started_at"
     t.integer "state", default: 0
+    t.text "task_comment"
     t.integer "tenant_id", null: false
     t.string "time"
     t.integer "time_spent"
@@ -820,6 +850,10 @@ ActiveRecord::Schema[8.1].define(version: 2025_05_14_135701) do
   add_foreign_key "solid_queue_ready_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
   add_foreign_key "solid_queue_recurring_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
   add_foreign_key "solid_queue_scheduled_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
+  add_foreign_key "taggings", "tags"
+  add_foreign_key "taggings", "users", column: "tagger_id"
+  add_foreign_key "tags", "tenants"
+  add_foreign_key "tags", "users", column: "created_by_id"
   add_foreign_key "tasks", "tenants"
   add_foreign_key "teams", "tenants"
   add_foreign_key "teams", "tenants", on_delete: :cascade

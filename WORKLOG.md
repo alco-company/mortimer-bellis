@@ -5,6 +5,7 @@
 ### 16/5/2025
 
 - export CSV w/selected fields
+- prepare DB for tags
 
 ### 15/5/2025
 
