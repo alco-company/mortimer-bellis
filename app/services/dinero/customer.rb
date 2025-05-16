@@ -26,7 +26,7 @@ class Dinero::Customer
         "seNumber":                     nil,
         "pNumber":                      nil,
         "paymentConditionType":         customer.payment_condition_type,
-        "paymentConditionNumberOfDays": customer.payment_condition_number_of_days.to_i,
+        "paymentConditionNumberOfDays": customer.payment_condition_number_of_days,
         "isPerson":                     customer.is_person,
         "isMember":                     false,
         "memberNumber":                 nil, # customer.member_number,

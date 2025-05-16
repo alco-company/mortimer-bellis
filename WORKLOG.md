@@ -8,6 +8,7 @@
 - prepare DB for tags
 - make PDF work - kind'a
 - make customer setup for Dinero work
+- make customer setup for Dinero work 2
 
 ### 15/5/2025
 
