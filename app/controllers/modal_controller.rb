@@ -39,9 +39,41 @@ class ModalController < MortimerController
     end
   end
 
+  # Parameters: {
+  #   "authenticity_token"=>"[FILTERED]",
+  #   "modal_form"=>"export",
+  #   "resource_class"=>"TimeMaterial",
+  #   "step"=>"setup",
+  #   "all"=>"true",
+  #   "id"=>"390",
+  #   "search"=>"",
+  #   "url"=>"https://localhost:3000/modal",
+  #   "archive_after"=>"0"
+  #   "file_type"=>"csv",
+  #   "export_about"=>"on",
+  #   "export_quantity"=>"on",
+  #   "export_rate"=>"on",
+  #   "export_discount"=>"on",
+  #   "export_state"=>"on",
+  #   "export_is_invoice"=>"on",
+  #   "export_is_free"=>"on",
+  #   "export_is_offer"=>"on",
+  #   "export_is_separate"=>"on",
+  #   "export_comment"=>"on",
+  #   "export_unit_price"=>"on",
+  #   "export_unit"=>"on",
+  #   "export_time_spent"=>"on",
+  #   "export_over_time"=>"on",
+  #   "export_registered_minutes"=>"on",
+  #   "export_task_comment"=>"on",
+  #   "export_location_comment"=>"on",
+  #   "button"=>""
+  # }
   def update
-    case resource_class.to_s.underscore
-    when "event"; process_event_update
+    # case resource_class.to_s.underscore
+    case params[:modal_form]
+    when "export"; process_export
+    # when "event"; process_event_update
     else; process_other_update
     end
   end
@@ -226,6 +258,14 @@ class ModalController < MortimerController
       in { ok:    Event   => rc };  redirect_to calendar_url(rc.calendar, date: @date, view: @view) and return
       in { ok:    String => msg };        # flash the string
       in { error: String  => msg };       # return event form with error
+      end
+    end
+
+    def process_export
+      selected_fields = params.select { |k, v| k.start_with?("export_") && v == "on" }.keys.map { |k| k.gsub("export_", "") }
+      case params[:file_type]
+      when "pdf"; send_pdf
+      when "csv"; send_data resource_class.to_csv(@resources, selected_fields), filename: "#{resource_class.name.pluralize.downcase}-#{Date.today}.csv"
       end
     end
 

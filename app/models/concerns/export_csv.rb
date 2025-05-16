@@ -44,7 +44,7 @@ module ExportCsv
         csv << headers
 
         resources.each do |r|
-          csv << r.attributes.values_at(*column_names) unless r.respond_to? :csv_row
+          csv << r.attributes.values_at(*headers) unless r.respond_to? :csv_row
         end
       end
     end

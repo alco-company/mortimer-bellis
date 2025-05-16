@@ -2,6 +2,10 @@
 
 ## CHANGELOG
 
+### 16/5/2025
+
+- export CSV w/selected fields
+
 ### 15/5/2025
 
 - add 2 fields to time_material for task and location comment

@@ -69,6 +69,11 @@ export default class extends Controller {
 
   submitForm(event) {
     this.removeScrollBlock()
+    let elem = event.target.closest("button")
+    if (elem.dataset.close) {
+      this.closeModal();
+      return;
+    }
   }
 
   show(event) {
