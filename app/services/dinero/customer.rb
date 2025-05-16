@@ -9,6 +9,7 @@ class Dinero::Customer
   def process(customers)
     customers.each do |customer|
       next unless dinero_is_ready_for? customer
+      set_payment_condition_type(customer)
       data = {
         "externalReference":            customer.external_reference,
         "name":                         customer.name,
@@ -149,7 +150,7 @@ class Dinero::Customer
     # customer.att_person
     # customer.city
     # customer.company_status
-    return false unless %w[DK SE NO DE UK NL FR].include?(customer.country_key)
+    return false unless %w[DK SE DE].include?(customer.country_key)
     # customer.ean_number
     # customer.email
     # customer.erp_guid
@@ -171,5 +172,24 @@ class Dinero::Customer
     return false if !customer.is_person && customer.vat_number.blank?
     customer.vat_region_key
     true
+  end
+
+  def set_payment_condition_type(customer)
+    if %W[Netto NettoCash CurrentMonthOut].include?(customer.payment_condition_type)
+      case customer.payment_condition_type
+      when "Netto", "CurrentMonthOut"
+        begin
+          customer.payment_condition_number_of_days = customer.payment_condition_number_of_days.to_i > 0 ?
+          customer.payment_condition_number_of_days :
+          "1"
+        rescue StandardError => e
+          customer.payment_condition_number_of_days = "1"
+        end
+      when "NettoCash"; customer.payment_condition_number_of_days = nil
+      end
+    else
+      customer.payment_condition_type = nil
+      customer.payment_condition_number_of_days = nil
+    end
   end
 end

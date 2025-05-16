@@ -16,7 +16,8 @@ class Customers::Form < ApplicationForm
     row field(:webpage).input()
     row field(:att_person).input()
     row field(:ean_number).input()
-    row field(:payment_condition_type).input()
+    # row field(:payment_condition_type).input()
+    row field(:payment_condition_type).select([ [ "Netto", "Netto" ], [ "NettoCash", "NettoCash" ], [ "CurrentMonthOut", "CurrentMonthOut" ] ], prompt: I18n.t(".select_payment_condition_type"), class: "mort-form-select")
     row field(:payment_condition_number_of_days).input()
     #
     # only used by unions
