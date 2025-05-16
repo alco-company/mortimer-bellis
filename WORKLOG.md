@@ -9,6 +9,8 @@
 - make PDF work - kind'a
 - make customer setup for Dinero work
 - make customer setup for Dinero work 2
+- drop contextmenu PDF
+- fix instructions for time_material export
 
 ### 15/5/2025
 

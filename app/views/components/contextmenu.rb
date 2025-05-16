@@ -131,10 +131,10 @@ class Contextmenu < Phlex::HTML
       #   data: { turbo_frame: "_top" },
       #   icon: "download",
       #   label: I18n.t(".export")
-      link2 url: helpers.resources_url() + ".pdf",
-        data: { turbo_frame: "_top" },
-        icon: "pdf",
-        label: I18n.t(".pdf")
+      # link2 url: helpers.resources_url() + ".pdf",
+      #   data: { turbo_frame: "_top" },
+      #   icon: "pdf",
+      #   label: I18n.t(".pdf")
     end
   end
 

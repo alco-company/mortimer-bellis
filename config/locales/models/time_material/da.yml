@@ -94,8 +94,8 @@ da:
         button: Slet
       export:
         title: Eksporter tid/materialer
-        instruction: Er du sikker på, at du vil eksportere de valgte/alle tid/materialer?
-        instruction_selected: Er du sikker på, at du vil eksportere alle %{count} udvalgte tid/materialer?
+        instruction: Du har filtreret/søgt og/eller udvælgt poster. Efter eksporten kan du vælge at arkivere de valgte/alle tid/materialer (fx hvis du bruger eksporten til at danne fakturalinjer til et ERP system, vi ikke integrerer direkte med)
+        instruction_continued: Vælg filtypen du skal bruge, og de felter du vil have med i eksporten.
         button: Eksportér
       upload_dinero:
         button: Overfør til Dinero
