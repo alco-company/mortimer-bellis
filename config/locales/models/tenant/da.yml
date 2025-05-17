@@ -6,7 +6,7 @@ da:
         title: "Betal for Mortimer"
         instruction: "Vælg mellem Essential, Pro eller Ambassador - og markér om du vil betale én gang om året (kun relevant for Essential og Pro)"
         pick_a_license: "Vælg en licens"
-        free_license_description: "Du bruger lige nu Mortimer med en gratis licens, som kun giver mulighed for at oprette en konto, og oprette brugere, men ikke bruge systemet."
+        free_license_description: "Du bruger lige nu Mortimer med en gratis licens, som kun giver mulighed for at oprette en konto, og én bruger, registrere tid og materialer, og eksportere til CSV, men ikke bruge integrationer, hold, og projekter."
         accept: "Det er mit valg"
         payment_successfully_confirmed: "Betalingen blev bekræftet"
         payment_not_confirmed: "Betalingen blev ikke bekræftet"
@@ -63,6 +63,7 @@ da:
   tenants:
     validation_errors: Der er fejl i det indtastede
     licenses:
+      trial: Prøve
       free: Gratis
       ambassador: Ambassadør
       essential: Essential

@@ -2,6 +2,10 @@
 
 ## CHANGELOG
 
+### 17/5/2025
+
+- use trial for free first 30 days
+
 ### 16/5/2025
 
 - export CSV w/selected fields

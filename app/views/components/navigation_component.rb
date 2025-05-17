@@ -15,7 +15,7 @@ class NavigationComponent < ApplicationComponent
     @locale = locale
     @time_zone = time_zone
     @menu = menu || default_menu
-    @license_valid = Current.user.tenant.license_valid?
+    @license_valid = Current.get_user.tenant.license_valid?
   end
 
   def view_template
@@ -51,21 +51,21 @@ class NavigationComponent < ApplicationComponent
             customers: { title: "customers", url: "/customers", icon: "customer" },
             dashboards: { title: "dashboards", url: "/dashboards", icon: "home", license: "super" },
             filters: { title: "filters", url: "/filters", icon: "filter", license: "super" },
-            invoices: { title: "invoices", url: "/invoices", icon: "invoice", license: "ambassador pro" },
-            invoice_items: { title: "invoice_items", url: "/invoice_items", icon: "invoice_item", license: "ambassador pro" },
+            invoices: { title: "invoices", url: "/invoices", icon: "invoice", license: "trial ambassador pro" },
+            invoice_items: { title: "invoice_items", url: "/invoice_items", icon: "invoice_item", license: "trial ambassador pro" },
             kiosks: { title: "kiosks", url: "/punch_clocks", icon: "punch_clock", license: "super" },
             locations: { title: "locations", url: "/locations", icon: "location", license: "super" },
             products: { title: "products", url: "/products", icon: "product" },
-            projects: { title: "projects", url: "/projects", icon: "project", license: "ambassador pro" },
+            projects: { title: "projects", url: "/projects", icon: "project", license: "trial ambassador pro" },
             punches: { title: "punches", url: "/punches", icon: "punch", license: "super" },
             # reports: { title: "Reports", url: "/reports", icon: "home" },
             tasks: { title: "tasks", url: "/tasks", icon: "task", license: "super" },
-            teams: { title: "teams", url: "/teams", icon: "team", license: "ambassador pro" },
+            teams: { title: "teams", url: "/teams", icon: "team", license: "trial ambassador pro" },
             tenants: { title: "tenants", url: "/tenants", icon: "tenant", license: "super" },
-            provided_services: { title: "integrations", url: "/provided_services", icon: "extension", license: "ambassador pro" },
+            provided_services: { title: "integrations", url: "/provided_services", icon: "extension", license: "trial ambassador pro" },
             settings: { title: "settings", url: "/settings", icon: "setting" },
             # oauths: { title: "oauth_applications", url: "/oauth/applications", icon: "oauth" },
-            users: { title: "users", url: "/users", icon: "user", license: "ambassador pro" }
+            users: { title: "users", url: "/users", icon: "user", license: "trial ambassador pro" }
           }
         }
       }
@@ -78,7 +78,7 @@ class NavigationComponent < ApplicationComponent
 
     def menu_item(item:, icon: nil)
       # %(Current: "bg-gray-50", Default: "hover:bg-gray-50")
-      item[:license] ||= "free ambassador essential pro"
+      item[:license] ||= "trial free ambassador essential pro"
       url = item[:url]
       css = "group flex gap-x-3 rounded-md  p-2 text-sm font-semibold leading-6 text-sky-400 hover:text-sky-800 hover:bg-gray-50"
       css = "#{css} #{current_item?(url)}"
@@ -203,7 +203,7 @@ class NavigationComponent < ApplicationComponent
       return false if item[:license] == "super"
       return true if item[:title] == "dashboard"
       return false unless license_valid
-      return true if Current.user.tenant.license == "free"
+      return true if Current.user.tenant.license == "trial"
       return true if item[:submenu]
       item[:license].include? Current.user.tenant.license
     end

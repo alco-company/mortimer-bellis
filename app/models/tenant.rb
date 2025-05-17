@@ -43,7 +43,7 @@ class Tenant < ApplicationRecord
   validates :name, presence: true, uniqueness: { message: I18n.t("tenants.errors.messages.name_exist") }
   validates :email, presence: true
 
-  enum :license, { free: 0, ambassador: 1, essential: 2, pro: 3 }
+  enum :license, { trial: 0, free: 1, ambassador: 2, essential: 3, pro: 4 }, default: :trial, scope: true
 
   def self.filtered(filter)
     flt = filter.filter
@@ -164,6 +164,9 @@ class Tenant < ApplicationRecord
   end
 
   def license_valid?
+    if license == "trial" && license_expires_at < Time.now
+      update(license: "free", license_expires_at: 10.years.from_now)
+    end
     license_expires_at.present? && license_expires_at > Time.now
   end
 
@@ -177,6 +180,7 @@ class Tenant < ApplicationRecord
       return self.license
     end
     {
+      trial: I18n.t("tenants.licenses.trial"),
       free: I18n.t("tenants.licenses.free"),
       ambassador: I18n.t("tenants.licenses.ambassador"),
       essential: I18n.t("tenants.licenses.essential"),
