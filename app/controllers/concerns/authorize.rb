@@ -7,7 +7,7 @@ module Authorize
 
   def authorize
     return true if current_user&.superadmin?
-    return true if %W[ dash_boards tags tasks time_materials time_material_stats tooltips customers products ].include? params.dig(:controller)
+    return true if %W[ dashboards tags tasks time_materials time_material_stats tooltips customers products ].include? params.dig(:controller)
 
     return true if %w[modal filters filter_fields batches sessions users/sessions users/passwords users/registrations users/confirmations users/otps].include? params.dig(:controller)
     ret = case params.dig(:controller)

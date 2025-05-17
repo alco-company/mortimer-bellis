@@ -5,6 +5,7 @@
 ### 17/5/2025
 
 - use trial for free first 30 days
+- fix spelling error
 
 ### 16/5/2025
 
