@@ -30,14 +30,15 @@ export default class extends Controller {
   }
 
   connect() {
+    let tmr = document.getElementById("time_material_rate");
     this.token = document.querySelector('meta[name="csrf-token"]').content;
-    this.hourRate =document.getElementById("time_material_rate").value;
+    if (tmr) 
+      this.hourRate = document.getElementById("time_material_rate").value;
     try {      
       if (this.counterTarget.dataset.state == "active") {
         this.startTimer();
       }
-    } catch (error) {
-      
+    } catch (error) {      
     }
   }
 

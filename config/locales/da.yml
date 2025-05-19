@@ -95,6 +95,11 @@ da:
       sync_with_ERP: Synkroniser med ERP
   
   select_country: Vælg land
+
+  components:
+    tag:
+      add_tag: "Tilføj mærke"
+
   country:
     dk: Danmark
     se: Sverige
@@ -843,6 +848,12 @@ da:
         system_key: Nøgle
         position: Rækkefølge
         value: Værdi
+      tag:
+        name: Mærke
+        category: Kategori
+        context: Kontekst
+        taggable_type: Post/record Type
+        taggable_id: ID
       task:
         created_at: Oprettet den
         updated_at: Opdateret den
@@ -934,6 +945,8 @@ da:
         trip_purpose: Formål
         odo_from_time: Kørsel start
         odo_to_time: Kørsel stoppet
+        task_comment: Opgave kommentar
+        location_comment: Arbejdssted kommentar
 
       uri_scheme: 
         created_at: Oprettet den

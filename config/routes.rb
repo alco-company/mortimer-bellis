@@ -1,4 +1,9 @@
 Rails.application.routes.draw do
+  resources :tags do
+    collection do
+      get "tags"
+    end
+  end
   get "time_material_stats", to: "time_material_stats#index", as: :time_material_stats
   get "home/show"
   # -------- AUTHENTICATION ROUTES --------

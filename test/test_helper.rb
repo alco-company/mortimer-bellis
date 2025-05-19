@@ -35,6 +35,7 @@ require_relative "../config/environment"
 require "rails/test_help"
 require "minitest/autorun"
 require "test_helpers/test_password_helper"
+require "capybara/rails"
 #
 # NOT WORKING as of 2024-09-13
 #

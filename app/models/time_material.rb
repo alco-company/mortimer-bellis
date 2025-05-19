@@ -69,6 +69,7 @@
 
 class TimeMaterial < ApplicationRecord
   include Tenantable
+  include Taggable
   include TimeMaterialStateable
   include Settingable
   include Unitable

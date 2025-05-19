@@ -316,6 +316,53 @@ h1 {
   display: initial;
 }
 
+[contenteditable="true"]:active,
+[contenteditable="true"]:focus {
+  border: none;
+  outline: none;
+}
+
+.tag-input {
+  flex-grow: 1;
+  display: inline-block;
+  position: relative;
+  margin: 5px;
+  padding: var(--tag-pad);
+  line-height: normal;
+  white-space: pre-wrap;
+  box-sizing: inherit;
+  overflow: hidden;
+  border: 0px solid transparent;
+
+  &::before {
+    content: attr(data-placeholder);
+    width: 100%;
+    height: 100%;
+    margin: auto 0;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    pointer-events: none;
+    position: absolute;
+    opacity: 0;
+    transition: all 0.5s;
+  }
+  &::after {
+    content: attr(data-suggest);
+    display: inline-block;
+    vertical-align: middle;
+    position: absolute;
+    min-width: calc(100% - 1.5em);
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: pre;
+    opacity: .3;
+    pointer-events: none;
+    max-width: 100px;
+    transition: all 0.5s;
+  }
+}
+
 .pulse_button {
   position: relative;
   background-color: white;

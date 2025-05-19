@@ -2,6 +2,10 @@
 
 ## CHANGELOG
 
+### 19/5/2025
+
+- 14 days work in 3 - part 1
+
 ### 17/5/2025
 
 - use trial for free first 30 days

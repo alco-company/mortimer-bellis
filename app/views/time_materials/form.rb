@@ -386,11 +386,17 @@ class TimeMaterials::Form < ApplicationForm
 
   def show_comments
     return unless Current.get_user.should? :allow_comments_on_time_material
+    render TagComponent.new(resource: Tag.new,
+        field: :name,
+        show_label: true,
+        value_class: "mr-5",
+        editable: true)
+
     div(class: "col-span-full") do
       div(class: "mort-field my-0") do
         div(class: "flex justify-between", data: { controller: "time-material" }) do
           label(for: "time_material_task_comment") do
-            span { I18n.t("time_material.task_comment.lbl") }
+            span { I18n.t("activerecord.attributes.time_material.task_comment") }
           end
         end
         textarea(id: "time_material_task_comment", name: "time_material[task_comment]", class: "mort-form-text") do
@@ -400,7 +406,7 @@ class TimeMaterials::Form < ApplicationForm
       div(class: "mort-field my-0") do
         div(class: "flex justify-between", data: { controller: "time-material" }) do
           label(for: "time_material_location_comment") do
-            span { I18n.t("time_material.location_comment.lbl") }
+            span { I18n.t("activerecord.attributes.time_material.location_comment") }
           end
         end
         textarea(id: "time_material_location_comment", name: "time_material[location_comment]", class: "mort-form-text") do

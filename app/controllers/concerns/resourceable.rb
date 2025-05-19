@@ -30,7 +30,7 @@ module Resourceable
     end
 
     def set_resources_stream
-      tenant = Current.tenant || @resource&.tenant || nil
+      tenant = Current.get_tenant || @resource&.tenant || nil
       @resources_stream ||= tenant.nil? ?
         "1_#{resource_class.to_s.underscore.pluralize}" :
         "%s_%s" % [ tenant&.id, resource_class.to_s.underscore.pluralize ]
