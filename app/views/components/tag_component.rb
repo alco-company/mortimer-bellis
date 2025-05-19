@@ -42,7 +42,6 @@ class TagComponent < ApplicationComponent
       label_container
       div(class: "inline-flex w-full rounded-md border-0 bg-white py-1.5 pl-1 text-gray-900 shadow-xs ring-1 ring-inset ring-gray-300 ") do
         selected_container
-        # editor_field
       end
       div(class: "relativ") do
         render_tags_list
@@ -90,23 +89,6 @@ class TagComponent < ApplicationComponent
       class: "grow ml-0.5 px-1",
       name: resource_field("%s[%s]-input"),
       id: resource_field("%s_%s-input")) { @search.html_safe }
-    # span(contenteditable: "true",
-    #   autocorrect: "off",
-    #   autocapitalize: false,
-    #   role: "textbox",
-    #   class: "tag-input",
-    #   aria: {
-    #     autocomplete: "off",
-    #     multiline: false,
-    #     placeholder: I18n.t("components.tag.#{@field}")
-    #   },
-    #   data: {
-    #     tag_target: "input",
-    #     action: "keydown->tag#keydown keyup->tag#keyup focus->tag#focus",
-    #     placeholder: I18n.t("components.tag.#{@field}")
-    #   },
-    #   name: resource_field("%s[%s]-input"),
-    #   id: resource_field("%s_%s-input")) { @search.html_safe }
   end
 
   def render_tags_list
@@ -114,7 +96,7 @@ class TagComponent < ApplicationComponent
 
     div(id: resource_field("%s-%s-lookup-container"),
       data: { tag_target: "tagList" },
-      class: "py-2 absolute z-10 mt-0.5 mort-form-text min-h-[50px] max-w-sm shadow-md") do
+      class: "py-2 relative md:absolute z-10 mt-0.5 mort-form-text min-h-[50px] max-w-sm shadow-md") do
       div(class: "tag-list-item current-tag-list-item cursor-pointer bg-sky-100 hover:bg-sky-200") do
         a(href: "#", data: { action: "click->tag#addTag", id: "0" }, class: "px-2") do
           plain I18n.t("components.tag.add_tag")
