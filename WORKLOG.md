@@ -7,6 +7,7 @@
 - 14 days work in 3 - part 1
 - try to show dropdown on mobile
 - fix bug on Enter and tap
+- hide PDF feature - make gray
 
 ### 17/5/2025
 
