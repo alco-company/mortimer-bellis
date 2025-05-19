@@ -66,7 +66,7 @@ class TagComponent < ApplicationComponent
     div(id: resource_field("%s-%s-selected-container"), data: { tag_target: "selectedTags" }, class: "flex flex-wrap") do
       @value.each do |tag|
         span(class: "flex items-center") do
-          a(href: "#", data: { action: "click->tag#removeTag", id: tag.id }, class: "ml-0.5 mb-0.5") do
+          a(href: "#", data: { action: "touchstart->tag#removeTag click->tag#removeTag", id: tag.id }, class: "ml-0.5 mb-0.5") do
             span(class: "flex items-center bg-gray-200 text-gray-700 px-2 py-1 rounded-md text-sm") do
               span { tag.name }
               render Icons::Cancel.new(css: "ml-2 h-4 w-4 text-gray-400")
@@ -96,16 +96,16 @@ class TagComponent < ApplicationComponent
 
     div(id: resource_field("%s-%s-lookup-container"),
       data: { tag_target: "tagList" },
-      class: "py-2 relative md:absolute z-10 mt-0.5 mort-form-text min-h-[50px] max-w-sm shadow-md") do
-      div(class: "tag-list-item current-tag-list-item cursor-pointer bg-sky-100 hover:bg-sky-200") do
-        a(href: "#", data: { action: "click->tag#addTag", id: "0" }, class: "px-2") do
+      class: "py-2 relative md:absolute bg-white z-10 mt-0.5 mort-form-text min-h-[50px] max-w-sm shadow-md") do
+      div(data: { action: "touchstart->tag#addTag click->tag#addTag", id: "0" }, class: "flex tag-list-item current-tag-list-item cursor-pointer bg-sky-100 hover:bg-sky-200 h-[40px] items-center") do
+        span(class: "px-2") do
           plain I18n.t("components.tag.add_tag")
         end
       end if @resources.empty? || @resources.filter { |tag| tag.name == @search }.empty?
       @resources.each do |tag|
         next if @value.include? tag
-        div(class: "tag-list-item cursor-pointer hover:bg-sky-200") do
-          a(href: "#", data: { action: "click->tag#pick", id: tag.id }, class: "px-2") do
+        div(data: { action: "touchstart->tag#pick click->tag#pick", id: tag.id }, class: "flex tag-list-item cursor-pointer hover:bg-sky-200 w-full h-[40px] items-center") do
+          span(class: "px-2") do
             plain tag.name
           end
         end

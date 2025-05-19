@@ -44,7 +44,7 @@ export default class extends Controller {
       case ',':         event.stopPropagation(); this.addTag(event);                 break;
       case 'ArrowDown': event.stopPropagation(); this.nextTagListItem(event);        break;
       case 'ArrowUp':   event.stopPropagation(); this.nextTagListItem(event, true);  break;
-      case 'Enter':     event.stopPropagation(); this.pick(event);                   break;
+      case 'Enter':     event.stopPropagation(); this.enter_pick(event);             break;
       case 'Backspace': event.stopPropagation(); this.doBackspace(event);            break;
       case 'Escape':
         event.preventDefault();
@@ -75,28 +75,22 @@ export default class extends Controller {
     }
   }
 
+  enter_pick(event) {
+    event.preventDefault();
+    let tag = this.tagListTarget.querySelector(".current-tag-list-item");
+    if (tag) {
+      this.selectTag(tag);
+    }
+  }
+
   pick(event) {
     event.preventDefault();
-    if (this.outputTarget.value === undefined) {
-      this.outputTarget.value = "";
+    let tag = event.target;
+    if (tag.tagName === "SPAN") {
+      tag = tag.parentElement;
     }
-    let tags = this.outputTarget.value.split(",");
-    let tag = this.tagListTarget.querySelector(".current-tag-list-item a");
-    let url = "";
     if (tag) {
-      if (tag.dataset.id === '0') {
-        url = encodeURI(
-          `/tags/tags?add_tag=${this.inputTarget.textContent}&value=${tags.join(",")}`
-        );
-      } else {
-        tags.push(tag.dataset.id);
-        url = encodeURI(
-          `/tags/tags?value=${tags.join(",")}`
-        );
-      }
-      get(url, {
-        responseKind: "turbo-stream",
-      });
+      this.selectTag(tag);
     }
   }
 
@@ -105,6 +99,23 @@ export default class extends Controller {
     let tags = this.outputTarget.value;
     let data = this.inputTarget.textContent;
     let url = encodeURI(`/tags/tags?add_tag=${data}&value=${tags}`);
+    get(url, {
+      responseKind: "turbo-stream",
+    });
+  }
+
+  selectTag(tag) {
+    if (this.outputTarget.value === undefined) {
+      this.outputTarget.value = "";
+    }
+    let tags = this.outputTarget.value.split(",");
+    let url = "";
+    if (tag.dataset.id === "0") {
+      url = encodeURI( `/tags/tags?add_tag=${this.inputTarget.textContent}&value=${tags.join( "," )}` );
+    } else {
+      tags.push(tag.dataset.id);
+      url = encodeURI(`/tags/tags?value=${tags.join(",")}`);
+    }
     get(url, {
       responseKind: "turbo-stream",
     });
@@ -136,6 +147,8 @@ export default class extends Controller {
       get(url, {
         responseKind: "turbo-stream",
       });
+    } else if (txt.length < 2) {
+      this.tagListTarget.classList.add("hidden");
     }
   }
 
@@ -161,7 +174,7 @@ export default class extends Controller {
       if (this.inputTarget.textContent.length > 1) {
         this.lookup(this.inputTarget.textContent);
       } else {
-        tagList.classList.add("hidden");
+        this.tagList.classList.add("hidden");
         this.inputTarget.focus();
         this.inputTarget.setSelectionRange(
           this.inputTarget.value.length,
