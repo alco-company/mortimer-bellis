@@ -5,6 +5,7 @@
 ### 20/5/2025
 
 - add CRUD for tags
+- make caret position work with only 1 char in input
 
 ### 19/5/2025
 

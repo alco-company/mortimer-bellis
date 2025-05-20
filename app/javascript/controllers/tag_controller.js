@@ -16,20 +16,39 @@ export default class extends Controller {
       if (this.inputTarget.textContent == undefined)
         this.inputTarget.textContent = "";
       this.lastSearch = this.inputTarget.textContent;
+      this.inputTarget.focus();
     },10)
-    this.inputTarget.focus();
-  }
-  
-  focus(event) {
-    event.preventDefault();
-    let caret = document.createRange();
-    caret.selectNodeContents(this.inputTarget);
-    caret.collapse(false);
-    const sel = window.getSelection();
-    sel.removeAllRanges();
-    sel.addRange(caret);
   }
 
+  focus(event) {
+    event.preventDefault();
+
+    const el = this.inputTarget;
+    const sel = window.getSelection();
+    sel.removeAllRanges();
+
+    // Normalize in case there are multiple text nodes
+    el.normalize();
+
+    const textNode = el.firstChild;
+
+    if (textNode && textNode.nodeType === Node.TEXT_NODE) {
+      const range = document.createRange();
+      // Force caret at END of the text node
+      range.setStart(textNode, textNode.length);
+      range.collapse(true);
+      sel.addRange(range);
+    } else {
+      // Fallback: insert an empty text node and place caret there
+      const fallback = document.createTextNode('');
+      el.appendChild(fallback);
+      const range = document.createRange();
+      range.setStart(fallback, 0);
+      range.collapse(true);
+      sel.addRange(range);
+    }
+  }
+  
   keyup(event){
     switch (event.key) {
       
@@ -41,13 +60,13 @@ export default class extends Controller {
 
   keydown(event) {
     switch (event.key) {
-      case ',':         event.stopPropagation(); this.addTag(event);                 break;
-      case 'ArrowDown': event.stopPropagation(); this.nextTagListItem(event);        break;
-      case 'ArrowUp':   event.stopPropagation(); this.nextTagListItem(event, true);  break;
-      case 'Enter':     event.stopPropagation(); this.enter_pick(event);             break;
-      case 'Backspace': event.stopPropagation(); this.doBackspace(event);            break;
+      case ',':         this.stop_event(event); this.addTag();              break;
+      case 'ArrowDown': this.stop_event(event); this.nextTagListItem();     break;
+      case 'ArrowUp':   this.stop_event(event); this.nextTagListItem(true); break;
+      case 'Enter':     this.stop_event(event); this.enter_pick();          break;
+      case 'Backspace': this.stop_event(event); this.doBackspace();         break;
       case 'Escape':
-        event.preventDefault();
+        this.stop_event(event);
         this.element.querySelector('input[type="text"]').value = '';
         break;
       default:
@@ -55,8 +74,12 @@ export default class extends Controller {
     }
   }
 
-  nextTagListItem(event, reverse = false) {
+  stop_event(event) {
     event.preventDefault();
+    event.stopPropagation();
+  }
+
+  nextTagListItem(reverse = false) {
     const tagList = this.tagListTarget;
     if (tagList) {
       const currentTag = tagList.querySelector('.current-tag-list-item');
@@ -75,8 +98,7 @@ export default class extends Controller {
     }
   }
 
-  enter_pick(event) {
-    event.preventDefault();
+  enter_pick() {
     let tag = this.tagListTarget.querySelector(".current-tag-list-item");
     if (tag) {
       this.selectTag(tag);
@@ -84,7 +106,6 @@ export default class extends Controller {
   }
 
   pick(event) {
-    event.preventDefault();
     let tag = event.target;
     if (tag.tagName === "SPAN") {
       tag = tag.parentElement;
@@ -94,28 +115,30 @@ export default class extends Controller {
     }
   }
 
-  addTag(event) {
-    event.preventDefault();
+  addTag() {
     let tags = this.outputTarget.value;
     let data = this.inputTarget.textContent;
-    let url = encodeURI(`/tags/tags?add_tag=${data}&value=${tags}`);
-    get(url, {
-      responseKind: "turbo-stream",
-    });
+    let context = this.inputTarget.dataset.context;
+    let url = encodeURI(`/tags/tags?add_tag=${data}&context=${context}&value=${tags}`);
+    this.get_url(url);
   }
 
   selectTag(tag) {
     if (this.outputTarget.value === undefined) {
       this.outputTarget.value = "";
     }
-    let tags = this.outputTarget.value.split(",");
-    let url = "";
     if (tag.dataset.id === "0") {
-      url = encodeURI( `/tags/tags?add_tag=${this.inputTarget.textContent}&value=${tags.join( "," )}` );
+      this.addTag();
     } else {
+      let tags = this.outputTarget.value.split(",");
+      let context = tag.dataset.context;
       tags.push(tag.dataset.id);
-      url = encodeURI(`/tags/tags?value=${tags.join(",")}`);
+      let url = encodeURI( `/tags/tags?context=${context}&value=${tags.join(",")}` );
+      this.get_url(url);
     }
+  }
+
+  get_url(url) {
     get(url, {
       responseKind: "turbo-stream",
     });
@@ -132,9 +155,7 @@ export default class extends Controller {
         tags = tags.filter(t => t !== tag.dataset.id).join(",");
 
         let url = encodeURI(`/tags/tags?search=${this.inputTarget.textContent}&value=${tags}`);
-        get(url, {
-          responseKind: "turbo-stream",
-        });
+        this.get_url(url);
       }
     }
   }
@@ -144,16 +165,16 @@ export default class extends Controller {
       this.lastSearch = txt;
       let tags = this.outputTarget.value.split(",");
       let url = encodeURI(`/tags/tags?search=${txt}&value=${tags.join(",")}`);
-      get(url, {
-        responseKind: "turbo-stream",
-      });
+      this.get_url(url);
     } else if (txt.length < 2) {
-      this.tagListTarget.classList.add("hidden");
+      try {
+        this.tagListTarget.classList.add("hidden");
+      } catch (error) {
+      }
     }
   }
 
-  doBackspace(event) {
-    event.preventDefault();
+  doBackspace() {
 
     const selectedTags = this.selectedTagsTarget;
     if (this.inputTarget.textContent.length === 0) {
@@ -171,19 +192,35 @@ export default class extends Controller {
         0,
         -1
       );
+
       if (this.inputTarget.textContent.length > 1) {
         this.lookup(this.inputTarget.textContent);
       } else {
-        this.tagList.classList.add("hidden");
-        this.inputTarget.focus();
-        this.inputTarget.setSelectionRange(
-          this.inputTarget.value.length,
-          this.inputTarget.value.length
-        );
+
+        const textNode = this.inputTarget.firstChild;
+        console.log( "Text node:", textNode?.nodeValue, "Length:", textNode?.length );
+        this.tagList?.classList.add("hidden"); 
+        this.placeCaretAtEnd();
       }
     }
   }
 
+  placeCaretAtEnd() {
+    this.inputTarget.focus();
+    this.inputTarget.normalize(); // merge text nodes
+
+    const sel = window.getSelection();
+    const range = document.createRange();
+
+    const textNode = this.inputTarget.firstChild;
+    if (textNode && textNode.nodeType === Node.TEXT_NODE) {
+      range.setStart(textNode, textNode.length);
+      range.collapse(true);
+      sel.removeAllRanges();
+      sel.addRange(range);
+    }
+  }
+  
   update(event) {
     const tag = this.element.querySelector('input[type="text"]')
     const tagList = this.tagListTarget
