@@ -122,7 +122,7 @@ gem "web-push", "~> 3.0"
 
 gem "doorkeeper", "~> 5.8"
 
-gem "posthog-ruby", "~> 2.5"
+gem "posthog-ruby", "~> 2.10"
 
 gem "active_model_otp"
 

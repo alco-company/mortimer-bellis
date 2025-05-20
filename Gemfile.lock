@@ -370,7 +370,7 @@ GEM
     phlex-rails (1.2.2)
       phlex (>= 1.10, < 2)
       railties (>= 6.1, < 9)
-    posthog-ruby (2.5.1)
+    posthog-ruby (2.10.0)
       concurrent-ruby (~> 1)
     pp (0.6.2)
       prettyprint
@@ -586,7 +586,7 @@ DEPENDENCIES
   omniauth-rails_csrf_protection (~> 1.0)
   pagy (~> 9.0)
   phlex-rails
-  posthog-ruby (~> 2.5)
+  posthog-ruby (~> 2.10)
   propshaft
   psych (~> 5.2.0)
   puma (>= 5.0)
