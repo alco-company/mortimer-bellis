@@ -24,7 +24,7 @@ class TagComponent < ApplicationComponent
           name: resource_field("%s[%s]"),
           id: resource_field,
           value: @ids,
-          data: { tag_target: "output" })
+          data: { tag_target: "output", context: @resource.class.to_s, field: @field.to_s })
         @editable ? editable_view : show_view
       end
     end
@@ -63,7 +63,7 @@ class TagComponent < ApplicationComponent
   end
 
   def selected_container
-    div(id: resource_field("%s-%s-selected-container"), data: { tag_target: "selectedTags" }, class: "flex flex-wrap") do
+    div(id: resource_field("%s-%s-selected-container"), data: { tag_target: "selectedTags" }, class: "flex flex-wrap w-full") do
       @value.each do |tag|
         span(class: "flex items-center") do
           a(href: "#", data: { action: "touchstart->tag#removeTag click->tag#removeTag", id: tag.id }, class: "ml-0.5 mb-0.5") do

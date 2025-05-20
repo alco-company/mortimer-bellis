@@ -118,8 +118,7 @@ export default class extends Controller {
   addTag() {
     let tags = this.outputTarget.value;
     let data = this.inputTarget.textContent;
-    let context = this.inputTarget.dataset.context;
-    let url = encodeURI(`/tags/tags?add_tag=${data}&context=${context}&value=${tags}`);
+    let url = encodeURI(`/tags/tags?add_tag=${data}&${this.get_context()}&value=${tags}`);
     this.get_url(url);
   }
 
@@ -131,9 +130,10 @@ export default class extends Controller {
       this.addTag();
     } else {
       let tags = this.outputTarget.value.split(",");
-      let context = tag.dataset.context;
       tags.push(tag.dataset.id);
-      let url = encodeURI( `/tags/tags?context=${context}&value=${tags.join(",")}` );
+      let url = encodeURI(
+        `/tags/tags?${this.get_context()}&value=${tags.join(",")}`
+      );
       this.get_url(url);
     }
   }
@@ -154,7 +154,7 @@ export default class extends Controller {
         let tags = this.outputTarget.value.split(",");
         tags = tags.filter(t => t !== tag.dataset.id).join(",");
 
-        let url = encodeURI(`/tags/tags?search=${this.inputTarget.textContent}&value=${tags}`);
+        let url = encodeURI( `/tags/tags?${this.get_context()}&search=${ this.inputTarget.textContent }&value=${tags}` );
         this.get_url(url);
       }
     }
@@ -164,7 +164,9 @@ export default class extends Controller {
     if (txt.length > 1 && txt !== this.lastSearch) {
       this.lastSearch = txt;
       let tags = this.outputTarget.value.split(",");
-      let url = encodeURI(`/tags/tags?search=${txt}&value=${tags.join(",")}`);
+      let url = encodeURI(
+        `/tags/tags?${this.get_context()}&search=${txt}&value=${tags.join(",")}`
+      );
       this.get_url(url);
     } else if (txt.length < 2) {
       try {
@@ -172,6 +174,12 @@ export default class extends Controller {
       } catch (error) {
       }
     }
+  }
+
+  get_context() {
+    let context = this.outputTarget.dataset.context;
+    let field = this.outputTarget.dataset.field;
+    return `context=${context}&field=${field}`;
   }
 
   doBackspace() {

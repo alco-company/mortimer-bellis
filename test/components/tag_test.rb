@@ -43,4 +43,10 @@ class TagTest < ApplicationSystemTestCase
     assert_match "data-id=\"#{tags(:one).id}\"", output.to_s
     assert_match tags(:one).name, output.to_s
   end
+
+  test "the tag to always have a context" do
+    tags = []
+    output = render TagComponent.new resource: TimeMaterial.new, field: :task_comment, resources: tags, value: [ tags(:one) ]
+    assert_match "data-context=\"TimeMaterial\"", output.to_s
+  end
 end

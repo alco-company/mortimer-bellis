@@ -2,11 +2,25 @@ module Taggable
   extend ActiveSupport::Concern
 
   included do
+    attr_accessor :tag_list
     has_many :taggings, as: :taggable
     has_many :tags, through: :taggings
 
     def tag_names
       tags.map(&:name).join(", ")
+    end
+
+    def tag_list
+      @tag_list ||= tags.map(&:name).join(", ")
+    end
+
+    def tag_list=(value)
+      return if value.blank?
+      return unless value.is_a?(String)
+      self.taggings.each { |tg| tg.delete }
+      value.split(",").map(&:strip).each do |tagID|
+        self.taggings << Tagging.new(taggable: self, tag: Tag.find(tagID), tagger: Current.get_user) unless taggings.where(tag_id: tagID).exists?
+      end
     end
   end
 

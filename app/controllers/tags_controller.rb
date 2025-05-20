@@ -1,5 +1,9 @@
 class TagsController < MortimerController
   def tags
+    @resource_class = params[:context].to_s.classify.constantize
+    @resource = params[:id].present? ? @resource_class.find(params[:id]) : @resource_class.new
+
+    field = params[:field].to_s
     # add a tag
     tag = add_tag
     # if params[:add_tag].present?
@@ -17,16 +21,16 @@ class TagsController < MortimerController
 
     # select tags
     if params[:value].blank?
-      value = tag.present? ? [ tag ] : []
+      value = tag.nil? ? [] : [ tag ]
     else
       ids = params[:value].to_s.split(",").map(&:strip)
-      ids.push tag.id if tag.present?
+      ids.push tag.id unless tag.nil?
       value = Tag.by_tenant.where(id: ids) rescue []
     end
 
     # show the result
     respond_to do |format|
-      format.turbo_stream { render partial: "tags/tags", locals: { tags:, search:, value: } }
+      format.turbo_stream { render partial: "tags/tags", locals: { resource: @resource, field:, tags:, search:, value: } }
     end
   end
 
@@ -49,10 +53,7 @@ class TagsController < MortimerController
     # like "context:category:name"
     def add_tag
       if params[:add_tag].present?
-        tag_info = params[:add_tag].split(":")
-        context = tag_info.size > 1 ? tag_info[0] : ""
-        category = tag_info.size > 2 ? tag_info[1] : ""
-        name = tag_info.last
+        name, category, context = set_tag_from params[:add_tag]
         Tag.find_or_create_by(name: name,
           tenant_id: Current.get_tenant.id,
           context: context,
@@ -61,5 +62,16 @@ class TagsController < MortimerController
       else
         nil
       end
+    end
+
+    def set_tag_from(tag)
+      return [ nil, nil, nil ] if tag.blank?
+      tag = ":%s" % tag if tag.count(":") < 1
+      tag = "%s:%s" % [ get_context, tag ] if tag.count(":") < 2
+      tag.split(":").reverse
+    end
+
+    def get_context
+      params[:context].present? ? params[:context] : ""
     end
 end

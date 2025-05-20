@@ -6,6 +6,7 @@
 
 - add CRUD for tags
 - make caret position work with only 1 char in input
+- allow TimeMaterial to keep tags
 
 ### 19/5/2025
 

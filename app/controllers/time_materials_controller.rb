@@ -213,6 +213,7 @@ class TimeMaterialsController < MortimerController
         :is_free,
         :is_offer,
         :is_separate,
+        :tag_list,
         :task_comment,
         :location_comment
       ])

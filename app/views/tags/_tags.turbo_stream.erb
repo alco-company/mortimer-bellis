@@ -1,6 +1,6 @@
 <%= turbo_stream.replace("#{Current.get_user.id}_tag") do %>
-<%=   render TagComponent.new(resource: Tag.new, 
-        field: :name, 
+<%=   render TagComponent.new(resource: resource, 
+        field: field, 
         resources: tags, 
         value: value,
         search: search, 
