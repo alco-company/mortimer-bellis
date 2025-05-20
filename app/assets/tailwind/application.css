@@ -49,7 +49,7 @@
   }
 
   .mort-btn-secondary {
-    @apply flex justify-center rounded-md bg-sky-400 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-xs hover:bg-sky-500 hover:cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-200;
+    @apply flex justify-center rounded-md bg-sky-400 px-3 py-0.5 text-xs font-semibold leading-6 text-white shadow-xs hover:bg-sky-500 hover:cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-200;
   }
 
   .mort-btn-cancel {

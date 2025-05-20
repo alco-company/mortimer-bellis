@@ -2,6 +2,10 @@
 
 ## CHANGELOG
 
+### 20/5/2025
+
+- add CRUD for tags
+
 ### 19/5/2025
 
 - 14 days work in 3 - part 1

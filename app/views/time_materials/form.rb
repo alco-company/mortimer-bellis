@@ -386,8 +386,8 @@ class TimeMaterials::Form < ApplicationForm
 
   def show_comments
     return unless Current.get_user.should? :allow_comments_on_time_material
-    render TagComponent.new(resource: Tag.new,
-        field: :name,
+    render TagComponent.new(resource: resource,
+        field: :task_comment,
         show_label: true,
         value_class: "mr-5",
         editable: true)

@@ -309,6 +309,7 @@ da:
     punch_cards: Stempelkort
     punch_clocks: Stempelure
     settings: Indstillinger
+    tags: Mærker
     teams: Hold
     tenant: Konto
     tenants: Konti
@@ -437,25 +438,6 @@ da:
 
   activerecord:
     attributes:
-      tenant:
-        created_at: Oprettet den
-        updated_at: Opdateret den
-        name: Kontonavn
-        email: Email adresse - konto ansvarlig
-        pp_identification: Lønbureau ID
-        eu_work_directive: EU regulativ (2003/88/EC)
-        send_state_rrule: Send compliance
-        send_eu_state_rrule: Send EU compliance
-        access_token: API nøgle
-        tax_number: CVR nummer
-        time_zone: Tidszone
-        locale: Sprog
-        country: Land - for at få vist korrekte nationale helligdage
-        logo: Logo (80 x 40)
-        color: Farve
-        license: Licens
-        license_expires_at: Udløber den
-        license_changed_at: Opdateret den
       asset:
         created_at: Oprettet den
         updated_at: Opdateret den
@@ -852,6 +834,8 @@ da:
         name: Mærke
         category: Kategori
         context: Kontekst
+        count: Antal mærkninger
+        created_by: Oprettet af
         taggable_type: Post/record Type
         taggable_id: ID
       task:
@@ -900,6 +884,25 @@ da:
         eu_state: EU regulativ (2003/88/EC) status
         blocked: Blokeret for tidsregistrering
         allowed_ot_minutes: Tilladt overtid i minutter (-1=ingen, 0=ubegrænset)
+      tenant:
+        created_at: Oprettet den
+        updated_at: Opdateret den
+        name: Kontonavn
+        email: Email adresse - konto ansvarlig
+        pp_identification: Lønbureau ID
+        eu_work_directive: EU regulativ (2003/88/EC)
+        send_state_rrule: Send compliance
+        send_eu_state_rrule: Send EU compliance
+        access_token: API nøgle
+        tax_number: CVR nummer
+        time_zone: Tidszone
+        locale: Sprog
+        country: Land - for at få vist korrekte nationale helligdage
+        logo: Logo (80 x 40)
+        color: Farve
+        license: Licens
+        license_expires_at: Udløber den
+        license_changed_at: Opdateret den
       time_material:
         created_at: Oprettet den
         updated_at: Opdateret den

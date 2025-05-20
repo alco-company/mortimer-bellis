@@ -59,6 +59,7 @@ class NavigationComponent < ApplicationComponent
             projects: { title: "projects", url: "/projects", icon: "project", license: "trial ambassador pro" },
             punches: { title: "punches", url: "/punches", icon: "punch", license: "super" },
             # reports: { title: "Reports", url: "/reports", icon: "home" },
+            tags: { title: "tags", url: "/tags", icon: "label" },
             tasks: { title: "tasks", url: "/tasks", icon: "task", license: "super" },
             teams: { title: "teams", url: "/teams", icon: "team", license: "trial ambassador pro" },
             tenants: { title: "tenants", url: "/tenants", icon: "tenant", license: "super" },
