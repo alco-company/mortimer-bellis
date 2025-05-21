@@ -146,12 +146,12 @@ class TimeMaterial < ApplicationRecord
       "tenant_id",
       "time",
       # t.string "about"
-      # "customer_name",
-      # "customer_id",
-      # "project_name",
-      # "project_id",
-      # "product_name",
-      # "product_id",
+      "customer_name",
+      "customer_id",
+      "project_name",
+      "project_id",
+      "product_name",
+      "product_id",
       # t.string "quantity"
       # t.string "rate"
       # t.string "discount"
@@ -175,6 +175,12 @@ class TimeMaterial < ApplicationRecord
       "trip_purpose",
       "odo_from_time",
       "odo_to_time"
+    ]
+    f = f + [
+      "customer_name",
+      "project_name",
+      "product_name",
+      "tag_list"
     ]
     f = f - [
       "date",
@@ -207,16 +213,18 @@ class TimeMaterial < ApplicationRecord
 
   def csv_row(*fields)
     f = fields.dup
-    v = []
-    v << self.customer.name if f.include?("customer_name") && self.customer.present?
-    v << self.project.name if f.include?("project_name") && self.project.present?
-    v << self.product.name if f.include?("product_name") && self.product.present?
     f = f - [
       "customer_name",
       "project_name",
-      "product_name"
+      "product_name",
+      "tag_list"
     ]
+
     v = attributes.values_at(*f)
+    v << self.customer&.name || "" if fields.include?("customer_name") # && self.customer.present?
+    v << self.project&.name || "" if fields.include?("project_name") # && self.project.present?
+    v << self.product&.name || "" if fields.include?("product_name") # && self.product.present?
+    v << self.tag_list if fields.include?("tag_list")
     v
   rescue => e
     UserMailer.error_report(e.to_s, "TimeMaterial#csv_row - failed with params: #{fields}").deliver_later

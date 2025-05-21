@@ -39,6 +39,7 @@ module ExportCsv
       require "csv"
       options = { col_sep: ";", encoding: "utf-8" }
       headers = (csv_header header) || column_names
+      debugger
 
       CSV.generate(headers: true, **options) do |csv|
         csv << headers
