@@ -20,6 +20,13 @@ export default class extends Controller {
     },10)
   }
 
+  blur(event) {
+    // event.preventDefault();
+    this.tagListTarget.classList.add("hidden");
+    this.inputTarget.textContent = "";
+    this.lastSearch = null;
+  }
+
   focus(event) {
     event.preventDefault();
 
@@ -63,11 +70,18 @@ export default class extends Controller {
       case ',':         this.stop_event(event); this.addTag();              break;
       case 'ArrowDown': this.stop_event(event); this.nextTagListItem();     break;
       case 'ArrowUp':   this.stop_event(event); this.nextTagListItem(true); break;
-      case 'Enter':     this.stop_event(event); this.enter_pick();          break;
+      case 'Enter':     this.enter_pick(event);                             break;
       case 'Backspace': this.stop_event(event); this.doBackspace();         break;
       case 'Escape':
-        this.stop_event(event);
-        this.element.querySelector('input[type="text"]').value = '';
+        if (!this.tagListTarget.classList.contains("hidden")) {
+          this.tagListTarget.classList.add("hidden");
+          this.stop_event(event);
+        } else {
+          if (this.inputTarget.textContent.length > 0) {
+            this.inputTarget.textContent = "";
+            this.stop_event(event);
+          } 
+        }
         break;
       default:
         break;
@@ -98,9 +112,10 @@ export default class extends Controller {
     }
   }
 
-  enter_pick() {
+  enter_pick(event) {
     let tag = this.tagListTarget.querySelector(".current-tag-list-item");
     if (tag) {
+      this.stop_event(event); 
       this.selectTag(tag);
     }
   }

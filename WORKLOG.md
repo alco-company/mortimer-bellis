@@ -5,6 +5,7 @@
 ### 21/5/2025
 
 - add customer.name, project.name, product.name to CSV reports
+- fix dropdown on desktop and mobile
 
 ### 20/5/2025
 

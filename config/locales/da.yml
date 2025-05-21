@@ -948,6 +948,7 @@ da:
         trip_purpose: Formål
         odo_from_time: Kørsel start
         odo_to_time: Kørsel stoppet
+        tag_list: Mærker
         task_comment: Opgave kommentar
         location_comment: Arbejdssted kommentar
 

@@ -25,14 +25,14 @@ class TagTest < ApplicationSystemTestCase
   test "the tag to have a lookup container" do
     tags = Tag.all
     output = render TagComponent.new resource: TimeMaterial.new, field: :task_comment, resources: tags, search: "do"
-    assert_match "<div id=\"time_material-task_comment-lookup-container\"", output.to_s
+    assert_match "<ul id=\"time_material-task_comment-lookup-container\"", output.to_s
     assert_match tags(:one).name, output.to_s
   end
 
   test "the tag to have a lookup container with no exact matching tag" do
     tags = Tag.all
     output = render TagComponent.new resource: TimeMaterial.new, field: :task_comment, resources: tags, search: "no_tags"
-    assert_match "<div id=\"time_material-task_comment-lookup-container\"", output.to_s
+    assert_match "<ul id=\"time_material-task_comment-lookup-container\"", output.to_s
     assert_match "Tilføj", output.to_s
   end
 
