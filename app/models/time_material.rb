@@ -146,12 +146,12 @@ class TimeMaterial < ApplicationRecord
       "tenant_id",
       "time",
       # t.string "about"
-      "customer_name",
-      "customer_id",
-      "project_name",
-      "project_id",
-      "product_name",
-      "product_id",
+      # "customer_name",
+      # "customer_id",
+      # "project_name",
+      # "project_id",
+      # "product_name",
+      # "product_id",
       # t.string "quantity"
       # t.string "rate"
       # t.string "discount"
@@ -203,6 +203,24 @@ class TimeMaterial < ApplicationRecord
         or(User[:team_id].in(Team.arel_table.project(:id).where(Team[:name].matches("%#{scope}%"))))
       )
     )
+  end
+
+  def csv_row(*fields)
+    f = fields.dup
+    v = []
+    v << self.customer.name if f.include?("customer_name") && self.customer.present?
+    v << self.project.name if f.include?("project_name") && self.project.present?
+    v << self.product.name if f.include?("product_name") && self.product.present?
+    f = f - [
+      "customer_name",
+      "project_name",
+      "product_name"
+    ]
+    v = attributes.values_at(*f)
+    v
+  rescue => e
+    UserMailer.error_report(e.to_s, "TimeMaterial#csv_row - failed with params: #{fields}").deliver_later
+    []
   end
 
   def self.associations

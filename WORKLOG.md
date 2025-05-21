@@ -2,6 +2,10 @@
 
 ## CHANGELOG
 
+### 21/5/2025
+
+- add customer.name, project.name, product.name to CSV reports
+
 ### 20/5/2025
 
 - add CRUD for tags
