@@ -6,6 +6,7 @@
 
 - add customer.name, project.name, product.name to CSV reports
 - fix dropdown on desktop and mobile
+- fix bug on update and delete TimeMaterial - taggings
 
 ### 20/5/2025
 

@@ -231,6 +231,11 @@ class TimeMaterial < ApplicationRecord
     resources.ordered(field, direction).order(created_at: :desc)
   end
 
+  def remove(step = nil)
+    self.taggings.each { |t| t.destroy! }
+    destroy!
+  end
+
   def list_item(links: [], context:)
     TimeMaterialDetailItem.new(item: self, links: links, id: context.dom_id(self))
   end

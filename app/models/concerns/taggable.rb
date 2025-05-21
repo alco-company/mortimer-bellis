@@ -15,9 +15,9 @@ module Taggable
     end
 
     def tag_list=(value)
-      return if value.blank?
       return unless value.is_a?(String)
       self.taggings.each { |tg| tg.delete }
+      return if value.blank?
       value.split(",").map(&:strip).each do |tagID|
         self.taggings << Tagging.new(taggable: self, tag: Tag.find(tagID), tagger: Current.get_user) unless taggings.where(tag_id: tagID).exists?
       end

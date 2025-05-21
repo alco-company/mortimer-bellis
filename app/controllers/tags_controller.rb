@@ -12,7 +12,29 @@ class TagsController < MortimerController
 
     # find tags
     unless params[:search].blank?
-      tags = Tag.by_tenant.where("name LIKE ?", "%#{params[:search]}%").order("name ASC").limit(10)
+      case true
+      # context:category:name
+      when params[:search].count(":") == 2
+        context, category, name = params[:search].split(":")
+        tags = Tag.by_tenant
+          .where("context like ?", "%#{context}%")
+          .where("category like ?", "%#{category}%")
+          .where("name like ?", "%#{name}%")
+          .order("context, category, name ASC").limit(10)
+
+      # category:name
+      when params[:search].count(":") == 1
+        category, name = params[:search].split(":")
+        tags = Tag.by_tenant
+          .where("category like ?", "%#{category}%")
+          .where("name LIKE ?", "%#{name}%")
+          .order("category, name ASC").limit(10)
+
+      else
+        tags = Tag.by_tenant
+          .where("name LIKE ?", "%#{params[:search]}%")
+          .order("name ASC").limit(10)
+      end
       search = params[:search]
     else
       tags = []
