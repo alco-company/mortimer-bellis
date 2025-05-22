@@ -102,7 +102,7 @@ class TagComponent < ApplicationComponent
     span(contenteditable: true,
       data: {
         tag_target: "input",
-        action: "keydown->tag#keydown keyup->tag#keyup focus->tag#focus blur->tag#blur",
+        action: "keydown->tag#keydown keyup->tag#keyup focus->tag#focus ",
         placeholder: I18n.t("components.tag.#{@field}")
       },
       style: "border: none; outline: none;",
@@ -137,13 +137,12 @@ class TagComponent < ApplicationComponent
     return if @resources.nil? or (@resources.empty? && @search == "")
     ul(
       id: resource_field("%s-%s-lookup-container"),
-      data: { tag_target: "tagList" },
+      data: { tag_target: "tagList", action: "click->tag#pickatju" },
       class:
         "absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-hidden sm:text-sm",
       tabindex: "-1",
       role: "listbox",
-      aria_labelledby: "#{@field}-listbox-label",
-      aria_activedescendant: "listbox-option-3"
+      aria_labelledby: "#{@field}-listbox-label"
     ) do
       comment do
         %(Select option, manage highlight styles based on mouseenter/mouseleave and keyboard navigation. Highlighted: "bg-indigo-600 text-white outline-hidden", Not Highlighted: "text-gray-900")
@@ -173,7 +172,8 @@ class TagComponent < ApplicationComponent
           comment do
             %(Selected: "font-semibold", Not Selected: "font-normal")
           end
-          span(class: "block truncate font-normal") { show_tag_name(tag) }
+          span(
+            class: "block truncate font-normal") { show_tag_name(tag) }
         end
       end
     end

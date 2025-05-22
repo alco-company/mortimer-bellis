@@ -8,6 +8,7 @@
 - fix dropdown on desktop and mobile
 - fix bug on update and delete TimeMaterial - taggings
 - fix taggings on CSV
+- fix click on tag list element
 
 ### 20/5/2025
 

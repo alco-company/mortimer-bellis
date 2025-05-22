@@ -16,16 +16,24 @@ export default class extends Controller {
       if (this.inputTarget.textContent == undefined)
         this.inputTarget.textContent = "";
       this.lastSearch = this.inputTarget.textContent;
-      this.inputTarget.focus();
     },10)
   }
 
-  blur(event) {
-    // event.preventDefault();
-    this.tagListTarget.classList.add("hidden");
-    this.inputTarget.textContent = "";
-    this.lastSearch = null;
-  }
+  // not working since blur will somehow loose the click event
+  // which f*** up the tag selection
+  //
+  // blur(event) {
+  //   console.log("Blur event triggered");
+  //   // event.preventDefault();
+  //   try {
+  //     this.tagListTarget.classList.add("hidden");
+  //     this.inputTarget.textContent = "";
+  //   }
+  //   catch (error) {
+  //     console.log("Tag list not found");
+  //   }
+  //   this.lastSearch = null;
+  // }
 
   focus(event) {
     event.preventDefault();
@@ -71,6 +79,7 @@ export default class extends Controller {
       case 'ArrowDown': this.stop_event(event); this.nextTagListItem();     break;
       case 'ArrowUp':   this.stop_event(event); this.nextTagListItem(true); break;
       case 'Enter':     this.enter_pick(event);                             break;
+      case 'Tab':       this.tab_next(event);                               break;
       case 'Backspace': this.stop_event(event); this.doBackspace();         break;
       case 'Escape':
         if (!this.tagListTarget.classList.contains("hidden")) {
@@ -122,12 +131,18 @@ export default class extends Controller {
 
   pick(event) {
     let tag = event.target;
+
     if (tag.tagName === "SPAN") {
       tag = tag.parentElement;
     }
     if (tag) {
       this.selectTag(tag);
     }
+  }
+
+  tab_next(event) {
+    this.tagListTarget.classList.add("hidden");
+    this.inputTarget.textContent = "";
   }
 
   addTag() {
