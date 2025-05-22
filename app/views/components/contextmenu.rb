@@ -102,23 +102,7 @@ class Contextmenu < Phlex::HTML
       # link2(url: helpers.new_modal_url(modal_form: "import", resource_class: resource_class.to_s.underscore, modal_next_step: "preview"),
       #   action: "click->contextmenu#hide",
       #   label: I18n.t(".import")) if resource_class.to_s == "User"
-      if Current.get_tenant.provided_services.by_name("Dinero").any?
-        link2(url: helpers.new_modal_url(modal_form: "upload_dinero",
-          resource_class: resource_class.to_s.underscore,
-          search: request.query_parameters.dig(:search),
-          modal_next_step: "preview"),
-          action: "click->contextmenu#hide",
-          icon: "ArrowsHunting",
-          label: I18n.t(".upload to ERP")) if resource_class.to_s == "TimeMaterial"
-        link2(url: erp_pull_link,
-          data: { turbo_prefetch: "false" },
-          action: "click->contextmenu#hide",
-          icon: "ArrowsHunting",
-          label: I18n.t(".sync with ERP")) if %(Customer Product Invoice).include? resource_class.to_s
-      else
-        div(class: "block px-3 py-1 text-sm leading-6 text-gray-400") { I18n.t(".upload to ERP") } if resource_class.to_s == "TimeMaterial"
-        div(class: "block px-3 py-1 text-sm leading-6 text-gray-400") { I18n.t(".sync with ERP") } if %(Customer Product Invoice).include? resource_class.to_s
-      end
+      show_ERP_link
       link2 url: helpers.new_modal_url(modal_form: "export",
         all: true,
         resource_class: resource_class.to_s.underscore,
@@ -208,6 +192,40 @@ class Contextmenu < Phlex::HTML
   end
 
   private
+
+    def should_show_ERP_sync_link?
+      (Current.get_tenant.provided_services.by_name("Dinero").any? and
+      Current.get_tenant.license_valid? and
+      %W[trial ambassador pro].include? Current.get_tenant.license and
+      Current.get_user.can?(:sync_with_erp))
+    end
+
+    def show_ERP_link
+      if should_show_ERP_sync_link?
+        link2(url: helpers.new_modal_url(modal_form: "upload_dinero",
+          resource_class: resource_class.to_s.underscore,
+          search: request.query_parameters.dig(:search),
+          modal_next_step: "preview"),
+          action: "click->contextmenu#hide",
+          icon: "ArrowsHunting",
+          label: I18n.t(".upload to ERP")) if resource_class.to_s == "TimeMaterial"
+        link2(url: erp_pull_link,
+          data: { turbo_prefetch: "false" },
+          action: "click->contextmenu#hide",
+          icon: "ArrowsHunting",
+          label: I18n.t(".sync with ERP")) if %(Customer Product Invoice).include? resource_class.to_s
+      else
+        if %(Customer Product Invoice TimeMaterial).include? resource_class.to_s
+          div(class: "flex justify-between px-4 py-2 text-sm text-gray-400") do
+            render_icon "ArrowsHunting"
+            span(class: "text-nowrap pl-2 truncate") { I18n.t(".sync with ERP") } if resource_class.to_s == "TimeMaterial"
+            span(class: "text-nowrap pl-2 truncate") { I18n.t(".sync with ERP") } if %(Customer Product Invoice).include? resource_class.to_s
+            # div(class: "block px-3 py-1 text-sm leading-6 text-gray-400") { I18n.t(".upload to ERP") } if resource_class.to_s == "TimeMaterial"
+            # div(class: "block px-3 py-1 text-sm leading-6 text-gray-400") { I18n.t(".sync with ERP") } if %(Customer Product Invoice).include? resource_class.to_s
+          end
+        end
+      end
+    end
 
     def link2(url:, label:, action: nil, data: { turbo_stream: true }, icon: nil, css: "flex justify-between px-4 py-2 text-sm text-gray-700 hover:text-gray-900")
       data[:action] = action if action

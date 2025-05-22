@@ -2,13 +2,17 @@
 
 ## CHANGELOG
 
+### 22/5/2025
+
+- fix click on tag list element
+- change 'upload til Dinero' to dimmed unless available
+
 ### 21/5/2025
 
 - add customer.name, project.name, product.name to CSV reports
 - fix dropdown on desktop and mobile
 - fix bug on update and delete TimeMaterial - taggings
 - fix taggings on CSV
-- fix click on tag list element
 
 ### 20/5/2025
 

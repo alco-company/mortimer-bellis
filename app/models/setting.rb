@@ -95,6 +95,7 @@ class Setting < ApplicationRecord
       [ "allow_create_project", I18n.t("settings.keys.allow_create_project") ],
       [ "allow_comments_on_time_material", I18n.t("settings.keys.allow_comments_on_time_material") ],
       [ "import_customers_only", I18n.t("settings.keys.import_customers_only") ],
+      [ "sync_with_erp", I18n.t("settings.keys.sync_with_erp") ],
       [ "validate_time_material_done", I18n.t("settings.keys.validate_time_material_done") ],
       [ "show_all_time_material_posts", I18n.t("settings.keys.show_all_time_material_posts") ]
     ]
