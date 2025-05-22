@@ -58,6 +58,7 @@ da:
       allow_create_project: Tillad bruger at oprette projekter på tid og materialer
       allow_comments_on_time_material: Tillad kommentarer på tid og materialer
       import_customers_only: Tillad kun import af kunder
+      sync_with_erp: Synkronisér med ERP
       validate_time_material_done: Valider at alle felter er udfyldt før en t/m post kan markeres som 'færdig'
       limit_time_to_quarters: Begræns tidsforbrug til kvart timer
       show_all_time_material_posts: Vis alle brugeres t/m poster

@@ -6,6 +6,7 @@
 
 - fix click on tag list element
 - change 'upload til Dinero' to dimmed unless available
+- change 'upload til Dinero' to sync w/ERP if provided_service 
 
 ### 21/5/2025
 
