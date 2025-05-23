@@ -260,4 +260,7 @@ https://getgrav.org/blog/macos-sequoia-apache-ssl
 ### Service Objects
 
 * service objects are great for '7 good deeds' programming - https://medium.com/@sulmanweb/service-objects-level-up-your-rails-architecture-8791099656e1 
-* 
+
+### Contenteditable
+
+* Frank M Taylor - https://blog.frankmtaylor.com/2012/01/23/html5-contenteditable-and-css/

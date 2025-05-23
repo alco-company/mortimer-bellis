@@ -6,6 +6,8 @@
 
 - started on building the HTML editor - preparing for the Report Generator
 - adding Resizable panes (resize-x and overflow-auto)
+- local update and skeleton remote update
+- Toggle device preview sizes
 
 ### 22/5/2025
 

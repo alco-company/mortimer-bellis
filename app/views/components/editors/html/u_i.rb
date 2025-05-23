@@ -15,10 +15,32 @@ class Editors::Html::UI < ApplicationComponent
         data: { action: "mousedown->split#startResize" }
       )
 
-      # Preview pane
-      div(id: "preview-pane", class: "flex-1 overflow-auto p-4 bg-gray-50") do
-        h2(class: "text-xl font-bold mb-4") { "Preview" }
-        render Editors::Html::Preview.new
+      # Preview pane wrapper with controls
+      div(data: { controller: "preview" }, class: "flex-1 flex flex-col overflow-auto p-4 bg-gray-50") do
+        # Device toggle
+        div(class: "mb-4 space-x-2") do
+          button(
+            class: "px-3 py-1  cursor-pointer rounded border bg-white hover:bg-gray-100",
+            data: { action: "click->preview#setSize", preview_size_param: "375" }
+          ) { "Mobile" }
+          button(
+            class: "px-3 py-1 cursor-pointer rounded border bg-white hover:bg-gray-100",
+            data: { action: "click->preview#setSize", preview_size_param: "768" }
+          ) { "Tablet" }
+          button(
+            class: "px-3 py-1 cursor-pointer rounded border bg-white hover:bg-gray-100",
+            data: { action: "click->preview#setSize", preview_size_param: "full" }
+          ) { "Desktop" }
+          button(
+            class: "px-3 py-1 rounded border bg-gray-100 hover:bg-gray-100",
+            data: { action: "click->preview#setSize", preview_size_param: "pdf" }
+          ) { "PDF" }
+        end
+
+        # Preview container (width adjusted by JS)
+        div(id: "preview-container", class: "mx-auto border bg-white p-4 shadow", data: { preview_target: "container" }) do
+          render Editors::Html::Preview.new
+        end
       end
     end
   end
