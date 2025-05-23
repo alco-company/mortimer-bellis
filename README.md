@@ -1,15 +1,14 @@
 # README
 
-Mortimer Time & Attendance (MTA) is a lean take on the centuries old 'punch clock'. You get a back office
-with tenants, users, locations, punch_clocks, teams, more, and you get a _front office_ with
-time_material, punch_cards, and punches.
+Mortimer Time & Attendance (MTA) is _your fastest from job done to invoice sent_. You get a back office
+with tenants, users, locations, teams, projects, more, and you get a _front office_ with
+time_material and exporting to CSV, and later PDF.
 
-Later MTA will email you a summary every morning at 05:00 highlighting what is important - employees/users working more than what has been
-agreed with them, employees working less, and employees not been working at all.
+Later MTA will keep notifications for you - pertaining to jobs, someone assigned you, tasks needing approval, more.
 
-Further down the road MTA will allow you to pull essential payroll data when your next payroll data contribution date nears.
+Further down the road MTA will allow you to do integration with a host of ERP systems like Odoo, Acumatica, SAP Business One, more.
 
-But for now - MTA is a simple time and attendance system that will allow you to keep track of your employees' time, and 
+But for now - MTA is a simple time and attendance system that will allow you to keep track of your time, and material spent on jobs, and
 allow you to bill your customers for the time your employees have spent on their projects, and materials used.
 
 ## REFERENCES
@@ -48,9 +47,9 @@ Then there is the `config/credentials.yml.enc` file that you need to configure w
   ```
 
 Rails will come up with the **secret_key_base** for you - you need to add the **microsoft** section with your own **ad_id** and **ad_secret**. You can get these from the Azure portal.
-Remember to copy the secret_key_base value - and paste it into the `.env` file in the root of the project - together with a number of other ENV's, that you will find mentioned in the
-`.kamal/a-template-4-secrets` file. You can copy that file to `.kamal/secrets` and edit it to your setup - perhaps even do a copy to `.kamal/secrets.staging` if you are going to deploy to a staging environment
-(in which case you'll have to edit the `config/deploy.staging.yml` ).
+
+Most static host parameters, passwords, id's and API-keys are kept in `.env` which gets used for setting up deployment environments.
+They are mentioned in `.kamal/a-template-4-secrets` file. You can copy that file to `.kamal/secrets` and edit it to your setup - perhaps even do a copy to `.kamal/secrets.staging` if you are going to deploy to a staging environment (in which case you'll have to edit the `config/deploy.staging.yml` ). In that case you should have a /.env.staging too. The 3 of them goes together like a pair of gloves: `.env, .kamal/secret, config/debug.yml`
 
 ## Deployment
 
