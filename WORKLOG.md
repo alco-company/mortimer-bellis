@@ -2,6 +2,9 @@
 
 ## CHANGELOG
 
+### 23/5/2025
+
+- started on building the HTML editor - preparing for the Report Generator
 ### 22/5/2025
 
 - fix click on tag list element

@@ -56,6 +56,7 @@ module Resourceable
       end
       ctrl = params.dig(:controller).split("/").last
       case ctrl
+      when "editor"; User
       when "modal"; model
       when "otps"; User
       when "invitations"; User

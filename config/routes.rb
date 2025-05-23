@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :editor, controller: "editor", only: [ :index ]
   resources :tags do
     collection do
       get "tags"
