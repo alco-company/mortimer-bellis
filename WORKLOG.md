@@ -5,6 +5,8 @@
 ### 23/5/2025
 
 - started on building the HTML editor - preparing for the Report Generator
+- adding Resizable panes (resize-x and overflow-auto)
+
 ### 22/5/2025
 
 - fix click on tag list element
