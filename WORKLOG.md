@@ -8,6 +8,7 @@
 - adding Resizable panes (resize-x and overflow-auto)
 - local update and skeleton remote update
 - Toggle device preview sizes
+- create structure for editor_documents, _blocks
 
 ### 22/5/2025
 

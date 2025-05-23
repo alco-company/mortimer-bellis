@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_05_17_205051) do
+ActiveRecord::Schema[8.1].define(version: 2025_05_23_172511) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
@@ -126,6 +126,25 @@ ActiveRecord::Schema[8.1].define(version: 2025_05_17_205051) do
     t.integer "tenant_id", null: false
     t.datetime "updated_at", null: false
     t.index ["tenant_id"], name: "index_dashboards_on_tenant_id"
+  end
+
+  create_table "editor_blocks", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.text "data"
+    t.integer "document_id", null: false
+    t.integer "parent_id"
+    t.integer "position"
+    t.string "type"
+    t.datetime "updated_at", null: false
+    t.index ["document_id"], name: "index_editor_blocks_on_document_id"
+  end
+
+  create_table "editor_documents", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.integer "tenant_id", null: false
+    t.string "title"
+    t.datetime "updated_at", null: false
+    t.index ["tenant_id"], name: "index_editor_documents_on_tenant_id"
   end
 
   create_table "event_meta", force: :cascade do |t|
@@ -813,6 +832,8 @@ ActiveRecord::Schema[8.1].define(version: 2025_05_17_205051) do
   add_foreign_key "customers", "tenants"
   add_foreign_key "dashboards", "tenants"
   add_foreign_key "dashboards", "tenants", on_delete: :cascade
+  add_foreign_key "editor_blocks", "documents"
+  add_foreign_key "editor_documents", "tenants"
   add_foreign_key "event_meta", "events"
   add_foreign_key "events", "calendars"
   add_foreign_key "events", "tenants"

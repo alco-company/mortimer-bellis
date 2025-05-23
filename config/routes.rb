@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
+  namespace :editor do
+    resources :blocks
+    resources :documents
+  end
   resources :editor, controller: "editor", only: [ :index ]
   resources :tags do
     collection do
