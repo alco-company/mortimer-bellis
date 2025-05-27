@@ -1,6 +1,12 @@
 # frozen_string_literal: true
 
 class Editors::Html::UI < ApplicationComponent
+  def initialize(document: nil)
+    @document = document
+    # super
+  end
+
+  # This method will render the HTML structure editor UI.
   def view_template
     div(class: "flex h-screen overflow-hidden", data: { controller: "split editor" }) do
       # Editor pane
@@ -39,7 +45,7 @@ class Editors::Html::UI < ApplicationComponent
 
         # Preview container (width adjusted by JS)
         div(id: "preview-container", class: "mx-auto border bg-white p-4 shadow", data: { preview_target: "container" }) do
-          render Editors::Html::Preview.new
+          render Editors::Html::Preview.new document: @document
         end
       end
     end

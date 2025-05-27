@@ -2,14 +2,14 @@
 
 one:
   document: one
-  parent_id: 1
-  type: 
-  data: MyText
+  parent:
+  type: div
+  data: '{ "text": "section" }'
   position: 1
 
 two:
-  document: two
-  parent_id: 1
-  type: 
-  data: MyText
+  document: one
+  parent: one
+  type: p
+  data: '{ "text": "paragraph" }'
   position: 1

@@ -11,4 +11,9 @@ class EditorTest < ApplicationSystemTestCase
     output = render Editors::Html::UI.new
     assert_match "<div\ id=\"preview\-pane\"", output
   end
+
+  test "the editor to have a preview pane with a document" do
+    output = render Editors::Html::UI.new(document: editor_documents(:one))
+    assert_match "<div>section<p>", output
+  end
 end

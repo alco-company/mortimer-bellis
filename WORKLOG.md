@@ -2,6 +2,10 @@
 
 ## CHANGELOG
 
+### 27/5/2025
+
+- build html_serializer for documents and blocks
+
 ### 23/5/2025
 
 - started on building the HTML editor - preparing for the Report Generator

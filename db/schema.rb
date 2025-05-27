@@ -832,7 +832,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_05_23_172511) do
   add_foreign_key "customers", "tenants"
   add_foreign_key "dashboards", "tenants"
   add_foreign_key "dashboards", "tenants", on_delete: :cascade
-  add_foreign_key "editor_blocks", "documents"
+  add_foreign_key "editor_blocks", "editor_documents", column: "document_id"
   add_foreign_key "editor_documents", "tenants"
   add_foreign_key "event_meta", "events"
   add_foreign_key "events", "calendars"

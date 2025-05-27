@@ -1,10 +1,11 @@
 class Editor::Document < ApplicationRecord
+  self.table_name = "editor_documents"
   belongs_to :tenant, class_name: "Tenant", optional: true
   has_many :blocks, -> { where(parent_id: nil).order(:position) }, class_name: "Editor::Block", dependent: :destroy
-  has_many :children, -> { order(:position) }, class_name: "Editor::Block", foreign_key: :parent_id, dependent: :destroy
+  # has_many :children, -> { order(:position) }, class_name: "Editor::Block", foreign_key: :parent_id, dependent: :destroy
 
   accepts_nested_attributes_for :blocks, allow_destroy: true
-  accepts_nested_attributes_for :children, allow_destroy: true
+  # accepts_nested_attributes_for :children, allow_destroy: true
 
   validates :title, presence: true
 
