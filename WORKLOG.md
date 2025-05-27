@@ -6,6 +6,7 @@
 
 - build html_serializer for documents and blocks
 - debounce on fetch to allow for slow input on tags - 500ms
+- fix calc overTime
 
 ### 23/5/2025
 

@@ -107,9 +107,10 @@ export default class extends Controller {
   }
 
   updateOverTime(e) {
-    if (this.productsValue.length >= e.currentTarget.value) {
+    let elem = document.getElementById("time_material_over_time");
+    if (this.productsValue.length >= elem.value) {
       document.getElementById("time_material_rate").value =
-        document.getElementById("time_material_rate").value * (this.productsValue[ e.currentTarget.value ] / this.productsValue[0] );
+        this.hourRate * (this.productsValue[ elem.value ] / this.productsValue[0] );
     }
   }
 
@@ -163,7 +164,6 @@ export default class extends Controller {
           let tmr = document.getElementById("time_material_rate");
           tmr.value = this.empty_value( tmr, document.querySelector("#time_material_project_id").dataset.lookupProjectHourlyRate);
           this.updateOverTime( document.getElementById("time_material_over_time") );
-
         }        
       }
     }
@@ -187,6 +187,7 @@ export default class extends Controller {
   }
 
   empty_value(e, value = 0.0) {
+    console.log(`hourRate: ${this.hourRate}`);
     if (
       e.value === "" ||
       e.value == 0 ||
@@ -195,6 +196,7 @@ export default class extends Controller {
       value != 0.0
     ) {
       this.hourRate = value;
+      console.log(`hourRate updated: ${this.hourRate}`);
       return value;
     }
     return e.value
