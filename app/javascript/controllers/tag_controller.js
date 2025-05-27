@@ -11,6 +11,28 @@ export default class extends Controller {
 
   lastSearch = null;
 
+  DEBOUNCE_TIMEOUT = 500; // milliseconds
+
+  debouncePromise(fn, time) {
+    let timeout;
+    return (...args) => {
+      return new Promise((resolve, reject) => {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => {
+          try {
+            resolve(fn(...args));
+            console.log(args)
+          } catch (error) {
+            reject(error);
+          }
+        }, time);
+      }
+      );
+    };
+  }
+
+  debouncedLookup = this.debouncePromise(this.lookup.bind(this), this.DEBOUNCE_TIMEOUT);
+
   connect() {
     setTimeout(() => {
       if (this.inputTarget.textContent == undefined)
@@ -68,7 +90,8 @@ export default class extends Controller {
     switch (event.key) {
       
       default:
-        this.lookup(event.target.textContent);
+        // this.lookup(event.target.textContent);
+        this.debouncedLookup(event.target.textContent);
         break;
     }
   }
