@@ -69,6 +69,7 @@
 
 class TimeMaterial < ApplicationRecord
   include Tenantable
+  include Taggable
   include TimeMaterialStateable
   include Settingable
   include Unitable
@@ -87,6 +88,16 @@ class TimeMaterial < ApplicationRecord
   scope :by_about, ->(about) { where("about LIKE ?", "%#{about}%") if about.present? }
   scope :by_exact_user, ->(user) { where("user_id= ?", "%#{user.id}%") if user.present? }
   scope :weekdays, -> { where("cast(strftime('%w', wdate) as integer) BETWEEN 1 AND 5") }
+  scope :billed, -> { where("is_invoice = ?", 1).where(state: [ :done, :pushed_to_erp ]) }
+  scope :drafted, -> { where(state: [ :draft, :active, :paused ]) }
+  scope :by_state, ->(state) { where("state = ?", state) if state.present? }
+  scope :by_customer, ->(customer) { where("customer_id = ?", customer.id) if customer.present? }
+  scope :by_project, ->(project) { where("project_id = ?", project.id) if project.present? }
+  scope :by_product, ->(product) { where("product_id = ?", product.id) if product.present? }
+  scope :by_date, ->(date) { where("wdate = ?", date) if date.present? }
+
+  # # SQLite
+  # scope :weekdays_only, -> { where("strftime('%w', created_at) BETWEEN 1 AND 5") }
 
   # # PostgreSQL
   # scope :weekdays_only_in_timezone, ->(timezone) {
@@ -165,6 +176,12 @@ class TimeMaterial < ApplicationRecord
       "odo_from_time",
       "odo_to_time"
     ]
+    f = f + [
+      "customer_name",
+      "project_name",
+      "product_name",
+      "tag_list"
+    ]
     f = f - [
       "date",
       "paused_at",
@@ -194,12 +211,37 @@ class TimeMaterial < ApplicationRecord
     )
   end
 
+  def csv_row(*fields)
+    f = fields.dup
+    f = f - [
+      "customer_name",
+      "project_name",
+      "product_name",
+      "tag_list"
+    ]
+
+    v = attributes.values_at(*f)
+    v << self.customer&.name || "" if fields.include?("customer_name") # && self.customer.present?
+    v << self.project&.name || "" if fields.include?("project_name") # && self.project.present?
+    v << self.product&.name || "" if fields.include?("product_name") # && self.product.present?
+    v << self.tag_list if fields.include?("tag_list")
+    v
+  rescue => e
+    UserMailer.error_report(e.to_s, "TimeMaterial#csv_row - failed with params: #{fields}").deliver_later
+    []
+  end
+
   def self.associations
     [ [ Customer, Project, Product ], [] ]
   end
 
   def self.set_order(resources, field = :wdate, direction = :desc)
     resources.ordered(field, direction).order(created_at: :desc)
+  end
+
+  def remove(step = nil)
+    self.taggings.each { |t| t.destroy! }
+    destroy!
   end
 
   def list_item(links: [], context:)
@@ -285,6 +327,14 @@ class TimeMaterial < ApplicationRecord
       [ 1, I18n.t("time_material.overtimes.50percent") ],
       [ 2, I18n.t("time_material.overtimes.100percent") ]
     ]
+  end
+
+  def self.overtimes_products
+    h = []
+    Current.get_user.tenant.time_products.each do |p|
+      h << p.base_amount_value.to_s
+    end
+    h.to_json
   end
 
   def self.trip_purposes
@@ -430,34 +480,57 @@ class TimeMaterial < ApplicationRecord
       self.over_time = 0
     end
     if resource_params[:state].present? &&
-      resource_params[:state] == "done" &&
-      Current.get_user.should?(:validate_time_material_done)
+      resource_params[:state] == "done"
 
-      if resource_params[:discount].present?
-        resource_params[:discount] = case resource_params[:discount]
-        when "0"; ""
-        when "0%"; 0
-        when "100%"; 100
-        else resource_params[:discount].to_f
+      resource_params = create_customer(resource_params)
+      resource_params = create_project(resource_params)
+      if Current.get_user.should?(:validate_time_material_done)
+        if resource_params[:discount].present?
+          resource_params[:discount] = case resource_params[:discount]
+          when "0"; ""
+          when "0%"; 0
+          when "100%"; 100
+          else resource_params[:discount].to_f
+          end
         end
-      end
 
-      if resource_params[:played].present?
-        resource_params.delete(:played)
-        return true
+        if resource_params[:played].present?
+          resource_params.delete(:played)
+          return true
+        end
+        unless pushable?
+          errors.add(:base, errors.full_messages.join(", "))
+          return false
+        end
+        return false unless valid?
       end
-      unless pushable?
-        errors.add(:base, errors.full_messages.join(", "))
-        return false
-      end
-      return resource_params if valid?
-      false
-    else
-      resource_params
     end
+    resource_params
   rescue => e
     # debug-ger
     UserMailer.error_report(e.to_s, "TimeMaterial#prepare_tm - failed with params: #{resource_params}").deliver_later
     false
+  end
+
+  def create_customer(resource_params)
+    return resource_params unless Current.get_user.can?(:allow_create_customer)
+    resource_params[:customer_id] = "" if resource_params[:customer_name].blank?
+    if (resource_params[:customer_id].present? && (Customer.find(resource_params[:customer_id]).name != resource_params[:customer_name])) ||
+      resource_params[:customer_name].present? && resource_params[:customer_id].blank?
+      customer = Customer.find_or_create_by(tenant: Current.get_tenant, name: resource_params[:customer_name], is_person: true)
+      resource_params[:customer_id] = customer.id
+    end
+    resource_params
+  end
+
+  def create_project(resource_params)
+    return resource_params unless Current.get_user.can?(:allow_create_project)
+    resource_params[:project_id] = "" if resource_params[:project_name].blank?
+    if (resource_params[:project_id].present? && (Project.find(resource_params[:project_id]).name != resource_params[:project_name])) ||
+      resource_params[:project_name].present? && resource_params[:project_id].blank?
+      project = Project.find_or_create_by(tenant: Current.get_tenant, name: resource_params[:project_name], customer_id: resource_params[:customer_id])
+      resource_params[:project_id] = project.id
+    end
+    resource_params
   end
 end

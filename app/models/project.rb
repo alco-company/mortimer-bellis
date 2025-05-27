@@ -86,9 +86,14 @@ class Project < ApplicationRecord
       lookup_target: "item",
       lookup_customer_id: customer.id,
       lookup_customer_name: customer.name,
+      lookup_project_hourly_rate: hourly_rate_unset? ? customer.hourly_rate : hourly_rate,
       value: id,
       display_value: name,
       action: "keydown->lookup#optionKeydown click->lookup#selectOption"
     }
+  end
+
+  def hourly_rate_unset?
+    hourly_rate.nil? || hourly_rate == 0.0
   end
 end

@@ -133,3 +133,7 @@ gem "anthropic", "~> 0.4.0"
 # gem "mailjet", "~> 1.8"
 
 gem "mailersend-ruby", "~> 3.0"
+
+# gem "turnstiled", "~> 0.1.14"
+
+gem "positioning"

@@ -2,6 +2,193 @@
 
 ## CHANGELOG
 
+### 27/5/2025
+
+- build html_serializer for documents and blocks
+- debounce on fetch to allow for slow input on tags - 500ms
+- fix calc overTime
+
+### 23/5/2025
+
+- started on building the HTML editor - preparing for the Report Generator
+- adding Resizable panes (resize-x and overflow-auto)
+- local update and skeleton remote update
+- Toggle device preview sizes
+- create structure for editor_documents, _blocks
+
+### 22/5/2025
+
+- fix click on tag list element
+- change 'upload til Dinero' to dimmed unless available
+- change 'upload til Dinero' to sync w/ERP if provided_service 
+
+### 21/5/2025
+
+- add customer.name, project.name, product.name to CSV reports
+- fix dropdown on desktop and mobile
+- fix bug on update and delete TimeMaterial - taggings
+- fix taggings on CSV
+
+### 20/5/2025
+
+- add CRUD for tags
+- make caret position work with only 1 char in input
+- allow TimeMaterial to keep tags
+
+### 19/5/2025
+
+- 14 days work in 3 - part 1
+- try to show dropdown on mobile
+- fix bug on Enter and tap
+- hide PDF feature - make gray
+
+### 17/5/2025
+
+- use trial for free first 30 days
+- fix spelling error
+
+### 16/5/2025
+
+- export CSV w/selected fields
+- prepare DB for tags
+- make PDF work - kind'a
+- make customer setup for Dinero work
+- make customer setup for Dinero work 2
+- drop contextmenu PDF
+- fix instructions for time_material export
+
+### 15/5/2025
+
+- add 2 fields to time_material for task and location comment
+
+### 14/5/2025
+
+- set country_key as select - and validate
+- prepare system_test for login_as using has_secure_password not Devise
+- add '?' to integration organizationID - https://mortimer.pro/dk/vejledninger/dinerointegration
+- change argument from cls to css for Icons::*
+- fill in Time/Time50/Time100 on Dinero integration - and '1000' 
+- don't write price if blank on project / customer - and link user and price
+- don't delete using export!
+
+### 13/5/2025
+
+- allow free licensees to use projects
+
+### 9/5/2025
+
+- fixed foreign key 'for now' (dropped to sqlite shell and 'delete from tenants...')
+- better validate of customer for upload to Dinero
+- issue with contacts vs customers ^^
+- add modal with choice on export; archive & report & column select - UI part only
+
+### 8/5/2025
+
+- expire free license after 30.days
+- make calls to time products more resilient
+- fake products if necessary
+- allow task calls to break free of turbo_frame
+- update tasks list on dashboard when done
+- FOREIGN KEY CONSTRAINT on KillTenantJob - debug
+
+### 7/5/2025
+
+- ambassador/pro - ingen arbejdssteder, kiosker, stemplinger, opgaver
+- essential = email support / pro det samme som essential
+- free tier = pro
+- finish up navigation
+- don't autoexpan menu when switch to dashboard
+- make user form great again
+- allow user på create customers & projects on time_material form
+- do not overwrite comment when adding to invoice
+- allow user to upload customers - if they do not exist
+- allow user to upload products - if they do not exist - and create 3 products for new tenants
+- forgot to add transmit_log to product
+- narrow new_entries 'by_tenant'
+- set integer/double values on customer/product
+- set product rates in order by value
+- set rates on new time_material post
+
+### 6/5/2025
+
+- turbolink to the tenants/1/edit + navigation fix
+- ass fix + added registered_minutes to time_material
+- bug in stats
+- wrong range in stats
+- overtime not presented when selected
+- allow user to set hour_rate on project, and customer
+
+### 5/5/2025
+
+- finish up the dashboard
+- don't give up the missing background sync
+
+### 2/5/2025
+
+- add turnstiled gem for counter 'attack of the bots'
+- buy_product small refactor
+- pause turnstiled
+- new dashboard - sketch
+
+### 1/5/2025
+
+- no keyboard shortcut icon on mobile
+- converting unpermitted params failing
+- link to contact form on mortimer.pro
+- align buy product options properly
+- show open tasks like reflect
+- make invitations page more resilient to input
+- when no open tasks menu_controller.js misses 'progress' target
+
+### 30/4/2025
+
+- fix two-factor-app (entraID)
+- fix users/invitations/edit - accepting invitation
+- favicon as prod today
+- sync as arrows-hunting on context + provided_service
+
+### 29/4/2025
+
+- forgot a few controllers pert. to authorize
+- fix list bottom blank "bar"
+- fix missing params[:url]
+- run rubocop a and brakeman repeatedly (33 ignores only half decent)
+- upgrade Brakeman
+
+### 28/4/2025
+
+- allow user to 'auto' create projects, customers on time_material cards
+- fix menu (show all if info@mortimer.pro)
+- don't show project on license free form
+- authorize all controllers
+- comment 'archive' as menu option for now
+
+### 25/4/2025
+
+- try to set asset_path correct on images
+- try to set asset_path correct on images 2
+- fixing (No route matches [GET] "/apple-touch-icon.png"):
+- fix 302 on GET "/modal/new?modal_form=keyboard&resource_class=page" - debug
+- fix 302 on GET "/modal/new?modal_form=keyboard&resource_class=page" - debug 2
+- fix error on keyboard modal
+- strategy for informing users on updates - https://whimsical.com/development-production-cycle-NDRwNWV3TGE4R2cFGkMRtK
+
+### 24/4/2025
+
+- add keyboard shotcuts modal help
+- refactor navigation sidebar
+- don't use meta-c for calls/new!
+- no fat border on flash'es
+- /users/invitations/new
+- 2FA hangs as task on dashboard
+- activate notifications link dead
+- only show buy_product on tenant
+- invitations look for , and space
+- send account welcome email when email confirmed
+- video record setting up integration to Dinero
+- 4-5 basic videos with basic features
+- allow admins access to more admin menu items
+- show punch in/out/break if license == ambassador
 
 ### 23/4/2025
 

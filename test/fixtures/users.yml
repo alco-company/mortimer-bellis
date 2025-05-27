@@ -9,7 +9,7 @@ one:
   team: one
   email: "john@doe.com"
   global_queries: false
-  encrypted_password: <%= Devise::Encryptor.digest(User, ENV['TEST_PASSWORD']) %>
+  password_digest: <%= default_password_digest %>
   confirmed_at: <%= Time.zone.now - 1.hour %>
   confirmation_sent_at: <%= Time.zone.now - 2.hours %>
   locale: "da"
@@ -27,7 +27,7 @@ two:
   tenant: two
   team: two
   email: "jane@doe.com"
-  encrypted_password: <%= Devise::Encryptor.digest(User, ENV['TEST_PASSWORD']) %>
+  password_digest: <%= default_password_digest %>
   confirmed_at: <%= Time.zone.now - 1.hour %>
   confirmation_sent_at: <%= Time.zone.now - 2.hours %>
   locale: "en"
@@ -45,7 +45,7 @@ superadmin:
   team: one
   email: "john2@doe.com"
   global_queries: true
-  encrypted_password: <%= Devise::Encryptor.digest(User, ENV['TEST_PASSWORD']) %>
+  password_digest: <%= default_password_digest %>
   confirmed_at: <%= Time.zone.now - 1.hour %>
   confirmation_sent_at: <%= Time.zone.now - 2.hours %>
   locale: "da"
@@ -63,7 +63,7 @@ no_dinero_authorization:
   team: no_dinero_authorization
   email: "no_dinero_authorization@doe.com"
   global_queries: true
-  encrypted_password: <%= Devise::Encryptor.digest(User, ENV['TEST_PASSWORD']) %>
+  password_digest: <%= default_password_digest %>
   confirmed_at: <%= Time.zone.now - 1.hour %>
   confirmation_sent_at: <%= Time.zone.now - 2.hours %>
   locale: "da"

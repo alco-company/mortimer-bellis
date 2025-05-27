@@ -1,8 +1,8 @@
 class Icons::ChevronLeft < Phlex::HTML
   attr_accessor :cls
 
-  def initialize(cls:  "h-5 w-5 text-gray-400 ", id: "chevron-left")
-    @cls = cls
+  def initialize(css:  "h-5 w-5 text-gray-400 ", id: "chevron-left")
+    @cls = css
     @id = id
   end
 

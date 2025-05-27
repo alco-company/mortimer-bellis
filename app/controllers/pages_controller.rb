@@ -1,5 +1,6 @@
 class PagesController < MortimerController
   skip_before_action :require_authentication, only: [ :show, :help ]
+  skip_before_action :authorize, only: [ :show, :help ]
 
   def show
     Current.user ?
@@ -16,9 +17,5 @@ class PagesController < MortimerController
     # Only allow a list of trusted parameters through.
     def resource_params
       params.expect(page: [ :slug, :title, :content ])
-    end
-
-    def authorize
-      redirect_to root_path, alert: t(:unauthorized) unless current_user.superadmin?
     end
 end

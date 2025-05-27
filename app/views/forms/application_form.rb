@@ -48,10 +48,11 @@ class ApplicationForm < Superform::Rails::Form
     return unless user.admin? or user.superadmin?
     div(class: "mt-6 p-4 rounded-md shadow-xs bg-purple-100") do
       h2(class: "font-bold text-2xl text-purple-800") { t("users.edit_profile.buy_product.title") }
+      p(class: "text-sm text-purple-600") { t("users.edit_profile.buy_product.description", discord: "https://discord.gg/kzkrrCJUuG").html_safe }
       if user.superadmin?
         row field(:license).enum_select(Tenant.licenses.keys, class: "mort-form-select")
-        row field(:license_expires_at).date(class: "mort-form-date"), "mort-field my-0"
-        row field(:license_changed_at).date(class: "mort-form-date"), "mort-field my-0"
+        row field(:license_expires_at).date(class: "mort-form-date"), "mort-field"
+        view_only field(:license_changed_at).date(class: "mort-form-date"), "mort-field my-4"
       end
       render TenantLicense.new
     end

@@ -12,3 +12,4 @@ pin "el-transition" # @0.0.7
 # pin "pulltorefreshjs" # @0.1.22
 pin "notifications"
 pin "custom_stream_actions"
+pin_all_from "app/javascript/custom", under: "custom"

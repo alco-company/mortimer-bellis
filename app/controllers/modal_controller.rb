@@ -14,6 +14,7 @@ class ModalController < MortimerController
     when "employee"; process_employee_new
     when "punch_card"; process_punch_card_new
     when "tenant"; process_tenant_new
+    when "page"; process_help_new
     else; process_other_new
     end
   end
@@ -38,9 +39,41 @@ class ModalController < MortimerController
     end
   end
 
+  # Parameters: {
+  #   "authenticity_token"=>"[FILTERED]",
+  #   "modal_form"=>"export",
+  #   "resource_class"=>"TimeMaterial",
+  #   "step"=>"setup",
+  #   "all"=>"true",
+  #   "id"=>"390",
+  #   "search"=>"",
+  #   "url"=>"https://localhost:3000/modal",
+  #   "archive_after"=>"0"
+  #   "file_type"=>"csv",
+  #   "export_about"=>"on",
+  #   "export_quantity"=>"on",
+  #   "export_rate"=>"on",
+  #   "export_discount"=>"on",
+  #   "export_state"=>"on",
+  #   "export_is_invoice"=>"on",
+  #   "export_is_free"=>"on",
+  #   "export_is_offer"=>"on",
+  #   "export_is_separate"=>"on",
+  #   "export_comment"=>"on",
+  #   "export_unit_price"=>"on",
+  #   "export_unit"=>"on",
+  #   "export_time_spent"=>"on",
+  #   "export_over_time"=>"on",
+  #   "export_registered_minutes"=>"on",
+  #   "export_task_comment"=>"on",
+  #   "export_location_comment"=>"on",
+  #   "button"=>""
+  # }
   def update
-    case resource_class.to_s.underscore
-    when "event"; process_event_update
+    # case resource_class.to_s.underscore
+    case params[:modal_form]
+    when "export"; process_export
+    # when "event"; process_event_update
     else; process_other_update
     end
   end
@@ -55,11 +88,11 @@ class ModalController < MortimerController
 
     def set_vars
       @modal_form = params[:modal_form]
-      @attachment = params[:attachment]
-      @step = params[:step]
-      @url = params[:url] || resources_url
+      @attachment = params[:attachment] rescue nil
+      @step = params[:step] || "accept" rescue ""
+      @url = params[:url] || resources_url rescue root_url
       @view = params[:view] || "month"
-      @search = params[:search]
+      @search = params[:search] || ""
     end
 
     #
@@ -103,6 +136,9 @@ class ModalController < MortimerController
 
     def process_tenant_new
       @step = "get_pay_link"
+    end
+
+    def process_help_new
     end
 
     def process_other_new
@@ -203,7 +239,7 @@ class ModalController < MortimerController
 
     def process_time_material_create
       ids = @filter.filter != {} || @batch&.batch_set? || @search.present? ? resources.pluck(:id) : nil
-      DineroUploadJob.perform_later tenant: Current.tenant, user: Current.user, date: Date.current, provided_service: "Dinero", ids: ids
+      DineroUploadJob.perform_later(tenant: Current.tenant, user: Current.user, date: Date.current, provided_service: "Dinero", ids: ids)
       flash.now[:success] = t("time_material.uploading_to_erp")
       render turbo_stream: [
         turbo_stream.close_remote_modal { },
@@ -222,6 +258,14 @@ class ModalController < MortimerController
       in { ok:    Event   => rc };  redirect_to calendar_url(rc.calendar, date: @date, view: @view) and return
       in { ok:    String => msg };        # flash the string
       in { error: String  => msg };       # return event form with error
+      end
+    end
+
+    def process_export
+      selected_fields = params.select { |k, v| k.start_with?("export_") && v == "on" }.keys.map { |k| k.gsub("export_", "") }
+      case params[:file_type]
+      when "pdf"; send_pdf
+      when "csv"; send_data resource_class.to_csv(@resources, selected_fields), filename: "#{resource_class.name.pluralize.downcase}-#{Date.today}.csv"
       end
     end
 
@@ -280,7 +324,7 @@ class ModalController < MortimerController
         end
       rescue => e
         say "ERROR on destroy: #{e.message}"
-        redirect_to resources_url, status: 303, error: t("something_went_wrong", error: e.message)
+        redirect_to show_dashboard_dashboards_url, status: 303, error: t("something_went_wrong", error: e.message)
       end
     end
 

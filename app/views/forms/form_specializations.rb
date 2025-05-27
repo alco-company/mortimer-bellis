@@ -28,12 +28,19 @@ module FormSpecializations
     end
 
     def row(component, outer_class = "mort-field", label_suffix = "")
-      div(class: outer_class) do
+      div(class: outer_class, data: { controller: "input" }) do
         render(component.field.label) do
-          plain I18n.t("activerecord.attributes.#{component.field.parent.key}.#{component.field.key}")
-          plain label_suffix.html_safe
-          # span(class: "text-sm font-light") do
-          # end
+          div(class: "relative") do
+            span { I18n.t("activerecord.attributes.#{component.field.parent.key}.#{component.field.key}") }
+            span { label_suffix.html_safe }
+            if component.send(:attributes).keys&.include?(:help)
+              button(type: "button", data: { action: "click->input#help", src: component.send(:attributes)[:help] }, class: "absolute inset-y-0 right-0 -top-1 flex items-center") do
+                render Icons::Help.new css: "h-5 w-5 text-gray-400 rotate-15 hover:rotate-30 hover:text-gray-600"
+              end
+            end
+            # span(class: "text-sm font-light") do
+            # end
+          end
         end unless component.class == ApplicationForm::HiddenField
         @editable ?
           render(component) :
@@ -67,6 +74,7 @@ module FormSpecializations
       when /tenant_id$/; plain(model&.tenant&.name)
       when /team_id$/; div(class: "flex") { link_to(model&.team&.name, team_url(model&.team), class: "flex place-items-center truncate mort-btn-secondary") } # plain(model&.team.name)
       when /user_id$/;  div(class: "flex") { link_to(model&.user&.name, user_url(model&.user), class: "flex place-items-center truncate mort-btn-secondary") } # plain(model&.user&.name)
+      when /created_by$/;  div(class: "flex") { link_to(model&.created_by&.name, user_url(model&.created_by), class: "flex place-items-center truncate mort-btn-secondary") } # plain(model&.user&.name)
       when /customer_id$/; div(class: "flex") { link_to(model&.customer&.name, customer_url(model&.customer), class: "flex place-items-center truncate mort-btn-secondary") }
       when /project_id$/;  div(class: "flex") { link_to(model&.project&.name, project_url(model&.project), class: "flex place-items-center truncate mort-btn-secondary") }
       when /product_id$/; div(class: "flex") { link_to(model&.product&.name, product_url(model&.product), class: "flex place-items-center truncate mort-btn-secondary") }

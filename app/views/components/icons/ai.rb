@@ -1,19 +1,19 @@
 class Icons::Ai < Phlex::HTML
   attr_accessor :cls
 
-  def initialize(cls: "h-6")
-    @cls = cls
+  def initialize(css: "h-6")
+    @cls = css
   end
 
   def view_template
     svg(
       class: cls,
-      # width: %(800px), 
-      # height: %(800px), 
-      viewbox: "0 0 512 512", 
-      version: "1.1", 
-      # xmlns: %(http://www.w3.org/2000/svg), 
-      # xmlns:xlink: %(http://www.w3.org/1999/xlink)
+      # width: %(800px),
+      # height: %(800px),
+      viewbox: "0 0 512 512",
+      version: "1.1",
+        # xmlns: %(http://www.w3.org/2000/svg),
+        # xmlns:xlink: %(http://www.w3.org/1999/xlink)
       ) { |s|
       s.title { %(ai) }
       s.g(id: "Page-1", stroke: "none", stroke_width: "1", fill: "none", fill_rule: "evenodd") {

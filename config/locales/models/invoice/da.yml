@@ -22,7 +22,7 @@ da:
       post: Fakturaen blev slettet
 
     erp_pull:
-      erp_pull: Henter fakturaer fra Dinero i baggrunden - dette kan tage lidt tid; opdatér siden om lidt
+      erp_pull: Henter fakturaer fra ERP i baggrunden - dette kan tage lidt tid; opdatér siden om lidt
 
     form:
       new: Ny faktura

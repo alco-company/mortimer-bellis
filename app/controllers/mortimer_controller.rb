@@ -1,4 +1,6 @@
 class MortimerController < BaseController
+  # defined in the authorize concern
+  before_action :authorize
   #
   # defined in the batch_actions concern
   before_action :set_batch, only: %i[ new index destroy] # new b/c of modal
@@ -9,6 +11,7 @@ class MortimerController < BaseController
   before_action :set_resources, only: %i[ index destroy ]
   before_action :set_resources_stream
 
+  include Authorize
   include Resourceable
   include BatchActions
   include DefaultActions

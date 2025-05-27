@@ -6,7 +6,7 @@ da:
         title: "Betal for Mortimer"
         instruction: "Vælg mellem Essential, Pro eller Ambassador - og markér om du vil betale én gang om året (kun relevant for Essential og Pro)"
         pick_a_license: "Vælg en licens"
-        free_license_description: "Du bruger lige nu Mortimer med en gratis licens, som kun giver mulighed for at oprette en konto, og oprette brugere, men ikke bruge systemet."
+        free_license_description: "Du bruger lige nu Mortimer med en gratis licens, som kun giver mulighed for at oprette en konto, og én bruger, registrere tid og materialer, og eksportere til CSV, men ikke bruge integrationer, hold, og projekter."
         accept: "Det er mit valg"
         payment_successfully_confirmed: "Betalingen blev bekræftet"
         payment_not_confirmed: "Betalingen blev ikke bekræftet"
@@ -16,7 +16,7 @@ da:
         products: produkter
         csv_data_export: CSV eksport
         e_mail_support: email support
-        essential_price: € 1/bruger/mdr
+        essential_price: € 2/bruger/mdr
         all_from_essential: Alt fra Essential
         projects: projekter
         teams: hold
@@ -24,7 +24,7 @@ da:
         microsoft_sso: Microsoft SSO
         dinero_integration: Dinero integration
         account_support: account support
-        pro_price: € 3/bruger/mdr
+        pro_price: € 4/bruger/mdr
         apply_for_ambassador: Markér denne licens, hvis du gerne vil være ambassadør for Mortimer - så hører du fra os.
         few_seats_left: Få pladser tilbage
         annual_billing: Betal én gang om året
@@ -45,7 +45,7 @@ da:
         preheader: "Velkomst email fra  M O R T I M E R  - måske Europa's enkleste og billigste tidsregistreringssystem"
         subject: Velkommen til M O R T I M E R
         hello: Velkommen %{name},
-        we_created_an_tenant: "Vi har oprettet en konto til jer på  M O R T I M E R.<br>For at logge på, skal du <a href='%{url}'>klikke her</a> og bruge de nedenstående oplysninger.<p>Du kan rette adgangskoden (faktisk vil vi gerne hvis du gør det), når du er logget korrekt ind:"
+        we_created_an_tenant: "Vi har oprettet en konto til jer på  M O R T I M E R.<br>For at logge på, skal du <a href='https://app.mortimer.pro'>klikke her</a> og den nedenstående oplysning.<p>Du bør rette adgangskoden, når du er logget korrekt ind (faktisk vil vi endnu hellere at du straks efter første login vælger at føje 2FA til din konto):"
         confirmation_instruction: "Brugernavn: %{email}"
         ignore: "Hvis du ikke har bedt om en konto, kan du ignorere denne e-mail, og så beklager vi ulejligheden."
         regards: Med venlig hilsen,
@@ -63,6 +63,7 @@ da:
   tenants:
     validation_errors: Der er fejl i det indtastede
     licenses:
+      trial: Prøve
       free: Gratis
       ambassador: Ambassadør
       essential: Essential

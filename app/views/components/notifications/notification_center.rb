@@ -60,7 +60,7 @@ class Notifications::NotificationCenter < ApplicationComponent
                       ) do
                         span(class: "absolute -inset-2.5")
                         span(class: "sr-only") { "Close panel" }
-                        render Icons::Cancel.new cls: "h-6 w-6 text-gray-400"
+                        render Icons::Cancel.new css: "h-6 w-6 text-gray-400"
                       end
                     end
                   end

@@ -1,3 +1,7 @@
+<% content_for :head do %>
+  <%#= turnstile_javascript_tag %>  
+<% end %>
+
 <%= turbo_frame_tag "new_registration" do %>
   <div class="mx-auto w-72 sm:w-96">
     <div class="flex flex-shrink-0 items-center">
@@ -42,6 +46,8 @@
         <%= f.label :password_confirmation %><br />
         <%= f.password_field :password_confirmation, placeholder: I18n.t("users.reenter_password"), class: "mort-form-text" %>
       </div>
+
+      <%#= turnstile_tag %>
 
       <div class="actions mort-field">
         <%= f.submit t(".create"), class: "mort-btn-primary" %>

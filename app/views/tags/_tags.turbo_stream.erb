@@ -1,0 +1,12 @@
+<%= turbo_stream.replace("#{Current.get_user.id}_tag") do %>
+<%=   render TagComponent.new(resource: resource, 
+        field: field, 
+        resources: tags, 
+        value: value,
+        search: search, 
+        show_label: true, 
+        field_class: "mort-form-text", 
+        label_class: "text-red-500", 
+        value_class: "mr-5", 
+        editable: true) %>
+<% end %>

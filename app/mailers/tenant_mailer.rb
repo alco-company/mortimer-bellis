@@ -3,11 +3,9 @@ class TenantMailer < ApplicationMailer
   #
   def welcome
     @rcpt =  email_address_with_name params[:tenant].email, params[:tenant].name
-    locale = params[:tenant].locale
-    @pw = params[:pw]
     @tenant = params[:tenant]
+    locale = @tenant.locale
     @resource = @tenant.users.first
-    @url = new_users_session_url
     I18n.with_locale(locale) do
       mail to: @rcpt,
         subject: I18n.t("tenant.mailer.welcome.subject"),

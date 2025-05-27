@@ -30,13 +30,13 @@ class TimeMaterialButtonComponent < ApplicationComponent
   def start_timer_button
     button_to(time_materials_url, class: "mort-btn-start-time-material rounded-full w-14 h-14 flex items-center") do
       input(type: "hidden", name: "play", value: "start")
-      @play ? render(Icons::Play.new cls: "h-8 w-8 text-white ") : render(Icons::Pause.new cls: "h-8 w-8 text-white")
+      @play ? render(Icons::Play.new css: "h-8 w-8 text-white ") : render(Icons::Pause.new css: "h-8 w-8 text-white")
     end
   end
 
   def add_time_material_button
     link_to(new_time_material_url, class: "mort-btn-start-time-material rounded-full w-14 h-14 flex items-center", data: { turbo_frame: "form" }) do
-      render Icons::Add.new cls: "h-8 w-8 text-white"
+      render Icons::Add.new css: "h-8 w-8 text-white"
     end
   end
 end

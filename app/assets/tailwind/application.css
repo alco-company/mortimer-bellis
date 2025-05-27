@@ -21,6 +21,16 @@
     }
   }
 }
+@layer base {
+
+  button:not([disabled]),
+  [role="button"]:not([disabled]) {
+    cursor: pointer;
+  }
+  a {
+    cursor: pointer;
+  }
+}
 
 @layer components {
 
@@ -49,7 +59,7 @@
   }
 
   .mort-btn-secondary {
-    @apply flex justify-center rounded-md bg-sky-400 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-xs hover:bg-sky-500 hover:cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-200;
+    @apply flex justify-center rounded-md bg-sky-400 px-3 py-0.5 text-xs font-semibold leading-6 text-white shadow-xs hover:bg-sky-500 hover:cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-200;
   }
 
   .mort-btn-cancel {
@@ -149,7 +159,7 @@
   }
 
   .mort-flash-border-error {
-    @apply border border-red-400 ring-red-600;
+    @apply border-0 border-red-400 ring-red-600 ring-0;
   }
 
   .mort-flash-warning {
@@ -161,11 +171,11 @@
   }
 
   .mort-flash-border-warning {
-    @apply border border-yellow-400 ring-yellow-600;
+    @apply border-0 border-yellow-400 ring-yellow-600 ring-0;
   }
 
   .mort-flash-border-alert {
-    @apply border border-yellow-400 ring-yellow-600;
+    @apply border-0 border-yellow-400 ring-yellow-600 ring-0;
   }
 
   .mort-flash-info {
@@ -177,11 +187,11 @@
   }
 
   .mort-flash-border-info {
-    @apply border border-sky-400 ring-sky-600;
+    @apply border-0 border-sky-400 ring-sky-600 ring-0;
   }
 
   .mort-flash-border-timedout {
-    @apply border border-sky-400 ring-sky-600;
+    @apply border-0 border-sky-400 ring-sky-600 ring-0;
   }
 
   .mort-flash-notice {
@@ -189,7 +199,7 @@
   }
 
   .mort-flash-border-notice {
-    @apply border border-sky-200 ring-sky-600;
+    @apply border-0 border-sky-200 ring-sky-600 ring-0;
   }
 
   .mort-flash-success {
@@ -197,7 +207,7 @@
   }
 
   .mort-flash-border-success {
-    @apply border border-green-400 ring-green-600;
+    @apply border-0 border-green-400 ring-green-600 ring-0;
   }
 
   .mort-state-in {
@@ -314,6 +324,53 @@ h1 {
 
 .clipboard--supported .clipboard-button {
   display: initial;
+}
+
+[contenteditable="true"]:active,
+[contenteditable="true"]:focus {
+  border: none;
+  outline: none;
+}
+
+.tag-input {
+  flex-grow: 1;
+  display: inline-block;
+  position: relative;
+  margin: 5px;
+  padding: var(--tag-pad);
+  line-height: normal;
+  white-space: pre-wrap;
+  box-sizing: inherit;
+  overflow: hidden;
+  border: 0px solid transparent;
+
+  &::before {
+    content: attr(data-placeholder);
+    width: 100%;
+    height: 100%;
+    margin: auto 0;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    pointer-events: none;
+    position: absolute;
+    opacity: 0;
+    transition: all 0.5s;
+  }
+  &::after {
+    content: attr(data-suggest);
+    display: inline-block;
+    vertical-align: middle;
+    position: absolute;
+    min-width: calc(100% - 1.5em);
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: pre;
+    opacity: .3;
+    pointer-events: none;
+    max-width: 100px;
+    transition: all 0.5s;
+  }
 }
 
 .pulse_button {

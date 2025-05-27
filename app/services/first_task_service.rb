@@ -15,7 +15,7 @@ class FirstTaskService
   # validate that all tasks are done
   def validate
     user.tasks.first_tasks.uncompleted.each do |task|
-      if eval(task.validation)
+      if !task.validation.blank? && eval(task.validation)
         task.update completed_at: Time.current
       else
         task.notify(action: :tasks_remaining, rcp: Current.user, title: I18n.t("tasks.remaining.title"), msg: I18n.t("tasks.remaining.msg", count: user.tasks.first_tasks.uncompleted.count)) unless task.notifications.where(recipient: user).any?

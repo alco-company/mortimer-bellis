@@ -1,6 +1,9 @@
 class TimeMaterials::Form < ApplicationForm
   def view_template(&)
-    div(class: "overflow-y-auto", data: { controller: "time-material tabs", tabs_index: @resource.is_time? ? "0" : "1" }) do
+    div(class: "overflow-y-auto", data: {
+      controller: "time-material tabs",
+      time_material_products_value: TimeMaterial.overtimes_products,
+      tabs_index: @resource.is_time? ? "0" : "1" }) do
       if model.cannot_be_pushed?
         show_possible_issues
       end
@@ -46,6 +49,9 @@ class TimeMaterials::Form < ApplicationForm
       #
       invoicing
 
+      #
+      show_comments
+
       # url = @resource.id.nil? ? time_materials_url : time_material_url(@resource)
       # render TimeMaterialForm.new time_material: @resource, url: url
       if @resource.pushed_to_erp?
@@ -71,7 +77,7 @@ class TimeMaterials::Form < ApplicationForm
         # comment do
         #   %(Current: "text-sky-500", Default: "text-gray-400 group-hover:text-gray-500")
         # end
-        render Icons::Person.new(cls: "-ml-0.5 mr-2 h-5 w-5 text-gray-400 group-hover:text-gray-500 pointer-events-none", data: { time_material_target: "timetab" })
+        render Icons::Person.new(css: "-ml-0.5 mr-2 h-5 w-5 text-gray-400 group-hover:text-gray-500 pointer-events-none", data: { time_material_target: "timetab" })
         span(class: "pointer-events-none") { I18n.t("time_material.type.time") }
     end
   end
@@ -90,7 +96,7 @@ class TimeMaterials::Form < ApplicationForm
         # comment do
         #   %(Current: "text-sky-500", Default: "text-gray-400 group-hover:text-gray-500")
         # end
-        render Icons::Building.new(cls: "-ml-0.5 mr-2 h-5 w-5 text-gray-400 group-hover:text-gray-500 pointer-events-none", data: { time_material_target: "materialtab" })
+        render Icons::Building.new(css: "-ml-0.5 mr-2 h-5 w-5 text-gray-400 group-hover:text-gray-500 pointer-events-none", data: { time_material_target: "materialtab" })
         span(class: "pointer-events-none") { I18n.t("time_material.type.material") }
     end
   end
@@ -109,7 +115,7 @@ class TimeMaterials::Form < ApplicationForm
         # comment do
         #   %(Current: "text-sky-500", Default: "text-gray-400 group-hover:text-gray-500")
         # end
-        render Icons::Transportation.new(cls: "-ml-0.5 mr-2 h-5 w-5 text-gray-400 group-hover:text-gray-500 pointer-events-none", data: { time_material_target: "mileagetab" })
+        render Icons::Transportation.new(css: "-ml-0.5 mr-2 h-5 w-5 text-gray-400 group-hover:text-gray-500 pointer-events-none", data: { time_material_target: "mileagetab" })
         span(class: "pointer-events-none") { I18n.t("time_material.type.mileage") }
     end
   end
@@ -139,7 +145,8 @@ class TimeMaterials::Form < ApplicationForm
             rate_field I18n.t("time_material.rate.hourly")
             #
             div(class: "col-span-4") do
-              row field(:over_time).select(TimeMaterial.overtimes, class: "mort-form-select"), "mort-field my-1"
+              div(class: "hidden", id: "time_values", data: {})
+              row field(:over_time).select(TimeMaterial.overtimes, data: { action: "change->time-material#updateOverTime" }, class: "mort-form-select"), "mort-field my-1"
             end
           end
         end
@@ -277,6 +284,7 @@ class TimeMaterials::Form < ApplicationForm
   end
 
   def project_field
+    return unless Current.get_tenant.license_valid? && %w[trial ambassador pro].include?(Current.get_tenant.license) || Current.user.superadmin?
     row field(:project_id).lookup(class: "mort-form-text #{field_id_error(resource.project_name, resource.project_id)}",
       data: {
         url: "/projects/lookup",
@@ -291,12 +299,12 @@ class TimeMaterials::Form < ApplicationForm
 
   def rate_field(lbl, css = "col-span-3", fld_name = "rate")
     div(class: css) do
-      row field(fld_name.to_sym).input(), "mort-field my-1"
+      row field(fld_name.to_sym).input(data: { action: "change->time-material##{fld_name}Change" }), "mort-field my-1"
     end
   end
 
   def invoicing
-    div(class: "pb-12") do
+    div(class: "pb-4") do
       div(class: "mt-1 space-y-1") do
         row field(:state).select(TimeMaterial.time_material_states, class: "my-auto mort-form-select"), "mort-field" # , "flex justify-end flex-row-reverse items-center"
         fieldset do
@@ -373,6 +381,39 @@ class TimeMaterials::Form < ApplicationForm
     else
       days, hours, minutes, _seconds = @resource.calc_hrs_minutes(time_spent)
       "#{days}d #{hours}h #{minutes}m"
+    end
+  end
+
+  def show_comments
+    return unless Current.get_user.should? :allow_comments_on_time_material
+    render TagComponent.new(resource: resource,
+        field: :tag_list,
+        show_label: true,
+        value_class: "mr-5",
+        value: resource.tags,
+        editable: true)
+
+    div(class: "col-span-full") do
+      div(class: "mort-field my-0") do
+        div(class: "flex justify-between", data: { controller: "time-material" }) do
+          label(for: "time_material_task_comment") do
+            span { I18n.t("activerecord.attributes.time_material.task_comment") }
+          end
+        end
+        textarea(id: "time_material_task_comment", name: "time_material[task_comment]", class: "mort-form-text") do
+          plain resource.comment
+        end
+      end
+      div(class: "mort-field my-0") do
+        div(class: "flex justify-between", data: { controller: "time-material" }) do
+          label(for: "time_material_location_comment") do
+            span { I18n.t("activerecord.attributes.time_material.location_comment") }
+          end
+        end
+        textarea(id: "time_material_location_comment", name: "time_material[location_comment]", class: "mort-form-text") do
+          plain resource.location_comment
+        end
+      end
     end
   end
 end

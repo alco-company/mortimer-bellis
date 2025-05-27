@@ -5,7 +5,7 @@ class TenantLicense < ApplicationComponent
   include Phlex::Rails::Helpers::T
 
   def view_template
-    return unless Current.get_user.admin? or Current.get_user.superadmin?
+    # return unless Current.get_user.admin? or Current.get_user.superadmin?
     turbo_frame_tag "tenant_license" do
       p(class: "text-sm text-purple-600") do
         t("users.edit_profile.buy_product.current_status", license: license_title).html_safe
@@ -17,7 +17,7 @@ class TenantLicense < ApplicationComponent
         t("users.edit_profile.buy_product.license_changed", changed: license_changed).html_safe
       end
 
-      if Current.get_tenant.license_expires_shortly? or Current.get_tenant.license == "free"
+      if Current.get_tenant.license_expires_shortly? or %W[trial free].include? Current.get_tenant.license
         p do
           link_to(
             new_modal_url(modal_form: "buy_product", id: Current.get_tenant.id, resource_class: "tenant", modal_next_step: "pick_product", url: "/"),

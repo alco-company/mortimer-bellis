@@ -16,8 +16,13 @@ export default class extends Controller {
   static values = {
     time: Number,
     interval: 1000,
-    reload: 60000
+    reload: 60000,
+    products: Array
   }
+
+  hourRate = 0.0;
+  initialCustomer = "";
+  initialProject = "";
 
   initialize() {
     this.interval = null;
@@ -25,14 +30,15 @@ export default class extends Controller {
   }
 
   connect() {
+    let tmr = document.getElementById("time_material_rate");
     this.token = document.querySelector('meta[name="csrf-token"]').content;
-
+    if (tmr) 
+      this.hourRate = document.getElementById("time_material_rate").value;
     try {      
       if (this.counterTarget.dataset.state == "active") {
         this.startTimer();
       }
-    } catch (error) {
-      
+    } catch (error) {      
     }
   }
 
@@ -100,6 +106,20 @@ export default class extends Controller {
     }
   }
 
+  updateOverTime(e) {
+    let elem = document.getElementById("time_material_over_time");
+    if (this.productsValue.length >= elem.value) {
+      document.getElementById("time_material_rate").value =
+        this.hourRate * (this.productsValue[ elem.value ] / this.productsValue[0] );
+    }
+  }
+
+  rateChange(e) {
+    // if (e.currentTarget.value != this.hourRate) {
+    //   this.hourRate = e.currentTarget.value;
+    // }
+  }
+
   customerChange(e) {
     if (e.currentTarget.value === "") {
       e.target.previousSibling.value = "";
@@ -108,6 +128,18 @@ export default class extends Controller {
     } else {
       if (this.invoiceTarget.value == 0)
         this.invoiceTarget.nextElementSibling.click();
+      if ( document.querySelector("#time_material_customer_id").dataset.lookupCustomerHourlyRate ) {
+        if (document.querySelector("#time_material_customer_id").value !== this.initialCustomer) {
+          this.initialCustomer = document.querySelector("#time_material_customer_id").value;
+          let tmr = document.getElementById("time_material_rate");
+          tmr.value = this.empty_value(
+            tmr,
+            document.querySelector("#time_material_customer_id").dataset
+              .lookupCustomerHourlyRate
+          );
+          this.updateOverTime(document.getElementById("time_material_over_time"));
+        }
+      }
     }
   }
 
@@ -126,12 +158,14 @@ export default class extends Controller {
       document.querySelector(
         "#time_material_project_id"
       ).dataset.lookupCustomerName;
-    }
-  }
-
-  productChange(e) {
-    if (e.currentTarget.value === "") {
-      e.target.previousSibling.value = "";
+      if ( document.querySelector("#time_material_project_id").dataset.lookupProjectHourlyRate ) {
+        if (document.querySelector("#time_material_project_id").value !== this.initialProject) {
+          this.initialProject = document.querySelector("#time_material_project_id").value;
+          let tmr = document.getElementById("time_material_rate");
+          tmr.value = this.empty_value( tmr, document.querySelector("#time_material_project_id").dataset.lookupProjectHourlyRate);
+          this.updateOverTime( document.getElementById("time_material_over_time") );
+        }        
+      }
     }
   }
 
@@ -150,6 +184,22 @@ export default class extends Controller {
   setMileage(e) {
     this.mileageTarget.value =
       this.odotoTarget.value - this.odofromTarget.value;
+  }
+
+  empty_value(e, value = 0.0) {
+    console.log(`hourRate: ${this.hourRate}`);
+    if (
+      e.value === "" ||
+      e.value == 0 ||
+      e.value == "0,0" ||
+      e.value == this.hourRate && 
+      value != 0.0
+    ) {
+      this.hourRate = value;
+      console.log(`hourRate updated: ${this.hourRate}`);
+      return value;
+    }
+    return e.value
   }
 
 

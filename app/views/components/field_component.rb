@@ -82,7 +82,7 @@ class FieldComponent < Phlex::HTML
         class:
           "col-span-1 relative rounded-md justify-self-end bg-white text-gray-400 hover:text-gray-500 focus:ring-1 focus:ring-sky-200"
       ) do
-        render Icons::Checkmark.new cls: "h-6 w-6 text-green-500"
+        render Icons::Checkmark.new css: "h-6 w-6 text-green-500"
       end
     end
   end
@@ -111,7 +111,7 @@ class FieldComponent < Phlex::HTML
         class:
           "col-span-1 relative rounded-md justify-self-end bg-white text-gray-400 hover:text-gray-500 focus:ring-1 focus:ring-sky-200"
       ) do
-        render Icons::Checkmark.new cls: "h-6 w-6 text-green-500"
+        render Icons::Checkmark.new css: "h-6 w-6 text-green-500"
       end
     end
   end
@@ -174,7 +174,7 @@ class FieldComponent < Phlex::HTML
         class:
           "col-span-1 relative rounded-md justify-self-end bg-white text-gray-400 hover:text-gray-500 focus:ring-1 focus:ring-sky-200"
       ) do
-        render Icons::Checkmark.new cls: "h-6 w-6 text-green-500"
+        render Icons::Checkmark.new css: "h-6 w-6 text-green-500"
       end
     end
   end
@@ -223,7 +223,7 @@ class FieldComponent < Phlex::HTML
         class:
           "col-span-1 relative rounded-md justify-self-end bg-white text-gray-400 hover:text-gray-500 focus:ring-1 focus:ring-sky-200"
       ) do
-        render Icons::Checkmark.new cls: "h-6 w-6 text-green-500"
+        render Icons::Checkmark.new css: "h-6 w-6 text-green-500"
       end
     end
   end

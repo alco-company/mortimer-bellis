@@ -11,6 +11,10 @@ class ProvidedServicesController < MortimerController
     def set_dinero
       @resource.name = "Dinero"
       @resource.service = "Dinero::Service"
+      @resource.account_for_one_off = "1000"
+      @resource.product_for_time = "Time"
+      @resource.product_for_overtime = "Time50"
+      @resource.product_for_overtime_100 = "Time100"
     end
 
     # Only allow a list of trusted parameters through.

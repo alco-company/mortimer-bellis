@@ -7,8 +7,9 @@
     <%= turbo_refreshes_with method: :morph, scroll: :preserve %>
     <!-- End Turbo -->
     <%= web_push_public_key_meta_tag %>
+    <%= yield :head %>
   </head>
-  <body id="body" class="h-full" style="height: 100vh;" >
+  <body id="body" class="h-full" style="height: 100vh;" data-controller="service-worker" >
     <!-- stream for this user -->
     <%= turbo_stream_from "#{Current.user.id}_user_stream" if Current.user %>
 
@@ -26,9 +27,9 @@
 
       <div data-controller="notificationcenter" data-menu-target="topmain" class="flex flex-1 flex-col <%= 'lg:pl-64' if Current.user %>">
         <%= render_topbar params: params %>
-        <main id="main-element" class="flex-1 pb-8">
+        <main id="main-element" class="flex-1">
           <%#= render user_top_profile %>
-          <div class="sticky top-20 md:px-4">
+          <div class="sticky top-16 md:px-4 lg:px-1 h-full">
             <%#= render page_overview %>
 
             <%#= render page_title %>
@@ -78,5 +79,5 @@
       }, 900000); // 15 min in milliseconds
     </script>
   <% end %>
-
+  <%= yield :foot %>
 </html>

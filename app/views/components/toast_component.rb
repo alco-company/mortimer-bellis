@@ -23,7 +23,7 @@ class ToastComponent < ApplicationComponent
     div(
       data_controller: "notice",
       class:
-        "pointer-events-auto w-full max-w-sm overflow-hidden rounded-lg mort-flash-#{type} mort-flash-border-#{type} shadow-lg ring-1 ring-opacity-5"
+        "pointer-events-auto w-full max-w-sm overflow-hidden rounded-lg mort-flash-#{type} mort-flash-border-#{type} shadow-lg"
     ) do
       div(class: "p-4") do
         div(class: "flex items-start") do

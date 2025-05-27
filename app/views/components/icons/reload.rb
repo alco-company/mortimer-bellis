@@ -1,8 +1,8 @@
 class Icons::Reload < Phlex::HTML
   attr_accessor :cls
 
-  def initialize(cls: "size-6")
-    @cls = cls
+  def initialize(css: "size-6")
+    @cls = css
   end
 
   def view_template

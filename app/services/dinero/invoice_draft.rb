@@ -153,7 +153,9 @@ class Dinero::InvoiceDraft
     return invoice_header(line, date, dinero_lines, refs.join(", "), project_description.compact.join(", ")) if invoice.nil?
     {
       "productLines": dinero_lines,
-      "timeStamp": invoice["TimeStamp"]
+      "timeStamp": invoice["TimeStamp"],
+      "Comment": project_description.compact.join(", "),
+      "externalReference" => refs.join(", ")
     }
   end
 
@@ -443,23 +445,25 @@ class Dinero::InvoiceDraft
       all: true,
       pageSize: 500,
       status_filter: "Draft",
-      fields: "guid,contactGuid,externalReference",
+      fields: "guid,contactGuid,externalReference,date",
       just_consume: true
     )
-
     # Filter drafts to only those for this customer
-    draft = drafts&.parsed_response&.dig("Collection")&.select do |invoice|
-      invoice["contactGuid"] == contactGuid
-    end.first || nil
+    if @drafts
+      draft = drafts&.parsed_response&.dig("Collection")&.select do |invoice|
+        invoice["contactGuid"] == contactGuid
+      end.first || nil
+    else
+      draft = nil
+    end
 
     return [ nil, [], [], [], I18n.l(invoice_date, format: :short_iso) ] if draft.nil?
 
     invoice = invoice_details(draft) || nil
     dinero_lines = invoice["ProductLines"] rescue []
-    project_description = [ draft["comment"] ] rescue []
-    refs = [ draft["externalReference"] ] rescue []
-    date = draft["date"] rescue I18n.l(invoice_date, format: :short_iso)
-
+    project_description = [ invoice["Comment"] ] rescue []
+    refs = [ invoice["ExternalReference"] ] rescue []
+    date = invoice["Date"] rescue I18n.l(invoice_date, format: :short_iso)
     [ invoice, dinero_lines, project_description, refs, date ]
   rescue => err
     UserMailer.error_report(err.to_s, "Dinero::InvoiceDraft#find_draft_invoices_for_customer").deliver_later

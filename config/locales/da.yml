@@ -63,6 +63,10 @@ da:
   session_expired: "Din session er udløbet - log venligst ind igen"
   sign_out_in_session_expires_shortly: "Overvej snart at logge ud/ind igen, din session udløber om under 10 minutter"
   old_csrf: Din session indeholder en ældre CSRF nøgle - prøv venligst igen
+  routing_error: Routing fejl - endpoint mangler eller defineret forkert
+  unknown_format: Ukendt format (kendte formater er html, turbo_stream, csv, pdf og json)
+  record_not_found: Posten blev ikke fundet
+  url_generation_error: Det lykkedes ikke at danne den ønskede URL
 
   weekdays: Ugedage
   monday: Mandag
@@ -90,6 +94,23 @@ da:
     header:
       sync_with_ERP: Synkroniser med ERP
   
+  select_country: Vælg land
+
+  components:
+    tag:
+      add_tag: "Tilføj mærke"
+
+  country:
+    dk: Danmark
+    se: Sverige
+    no: Norge
+    fi: Finland
+    de: Tyskland
+    fr: Frankrig
+    gb: England
+    us: USA
+    pl: Polen
+
   colors:
     red: Rød
     fuchsia: Fuchsia
@@ -120,6 +141,24 @@ da:
         title: Slet denne overblik
         instruction: Er du sikker på, at du vil slette overblik %{name}?
         button: Slet
+
+    stats:
+      title: Registreringer
+      billed_hours: Fakturerbare timer
+      drafted_hours: Kladde timer
+      year: dette år
+      month: denne måned
+      week: denne uge
+      today: i dag
+
+    license_type:
+      expires: Din licens udløber %{expires}
+      expired: Din licens udløb %{expires}
+      manage: Vedligehold din licens
+
+    integrations:
+      title: Integrationer
+      none_title: Ingen integrationer
 
   dashboards:
     list:
@@ -256,6 +295,7 @@ da:
     holidays: Helligdage
     invoices: Fakturaer
     invoice_items: Fakturalinjer
+    integrations: Integrationer
     kiosks: Kiosker
     locations: Arbejdssteder
     login: Log ind
@@ -268,6 +308,8 @@ da:
     punches: Stemplinger
     punch_cards: Stempelkort
     punch_clocks: Stempelure
+    settings: Indstillinger
+    tags: Mærker
     teams: Hold
     tenant: Konto
     tenants: Konti
@@ -315,7 +357,10 @@ da:
     truncate: "..."
     more: "mere"
   profile:
-    overview: Åbne opgaver
+    open_tasks: Åbne opgaver
+    no_tasks: Ingen åbne opgaver
+    no_tasks_message: Der er ingen åbne opgaver, som du bør tage dig af, for at indstille Mortimer til at fungere optimalt.
+
     invite_new_user: Invitér ny bruger
     invite_new_ user: Invitér ny medarbejder
 
@@ -393,25 +438,6 @@ da:
 
   activerecord:
     attributes:
-      tenant:
-        created_at: Oprettet den
-        updated_at: Opdateret den
-        name: Kontonavn
-        email: Email adresse - konto ansvarlig
-        pp_identification: Lønbureau ID
-        eu_work_directive: EU regulativ (2003/88/EC)
-        send_state_rrule: Send compliance
-        send_eu_state_rrule: Send EU compliance
-        access_token: API nøgle
-        tax_number: CVR nummer
-        time_zone: Tidszone
-        locale: Sprog
-        country: Land - for at få vist korrekte nationale helligdage
-        logo: Logo (80 x 40)
-        color: Farve
-        license: Licens
-        license_expires_at: Udløber den
-        license_changed_at: Opdateret den
       asset:
         created_at: Oprettet den
         updated_at: Opdateret den
@@ -465,6 +491,7 @@ da:
         is_member: Er det et medlem (af Dinero)
         is_debitor: Er debitor
         is_creditor: Er kreditor
+        hourly_rate: Timepris
         street: Gade/vej
         zipcode: Postnr
         city: By
@@ -483,6 +510,7 @@ da:
         invoice_mail_out_option_key: Faktura udsendelse
         contact_person: Kontaktperson
         description: Beskrivelse
+        transmit_log: ERP sync status
       dashboard:
         created_at: Oprettet den
         updated_at: Opdateret den
@@ -664,6 +692,7 @@ da:
         total_amount_incl_vat: Total salg inkl. moms
         account_number: Salgskonto nummer
         external_reference: Ekstern reference
+        transmit_log: ERP sync status
       project:
         created_at: Oprettet den
         updated_at: Opdateret den
@@ -801,6 +830,14 @@ da:
         system_key: Nøgle
         position: Rækkefølge
         value: Værdi
+      tag:
+        name: Mærke
+        category: Kategori
+        context: Kontekst
+        count: Antal mærkninger
+        created_by: Oprettet af
+        taggable_type: Post/record Type
+        taggable_id: ID
       task:
         created_at: Oprettet den
         updated_at: Opdateret den
@@ -847,6 +884,25 @@ da:
         eu_state: EU regulativ (2003/88/EC) status
         blocked: Blokeret for tidsregistrering
         allowed_ot_minutes: Tilladt overtid i minutter (-1=ingen, 0=ubegrænset)
+      tenant:
+        created_at: Oprettet den
+        updated_at: Opdateret den
+        name: Kontonavn
+        email: Email adresse - konto ansvarlig
+        pp_identification: Lønbureau ID
+        eu_work_directive: EU regulativ (2003/88/EC)
+        send_state_rrule: Send compliance
+        send_eu_state_rrule: Send EU compliance
+        access_token: API nøgle
+        tax_number: CVR nummer
+        time_zone: Tidszone
+        locale: Sprog
+        country: Land - for at få vist korrekte nationale helligdage
+        logo: Logo (80 x 40)
+        color: Farve
+        license: Licens
+        license_expires_at: Udløber den
+        license_changed_at: Opdateret den
       time_material:
         created_at: Oprettet den
         updated_at: Opdateret den
@@ -884,7 +940,7 @@ da:
         is_free: per kulance
         is_offer: Tilbud
         is_separate: Separat faktura
-        push_log: Log over fejl ifm upload til Dinero
+        push_log: Log over fejl ifm upload til ERP
         pushed_erp_timestamp: Overført til ERP
         odo_from: fra
         odo_to: til
@@ -892,6 +948,9 @@ da:
         trip_purpose: Formål
         odo_from_time: Kørsel start
         odo_to_time: Kørsel stoppet
+        tag_list: Mærker
+        task_comment: Opgave kommentar
+        location_comment: Arbejdssted kommentar
 
       uri_scheme: 
         created_at: Oprettet den
@@ -943,8 +1002,8 @@ da:
         confirmation_sent_at: Bekræftelse sendt den
         confirmation_token: Bekræftelsestoken
         receive_notifications: Modtager notifikationer
-        last_sign_in_ip: sidst logget ind fra
-        current_sign_in_ip: nuværende login fra
+        last_sign_in_ip: sidst logget ind fra IP adressen
+        current_sign_in_ip: nuværende login fra IP adressen
         current_sign_in_at: nuværende login
         last_sign_in_at: sidst logget ind
         sign_in_count: antal logins
@@ -956,6 +1015,7 @@ da:
         team_id: "Hold/arbejdsgruppe"
         country: Land - for at få vist korrekte nationale helligdage - (overstyr hold land)
         pincode: Pinkode
+        hourly_rate: Timepris
         color: Farve
         payroll_user_ident: Løn nummer
         punching_absence: Stempler kun fravær

@@ -20,6 +20,7 @@ class Users::OtpsController < MortimerController
       flash[:success] = t("devise.second_factor.enabled")
       render turbo_stream: [
         turbo_stream.remove("new_form_modal"),
+        turbo_stream.replace("#{Current.get_user.id}_progress", partial: "dashboards/progress"),
         turbo_stream.update("two_factor_field", partial: "users/otps/two_factor_field"),
         turbo_stream.replace("flash_container", partial: "application/flash_message", locals: { tenant: Current.get_tenant, messages: flash, user: Current.get_user })
       ]
@@ -48,7 +49,7 @@ class Users::OtpsController < MortimerController
     if @user.authenticate_otp(otp_code)
       session[:otp_passed] = true
       Current.session.otp!
-      redirect_to root_path, notice: "You have successfully authenticated with OTP."
+      redirect_to show_dashboard_dashboards_url, notice: t("devise.second_factor.enabled")
     else
       flash[:error] = "Invalid OTP code"
       redirect_to edit_users_otp_url(@user.id)

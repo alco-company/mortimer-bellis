@@ -1,6 +1,6 @@
 <%= turbo_frame_tag "#{Current.user.id}_list_header" do %>
   <!-- Page Header -->
-  <div data-controller="header" class="border-b border-slate-100 pb-5">
+  <div data-controller="header" class="border-b border-slate-100 mt-8 pb-5">
     <div class="flex items-center sm:justify-between">
       <div class="sm:w-0 flex-1">
         <input name="batch[all]" type="hidden" value="0" autocomplete="off">
@@ -10,12 +10,6 @@
           <% case @filter_form %>
           <% when "background_jobs" %>
             <%= link_to t("Mission Control Jobs"), "/solid_queue_jobs", class: "mort-link-primary", data: { turbo_prefetch: "false" } %>
-          <% when 'customers' %>
-            <%= link_to t(".sync_with_ERP"), erp_pull_customers_url, class: "mort-link-primary", data: { turbo_prefetch: "false" } %>
-          <% when 'products' %>
-            <%= link_to t(".sync_with_ERP"), erp_pull_products_url, class: "mort-link-primary", data: { turbo_prefetch: "false" } %>
-          <% when 'invoices' %>
-            <%= link_to t(".sync_with_ERP"), erp_pull_invoices_url, class: "mort-link-primary", data: { turbo_prefetch: "false" } %>
           <% when 'punch_cards' %>
             <%= link_to t(:payroll_order), new_modal_url(modal_form: 'payroll', resource_class: 'punch_card'), class: "inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10", data: { turbo_stream: true } %>
             <%= link_to t(:state_order), new_modal_url(modal_form: 'state', resource_class: 'punch_card'), class: "inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10", data: { turbo_stream: true } %>
@@ -61,7 +55,7 @@
         <%= link_to(new_resource_url, id: "new_list_item", class: "-my-2 flex items-center rounded-md p-2 text-gray-400 hover:text-gray-600 focus:outline-hidden focus:ring-1 focus:ring-sky-200", data: { turbo_frame: "form" }) do %>
             <span class="sr-only">Add new</span>
             <span class="inline-flex items-center rounded-md bg-white px-1.5 py-0.5 text-xs font-medium text-gray-600 sm:ring-1 ring-inset ring-gray-500/10">
-              <%= render Icons::Add.new cls: "h-6 text-gray-400" %>
+              <%= render Icons::Add.new css: "h-6 text-gray-400" %>
               <span class="hidden pl-2 sm:inline text-gray-400 text-2xs"><%= t("#{ resource_class.table_name}.list.new") %></span>
             </span>
           <% end if user_can_create? %>

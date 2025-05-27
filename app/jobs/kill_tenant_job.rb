@@ -27,7 +27,7 @@ class KillTenantJob < ApplicationJob
         tenant.provided_services.destroy_all
         tenant.settings.destroy_all
 
-        tenant.users.each do |user|
+        tenant.users.order(id: :desc).each do |user|
           next if user.id == 1
           user.mugshot.purge if user.mugshot.attached?
           user.access_grants.destroy_all
@@ -41,6 +41,8 @@ class KillTenantJob < ApplicationJob
         tenant.teams.destroy_all
         tenant.logo.purge if tenant.logo.attached?
         tenant.delete
+      rescue SQLite3::ConstraintException => e
+        Rails.logger.error "Failed to delete tenant #{step} #{tenant.id}: #{e.message}"
       end
     end
   end

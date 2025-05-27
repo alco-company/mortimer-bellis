@@ -1,8 +1,8 @@
 class Icons::Stop < Phlex::HTML
   attr_accessor :cls
 
-  def initialize(cls: "h-12")
-    @cls = cls
+  def initialize(css: "h-12")
+    @cls = css
   end
 
   def view_template

@@ -110,6 +110,7 @@ da:
       update: Opdater profil
       buy_product:
         title: "Betal for Mortimer"
+        description: "Vi har tre forskellige licenser, som du kan vælge mellem. Hvis du har spørgsmål, kan du kontakte os på <a class='mort-link-primary text-purple-700 hover:text-purple-400' href='%{discord}'>Discord</a>."
         current_status: "Lige nu bruger du %{license}"
         license_expiring: "Udløber %{expiring}"
         license_changed: "Opdateret %{changed}"
@@ -271,6 +272,7 @@ da:
 
     omniauth_callbacks:
       user_not_found: "vi ikke kunne finde en bruger med den email adresse (%{email}), som du har brugt til at logge ind med."
+      wrong_license: "du har ikke tilladelse til at bruge denne form for log ind. Det kræver Ambassadør eller Pro licens"
       failure: "Kunne ikke godkende dig fra %{kind} fordi %{reason}."
       success: "Godkendte dig fra %{kind} kontoen %{email}."
     passwords:

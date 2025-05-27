@@ -12,8 +12,7 @@ class TenantRegistrationService
       user = User.new tenant_id: tenant.id, email: user_params[:email], role: "admin", password: user_params[:password], locale: "da", time_zone: "Europe/Copenhagen"
       if user.save
         user.send_confirmation_instructions
-        TenantMailer.with(tenant: tenant, pw: user_params[:password]).welcome.deliver_later
-        UserMailer.with(user: user).welcome.deliver_later
+        UserMailer.with(user: user).welcome.deliver_later # tell monitor@alco.dk that this user has registered
         create_defaults_for_new tenant, user
         return user
       end
@@ -44,5 +43,9 @@ class TenantRegistrationService
     PunchClock.find_or_create_by tenant: tenant, name: I18n.t("punch_clocks.default_punch_clock"), location: location
     #
     Setting.create_defaults_for_new tenant
+    #
+    Product.create_defaults_for_new tenant
+    #
+    tenant.update(license: "trial", license_expires_at: 30.days.from_now)
   end
 end

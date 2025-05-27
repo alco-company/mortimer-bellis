@@ -7,5 +7,6 @@ class Products::Form < ApplicationForm
     row field(:base_amount_value).money(value: helpers.number_to_currency(@resource.base_amount_value))
     row field(:account_number).input()
     row field(:external_reference).input()
+    view_only field(:transmit_log).input()
   end
 end

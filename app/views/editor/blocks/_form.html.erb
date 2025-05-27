@@ -1,0 +1,42 @@
+<%= form_with(model: editor_block, class: "contents") do |form| %>
+  <% if editor_block.errors.any? %>
+    <div id="error_explanation" class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-md mt-3">
+      <h2><%= pluralize(editor_block.errors.count, "error") %> prohibited this editor_block from being saved:</h2>
+
+      <ul class="list-disc ml-6">
+        <% editor_block.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="my-5">
+    <%= form.label :document_id %>
+    <%= form.text_field :document_id, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": editor_block.errors[:document_id].none?, "border-red-400 focus:outline-red-600": editor_block.errors[:document_id].any?}] %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :parent_id %>
+    <%= form.number_field :parent_id, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": editor_block.errors[:parent_id].none?, "border-red-400 focus:outline-red-600": editor_block.errors[:parent_id].any?}] %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :type %>
+    <%= form.text_field :type, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": editor_block.errors[:type].none?, "border-red-400 focus:outline-red-600": editor_block.errors[:type].any?}] %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :data %>
+    <%= form.textarea :data, rows: 4, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": editor_block.errors[:data].none?, "border-red-400 focus:outline-red-600": editor_block.errors[:data].any?}] %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :position %>
+    <%= form.number_field :position, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": editor_block.errors[:position].none?, "border-red-400 focus:outline-red-600": editor_block.errors[:position].any?}] %>
+  </div>
+
+  <div class="inline">
+    <%= form.submit class: "w-full sm:w-auto rounded-md px-3.5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white inline-block font-medium cursor-pointer" %>
+  </div>
+<% end %>

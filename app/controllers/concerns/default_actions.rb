@@ -5,11 +5,11 @@ module DefaultActions
     # GET /users or /users.json
     def index
       posthog_capture
-      params.permit![:url] = resources_url
+      params[:url] = resources_url
       @pagy, @records = pagy_keyset(resources)
       r = @records.pluck(:id).sort
       @ids_range = "#{r.first}..#{r.last}"
-      @replace = params.permit![:replace] || false
+      @replace = params.dig(:replace) || false
 
       respond_to do |format|
         format.html { }
@@ -38,7 +38,7 @@ module DefaultActions
     def lookup
       posthog_capture
       set_query
-      lookup_options = "%s_lookup_options" % params.permit![:div_id]
+      lookup_options = "%s_lookup_options" % params.dig(:div_id)
       respond_to do |format|
         format.turbo_stream {
           render turbo_stream: turbo_stream.replace(
@@ -47,7 +47,7 @@ module DefaultActions
             locals: {
               lookup_options: lookup_options,
               resources: @resources,
-              div_id: params.permit![:div_id]
+              div_id: params.dig(:div_id)
             }
           )
         }
@@ -56,7 +56,7 @@ module DefaultActions
 
     def erp_pull
       posthog_capture
-      SyncErpJob.perform_later tenant: Current.tenant, user: Current.user, resource_class: resource_class
+      SyncErpJob.perform_now tenant: Current.tenant, user: Current.user, resource_class: resource_class
       redirect_to resources_url, success: t(".erp_pull")
     end
 
@@ -123,6 +123,7 @@ module DefaultActions
           flash[:success] = t(".post")
           format.turbo_stream { render turbo_stream: [
             turbo_stream.update("form", ""),
+            turbo_stream.replace("#{Current.get_user.id}_progress", partial: "dashboards/progress"),
             turbo_stream.replace("flash_container", partial: "application/flash_message", locals: { tenant: Current.get_tenant, messages: flash, user: Current.get_user })
             # special
           ] ; flash.clear}
@@ -159,6 +160,7 @@ module DefaultActions
           flash[:success] = t(".post")
           format.turbo_stream { render turbo_stream: [
             turbo_stream.update("form", ""),
+            turbo_stream.replace("#{Current.get_user.id}_progress", partial: "dashboards/progress"),
             turbo_stream.replace("flash_container", partial: "application/flash_message", locals: { tenant: Current.get_tenant, messages: flash, user: Current.get_user })
           ] ; flash.clear}
           format.html { redirect_to resources_url, success: t(".post") }
@@ -284,17 +286,17 @@ module DefaultActions
         when "Project"
           unless params[:customer_id].blank?
             resource_class.by_tenant()
-              .where("customer_id = ?", params.permit![:customer_id])
-              .where(params.permit![:q].blank? ? "1=1" : "name LIKE ?", "%#{params.permit![:q]}%")
+              .where("customer_id = ?", params.dig(:customer_id))
+              .where(params.dig(:q).blank? ? "1=1" : "name LIKE ?", "%#{params.dig(:q)}%")
               .limit(10)
           else
             resource_class.by_tenant()
-              .where(params.permit![:q].blank? ? "1=1" : "name LIKE ?", "%#{params.permit![:q]}%")
+              .where(params.dig(:q).blank? ? "1=1" : "name LIKE ?", "%#{params.dig(:q)}%")
               .limit(10)
           end
         else
           resource_class.by_tenant()
-            .where(params.permit![:q].blank? ? "1=1" : "name LIKE ?", "%#{params.permit![:q]}%")
+            .where(params.dig(:q).blank? ? "1=1" : "name LIKE ?", "%#{params.dig(:q)}%")
             .limit(10)
         end
 

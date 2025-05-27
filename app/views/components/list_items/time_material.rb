@@ -51,8 +51,8 @@ class ListItems::TimeMaterial < ListItems::ListItem
     div(class: "absolute inset-0 flex items-center justify-center pointer-events-none") do
       if resource.active? or resource.paused? # and this_user?(resource.user_id)
         resource.paused? ?
-          render(Icons::Play.new(cls: "text-gray-500/15 h-1/2 w-1/2 sm:h-22 sm:w-22")) :
-          render(Icons::Pause.new(cls: "text-gray-500/15 h-1/2 w-1/2 sm:h-22 sm:w-22"))
+          render(Icons::Play.new(css: "text-gray-500/15 h-1/2 w-1/2 sm:h-22 sm:w-22")) :
+          render(Icons::Pause.new(css: "text-gray-500/15 h-1/2 w-1/2 sm:h-22 sm:w-22"))
         # link_to(resource_url(pause: (resource.paused? ? "resume" : "pause")), data: { turbo_prefetch: "false", turbo_stream: "true" }) do
         # end
       end
@@ -94,13 +94,14 @@ class ListItems::TimeMaterial < ListItems::ListItem
     end
     span(class: "md:inline text-xs font-bold truncate mr-2") { "%s:" % resource.user.name }
     span(class: "md:inline text-xs truncate") do
-      link_to(edit_resource_url,
-        class: "truncate hover:underline inline grow flex-nowrap",
-        data: { turbo_action: "advance", turbo_frame: "form" },
-        tabindex: -1) do
-        span(class: "2xs:hidden") { show_time_material_quantative unless resource.active? }
-        span(class: " truncate") { resource.name }
-      end
+      # link_to(edit_resource_url,
+      #   class: "truncate hover:underline inline grow flex-nowrap",
+      #   data: { turbo_action: "advance", turbo_frame: "form" },
+      #   tabindex: -1) do
+      #   span(class: "2xs:hidden") { show_time_material_quantative unless resource.active? }
+      #   span(class: " truncate") { resource.name }
+      # end
+      span(class: " truncate") { resource.name }
     end
   end
 
@@ -118,13 +119,13 @@ class ListItems::TimeMaterial < ListItems::ListItem
       if resource.is_invoice?
         color = resource.pushed_to_erp? ? "bg-green-700 text-green-50" : "bg-green-50 text-green-700"
         span(class: "hidden 2xs:inline-flex w-fit items-center rounded-md #{color} mr-1 px-1 xs:px-2 py-0 xs:py-0.5 text-2xs font-medium ring-1 ring-inset ring-green-600/20 truncate") do
-          render Icons::Money.new(cls: "#{color} h-4 w-4")
+          render Icons::Money.new(css: "#{color} h-4 w-4")
           span(class: "hidden ml-2 md:inline") { resource.pushed_to_erp? ? I18n.t("time_material.billed") : I18n.t("time_material.billable") }
         end
       end
       if @insufficient_data
         span(class: "2xs:inline-flex w-fit items-center rounded-md bg-yellow-50 mr-1 px-1 xs:px-2 py-0 xs:py-0.5 text-2xs font-medium text-yellow-700 ring-1 ring-inset ring-yellow-600/20 truncate") do
-          render Icons::Warning.new(cls: "text-yellow-500 h-4 w-4")
+          render Icons::Warning.new(css: "text-yellow-500 h-4 w-4")
           span(class: "ml-2 md:inline") { I18n.t("time_material.insufficient_data") }
         end
       end

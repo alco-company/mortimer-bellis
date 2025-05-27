@@ -2,7 +2,7 @@ class ProvidedServices::Form < ApplicationForm
   def view_template(&)
     row field(:name).input().focus
     row field(:service).input()
-    row field(:organizationID).input(placeholder: I18n.t("provided_service.organizationID_placeholder"))
+    row field(:organizationID).input(placeholder: I18n.t("provided_service.organizationID_placeholder"), help: "https://mortimer.pro/dk/vejledninger/dinerointegration")
     row field(:product_for_time).input()
     row field(:product_for_overtime).input()
     row field(:product_for_overtime_100).input()

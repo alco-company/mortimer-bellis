@@ -90,4 +90,22 @@ class Product < ApplicationRecord
       Broadcasters::Resource.new(product, { controller: "products" }).create
     end
   end
+
+  #
+  # create 3 default products for new tenants
+  # 1. Product with localized name and product_number "Time" and unit "hours"
+  # 2. Product with localized name and product_number "Time50" and unit "hours"
+  # 3. Product with localized name and product_number "Time100" and unit "hours"
+  #
+  # @param tenant [Tenant] the tenant to create defaults for
+  # @return [void]
+  def self.create_defaults_for_new(tenant)
+    [
+      { name: I18n.t("products.default_time"),     product_number: "Time",    quantity: 1.0, unit: "hours", base_amount_value: 100.0, account_number: 1000 },
+      { name: I18n.t("products.default_time_50"),  product_number: "Time50",  quantity: 1.0, unit: "hours", base_amount_value: 150.0, account_number: 1000 },
+      { name: I18n.t("products.default_time_100"), product_number: "Time100", quantity: 1.0, unit: "hours", base_amount_value: 200.0, account_number: 1000 }
+    ].each do |attributes|
+      Product.create(tenant: tenant, **attributes)
+    end
+  end
 end

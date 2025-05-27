@@ -6,7 +6,7 @@ class Broadcasters::Resource
 
   def initialize(resource, params = {}, target = "record_list", user = Current.get_user, stream = nil, partial = nil)
     @resource = resource
-    @params = params
+    @params = params.respond_to?(:to_unsafe_h) ? params.to_unsafe_h : params
     @target = target
     @resource_class = resource.class rescue nil
     @user = user

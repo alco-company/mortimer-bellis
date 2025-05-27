@@ -1,4 +1,15 @@
 Rails.application.routes.draw do
+  namespace :editor do
+    resources :blocks
+    resources :documents
+  end
+  resources :editor, controller: "editor", only: [ :index ]
+  resources :tags do
+    collection do
+      get "tags"
+    end
+  end
+  get "time_material_stats", to: "time_material_stats#index", as: :time_material_stats
   get "home/show"
   # -------- AUTHENTICATION ROUTES --------
   # use_doorkeeper do
@@ -104,7 +115,7 @@ Rails.application.routes.draw do
   resources :projects, concerns: [ :lookupable ]
 
 
-  resources :provided_services
+  resources :provided_services, concerns: [ :erp_pullable ]
   resources :settings
   resources :events
   resources :notifications
