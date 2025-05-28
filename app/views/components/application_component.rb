@@ -3,6 +3,8 @@
 class ApplicationComponent < Phlex::HTML
   include Phlex::Rails::Helpers::Routes
 
+  attr_accessor :params
+
   if Rails.env.development?
     def before_template
       comment { "Before #{self.class.name}" }
@@ -30,8 +32,8 @@ class ApplicationComponent < Phlex::HTML
     end if item
   end
 
-  def new_resource_url
-    url_for(controller: params_ctrl, action: :new)
+  def new_resource_url(**options)
+    url_for(controller: params_ctrl, action: :new, **options)
   end
 
   def resource_url(**options)
@@ -49,9 +51,8 @@ class ApplicationComponent < Phlex::HTML
   end
 
   def resources_url(**options)
-    options[:search] = params.permit![:search] if params.permit![:search].present?
-    return url_for(controller: params_ctrl, action: :index, **options) if options.delete(:rewrite).present?
-    @resources_url ||= url_for(controller: params_ctrl, action: :index, **options)
+    options[:search] = params.dig(:search) if params.dig(:search).present?
+    url_for(controller: params_ctrl, action: :index, **options)
   end
 
   def resource_class
@@ -64,20 +65,20 @@ class ApplicationComponent < Phlex::HTML
   end
 
   def rc_params
-    params.respond_to?(:permit) ? params.permit! : params
+    params.respond_to?(:permit) ? params.to_unsafe_h : params
     # params.permit(:id, :s, :d, :page, :format, :_method, :commit, :authenticity_token, :controller)
   end
 
   def params_ctrl
-    rc_params[:controller]
+    params.dig(:controller)
   end
 
   def params_s
-    rc_params[:s]
+    params.dig(:s)
   end
 
   def params_d
-    rc_params[:d]
+    params.dig(:d)
   end
 
   def params_parent(ref)

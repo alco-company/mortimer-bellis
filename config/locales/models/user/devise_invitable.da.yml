@@ -4,6 +4,7 @@ da:
       invited: "Du har en uafsluttet invitation, accepter den for at færdiggøre oprettelsen af din konto."
     invitations:
       send_instructions: "En inviterende email er blev sendt til %{email}."
+      send_instructions_count: "En inviterende email er blev sendt til %{count} personer."
       invitation_token_invalid: "Den angivne invitationstoken er ugyldig!"
       updated: "Dit kodeord blev sat korrekt. Du er nu logget ind."
       updated_not_active: "Dit kodeord blev sat korrekt."
@@ -11,7 +12,7 @@ da:
       invitation_removed: "Din invitation blev fjernet."
       new:
         header: "Send en invitation"
-        description: "<p class='my-2'>Indtast en emailadresse på den person, du vil invitere til at bruge Mortimer's administrative brugergrænseflade.</p><p class='my-2'>Brugeren oprettes som 'bruger' men når brugeren har færdiggjort oprettelse af sin profil, kan du rette brugerens rolle til 'admin'</p>"
+        description: "<p class='my-2'>Indtast emailadresser på de personer, du vil invitere til at bruge Mortimer's administrative brugergrænseflade, adskilt af mellemrum, komma, eller semi-kolon.</p><p class='my-2'>Brugeren oprettes som 'bruger' men når brugeren har færdiggjort oprettelse af sin profil, kan du rette brugerens rolle til 'admin'</p>"
         submit_button: "Send invitationen"
       edit:
         header: "Indstil din egen adgangskode"
@@ -20,6 +21,7 @@ da:
         submit_button: "Indstil adgangskoden"
     mailer:
       invitation_instructions:
+        hello: "Hej"
         page_title: "Invitation til at oprette en brugerprofil på Mortimer"
         subject: "Invitation til at oprette en brugerprofil på  M O R T I M E R"
         preheader: "Invitation til at oprette en brugerprofil på Mortimer"

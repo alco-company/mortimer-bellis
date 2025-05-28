@@ -17,7 +17,7 @@ export default class extends Controller {
     document.documentElement.classList.add('lock-scroll'); // For html
     document.body.classList.add('lock-scroll'); // For body
     
-    enter(this.backdropTarget);
+    if (this.backdropTarget) enter(this.backdropTarget);
     enter(this.panelTarget);
   }
 
@@ -29,28 +29,47 @@ export default class extends Controller {
   }
 
   keydown(e) {
-    // e.preventDefault();
-    switch(e.key) {
-      case "Escape":
-        leave(this.backdropTarget);
-        leave(this.panelTarget).then(() => {
-          this.cancelFormTarget.click()
-        });
-        break;
-      case "Enter":
-        this.submitForm(e);
-        break;
-      // case "e":
-      //   this.editForm(e);
-      //   break;
-      // case "c":
-      //   this.clearForm(e);
-      //   break;
-      // case "q":
-      //   this.closeForm(e);
-      //   break;
-      default:
-        console.log(`[form_controller] you pressed ${e.key}`);
+    console.log(`[form_controller] you pressed ${e.key}`);
+    e.stopPropagation();
+    if (e.metaKey){
+      switch (e.key) {
+        case "c":
+          if (e.shiftKey)
+             this.newCall(e);
+          break;
+        case "e":
+          let form = document.getElementById("form");
+          if (form.children.length > 0) {
+            form = form.querySelectorAll("div")[9].querySelectorAll("a");
+            if (form.length > 0) {
+              form[0].click();
+            }
+          }
+          break;
+        case "Enter":
+          this.submitForm(e);
+          break;
+        // case "c":
+        //   this.clearForm(e);
+        //   break;
+        // case "q":
+        //   this.closeForm(e);
+        //   break;
+        // default:
+        //   console.log(`[form_controller] you pressed ${e.key}`);
+      }
+    } else {
+      switch (e.key) {
+        case "Escape":
+          leave(this.backdropTarget);
+          leave(this.panelTarget).then(() => {
+            this.cancelFormTarget.click();
+          });
+          break;
+        case "Enter":
+          this.submitForm(e);
+          break;
+      }
     }
   }
 
@@ -63,6 +82,13 @@ export default class extends Controller {
   //   document.getElementById('form').innerHTML = ""
   // }
 
+  newCall() {
+    let url = "/calls/new";
+    fetch(url)
+      .then((r) => r.text())
+      .then((html) => Turbo.renderStreamMessage(html));
+  }
+
   editForm(e) {
     e.preventDefault();
     Turbo.visit(e.target.dataset.url);
@@ -71,10 +97,17 @@ export default class extends Controller {
   submitForm(e) {
     e.preventDefault();
     leave(this.backdropTarget);
-    leave(this.panelTarget).then(() => {
+    leave(this.panelTarget)
+    .then(() => {
       this.formTarget.requestSubmit();
+      this.changeBrowserUrl();
       // Turbo.navigator.submitForm(this.formTarget);
     })
+    .then(() => {
+      this.closeForm(e);
+      // this.formTarget.reset();
+      // this.cancelButtonTarget.click();
+    });
     // this.formTarget.requestSubmit();
   }
 
@@ -86,5 +119,17 @@ export default class extends Controller {
   closeForm(e) {
    document.getElementById("form").innerHTML="";
   }
+
+  changeBrowserUrl() {
+    const url = document.getElementById("cancel-form").href
+    // const url = new URL(window.location.href.split("?")[0])
+  
+    // this.labelFilterValue.forEach((filter) => {
+    //   url.searchParams.append("label[]", filter)
+    // })
+  
+    history.pushState({}, null, url.toString())
+    Turbo.navigator.history.replace(url.toString())
+  }  
 
 }

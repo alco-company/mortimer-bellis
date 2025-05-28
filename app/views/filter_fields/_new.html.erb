@@ -1,0 +1,20 @@
+<li id="<%= "li_#{model}_#{field}" %>" class=" rounded-md">
+  <div class="mort-field grid grid-cols-5 gap-2">
+    <select 
+      name="<%= "#{model}_#{field}" %>_selector" 
+      data-filter-target="selector"
+      class="mort-form-select col-span-2">
+      <%= options_for_select selector, selected %>
+    </select>
+    <input 
+      type="text" 
+      name="<%= "#{model}-#{field}" %>" 
+      placeholder="<%= I18n.t("value") %>" 
+      class="mort-form-text col-span-2" 
+      value="<%= value %>"
+      data-filter-target="input">
+    <button data-action="click->filter#submitField" class="col-span-1 relative rounded-md justify-self-end bg-white text-gray-400 hover:text-gray-500 focus:ring-1 focus:ring-sky-200">
+      <%= render Icons::Checkmark.new css: "h-6 w-6 text-green-500" %>
+    </button>
+  </div>
+</li>

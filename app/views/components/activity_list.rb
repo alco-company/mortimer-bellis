@@ -26,7 +26,7 @@ class ActivityList < Phlex::HTML
   #   # we introduce them here:
   #   div(class: "hidden mort-state-in mort-state-out mort-state-break mort-state-sick mort-state-iam_sick mort-state-child_sick mort-state-nursing_sick mort-state-lost_work_sick mort-state-p56_sick mort-state-free mort-state-rr_free mort-state-senior_free mort-state-unpaid_free mort-state-maternity_free mort-state-leave_free mort-state-archived") { }
   #   div(class: "shadow") do
-  #     div(role: "list", class: "mt-2 divide-y divide-gray-200 overflow-hidden shadow ") do
+  #     div(role: "list", class: "mt-2 divide-y divide-gray-200 overflow-hidden shadow-sm ") do
   #       if @list.empty?
   #         div do
   #           div(class: "px-4") { I18n.t("landing.no_activity_description") }
@@ -72,7 +72,7 @@ class ActivityList < Phlex::HTML
   #     div(class: "mt-2 flex flex-col") do
   #       div(
   #         class:
-  #           "min-w-full overflow-hidden overflow-x-auto align-middle shadow sm:rounded-lg"
+  #           "min-w-full overflow-hidden overflow-x-auto align-middle shadow-sm sm:rounded-lg"
   #       ) do
   #         table(class: "min-w-full divide-y divide-gray-200") do
   #           thead do

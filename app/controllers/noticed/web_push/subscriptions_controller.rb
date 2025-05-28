@@ -1,26 +1,28 @@
 # frozen_string_literal: true
 
-class Noticed::WebPush::SubscriptionsController < ApplicationController
-  skip_before_action :verify_authenticity_token
-
+class Noticed::WebPush::SubscriptionsController < BaseController
   def create
+    require_authentication
     params.permit![:unsubscribe] ?
       unsubscribe :
       subscribe
-
-    head :ok
   end
 
   def subscribe
-    Noticed::WebPush::Subscription.find_or_create_by!(user: current_user, endpoint: params[:endpoint], auth_key: params[:keys][:auth], p256dh_key: params[:keys][:p256dh])
+    sub = Noticed::WebPush::Subscription.find_or_create_by!(user: Current.user, endpoint: params[:endpoint], auth_key: params[:keys][:auth], p256dh_key: params[:keys][:p256dh])
+    enable = sub ? "hidden" : ""
+    disabled = enable.blank? ? "hidden" : ""
+    render turbo_stream: [
+      # turbo_stream.replace("csrf_token", partial: "application/csrf_token"),
+      turbo_stream.replace("notifications_outlet", partial: "users/registrations/notifications_outlet", locals: { enable: enable, disabled: disabled })
+    ]
   end
 
   def unsubscribe
-    sub = Noticed::WebPush::Subscription.find_by(user: current_user, endpoint: params[:endpoint], auth_key: params[:keys][:auth], p256dh_key: params[:keys][:p256dh])
+    sub = Noticed::WebPush::Subscription.find_by(user: Current.user, endpoint: params[:endpoint], auth_key: params[:keys][:auth], p256dh_key: params[:keys][:p256dh])
     sub.destroy if sub
+    render turbo_stream: [
+      turbo_stream.replace("notifications_outlet", partial: "users/registrations/notifications_outlet", locals: { enable: "", disabled: "hidden" })
+    ]
   end
 end
-
-# TODO
-# - replace AppController
-# - replace current_user

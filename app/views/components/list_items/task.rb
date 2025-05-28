@@ -3,14 +3,11 @@ class ListItems::Task < ListItems::ListItem
   # name
   # color
 
-  def show_recipient_link
-    link_to resource_url, class: "hover:underline" do
-      plain resource.title
-    end
-  end
-
   def show_left_mugshot
-    # mugshot(resource, css: "hidden sm:block h-12 w-12 flex-none rounded-full bg-gray-50")
+    div(class: "flex items-center") do
+      input(type: "checkbox", name: "batch[ids][]", value: resource.id, class: "hidden batch mort-form-checkbox mr-2")
+      # mugshot(resource.user, css: "hidden sm:block h-12 w-12 flex-none rounded-full bg-gray-50")
+    end
   end
 
   def show_matter_mugshot

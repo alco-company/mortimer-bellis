@@ -7,7 +7,7 @@ class DineroUploadJob < ApplicationJob
     super(**args)
     switch_locale do
       @until_date = args[:date]
-      time_materials = TimeMaterial.by_tenant.where(date: ..@until_date)
+      time_materials = args[:ids].present? ? TimeMaterial.where(id: args[:ids], date: ..@until_date) : TimeMaterial.by_tenant.where(date: ..@until_date)
       return if time_materials.empty?
 
       ps = ProvidedService.by_tenant.find_by(name: args[:provided_service])

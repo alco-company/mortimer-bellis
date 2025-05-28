@@ -53,7 +53,7 @@ class PosContextmenu < Phlex::HTML
       button(
         type: "button",
         data_contextmenu_target: "button",
-        data_action: "touchstart->contextmenu#tap click->contextmenu#tap click@window->contextmenu#hide",
+        data_action: "touchstart->contextmenu#tap:passive click->contextmenu#tap click@window->contextmenu#hide",
         class: "-m-2.5 block p-2.5 text-gray-500 hover:text-gray-900",
         id: "options-menu-0-button",
         aria_expanded: "false",
@@ -90,7 +90,7 @@ class PosContextmenu < Phlex::HTML
     div(
       data_contextmenu_target: "popup",
       class:
-        "hidden absolute right-0 z-10 mt-2 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none",
+        "hidden absolute right-0 z-10 mt-2 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-hidden",
       role: "menu",
       aria_orientation: "vertical",
       aria_labelledby: "options-menu-0-button",
@@ -121,7 +121,7 @@ class PosContextmenu < Phlex::HTML
     div(
       data_contextmenu_target: "popup",
       class:
-        "hidden absolute right-0 z-10 mt-2 w-auto h-auto min-w-18 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none",
+        "hidden absolute right-0 z-10 mt-2 w-auto h-auto min-w-18 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-hidden",
       role: "menu",
       aria_orientation: "vertical",
       aria_labelledby: "options-menu-0-button",

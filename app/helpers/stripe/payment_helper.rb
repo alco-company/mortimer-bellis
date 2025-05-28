@@ -1,0 +1,2 @@
+module Stripe::PaymentHelper
+end

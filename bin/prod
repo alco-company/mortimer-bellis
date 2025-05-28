@@ -7,6 +7,7 @@ fi
 git checkout main
 git pull
 kamal deploy 
+kamal app exec --interactive --reuse "bin/rails db:migrate"
 git checkout development
 #
 # clean up ssh's

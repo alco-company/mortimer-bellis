@@ -37,7 +37,7 @@ class WorkScheduleTemplate < ApplicationComponent
         a(
           href: "#",
           class:
-            "hidden rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:block"
+            "hidden rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:block"
         ) do
           plain "View project"
           span(class: "sr-only") { ", GraphQL API" }
@@ -68,7 +68,7 @@ class WorkScheduleTemplate < ApplicationComponent
           end
           div(
             class:
-              "absolute hidden right-0 z-10 mt-2 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none",
+              "absolute hidden right-0 z-10 mt-2 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-hidden",
             role: "menu",
             aria_orientation: "vertical",
             aria_labelledby: "options-menu-0-button",

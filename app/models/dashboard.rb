@@ -17,6 +17,24 @@ class Dashboard < ApplicationRecord
     all
   end
 
+  def self.filterable_fields(model = self)
+    f = column_names - [
+      "id",
+      "tenant_id"
+      # "feed",
+      # "last_feed",
+      # "last_feed_at",
+      # "created_at",
+      # "updated_at"
+    ]
+    f = f - [
+      "last_feed_at",
+      "created_at",
+      "updated_at"
+    ] if model == self
+    f
+  end
+
   def self.set_order(resources, field = :feed, direction = :asc)
     resources.ordered(field, direction)
   end

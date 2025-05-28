@@ -2,11 +2,11 @@
 
 class SessionsController < BaseController
   include TimezoneLocale
-  before_action :authenticate_user!, only: [ :check ]
+  before_action :require_authentication, only: [ :check ]
 
   # called by the client side to check if the session is still valid
   def check
-    # return unless user_signed_in?
+    # return unless Current.user
 
     expires_at = Current.user.last_sign_in_at + 7.days
     if Time.now > expires_at
@@ -18,7 +18,7 @@ class SessionsController < BaseController
         Current.user.notify(action: :session_expiring, title: "Session expiring!", msg: I18n.t("sign_out_in_session_expires_shortly"))
       when expires_at < 10.minutes.since
         flash.now[:notice]= I18n.t("sign_out_in_session_expires_shortly")
-        render turbo_stream: turbo_stream.replace("flash_container", partial: "application/flash_message")
+        render turbo_stream: turbo_stream.replace("flash_container", partial: "application/flash_message", locals: { tenant: Current.get_tenant, messages: flash, user: Current.get_user })
       end
       head :ok
     end

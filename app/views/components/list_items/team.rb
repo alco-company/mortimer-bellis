@@ -34,6 +34,7 @@ class ListItems::Team < ListItems::ListItem
   end
 
   def show_left_mugshot
+    input(type: "checkbox", name: "batch[ids][]", value: resource.id, class: "hidden batch mort-form-checkbox mr-2")
     # mugshot(resource, css: "hidden sm:block h-12 w-12 flex-none rounded-full bg-gray-50")
   end
 

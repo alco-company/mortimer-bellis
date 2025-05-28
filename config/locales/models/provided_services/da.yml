@@ -1,9 +1,11 @@
 da:
   provided_service:
+    authorize_now: "Autorisér nu!"
     modal:
       delete_all: 
         title: Slet alle udvidelser/integrationer
         instruction: Er du sikker på, at du vil slette alle udvidelser/integrationer?
+        instruction_selected: Er du sikker på, at du vil slette alle %{count} udvalgte udvidelser/integrationer?
       delete:
         title: Slet denne udvidelse/integration
         instruction: Er du sikker på, at du vil slette udvidelsen/integrationen %{name}?
@@ -33,6 +35,7 @@ da:
     form:
       new: Ny udvidelse/integration
       edit: Rediger udvidelse/integration
+      show: Udvidelse/Integration
 
     new:
       title: Ny udvidelse/integration
@@ -49,6 +52,7 @@ da:
     errors:
       messages:
         name_exist: "Udvidelsen/integrationen findes allerede"
+        service_exist: "Udvidelsen/integrationen findes allerede"
         name_blank: "Navn kan ikke være blank"
         service_blank: "Service klassen kan ikke være blank"
         service_does_not_exist: "Service klassen findes ikke"

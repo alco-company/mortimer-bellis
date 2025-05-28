@@ -13,6 +13,7 @@
         <%= form.hidden_field :modal_form, value: @modal_form %>
         <%= form.hidden_field :resource_class, value: @resource_class %>
         <%= form.hidden_field :step, value: @step %>
+        <%= form.hidden_field :search, value: @search %>
         <%= form.label :import_file, t("#{@resource_class.to_s.underscore}.modal.import.file"), class: "" %>
         <%= form.file_field :import_file, autofocus: true, accept: ".csv", class: "mort-form-text py-3" %>
 

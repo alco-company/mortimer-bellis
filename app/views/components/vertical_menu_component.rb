@@ -651,7 +651,7 @@ class VerticalMenuComponent < ApplicationComponent
         div(class: "sticky top-0 z-40 lg:mx-auto lg:max-w-7xl lg:px-8") do
           div(
             class:
-              "flex h-16 items-center gap-x-4 border-b border-gray-200 bg-white px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-0 lg:shadow-none"
+              "flex h-16 items-center gap-x-4 border-b border-slate-100 bg-white px-4 shadow-xs sm:gap-x-6 sm:px-6 lg:px-0 lg:shadow-none"
           ) do
             whitespace
             button(
@@ -793,7 +793,7 @@ class VerticalMenuComponent < ApplicationComponent
                   end
                   div(
                     class:
-                      "absolute right-0 z-10 mt-2.5 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none",
+                      "absolute right-0 z-10 mt-2.5 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-hidden",
                     role: "menu",
                     aria_orientation: "vertical",
                     aria_labelledby: "user-menu-button",

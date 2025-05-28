@@ -4,6 +4,7 @@ da:
       delete_all: 
         title: Slet alle brugere
         instruction: Er du sikker på, at du vil slette alle brugere?
+        instruction_selected: Er du sikker på, at du vil slette alle %{count} udvalgte brugere?
       delete:
         title: Slet denne bruger
         instruction: Er du sikker på, at du vil slette brugeren %{name}?
@@ -19,7 +20,10 @@ da:
     next_step: "Hvis du ikke har modtaget emailen, kan du få den sendt igen."
     email_missing: Check din 'junk'/'reklame' postmappe - måske ligger email'en der?
     validation_errors: Der er fejl i det indtastede
-    
+    enter_password: Indtast din nye adgangskode
+    reenter_password: Gentag din nye adgangskode
+    enter_current_password: Indtast din nuværende adgangskode
+
     create:
       post: Bruger blev oprettet
     update:
@@ -55,7 +59,11 @@ da:
         resend_confirmation: 
           title: Bekræftelses email
           action: Send igen
-
+      show:
+        confirmation:
+          title: Oprettelse godkendt!
+          thankyou: Tak for at bekræfte din oprettelse. Du er nu klar til at komme i gang!
+          help: "Har du spørgsmål kan du altid finde svar her: <span class='cursor-pointer mort-link-primary'>https://mortimer.pro/help</span> <p>Eller kig efter redningskransen nederst til venstre i appen.</p>"
     sessions:
       new: 
         sign_in: Log ind
@@ -70,16 +78,27 @@ da:
       sign_up: Opret en ny konto
 
     registrations:
+      updated: Din profil er blevet opdateret
+      validation_errors: "Der opstod fejl under opdateringen af brugeren."
       new:
         create: Opret kontoen
         sign_up:
           title: Opret en ny konto
+          leave_empty: "Lad være tom, hvis du ikke vil ændre adgangskoden"
           minimum: "(mindst %{count} tegn)"
+      edit:
+        sign_up:
+          current_password: Nuværende adgangskode
+          leave_empty: "Lad være tom, hvis du ikke vil ændre adgangskoden"
+          minimum: "(mindst %{count} tegn)"
+          need_current_password: "Du skal indtaste din nuværende adgangskode for at ændre den."
         
     passwords:
       new: 
         reset_password: Nulstil adgangskoden
       edit:
+        sign_up:
+          minimum: "(mindst %{count} tegn)"
         change_password: Skift din adgangskode
         password: Adgangskode
         password_confirmation: Bekræft/Gentag adgangskoden
@@ -89,9 +108,16 @@ da:
       title: Rediger profil
       name: Redigér din profil
       update: Opdater profil
+      buy_product:
+        title: "Betal for Mortimer"
+        description: "Vi har tre forskellige licenser, som du kan vælge mellem. Hvis du har spørgsmål, kan du kontakte os på <a class='mort-link-primary text-purple-700 hover:text-purple-400' href='%{discord}'>Discord</a>."
+        current_status: "Lige nu bruger du %{license}"
+        license_expiring: "Udløber %{expiring}"
+        license_changed: "Opdateret %{changed}"
+        manage_status: "Vedligehold"
       cancel:
         title: Slet min konto
-        unhappy: Er du utilfreds med vores service, eller har du bare ikke brug for det længere? Trykker du på [slet] knappen her nedenfor, vil din konto blive slettet. Vi vil være kede af at skulle sige farvel, men respekterer naturligvis dit valg.
+        unhappy: "Er du utilfreds med vores service, eller har du bare ikke brug for det længere?<p class='text-sm mt-2'> Trykker du på <strong>[ slet ]</strong> knappen her nedenfor, vil din konto, med alle oprettede brugere og deres data, blive slettet. </p><p class='text-sm mt-2'>Vi vil være kede af at skulle sige farvel, men respekterer naturligvis dit valg.</p>"
         action: Slet!
 
     errors:
@@ -148,8 +174,9 @@ da:
       send_paranoid_instructions: "Hvis din email adresse eksisterer i vores database, vil du modtage en email med instruktioner om hvordan du bekræfter din email-adresse om et par minutter."
     failure:
       already_authenticated: "Du er allerede logget ind."
+      already_confirmed: "Din konto er allerede bekræftet - eller det link du har brugt er i stykker."
       inactive: "Din konto er endnu ikke aktiveret."
-      invalid: "Invalid %{authentication_keys} or password."
+      invalid: "Forkert email adresse eller adgangskode"
       locked: "Din konto er låst. Vi har sendt dig en email med instruktioner om hvordan du låser den op."
       last_attempt: "Du har et forsøg tilbage før din konto låses."
       not_found_in_database: "Invalid %{authentication_keys} or password."
@@ -220,6 +247,7 @@ da:
 
     second_factor:
       otp_code: "2 faktor kode"
+      authentication_title: "2 Faktor Autentificering"
       authenticator_app: "Autentificerings app"
       enabled: "Din to-faktor autentificering er aktiveret."
       already_enabled: "Din to-faktor autentificering er allerede aktiveret."
@@ -228,6 +256,8 @@ da:
       enable: "Aktiver"
       disable_2fa: "Deaktiver 2FA"
       enable_2fa: "Aktiver 2FA"
+      enable_2fa_introduction: "For at aktivere 2FA skal du downloade en autentificerings app, fx Google Authenticator, scanne QR koden herunder. Derefter skal du indtaste den genererede kode (fx 231312)."
+      copy_and_paste: "tap for at kopiere koden."
       title: "Bekræft din identitet"
       password_placeholder: "Adgangskode"
       bad_password: "Din adgangskode er forkert"
@@ -242,15 +272,21 @@ da:
 
     omniauth_callbacks:
       user_not_found: "vi ikke kunne finde en bruger med den email adresse (%{email}), som du har brugt til at logge ind med."
+      wrong_license: "du har ikke tilladelse til at bruge denne form for log ind. Det kræver Ambassadør eller Pro licens"
       failure: "Kunne ikke godkende dig fra %{kind} fordi %{reason}."
       success: "Godkendte dig fra %{kind} kontoen %{email}."
     passwords:
       no_token: "Du kan ikke tilgå denne side uden at komme fra en email med instruktioner til at nulstille din adgangskode. Hvis du kommer fra en email med instruktioner til at nulstille din adgangskode, så sørg for at du brugte den fulde URL."
       send_instructions: "Du vil modtage en email med instruktioner om hvordan du nulstiller din adgangskode om et par minutter."
       send_paranoid_instructions: "Hvis din email adresse eksisterer i vores database, vil du modtage et link til at nulstille din adgangskode om et par minutter."
+      update_now: "Opdatér adgangskoden - og tryk på 'Skift adgangskoden' (gør du ikke det, vil din adgangskode ikke blive ændret)."
       updated: "Din adgangskode er blevet ændret korrekt. Du er nu logget ind."
-      updated_not_active: "Din adgangskode er blevet ændret korrekt."
+      updated_not_active: "Din adgangskode er blevet ændret korrekt. Log ind med din nye adgangskode."
+      passwords_not_matching: "Adgangskoderne er ikke ens."
     registrations:
+      email_taken: "Email adressen er allerede tilknyttet en anden konto."
+      email_ok: "Email adressen er ledig."
+      failed: "Der opstod en fejl under oprettelsen af din konto."
       destroyed: "Farvel! Din konto er blevet annulleret korrekt. Det ville glæde os at se dig tilbage."
       signed_up: "Velkommen! Du er blevet oprettet korrekt."
       signed_up_but_inactive: "Du er blevet oprettet korrekt. Dog kunne vi ikke logge dig ind, da din konto endnu ikke er aktiveret."

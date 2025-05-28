@@ -1,5 +1,6 @@
 class Customer  < ApplicationRecord
   include Tenantable
+  include Countryable
 
   has_many :projects, dependent: :destroy
   has_many :invoices, dependent: :destroy
@@ -17,6 +18,16 @@ class Customer  < ApplicationRecord
 
   validates :name, presence: true, uniqueness: { scope: :tenant_id, message: I18n.t("customers.errors.messages.name_exist") }
   validates :vat_number, presence: true, uniqueness: { scope: :tenant_id, message: I18n.t("customers.errors.messages.vat_number_exist") }, if: -> { !is_person? }
+  # validates :payment_condition_type, presence: true, if: -> { !is_person? }
+  # validates :payment_condition_number_of_days, presence: true, if: -> { !is_person? }
+  # validates :street, presence: true
+  # validates :zipcode, presence: true
+  # validates :city, presence: true
+  # validates :phone, presence: true
+  # validates :email, presence: true
+  validates :country_key, presence: true
+  # validates :vat_region_key, presence: true
+
 
   def self.filtered(filter)
     flt = filter.filter
@@ -35,6 +46,47 @@ class Customer  < ApplicationRecord
     all
   end
 
+  def self.filterable_fields(model = self)
+    f = column_names - [
+      "id",
+      "tenant_id",
+      "erp_guid",
+      # t.string "name"
+      # t.string "street"
+      # t.string "zipcode"
+      # t.string "city"
+      # t.string "phone"
+      # t.string "email"
+      # t.string "vat_number"
+      # t.string "ean_number"
+      # "created_at",
+      # "updated_at",
+      # t.string "external_reference"
+      # t.boolean "is_person"
+      "is_member",
+      # t.boolean "is_debitor"
+      # t.boolean "is_creditor"
+      "country_key",
+      # t.string "webpage"
+      # t.string "att_person"
+      # t.string "payment_condition_type"
+      # t.string "payment_condition_number_of_days"
+      "member_number",
+      "company_status",
+      "vat_region_key",
+      "invoice_mail_out_option_key"
+    ]
+    f = f - [
+      "created_at",
+      "updated_at"
+      ] if model == self
+    f
+  end
+
+  def self.associations
+    [ [], [ "invoices", "time_materials", "projects" ] ]
+  end
+
   def address
     "%s\n%s  %s" % [ street, zipcode, city ]
   end
@@ -45,8 +97,9 @@ class Customer  < ApplicationRecord
 
   def self.add_from_erp(item)
     return false unless item["Name"].present?
+    return true if User.can?(:import_customers_only) and !item["IsDebitor"]
 
-    customer = Customer.find_or_create_by(tenant: Current.tenant, erp_guid: item["ContactGuid"])
+    customer = Customer.find_or_create_by(tenant: Current.get_tenant, erp_guid: item["ContactGuid"])
     customer.name = item["Name"]
     customer.external_reference = item["ExternalReference"]
     customer.is_person = item["IsPerson"]
@@ -70,9 +123,21 @@ class Customer  < ApplicationRecord
     customer.vat_region_key = item["VatRegionKey"]
     customer.invoice_mail_out_option_key = item["InvoiceMailOutOptionKey"]
     if customer.save
-       Broadcasters::Resource.new(customer).create
+       Broadcasters::Resource.new(customer, { controller: "customers" }).create
     end
   rescue => error
     UserMailer.error_report(error.message, "Customer#add_from_erp failed ").deliver_later
+  end
+
+  def select_data_attributes
+    {
+      lookup_target: "item",
+      lookup_customer_id: id,
+      lookup_customer_name: name,
+      lookup_customer_hourly_rate: hourly_rate,
+      value: id,
+      display_value: name,
+      action: "keydown->lookup#optionKeydown click->lookup#selectOption"
+    }
   end
 end

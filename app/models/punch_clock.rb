@@ -31,6 +31,32 @@ class PunchClock < ApplicationRecord
     all
   end
 
+  def self.filterable_fields(model = self)
+    f = column_names - [
+      "id",
+      "tenant_id",
+      "location_id"
+      # "name"
+      # "ip_addr"
+      # "last_punched_at"
+      # "access_token"
+      # "locale"
+      # "time_zone"
+      # "created_at"
+      # "updated_at"
+    ]
+    f = f - [
+      "last_punched_at",
+      "created_at",
+      "updated_at"
+    ] if model == self
+    f
+  end
+
+  def self.associations
+    [ [ Location ], [ Punch ] ]
+  end
+
   # def self.ordered(resources, field, direction = :desc)
   #   resources.joins(:location).order(field => direction)
   # end

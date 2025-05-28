@@ -1,0 +1,2 @@
+module Editor::BlocksHelper
+end

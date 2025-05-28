@@ -1,5 +1,4 @@
 class YearComponent < CalendarComponent
-
   def view_template
     div do
       show_header(date)

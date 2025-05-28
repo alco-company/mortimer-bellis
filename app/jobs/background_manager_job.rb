@@ -9,7 +9,7 @@ class BackgroundManagerJob < ApplicationJob
   #   3: user_auto_punch_job
   #
   def perform
-    dt = DateTime.current
+    # dt = DateTime.current
     # prepare_state_job if dt.hour == 5 and dt.min == 0
     # prepare_eu_state_job if dt.hour == 5 and dt.min == 5
     # prepare_auto_punch_job if dt.hour == 23 and dt.min == 50

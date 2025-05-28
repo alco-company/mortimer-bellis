@@ -28,6 +28,7 @@
 #       enabled: "ON"
 
 en:
+  need_help: "Need help?"
   danish: "Foretrækker du dansk?"
 
   menu:
@@ -44,7 +45,20 @@ en:
     motds: MessageOfTheDay
 
 
-
+  pages:
+    help:
+      title: We have compiled a short list of answers to frequently asked questions.
+      paragraph: "Initially, though, here is a few links that you might find usefull in getting started with Mortimer:"
+      answers: "Answers to frequently asked questions"
+      what_is:
+        question: What is Mortimer?
+        answer: "Mortimer is a kind of personal assistent that assist you in collecting data. Data you can use to make better decisions, report mileage driving your car whilst on the job, bill your customers or just keep track of your own time."
+      how_to_use:
+        question: How do I use Mortimer?
+        answer: It's easy to use Mortimer. Just sign up and start using the app. You can use it on your phone, tablet or computer.
+      what_to_use_for: 
+        question: What can I use Mortimer for?
+        answer: Mortimer allows you to quickly persist data pertaining to tasks that you have completed. You can use it to keep track of your time, mileage, and more.
   errors:
     messages:
       already_confirmed: "was already confirmed, please try signing in"
@@ -109,7 +123,7 @@ en:
         title: titel 
         description: beskrivelse
       lead:
-        email_address: Email adresse
+        email: Email adresse
         trial_ends_at: Prøveperioden slutter
         converted_at: Kunde fra    
       location:

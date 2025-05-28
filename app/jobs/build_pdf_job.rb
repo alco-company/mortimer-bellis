@@ -24,6 +24,7 @@ class BuildPdfJob < ApplicationJob
     end
     true
   rescue StandardError => e
+    UserMailer.error_report(e.to_s, "BuildPdfJob#perform").deliver_later
     false
   end
 end

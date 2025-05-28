@@ -1,8 +1,8 @@
 class Icons::BackgroundJob < Phlex::HTML
   attr_accessor :cls
 
-  def initialize(cls: "h-6 text-gray-900 hover:text-gray-5000")
-    @cls = cls
+  def initialize(css: "h-6 text-gray-900 hover:text-gray-5000")
+    @cls = css
   end
 
   def view_template

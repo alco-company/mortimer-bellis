@@ -4,12 +4,15 @@
     <div class="mx-auto max-w-sm lg:w-96">
       <div class="">
         <%= render_logo %>
-        <h1 class="font-bold text-gray-200 text-2xl"> <%= I18n.t("users.thank_you_for_signing_up") %> </h1>
+        <h1> <%= I18n.t("users.thank_you_for_signing_up") %> </h1>
 
         <p class="mort-form-txt mt-6"><%= I18n.t("users.action") %></p>
         <p class="mort-form-txt mt-6"><%= I18n.t("users.next_step") %></p>
         <p class="mt-4 text-sm leading-6">
-          <a href="<%= new_user_confirmation_url() %> " class="mort-btn-primary"><%= I18n.t("users.resend_invitation") %></a>
+          <a href="<%= new_users_session_url() %> " class="mort-btn-primary"><%= I18n.t("devise.login") %></a>
+        </p>
+        <p class="mt-4 text-sm leading-6">
+          <a href="<%= new_users_confirmation_url() %> " class="mort-btn-primary"><%= I18n.t("users.resend_invitation") %></a>
         </p>
         <p class="mort-form-txt text-xs text-gray-400 mt-1"><%= I18n.t("users.email_missing") %></p>
       </div>

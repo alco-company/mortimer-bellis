@@ -1,13 +1,16 @@
 da:
-  upload to ERP: Upload til Dinero
+  upload to ERP: Upload til ERP
+  sync with ERP: Synkronisér med ERP
+  sync all with ERP: Synkronisér alt
   time_material:
     no_time_spent: Der er ikke logget tid
     no_date: <i class="text-red-400">Bemærk! Der er ikke valgt en dato</i>
     time_spent: Der er logget %{time_spent} tid
     billable: fakturérbar
-    uploading_to_erp: Overfører fakturalinjer til Dinero
+    uploading_to_erp: Overfører fakturalinjer til ERP
     current_task: Igangværende opgave
     default_assigned_task_title: "Vedr en af dine opgaver"
+    default_assigned_about: "En opgave"
     new_assigned_task: "%{delegator} har tildelt dig en ny opgave"
     updated_assigned_task: "%{moderator} har rettet en af dine opgaver"
     destroyed_assigned_task: "%{terminator} har slettet en af dine opgaver"
@@ -18,15 +21,22 @@ da:
     paused: Opgaven blev parkeret
     done: Afsluttet
     resumed: Opgaven blev genoptaget
-    pushed_to_erp: Overført til Dinero
+    pushed_to_erp: Overført til ERP
     cannot_be_pushed: Kan ikke overføres
-    archived: Arkiveret
+    archived: Posten er blevet arkiveret
+    unarchived: Posten er taget ud af arkivet (igen)
+    insufficient_data: Manglende data
+    billed: Faktureret
+    task_comment:
+      lbl: Tasks
+    location_comment:
+      lbl: Locations
     states:
       draft: Kladde
       active: Aktiv
       paused: Parkeret
       done: Afsluttet
-      pushed_to_erp: Overført til Dinero
+      pushed_to_erp: Overført til ERP
       cannot_be_pushed: Kan ikke overføres
       archived: Arkiveret
     units:
@@ -77,15 +87,22 @@ da:
       delete_all: 
         title: Slet alle tid/materialer
         instruction: Er du sikker på, at du vil slette alle tid/materialer?
+        instruction_selected: Er du sikker på, at du vil slette alle %{count} udvalgte tid/materialer?
       delete:
         title: Slet denne tid/materiale
         instruction: Er du sikker på, at du vil slette denne tid/materiale %{name}?
         button: Slet
-      upload_dinero:
-        title: Dan fakturalinjer i Dinero
-        instruction: Når du trykker upload, vil der blive oprettet fakturalinjer i Dinero for alle tid/materialer, der er markeret til fakturering. Er du sikker på, at du vil fortsætte?
+      export:
+        title: Eksporter tid/materialer
+        instruction: Du har filtreret/søgt og/eller udvælgt poster. Efter eksporten kan du vælge at arkivere de valgte/alle tid/materialer (fx hvis du bruger eksporten til at danne fakturalinjer til et ERP system, vi ikke integrerer direkte med)
+        instruction_continued: Vælg filtypen du skal bruge, og de felter du vil have med i eksporten.
+        button: Eksportér
+      upload_ERP:
+        button: Overfør til ERP
+        title: Dan fakturalinjer i ERP
+        instruction: Når du trykker upload, vil der blive oprettet fakturalinjer i ERP for alle valgte tid/materialer, der er markeret til fakturering (%{posts} linjer). Er du sikker på, at du vil fortsætte?
         label: Fakturalinjer
-        description: Fakturalinjerne dannes i Dinero som kladder, så du skal logge ind i Dinero, og godkende dem, før de bliver til fakturaer, og kan sendes.
+        description: Fakturalinjerne dannes i ERP som kladder, så du skal logge ind i ERP, og godkende dem, før de bliver til fakturaer, og kan sendes.
         approved: 
           title: Import af medarbejdere
           description: Du har godkendt importen - som nu gennemføres i en baggrundsproces. Når processen er færdig, vil du kunne se resultatet i oversigten over medarbejdere (klik på menupunktet medarbejdere).

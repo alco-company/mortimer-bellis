@@ -12,7 +12,10 @@ class ApplicationRecord < ActiveRecord::Base
   #
   # make it possible to handle model deletion differently from model to model
   # eg TenantRegistrationService.call(tenant, destroy: true)
-  def remove
+  # argument step is used to control the deletion process - used on User model
+  # when deleting an account
+  #
+  def remove(step = nil)
     destroy!
   end
 
@@ -69,6 +72,15 @@ class ApplicationRecord < ActiveRecord::Base
   end
 
   #
+  # extend this method on the model to define the associations
+  # existing on the model
+  # define as array of belongs_to, has_many
+  # fx [ [ Customer, User, Tenant ], [ Comment, InvoiceItem ] ]
+  def self.associations
+    [ [], [] ]
+  end
+
+  #
   # extend this method on the model to define the field formats
   # its a callback from the superform when rendering the form
   # (in non-editable mode, the form will render the field value using this method)
@@ -114,7 +126,24 @@ class ApplicationRecord < ActiveRecord::Base
     ApplicationForm.new resource: resource, editable: editable, fields: fields
   end
 
+  # FIXME - implement this method on models that have users
+  def self.user_scope(scope)
+    nil # all.by_tenant()
+    # case scope
+    # when "all"; all
+    # when "mine"; where(user_id: Current.user.id)
+    # when "my_team"; where(user_id: Current.user.team.users.pluck(:id))
+    # end
+  end
 
+  # FIXME - implement this method on models that have users/teams
+  def self.named_scope(scope)
+    nil # all.by_tenant()
+    # users = User.where name: "%#{scope}%"
+    # team_users = User.where team_id: Team.where_op(:matches, name: "%#{scope}%").pluck(:id)
+    # users = users + team_users if team_users.any?
+    # where(user_id: users.pluck(:id))
+  end
 
   # def self.ordered(resources, field, direction = :desc)
   #   resources.order(field => direction)

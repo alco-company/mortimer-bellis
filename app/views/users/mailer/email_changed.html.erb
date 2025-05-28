@@ -109,7 +109,7 @@
         margin-right: calc(24px * var(--tw-space-x-reverse));
         margin-left: calc(24px * calc(1 - var(--tw-space-x-reverse)))
     }
-    .rounded {
+    .rounded-sm {
         border-radius: 4px
     }
     .bg-slate-200 {
@@ -254,7 +254,7 @@
     .mso-font-width-\[150\%\] {
         mso-font-width: 150%
     }
-    .shadow-sm {
+    .shadow-xs {
         box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05)
     }
     .no-underline {
@@ -356,7 +356,7 @@
           </div>
           <table class="w-full" cellpadding="0" cellspacing="0" role="none">
             <tr>
-              <td class="p-12 sm:px-6 text-base text-slate-700 bg-white rounded shadow-sm">
+              <td class="p-12 sm:px-6 text-base text-slate-700 bg-white rounded-sm shadow-xs">
                 <h1 class="m-0 mb-6 text-base sm:leading-8 text-black font-semibold">
                   <%= I18n.t("devise.mailer.email_changed.hello", email: @email) %>
                 </h1>
@@ -388,7 +388,7 @@
                   M O R T I M E R
                 </p>
                 <p class="m-0 italic">
-                  The most easy, fast, and affordable Time & Attendance software in Europe. Most likely.
+                  The easiest, fastest, and most affordable Time & Attendance software in Europe. Most likely.
                 </p>
                 <p class="cursor-default"></p>
                   <%= render SomelinksComponent.new %>

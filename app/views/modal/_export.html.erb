@@ -1,0 +1,92 @@
+<% url = resource.id.present? ? modal_url(resource) : modal_url(resource_class.first) %>
+<%= form_with(url: url, method: :put, multipart: true) do |form| %>
+  <div class="sm:flex sm:items-start">
+    <div class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full text-sky-500 bg-sky-100 sm:mx-0 sm:h-10 sm:w-10">
+      <%= render Icons::Download.new css: "h-6 text-sky-500" %>
+    </div>
+    <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
+      <h3 class="text-base font-semibold leading-6 text-gray-900" id="modal_title"> <%= I18n.t("#{resource_class.to_s.underscore}.modal.export.title") %></h3>
+      <div class="mt-2">
+        <p class="text-sm text-gray-500 pb-3"> <%== I18n.t("#{resource_class.to_s.underscore}.modal.export.instruction") %></p>
+
+        <%= form.hidden_field :modal_form, value: @modal_form %>
+        <%= form.hidden_field :resource_class, value: resource_class %>
+        <%= form.hidden_field :step, value: "accept" %>
+        <%= form.hidden_field :all, value: set_all_true %>
+        <%= form.hidden_field :id, value: resource&.id %>
+        <%= form.hidden_field :search, value: params.dig(:search) %>
+        <%= form.hidden_field :url, value: @url %>
+
+        <% if resource_class.first.respond_to? :archived! %>
+          <div class="">
+            <div class="mort-field my-1 flex justify-end flex-row-reverse items-center">
+              <label for="time_material_is_separate">Arkivér efterfølgende</label>
+              <div class="my-auto mort-form-bool" data-controller="boolean">
+                <input name="archive_after" data-boolean-target="input" type="hidden" value="0">
+                <button type="button" data-action="click->boolean#toggle" data-boolean-target="button" class="group relative inline-flex h-6 w-10 flex-shrink-0 cursor-pointer items-center justify-center rounded-full focus:outline-hidden focus:ring-1 focus:ring-sky-200 focus:ring-offset-1" role="switch" aria-checked="false">
+                  <span class="sr-only">Use setting</span>
+                  <span aria-hidden="true" class="pointer-events-none absolute h-full w-full rounded-md bg-white"></span>
+                  <!-- Enabled: &quot;bg-sky-600&quot;, Not Enabled: &quot;bg-gray-200&quot;-->
+                  <span aria-hidden="true" data-boolean-target="indicator" class="bg-gray-200 pointer-events-none absolute mx-auto h-4 w-9 rounded-full transition-colors duration-200 ease-in-out"></span>
+                  <!-- Enabled: &quot;translate-x-5&quot;, Not Enabled: &quot;translate-x-0&quot;-->
+                  <span aria-hidden="true" data-boolean-target="handle" class="translate-x-0 pointer-events-none absolute left-0 inline-block h-5 w-5 transform rounded-full border border-gray-200 bg-white shadow-sm ring-0 transition-transform duration-200 ease-in-out"></span>
+                </button>
+              </div>
+            </div>
+          </div>
+          <p class="text-sm text-gray-500 pb-3"> <%== I18n.t("#{resource_class.to_s.underscore}.modal.export.instruction_continued") %></p>
+        <% end %>
+
+        <div class="mort-field">
+          <%= form.label :file_type, t("#{@resource_class.to_s.underscore}.modal.export.export_type"), class: "font-medium text-gray-900" %>
+          <div class="grid grid-cols-1">
+            <%= form.select :file_type, options_for_select([["CSV", "csv"]]), { include_blank: false }, { class: "mort-form-select" }  %>
+            <svg class="pointer-events-none col-start-1 row-start-1 mr-2 size-5 self-center justify-self-end text-gray-500 sm:size-4" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" data-slot="icon"><path fill-rule="evenodd" d="M4.22 6.22a.75.75 0 0 1 1.06 0L8 8.94l2.72-2.72a.75.75 0 1 1 1.06 1.06l-3.25 3.25a.75.75 0 0 1-1.06 0L4.22 7.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd"></path></svg>
+          </div>
+        </div>
+
+        <p class="mt-4">
+          <%= form.label :export_type, t("#{@resource_class.to_s.underscore}.modal.export.export_fields"), class: "font-medium text-gray-900" %>
+          <fieldset>
+            <legend class="sr-only">field selection</legend>
+            <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-2 space-y-5">
+              <% resource_class.filterable_fields.each do |key| %>
+                <div class="flex gap-3">
+                  <div class="flex h-6 shrink-0 items-center">
+                    <div class="group grid size-4 grid-cols-1">
+                      <input 
+                        id="export_<%= key %>" 
+                        aria-describedby="comments-description" 
+                        name="export_<%= key %>" 
+                        type="checkbox" 
+                        checked 
+                        class="col-start-1 row-start-1 appearance-none rounded-sm border border-gray-300 bg-white checked:border-sky-600 checked:bg-sky-600 indeterminate:border-sky-600 indeterminate:bg-sky-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:checked:bg-gray-100 forced-colors:appearance-auto">
+                      <svg class="pointer-events-none col-start-1 row-start-1 size-3.5 self-center justify-self-center stroke-white group-has-disabled:stroke-gray-950/25" viewBox="0 0 14 14" fill="none">
+                        <path class="opacity-0 group-has-checked:opacity-100" d="M3 8L6 11L11 3.5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                        <path class="opacity-0 group-has-indeterminate:opacity-100" d="M3 7H11" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                      </svg>
+                    </div>
+                  </div>
+                  <div class="text-sm/6">
+                    <label for="comments" class="font-medium text-gray-900"><%= key %></label>
+                    <!--<span id="comments-description" class="text-gray-500"><span class="sr-only">New comments </span>so you always know what's happening.</span>-->
+                  </div>
+                </div>
+              <% end %>
+            </div>
+          </fieldset>
+        </p>
+        <!-- <div class="relative flex items-start mt-3">
+          <div class="ml-3 text-sm leading-6">
+            <label for="import_model" class="font-medium text-gray-900"><%= t("#{@resource_class.to_s.underscore}.modal.import.label") %></label>
+            <p id="comments-description" class="text-gray-500"><%= t("#{@resource_class.to_s.underscore}.modal.import.description") %></p>
+          </div>
+        </div> -->
+      </div>
+    </div>
+  </div>
+  <div class="mt-5 sm:mt-4 flex justify-between flex-row-reverse">
+    <%= form.button t("#{resource_class.to_s.underscore}.modal.export.button"), data: { turbo: false, modal_target: "submitForm", action: "modal#submitForm", close: true }, class: "mort-btn-primary sm:ml-3" %>
+    <%= button_tag t(:cancel), form: "dialog_form", formmethod: :dialog,  data: { action: "click->modal#close" }, class: "mort-btn-cancel" %>
+  </div>
+<% end %>

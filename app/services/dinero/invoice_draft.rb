@@ -1,5 +1,5 @@
 class Dinero::InvoiceDraft
-  attr_accessor :ds, :cid_array, :settings, :invoice_date
+  attr_accessor :ds, :cid_array, :settings, :invoice_date, :drafts
 
   def initialize(ds)
     @ds = ds
@@ -7,25 +7,26 @@ class Dinero::InvoiceDraft
   end
 
   def process(time_materials, invoice_date = Date.current)
-    # prepare hash to hold customer invoices
+    return if time_materials.empty?
     @cid_array = {}
     @invoice_date = invoice_date.to_date
-    return { ok: "none records" } if time_materials.where(date: ..invoice_date).empty?
-
+    return { ok: "no records" } if time_materials.where(date: ..invoice_date).empty?
 
     # load settings like accounts, company details, more
     load_settings
-    records=0
-    unless settings == {}
-      # loop through all time_materials, picking elligible ones
+    records = 0
+
+    unless settings=={}
+      # Group time materials by customer and project
       time_materials.each do |resource|
         next unless resource.valid?
         next if resource.pushed_to_erp?
-        can_resource_be_pushed? resource
+        next unless can_resource_be_pushed?(resource)
         pack_resource_for_push(resource) && records += 1 if resource.is_invoice? && resource.done?
       end
       push_to_erp
     end
+
     { ok: "%d records drafted" % records }
 
   rescue => err
@@ -55,12 +56,18 @@ class Dinero::InvoiceDraft
   end
 
   def can_resource_be_pushed?(resource)
-    return unless resource.is_invoice?
-    resource.cannot_be_pushed! unless resource.values_ready_for_push?
+    return false if resource.nil?
+    return false unless resource.is_invoice?
+    unless resource.pushable?
+      resource.cannot_be_pushed!
+      return false
+    end
+    true
 
   rescue => err
-    resource.update push_log: "%s\n- - - \n%s\%s" % [ resource.push_log, Time.current.to_s, err.message ]
-    resource.cannot_be_pushed!
+
+    resource&.update push_log: "%s\n- - - \n%s\%s" % [ resource&.push_log, Time.current.to_s, err.message ]
+    resource&.cannot_be_pushed!
     UserMailer.error_report(err.to_s, "DineroUpload.can_resource_be_pushed?").deliver_later
   end
 
@@ -96,10 +103,11 @@ class Dinero::InvoiceDraft
   def push_to_erp
     cid_array.each do |cid, lines|
       begin
-        dinero_lines = []
-        project_description = []
-        refs = []
-        date = I18n.l(invoice_date, format: :short_iso)
+        invoice, dinero_lines, project_description, refs, date = find_draft_invoices_for_customer(cid)
+        dinero_lines = dinero_lines.collect do |line|
+          line["Description"] = nil unless line["ProductGuid"].blank?
+          line
+        end
         lines.each do |line|
           # Struct.new("Line", :productGuid, :description, :comments, :quantity, :accountNumber, :unit, :discount, :lineType, :baseAmountValue).new(
           dinero_lines << product_line(line, date)
@@ -107,47 +115,48 @@ class Dinero::InvoiceDraft
           refs << line.product&.external_reference || ""
         end
         line = lines.first
-        dinero_invoice = invoice_header(line, date, dinero_lines, refs.join(", "), project_description.compact.join(", "))
+        dinero_invoice = get_invoice_header(invoice, line, dinero_lines, project_description, refs, date)
         persist_invoice_for_testing(cid, dinero_invoice, lines) if Rails.env.test?
 
         # happy path = {"Guid"=>"5856516f-5127-4dfc-98a7-52ab7d09e1df", "TimeStamp"=>"0000000080C81AC0"}
         # result = ds.push_invoice test_invoice
-        result = ds.push_invoice dinero_invoice unless dinero_invoice == {}
-        unless result["Guid"].present?
+        if invoice.nil?
+          result = ds.create_invoice(params: dinero_invoice)
+        else
+          result = ds.update_invoice(guid: invoice["Guid"], params: dinero_invoice)
+        end
+        result["guid"] = result["Guid"] if result["Guid"].present? rescue nil
+        unless result["guid"].present?
           lines.each do |line|
-            line.update push_log: "%s\n%s" % [ line.push_log, result ]
+            line.update push_log: "%s\n%s" % [ line&.push_log, result ]
             line.cannot_be_pushed!
             Broadcasters::Resource.new(line, { controller: "time_materials" }).replace
           end
+          raise "Invoice not created - %s" % result if result[:error]
         else
           lines.each do |line|
             line.pushed_to_erp!
-            line.update erp_guid: result["Guid"], pushed_erp_timestamp: result["TimeStamp"]
+            line.update erp_guid: result["guid"], pushed_erp_timestamp: result["TimeStamp"]
             Broadcasters::Resource.new(line, { controller: "time_materials" }).replace
           end
         end
 
       rescue => err
-        line.update push_log: "%s\n%s" % [ line.push_log, err.message ]
-        line.cannot_be_pushed!
+        line&.update push_log: "%s\n%s" % [ line&.push_log, err.message ]
+        line&.cannot_be_pushed!
         UserMailer.error_report(err.to_s, "DineroUpload.push_to_erp").deliver_later
       end
     end
   end
 
-  # 4 types of lines:
-  #
-  # 1. Product
-  # 2. Service (hours)
-  # 3. Product (one offs)
-  # 4. Text
-  #
-  def product_line(line, date)
-    return a_product(line, date) unless line.product_id.blank?
-    return a_one_off(line, date) unless line.quantity.blank?
-    return a_mileage(line, date) unless line.kilometers.blank?
-    return a_text(line, date) unless line.comment.blank?
-    service_line(line, date)
+  def get_invoice_header(invoice, line, dinero_lines, project_description, refs, date)
+    return invoice_header(line, date, dinero_lines, refs.join(", "), project_description.compact.join(", ")) if invoice.nil?
+    {
+      "productLines": dinero_lines,
+      "timeStamp": invoice["TimeStamp"],
+      "Comment": project_description.compact.join(", "),
+      "externalReference" => refs.join(", ")
+    }
   end
 
   def invoice_header(line, date, lines, refs, comment)
@@ -171,31 +180,49 @@ class Dinero::InvoiceDraft
       "isMobilePayInvoiceEnabled" => false,
       "isPensoPayEnabled" => false
     }
+
   rescue => err
-    line.update push_log: "%s\n%s" % [ line.push_log, err.message ]
-    line.cannot_be_pushed!
+    line&.update push_log: "%s\n%s" % [ line&.push_log, err.message ]
+    line&.cannot_be_pushed!
     UserMailer.error_report(err.to_s, "DineroUpload.invoice_header").deliver_later
     {}
   end
 
+  # 4 types of lines:
+  #
+  # 1. Product
+  # 2. Service (hours)
+  # 3. Product (one offs)
+  # 4. Text
+  #
+  # set invoice date on invoice_item - not created_at
+  #
+  def product_line(line, date)
+    date = line.date.blank? ? date : line.date
+    return a_product(line, date) unless line.product_id.blank?
+    return a_one_off(line, date) unless line.quantity.blank?
+    return a_mileage(line, date) unless line.kilometers.blank?
+    return a_text(line, date) unless line.comment.blank?
+    service_line(line, date)
+  end
+
   def a_product(line, date)
-    q = ("%.2f" % line.quantity.gsub(",", ".")).to_f rescue 0.0
-    d = ("%.2f" % line.discount.gsub(",", ".")).to_f rescue 0.0
-    p = line.unit_price.blank? ? line.product.base_amount_value : ("%.2f" % line.unit_price.gsub(",", ".")).to_f
+    line.calculated_unit_price = line.unit_price.blank? ? line.product.base_amount_value : ("%.2f" % line.unit_price.gsub(",", ".")).to_f
     initials = line.user&.initials rescue "-"
     {
-      "productGuid" => (line.product.erp_guid rescue raise "Product not found - productGuid"),     #   "102eb2e1-d732-4915-96f7-dac83512f16d",
-      "comments" =>    "%s, %s: %s" % [ date, initials, line.comment ],
-      "quantity" =>    q,
-      "accountNumber" => (line.product.account_number.to_i rescue raise "Product not found - accountNumber"),
-      "unit" =>        (line.product.unit rescue raise "Product not found - unit"),
-      "discount" =>    d,
-      "lineType" =>    "Product",                 # or Text - in which case only description should be set
-      "baseAmountValue" => p
+      "productGuid"     => (line.product.erp_guid rescue raise "productGuid missing - pull products from Dinero first!"),     #   "102eb2e1-d732-4915-96f7-dac83512f16d",
+      "comments"        => "%s, %s: %s" % [ date, initials, line.comment ],
+      "quantity"        => quantified(line),
+      "accountNumber"   => (line.product.account_number.to_i rescue raise "accountNumber missing - pull products from Dinero first!"),
+      "unit"            => (line.product.unit rescue raise "unit missing - pull products from Dinero first!"),
+      "discount"        => discounted(line),
+      "lineType"        => "Product",                 # or Text - in which case only description should be set
+      "baseAmountValue" => line.calculated_unit_price
     }
+
   rescue => err
-    line.update push_log: "%s\n%s" % [ line.push_log, err.message ]
-    line.cannot_be_pushed!
+    line&.update push_log: "%s\n%s" % [ line&.push_log, err.message ]
+    line&.cannot_be_pushed!
     UserMailer.error_report(err.to_s, "DineroUpload.a_product").deliver_later
     {
       "productGuid" => nil,
@@ -206,25 +233,24 @@ class Dinero::InvoiceDraft
 
   # a product we just invented - no data exists in the system
   def a_one_off(line, date)
-    q = ("%.2f" % line.quantity.gsub(",", ".")).to_f rescue 0.0
-    d = ("%.2f" % line.discount.gsub(",", ".")).to_f rescue 0.0
-    p = line.unit_price.blank? ? 0.0 : ("%.2f" % line.unit_price.gsub(",", ".")).to_f
+    # d = ("%.2f" % line.discount.gsub(",", ".")).to_f rescue 0.0
+    line.calculated_unit_price = line.unit_price.blank? ? 0.0 : ("%.2f" % line.unit_price.gsub(",", ".")).to_f
     initials = line.user&.initials rescue "-"
     {
-      "productGuid" => nil,
-      "description" => line.product_name,
-      "comments" =>    "%s, %s: %s" % [ date, initials, line.comment ],
-      "quantity" =>   q,
-      "accountNumber" => settings["defaultAccountNumber"].to_i,
-      "unit" =>        "parts",
-      "discount" =>    d,
-      "lineType" =>    "Product",                 # or Text - in which case only description should be set
-      "baseAmountValue" => p
+      "productGuid"     => nil,
+      "description"     => line.product_name,
+      "comments"        => "%s, %s: %s" % [ date, initials, line.comment ],
+      "quantity"        => quantified(line),
+      "accountNumber"   => settings["defaultAccountNumber"].to_i,
+      "unit"            => "parts",
+      "discount"        => discounted(line),
+      "lineType"        => "Product",                 # or Text - in which case only description should be set
+      "baseAmountValue" => line.calculated_unit_price
     }
 
   rescue => err
-    line.update push_log: "%s\n%s" % [ line.push_log, err.message ]
-    line.cannot_be_pushed!
+    line&.update push_log: "%s\n%s" % [ line&.push_log, err.message ]
+    line&.cannot_be_pushed!
     UserMailer.error_report(err.to_s, "DineroUpload.a_one_off").deliver_later
     {
       "productGuid" => nil,
@@ -241,9 +267,10 @@ class Dinero::InvoiceDraft
       "description" => "%s, %s: %s" % [ date, initials, line.comment ],
       "lineType" =>    "Text"
     }
+
   rescue => err
-    line.update push_log: "%s\n%s" % [ line.push_log, err.message ]
-    line.cannot_be_pushed!
+    line&.update push_log: "%s\n%s" % [ line&.push_log, err.message ]
+    line&.cannot_be_pushed!
     UserMailer.error_report(err.to_s, "DineroUpload.a_text").deliver_later
     {
       "productGuid" => nil,
@@ -256,22 +283,22 @@ class Dinero::InvoiceDraft
     nbr = settings["productForMileage"]
     prod = Product.where("product_number like ?", nbr).first
     raise "Product not found %s - set products in Dinero Service" % nbr unless prod
-    q = line.kilometers.to_f rescue 0.0
-    p = prod.base_amount_value
+    line.calculated_unit_price = prod.base_amount_value
     initials = line.user&.initials rescue "-"
     {
-      "productGuid" => prod.erp_guid,             #   "102eb2e1-d732-4915-96f7-dac83512f16d",
-      "comments" =>    "%s, %s: %s" % [ date, initials, line.about ],
-      "quantity" =>    q,
-      "accountNumber" => prod.account_number.to_i,
-      "unit" =>        prod.unit,
-      "discount" =>    0.0,                       # "%.2f" % line.discount.gsub("%", "").to_f,
-      "lineType" =>    "Product",                 # or Text - in which case only description should be set
-      "baseAmountValue" => p
+      "productGuid"     => prod.erp_guid,             #   "102eb2e1-d732-4915-96f7-dac83512f16d",
+      "comments"        => "%s, %s: %s" % [ date, initials, line.about ],
+      "quantity"        => quantified(line, line.kilometers&.to_f),
+      "accountNumber"   => prod.account_number.to_i,
+      "unit"            => prod.unit,
+      "discount"        => discounted(line),                       # "%.2f" % line.discount.gsub("%", "").to_f,
+      "lineType"        => "Product",                 # or Text - in which case only description should be set
+      "baseAmountValue" => line.calculated_unit_price
     }
+
   rescue => err
-    line.update push_log: "%s\n%s" % [ line.push_log, err.message ]
-    line.cannot_be_pushed!
+    line&.update push_log: "%s\n%s" % [ line&.push_log, err.message ]
+    line&.cannot_be_pushed!
     UserMailer.error_report(err.to_s, "DineroUpload.mileage_line").deliver_later
     {
       "productGuid" => nil,
@@ -287,23 +314,24 @@ class Dinero::InvoiceDraft
     when "2"; settings["productForOverTime100"]
     end
     prod = Product.where("product_number like ?", nbr).first
-    raise "Product not found %s - set products in Dinero Service" % nbr unless prod
-    q = line.calc_time_to_decimal
-    p = line.rate.blank? ? prod.base_amount_value : ("%.2f" % line.rate.gsub(",", ".")).to_f
+    raise "Product %s not found - pull products from Dinero first!" % nbr unless prod
+    line.calculated_unit_price = line.rate.blank? ? prod.base_amount_value : ("%.2f" % line.rate.gsub(",", ".")).to_f
+    line.discount = "0"
     initials = line.user&.initials rescue "-"
     {
-      "productGuid" => prod.erp_guid,             #   "102eb2e1-d732-4915-96f7-dac83512f16d",
-      "comments" =>    "%s, %s: %s" % [ date, initials, line.about ],
-      "quantity" =>    q,
-      "accountNumber" => prod.account_number.to_i,
-      "unit" =>        prod.unit,
-      "discount" =>    0.0,                       # "%.2f" % line.discount.gsub("%", "").to_f,
-      "lineType" =>    "Product",                 # or Text - in which case only description should be set
-      "baseAmountValue" => p
+      "productGuid"     => prod.erp_guid,             #   "102eb2e1-d732-4915-96f7-dac83512f16d",
+      "comments"        => "%s, %s: %s" % [ date, initials, line.about ],
+      "quantity"        => quantified(line, line.calc_time_to_decimal),
+      "accountNumber"   => prod.account_number.to_i,
+      "unit"            => prod.unit,
+      "discount"        => discounted(line),
+      "lineType"        => "Product",                 # or Text - in which case only description should be set
+      "baseAmountValue" => line.calculated_unit_price
     }
+
   rescue => err
-    line.update push_log: "%s\n%s" % [ line.push_log, err.message ]
-    line.cannot_be_pushed!
+    line&.update push_log: "%s\n%s" % [ line&.push_log, err.message ]
+    line&.cannot_be_pushed!
     UserMailer.error_report(err.to_s, "DineroUpload.service_line").deliver_later
     {
       "productGuid" => nil,
@@ -313,9 +341,9 @@ class Dinero::InvoiceDraft
   end
 
   def set_project_description(project_description, line)
-    return nil if line.project_name.blank?
+    return nil if line&.project_name.blank?
     return nil if project_description.include?(line.project_name)
-    line.project_name
+    line&.project_name
   end
 
   def persist_invoice_for_testing(cid, dinero_invoice, lines)
@@ -324,6 +352,34 @@ class Dinero::InvoiceDraft
       f.write("\n")
       f.write(lines.to_json)
     end
+  end
+
+  def quantified(line, value = nil)
+    return 1.0 if line.quantity.blank? && value.blank?
+    v = value.nil? ? line.quantity : value
+    l = v.to_s.gsub(",", ".")
+    ("%.2f" % l).to_f
+  rescue
+    1.0
+  end
+
+  # "%.2f" % line.discount.gsub("%", "").to_f,
+  # d = ("%.2f" % line.discount.gsub(",", ".")).to_f
+  def discounted(line)
+    return 0.0 if line.discount.blank?
+    l = case line.discount
+    when /%/; line.discount.gsub("%", "").gsub(",", ".")
+    else calculated_discount(line)
+    end
+    ("%.2f" % l).to_f
+  rescue
+    0.0
+  end
+
+  def calculated_discount(line)
+    line.discount.gsub(",", ".").to_f / line.calculated_unit_price * 100
+  rescue
+    0
   end
 
   # used for testing the Dinero service initially
@@ -340,26 +396,27 @@ class Dinero::InvoiceDraft
       "comment": "Here is a comment",
       "date": "2024-10-22",
       "productLines": [
-      {
-      "productGuid": prod.erp_guid,
-      "comments": "Smells good",
-      "quantity": 5,
-      "accountNumber": prod.account_number,
-      "unit": "parts",
-      "discount": 10,
-      "lineType": "Product",
-      "baseAmountValue": 20
-      }, {
-      "productGuid": nil,
-      "description": "Flowers",
-      "comments": "Smells good",
-      "quantity": 5,
-      "accountNumber": prod.account_number,
-      "unit": "parts",
-      "discount": 5.5,
-      "lineType": "Product",
-      "baseAmountValue": 20.25
-      }
+        {
+        "productGuid": prod.erp_guid,
+        "comments": "Smells good",
+        "quantity": 5,
+        "accountNumber": prod.account_number,
+        "unit": "parts",
+        "discount": 10,
+        "lineType": "Product",
+        "baseAmountValue": 20
+        },
+        {
+        "productGuid": nil,
+        "description": "Flowers",
+        "comments": "Smells good",
+        "quantity": 5,
+        "accountNumber": prod.account_number,
+        "unit": "parts",
+        "discount": 5.5,
+        "lineType": "Product",
+        "baseAmountValue": 20.25
+        }
       ],
       "address": "Test Road 3 2300 Copenhagen S Denmark",
       "guid": nil,
@@ -373,5 +430,51 @@ class Dinero::InvoiceDraft
       "isMobilePayInvoiceEnabled": false,
       "isPensoPayEnabled": false
     }
+  end
+
+  # return
+  # dinero_invoice, dinero_lines, project_description, refs, date
+  #
+  def find_draft_invoices_for_customer(customer_id)
+    contactGuid = Customer.find(customer_id).erp_guid rescue nil
+    return [ nil, [], [], [], I18n.l(invoice_date, format: :short_iso) ] if contactGuid.blank?
+
+    # Get all draft invoices from Dinero
+    @drafts ||= @ds.pull(
+      resource_class: "Invoice",
+      all: true,
+      pageSize: 500,
+      status_filter: "Draft",
+      fields: "guid,contactGuid,externalReference,date",
+      just_consume: true
+    )
+    # Filter drafts to only those for this customer
+    if @drafts
+      draft = drafts&.parsed_response&.dig("Collection")&.select do |invoice|
+        invoice["contactGuid"] == contactGuid
+      end.first || nil
+    else
+      draft = nil
+    end
+
+    return [ nil, [], [], [], I18n.l(invoice_date, format: :short_iso) ] if draft.nil?
+
+    invoice = invoice_details(draft) || nil
+    dinero_lines = invoice["ProductLines"] rescue []
+    project_description = [ invoice["Comment"] ] rescue []
+    refs = [ invoice["ExternalReference"] ] rescue []
+    date = invoice["Date"] rescue I18n.l(invoice_date, format: :short_iso)
+    [ invoice, dinero_lines, project_description, refs, date ]
+  rescue => err
+    UserMailer.error_report(err.to_s, "Dinero::InvoiceDraft#find_draft_invoices_for_customer").deliver_later
+    [ nil, [], [], [], I18n.l(invoice_date, format: :short_iso) ]
+  end
+
+  def invoice_details(invoice)
+    invoice = @ds.pull_invoice(guid: invoice["guid"])
+    invoice[:error].present? ? nil : invoice
+  rescue => err
+    UserMailer.error_report(err.to_s, "Dinero::InvoiceDraft#invoice_details").deliver_later
+    nil
   end
 end

@@ -35,7 +35,7 @@ module Noticed::NotificationExtensions
       "#{recipient.id}_noticed/notifications",
       target: "flash_container",
       partial: "application/flash_message",
-      locals: { recipient: recipient, flash: flash }
+      locals: { recipient: recipient, messages: flash }
     )
   end
 
