@@ -1,8 +1,8 @@
 class Icons::More < Phlex::HTML
   attr_accessor :cls
 
-  def initialize(cls: "h-5 w-5")
-    @cls = cls
+  def initialize(css: "h-5 w-5")
+    @cls = css
   end
 
   def view_template

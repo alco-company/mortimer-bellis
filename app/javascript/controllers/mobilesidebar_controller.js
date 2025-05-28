@@ -15,7 +15,8 @@ export default class extends Controller {
     enter(this.panelTarget);
   }
 
-  hide() {
+  hide(event) {
+    event.target.closest("li").classList.add("bg-sky-100");
     Promise.all([
       leave(this.backdropTarget),
       leave(this.closeButtonTarget),
@@ -23,5 +24,23 @@ export default class extends Controller {
     ]).then(() => {
       this.containerTarget.classList.add("hidden");
     });
+  }
+
+  hideSidebar() {
+    Promise.all([
+      leave(this.backdropTarget),
+      leave(this.closeButtonTarget),
+      leave(this.panelTarget),
+    ]).then(() => {
+      this.containerTarget.classList.add("hidden");
+    });
+  }
+
+  toggleSidebar() {
+    if (this.containerTarget.classList.contains("hidden")) {
+      this.show();
+    } else {
+      this.hideSidebar();
+    }
   }
 }

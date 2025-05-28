@@ -1,9 +1,11 @@
 da:
+
   task:
     modal:
       delete_all: 
         title: Slet alle opgaver
         instruction: Er du sikker på, at du vil slette alle opgaver?
+        instruction_selected: Er du sikker på, at du vil slette alle %{count} udvalgte opgaver?
       delete:
         title: Slet denne opgave
         instruction: Er du sikker på, at du vil slette opgaven %{name}?
@@ -11,7 +13,6 @@ da:
 
   tasks:
     default_task: Opgave
-    new: Ny opgave
     validation_errors: Der er fejl i det indtastede
 
     create:
@@ -22,6 +23,18 @@ da:
       post: Opgaven blev slettet
 
     punch_clocks: Stempelure
+
+    open_tasks_remain: Du har %{count} opgaver som ikke er afsluttet
+    find_them_here: Vis mig dem
+
+    remaining:
+      title: Uafsluttede opgaver
+      msg: Du har %{count} uafsluttede opgaver, der venter på dig
+
+
+    dashboard:
+      get_help_here: Få hjælp her
+      no_unfinished_tasks: Du har ingen opgaver, der ikke er afsluttet
 
     list:
       title: Opgaver

@@ -17,8 +17,8 @@ module SecondFactor
         #   return Failure(InvalidOtpCodeOrBackupCode.new)
         # end
 
-        user.two_factor_app_enabled = false
-        user.two_factor_app_enabled_at = nil
+        user.otp_enabled = false
+        user.otp_enabled_at = nil
 
         user.otp_secret = User.generate_otp_secret
         user.otp_required_for_login = false

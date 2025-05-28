@@ -5,6 +5,7 @@ da:
       delete_all: 
         title: Slet alle stempelure
         instruction: Er du sikker på, at du vil slette alle stempelure?
+        instruction_selected: Er du sikker på, at du vil slette alle %{count} udvalgte stempelure?
       delete:
         title: Slet dette stempelur
         instruction: Er du sikker på, at du vil slette stempeluret %{name}?

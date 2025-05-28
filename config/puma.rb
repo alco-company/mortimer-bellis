@@ -58,6 +58,6 @@ when "production"
   preload_app!
 when "development"
   # Specifies a very generous `worker_timeout` so that the worker
-  # isn't killed by Puma when suspended by a debugger.
+  # isn't killed by Puma when suspended by a debug-ger.
   worker_timeout 3600
 end

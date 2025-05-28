@@ -1,0 +1,35 @@
+<% url = @resource.id.present? ? modal_url(@resource) : modal_url(@resource_class.first) %>
+<%= form_with(url: url, method: :delete, multipart: true, data: { turbo: false }) do |form| %>
+  <div class="sm:flex sm:items-start">
+    <div class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full text-red-500 bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
+      <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor" stroke-width="1.5" stroke="currentColor">
+        <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/>
+      </svg>
+    </div>
+    <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
+      <h3 class="text-base font-semibold leading-6 text-gray-900" id="modal_title"> <%= delete_account_modal_title %></h3>
+      <div class="mt-2">
+        <p class="text-sm text-gray-500 pb-3"> <%== delete_account_modal_instruction %></p>
+
+        <%= form.hidden_field :modal_form, value: @modal_form %>
+        <%= form.hidden_field :resource_class, value: @resource_class %>
+        <%= form.hidden_field :step, value: @step %>
+        <%= form.hidden_field :all, value: !@resource.id.present? %>
+        <%= form.hidden_field :attachment, value: @attachment %>
+        <%= form.hidden_field :search, value: @search %>
+        <%= form.hidden_field :id, value: @resource&.id %>
+        <%= form.hidden_field :url, value: @url %>
+        <!-- <div class="relative flex items-start mt-3">
+          <div class="ml-3 text-sm leading-6">
+            <label for="import_model" class="font-medium text-gray-900"><%= t("#{@resource_class.to_s.underscore}.modal.import.label") %></label>
+            <p id="comments-description" class="text-gray-500"><%= t("#{@resource_class.to_s.underscore}.modal.import.description") %></p>
+          </div>
+        </div> -->
+      </div>
+    </div>
+  </div>
+  <div class="mt-5 sm:mt-4 flex justify-between flex-row-reverse">
+    <%= form.button t("#{@resource_class.to_s.underscore}.modal.delete.button"), data: { action: "modal#submitForm"}, class: "mort-btn-alert sm:ml-3" %>
+    <%= button_tag t(:cancel), form: "dialog_form", formmethod: :dialog,  data: { action: "click->modal#close" }, class: "mort-btn-cancel" %>
+  </div>
+<% end %>

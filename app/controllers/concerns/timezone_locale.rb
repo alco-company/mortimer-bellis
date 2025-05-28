@@ -24,10 +24,12 @@ module TimezoneLocale
     #
     def switch_locale(&action)
       locale = extract_locale_from_tld || I18n.default_locale
-      locale = params.permit![:lang] || locale
-      locale = params.permit![:locale] || locale
+      locale = params.dig(:lang) || locale
+      locale = params.dig(:locale) || locale
       parsed_locale = get_locale_from_user_or_tenant || locale
       I18n.with_locale(parsed_locale, &action)
+    rescue I18n::MissingTranslationData => e
+      UserMailer.error_report(e.to_s, "TimezoneLocale#switch_locale - failed with params: #{params}").deliver_later
     end
 
     # Get locale from top-level domain or return +nil+ if such locale is not available

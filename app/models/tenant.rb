@@ -11,12 +11,13 @@ class Tenant < ApplicationRecord
   include Serviceable
 
   has_many :background_jobs, dependent: :destroy
+  has_many :batches, dependent: :destroy
   has_many :calls, dependent: :destroy
   has_many :customers, dependent: :destroy
   has_many :dashboards, dependent: :destroy
   has_many :events, dependent: :destroy
   has_many :filters, dependent: :destroy
-  has_many :invoice, dependent: :destroy
+  has_many :invoices, dependent: :destroy
   has_many :invoice_items, dependent: :destroy
   has_many :locations, dependent: :destroy
   has_many :products, dependent: :destroy
@@ -42,6 +43,8 @@ class Tenant < ApplicationRecord
   validates :name, presence: true, uniqueness: { message: I18n.t("tenants.errors.messages.name_exist") }
   validates :email, presence: true
 
+  enum :license, { trial: 0, free: 1, ambassador: 2, essential: 3, pro: 4 }, default: :trial, scope: true
+
   def self.filtered(filter)
     flt = filter.filter
 
@@ -55,11 +58,35 @@ class Tenant < ApplicationRecord
     all
   end
 
+  def self.filterable_fields(model = self)
+    f = column_names - [
+      "id"
+      # "name",
+      # "email",
+      # "pp_identification",
+      # "locale",
+      # "time_zone",
+      # "created_at",
+      # "updated_at",
+      # "send_state_rrule",
+      # "send_eu_state_rrule",
+      # "color",
+      # "tax_number",
+      # "country",
+      # "access_token"
+    ]
+    f = f - [
+      "created_at",
+      "updated_at"
+    ] if model == self
+    f
+  end
+
   #
   # make it possible to handle model deletion differently from model to model
   # eg TenantRegistrationService.call(tenant, destroy: true)
-  def remove
-    TenantRegistrationService.call(self, destroy: true)
+  def remove(step = nil)
+    TenantRegistrationService.call(self, {}, destroy: true)
   end
 
   def has_this_access_token(token)
@@ -106,7 +133,7 @@ class Tenant < ApplicationRecord
     {
       colleagues: {
         title: I18n.t("tasks.first_tasks.colleagues.title"),
-        link: "/users/invitation/new",
+        link: "/users/invitations/new",
         priority: -1
       },
       dinero: {
@@ -121,14 +148,43 @@ class Tenant < ApplicationRecord
       },
       profile: {
         title: I18n.t("tasks.first_tasks.profile.title"),
-        link: "/users/edit",
+        link: "/users/registrations/edit",
         priority: -4
       },
       notifications: {
         title: I18n.t("tasks.first_tasks.notifications.title"),
-        link: "/users/edit",
+        link: "/users/registrations/edit",
         priority: -5
       }
+    }
+  end
+
+  def license_expires_shortly?
+    license_expires_at.present? && license_expires_at < 1.week.from_now
+  end
+
+  def license_valid?
+    if license == "trial" && license_expires_at < Time.now
+      update(license: "free", license_expires_at: 10.years.from_now)
+    end
+    license_expires_at.present? && license_expires_at > Time.now
+  end
+
+  def license_expired?
+    !license_valid?
+  end
+
+  def licenses(lic = nil)
+    if lic.present?
+      self.license=lic.to_i
+      return self.license
+    end
+    {
+      trial: I18n.t("tenants.licenses.trial"),
+      free: I18n.t("tenants.licenses.free"),
+      ambassador: I18n.t("tenants.licenses.ambassador"),
+      essential: I18n.t("tenants.licenses.essential"),
+      pro: I18n.t("tenants.licenses.pro")
     }
   end
 end

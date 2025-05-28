@@ -1,0 +1,16 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  tenant: one
+  name: dom
+  created_by: one
+
+two:
+  tenant: one
+  name: dorsk
+  created_by: one
+
+three:
+  tenant: one
+  name: dosmer
+  created_by: one

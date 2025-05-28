@@ -1,8 +1,8 @@
 class Icons::Search < Phlex::HTML
   attr_accessor :cls
 
-  def initialize(cls: "pointer-events-none absolute inset-y-0 left-0 h-full w-5 text-gray-400")
-    @cls = cls
+  def initialize(css: "pointer-events-none absolute inset-y-0 left-0 h-full w-5 text-gray-400")
+    @cls = css
   end
 
   def view_template
@@ -10,6 +10,7 @@ class Icons::Search < Phlex::HTML
       class: cls,
       viewbox: "0 0 20 20",
       fill: "currentColor",
+      # strike: "currentColor",
       aria_hidden: "true",
       data_slot: "icon"
     ) do |s|

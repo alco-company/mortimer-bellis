@@ -1,73 +1,44 @@
-# frozen_string_literal: true
-
-class Users::RegistrationsController < Devise::RegistrationsController
-  include Authentication
-  include TimezoneLocale
-  before_action :configure_sign_up_params, only: [ :create ]
-  before_action :configure_account_update_params, only: [ :update ]
-  skip_before_action :authenticate_user!, only: [ :new, :create ]
-
-  # GET /resource/sign_up
-  # def new
-  #   super
-  # end
-
-  # POST /resource
-  def create
-    begin
-      usr = nil
-      params[:user][:tenant_id] = 1 # temporary placeholder - UserRegistrationService will fix!
-      params[:user][:team_id] = 1   # temporary placeholder - UserRegistrationService will fix!
-      # configure_sign_up_params
-      super do |resource|
-        if resource.valid?
-          resource.add_role
-          usr = resource.dup
-          raise "user was not registered correctly" unless UserRegistrationService.call(resource, tenant_name)
-        end
-      end
-    rescue => e
-      UserMailer.error_report(e.to_s, "Users::RegistrationController#create - failed for email #{usr&.email}").deliver_later
-      usr.destroy unless usr.nil?
-      redirect_to root_path, alert: I18n.t("errors.messages.user_registration_failed", error: e.message)
-    end
-  end
+#
+# the registration controller for users
+# is solely for the Current.user themselves
+#
+class Users::RegistrationsController < MortimerController
+  before_action :resize_mugshot, only: [ :create, :update ]
+  # verify_turnstile_request only: %i[create]
 
   # GET /resource/edit
-  # def edit
-  #   super
-  # end
+  def edit
+    @resource = resource.persisted? ? resource : Current.user
+    super
+  end
 
   # PUT /resource
   #
   # rewriting update method to allow for turbo drive/stream update
   #
   def update
-    unless params[:user][:mugshot].present?
-      mugshot = resource.mugshot
-    end
+    @resource = Current.user
     if params[:user][:role].present? &&
       !Current.user.superadmin? &&
       [ 0, "0", "superadmin", "Superadmin", "SUPERADMIN" ].include?(params[:user][:role])
-      redirect_to edit_user_registration_path, alert: I18n.t("errors.messages.user_role_cannot_be_assigned") and return
+      redirect_to edit_users_registrations_url(resource), alert: I18n.t("errors.messages.user_role_cannot_be_assigned") and return
     end
 
-    self.resource = resource_class.to_adapter.get!(send(:"current_#{resource_name}").to_key)
-    prev_unconfirmed_email = resource.unconfirmed_email if resource.respond_to?(:unconfirmed_email)
-
-    resource_updated = update_resource(resource, account_update_params)
-    yield resource if block_given?
+    # self.resource = resource_class.to_adapter.get!(send(:"current_#{resource_name}").to_key)
+    # prev_unconfirmed_email = resource.unconfirmed_email if resource.respond_to?(:unconfirmed_email)
+    resource_updated = update_resource(resource, user_params)
+    # yield resource if block_given?
     if resource_updated
-      resource.mugshot = mugshot if mugshot
-      set_flash_message_for_update(resource, prev_unconfirmed_email)
+      resource.mugshot = params[:user][:mugshot] if params[:user][:mugshot].present?
+      resource.save
+      # set_flash_message_for_update(resource, prev_unconfirmed_email)
+      flash[:notice] = I18n.t("users.registrations.updated")
       render turbo_stream: [
         turbo_stream.update("form", ""),
-        turbo_stream.replace("flash_container", partial: "application/flash_message")
+        turbo_stream.replace("profile_dropmenu", ProfileDropmenuComponent.new),
+        turbo_stream.replace("flash_container", partial: "application/flash_message", locals: { tenant: Current.get_tenant, messages: flash, user: Current.get_user })
       ]
-
-      # bypass_sign_in resource, scope: resource_name if sign_in_after_change_password?
-
-      # respond_with resource, location: after_update_path_for(resource)
+      flash.clear
     else
       resource.attachment_changes.each do |_, change|
         if change.is_a?(ActiveStorage::Attached::Changes::CreateOne)
@@ -78,8 +49,13 @@ class Users::RegistrationsController < Devise::RegistrationsController
       end
 
       clean_up_passwords resource
-      set_minimum_password_length
-      respond_with resource
+      # set_minimum_password_length
+      flash.now[:warning] = t(".validation_errors")
+      render turbo_stream: [
+        turbo_stream.update("form", partial: "application/edit", locals: { resource: resource }),
+        turbo_stream.replace("flash_container", partial: "application/flash_message", locals: { tenant: Current.get_tenant, messages: flash, user: Current.get_user })
+      ]
+      flash.clear
     end
   end
 
@@ -102,67 +78,55 @@ class Users::RegistrationsController < Devise::RegistrationsController
   protected
 
   def update_resource(resource, params)
-    params[:password].blank? && params[:password_confirmation].blank? ? update_now(resource, params) : super
+    # params[:password].blank? && params[:password_confirmation].blank? ?
+    update_now(resource, params)
+    #  : update_access(resource, params)
+  end
+
+  def update_access(resource, params)
+    usr = User.authenticate_by(email: resource.email, password: params[:current_password])
+    return unless usr
+    params.delete :current_password
+
+    resource.update(params)
   end
 
   def update_now(resource, params)
-    resize_before_save(params[:mugshot], 100, 100)
+    # resize_before_save(params[:mugshot], 100, 100)
     unless Current.user.user?
-      resource.update role: params[:role] if params[:role].present?
+      # resource.update role: params[:role] if params[:role].present?
       resource.update global_queries: params[:global_queries] if params[:global_queries].present?
       resource.update tenant_id: params[:tenant_id] if params[:tenant_id].present?
     end
     resource.update name: params[:name],
-      mugshot: params[:mugshot],
+      # mugshot: params[:mugshot],
       pincode: params[:pincode],
       locale: params[:locale],
       time_zone: params[:time_zone]
-  end
-
-  # If you have extra params to permit, append them to the sanitizer.
-  def configure_sign_up_params
-    devise_parameter_sanitizer.permit(:sign_up, keys: [ :tenant_id, :team_id, :role ])
+      Current.user.reload
   end
 
   #
   # a_waffle_23_company_com - random company name generator by AHD 19/6/2024
   #
   def tenant_name
-    sign_up_params[:email]
+    user_params[:email]
     # sign_up_params[:email].split("@")[1].split(".")[..-2].join(" ").capitalize
   rescue
     "Unknown Tenant Name"
   end
 
-  # If you have extra params to permit, append them to the sanitizer.
-  def configure_account_update_params
-    devise_parameter_sanitizer.permit(:account_update, keys: [ :tenant_id, :team_id, :global_queries, :name, :pincode, :mugshot, :locale, :time_zone ])
-  end
-
-  # The path used after sign up.
-  def after_sign_up_path_for(resource)
-    # super(resource)
-    "/users/sign_in_success"
-  end
-
-  # The path used after sign up for inactive tenants.
-  def after_inactive_sign_up_path_for(resource)
-    # super(resource)
-    "/users/sign_in_success"
-  end
-
-  def resize_before_save(image_param, width, height)
-    return unless image_param
-
-    begin
-      ImageProcessing::MiniMagick
-        .source(image_param)
-        .resize_to_fit(width, height)
-        .call(destination: image_param.tempfile.path)
-    rescue StandardError => _e
-      # Do nothing. If this is catching, it probably means the
-      # file type is incorrect, which can be caught later by
-      # model validations.
+  private
+    def user_params
+      params.expect(user: [ :tenant_id, :global_queries, :name, :pincode, :email, :mugshot, :locale, :time_zone, :password, :password_confirmation, :current_password ])
     end
-  end
+
+    def clean_up_passwords(resource)
+      resource.password = resource.password_confirmation = nil
+    end
+
+    def resize_mugshot
+      return unless params[:user][:mugshot].present?
+      resize_before_save(params[:user][:mugshot], 40, 80)
+    end
 end

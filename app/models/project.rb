@@ -19,7 +19,7 @@ class Project < ApplicationRecord
   scope :by_actual_minutes, ->(actual_minutes) { where("actual_minutes LIKE ?", "%#{actual_minutes}%") if actual_minutes.present? }
 
 
-  validates :name, presence: true, uniqueness: { scope: :tenant_id, message: I18n.t("locations.errors.messages.name_exist") }
+  validates :name, presence: true, uniqueness: { scope: :tenant_id, message: I18n.t("projects.errors.messages.name_exist") }
 
   def self.filtered(filter)
     flt = filter.filter
@@ -44,7 +44,56 @@ class Project < ApplicationRecord
     all
   end
 
+  def self.filterable_fields(model = self)
+    f = column_names - [
+      "id",
+      # t.string "name"
+      "tenant_id",
+      "customer_id",
+      "description"
+      # t.integer "state"
+      # t.decimal "budget", precision: 11, scale: 2
+      # t.boolean "is_billable"
+      # t.boolean "is_separate_invoice"
+      # t.decimal "hourly_rate", precision: 11, scale: 2
+      # t.integer "priority"
+      # t.integer "estimated_minutes"
+      # t.integer "actual_minutes"
+    ]
+    f = f - [
+      "start_date",
+      "end_date",
+      "created_at",
+      "updated_at"
+      ] if model == self
+    f
+  end
+
+  def self.associations
+    [ [ Customer ], [] ]
+  end
+
   def self.form(resource:, editable: true)
     Projects::Form.new resource: resource, editable: editable
+  end
+
+  def customer_name
+    customer&.name
+  end
+
+  def select_data_attributes
+    {
+      lookup_target: "item",
+      lookup_customer_id: customer.id,
+      lookup_customer_name: customer.name,
+      lookup_project_hourly_rate: hourly_rate_unset? ? customer.hourly_rate : hourly_rate,
+      value: id,
+      display_value: name,
+      action: "keydown->lookup#optionKeydown click->lookup#selectOption"
+    }
+  end
+
+  def hourly_rate_unset?
+    hourly_rate.nil? || hourly_rate == 0.0
   end
 end

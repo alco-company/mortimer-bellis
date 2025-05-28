@@ -14,7 +14,7 @@ module EUCompliance
     def min_6_hrs_rest_break
       (work_yesterday.works < 6*60) or (work_yesterday.breaks > 0)
     rescue
-      debugger
+      # debug-ger
     end
 
     # a minimum daily rest period

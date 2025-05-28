@@ -2,7 +2,7 @@ import { Controller } from "@hotwired/stimulus"
 
 // Connects to data-controller="modal"
 export default class extends Controller {
-  static targets = ["backdrop", "dialog", "dismiss"];
+  static targets = ["backdrop", "dialog", "dismiss", "submitForm"];
 
   connect() {
     // this.element.dataset.action = "modal#show";
@@ -47,6 +47,20 @@ export default class extends Controller {
     this.removeScrollBlock()
   }
 
+  keydown(e) {
+    e.stopPropagation();
+    switch(e.key) {
+      case "Escape":
+        this.close(e);
+        break;
+      case "Enter":
+        this.submitFormTarget.click();
+        break;
+      default:
+        console.log(`[modal_controller] you pressed ${e.key}`);
+    }
+  }
+
   removeScrollBlock(){
     // document.body.removeEventListener( "touchmove", (e) => { e.preventDefault(); }, { passive: false } );
     document.documentElement.classList.remove("lock-scroll"); // For html
@@ -55,6 +69,11 @@ export default class extends Controller {
 
   submitForm(event) {
     this.removeScrollBlock()
+    let elem = event.target.closest("button")
+    if (elem.dataset.close) {
+      this.closeModal();
+      return;
+    }
   }
 
   show(event) {
@@ -65,6 +84,11 @@ export default class extends Controller {
   closeDialog(event) {
     const dialog = document.getElementById(event.target.data.dialog);
     dialog.close();
+  }
+
+  closeModal(e) {
+    const modal = document.getElementById("new_form_modal");
+    modal.close();
   }
 
   close(e) {

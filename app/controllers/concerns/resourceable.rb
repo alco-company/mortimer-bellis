@@ -1,7 +1,7 @@
 module Resourceable
   extend ActiveSupport::Concern
 
-  attr_reader :resource, :resources # , :filter, :filter_form, :url
+  attr_reader :resource, :resource_name, :resources, :resource_class, :collection # , :filter, :filter_form, :url
 
   included do
     def resource
@@ -13,81 +13,72 @@ module Resourceable
     end
 
     def resource_class
-      @resource_class ||= case params_ctrl.split("/").last
-      # when "invitations"; UserInvitation
-      when "notifications"; Noticed::Notification
-      when "applications"; Oauth::Application
-      else; params_ctrl.split("/").last.classify.constantize rescue nil
-      end
+      @resource_class ||= set_resource_class
+    end
+
+    def resource_name
+      @resource_name ||= resource_class.name.underscore
     end
 
     # Use callbacks to share common setup or constraints between actions.
     def set_resource
-      @resource = params_id ? (resource_class.find(params_id) rescue resource_class.new) : resource_class.new
+      @resource = get_resource_id ? find_resource : new_resource
+    end
+
+    def new_resource(params = nil)
+      params.nil? ? @resource = resource_class.new : @resource = resource_class.new(params)
     end
 
     def set_resources_stream
-      tenant = Current.tenant || @resource&.tenant || nil
+      tenant = Current.get_tenant || @resource&.tenant || nil
       @resources_stream ||= tenant.nil? ?
         "1_#{resource_class.to_s.underscore.pluralize}" :
         "%s_%s" % [ tenant&.id, resource_class.to_s.underscore.pluralize ]
     end
 
     def set_resources
-      @resources = any_filters? ? resource_class.filtered(@filter) : parent_or_class
-      @resources = case resource_class.to_s
-      when "TimeMaterial"; Current.user.can?(:show_all_time_material_posts) ? @resources : @resources.by_user()
-      when "Noticed::Notification"; Current.user.notifications.unread.includes(event: :record)
-      when "Oauth::Application"; @resources
-      else; @resources.by_user()
+      # @resources ||= ResourceableResource.new(resource_class, request.path, params)
+      @resources = ResourceableResource.new(resource_class, request.path, params, @filter, @batch)
+      .parent_or_class
+      .filtered
+      .batched
+      .searched
+      .sorted
+      .records
+    end
+
+    def set_resource_class
+      if params.dig(:resource_class).present?
+        model = params.dig(:resource_class).classify.constantize
+        _m = model.new
+      else
+        model = nil
       end
-      @resources = any_sorts? ? @resources.ordered(params_s, params_d) : resource_class.set_order(@resources) rescue @resources
-    end
-
-    def parent_or_class
-      parent? ? parent_resources : resource_resources rescue nil
-    end
-
-    def resource_resources
-      case resource_class.to_s
-      when "Oauth::Application"; resource_class.all
-      else; params.permit![:search].present? ? resource_class.by_tenant().by_fulltext(params.permit![:search]) : resource_class.by_tenant()
+      ctrl = params.dig(:controller).split("/").last
+      case ctrl
+      when "editor"; User
+      when "modal"; model
+      when "otps"; User
+      when "invitations"; User
+      when "passwords"; User
+      when "sessions"; User
+      when "registrations"; User
+      when "confirmations"; User
+      when "notifications"; Noticed::Notification
+      when "applications"; Oauth::Application
+      when "time_material_stats"; TimeMaterial
+      else; model || ctrl.classify.constantize
       end
-    end
-
-    # "/teams/37/calendars"
-    # "/tenants/37/calendars"
-    # "/employees/37/calendars"
-    # "/calendars/6/events"
-    #
-    def parent?
-      (request.path =~ /\/(team|employee|tenant|calendar)s\/(\d+)\/(calendars|events)/).nil? ? false : true
-    end
-
-    def parent_resources
-      parent.send params_ctrl
-    end
-
-    def parent
-      parent_class, parent_id, _ = request.path.scan(/\/(team|employee|tenant|calendar)s\/(\d+)\/(calendars|events)/).first
-      @parent ||= parent_class.classify.constantize.find(parent_id)
-      # @parent ||= parent_class.find(params_parent(:team_id) || params_parent(:user_id) || params_parent(:tenant_id))
-    end
-
-    def parent_class
-      parent_class, _, _ = request.path.scan(/\/(team|employee|tenant|calendar)s\/(\d+)\/(calendars|events)/).first
-      @parent_class ||= parent_class.classify.constantize
-      # @parent_class ||= case request.path.split("/").second
-      # when "teams"; Team
-      # when "employees"; User
-      # when "tenants"; Tenant
-      # end
+    rescue => e
+      redirect_to "/", alert: I18n.t("errors.resources.resource_class.not_found", ctrl: params.dig(:controller), reason: e.to_s) and return
     end
 
     def set_filter
-      @filter_form = params_ctrl.split("/").last
+      # @filter_form = params_ctrl.split("/").last
+      # @filter_form = @filter_form == "modal" ? resource_class.table_name : @filter_form
+      @filter_form = resource_class.table_name
       @url = resources_url
-      @filter = Filter.where(tenant: Current.tenant).where(view: @filter_form).take || Filter.new
+      @filter = Filter.by_user.by_view(@filter_form).take || Filter.new
       @filter.filter ||= {}
     end
 
@@ -114,13 +105,17 @@ module Resourceable
     # to skip using the memoized url
     #
     def resources_url(**options)
-      options[:search] = params.permit![:search] if params.permit![:search].present?
-      return url_for(controller: params_ctrl, action: :index, **options) if options.delete(:rewrite).present?
-      @resources_url ||= url_for(controller: params_ctrl, action: :index, **options)
+      options[:search] = params.dig(:search) if params.dig(:search).present?
+      url_for(controller: params_ctrl, action: :index, **options)
+    rescue => e
+      Rails.logger.error("Error generating resources_url: #{e.message}")
+      root_url
     end
 
     def filtering_url
-      new_filter_url(url: resources_url, filter_form: params_ctrl.split("/").last)
+      @filter.persisted? ?
+        edit_filter_url(@filter, url: resources_url, filter_form: params_ctrl.split("/").last):
+        new_filter_url(url: resources_url, filter_form: params_ctrl.split("/").last)
     end
 
     def delete_all_url
@@ -131,38 +126,145 @@ module Resourceable
       url_for(controller: params_ctrl, id: 1, action: :show, all: true, date: date, api_key: @resource.access_token)
     end
 
-    def any_filters?
-      return false if @filter.nil? or params_ctrl.split("/").last == "filters"
-      !@filter.id.nil?
+    def find_resource
+      resource_class.where(id: get_resource_id)&.take || resource_class.new
+    rescue
+      Rails.logger.info "ERROR! >>>>>>>>>>>>> Resourceable#find_resource: #{params.inspect}"
+      redirect_to "/", alert: I18n.t("errors.messages.not_found", model: resource_class.to_s) and return
     end
 
-    def any_sorts?
-      params[:s].present?
+    def get_resource_id
+      params_id
+    rescue
+      Rails.logger.info "ERROR! >>>>>>>>>>>>> Resourceable#get_resource_id: #{params.inspect}"
+      nil
     end
   end
 
   private
-    def rc_params
-      params.permit! # (:id, :s, :d, :page, :format, :_method, :commit, :authenticity_token, :controller)
-    end
+    # def rc_params
+    #   params.permit! # (:id, :s, :d, :page, :format, :_method, :commit, :authenticity_token, :controller)
+    # end
 
     def params_ctrl
-      rc_params[:controller]
+      params.dig :controller
     end
 
     def params_s
-      rc_params[:s]
+      params.dig :s
     end
 
     def params_d
-      rc_params[:d]
+      params.dig :d
     end
 
-    def params_parent(ref)
-      params.permit(:team_id, :user_id, :tenant_id)[ref]
-    end
+    # def params_parent(ref)
+    #   params.permit(:team_id, :user_id, :tenant_id)[ref]
+    # end
 
     def params_id
-      rc_params[:id]
+      params&.dig(:id) || params.dig(resource_class.to_s.underscore.to_sym, :id)
+    end
+
+    # @resources = any_filters? ? @filter.do_filter(resource_class) : parent_or_class
+    # @resources = case resource_class.to_s
+    # when "TimeMaterial"; Current.user.can?(:show_all_time_material_posts) ? @resources : @resources.by_user()
+    # when "Noticed::Notification"; Current.user.notifications.unread.includes(event: :record)
+    # when "Oauth::Application"; @resources
+    # else; @resources
+    # end
+    # @resources = any_sorts? ? @resources.ordered(params_s, params_d) : resource_class.set_order(@resources) rescue @resources
+    class ResourceableResource
+      attr_accessor :rc, :request_path, :params, :collection, :parent, :filter, :batch
+
+      def initialize(rc, request_path, params, filter = nil, batch = nil)
+        @rc = rc
+        @request_path = request_path
+        @params = params
+        @filter = filter
+        @batch = batch
+        @collection = rc.all
+      end
+
+      def parent_or_class
+        @collection = parent? ? parent_resources : resource_resources rescue nil
+        self
+      end
+
+      def filtered
+        @collection = @filter.do_filter(rc, collection) if any_filters?
+        self
+      end
+
+      def batched
+        @collection = @batch.entities(collection) if batch&.batch_set?
+        self
+      end
+
+      def searched
+        @collection = params.dig(:search) ? collection.by_fulltext(params.dig(:search)) : collection
+        self
+      end
+
+      def sorted
+        @collection = any_sorts? ? collection.ordered(params.dig(:s), params.dig(:d)) : collection.set_order(collection) rescue collection&.order(id: :desc)
+        self
+      end
+
+      def records
+        @collection
+      end
+
+      private
+
+        def resource_resources
+          case rc.to_s
+          when "TimeMaterial"; Current.user.can?(:show_all_time_material_posts) ? rc.by_tenant() : rc.by_user()
+          when "Noticed::Notification"; Current.user.notifications.unread.includes(event: :record)
+          when "Oauth::Application"; rc.all
+          else; rc.by_tenant
+          end
+        end
+
+        # "/teams/37/calendars"
+        # "/tenants/37/calendars"
+        # "/employees/37/calendars"
+        # "/calendars/6/events"
+        #
+        def parent?
+          (request_path =~ /\/(team|employee|tenant|calendar)s\/(\d+)\/(calendars|events)/).nil? ? false : true
+        end
+
+        #
+        # TODO how do we show invoices/11/invoice_items
+        def parent_resources
+          parent.send params_ctrl
+        end
+
+        def parent
+          parent_class, parent_id, _ = request_path.scan(/\/(team|employee|tenant|calendar)s\/(\d+)\/(calendars|events)/).first
+          @parent ||= parent_class.classify.constantize.find(parent_id)
+          # @parent ||= parent_class.find(params_parent(:team_id) || params_parent(:user_id) || params_parent(:tenant_id))
+        end
+
+        def parent_class
+          parent_class, _, _ = request.path.scan(/\/(team|employee|tenant|calendar)s\/(\d+)\/(calendars|events)/).first
+          @parent_class ||= parent_class.classify.constantize
+          # @parent_class ||= case request.path.split("/").second
+          # when "teams"; Team
+          # when "employees"; User
+          # when "tenants"; Tenant
+          # end
+        end
+
+        def any_filters?
+          return false if filter.nil? or params.dig(:controller).split("/").last == "filters" or params.dig(:action) == "lookup"
+          # !@filter.id.nil?
+          filter.persisted?
+        end
+
+        def any_sorts?
+          params.dig :s
+        end
     end
 end

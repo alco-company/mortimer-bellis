@@ -1,6 +1,6 @@
             <!-- Activity list (smallest breakpoint only) -->
-            <div class="shadow sm:hidden">
-              <ul role="list" class="mt-2 divide-y divide-gray-200 overflow-hidden shadow sm:hidden">
+            <div class="shadow-sm sm:hidden">
+              <ul role="list" class="mt-2 divide-y divide-gray-200 overflow-hidden shadow-sm sm:hidden">
                 <li>
                   <a href="#" class="block bg-white px-4 py-4 hover:bg-gray-50">
                     <span class="flex items-center space-x-4">

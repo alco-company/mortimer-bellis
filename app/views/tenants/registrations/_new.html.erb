@@ -1,0 +1,63 @@
+<% content_for :head do %>
+  <%#= turnstile_javascript_tag %>  
+<% end %>
+
+<%= turbo_frame_tag "new_registration" do %>
+  <div class="mx-auto w-72 sm:w-96">
+    <div class="flex flex-shrink-0 items-center">
+    <%= render_logo %>
+    </div>
+    <h1 class="font-bold text-gray-200 text-2xl"> <%= t(".sign_up.title") %> </h1>
+
+    <%= form_for(resource, as: resource_name, url: tenants_registrations_url,  data: { controller: "email-taken password-strength" }) do |f| %>
+      <%= render "users/shared/error_messages", resource: resource %>
+
+      <div class="mort-field">
+        <%= f.label :email %><br />
+        <%= f.email_field :email, 
+          autofocus: true, 
+          autocomplete: "email", 
+          "data-action": "blur->email-taken#validate",
+          class: "mort-form-text" %>
+        <div data-email-taken-target="emailTakenMessage" class="mt-0 pl-3 text-xs"></div>
+      </div>
+      <%#= real people should not fill this in and expect good things - do not remove this or risk form bot signups %>
+      <div aria-hidden="true" style="position: absolute; left: -5000px;">        
+        <input type="text" name="user[realname]" tabindex="-1" value="">
+      </div>     
+
+
+      <div class="mort-field">
+        <%= f.label :password %>
+        <% if @minimum_password_length %>
+        <em ><%= t(".sign_up.minimum", count: @minimum_password_length) %></em>
+        <% end %><br />
+        <%= f.password_field :password, 
+          required: true,
+          placeholder: I18n.t("users.enter_password"),
+          maxlength: 72,
+          "data-password-strength-target": :password,
+          "data-action": "input->password-strength#updateStrength",
+          class: "mort-form-text" %>
+        <div data-password-strength-target="strengthIndicator" class="mt-0 pl-3 text-xs"></div>
+      </div>
+
+      <div class="mort-field">
+        <%= f.label :password_confirmation %><br />
+        <%= f.password_field :password_confirmation, placeholder: I18n.t("users.reenter_password"), class: "mort-form-text" %>
+      </div>
+
+      <%#= turnstile_tag %>
+
+      <div class="actions mort-field">
+        <%= f.submit t(".create"), class: "mort-btn-primary" %>
+      </div>
+    <% end %>
+
+    <hr>
+    <div class="actions mort-field">
+      <%= render "users/shared/links" %>
+    </div>
+
+  </div>
+<% end %>

@@ -17,7 +17,8 @@ class Punch < ApplicationRecord
 
   # used by eg delete
   def name
-    "#{user.name} #{punched_at}"
+    I18n.l(punched_at, format: :short)
+    # "#{user.name} #{punched_at}"
   end
 
   def self.set_order(resources, field = :created_at, direction = :desc)
@@ -37,6 +38,50 @@ class Punch < ApplicationRecord
   rescue
     filter.destroy if filter
     all
+  end
+
+  def self.filterable_fields(model = self)
+    f = column_names - [
+      "id",
+      "tenant_id",
+      "user_id",
+      "punch_clock_id",
+      "punch_card_id"
+      # "punched_at",
+      # "state",
+      # "remote_ip",
+      # "created_at",
+      # "updated_at",
+      # "comment"
+    ]
+    f = f - [
+      "punched_at",
+      "created_at",
+      "updated_at"
+    ] if model == self
+    f
+  end
+
+  def self.associations
+    [ [ PunchClock, PunchCard ], [] ]
+  end
+
+  def self.user_scope(scope)
+    case scope
+    when "all"; nil # all.by_tenant()
+    when "mine"; TimeMaterial.arel_table[:user_id].eq(Current.user.id)
+    when "my_team"; TimeMaterial.arel_table[:user_id].in(Current.user.team.users.pluck(:id))
+    end
+  end
+
+  def self.named_scope(scope)
+    TimeMaterial.arel_table[:user_id].
+    in(
+      User.arel_table.project(:id).where(
+        User[:name].matches("%#{scope}%").
+        or(User[:team_id].in(Team.arel_table.project(:id).where(Team[:name].matches("%#{scope}%"))))
+      )
+    )
   end
 
   def notify(action: nil, title: nil, msg: nil, rcp: nil, priority: 0)

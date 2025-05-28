@@ -9,7 +9,7 @@ class ProvidedService < ApplicationRecord
   scope :by_params, ->(params) { where("params LIKE ?", "%#{params}%") if params.present? }
 
   validates :name, presence: true, uniqueness: { scope: :tenant_id, message: I18n.t("provided_services.errors.messages.name_exist") }
-  validates :service, presence: true, uniqueness: { scope: :tenant_id, message: I18n.t("provided_services.errors.messages.name_exist") }
+  validates :service, presence: true, uniqueness: { scope: :tenant_id, message: I18n.t("provided_services.errors.messages.service_exist") }
   validate :service_class_exists
 
   def service_class_exists
@@ -31,12 +31,38 @@ class ProvidedService < ApplicationRecord
     all
   end
 
+  def self.filterable_fields(model = self)
+    f = column_names - [
+      "id",
+      "tenant_id",
+      "authorized_by_id"
+      # "name",
+      # "service",
+      # "params",
+      # "created_at",
+      # "updated_at",
+      # "organizationID",
+      # "account_for_one_off",
+      # "product_for_time",
+      # "product_for_overtime",
+      # "product_for_hardware",
+      # "product_for_overtime_100",
+      # "product_for_mileage"
+    ]
+    f = f - [
+      "created_at",
+      "updated_at"
+    ] if model == self
+    f
+  end
+
   def self.form(resource:, editable: true)
     ProvidedServices::Form.new resource: resource, editable: editable
   end
 
   def authorized?
-    !params.blank?
+    return !params.blank? if name =~ /inero/ # ? false : Dinero::Service.new.token_fresh?
+    true if name =~ /tripe/
   end
 
   def service_params
@@ -81,14 +107,19 @@ class ProvidedService < ApplicationRecord
     end
 
     def make_json_text(p)
-      sp = case p.class.to_s
-      when "String"; ServiceParams.new.from_json(p)
-      when "Hash"; ServiceParams.new.from_json(p.to_json)
-      when "HTTParty::Response"; ServiceParams.new.from_json(p.parsed_response.to_json)
-      else; ServiceParams.new
+      case name
+      when /inero/
+        sp = case p.class.to_s
+        when "String"; ServiceParams.new.from_json(p)
+        when "Hash"; ServiceParams.new.from_json(p.to_json)
+        when "HTTParty::Response"; ServiceParams.new.from_json(p.parsed_response.to_json)
+        else; ServiceParams.new
+        end
+        sp = set_expires_at(sp)
+        sp.to_json
+      when /tripe/; p
+      else; p
       end
-      sp = set_expires_at(sp)
-      sp.to_json
     end
 
     def set_expires_at(ps)

@@ -149,34 +149,34 @@ class EventComponent < ApplicationComponent
               type: "button",
               data_action: " click->event-form#toggleWork",
               data_event_form_target: "workButton",
-              class: "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent bg-gray-200 transition-colors duration-200 ease-in-out focus:outline-none focus:ring-1 focus:ring-sky-600 focus:ring-offset-1 aria-checked:bg-sky-600",
+              class: "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent bg-gray-200 transition-colors duration-200 ease-in-out focus:outline-hidden focus:ring-1 focus:ring-sky-600 focus:ring-offset-1 aria-checked:bg-sky-600",
               role: "switch",
               aria_checked: work_type_value("in", "true", "false")
             ) do
               span(class: "sr-only") { "work" }
-              span(data_event_form_target: "workSpan", aria_hidden: "true", class: "pointer-events-none inline-block h-5 w-5 #{work_type_value("in", "translate-x-5", "translate-x-0")} transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out")
+              span(data_event_form_target: "workSpan", aria_hidden: "true", class: "pointer-events-none inline-block h-5 w-5 #{work_type_value("in", "translate-x-5", "translate-x-0")} transform rounded-full bg-white shadow-sm ring-0 transition duration-200 ease-in-out")
             end
             button(
               type: "button",
               data_action: " click->event-form#toggleSick",
               data_event_form_target: "sickButton",
-              class: "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent bg-gray-200 transition-colors duration-200 ease-in-out focus:outline-none focus:ring-1 focus:ring-sky-600 focus:ring-offset-1 aria-checked:bg-sky-600",
+              class: "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent bg-gray-200 transition-colors duration-200 ease-in-out focus:outline-hidden focus:ring-1 focus:ring-sky-600 focus:ring-offset-1 aria-checked:bg-sky-600",
               role: "switch",
               aria_checked: work_type_value("sick", "true", "false")
             ) do
               span(class: "sr-only") { "sick" }
-              span(data_event_form_target: "sickSpan", aria_hidden: "true", class: "pointer-events-none inline-block h-5 w-5  #{work_type_value("sick", "translate-x-5", "translate-x-0")} transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out")
+              span(data_event_form_target: "sickSpan", aria_hidden: "true", class: "pointer-events-none inline-block h-5 w-5  #{work_type_value("sick", "translate-x-5", "translate-x-0")} transform rounded-full bg-white shadow-sm ring-0 transition duration-200 ease-in-out")
             end
             button(
               type: "button",
               data_action: " click->event-form#toggleFree",
               data_event_form_target: "freeButton",
-              class: "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent bg-gray-200 transition-colors duration-200 ease-in-out focus:outline-none focus:ring-1 focus:ring-sky-600 focus:ring-offset-1 aria-checked:bg-sky-600",
+              class: "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent bg-gray-200 transition-colors duration-200 ease-in-out focus:outline-hidden focus:ring-1 focus:ring-sky-600 focus:ring-offset-1 aria-checked:bg-sky-600",
               role: "switch",
               aria_checked: work_type_value("free", "true", "false")
             ) do
               span(class: "sr-only") { "free" }
-              span(data_event_form_target: "freeSpan", aria_hidden: "true", class: "pointer-events-none inline-block h-5 w-5  #{work_type_value("free", "translate-x-5", "translate-x-0")} transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out")
+              span(data_event_form_target: "freeSpan", aria_hidden: "true", class: "pointer-events-none inline-block h-5 w-5  #{work_type_value("free", "translate-x-5", "translate-x-0")} transform rounded-full bg-white shadow-sm ring-0 transition duration-200 ease-in-out")
             end
             input(id: "event_work_type", name: "event[work_type]", type: "text", data_event_form_target: "workReason", value: resource.work_type, class: "hidden")
           end
@@ -203,12 +203,12 @@ class EventComponent < ApplicationComponent
             type: "button",
             data_action: " click->event-form#toggleBreakIncluded",
             data_event_form_target: "breaksIncludedButton",
-            class: "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent bg-gray-200 transition-colors duration-200 ease-in-out focus:outline-none focus:ring-1 focus:ring-sky-600 focus:ring-offset-1 aria-checked:bg-sky-600",
+            class: "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent bg-gray-200 transition-colors duration-200 ease-in-out focus:outline-hidden focus:ring-1 focus:ring-sky-600 focus:ring-offset-1 aria-checked:bg-sky-600",
             role: "switch",
             aria_checked: resource.breaks_included ? "true" : "false"
           ) do
             span(class: "sr-only") { "breakIncluded" }
-            span(data_event_form_target: "breaksIncludedSpan", aria_hidden: "true", class: "pointer-events-none inline-block h-5 w-5 #{ resource.breaks_included ? "translate-x-5" : "translate-x-0"} transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out")
+            span(data_event_form_target: "breaksIncludedSpan", aria_hidden: "true", class: "pointer-events-none inline-block h-5 w-5 #{ resource.breaks_included ? "translate-x-5" : "translate-x-0"} transform rounded-full bg-white shadow-sm ring-0 transition duration-200 ease-in-out")
           end
           input(id: "event_breaks_included", name: "event[breaks_included]", type: "checkbox", data_event_form_target: "breaksIncludedInput", value: resource.breaks_included ? "1" : "0", checked: "checked", class: "hidden")
         end
@@ -259,12 +259,12 @@ class EventComponent < ApplicationComponent
               type: "button",
               data_action: " click->event-form#toggleAutoPunch",
               data_event_form_target: "autoPunchButton",
-              class: "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent bg-gray-200 transition-colors duration-200 ease-in-out focus:outline-none focus:ring-1 focus:ring-sky-600 focus:ring-offset-1 aria-checked:bg-sky-600",
+              class: "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent bg-gray-200 transition-colors duration-200 ease-in-out focus:outline-hidden focus:ring-1 focus:ring-sky-600 focus:ring-offset-1 aria-checked:bg-sky-600",
               role: "switch",
               aria_checked: resource.auto_punch ? "true" : "false"
             ) do
               span(class: "sr-only") { "auto punch" }
-              span(data_event_form_target: "autoPunchSpan", aria_hidden: "true", class: "pointer-events-none inline-block h-5 w-5 #{ resource.auto_punch ? "translate-x-5" : "translate-x-0" } transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out")
+              span(data_event_form_target: "autoPunchSpan", aria_hidden: "true", class: "pointer-events-none inline-block h-5 w-5 #{ resource.auto_punch ? "translate-x-5" : "translate-x-0" } transform rounded-full bg-white shadow-sm ring-0 transition duration-200 ease-in-out")
             end
             input(
               id: "event_auto_punch",
@@ -341,12 +341,12 @@ class EventComponent < ApplicationComponent
               type: "button",
               data_action: " click->event-form#toggleAllDay",
               data_event_form_target: "allDayButton",
-              class: "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent bg-gray-200 transition-colors duration-200 ease-in-out focus:outline-none focus:ring-1 focus:ring-sky-600 focus:ring-offset-1 aria-checked:bg-sky-600",
+              class: "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent bg-gray-200 transition-colors duration-200 ease-in-out focus:outline-hidden focus:ring-1 focus:ring-sky-600 focus:ring-offset-1 aria-checked:bg-sky-600",
               role: "switch",
               aria_checked: resource.all_day ? "true" : "false"
             ) do
               span(class: "sr-only") { "all day" }
-              span(data_event_form_target: "allDaySpan", aria_hidden: "true", class: "pointer-events-none inline-block h-5 w-5 #{ resource.all_day ? "translate-x-5" : "translate-x-0" } transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out")
+              span(data_event_form_target: "allDaySpan", aria_hidden: "true", class: "pointer-events-none inline-block h-5 w-5 #{ resource.all_day ? "translate-x-5" : "translate-x-0" } transform rounded-full bg-white shadow-sm ring-0 transition duration-200 ease-in-out")
             end
             input(id: "event_all_day", name: "event[all_day]", type: "checkbox", data_event_form_target: "allDay", value: resource.all_day ? "1" : "0", checked: "checked", class: "hidden")
           end
@@ -575,7 +575,7 @@ class EventComponent < ApplicationComponent
         chck = wd.include?(day)
         div(class: "flex items-start") do
           div(class: "flex h-6 items-center") do
-            input(id: "event_#{prefix}_weekdays_#{day}", aria_describedby: "comments-description", name: "event[event_metum_attributes][#{prefix}_weekdays][#{day}]", type: "checkbox", value: day, checked: chck, class: "h-4 w-4 rounded border-gray-300 text-sky-600 focus:ring-sky-600")
+            input(id: "event_#{prefix}_weekdays_#{day}", aria_describedby: "comments-description", name: "event[event_metum_attributes][#{prefix}_weekdays][#{day}]", type: "checkbox", value: day, checked: chck, class: "h-4 w-4 rounded-sm border-gray-300 text-sky-600 focus:ring-sky-600")
           end
           div(class: "ml-3 text-sm leading-6") do
             span(class: "sr-only") { day }
@@ -599,7 +599,7 @@ class EventComponent < ApplicationComponent
           chck = wd.include?(mth)
           div(class: "flex items-start") do
             div(class: "flex h-6 items-center") do
-              input(id: "event_event_metum_yearly_months_#{mth}", aria_describedby: "comments-description", name: "event[event_metum_attributes][yearly_months][#{mth}]", type: "checkbox", value: mth, checked: chck, class: "h-4 w-4 rounded border-gray-300 text-sky-600 focus:ring-sky-600")
+              input(id: "event_event_metum_yearly_months_#{mth}", aria_describedby: "comments-description", name: "event[event_metum_attributes][yearly_months][#{mth}]", type: "checkbox", value: mth, checked: chck, class: "h-4 w-4 rounded-sm border-gray-300 text-sky-600 focus:ring-sky-600")
             end
             div(class: "ml-3 text-sm leading-6") do
               span(class: "sr-only") { mth }
@@ -669,7 +669,7 @@ class EventComponent < ApplicationComponent
     div(class: "mort-field") do
       label(for: "event_comment", class: "block text-sm font-medium leading-6 text-gray-900")  { I18n.t("event.comment") }
       div(class: "mt-2") do
-        textarea(rows: "4", name: "event[comment]", id: "event_comment", class: "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-sky-600 sm:text-sm sm:leading-6")
+        textarea(rows: "4", name: "event[comment]", id: "event_comment", class: "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-xs ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-sky-600 sm:text-sm sm:leading-6")
       end
     end
   end
@@ -745,7 +745,7 @@ end
 #       "Hvis blot én af betingelserne her nedenfor er opfyldt, træder denne plan i kraft"
 #     end
 
-#     ul(role: "list", class: "divide-y divide-gray-100 overflow-hidden bg-white shadow-sm ring-1 ring-gray-900/5 sm:rounded-xl") do
+#     ul(role: "list", class: "divide-y divide-gray-100 overflow-hidden bg-white shadow-xs ring-1 ring-gray-900/5 sm:rounded-xl") do
 #       li(class: "relative cursor-pointer flex justify-between gap-x-6 px-4 py-5 hover:bg-gray-50 sm:px-6", data: { action: "click->event-form#togglePeriodPicker", type: "daily" }) do
 #         show_daily_inputs
 #       end

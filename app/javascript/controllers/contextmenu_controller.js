@@ -30,21 +30,27 @@ export default class extends Controller {
   show() {
     this.buttonTarget.setAttribute('aria-expanded', 'true');
     this.buttonTarget.classList.add('active');
+    let list_items = document.querySelectorAll(".list_context_menu")
+    if (this.lastItemInList(this.buttonTarget.closest(".list_item")) && list_items.length > 3) {
+      this.popupTarget.classList.remove("top-0");
+      this.popupTarget.classList.add("bottom-6");
+    }
     enter(this.popupTarget);
     // this.popupTarget.classList.remove('hidden');
   }
 
   hide(event) {
+    // event.stopPropagation();
     try {      
       if (
         event &&
-        (this.popupTarget.contains(event.target) ||
-          this.buttonTarget.contains(event.target))
+        (this.popupTarget.contains(event.target) )
       ) {
         // changed your solution with crispinheneise's recommendation and added additional check:
         // event.preventDefault();
-        if( event.target.tagName != 'A')
+        if( event.target.tagName != 'A' && event.target.tagName != 'BUTTON' ) {
           return;
+        }
       }
 
       this.buttonTarget.setAttribute("aria-expanded", "false");
@@ -56,4 +62,13 @@ export default class extends Controller {
       return
     }
   }  
+
+  lastItemInList(item) {
+    try {
+      let records = document.getElementById("record_list").children
+      return records[records.length - 1] == item
+    } catch (error) {
+      return false
+    }
+  }
 }

@@ -18,6 +18,7 @@ da:
       delete_all: 
         title: Slet alle medarbejdere
         instruction: Er du sikker på, at du vil slette alle medarbejdere?
+        instruction_selected: Er du sikker på, at du vil slette alle %{count} udvalgte medarbejdere?
       delete:
         title: Slet denne medarbejdere
         instruction: Er du sikker på, at du vil slette medarbejderen %{name}?
@@ -50,6 +51,7 @@ da:
       delete_all: 
         title: Slet alle medarbejder invitationer
         instruction: Er du sikker på, at du vil slette alle medarbejder invitationer?
+        instruction_selected: Er du sikker på, at du vil slette alle %{count} udvalgte invitationer?
 
   employee_invitations:
     link: "Medarbejder invitationer"

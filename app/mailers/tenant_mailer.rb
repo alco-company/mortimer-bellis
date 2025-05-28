@@ -3,16 +3,44 @@ class TenantMailer < ApplicationMailer
   #
   def welcome
     @rcpt =  email_address_with_name params[:tenant].email, params[:tenant].name
-    locale = params[:tenant].locale
-    @pw = params[:pw]
     @tenant = params[:tenant]
+    locale = @tenant.locale
     @resource = @tenant.users.first
-    @url = new_user_session_url
     I18n.with_locale(locale) do
-      mail to: @rcpt, subject: I18n.t("tenant.mailer.welcome.subject")
+      mail to: @rcpt,
+        subject: I18n.t("tenant.mailer.welcome.subject"),
+        delivery_method: :mailersend,
+        delivery_method_options: {
+          api_key: ENV["MAILERSEND_API_TOKEN"]
+        }
     end
+  rescue => e
+    UserMailer.error_report(e.to_s, "TenantMailer#welcome - failed for #{params[:tenant]&.id}").deliver_later
   end
 
+  def send_invoice
+    @tenant = params[:tenant]
+    @email = params[:recipient]
+    @pdf = params[:invoice_pdf]
+    # attachments["invoice.pdf"] = File.read(@pdf)
+    mail to: @email,
+      subject: "Mortimer Invoice",
+      delivery_method: :mailersend,
+      delivery_method_options: {
+        api_key: ENV["MAILERSEND_API_TOKEN"]
+      }
+  end
+
+  def send_ambassador_request
+    @tenant = params[:tenant]
+    @email = params[:recipient]
+    mail to: @email,
+      subject: "Mortimer Ambassador Request",
+      delivery_method: :mailersend,
+      delivery_method_options: {
+        api_key: ENV["MAILERSEND_API_TOKEN"]
+      }
+  end
 
   # params:
   # :rcpt is the recipient (object) that has two methods: email, and :name
@@ -31,8 +59,8 @@ class TenantMailer < ApplicationMailer
   end
 
   def report_state
-    Current.tenant = params[:tenant]
-    rcpt =  email_address_with_name Current.tenant.email, Current.tenant.name
+    @tenant = params[:tenant]
+    rcpt =  email_address_with_name @tenant.email, @tenant.name
     params[:tmpfiles].each_with_index do |tmpfile, i|
       attachments["report_state_#{i}.pdf"] = File.read(tmpfile)
 

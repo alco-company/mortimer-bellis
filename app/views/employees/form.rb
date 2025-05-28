@@ -27,7 +27,7 @@ class Employees::Form < ApplicationForm
         row field(:birthday).date(class: "mort-form-text")
         row field(:hired_at).input()
         row field(:pbx_extension).input()
-        p(class: "text-lg font-medium border-b-2 border-gray-400") { I18n.t("users.contract_template_details") }
+        p(class: "text-lg font-medium border-b-2 border-slate-100") { I18n.t("users.contract_template_details") }
         row field(:contract_minutes).input(placeholder: "160:20")
         row field(:contract_days_per_payroll).input(placeholder: "0")
         row field(:contract_days_per_week).input(placeholder: "5")

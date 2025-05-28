@@ -1,5 +1,8 @@
 class ApplicationJob < ActiveJob::Base
   include Alco::SqlStatements
+
+  attr_accessor :tenant, :user
+
   # Automatically retry jobs that encountered a deadlock
   # retry_on ActiveRecord::Deadlocked
 
@@ -11,9 +14,9 @@ class ApplicationJob < ActiveJob::Base
   # - so jobs inheriting from this will call super(args)
   #
   def perform **args
-    tenant = args[:tenant] || Tenant.find(args[:tenant_id]) rescue Tenant.first
-    Current.tenant = tenant
-    Current.user = args[:user] || User.find(args[:user_id]) || tenant.users.first rescue User.first
+    @tenant = args[:tenant] || Tenant.find(args[:tenant_id]) rescue Tenant.first
+    @user = args[:user] || User.find(args[:user_id]) || tenant.users.first rescue User.first
+    Current.system_user = @user
   rescue => exception
     say exception
   end

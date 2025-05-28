@@ -1,8 +1,8 @@
 class Icons::Person < Phlex::HTML
   attr_accessor :cls, :data
 
-  def initialize(cls: "h-6 text-gray-900 hover:text-gray-500", data: {})
-    @cls = cls
+  def initialize(css: "h-6 text-gray-900 hover:text-gray-500", data: {})
+    @cls = css
     @data = data
   end
 

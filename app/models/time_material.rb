@@ -1,19 +1,103 @@
+#
+#
+# t.integer "state", default: 0             draft active paused finished  pushed_to_erp error_on_push archived      default_state               fx 'draft'
+#
+# t.integer "tenant_id", null: false                                                                                Current.get_tenant
+# t.integer "user_id", null: false                                                                                  | delegate_time_materials   true
+#                                                                                                                   | Current.get_user.id
+#
+# t.string "date"                                                                                                   default_date                today
+# t.string "time"
+# t.datetime "paused_at"
+# t.datetime "started_at"
+# t.integer "time_spent"
+# t.date "wdate"
+# hour_time                                                                                                         default_hours               fx 0
+# minute_time                                                                                                       default_minutes             fx 15
+#
+# t.string "about"                                                        |                                         default_time_material_about fx 'ongoing task'
+# t.text "comment"                                                        |
+#
+# t.string "customer_name"                                                                                          allow_create_customer
+# t.string "customer_id"                                                  required
+#
+# t.string "project_name"                                                                                           allow_create_project
+# t.string "project_id"
+#
+# t.string "product_name"                                                 |                                         allow_create_product
+# t.string "product_id"                                                   | either
+#
+# t.string "quantity"                                                     required                                  default_quantity            fx 1
+# t.string "rate"                                                         required                                  default_rate                fx 500.00
+# t.integer "over_time", default: 0                                                                                 default_over_time           fx {base: 100, quarter: 125, fifty: 150, three_quarter: 175, 100percent:200} (%)
+# t.string "discount"                                                     required                                  default_discount            fx 0.00
+# t.string "unit_price"                                                   required
+# t.string "unit"                                                         required
+
+# t.string "pushed_erp_timestamp"
+# t.string "erp_guid"
+# t.text "push_log"
+
+# t.boolean "is_invoice"
+# t.boolean "is_free"
+# t.boolean "is_offer"
+# t.boolean "is_separate"
+
+# t.datetime "created_at", null: false
+# t.datetime "updated_at", null: false
+
+# currently not implemented
+# t.integer "odo_from"
+# t.integer "odo_to"
+# t.integer "kilometers"
+# t.string "trip_purpose"
+# t.datetime "odo_from_time"
+# t.datetime "odo_to_time"
+
+#
+# VALIDATIONS:
+#
+# validate_draft
+# validate_active                       set_time_spent
+# validate_paused                       set_time_spent
+# validate_finished                     set_time_spent  finishable?
+# validate_pushed_to_erp                                          pushable?
+# validate_error_on_push
+# validate_archived
+#
+
+
 class TimeMaterial < ApplicationRecord
   include Tenantable
+  include Taggable
   include TimeMaterialStateable
   include Settingable
+  include Unitable
 
-  attr_accessor :hour_time, :minute_time
+  attr_accessor :hour_time, :minute_time, :calculated_unit_price
 
   belongs_to :customer, optional: true
   belongs_to :project, optional: true
   belongs_to :product, optional: true
   belongs_to :user
 
+  # notifications
+  has_many :notification_mentions, as: :record, dependent: :destroy, class_name: "Noticed::Event"
+
   scope :by_fulltext, ->(query) { includes([ :customer, :project, :product ]).references([ :customers, :projects, :products ]).where("customers.name LIKE :query OR projects.name like :query or products.name like :query or products.product_number like :query or about LIKE :query OR product_name LIKE :query OR comment LIKE :query", query: "%#{query}%") if query.present? }
   scope :by_about, ->(about) { where("about LIKE ?", "%#{about}%") if about.present? }
   scope :by_exact_user, ->(user) { where("user_id= ?", "%#{user.id}%") if user.present? }
-  scope :weekdays, -> { where("cast(strftime('%w', date) as integer) BETWEEN 1 AND 5") }
+  scope :weekdays, -> { where("cast(strftime('%w', wdate) as integer) BETWEEN 1 AND 5") }
+  scope :billed, -> { where("is_invoice = ?", 1).where(state: [ :done, :pushed_to_erp ]) }
+  scope :drafted, -> { where(state: [ :draft, :active, :paused ]) }
+  scope :by_state, ->(state) { where("state = ?", state) if state.present? }
+  scope :by_customer, ->(customer) { where("customer_id = ?", customer.id) if customer.present? }
+  scope :by_project, ->(project) { where("project_id = ?", project.id) if project.present? }
+  scope :by_product, ->(product) { where("product_id = ?", product.id) if product.present? }
+  scope :by_date, ->(date) { where("wdate = ?", date) if date.present? }
+
+  # # SQLite
+  # scope :weekdays_only, -> { where("strftime('%w', created_at) BETWEEN 1 AND 5") }
 
   # # PostgreSQL
   # scope :weekdays_only_in_timezone, ->(timezone) {
@@ -24,23 +108,140 @@ class TimeMaterial < ApplicationRecord
 
 
   # validates :about, presence: true
+  # validates :about, presence: true, if: [ Proc.new { |c| c.comment.blank? && c.product_name.blank? } ]
 
-  validates :about, presence: true, if: [ Proc.new { |c| c.comment.blank? && c.product_name.blank? } ]
+  before_save :set_wdate
 
-  def self.filtered(filter)
-    flt = filter.filter
-
-    all
-      .by_tenant()
-      .by_about(flt["about"])
-      .by_state(flt["state"])
-  rescue
-    filter.destroy if filter
-    all
+  def set_wdate
+    self.wdate = Date.parse date unless date.blank?
   end
 
-  def self.set_order(resources, field = :date, direction = :desc)
-    resources.ordered(field, direction)
+  def has_insufficient_data?
+    hid = false
+    hid = true if project_name.present? && project_id.blank? && Current.get_user.cannot?(:allow_create_project)
+    hid = true if customer_name.present? && customer_id.blank? && Current.get_user.cannot?(:allow_create_customer)
+    hid = true if product_name.present? && product_id.blank? && Current.get_user.cannot?(:allow_create_product)
+    hid = true if is_invoice? && customer_id.blank?
+    hid
+  rescue
+    false
+  end
+
+  # def self.filtered(filter)
+  #   flt = filter.collect_filters self
+  #   flt = filter.filter
+
+  #   all
+  #     .by_tenant()
+  #     .by_about(flt["about"])
+  #     .by_state(flt["state"])
+  # rescue
+  #   filter.destroy if filter
+  #   all
+  # end
+
+  def self.filterable_fields(model = self)
+    f = column_names - [
+      "id",
+      "tenant_id",
+      "time",
+      # t.string "about"
+      "customer_name",
+      "customer_id",
+      "project_name",
+      "project_id",
+      "product_name",
+      "product_id",
+      # t.string "quantity"
+      # t.string "rate"
+      # t.string "discount"
+      # t.integer "state",
+      # t.boolean "is_invoice"
+      # t.boolean "is_free"
+      # t.boolean "is_offer"
+      # t.boolean "is_separate"
+      "user_id",
+      # t.text "comment"
+      # t.string "unit_price"
+      # t.string "unit"
+      "pushed_erp_timestamp",
+      "erp_guid",
+      "push_log",
+      # t.integer "time_spent"
+      # t.integer "over_time",
+      "odo_from",
+      "odo_to",
+      "kilometers",
+      "trip_purpose",
+      "odo_from_time",
+      "odo_to_time"
+    ]
+    f = f + [
+      "customer_name",
+      "project_name",
+      "product_name",
+      "tag_list"
+    ]
+    f = f - [
+      "date",
+      "paused_at",
+      "wdate",
+      "created_at",
+      "updated_at",
+      "started_at"
+      ] if model == self
+    f
+  end
+
+  def self.user_scope(scope)
+    case scope
+    when "all"; nil # all.by_tenant()
+    when "mine"; TimeMaterial.arel_table[:user_id].eq(Current.user.id)
+    when "my_team"; TimeMaterial.arel_table[:user_id].in(Current.user.team.users.pluck(:id))
+    end
+  end
+
+  def self.named_scope(scope)
+    TimeMaterial.arel_table[:user_id].
+    in(
+      User.arel_table.project(:id).where(
+        User[:name].matches("%#{scope}%").
+        or(User[:team_id].in(Team.arel_table.project(:id).where(Team[:name].matches("%#{scope}%"))))
+      )
+    )
+  end
+
+  def csv_row(*fields)
+    f = fields.dup
+    f = f - [
+      "customer_name",
+      "project_name",
+      "product_name",
+      "tag_list"
+    ]
+
+    v = attributes.values_at(*f)
+    v << self.customer&.name || "" if fields.include?("customer_name") # && self.customer.present?
+    v << self.project&.name || "" if fields.include?("project_name") # && self.project.present?
+    v << self.product&.name || "" if fields.include?("product_name") # && self.product.present?
+    v << self.tag_list if fields.include?("tag_list")
+    v
+  rescue => e
+    UserMailer.error_report(e.to_s, "TimeMaterial#csv_row - failed with params: #{fields}").deliver_later
+    []
+  end
+
+  def self.associations
+    [ [ Customer, Project, Product ], [] ]
+  end
+
+  def self.set_order(resources, field = :wdate, direction = :desc)
+    resources.ordered(field, direction).order(created_at: :desc)
+  end
+
+  def remove(step = nil)
+    self.taggings.each { |t| t.destroy! }
+    destroy!
   end
 
   def list_item(links: [], context:)
@@ -65,12 +266,15 @@ class TimeMaterial < ApplicationRecord
   end
 
   def name
-    about[..50]
+    # about
     case false
-    when product_name.blank?; product_name[..50]
-    when about.blank?; about[..50]
-    when comment.blank?; comment[..50]
+    when product_name.blank?; product_name
+    when about.blank?; about
+    when comment.blank?; comment
+    else; user.default(:default_time_material_about, I18n.t("time_material.default_assigned_about"))
     end
+  rescue
+    ""
   end
 
   def hour_time
@@ -83,7 +287,6 @@ class TimeMaterial < ApplicationRecord
 
   def hour_time=(val)
     return if val.blank?
-
     self.time = "#{val}:00" if self.time.blank?
     self.time = "%s:%s" % [ val, self.time.split(":")[1] ] if self.time.include?(":")
     self.time = "%s:%s" % [ val, self.time.split(",")[1] ] if self.time.include?(",")
@@ -100,7 +303,6 @@ class TimeMaterial < ApplicationRecord
 
   def minute_time=(val)
     return if val.blank?
-
     self.time = "00:#{val}" if self.time.blank?
     self.time = "%s:%s" % [ self.time.split(":")[0], val ] if self.time.include?(":")
     self.time = "%s:%s" % [ self.time.split(",")[0], val ] if self.time.include?(",")
@@ -111,32 +313,12 @@ class TimeMaterial < ApplicationRecord
     false
   end
 
-  def self.form(resource:, editable: true)
-    TimeMaterials::Form.new resource: resource, editable: editable
+  def is_time?
+    product_id.blank? && product_name.blank?
   end
 
-  def units
-    [
-      [ "hours", I18n.t("time_material.units.hours") ],
-      [ "parts", I18n.t("time_material.units.parts") ],
-      [ "km", I18n.t("time_material.units.km") ],
-      [ "day", I18n.t("time_material.units.day") ],
-      [ "week", I18n.t("time_material.units.week") ],
-      [ "month", I18n.t("time_material.units.month") ],
-      [ "kilogram", I18n.t("time_material.units.kilogram") ],
-      [ "cubicMetre", I18n.t("time_material.units.cubicMetre") ],
-      [ "set", I18n.t("time_material.units.set") ],
-      [ "litre", I18n.t("time_material.units.litre") ],
-      [ "box", I18n.t("time_material.units.box") ],
-      [ "case", I18n.t("time_material.units.case") ],
-      [ "carton", I18n.t("time_material.units.carton") ],
-      [ "metre", I18n.t("time_material.units.metre") ],
-      [ "package", I18n.t("time_material.units.package") ],
-      [ "shipment", I18n.t("time_material.units.shipment") ],
-      [ "squareMetre", I18n.t("time_material.units.squareMetre") ],
-      [ "session", I18n.t("time_material.units.session") ],
-      [ "tonne", I18n.t("time_material.units.tonne") ]
-    ]
+  def self.form(resource:, editable: true)
+    TimeMaterials::Form.new resource: resource, editable: editable
   end
 
   def self.overtimes
@@ -145,6 +327,14 @@ class TimeMaterial < ApplicationRecord
       [ 1, I18n.t("time_material.overtimes.50percent") ],
       [ 2, I18n.t("time_material.overtimes.100percent") ]
     ]
+  end
+
+  def self.overtimes_products
+    h = []
+    Current.get_user.tenant.time_products.each do |p|
+      h << p.base_amount_value.to_s
+    end
+    h.to_json
   end
 
   def self.trip_purposes
@@ -217,7 +407,7 @@ class TimeMaterial < ApplicationRecord
       else hours += 1; 0
       end
     end
-    "%s:%s" % [ hours, minutes ]
+    "%02d:%02d" % [ hours.to_i, minutes.to_i ] rescue "00:00"
   end
 
   def set_ptime(ht, mt)
@@ -248,8 +438,8 @@ class TimeMaterial < ApplicationRecord
   #
   # make sure this record is good for pushing to the ERP
   #
-  def values_ready_for_push?
-    entry = InvoiceItemValidator.new(self)
+  def pushable?
+    entry = InvoiceItemValidator.new(self, user)
     return true if entry.valid?
     self.project = entry.project if entry.project.present?
     self.errors.add(:base, entry.errors.full_messages.join(", "))
@@ -272,5 +462,75 @@ class TimeMaterial < ApplicationRecord
     # # we'll use the project field for adding a comment in the top of the invoice
     # # or use the project.name !resource.project_name.blank? && resource.project.name
     # true
+  end
+
+
+  def prepare_tm(resource_params)
+    # if product/material
+    if resource_params[:product_name].present? or resource_params[:product_id].present?
+      resource_params[:hour_time] = ""
+      resource_params[:time] = ""
+      resource_params[:minute_time] = ""
+      self.time = ""
+      self.hour_time = ""
+      self.minute_time = ""
+      self.rate = ""
+      resource_params[:rate] = ""
+      resource_params[:over_time] = ""
+      self.over_time = 0
+    end
+    if resource_params[:state].present? &&
+      resource_params[:state] == "done"
+
+      resource_params = create_customer(resource_params)
+      resource_params = create_project(resource_params)
+      if Current.get_user.should?(:validate_time_material_done)
+        if resource_params[:discount].present?
+          resource_params[:discount] = case resource_params[:discount]
+          when "0"; ""
+          when "0%"; 0
+          when "100%"; 100
+          else resource_params[:discount].to_f
+          end
+        end
+
+        if resource_params[:played].present?
+          resource_params.delete(:played)
+          return true
+        end
+        unless pushable?
+          errors.add(:base, errors.full_messages.join(", "))
+          return false
+        end
+        return false unless valid?
+      end
+    end
+    resource_params
+  rescue => e
+    # debug-ger
+    UserMailer.error_report(e.to_s, "TimeMaterial#prepare_tm - failed with params: #{resource_params}").deliver_later
+    false
+  end
+
+  def create_customer(resource_params)
+    return resource_params unless Current.get_user.can?(:allow_create_customer)
+    resource_params[:customer_id] = "" if resource_params[:customer_name].blank?
+    if (resource_params[:customer_id].present? && (Customer.find(resource_params[:customer_id]).name != resource_params[:customer_name])) ||
+      resource_params[:customer_name].present? && resource_params[:customer_id].blank?
+      customer = Customer.find_or_create_by(tenant: Current.get_tenant, name: resource_params[:customer_name], is_person: true)
+      resource_params[:customer_id] = customer.id
+    end
+    resource_params
+  end
+
+  def create_project(resource_params)
+    return resource_params unless Current.get_user.can?(:allow_create_project)
+    resource_params[:project_id] = "" if resource_params[:project_name].blank?
+    if (resource_params[:project_id].present? && (Project.find(resource_params[:project_id]).name != resource_params[:project_name])) ||
+      resource_params[:project_name].present? && resource_params[:project_id].blank?
+      project = Project.find_or_create_by(tenant: Current.get_tenant, name: resource_params[:project_name], customer_id: resource_params[:customer_id])
+      resource_params[:project_id] = project.id
+    end
+    resource_params
   end
 end

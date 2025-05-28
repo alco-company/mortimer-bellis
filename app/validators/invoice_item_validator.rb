@@ -22,26 +22,27 @@ class InvoiceItemValidator
   include ActiveModel::Model
 
   attr_accessor :quantity, :product_name, :product_id, :hour_time, :minute_time, :rate, :discount, :unit_price,
-                :kilometers, :comment, :customer_id, :customer_name, :project_name, :project, :is_invoice
+                :kilometers, :comment, :customer_id, :customer_name, :project_name, :project, :is_invoice,
+                :user
 
   validates :product_name, presence: true, if: -> { quantity.present? }
   validates :quantity, presence: true, if: -> { product_id.present? || product_name.present? }
-  validates :unit_price, presence: true, if: -> { quantity.present? }
-  validate :time_requires_blank_fields
+  validates :unit_price, presence: true, if: -> { product_id.present? || product_name.present? || quantity.present? }
+  # validate :time_requires_blank_fields
   validate :rate_requires_conditions
   validate :discount_requires_conditions
   validate :unit_price_format
   validate :quantity_format
   validate :rate_format
   validate :time_format
-  validate :kilometers_format
+  # validate :kilometers_format
   validate :comment_required_if_no_fields
-  validate :mutual_exclusivity_of_time_quantity_and_kilometers
+  # validate :mutual_exclusivity_of_time_quantity_and_kilometers
   validate :product_must_exist
   validate :customer_must_exist
   validate :project_name_creates_project_if_not_found
 
-  def initialize(tm)
+  def initialize(tm, user)
     @quantity = tm.quantity
     @product_name = tm.product_name
     @product_id = tm.product_id
@@ -57,6 +58,7 @@ class InvoiceItemValidator
     @project_name = tm.project_name
     @project = tm.project
     @is_invoice = tm.is_invoice
+    @user = user
   end
 
   private
@@ -78,7 +80,7 @@ class InvoiceItemValidator
   def discount_requires_conditions
     if discount.present?
       errors.add(:discount, tr("product_name_quantity_must_be_set")) if product_name.blank? || quantity.blank?
-      unless discount =~ /\A\d*[,.]?\d{2}%?\z/
+      unless discount =~ /\A\d*[,.]?\d{0,2}%?\z/
         errors.add(:discount, tr("format_wrong_number")) #  0[,.]00 or 0[,.]00%
       end
     end
@@ -110,38 +112,42 @@ class InvoiceItemValidator
 
   def time_format
     if hour_time.present? && hour_time !~ /\A\d*[,:.]?\d{0,2}\z/
-      errors.add(:hour_time, tr("format_wrong_number_time")) #  0[,.]00 or 0[,.]00%
+      errors.add(:hour_time, tr("format_wrong_number_time")) #  0[,.:]00
     end
     if minute_time.present? && minute_time !~ /\A\d*[,:.]?\d{0,2}\z/
-      errors.add(:minute_time, tr("format_wrong_number_time")) #  0[,.]00 or 0[,.]00%
+      errors.add(:minute_time, tr("format_wrong_number_time")) #  0[,.:]00
     end
   end
 
-  def kilometers_format
-    if kilometers.present? && kilometers !~ /\A\d{1,8}\z/
-      errors.add(:kilometers, tr("format_wrong_number_digits")) # 0000..0
-    end
-  end
+  # def kilometers_format
+  #   if kilometers.present? && kilometers !~ /\A\d{1,8}\z/
+  #     errors.add(:kilometers, tr("format_wrong_number_digits")) # 0000..0
+  #   end
+  # end
 
   def comment_required_if_no_fields
-    if time_blank? && quantity.blank? && kilometers.blank? && comment.blank?
-      errors.add(:comment, tr("cannot_be_blank_when_time_quantity_km_blank"))
+    if time_blank? && quantity.blank? && comment.blank? # && kilometers.blank?
+      errors.add(:comment, tr("cannot_be_blank_when_time_quantity_blank"))
     end
   end
 
-  def mutual_exclusivity_of_time_quantity_and_kilometers
-    if time_present? && (kilometers.present? || quantity.present?)
-      errors.add(:time, tr("km_quantity_must_blank"))
-    elsif quantity.present? && (time_present? || kilometers.present?)
-      errors.add(:quantity, tr("time_km_must_blank"))
-    elsif kilometers.present? && (time_present? || quantity.present?)
-      errors.add(:kilometers, "time_quantity_must_blank")
-    end
-  end
+  # def mutual_exclusivity_of_time_quantity_and_kilometers
+  #   if time_present? && (kilometers.present? || quantity.present?)
+  #     errors.add(:time, tr("km_quantity_must_blank"))
+  #   elsif quantity.present? && (time_present? || kilometers.present?)
+  #     errors.add(:quantity, tr("time_km_must_blank"))
+  #   elsif kilometers.present? && (time_present? || quantity.present?)
+  #     errors.add(:kilometers, "time_quantity_must_blank")
+  #   end
+  # end
 
   def product_must_exist
+    return true unless user.cannot?(:allow_create_product)
     if product_id.present? && !Product.by_tenant.find(product_id)
-      errors.add(:product, tr("must_exist"))
+      errors.add(:product, tr("wrong_product_id_not_found"))
+    end
+    if product_name.present? && product_id.blank? && !Product.by_tenant.find_by("name like ?", "%#{product_name}%")
+      errors.add(:product, tr("wrong_product_name_not_found"))
     end
   end
 
@@ -153,13 +159,19 @@ class InvoiceItemValidator
         errors.add(:customer, tr("not_found_search_customer_again"))
       elsif customer_name.blank? && customer_id.blank?
         errors.add(:customer, tr("not_found_search_customer_again"))
+      elsif !customer_id.blank? && customer_name.blank?
+        errors.add(:customer, tr("customer_set_but_name_blank_or_not_matching"))
       end
     end
   end
 
   def project_name_creates_project_if_not_found
     if project_name.present?
-      self.project = Project.by_tenant.find_or_create_by(tenant: Current.tenant, customer: customer, name: project_name)
+      if user.cannot?(:allow_create_project)
+        errors.add(:project, tr("not_found_search_project_again")) unless Project.by_tenant.find_by(name: project_name)
+      else
+        self.project = Project.by_tenant.find_or_create_by(tenant: user.tenant, customer_id: customer_id, name: project_name)
+      end
     end
   end
 

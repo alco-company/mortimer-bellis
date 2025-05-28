@@ -1,0 +1,66 @@
+da:
+
+  tag:
+    modal:
+      delete_all: 
+        title: Slet alle mærker
+        instruction: Er du sikker på, at du vil slette alle mærker?
+        instruction_selected: Er du sikker på, at du vil slette alle %{count} udvalgte mærker?
+      delete:
+        title: Slet dette mærke
+        instruction: Er du sikker på, at du vil slette mærket %{name}?
+        button: Slet
+
+  tags:
+    default_tag: Mærke
+    validation_errors: Der er fejl i det indtastede
+
+    create:
+      post: Mærket blev oprettet
+    update:
+      post: Mærket blev opdateret
+    destroy:
+      post: Mærket blev slettet
+
+    open_tags_remain: Du har %{count} mærker som ikke er afsluttet
+    find_them_here: Vis mig dem
+
+    remaining:
+      title: Uredigerede mærker
+      msg: Du har %{count} uredigerede mærker, der venter på dig
+
+
+    dashboard:
+      no_remaining_tags: Du har ingen mærker, der ikke er redigeret
+
+    list:
+      title: mærker
+      new: Nyt Mærke
+      edit: Rediger
+      delete: Slet
+      show: Vis
+      name: Navn
+      category: Kategori
+      context: Sammenhæng
+      updated_at: Opdateret den
+
+    form:
+      new: Nyt mærke
+      edit: Rediger mærket
+      show: Vis mærket
+
+    new:
+      title: Nyt mærke
+      create: Opret
+
+    edit:
+      title: Rediger mærke
+      update: Opdater
+
+    show:
+      title: Mærke
+      back: Tilbage
+
+    errors:
+      messages:
+        name_exist: "Mærket findes allerede"

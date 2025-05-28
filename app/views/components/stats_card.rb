@@ -8,7 +8,7 @@ class StatsCard < Phlex::HTML
 
   def view_template
     comment { "Card" }
-    div(class: "overflow-hidden rounded-lg bg-white shadow #{@css}") do
+    div(class: "overflow-hidden rounded-lg bg-white shadow-sm #{@css}") do
       div(class: "p-5") do
         div(class: "flex items-center") do
           div(class: "flex-shrink-0") do

@@ -1,20 +1,24 @@
 class ApplicationForm < Superform::Rails::Form
   include Phlex::Rails::Helpers::Pluralize
   include Phlex::Rails::Helpers::LinkTo
+  include Phlex::Rails::Helpers::TurboFrameTag
   include FieldSpecializations
   include FormSpecializations
 
-  attr_accessor :resource, :cancel_url, :title, :edit_url,  :editable, :api_key, :model, :fields
+  attr_accessor :resource, :cancel_url, :title, :edit_url,  :editable, :api_key, :model, :fields, :user
 
   def initialize(resource:, editable: nil, **options)
-    options[:data] = { form_target: "form" }
-    options[:class] = "mort-form"
+    options[:data] ||= { form_target: "form" }
+    options[:class] ||= "mort-form"
     super(resource, **options)
     @resource = @model = resource
     @fields = options[:fields] || []
     @fields = @fields.any? ? @fields : model.class.attribute_types.keys
     @editable = editable
     @api_key = options[:api_key] || ""
+    @user = options[:user].present? ? options[:user] :
+      resource.respond_to?(:user) && resource.user.present? ? resource.user :
+      Current.get_user
   end
 
   def view_template(&)
@@ -37,6 +41,54 @@ class ApplicationForm < Superform::Rails::Form
       end
     rescue => err
       UserMailer.error_report(err.to_s, "Phlex::SGML format_object error with object #{ object.class }").deliver_later
+    end
+  end
+
+  def buy_product
+    return unless user.admin? or user.superadmin?
+    div(class: "mt-6 p-4 rounded-md shadow-xs bg-purple-100") do
+      h2(class: "font-bold text-2xl text-purple-800") { t("users.edit_profile.buy_product.title") }
+      p(class: "text-sm text-purple-600") { t("users.edit_profile.buy_product.description", discord: "https://discord.gg/kzkrrCJUuG").html_safe }
+      if user.superadmin?
+        row field(:license).enum_select(Tenant.licenses.keys, class: "mort-form-select")
+        row field(:license_expires_at).date(class: "mort-form-date"), "mort-field"
+        view_only field(:license_changed_at).date(class: "mort-form-date"), "mort-field my-4"
+      end
+      render TenantLicense.new
+    end
+  end
+
+  def delete_account
+    if (user.admin? or user.superadmin?) && (user.id > 1)
+      div(class: "mt-6 p-4 rounded-md shadow-xs bg-red-100") do
+        h2(class: "font-bold text-2xl") { t("users.edit_profile.cancel.title") }
+        div do
+          p(class: "text-sm") do
+            t("users.edit_profile.cancel.unhappy").html_safe
+          end
+          p do
+            link_to(
+              new_modal_url(modal_form: "delete_account", id: user.id, resource_class: "user", modal_next_step: "delete_account", url: "/"),
+              data: {
+                turbo_stream: true
+              },
+              class: "mort-btn-alert mt-4",
+              role: "deleteitem",
+              tabindex: "-1"
+            ) do
+              plain I18n.t(".delete")
+              span(class: " sr-only") do
+                begin
+                  plain resource.name
+                rescue StandardError
+                  ""
+                end
+              end
+            end
+            # = button_to t("users.edit_profile.cancel.action"), registration_path(resource_name), data: { confirm: "Are you sure?", turbo_confirm: "Are you sure?" }, method: :delete, class: "mort-btn-alert mort-field"
+          end
+        end
+      end
     end
   end
 end

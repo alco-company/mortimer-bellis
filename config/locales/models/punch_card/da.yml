@@ -4,6 +4,7 @@ da:
       delete_all: 
         title: Slet alle stempelkort
         instruction: Er du sikker på, at du vil slette alle stempelkort?
+        instruction_selected: Er du sikker på, at du vil slette alle %{count} udvalgte stempelkort?
       delete:
         title: Slet dette stempelkort
         instruction: Er du sikker på, at du vil slette stempelkortet for %{name}?

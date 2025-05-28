@@ -1,15 +1,20 @@
-class ModalController < BaseController
+class ModalController < MortimerController
   before_action :set_vars, only: [ :new, :show, :create, :destroy, :update ]
-  skip_before_action :authenticate_user!, only: [ :destroy ]
-  skip_before_action :check_session_length, only: [ :destroy ]
+  before_action :set_batch
+  before_action :set_filter # , only: %i[ new index destroy ] # new b/c of modal
+  before_action :set_resources # , only: %i[ index destroy ]
+  before_action :set_resources_stream
 
   def new
     # resource
+    @resource = find_resource
     case resource_class.to_s.underscore
     when "calendar"; process_calendar_new
     when "event"; process_event_new
     when "employee"; process_employee_new
     when "punch_card"; process_punch_card_new
+    when "tenant"; process_tenant_new
+    when "page"; process_help_new
     else; process_other_new
     end
   end
@@ -29,20 +34,53 @@ class ModalController < BaseController
     when "punch_card"; process_punch_card_create
     when "event"; process_event_create
     when "time_material"; process_time_material_create
+    when "tenant"; process_tenant_create
     else; process_other_create
     end
   end
 
+  # Parameters: {
+  #   "authenticity_token"=>"[FILTERED]",
+  #   "modal_form"=>"export",
+  #   "resource_class"=>"TimeMaterial",
+  #   "step"=>"setup",
+  #   "all"=>"true",
+  #   "id"=>"390",
+  #   "search"=>"",
+  #   "url"=>"https://localhost:3000/modal",
+  #   "archive_after"=>"0"
+  #   "file_type"=>"csv",
+  #   "export_about"=>"on",
+  #   "export_quantity"=>"on",
+  #   "export_rate"=>"on",
+  #   "export_discount"=>"on",
+  #   "export_state"=>"on",
+  #   "export_is_invoice"=>"on",
+  #   "export_is_free"=>"on",
+  #   "export_is_offer"=>"on",
+  #   "export_is_separate"=>"on",
+  #   "export_comment"=>"on",
+  #   "export_unit_price"=>"on",
+  #   "export_unit"=>"on",
+  #   "export_time_spent"=>"on",
+  #   "export_over_time"=>"on",
+  #   "export_registered_minutes"=>"on",
+  #   "export_task_comment"=>"on",
+  #   "export_location_comment"=>"on",
+  #   "button"=>""
+  # }
   def update
-    case resource_class.to_s.underscore
-    when "event"; process_event_update
+    # case resource_class.to_s.underscore
+    case params[:modal_form]
+    when "export"; process_export
+    # when "event"; process_event_update
     else; process_other_update
     end
   end
 
   #
   def destroy
-    (authenticate_user! && check_session_length) || verify_api_key
+    params[:action] = "destroy"
     params[:all] == "true" ? process_destroy_all : process_destroy
   end
 
@@ -50,28 +88,11 @@ class ModalController < BaseController
 
     def set_vars
       @modal_form = params[:modal_form]
-      @attachment = params[:attachment]
-      resource()
-      @step = params[:step]
-      @url = params[:url] || resources_url
+      @attachment = params[:attachment] rescue nil
+      @step = params[:step] || "accept" rescue ""
+      @url = params[:url] || resources_url rescue root_url
       @view = params[:view] || "month"
-    end
-
-    def resource
-      if params[:id].present?
-        @resource = resource_class.find(params[:id]) rescue resource_class.new
-      else
-        @resource = resource_class.new
-      end
-    end
-
-    def resource_class
-      @resource_class ||= case params[:resource_class]
-      # when "invitations"; UserInvitation
-      when "notifications"; Noticed::Notification
-      when "doorkeeper/application"; Oauth::Application
-      else; params[:resource_class].classify.constantize rescue nil
-      end
+      @search = params[:search] || ""
     end
 
     #
@@ -113,8 +134,16 @@ class ModalController < BaseController
       end
     end
 
+    def process_tenant_new
+      @step = "get_pay_link"
+    end
+
+    def process_help_new
+    end
+
     def process_other_new
-      @step = "accept"
+      @step = params[:modal_next_step] || "accept"
+      @ids = @filter.filter != {} || @batch&.batch_set? || @search.present? ? resources.pluck(:id) : []
     end
 
     #
@@ -139,6 +168,32 @@ class ModalController < BaseController
 
     #
     # --------------------------- CREATE --------------------------------
+
+    #  {"authenticity_token"=>"[FILTERED]", "modal_form"=>"buy_product", "resource_class"=>"Tenant", "step"=>"pick_product", "search"=>"", "tenant"=>{"license"=>"pro"}, "button"=>""}
+    def process_tenant_create
+      case params[:step]
+      when "get_pay_link"
+        if params[:tenant][:license] == "1" # "ambassador"
+          Current.get_tenant.update license: "ambassador", license_changed_at: Time.current, license_expires_at: Time.current + 1.month
+          TenantMailer.with(tenant: Current.get_tenant, user: Current.get_user, recipient: "info@mortimer.pro").send_ambassador_request.deliver_later
+
+          flash[:success] = t("tenant.modal.buy_product.we_got_notified_you_will_hear_from_us_soon")
+          render turbo_stream: [
+            turbo_stream.replace("new_form_modal", ""),
+            turbo_stream.replace("tenant_license", partial: "modal/tenant_license"),
+            turbo_stream.replace("flash_container", partial: "application/flash_message", locals: { tenant: Current.get_tenant, messages: flash, user: Current.get_user })
+            # special
+          ]
+          flash.clear
+        else
+          license = Tenant.new.licenses(params[:tenant][:license])
+          price = params[:tenant][:invoice_yearly] == "1" ? "yr" : "mth"
+          url = Stripe::Service.new.payment_link product: license, price: price, url: stripe_payment_new_url(ui: Current.user.id)
+          render turbo_stream: turbo_stream.replace("modal_container", partial: "modal/stripe_checkout", locals: { url: url })
+        end
+      end
+    end
+
     def process_employee_create
       case params[:step]
       when "preview"
@@ -183,11 +238,12 @@ class ModalController < BaseController
     end
 
     def process_time_material_create
-      DineroUploadJob.perform_later tenant: Current.tenant, user: Current.user, date: Date.current, provided_service: "Dinero"
+      ids = @filter.filter != {} || @batch&.batch_set? || @search.present? ? resources.pluck(:id) : nil
+      DineroUploadJob.perform_later(tenant: Current.tenant, user: Current.user, date: Date.current, provided_service: "Dinero", ids: ids)
       flash.now[:success] = t("time_material.uploading_to_erp")
       render turbo_stream: [
         turbo_stream.close_remote_modal { },
-        turbo_stream.replace("flash_container", partial: "application/flash_message")
+        turbo_stream.replace("flash_container", partial: "application/flash_message", locals: { tenant: Current.get_tenant, messages: flash, user: Current.get_user })
       ]
     end
 
@@ -205,6 +261,14 @@ class ModalController < BaseController
       end
     end
 
+    def process_export
+      selected_fields = params.select { |k, v| k.start_with?("export_") && v == "on" }.keys.map { |k| k.gsub("export_", "") }
+      case params[:file_type]
+      when "pdf"; send_pdf
+      when "csv"; send_data resource_class.to_csv(@resources, selected_fields), filename: "#{resource_class.name.pluralize.downcase}-#{Date.today}.csv"
+      end
+    end
+
     def process_other_update
       raise "ModalController: Update Not Implemented"
     end
@@ -214,11 +278,10 @@ class ModalController < BaseController
 
     def process_destroy_all
       begin
-        set_filter resource_class.to_s.underscore.pluralize
-        set_resources
-        DeleteAllJob.perform_later tenant: Current.tenant, resource_class: resource_class.to_s,
-          ids: @resources.pluck(:id),
-          user_ids: (resource_class.first.respond_to?(:user_id) ? @resources.pluck(:user_id).uniq : User.by_tenant.by_role(:user).pluck(:id)) rescue nil
+        DeleteAllJob.perform_later tenant: Current.tenant, user: Current.user, resource_class: resource_class.to_s,
+          ids: resources.pluck(:id),
+          batch: @batch,
+          user_ids: (resource_class.first.respond_to?(:user_id) ? resources.pluck(:user_id).uniq : User.by_tenant.by_role(:user).pluck(:id)) rescue nil
         @url.gsub!(/\/\d+$/, "") if @url.match?(/\d+$/)
         flash[:success] = t("delete_all_later")
         respond_to do |format|
@@ -239,29 +302,37 @@ class ModalController < BaseController
           when "logo"; @resource.logo.purge
           when "mugshot"; @resource.mugshot.purge
           end
-          redirect_back fallback_location: root_path, success: t(".attachment_deleted")
+          render turbo_stream: [
+            turbo_stream.close_remote_modal { },
+            turbo_stream.replace("attachment", "")
+          ]
+          # redirect_back fallback_location: root_path, success: t(".attachment_deleted")
         else
           cb = get_cb_eval_after_destroy(resource)
           r = resource_class.build resource.attributes
-          if resource.remove
+          if resource.remove params[:step]
             eval(cb) unless cb.nil?
             @url.gsub!(/\/\d+$/, "") if @url.match?(/\d+$/)
             Broadcasters::Resource.new(r).destroy
             r.notify(action: :destroy)
             r.destroy
             flash[:success] = t(".post")
-            respond_to do |format|
-              format.turbo_stream { }
-              format.html { redirect_to @url, status: 303, success: t(".post") }
-              format.json { head :no_content }
-            end
+            params[:step] == "delete_account" ? redirect_to(root_path) : do_respond
           else
             head :no_content
           end
         end
       rescue => e
         say "ERROR on destroy: #{e.message}"
-        redirect_to resources_url, status: 303, error: t("something_went_wrong", error: e.message)
+        redirect_to show_dashboard_dashboards_url, status: 303, error: t("something_went_wrong", error: e.message)
+      end
+    end
+
+    def do_respond
+      respond_to do |format|
+        format.turbo_stream { }
+        format.html { redirect_to @url, status: 303, success: t(".post") }
+        format.json { head :no_content }
       end
     end
 
@@ -278,48 +349,13 @@ class ModalController < BaseController
       render_to_string "employees/report_state", layout: "pdf", formats: :pdf
     end
 
-    def resources_url(**options)
-      return url_for(controller: resource_class.to_s.underscore.pluralize, action: :index, **options) if options.delete(:rewrite).present?
-      @resources_url ||= url_for(controller: resource_class.to_s.underscore.pluralize, action: :index, **options)
-    end
+  # def any_filters?
+  #   return false if @filter.nil? or params.dig(:controller).split("/").last == "filters" or params.dig(:action) == "lookup"
+  #   # !@filter.id.nil?
+  #   @filter.persisted?
+  # end
 
-    def set_resources
-      @resources = any_filters? ? resource_class.filtered(@filter) : resource_class.by_tenant()
-      @resources = any_sorts? ? resource_class.ordered(@resources, params[:s], params[:d]) : @resources.order(created_at: :desc)
-    end
-
-    def set_filter(view = params[:controller].split("/").last)
-      @filter_form = resource_class.to_s.underscore.pluralize
-      @filter = Filter.where(tenant: Current.tenant).where(view: view).take || Filter.new
-      @filter.filter ||= {}
-    end
-
-    def verify_api_key
-      return false unless params[:api_key].present? && @resource && @resource.respond_to?(:access_token)
-      @resource.access_token == params[:api_key] || redirect_to(new_user_session_path)
-    end
-
-    def any_filters?
-      return false if @filter.nil? or params[:controller].split("/").last == "filters"
-      !@filter.id.nil?
-    end
-
-    def any_sorts?
-      params[:s].present?
-    end
+  # def any_sorts?
+  #   params.dig :s
+  # end
 end
-
-
-# case params[:modal_form]
-# when "payroll"
-#   params[:update_payroll] = params[:update_payroll] == "on" ? true : false
-#    DatalonPreparationJob.perform_later tenant: Current.tenant, last_payroll_at: Date.parse(params[:last_payroll_at]), update_payroll: params[:update_payroll]
-# end
-
-# html_filename = Rails.root.join("tmp", "report_state.html")
-# pdf_filename = Rails.root.join("tmp", "#{Current.user.id}_report_state.pdf")
-# File.open(html_filename, "w") { |f| f.write(html) }
-# if BuildPdfJob.new.perform(html: html_filename, pdf: pdf_filename)
-#   TenantMailer.with(tenant: Current.tenant, tmpfiles: [ pdf_filename.to_s ]).report_state.deliver_later
-# end
-# UserEuStateJob.perform_later tenant: Current.tenant

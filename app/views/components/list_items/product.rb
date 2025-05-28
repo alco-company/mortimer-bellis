@@ -12,14 +12,12 @@ class ListItems::Product < ListItems::ListItem
   # total_amount_incl_vat
   # external_reference
 
-  def show_recipient_link
-    link_to resource_url, class: "hover:underline" do
-      plain resource.name
-    end
-  end
 
   def show_left_mugshot
-    # mugshot(resource, css: "hidden sm:block h-12 w-12 flex-none rounded-full bg-gray-50")
+    div(class: "flex items-center") do
+      input(type: "checkbox", name: "batch[ids][]", value: resource.id, class: "hidden batch mort-form-checkbox mr-2")
+      # mugshot(resource.user, css: "hidden sm:block h-12 w-12 flex-none rounded-full bg-gray-50")
+    end
   end
 
   def show_matter_mugshot
@@ -27,6 +25,6 @@ class ListItems::Product < ListItems::ListItem
   end
 
   def show_secondary_info
-    plain "%s %s" % [ resource.product_number, resource.base_amount_value ]
+    plain "%s %s" % [ resource.product_number, helpers.number_to_currency(resource.base_amount_value) ]
   end
 end

@@ -16,6 +16,8 @@ da:
     unpaid_free: Ulønnet
     maternity_free: Barsel
     leave_free: Orlov
+    invited: Inviteret
+    confirmed: Bekræftet
     archived: Arkiveret
 
     tooltips:
@@ -27,6 +29,7 @@ da:
       delete_all: 
         title: Slet alle stemplinger
         instruction: Er du sikker på, at du vil slette alle stemplinger?
+        instruction_selected: Er du sikker på, at du vil slette alle %{count} udvalgte stemplinger?
       delete:
         title: Slet denne stempling
         instruction: Er du sikker på, at du vil slette stemplingen kl %{name}?

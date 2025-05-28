@@ -10,12 +10,6 @@ class ListItems::Punch < ListItems::ListItem
   # punch_card_id
   # comment
 
-  def show_recipient_link
-    link_to resource_url, class: "hover:underline" do
-      I18n.l(resource.punched_at, format: :short)
-    end
-  end
-
   def show_secondary_info
     plain "%s %s " % [ resource.punch_clock&.name, resource.state ]
   end

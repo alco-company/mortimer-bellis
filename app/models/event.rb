@@ -30,6 +30,39 @@ class Event < ApplicationRecord
     all
   end
 
+  def self.filterable_fields(model = self)
+    f = column_names - [
+      "id",
+      "tenant_id",
+      "calendar_id"
+      # "name"
+      # "from_date"
+      # "from_time"
+      # "to_date"
+      # "to_time"
+      # "duration"
+      # "auto_punch"
+      # "all_day"
+      # "comment"
+      # "created_at",
+      # "updated_at",
+      # "work_type"
+      # "reason"
+      # "break_minutes"
+      # "breaks_included"
+      # "color"
+    ]
+    f = f - [
+      "from_date",
+      "from_time",
+      "to_date",
+      "to_time",
+      "created_at",
+      "updated_at"
+    ] if model == self
+    f
+  end
+
   def self.form(resource:, editable: true)
     Events::Form.new resource: resource, editable: editable, enctype: "multipart/form-data"
   end

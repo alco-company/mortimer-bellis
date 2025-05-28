@@ -2,33 +2,29 @@ module ApplicationCable
   class Connection < ActionCable::Connection::Base
     identified_by :current_user
 
-    # around_command :set_user
-
     def connect
-      self.current_user = find_verified_user
-      Current.user = current_user if current_user.class == User
-      logger.add_tags "ActionCable", "User #{current_user.id}"
-    rescue
-      Rails.logger.error { "ActionCable: Connection refused -----------------------------" }
+      set_current_user || reject_unauthorized_connection
     end
 
-    protected
-
-      def set_user
-        Current.user = find_verified_user
-        Rails.logger.error { "ActionCable: Current.user #{Current.user.name} -----------------------------" }
-        yield
+    private
+      def set_current_user
+        if session = Session.find_by(id: cookies.signed[:session_id])
+          self.current_user = session.user
+          true
+        else
+          find_verified_user
+        end
       end
 
       def find_verified_user
-        if current_user =  env["warden"].user
-          current_user
+        token = request.params[:token] || request.headers["Authorization"]&.split(" ")&.last
+        decoded_token = JWT.decode(token, JWT_SECRET_KEY, true, { algorithm: JWT_ALGORITHM })
+        if decoded_token && (user = User.find_by(id: decoded_token.first["user_id"]))
+          self.current_user = user
+          true
         else
-          reject_unauthorized_connection
+          false
         end
-      rescue => error
-        Rails.logger.error { "ActionCable: Current.user #{current_user&.name} is unauthorized (#{error}) -----------------------------" }
-        false
       end
   end
 end

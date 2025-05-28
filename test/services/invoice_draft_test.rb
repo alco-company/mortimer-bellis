@@ -36,4 +36,15 @@ class InvoiceDraftTest < ActiveSupport::TestCase
 
     assert ({ ok: "0 records drafted" }) == result
   end
+
+  test "draft invoices if any TimeMaterial posts there - and invoices on Dinero to add them to" do
+    date = time_materials.pluck(:date).max
+    time_materials = TimeMaterial.where(tenant: time_materials(:one).tenant)
+
+    ps = provided_services(:one)
+    result = ps.service.classify.constantize.new(provided_service: ps)
+      .process(type: :invoice_draft, data: { date: date, records: time_materials.order(:customer_id) })
+
+    assert ({ ok: "0 records drafted" }) == result
+  end
 end

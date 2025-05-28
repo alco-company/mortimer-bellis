@@ -12,8 +12,8 @@ class EmailValidator < ActiveModel::Validator
     end
     if record.send(field).present?
       lead = Lead.arel_table
-      email_exist = Lead.where(email_address: record.send(field)).any? # .where(lead[:trial_ends_at].gt(DateTime.now).or(lead[:trial_ends_at].eq(nil)))
-      email_exist ||= User.unscoped.where(user_email: record.send(field)).exists?
+      email_exist = Lead.where(email: record.send(field)).any? # .where(lead[:trial_ends_at].gt(DateTime.now).or(lead[:trial_ends_at].eq(nil)))
+      email_exist ||= User.unscoped.where(email: record.send(field)).exists?
       if email_exist
         record.errors.add field, ApplicationController.helpers.tl("you_have_a_current_demo_account_already")
         return false

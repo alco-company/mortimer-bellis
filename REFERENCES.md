@@ -2,8 +2,8 @@
 
 ## Important CAVEATS
 
-[ActionCable Performance](https://ably.com/blog/rails-actioncable-the-good-and-the-bad) makes a Rails version of SPEICHER in a broader/scaleable scope
-impossible - thus heading the PETAL way really should be considered! Or things will have to be rebuilt twice - at least!
+~~[ActionCable Performance](https://ably.com/blog/rails-actioncable-the-good-and-the-bad) makes a Rails version of MORTIMER in a broader/scaleable scope
+impossible - thus heading the PETAL way really should be considered! Or things will have to be rebuilt twice - at least!~~
 
 ## People
 
@@ -13,6 +13,8 @@ contributions to Open Source Software have in each their own way made a crucial 
 * Rails [David Heinemeier Hansson](https://basecamp.com/)
 * Tailwind [Adam Wathan](https://tailwindcss.com/)
 * Tailwind & Rails [David Teren](https://davidteren.medium.com/)
+* Componentizing Views With Phlex: [Joel Drapper](https://phlex.fun)
+* Making the Form fantastic: [Brad Gessler](https://github.com/rubymonolith/superform)
 * Progressier by [Kevin Basset](https://progressier.com/)
 * Rails Training [Chris Oliver](https://gorails.com/)
 * Display Table Anti Hero [Colin Toh](https://colintoh.com/blog/display-table-anti-hero)
@@ -30,7 +32,6 @@ contributions to Open Source Software have in each their own way made a crucial 
 * UniversalID: [Nate Hopkins](https://github.com/hopsoft/universalid)
 * Turbo Boost Elements: [Nate Hopkins](https://github.com/hopsoft/turbo_boost-elements?tab=readme-ov-file#installation)
 * Fun With Keyword Arguments: [Justin Weiss](https://www.justinweiss.com/articles/fun-with-keyword-arguments/)
-* Componentizing Views With Phlex: [Joel Drapper](https://phlex.fun)
 * Minitest Helpers and Rails fixtures: [Brandon Hilkert](https://brandonhilkert.com/blog/managing-login-passwords-for-capybara-with-minitest-and-rails-fixtures/)
 * ActiveStorage Routes eaten by _catchall_: [Justin Searls](https://github.com/rails/rails/issues/31228#issuecomment-1947387804)
 * a17t building blocks designed for TailwindCSS [Miles McCain](https://github.com/milesmcc/a17t)
@@ -40,9 +41,12 @@ contributions to Open Source Software have in each their own way made a crucial 
 * Working With TimeZones [Elle Meredith](https://thoughtbot.com/blog/its-about-time-zones)
 * (man)handling Turbo Frames [Radan Skoric](https://radanskoric.com/articles/update-full-page-on-form-in-frame-submit)
 * Setting Up TOTP Two-Factor Authentication in Ruby on Rails Application [Mikołaj Bogucki](https://blog.lunarlogic.com/2024/setting-up-totp-two-factor-authentication-in-rails)
+* Correctly resizing PWA icons [Jon Henshaw](https://coywolf.pro/webdev/how-to-create-pwa-icons-that-look-correct-on-all-platforms-and-devices/)
+* Automating the generation of PWA Icons [Dominik Fiala](https://dev.to/dominikfiala/hassle-free-pwa-icons-and-splash-screen-generation-3c24)
 
 ## Resources
 
+* [Maskable Icons - by Tiger Oakes](https://maskable.app/editor)
 * [How To GraphQL](https://www.howtographql.com/)
 * [Sidekiq and Redis example](https://www.digitalocean.com/community/tutorials/how-to-add-sidekiq-and-redis-to-a-ruby-on-rails-application)
 * [A Goldchest of Rails tips and tricks](https://til.hashrocket.com/rails)
@@ -54,20 +58,20 @@ contributions to Open Source Software have in each their own way made a crucial 
 * [Deleting data at scale](https://planetscale.com/blog/ruby-on-rails-3-tips-for-deleting-data-at-scale)
 * [Cascading deletes on foreign keys](https://stackoverflow.com/questions/37447531/how-do-i-create-a-rails-migration-that-updates-a-foreign-key-with-an-on-delete-c)
 
-https://blog.alco.dk/2021/03/18/tailwind-hotwire-more/
+## Blog posts
 
-[How to build a beautiful modal - using the <dialog> element](https://web.dev/building-a-dialog-component/)
-[Rails 7 / Hotware Tutorials](https://www.hotrails.dev/turbo-rails)
+* [Losing the C in MVC](https://blog.alco.dk/how-i-almost-lost-the-c-in-mvc/)
+* [How to build a beautiful modal - using the <dialog> element](https://web.dev/building-a-dialog-component/)
+* [Rails 7 / Hotware Tutorials](https://www.hotrails.dev/turbo-rails)
+* [Inspiration for components](https://polarisviewcomponents.org/lookbook/lists_and_tables/option_list/single_choice)
 
-https://polarisviewcomponents.org/lookbook/lists_and_tables/option_list/single_choice
-
-https://www.bigbinary.com/blog 
-https://www.stevenbuccini.com/how-to-use-delegate-types-in-rails-6-1
-https://gist.github.com/bigglesrocks/9026919 - invitation
-https://gorails.com/episodes/datatables-from-scratch-using-hotwire
-https://labs.k.io/lessons-learned-with-hotwire/
-https://github.com/excid3/tailwindcss-stimulus-components
-https://www.colby.so/posts/handling-modal-forms-with-rails-and-hotwire
+* https://www.bigbinary.com/blog 
+* https://www.stevenbuccini.com/how-to-use-delegate-types-in-rails-6-1
+* https://gist.github.com/bigglesrocks/9026919 - invitation
+* https://gorails.com/episodes/datatables-from-scratch-using-hotwire
+* https://labs.k.io/lessons-learned-with-hotwire/
+* https://github.com/excid3/tailwindcss-stimulus-components
+* https://www.colby.so/posts/handling-modal-forms-with-rails-and-hotwire
 
 ### Project management - alternative to JIRA perhaps?
 
@@ -143,6 +147,7 @@ https://github.com/mailchimp/email-blueprints
 
 ### Push notifications
 
+https://github.com/pushpad/web-push
 https://github.com/rpush/rpush
 https://www.colby.so/posts/user-notifications-with-rails-noticed-and-hotwire
 
@@ -234,3 +239,28 @@ https://native.hotwired.dev/ios/getting-started
 https://www.writesoftwarewell.com/implement-content-security-policy-in-rails/
 https://content-security-policy.com/examples/meta/
 https://guides.rubyonrails.org/security.html#content-security-policy-header
+
+### Tutorials, Lessons, Courses
+
+https://courses.bigbinaryacademy.com/learn-rubyonrails/
+
+### CSRF 
+
+https://bloggie.io/@kinopyo/sending-non-get-requests-with-fetch-javascript-api-in-rails
+
+### SSL - self-signed certificates, more
+
+https://deanin.com/blog/https-certificates-for-localhost/#google_vignette
+https://getgrav.org/blog/macos-sequoia-apache-ssl
+
+### Spinners 
+
+* using spinners to make users aware that something is happening https://medium.com/unagi/hotwire-turbo-frames-add-seamless-loading-spinners-in-rails-7d4339792f91
+
+### Service Objects
+
+* service objects are great for '7 good deeds' programming - https://medium.com/@sulmanweb/service-objects-level-up-your-rails-architecture-8791099656e1 
+
+### Contenteditable
+
+* Frank M Taylor - https://blog.frankmtaylor.com/2012/01/23/html5-contenteditable-and-css/

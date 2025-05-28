@@ -1,8 +1,8 @@
 class Icons::Product < Phlex::HTML
   attr_accessor :cls
 
-  def initialize(cls: "h-6 text-gray-900 hover:text-gray-500")
-    @cls = cls
+  def initialize(css: "h-6 text-gray-900 hover:text-gray-500")
+    @cls = css
   end
 
   def view_template

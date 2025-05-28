@@ -40,6 +40,51 @@ class PunchCard < ApplicationRecord
     all
   end
 
+  def self.filterable_fields(model = self)
+    f = column_names - [
+      "id",
+      "tenant_id",
+      "user_id"
+      # "work_minutes",
+      # "ot1_minutes",
+      # "ot2_minutes",
+      # "break_minutes",
+      # "work_date",
+      # "punches_settled_at",
+      # "created_at",
+      # "updated_at"
+    ]
+    f = f - [
+      "work_date",
+      "punches_settled_at",
+      "created_at",
+      "updated_at"
+    ] if model == self
+    f
+  end
+
+  def self.associations
+    [ [], [ Punch ] ]
+  end
+
+  def self.user_scope(scope)
+    case scope
+    when "all"; nil # all.by_tenant()
+    when "mine"; TimeMaterial.arel_table[:user_id].eq(Current.user.id)
+    when "my_team"; TimeMaterial.arel_table[:user_id].in(Current.user.team.users.pluck(:id))
+    end
+  end
+
+  def self.named_scope(scope)
+    TimeMaterial.arel_table[:user_id].
+    in(
+      User.arel_table.project(:id).where(
+        User[:name].matches("%#{scope}%").
+        or(User[:team_id].in(Team.arel_table.project(:id).where(Team[:name].matches("%#{scope}%"))))
+      )
+    )
+  end
+
   # def self.ordered(resources, field, direction = :desc)
   #   resources.joins(:user).order(field => direction)
   # end

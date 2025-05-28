@@ -62,6 +62,9 @@ Pagy::DEFAULT[:size]        = [ 1, 2, 2, 1 ]             # default in pagy < 7.0
 require "pagy/extras/countless"
 # Pagy::DEFAULT[:countless_minimal] = false   # default (eager loading)
 
+# Using keysets to do infinite scrolling fast
+require "pagy/extras/keyset"
+
 # Elasticsearch Rails extra: Paginate `ElasticsearchRails::Results` objects
 # See https://ddnexus.github.io/pagy/docs/extras/elasticsearch_rails
 # Default :pagy_search method: change only if you use also

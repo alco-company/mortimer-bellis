@@ -6,7 +6,7 @@ class Employees::Signup < ApplicationForm
       hidden field(:team_id).input(class: "hidden")
       view_only field(:team_id).select(Team.by_tenant.order(name: :asc).select(:id, :name), prompt: I18n.t(".select_team"), class: "mort-form-text").focus
       row field(:name).input()
-      row field(:birthday).date(class: "mort-form-text")
+      row field(:birthday).date(class: "mort-form-date")
       row field(:email).input()
       row field(:cell_phone).input()
       row field(:locale).select(User.locales, prompt: I18n.t(".select_employee_locale"), class: "mort-form-text")

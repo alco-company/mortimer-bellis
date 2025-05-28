@@ -5,6 +5,15 @@ module UsersHelper
     usr.global_queries?
   end
 
+  def user_can_create?
+    return true if Current.user.superadmin?
+    return true if Current.user.admin? && params.dig(:controller) != "tenants"
+    key = "allow_create_#{resource_class.to_s.underscore}"
+    Current.user.can? key
+  rescue
+    false
+  end
+
   #
   def user_mugshot(user, size: nil, css: "")
     size = size.blank? ? "40x40!" : size
@@ -28,7 +37,7 @@ module UsersHelper
 
   def remaining_session_time
     last_request_at = warden.session(:user)["last_request_at"]
-    timeout_in = Devise.timeout_in
+    timeout_in = 7.days
     return 0 unless last_request_at
 
     elapsed_time = Time.current.to_i - last_request_at.to_i

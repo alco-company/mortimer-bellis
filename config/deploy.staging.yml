@@ -35,18 +35,24 @@ registry:
     - KAMAL_REGISTRY_PASSWORD
 
 # Configure builder setup.
-builder:
-  remote: ssh://root@135.181.202.106
-  arch: arm64
+# builder:
+#   remote: ssh://root@135.181.202.106
+#   arch: arm64
 
 # Inject ENV variables into containers (secrets come from .env).
 # Remember to run `kamal env push` after making changes!
 env:
   secret:
+    - CLOUDFLARE_TURNSTILE_SITE
+    - CLOUDFLARE_TURNSTILE_SECRET
+    - MAILERSEND_API_WEBHOOK_SECRET
+    - MAILERSEND_API_TOKEN
     - SECRET_KEY_BASE
     - RAILS_MASTER_KEY
     - DINERO_APP_ID
     - DINERO_APP_SECRET
+    - STRIPE_SECRET_KEY
+    - ANTHROPIC_API_KEY
     - SMTP_PASSWORD
     - VAPID_PRIVATE_KEY
     - VAPID_PUBLIC_KEY
@@ -61,6 +67,7 @@ env:
     - SMTP_PORT
     - SMTP_AUTHENTICATION
     - SMTP_HOST
+    - MORTIMER_VERSION
   clear:
     SOLID_QUEUE_IN_PUMA: true
     WEB_HOST: anemone.mortimer.pro
@@ -70,7 +77,6 @@ env:
     SMTP_DOMAIN: mortimer.pro
     SMTP_ENABLE_STARTTLS_AUTO: 'false'
     SSL_DOMAIN: anemone.mortimer.pro
-    MORTIMER_VERSION: "1.0.9"
     DINERO_APP_CALLBACK: 'https://anemone.mortimer.pro/dinero/callback'
 
 # Aliases are triggered with "bin/kamal <alias>". You can overwrite arguments on invocation:

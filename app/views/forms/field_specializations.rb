@@ -19,6 +19,8 @@ module FieldSpecializations
           enumerable_list(colr).each(&options)
         in [Localeable::Locale, *] => locl
           enumerable_list(locl).each(&options)
+        in [Countryable::Country, *] => ctry
+          enumerable_list(ctry).each(&options)
         in [[ String, /^\([+-]\d{1,2}\:\d\d\)$/ ], *] => arr
           timezone_list(arr).each(&options)
         in [[ String, String ], *] => arr
@@ -84,13 +86,22 @@ module FieldSpecializations
   #
   class InputField < Superform::Rails::Components::InputComponent
     def field_attributes
-      @attributes.keys.include?(:class) ? super : super.merge(class: "mort-form-text")
+      field.value = @attributes[:value] if @attributes[:value].present?
+      @attributes.keys&.include?(:class) ? super : super.merge(class: "mort-form-text")
+    end
+  end
+
+  class MoneyField < Superform::Rails::Components::InputComponent
+    def field_attributes
+      field.value = @attributes[:value] ? @attributes[:value] : (I18n.t("number.currency.format.unit") + " " + field.value rescue "")
+      @attributes.keys&.include?(:class) ? super : super.merge(class: "mort-form-text")
     end
   end
 
   class NumberField < Superform::Rails::Components::InputComponent
     def field_attributes
-      @attributes.keys.include?(:class) ? super.merge(type: "number") : super.merge(class: "mort-form-text", type: "number")
+      field.value = @attributes[:value] if @attributes[:value]
+      @attributes.keys&.include?(:class) ? super.merge(type: "number") : super.merge(class: "mort-form-text", type: "number")
     end
   end
 
@@ -98,6 +109,8 @@ module FieldSpecializations
     # include Phlex::Rails::Helpers::Request
     #
     def view_template(&)
+      field.value = @attributes[:value] if @attributes[:value]
+
       div(class: "relative", data: { controller: "lookup" }) do
         input(type: "hidden", id: dom.id, name: dom.name, value: field.value, data: { lookup_target: "selectId" })
         data = attributes[:data] || { url: attributes[:lookup_path], div_id: field.dom.id, lookup_target: "input", action: "keydown->lookup#keyDown" }
@@ -109,19 +122,19 @@ module FieldSpecializations
           value: attributes[:display_value],
           id: dom.id.gsub(/_id$/, "_name"),
           name: dom.name.gsub(/_id\]/, "_name]"),
-          class: css, # "w-full rounded-md border-0 bg-white py-1.5 pl-3 pr-12 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-1 focus:ring-inset focus:ring-sky-200 sm:text-sm sm:leading-6",
+          class: css, # "w-full rounded-md border-0 bg-white py-1.5 pl-3 pr-12 text-gray-900 shadow-xs ring-1 ring-inset ring-gray-300 focus:ring-1 focus:ring-inset focus:ring-sky-200 sm:text-sm sm:leading-6",
           role: attributes[:role] || "combobox",
           autocomplete: "off",
           aria_controls: "options",
           aria_expanded: "false"
         )
         hide = @collection.any? ? "" : "hidden"
-        button(type: "button", data: { lookup_target: "optionsIcon", action: "click->lookup#toggleOptions" }, class: "#{hide} absolute w-10 inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:ring-1 focus:ring-inset focus:ring-sky-200 focus:outline-none") do
-          render Icons::ChevronUpDown.new cls: "h-5 w-5 text-gray-400"
+        button(type: "button", data: { lookup_target: "optionsIcon", action: "click->lookup#toggleOptions" }, class: "#{hide} absolute w-10 inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:ring-1 focus:ring-inset focus:ring-sky-200 focus:outline-hidden") do
+          render Icons::ChevronUpDown.new css: "h-5 w-5 text-gray-400"
         end
         hide = (!hide.blank? && field.value.nil?) ? "" : "hidden"
-        button(type: "button", data: { lookup_target: "searchIcon", action: "click->lookup#search" }, class: "#{hide} absolute w-10 inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:ring-1 focus:ring-inset focus:ring-sky-200 focus:outline-none") do
-          render Icons::Search.new cls: "text-gray-400 right-2 top-0 h-full w-5 absolute pointer-events-none"
+        button(type: "button", data: { lookup_target: "searchIcon", action: "click->lookup#search" }, class: "#{hide} absolute w-10 inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:ring-1 focus:ring-inset focus:ring-sky-200 focus:outline-hidden") do
+          render Icons::Search.new css: "text-gray-400 right-2 top-0 h-full w-5 absolute pointer-events-none"
         end
         collection = @collection[0] rescue []
         render SelectLookup.new(collection: collection, div_id: field.dom.id, field_value: field.value)
@@ -135,17 +148,44 @@ module FieldSpecializations
   end
 
   class SelectField < Superform::Rails::Components::SelectField
+    def field_attributes
+      @attributes.keys&.include?(:class) ? super : super.merge(class: "mort-form-select")
+    end
+
+    #
+    def view_template(&)
+      div(class: "grid grid-cols-1") do
+        select(**attributes) do
+          options(*@collection)
+        end
+        svg(
+          class:
+            "pointer-events-none col-start-1 row-start-1 mr-2 size-5 self-center justify-self-end text-gray-500 sm:size-4",
+          viewbox: "0 0 16 16",
+          fill: "currentColor",
+          aria_hidden: "true",
+          data_slot: "icon"
+        ) do |s|
+          s.path(
+            fill_rule: "evenodd",
+            d:
+              "M4.22 6.22a.75.75 0 0 1 1.06 0L8 8.94l2.72-2.72a.75.75 0 1 1 1.06 1.06l-3.25 3.25a.75.75 0 0 1-1.06 0L4.22 7.28a.75.75 0 0 1 0-1.06Z",
+            clip_rule: "evenodd"
+          )
+        end
+      end
+    end
     protected
       def map_options(collection)
         OptionMapper.new(collection)
       end
   end
 
-  class EnumSelectField < Superform::Rails::Components::SelectField
+  class EnumSelectField < SelectField
     def options(*collection)
       collection.flatten!
       map_options(collection).each do |key, value|
-        option(selected: field.value.include?(key), value: key) { value }
+        option(selected: field.value&.include?(key), value: key) { value }
       end
     end
   end
@@ -153,7 +193,7 @@ module FieldSpecializations
   class MultipleSelectField < Superform::Rails::Components::SelectField
     def options(*collection)
       map_options(collection).each do |key, value|
-        option(selected: field.value.include?(key), value: key) { value }
+        option(selected: field.value&.include?(key), value: key) { value }
       end
     end
   end
@@ -162,20 +202,23 @@ module FieldSpecializations
     def field_attributes
       super.merge(type: "week")
     end
+    def view_template(&)
+      input(**attributes, value: field.value&.strftime("%Y-W%V"))
+    end
   end
 
   class FileField < InputField
     include Phlex::Rails::Helpers::LinkTo
 
     def field_attributes
-      @attributes.keys.include?(:multiple) ? super.merge(type: "file", accept: "image/*", multiple: true) : super.merge(type: "file", accept: "image/*")
+      @attributes.keys&.include?(:multiple) ? super.merge(type: "file", accept: "image/*", multiple: true) : super.merge(type: "file", accept: "image/*")
     end
 
     def view_template(&)
       div(class: "mort-field") do
         input(**attributes)
         if field.value.attached?
-          div(class: "w-auto max-w-32 relative border rounded-md shadow px-3 mt-3") do
+          div(id: "attachment", class: "w-auto max-w-32 relative border border-slate-100 rounded-md shadow-sm px-3 mt-3") do
             img(src: url_for(field.value), class: "mort-img m-2")
             div(class: "absolute top-0 right-0 w-8 h-8 rounded-lg bg-white/75") do
               link_to(
@@ -200,9 +243,10 @@ module FieldSpecializations
 
   class BooleanField < Superform::Rails::Components::CheckboxComponent
     def field_attributes
-      super.merge(type: "boolean")
+      @attributes.keys&.include?(:class) ? super.merge(type: "boolean") : super.merge(class: "mort-form-text", type: "boolean")
     end
     def view_template(&)
+      field.value = attributes[:value] if attributes[:value]
       data_attr = attributes[:data] || {}
       div(class: attributes[:class], data: { controller: "boolean" }) do
         input(name: dom.name, data: data_attr.merge({ boolean_target: "input" }), type: :hidden, value: setValue)
@@ -210,7 +254,7 @@ module FieldSpecializations
           type: "button",
           data: { action: (attributes[:disabled] ? "" : "click->boolean#toggle"), boolean_target: "button" },
           class:
-            "group relative inline-flex h-6 w-10 flex-shrink-0 cursor-pointer items-center justify-center rounded-full focus:outline-none focus:ring-1 focus:ring-sky-200 focus:ring-offset-1",
+            "group relative inline-flex h-6 w-10 flex-shrink-0 cursor-pointer items-center justify-center rounded-full focus:outline-hidden focus:ring-1 focus:ring-sky-200 focus:ring-offset-1",
           role: "switch",
           aria_checked: "false"
         ) do
@@ -231,7 +275,7 @@ module FieldSpecializations
             aria_hidden: "true",
             data: { boolean_target: "handle" },
             class:
-              "#{setHandle} pointer-events-none absolute left-0 inline-block h-5 w-5 transform rounded-full border border-gray-200 bg-white shadow ring-0 transition-transform duration-200 ease-in-out"
+              "#{setHandle} pointer-events-none absolute left-0 inline-block h-5 w-5 transform rounded-full border border-gray-200 bg-white shadow-sm ring-0 transition-transform duration-200 ease-in-out"
           )
         end
       end
@@ -278,7 +322,7 @@ module FieldSpecializations
 
   class TimeField < InputField
     def field_attributes
-      super.merge(type: "time")
+      @attributes.keys&.include?(:class) ? super.merge(type: "time") : super.merge(class: "mort-form-text", type: "time")
     end
     def view_template(&)
       input(**attributes, value: field.value&.strftime("%H:%M"))
@@ -287,7 +331,7 @@ module FieldSpecializations
 
   class DateField < InputField
     def field_attributes
-      super.merge(type: "date")
+      @attributes.keys&.include?(:class) ? super.merge(type: "date") : super.merge(class: "mort-form-text", type: "date")
     end
     def view_template(&)
       fld = field.value.class == String ? field.value : field.value&.strftime("%Y-%m-%d") rescue nil
@@ -296,7 +340,7 @@ module FieldSpecializations
   end
   class DateTimeField < InputField
     def field_attributes
-      super.merge(type: "datetime-local")
+      @attributes.keys&.include?(:class) ? super.merge(type: "datetime-local") : super.merge(class: "mort-form-text", type: "datetime-local")
     end
     def view_template(&)
       input(**attributes, value: field.value&.strftime("%Y-%m-%dT%H:%M"))
@@ -339,10 +383,17 @@ module FieldSpecializations
     def datetime(**attributes)
       DateTimeField.new(self, attributes: attributes)
     end
+    def money(**attributes)
+      MoneyField.new(self, attributes: attributes)
+    end
     def number(**attributes)
       NumberField.new(self, attributes: attributes)
     end
     def input(**attributes)
+      InputField.new(self, attributes: attributes)
+    end
+    def password(**attributes)
+      attributes.merge!(type: "password")
       InputField.new(self, attributes: attributes)
     end
   end

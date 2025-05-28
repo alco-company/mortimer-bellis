@@ -1,6 +1,5 @@
 class UsersController < MortimerController
-  before_action :authorize
-  skip_before_action :authenticate_user!, only: [ :sign_in_success ]
+  skip_before_action :require_authentication, only: [ :sign_in_success ]
   skip_before_action :authorize, only: [ :sign_in_success ]
 
   # POST /users/:id/archive
@@ -11,7 +10,7 @@ class UsersController < MortimerController
         (@resource.update(state: :out) && notice = t("users.unarchived")) :
         (@resource.archived! && notice = t("users.archived"))
       redirect_back(fallback_location: root_path, notice: notice)
-      Broadcasters::Resource.new(@resource).replace
+      Broadcasters::Resource.new(@resource, params.permit!).replace
     else
       redirect_back(fallback_location: root_path, warning: t("users.not_found"))
     end
@@ -43,7 +42,7 @@ class UsersController < MortimerController
         (@resource.update(state: :out) && notice = t("users.unarchived")) :
         (@resource.archived! && notice = t("users.archived"))
       redirect_back(fallback_location: root_path, notice: notice)
-      Broadcasters::Resource.new(@resource).replace
+      Broadcasters::Resource.new(@resource, params.permit!).replace
     else
       redirect_back(fallback_location: root_path, warning: t("users.not_found"))
     end
@@ -67,20 +66,36 @@ class UsersController < MortimerController
 
     # Only allow a list of trusted parameters through.
     def resource_params
-      params.expect(user: [ :tenant_id, :name, :pincode, :email, :role, :mugshot, :locale, :time_zone ])
+      params.expect(user: [ :tenant_id, :name, :pincode, :hourly_rate, :email, :role, :mugshot, :locale, :time_zone, :team_id ])
     end
 
+    def resource_create
+      if resource_params[:hourly_rate].present?
+        resource.hourly_rate = resource_params[:hourly_rate].gsub(",", ".")
+      else
+        resource.hourly_rate = 0.0
+      end
+      resource.save
+    end
+
+    # after the fact clean-ups
     def create_callback
       params[:user].delete(:mugshot)
       true
     end
 
-    def update_callback
-      params[:user].delete(:mugshot)
+    def before_update_callback
+      if resource_params[:hourly_rate].present?
+        params[:user][:hourly_rate] = resource_params[:hourly_rate].gsub(",", ".")
+      else
+        params[:user][:hourly_rate] = 0.0
+      end
       true
     end
 
-    def authorize
-      redirect_to(root_path, alert: t(:unauthorized)) if current_user.user?
+    # after the fact clean-ups
+    def update_callback
+      params[:user].delete(:mugshot)
+      true
     end
 end

@@ -8,21 +8,19 @@ class ListItems::BackgroundJob < ListItems::ListItem
   # :job_id
 
 
-  def show_recipient_link
-    plain resource.job_klass
-  end
-
   def show_matter_link
     show_matter_mugshot
-    if Current.user.global_queries?
+    if user.global_queries?
       span(class: "hidden md:inline text-xs mr-2") { show_resource_link(resource.tenant) }
     end
-    link_to(resource_url,
-      class: "truncate hover:underline",
-      data: { turbo_action: "advance", turbo_frame: "form" },
-      tabindex: -1) do
-      span(class: "2xs:hidden") { show_secondary_info }
-      plain "%s %s %s" % [ resource.schedule, resource.job_id, resource.params ]
+    span(class: "md:inline text-xs truncate") do
+      link_to(resource_url,
+        class: "truncate hover:underline inline grow flex-nowrap",
+        data: { turbo_action: "advance", turbo_frame: "form" },
+        tabindex: -1) do
+        span(class: "2xs:hidden") { show_secondary_info }
+        plain "%s %s %s" % [ resource.schedule, resource.job_id, resource.params ]
+      end
     end
   end
 

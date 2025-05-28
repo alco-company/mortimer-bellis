@@ -1,5 +1,6 @@
 class Product < ApplicationRecord
   include Tenantable
+  include Unitable
 
   scope :by_fulltext, ->(query) { where("name LIKE :query OR product_number LIKE :query OR quantity LIKE :query OR unit LIKE :query OR base_amount_value LIKE :query OR account_number LIKE :query OR external_reference LIKE :query", query: "%#{query}%") if query.present? }
   scope :by_name, ->(name) { where("name LIKE ?", "%#{name}%") if name.present? }
@@ -14,7 +15,7 @@ class Product < ApplicationRecord
   validates :base_amount_value, presence: true
   validates :quantity, presence: true
   validates :unit, presence: true # hours, parts, km, day, week, month, kilogram, cubicMetre, set, litre, box, case, carton, metre, package, shipment, squareMetre, session, tonne, unit, other
-  validates :account_number, presence: true
+  # validates :account_number, presence: true
 
   def self.filtered(filter)
     flt = filter.filter
@@ -31,6 +32,29 @@ class Product < ApplicationRecord
   rescue
     filter.destroy if filter
     all
+  end
+
+  def self.filterable_fields(model = self)
+    f = column_names - [
+      "id",
+      "tenant_id",
+      "erp_guid"
+      # t.string "name"
+      # t.string "product_number"
+      # t.decimal "quantity", precision: 9, scale: 3
+      # t.string "unit"
+      # t.integer "account_number"
+      # t.decimal "base_amount_value", precision: 11, scale: 2
+      # t.decimal "base_amount_value_incl_vat", precision: 11, scale: 2
+      # t.decimal "total_amount", precision: 11, scale: 2
+      # t.decimal "total_amount_incl_vat", precision: 11, scale: 2
+      # t.string "external_reference"
+    ]
+    f = f - [
+      "created_at",
+      "updated_at"
+    ] if model == self
+    f
   end
 
   def self.form(resource:, editable: true)
@@ -51,7 +75,7 @@ class Product < ApplicationRecord
 
   def self.add_from_erp(item)
     return false unless item["Name"].present?
-    product = Product.find_or_create_by(tenant: Current.tenant, erp_guid: item["ProductGuid"])
+    product = Product.find_or_create_by(tenant: Current.get_tenant, erp_guid: item["ProductGuid"])
     product.name = item["Name"]
     product.product_number = item["ProductNumber"]
     product.quantity = item["Quantity"]
@@ -63,7 +87,25 @@ class Product < ApplicationRecord
     product.total_amount_incl_vat = item["TotalAmountInclVat"]
     product.external_reference = item["ExternalReference"]
     if product.save
-      Broadcasters::Resource.new(product).create
+      Broadcasters::Resource.new(product, { controller: "products" }).create
+    end
+  end
+
+  #
+  # create 3 default products for new tenants
+  # 1. Product with localized name and product_number "Time" and unit "hours"
+  # 2. Product with localized name and product_number "Time50" and unit "hours"
+  # 3. Product with localized name and product_number "Time100" and unit "hours"
+  #
+  # @param tenant [Tenant] the tenant to create defaults for
+  # @return [void]
+  def self.create_defaults_for_new(tenant)
+    [
+      { name: I18n.t("products.default_time"),     product_number: "Time",    quantity: 1.0, unit: "hours", base_amount_value: 100.0, account_number: 1000 },
+      { name: I18n.t("products.default_time_50"),  product_number: "Time50",  quantity: 1.0, unit: "hours", base_amount_value: 150.0, account_number: 1000 },
+      { name: I18n.t("products.default_time_100"), product_number: "Time100", quantity: 1.0, unit: "hours", base_amount_value: 200.0, account_number: 1000 }
+    ].each do |attributes|
+      Product.create(tenant: tenant, **attributes)
     end
   end
 end

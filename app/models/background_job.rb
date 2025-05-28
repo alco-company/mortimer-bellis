@@ -14,6 +14,7 @@
 # end
 #
 class BackgroundJob < ApplicationRecord
+  include Settingable
   include Tenantable
   include Queueable
 
@@ -62,18 +63,59 @@ class BackgroundJob < ApplicationRecord
     all
   end
 
+  def self.user_scope(scope)
+    case scope
+    when "all"; nil # all.by_tenant()
+    when "mine"; TimeMaterial.arel_table[:user_id].eq(Current.user.id)
+    when "my_team"; TimeMaterial.arel_table[:user_id].in(Current.user.team.users.pluck(:id))
+    end
+  end
+
+  def self.named_scope(scope)
+    TimeMaterial.arel_table[:user_id].
+    in(
+      User.arel_table.project(:id).where(
+        User[:name].matches("%#{scope}%").
+        or(User[:team_id].in(Team.arel_table.project(:id).where(Team[:name].matches("%#{scope}%"))))
+      )
+    )
+  end
+
+  def self.filterable_fields(model = self)
+    f = column_names - [
+      "id",
+      "tenant_id",
+      "user_id"
+      # "state",
+      # "job_klass",
+      # "params",
+      # "schedule",
+      # "next_run_at",
+      # "job_id"
+      # t.datetime "created_at", null: false
+      # t.datetime "updated_at", null: false
+    ]
+    f = f - [
+      "next_run_at",
+      "created_at",
+      "updated_at"
+    ] if model == self
+    f
+  end
+
   def self.set_order(resources, field = :job_klass, direction = :asc)
     resources.ordered(field, direction)
   end
 
   def self.job_klasses
     [
-      [ "DatalonPreparationJob", "DatalonPreparationJob" ],
-      [ "UserAutoPunchJob", "UserAutoPunchJob" ],
-      [ "UserEuStateJob", "UserEuStateJob" ],
-      [ "UserStateJob", "UserStateJob" ],
-      [ "ImportUsersJob", "ImportUsersJob" ],
+      # [ "DatalonPreparationJob", "DatalonPreparationJob" ],
+      # [ "UserAutoPunchJob", "UserAutoPunchJob" ],
+      # [ "UserEuStateJob", "UserEuStateJob" ],
+      # [ "UserStateJob", "UserStateJob" ],
+      # [ "ImportUsersJob", "ImportUsersJob" ],
       [ "PunchCardJob", "PunchCardJob" ],
+      [ "RefreshErpTokenJob", "RefreshErpTokenJob" ],
       [ "PunchReminderJob", "PunchReminderJob" ],
       [ "PunchJob", "PunchJob" ]
     ]
@@ -81,5 +123,15 @@ class BackgroundJob < ApplicationRecord
 
   def self.form(resource:, editable: true)
     BackgroundJobs::Form.new resource: resource, editable: editable
+  end
+
+  def self.toggle
+    bj = Tenant.first.background_jobs.first || Tenant.first.background_jobs.build
+    zting = Tenant.first.settings.where(setable_type: "BackgroundJob", setable_id: nil, key: "run").take || Tenant.first.settings.create(setable_type: "BackgroundJob", setable_id: nil, key: "run", value: "true")
+    if bj.shouldnt?(:run)
+      zting.update value: "true"
+    else
+      zting.update value: "false"
+    end
   end
 end

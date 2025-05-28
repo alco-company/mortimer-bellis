@@ -1,8 +1,8 @@
 class Icons::Lock < Phlex::HTML
   attr_accessor :cls
 
-  def initialize(cls: "h-5 mr-2")
-    @cls = cls
+  def initialize(css: "h-5 mr-2")
+    @cls = css
   end
 
   def view_template
