@@ -389,7 +389,7 @@ GEM
       activesupport (>= 7.0.0)
       rack
       railties (>= 7.0.0)
-    psych (5.2.3)
+    psych (5.2.6)
       date
       stringio
     public_suffix (6.0.1)
@@ -599,7 +599,7 @@ DEPENDENCIES
   positioning
   posthog-ruby (~> 3.0)
   propshaft
-  psych (~> 5.2.0)
+  psych (~> 5.2.6)
   puma (>= 5.0)
   rails!
   redcarpet (~> 3.6)
