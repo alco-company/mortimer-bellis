@@ -102,7 +102,7 @@ gem "redcarpet", "~> 3.6"
 
 gem "httparty", "~> 0.23.1"
 
-gem "psych", "~> 5.2.0"
+gem "psych", "~> 5.2.6"
 
 gem "rrule", "~> 0.6.0"
 
