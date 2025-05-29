@@ -128,7 +128,7 @@ GEM
       sqlite3 (>= 1.6)
     addressable (2.8.7)
       public_suffix (>= 2.0.2, < 7.0)
-    amazing_print (1.6.0)
+    amazing_print (1.8.1)
     anthropic (0.4.0)
       event_stream_parser (>= 0.3.0, < 2.0.0)
       faraday (>= 1)
