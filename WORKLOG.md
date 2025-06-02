@@ -2,6 +2,10 @@
 
 ## CHANGELOG
 
+### 2/6/2025
+
+- remember to require 'posthog'
+
 ### 27/5/2025
 
 - build html_serializer for documents and blocks
