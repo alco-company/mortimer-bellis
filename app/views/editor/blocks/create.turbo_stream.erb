@@ -1,0 +1,8 @@
+
+<%= turbo_stream.replace "editor-pane" do %>
+  <%= render Editors::Html::Form.new document: @block.document %>
+<% end %>
+
+<%= turbo_stream.replace "preview-pane" do %>
+  <%= render Editors::Html::Preview.new document: @block.document %>
+<% end %>

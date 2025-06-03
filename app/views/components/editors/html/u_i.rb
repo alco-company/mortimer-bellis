@@ -3,16 +3,34 @@
 class Editors::Html::UI < ApplicationComponent
   def initialize(document: nil)
     @document = document
-    # super
+    super()
   end
 
   # This method will render the HTML structure editor UI.
   def view_template
     div(class: "flex h-screen overflow-hidden", data: { controller: "split editor" }) do
       # Editor pane
-      div(id: "editor-pane", class: "overflow-auto p-4 border-r", style: "width: 50%; min-width: 300px;") do
-        h2(class: "text-xl font-bold mb-4") { "Editor" }
-        render Editors::Html::Form.new
+      div(id: "editor-container", data: { controller: "editor-dnd", editor_dnd_document_id_value: @document&.id }, class: "overflow-auto p-4 border-r", style: "width: 50%; min-width: 300px;") do
+        div(
+          class: "p-4 h-[70%] overflow-auto",
+          # data: { editor_dnd_target: "dropzone" }
+        ) do
+          h2(class: "text-xl font-bold mb-4") { "Editor" }
+          render Editors::Html::Form.new document: @document
+
+          # Wrap sortable block list
+          div(id: "editor_blocks", data: { controller: "sort", sort_target: "container" }) do
+            @document.blocks.order(:position).each do |block|
+              render Editors::Html::Block.new(block: block)
+            end
+          end
+        end
+
+        # Block palette area
+        div(class: "p-4 border-t h-[30%] overflow-y-auto bg-gray-100") do
+          h3(class: "text-sm font-semibold mb-2 text-gray-600") { "Blocks" }
+          render Editors::Html::BlockPalette.new
+        end
       end
 
       # Divider (drag handle)

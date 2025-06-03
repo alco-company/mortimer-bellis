@@ -10,7 +10,7 @@ class Editor::Document < ApplicationRecord
   validates :title, presence: true
 
   def to_html
-    blocks.map(&:to_html).join("\n")
+    blocks.map { |block| Editor::BlockHtmlSerializer.new(block).to_html }.join
   end
 
   def to_json

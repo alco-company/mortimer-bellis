@@ -5,7 +5,7 @@ export default class extends Controller {
 
   connect() {
     this.isResizing = false;
-    this.editor = document.getElementById("editor-pane");
+    this.editor = document.getElementById("editor-container");
 
     // Load width from localStorage
     const savedWidth = localStorage.getItem("editorPaneWidth");
@@ -17,7 +17,7 @@ export default class extends Controller {
   startResize(event) {
     this.isResizing = true
     this.startX = event.clientX
-    this.editor = document.getElementById("editor-pane")
+    this.editor = document.getElementById("editor-container")
     this.preview = document.getElementById("preview-pane")
 
     document.addEventListener("mousemove", this.resizePane)

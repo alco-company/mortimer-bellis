@@ -11,7 +11,7 @@ module Authorize
 
     return true if %w[modal filters filter_fields batches sessions users/sessions users/passwords users/registrations users/confirmations users/otps].include? params.dig(:controller)
     ret = case params.dig(:controller)
-    when "settings", "provided_services"; current_user.admin? ? true : false
+    when "editor", "settings", "provided_services"; current_user.admin? ? true : false
     when "projects", "teams"; Current.get_tenant.license == "free" ? false : true
     when "users/invitations"; %(trial ambassador essential pro).include?(Current.get_tenant.license) && current_user.admin? ? true : false
     when "users"; %(trial ambassador essential pro).include?(Current.get_tenant.license) && current_user.admin? ? true : false

@@ -27,6 +27,16 @@ class Editors::Html::Preview < ApplicationComponent
   end
 
   def preview_document
+    div(
+      id: "preview-pane",
+      class: "mt-4 p-4 shadow-md rounded-sm bg-white",
+      data: { editor_target: "preview" }
+    ) do
+      render_html_blocks
+    end
+  end
+
+  def render_html_blocks
     html = document.blocks.map { |block| Editor::BlockHtmlSerializer.new(block).to_html }.join
     unsafe_raw(html)
   end

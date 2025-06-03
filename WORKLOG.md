@@ -2,6 +2,10 @@
 
 ## CHANGELOG
 
+### 3/6/2025
+
+- drag/drop & sort blocks
+
 ### 2/6/2025
 
 - remember to require 'posthog'

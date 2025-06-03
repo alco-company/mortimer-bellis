@@ -8,7 +8,6 @@ module PostHogging
 
     #
     def create_posthog_client
-      debugger
       Current.posthog = PostHog::Client.new({
           api_key: "phc_9G03FF48pq66rNcwQSqiH7aPcsVItkO5n2YMOxzuw5h",
           host: "https://eu.i.posthog.com",

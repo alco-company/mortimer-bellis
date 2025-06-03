@@ -10,10 +10,12 @@ class Editor::Block < ApplicationRecord
   # STI support (optional)
   self.inheritance_column = :_type_disabled
 
-  store_accessor :data, :text, :src, :alt
+  store :data, accessors: [ :text, :src, :alt ]
   # `type` might be "paragraph", "heading", "image", etc.
   def data_parsed
     case data
+    when ActiveSupport::HashWithIndifferentAccess
+      data.to_h
     when Hash
       data
     when String
