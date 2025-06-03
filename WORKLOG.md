@@ -5,6 +5,7 @@
 ### 3/6/2025
 
 - drag/drop & sort blocks
+- debounce sort
 
 ### 2/6/2025
 
