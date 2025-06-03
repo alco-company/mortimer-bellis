@@ -13,7 +13,7 @@ class Editors::Html::UI < ApplicationComponent
       div(id: "editor-container", data: { controller: "editor-dnd", editor_dnd_document_id_value: @document&.id }, class: "overflow-auto p-4 border-r", style: "width: 50%; min-width: 300px;") do
         div(
           class: "p-4 h-[70%] overflow-auto",
-          # data: { editor_dnd_target: "dropzone" }
+          data: { editor_dnd_target: "dropzone" }
         ) do
           h2(class: "text-xl font-bold mb-4") { "Editor" }
           render Editors::Html::Form.new document: @document

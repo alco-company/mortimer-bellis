@@ -11,15 +11,20 @@ class Editors::Html::Form < ApplicationComponent
   # You can add drag/drop blocks or fields here.
   def view_template
     div(id: "editor-pane") do
-      p(class: "text-gray-500") { "This will be your HTML structure editor UI." }
-      textarea(
+      form(action: "/editor/documents/#{@document.id}", method: "put") do
+        textarea(
           id: "editor-input",
+          name: "html",
+          placeholder: "Enter HTML content here...",
+          rows: 10,
+          cols: 50,
           class: "w-full h-64 border p-2 font-mono",
-          data: { editor_dnd_target: "dropzone", document_id: document.id, editor_target: "input", action: "input->editor#update" }
+          data: { editor_target: "input", action: "input->editor#update" }
         ) do
           plain document&.to_html
         end
-
+        button(class: "mt-2 px-4 py-2 bg-blue-500 text-white rounded") { "Apply HTML" }
+      end
       # Add drag/drop blocks or fields here
     end
   end

@@ -6,6 +6,7 @@
 
 - drag/drop & sort blocks
 - debounce sort
+- deserializer for HTML -> blocks	
 
 ### 2/6/2025
 
