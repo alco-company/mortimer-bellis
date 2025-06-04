@@ -21,6 +21,13 @@ export default class extends Controller {
       this.settingTarget.classList.add("w-24");
       this.settingTarget.classList.add("max-w-24");
       this.sidebarTarget.classList.add("w-24", "max-w-24");
+      document
+        .getElementById("editor_fixed_container")
+        ?.classList.remove("lg:left-64");
+      document
+        .getElementById("editor_fixed_container")
+        ?.classList.add("lg:left-24");
+
       this.menuitemTargets.forEach((e) => { e.classList.add("lg:hidden"); });
       for (i of document.getElementsByClassName("collapse-sidebar")) {
         i.classList.add("rotate-180");
@@ -43,6 +50,13 @@ export default class extends Controller {
       for (i of document.getElementsByClassName("collapse-sidebar")) {
         i.classList.remove("rotate-180");
       }
+      document
+        .getElementById("editor_fixed_container")
+        ?.classList.remove("lg:left-24");
+      document
+        .getElementById("editor_fixed_container")
+        ?.classList.add("lg:left-64")
+
       this.menuitemTargets.forEach((e) => { e.classList.remove("lg:hidden"); });
       localStorage.setItem("collapsed", "false");
 
@@ -57,6 +71,13 @@ export default class extends Controller {
       this.settingTarget.classList.remove("w-64");
       this.settingTarget.classList.add("w-24");
       this.settingTarget.classList.add("max-w-24");
+      document
+        .getElementById("editor_fixed_container")
+        ?.classList.remove("lg:left-64");
+      document
+        .getElementById("editor_fixed_container")
+        ?.classList.add("lg:left-24");
+
       this.menuitemTargets.forEach((e) => { e.classList.add("lg:hidden"); });
       localStorage.setItem("collapsed", "true");
     }

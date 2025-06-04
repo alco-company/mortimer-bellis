@@ -1,11 +1,18 @@
 class Editor::BlocksController < ApplicationController
   def create
     @document = Editor::Document.find(params[:document_id])
+    parent = params[:parent_id].present? ? Editor::Block.find(params[:parent_id]) : nil
+    block_type = params[:type]
+
+    unless Editor::BlockNesting.allowed_child?(parent&.type&.to_sym, block_type)
+      return head :unprocessable_entity
+    end
+
     @block = @document.blocks.create!(
-      type: params[:type],
-      text: params[:text] || "#{params[:type]} #{@document.blocks.count + 1}",
-      parent_id: params[:parent_id] || nil,
-      position: next_position(params[:parent_id])
+      type: block_type,
+      text: params[:text] || "#{block_type} #{@document.blocks.count + 1}",
+      parent_id: parent&.id,
+      position: next_position(parent&.id)
     )
 
     respond_to do |format|

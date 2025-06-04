@@ -7,6 +7,7 @@
 - show editor as tabs
 - don't create blocks while sorting
 - nested blocks editing
+- invalid drop prevention (server side only)
 
 ### 3/6/2025
 

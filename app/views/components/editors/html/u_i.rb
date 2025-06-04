@@ -8,8 +8,8 @@ class Editors::Html::UI < ApplicationComponent
 
   # This method will render the HTML structure editor UI.
   def view_template
-    div(class: "absolute") do
-      div(class: "fixed mt-2 flex flex-col h-screen overflow-hidden", data: { controller: "tabs editor" }) do
+    div(class: "absolute inset-0") do
+      div(id: "editor_fixed_container", class: "fixed inset-y-20 left-0 lg:left-64 right-0 mt-2 flex flex-col h-[calc(100vh-0.5rem)] overflow-hidden", data: { controller: "tabs editor" }) do
         span(class: "ml-4 font-semibold") { @document.title }
         show_tabs
         show_tab_content
