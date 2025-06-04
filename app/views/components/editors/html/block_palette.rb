@@ -8,6 +8,7 @@ class Editors::Html::BlockPalette < ApplicationComponent
   # You can add drag/drop blocks or fields here.
   def view_template
     div(class: "flex flex-col space-y-1") do
+      block_button("Container", "div")
       block_button("Paragraph", "p")
       block_button("Heading", "h1")
       block_button("Image", "image")

@@ -6,6 +6,7 @@
 
 - show editor as tabs
 - don't create blocks while sorting
+- nested blocks editing
 
 ### 3/6/2025
 

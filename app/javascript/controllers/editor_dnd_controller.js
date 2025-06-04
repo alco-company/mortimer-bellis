@@ -49,6 +49,7 @@ export default class extends Controller {
     if (this.origin !== "palette") return;
     this.origin = null;
     const blockType = event.dataTransfer.getData("text/plain")
+    const parentId = event.currentTarget.dataset.id;
     // const documentId = this.element.dataset.documentId
     const csrfToken = document.querySelector("[name='csrf-token']").content;
  
@@ -56,10 +57,10 @@ export default class extends Controller {
       method: "POST",
       headers: {
         "X-CSRF-Token": csrfToken,
-        Accept: "text/vnd.turbo-stream.html",
+        "Accept": "text/vnd.turbo-stream.html",
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ type: blockType }),
+      body: JSON.stringify({ type: blockType, parent_id: parentId }),
     })
     .then((r) => r.text())
     .then((html) => {

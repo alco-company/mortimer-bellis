@@ -14,7 +14,7 @@ class Editors::Html::Block < ApplicationComponent
   def view_template
     div(
       id: dom_id(block),
-      data: { id: block.id },
+      data: { id: block.id, action: "drop->editor-dnd#drop" },
       class: "border rounded mb-2 p-2 bg-white cursor-move"
     ) do
       draw_block_content
@@ -24,7 +24,7 @@ class Editors::Html::Block < ApplicationComponent
   def draw_block_content
     if block.children.any?
       div(class: "mt-2 border border-gray-300") do
-        block.children.each do |child|
+        block.children.order(:position).each do |child|
           render Editors::Html::Block.new(block: child)
         end
       end

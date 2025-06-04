@@ -5,7 +5,7 @@ class Editor::BlocksController < ApplicationController
       type: params[:type],
       text: params[:text] || "#{params[:type]} #{@document.blocks.count + 1}",
       parent_id: params[:parent_id] || nil,
-      position: @document.blocks.maximum(:position).to_i + 1
+      position: next_position(params[:parent_id])
     )
 
     respond_to do |format|
@@ -28,6 +28,12 @@ class Editor::BlocksController < ApplicationController
       format.json { head :ok }
     end
   end
+
+  private
+    def next_position(parent_id)
+      scope = parent_id.present? ? Editor::Block.where(parent_id:) : @document.blocks.where(parent_id: nil)
+      scope.maximum(:position).to_i + 1
+    end
   # before_action :set_editor_block, only: %i[ show edit update destroy ]
 
   # # GET /editor/blocks or /editor/blocks.json
