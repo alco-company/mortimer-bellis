@@ -8,6 +8,8 @@ export default class extends Controller {
     documentId: String,
   }
 
+  origin = null;
+
   connect() {
     this.dropzoneTarget.addEventListener("dragover", this.dragOver)
     this.dropzoneTarget.addEventListener("drop", this.drop.bind(this))
@@ -19,6 +21,8 @@ export default class extends Controller {
   }
 
   dragStart(event) {
+    this.origin = event.target.dataset.origin;
+    if (this.origin !== "palette") return;
     // Get the block type from the data attribute
     const blockType = event.params.blockType
 
@@ -31,6 +35,7 @@ export default class extends Controller {
 
   dragEnd(event) {
     // Remove the dragging class
+    this.origin = null;
     event.currentTarget.classList.remove("dragging")
   }
 
@@ -41,6 +46,8 @@ export default class extends Controller {
 
   drop(event) {
     event.preventDefault()
+    if (this.origin !== "palette") return;
+    this.origin = null;
     const blockType = event.dataTransfer.getData("text/plain")
     // const documentId = this.element.dataset.documentId
     const csrfToken = document.querySelector("[name='csrf-token']").content;
