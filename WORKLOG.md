@@ -2,6 +2,10 @@
 
 ## CHANGELOG
 
+### 4/6/2025
+
+- show editor as tabs
+
 ### 3/6/2025
 
 - drag/drop & sort blocks

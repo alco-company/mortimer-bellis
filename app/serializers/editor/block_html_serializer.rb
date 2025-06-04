@@ -33,7 +33,7 @@ module Editor
       data = @block.data_parsed
       attributes = data.except("text")
       attributes = attributes.merge(attrs).map { |k, v| %(#{k}="#{v}") }.compact
-      attributes = attributes.empty? ? "" : attributes.join(" ")
+      attributes = attributes.empty? ? "" : " %s" % attributes.join(" ")
       html = if content
         "<#{tag}#{attributes}>#{content}</#{tag}>"
       else

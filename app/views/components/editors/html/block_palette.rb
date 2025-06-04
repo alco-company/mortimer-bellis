@@ -7,7 +7,7 @@ class Editors::Html::BlockPalette < ApplicationComponent
   # This method will render the HTML structure editor UI.
   # You can add drag/drop blocks or fields here.
   def view_template
-    div(class: "grid grid-cols-2 gap-2") do
+    div(class: "flex flex-col space-y-1") do
       block_button("Paragraph", "p")
       block_button("Heading", "h1")
       block_button("Image", "image")
@@ -18,7 +18,12 @@ class Editors::Html::BlockPalette < ApplicationComponent
     div(
       class: "cursor-move bg-white border rounded p-2 text-center text-sm hover:bg-gray-200",
       draggable: "true",
-      data: { block_type: type, action: "dragstart->editor-dnd#dragStart", editor_dnd_block_type_param: type },
+      data: {
+        block_type: type,
+        origin: "palette",
+        action: "dragstart->editor-dnd#dragStart",
+        editor_dnd_block_type_param: type
+      },
     ) { label }
   end
 end

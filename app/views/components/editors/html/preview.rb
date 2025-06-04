@@ -18,7 +18,7 @@ class Editors::Html::Preview < ApplicationComponent
       div do
         p(class: "text-gray-500") { "Live HTML preview will go here." }
         div(
-            id: "preview-pane",
+            id: "preview_pane",
             class: "mt-4 p-4 shadow-md rounded-sm bg-white",
             data: { editor_target: "preview" }
         )
@@ -28,7 +28,7 @@ class Editors::Html::Preview < ApplicationComponent
 
   def preview_document
     div(
-      id: "preview-pane",
+      id: "preview_pane",
       class: "mt-4 p-4 shadow-md rounded-sm bg-white",
       data: { editor_target: "preview" }
     ) do

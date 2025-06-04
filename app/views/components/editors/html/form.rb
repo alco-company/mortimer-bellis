@@ -10,8 +10,12 @@ class Editors::Html::Form < ApplicationComponent
   # This method will render the HTML structure editor UI.
   # You can add drag/drop blocks or fields here.
   def view_template
-    div(id: "editor-pane") do
-      form(action: "/editor/documents/#{@document.id}", method: "put") do
+    div(id: "editor_pane") do
+      form(
+        action: "/editor/documents/#{@document.id}",
+        data: { turbo_stream: true },
+        class: "p-4 bg-white rounded shadow",
+        method: "put") do
         textarea(
           id: "editor-input",
           name: "html",

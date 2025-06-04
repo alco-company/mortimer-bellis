@@ -21,15 +21,15 @@ class Editor::DocumentsController < ApplicationController
 
   # POST /editor/documents or /editor/documents.json
   def create
-    @editor_document = Editor::Document.new(editor_document_params)
+    @document = Editor::Document.new(editor_document_params)
 
     respond_to do |format|
-      if @editor_document.save
-        format.html { redirect_to @editor_document, notice: "Document was successfully created." }
-        format.json { render :show, status: :created, location: @editor_document }
+      if @document.save
+        format.html { redirect_to @document, notice: "Document was successfully created." }
+        format.json { render :show, status: :created, location: @document }
       else
         format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @editor_document.errors, status: :unprocessable_entity }
+        format.json { render json: @document.errors, status: :unprocessable_entity }
       end
     end
   end

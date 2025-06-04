@@ -3,7 +3,7 @@ class Editor::BlocksController < ApplicationController
     @document = Editor::Document.find(params[:document_id])
     @block = @document.blocks.create!(
       type: params[:type],
-      text: params[:text] || "kingo",
+      text: params[:text] || "#{params[:type]} #{@document.blocks.count + 1}",
       parent_id: params[:parent_id] || nil,
       position: @document.blocks.maximum(:position).to_i + 1
     )
