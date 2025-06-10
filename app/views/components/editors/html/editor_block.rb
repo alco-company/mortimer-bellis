@@ -13,7 +13,17 @@ class Editors::Html::EditorBlock < ApplicationComponent
   # This method will render the HTML structure editor UI.
   # You can add drag/drop blocks or fields here.
   def view_template
-    div(id: "editor_blocks", class: "#{@hidden} flex space-x-1", data: { controller: "editor-dnd", editor_dnd_document_id_value: document&.id, tabs_target: "tabPanel" }) do
+    div(
+      id: "editor_blocks",
+      class: "#{@hidden} flex space-x-1",
+      data: {
+        controller: "editor-dnd",
+        # block_id: "",
+        # block_type: "",
+        # action: "dragover->editor-dnd#dragOver drop->editor-dnd#drop",
+        editor_dnd_document_id_value: document&.id,
+        tabs_target: "tabPanel"
+      }) do
       render Editors::Html::BlockPalette.new
 
       # Wrap sortable block list

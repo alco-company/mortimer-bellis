@@ -2,6 +2,10 @@
 
 ## CHANGELOG
 
+### 6/6/2025
+
+- pick individual block
+
 ### 4/6/2025
 
 - show editor as tabs

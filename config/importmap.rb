@@ -13,4 +13,3 @@ pin "el-transition" # @0.0.7
 pin "notifications"
 pin "custom_stream_actions"
 pin_all_from "app/javascript/custom", under: "custom"
-pin "sortablejs" # @1.15.6

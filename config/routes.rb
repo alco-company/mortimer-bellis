@@ -4,6 +4,9 @@ Rails.application.routes.draw do
       resources :blocks
     end
     resources :blocks do
+      member do
+        patch :move
+      end
       collection do
         patch :reorder
       end

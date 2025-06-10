@@ -21,6 +21,19 @@ class Editor::BlocksController < ApplicationController
     end
   end
 
+  def move
+    @block = Editor::Block.find(params[:id])
+    @document = @block.document
+    new_parent_id = params[:parent_id].presence
+
+    @block.update!(parent_id: new_parent_id, position: next_position(new_parent_id))
+
+    respond_to do |format|
+      format.turbo_stream
+      format.json { head :ok }
+    end
+  end
+
   def reorder
     blocks = params[:ids].each_with_index.map do |id, index|
       block = Editor::Block.find(id)
