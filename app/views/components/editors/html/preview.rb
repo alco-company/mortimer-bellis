@@ -37,7 +37,7 @@ class Editors::Html::Preview < ApplicationComponent
   end
 
   def render_html_blocks
-    html = document.blocks.map { |block| Editor::BlockHtmlSerializer.new(block).to_html }.join
+    html = document.to_html # blocks.map { |block| Editor::BlockHtmlSerializer.new(block).to_html }.join
     unsafe_raw(html)
   end
 end

@@ -7,6 +7,7 @@
 ### 10/6/2025
 
 - hide block tab for now
+- first render of {{}}
 
 ### 6/6/2025
 
