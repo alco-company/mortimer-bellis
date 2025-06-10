@@ -21,7 +21,7 @@ class Editors::Html::UI < ApplicationComponent
     # Tabs
     selected_tab = "border-b-2 border-sky-500 text-sky-600"
     div(class: "flex border-b border-gray-200 text-sm font-medium") do
-      [ "Blocks", "HTML", "Preview" ].each_with_index do |name, i|
+      [  "HTML", "Preview" ].each_with_index do |name, i| # hidden "Blocks" tab for now
         button(
           type: "button",
           value: i,
@@ -34,7 +34,7 @@ class Editors::Html::UI < ApplicationComponent
 
   def show_tab_content
     div(class: "flex-1 overflow-auto p-4") do
-      show_blocks_tab_content
+      # show_blocks_tab_content
       show_html_tab_content
       show_preview_tab_content
     end

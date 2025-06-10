@@ -2,6 +2,12 @@
 
 ## CHANGELOG
 
+- drop block from canvas on other block on canvas
+
+### 10/6/2025
+
+- hide block tab for now
+
 ### 6/6/2025
 
 - pick individual block

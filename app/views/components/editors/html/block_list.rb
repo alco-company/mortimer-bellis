@@ -12,7 +12,7 @@ class Editors::Html::BlockList < ApplicationComponent
   def view_template
     div(
       id: "block_list",
-      class: "shadow-md p-2 w-full",
+      class: "flex flex-row shadow-md p-2 w-full",
       data: {
         drop_position: "after",
         editor_dnd_target: "dropzone",
@@ -20,7 +20,7 @@ class Editors::Html::BlockList < ApplicationComponent
       }
     ) do
       div(
-        class: "w-2 h-2 bg-transparent hover:bg-blue-200 transition-colors",
+        class: "w-2 h-2 bg-transparent transition-colors",
         data: {
           drop_position: "after",
           action: "dragover->editor-dnd#dragOver drop->editor-dnd#drop"

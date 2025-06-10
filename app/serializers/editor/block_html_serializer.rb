@@ -10,14 +10,15 @@ module Editor
       data = @block.data_parsed
 
       case @block.type
-      when "div", "section", "article", "aside", "nav", "header", "footer", "main", "span"
-        content_tag(@block.type, data["text"] + (children_html || ""), data.except("text"))
-      when "p", "h1", "h2", "h3", "h4", "h5", "h6"
-        content_tag(@block.type, data["text"] + (children_html || ""), data.except("text"))
+      # when "div", "section", "article", "aside", "nav", "header", "footer", "main", "span"
+      #   content_tag(@block.type, data["text"] + (children_html || ""), data.except("text"))
+      # when "p", "h1", "h2", "h3", "h4", "h5", "h6"
+      #   content_tag(@block.type, data["text"] + (children_html || ""), data.except("text"))
       when "image"
         tag("img", data.slice("src", "alt"))
       else
-        children_html.to_s
+        content_tag(@block.type, data["text"] + (children_html || ""), data.except("text"))
+        # children_html.to_s
       end
     end
 

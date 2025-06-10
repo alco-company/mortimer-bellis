@@ -24,7 +24,7 @@ class Editors::Html::Block < ApplicationComponent
   def drop_before
     # Top drop zone
     div(
-      class: "w-2 bg-transparent hover:bg-blue-500 transition-colors",
+      class: "w-2 bg-transparent bg-green-500 hover:bg-green-500 transition-colors",
       data: {
         action: "dragover->editor-dnd#dragOver drop->editor-dnd#drop",
         drop_position: "before",
@@ -52,7 +52,7 @@ class Editors::Html::Block < ApplicationComponent
   def drop_after
     # Bottom drop zone
     div(
-      class: "w-2 bg-transparent hover:bg-blue-200 transition-colors",
+      class: "w-2 bg-transparent bg-red-500 hover:bg-red-200 transition-colors",
       data: {
         action: "dragover->editor-dnd#dragOver drop->editor-dnd#drop",
         drop_position: "after",
