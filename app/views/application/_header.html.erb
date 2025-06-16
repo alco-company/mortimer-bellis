@@ -49,6 +49,7 @@
           <%= link_to( show_background_job_toggle_label, toggle_background_jobs_url, data: { turbo_stream: true}, class: "mort-btn-primary", role: "menuitem", tabindex: "-1", id: "user-menu-item-0")  %>
         <% end %>
         <% case params[:controller]
+           when "settings";
            when "calls"; %><%= link_to("New Call", new_call_path, data: { turbo_stream: true}, class: "mort-btn-primary", role: "menuitem", tabindex: "-1", id: "user-menu-item-0")  %>
         <% when "users"; %><%= link_to( t("profile.invite_new_user"), users_invitations_new_url, data: { turbo_stream: false}, class: "mort-btn-primary mr-2", role: "menuitem", tabindex: "-1", id: "user-menu-item-0") unless Current.user.user?  %>
         <% else; %>
