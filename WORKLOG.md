@@ -4,6 +4,7 @@
 
 ### 16/6/2025
 
+- setup puma-dev to handle https://mortimer.dev
 - WIP: invoiceable
 
 ### 10/6/2025
