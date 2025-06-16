@@ -17,6 +17,8 @@ class Editor::LiquidRenderer
   end
 
   #
+  # interpolate_element takes a match from the interpolation regex
+  # and returns the corresponding value from the resource.
   #
   def interpolate_element(match)
     case match.strip

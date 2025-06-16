@@ -2,7 +2,9 @@
 
 ## CHANGELOG
 
-- drop block from canvas on other block on canvas
+### 16/6/2025
+
+- WIP: invoiceable
 
 ### 10/6/2025
 
@@ -24,7 +26,7 @@
 
 - drag/drop & sort blocks
 - debounce sort
-- deserializer for HTML -> blocks	
+- deserializer for HTML -> blocks
 
 ### 2/6/2025
 

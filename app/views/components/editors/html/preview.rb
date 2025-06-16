@@ -1,20 +1,18 @@
 # app/views/editor/form.rb
 class Editors::Html::Preview < ApplicationComponent
-  attr_reader :document
-  # This component is used to render a live HTML preview of the document.
-  # It expects a document object that contains blocks of HTML.
-  # The document should have a `blocks` association that returns an array of blocks.
-  # Each block should have a `type` and `data` attributes.
-  def initialize(document: nil)
-    @document = document
-    # super
+  attr_reader :resource
+  # This component is used to render a live HTML preview of the resource.
+  # It expects a resource object that responds_to :to_html
+  def initialize(resource: nil)
+    @resource = resource
+    super()
   end
 
   # This method will render the HTML structure editor UI.
   # You can add drag/drop blocks or fields here.
   def view_template
-    document ?
-      preview_document :
+    resource ?
+      preview_resource :
       div do
         p(class: "text-gray-500") { "Live HTML preview will go here." }
         div(
@@ -26,18 +24,18 @@ class Editors::Html::Preview < ApplicationComponent
       end
   end
 
-  def preview_document
+  def preview_resource
     div(
       id: "preview_pane",
       class: "mt-4 p-4 shadow-md rounded-sm bg-white",
       data: { editor_target: "preview" }
     ) do
-      render_html_blocks
+      render_resource_html
     end
   end
 
-  def render_html_blocks
-    html = document.to_html # blocks.map { |block| Editor::BlockHtmlSerializer.new(block).to_html }.join
+  def render_resource_html
+    html = resource.to_html # blocks.map { |block| Editor::BlockHtmlSerializer.new(block).to_html }.join
     unsafe_raw(html)
   end
 end

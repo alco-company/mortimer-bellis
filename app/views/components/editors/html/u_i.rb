@@ -78,7 +78,7 @@ class Editors::Html::UI < ApplicationComponent
 
         # Preview container (width adjusted by JS)
         div(id: "preview-container", class: "mx-auto border bg-white p-4 shadow", data: { preview_target: "container" }) do
-          render Editors::Html::Preview.new document: @document
+          render Editors::Html::Preview.new resource: @document
         end
       end
     end
