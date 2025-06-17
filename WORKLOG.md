@@ -5,6 +5,7 @@
 ### 17/6/2025
 
 - settings basic navigation
+- debug and dev choices reestablished (dev using puma-dev -d test = mortimer.test)
 
 ### 16/6/2025
 

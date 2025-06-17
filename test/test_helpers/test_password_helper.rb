@@ -25,7 +25,7 @@ module TestPasswordHelper
     page.driver.set_cookie(
       session_key,
       cookie_jar[session_key],
-      domain: "localhost:3000",
+      domain: "mortimer.test",
       sameSite: :Lax,
       httpOnly: true
     )
