@@ -6,6 +6,7 @@
 
 - settings basic navigation
 - debug and dev choices reestablished (dev using puma-dev -d test = mortimer.test)
+- fail on run_test.rake
 
 ### 16/6/2025
 
