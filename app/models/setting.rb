@@ -61,17 +61,17 @@ class Setting < ApplicationRecord
     # create default settings for new tenant
     self.available_keys.each do |k|
       value, setable_type = case k[0]
-      when "default_time_material_state"; [ "draft", "TimeMaterial" ]
-      when "default_time_material_date"; [ "Time.current.to_date", "TimeMaterial" ]
-      when "default_time_material_about"; [ I18n.t("time_material.default_assigned_about"), "TimeMaterial" ]
-      when "default_time_material_hour_time"; [ "0", "TimeMaterial" ]
-      when "default_time_material_minute_time"; [ "15", "TimeMaterial" ]
+      when "default_time_material_state";         [ "draft", "TimeMaterial" ]
+      when "default_time_material_date";          [ "Time.current.to_date", "TimeMaterial" ]
+      when "default_time_material_about";         [ I18n.t("time_material.default_assigned_about"), "TimeMaterial" ]
+      when "default_time_material_hour_time";     [ "0", "TimeMaterial" ]
+      when "default_time_material_minute_time";   [ "15", "TimeMaterial" ]
       # when "default_time_material_rate"; [ "500", "TimeMaterial" ]
       # when "default_time_material_over_time"; [ "0", "TimeMaterial" ]
-      when "validate_time_material_done"; [ "false", "TimeMaterial" ]
-      when "limit_time_to_quarters"; [ "false", "TimeMaterial" ]
-      when "run"; [ "true", "BackgroundJob" ]
-      else [ "true", "User" ]
+      when "validate_time_material_done";         [ "false", "TimeMaterial" ]
+      when "limit_time_to_quarters";              [ "false", "TimeMaterial" ]
+      when "run";                                 [ "true", "BackgroundJob" ]
+      else                                        [ "true", "User" ]
       end
       self.create tenant: tenant, key: k[0], setable_type: setable_type, value: value
     end

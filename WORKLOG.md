@@ -2,6 +2,10 @@
 
 ## CHANGELOG
 
+### 17/6/2025
+
+- settings basic navigation
+
 ### 16/6/2025
 
 - WIP: work on settings

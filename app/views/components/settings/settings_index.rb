@@ -1,12 +1,178 @@
 class Settings::SettingsIndex < ApplicationComponent
   include Phlex::Rails::Helpers::TurboStreamFrom
+  include Phlex::Rails::Helpers::TurboFrameTag
 
-  def initialize(form: nil, resources_stream: nil)
-    @form = form
+  def initialize(resources_stream: nil, divider: true, params: {})
     @resources_stream = resources_stream || "settings:resources"
+    @divider = divider
+    @params = params
   end
 
   def view_template
+    if @params[:tab].present?
+      turbo_frame_tag "settings_list" do
+        bread_crumb
+        show_tab
+      end
+    else
+      show_index
+    end
+  end
+
+  def show_index
+    turbo_stream_from @resources_stream
+    render partial: "header", locals: { batch_form: form, divider: @divider }
+    turbo_frame_tag "settings_list" do
+      div(id: "list", role: "list", class: "") do
+        comment { "Help Box" }
+        div(class: "mx-4 mb-6 p-4 bg-blue-50 border border-blue-200 rounded-xl") do
+          h2(class: "font-semibold text-sky-700 mb-1") { "Need help?" }
+          p(class: "text-sm text-sky-700") do
+            "Adjust how your time and material tracking works. Your changes apply to all users unless otherwise noted."
+          end
+        end
+
+        div(class: "mx-4 my-6 bg-white rounded-xl shadow divide-y divide-gray-200") do
+          settings_user_profile
+          settings_organization
+          # settings_team
+        end
+
+        comment { "Settings List" }
+        div(class: "mx-4 my-6 bg-white rounded-xl shadow divide-y divide-gray-200") do
+          link2tab "/settings?tab=general", "General Settings", "general", Icons::Setting, css: "h-8 w-8 text-sky-600 bg-sky-100"
+          link2tab "/settings?tab=customer", "Customer Settings", "customer", Icons::Customer, css: "h-8 w-8 text-purple-600 bg-purple-100"
+          link2tab "/settings?tab=time_material", "Time & Material Settings", "time_material", Icons::TimeMaterial, css: "h-8 w-8 text-green-600 bg-green-100"
+          link2tab "/settings?tab=erp_integration", "ERP Integration", "erp_integration", Icons::Extension, css: "h-8 w-8 text-indigo-600 bg-indigo-100"
+          link2tab "/settings?tab=permissions", "Permissions", "permissions", Icons::User, css: "h-8 w-8 text-slate-600 bg-slate-100"
+        end
+      end
+    end
+  end
+
+  def bread_crumb
+    div(class: "mx-5 flex items-center space-x-2 mb-4") do
+      a(
+        href: "/settings",
+        class: "text-sm text-gray-500 hover:text-gray-700"
+      ) { "Settings" }
+      span(class: "text-sm text-gray-400") { ">" }
+      span(class: "text-sm font-medium text-gray-900") { @params[:tab].humanize }
+    end
+  end
+
+  def show_tab
+    div(class: "p-4") do
+      case @params[:tab]
+      when "permissions"
+        # settings_permissions
+      end
+    end
+  end
+
+  def link2tab(href, label, description, icon, css: "text-gray-600 bg-gray-100")
+    a(
+      href: href,
+      data: { turbo_frame: "settings_list", turbo_action: "advance" },
+      class: "flex justify-between items-center px-4 py-4 hover:bg-gray-50"
+    ) do
+      div(class: "flex items-center space-x-3") do
+        div(class: " p-2 rounded-md") do
+          render icon.new(css: css)
+        end
+        div do
+          p(class: "font-medium text-gray-900") { label }
+          p(class: "text-sm text-gray-500") do
+            plain description
+          end
+        end
+      end
+      svg(
+        class: "h-5 w-5 text-gray-400",
+        fill: "none",
+        viewbox: "0 0 24 24",
+        stroke: "currentColor"
+      ) do |s|
+        s.path(
+          stroke_linecap: "round",
+          stroke_linejoin: "round",
+          stroke_width: "2",
+          d: "M9 5l7 7-7 7"
+        )
+      end
+    end
+  end
+
+  def settings_organization
+    a(
+      href: "/tenants/#{Current.tenant.id}/edit",
+      data: { turbo_action: "advance", turbo_frame: "form" },
+      class: "flex justify-between items-center py-4 hover:bg-gray-50"
+    ) do
+      div(class: "flex items-center space-x-3") do
+        div(class: " p-2 rounded-md") do
+          render LogoComponent.new logo: Current.tenant.logo, div_css: "h-4 w-4", just_logo: true
+        end
+        div do
+          p(class: "font-medium text-gray-900") { "Organization Settings" }
+          p(class: "text-sm text-gray-500") do
+            "Manage organization-wide settings"
+          end
+        end
+      end
+      svg(
+        class: "h-5 w-5 text-gray-400",
+        fill: "none",
+        viewbox: "0 0 24 24",
+        stroke: "currentColor"
+      ) do |s|
+        s.path(
+          stroke_linecap: "round",
+          stroke_linejoin: "round",
+          stroke_width: "2",
+          d: "M9 5l7 7-7 7"
+        )
+      end
+    end
+  end
+
+  def settings_team
+  end
+
+  def settings_user_profile
+    a(
+      href: "/users/registrations/edit",
+      data: { turbo_frame: "form", turbo_action: "advance" },
+      class: "flex justify-between items-center px-2 py-4 hover:bg-gray-50"
+    ) do
+      div(class: "flex items-center space-x-3") do
+        div(class: "p-2 rounded-md") do
+          helpers.user_mugshot(Current.get_user)
+        end
+        div do
+          p(class: "font-medium text-gray-900") { "User Profile" }
+          p(class: "text-sm text-gray-500") do
+            "Rates, rounding, comments, delegation"
+          end
+        end
+      end
+      svg(
+        class: "h-5 w-5 text-gray-400",
+        fill: "none",
+        viewbox: "0 0 24 24",
+        stroke: "currentColor"
+      ) do |s|
+        s.path(
+          stroke_linecap: "round",
+          stroke_linejoin: "round",
+          stroke_width: "2",
+          d: "M9 5l7 7-7 7"
+        )
+      end
+    end
+  end
+
+  def view_template_old
     # List of settings for the organization, team, or user
     turbo_stream_from @resources_stream
     render partial: "header", locals: { batch_form: form }
@@ -14,130 +180,138 @@ class Settings::SettingsIndex < ApplicationComponent
       div(class: "ml-6 mr-1") do
         div(class: "text-sm/6 pt-6") { "Settings for organization, team, or user - choose wisely in some situations" }
         dl(class: "divide-y divide-gray-100") do
-          true_false "Create projects", "Allow Users to create projects on Time & Material registrations"
-          edit_input "Monitor email address", "The email address used for monitoring", "margotfoster@example.com"
-          div(class: "px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0") do
-            dt(class: "text-sm/6 font-medium text-gray-900") do
-              "Max Invoice Amount"
-            end
-            dd(
-              class: "mt-1 flex text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0"
-            ) do
-              whitespace
-              span(class: "grow") { "$120,000" }
-              whitespace
-              span(class: "ml-4 shrink-0") do
-                whitespace
-                button(
-                  type: "button",
-                  class:
-                    "rounded-md bg-white font-medium text-indigo-600 hover:text-indigo-500"
-                ) { "Edit" }
-                whitespace
-              end
-            end
-          end
-          div(class: "px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0") do
-            dt(class: "text-sm/6 font-medium text-gray-900") do
-              "Default Time/Material State"
-            end
-            dd(
-              class: "mt-1 flex-col text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0"
-            ) do
-              div do
-                whitespace
-                label(
-                  for: "location",
-                  class: "block text-sm/6 font-medium text-gray-900"
-                ) { "State" }
-                div(class: "mt-2 grid grid-cols-1") do
-                  whitespace
-                  select(
-                    id: "location",
-                    name: "location",
-                    class:
-                      "col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pr-8 pl-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                  ) do
-                    option(selected: "selected") { "Done" }
-                    option { "Draft" }
-                    option { "Parked" }
-                    whitespace
-                  end
-                  whitespace
-                  svg(
-                    class:
-                      "pointer-events-none col-start-1 row-start-1 mr-2 size-5 self-center justify-self-end text-gray-500 sm:size-4",
-                    viewbox: "0 0 16 16",
-                    fill: "currentColor",
-                    aria_hidden: "true",
-                    data_slot: "icon"
-                  ) do |s|
-                    s.path(
-                      fill_rule: "evenodd",
-                      d:
-                        "M4.22 6.22a.75.75 0 0 1 1.06 0L8 8.94l2.72-2.72a.75.75 0 1 1 1.06 1.06l-3.25 3.25a.75.75 0 0 1-1.06 0L4.22 7.28a.75.75 0 0 1 0-1.06Z",
-                      clip_rule: "evenodd"
-                    )
-                  end
-                end
-              end
-              whitespace
-              span(class: "grow") do
-                "Opening a new Time Material item will set the state to the one selected here"
-              end
-              whitespace
-              span(class: "ml-4 shrink-0") { whitespace }
-            end
-          end
-          div(class: "px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0") do
-            dt(class: "text-sm/6 font-medium text-gray-900") { "Company Color" }
-            dd(class: "mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0") do
-              fieldset do
-                legend(class: "block text-sm/6 font-semibold text-gray-900") do
-                  "Choose a label color"
-                end
-                div(class: "mt-6 flex flex-wrap items-center gap-x-3 gap-y-2") do
-                  # bg-red-500 bg-orange-500 bg-amber-500 bg-yellow-500 bg-lime-500 bg-green-500 bg-emerald-500 bg-teal-500 bg-cyan-500 bg-sky-500 bg-blue-500 bg-indigo-500 bg-violet-500 bg-purple-500 bg-fuchsia-500 bg-pink-500 bg-rose-500 bg-slate-500 bg-gray-500 bg-zinc-500 bg-neutral-500 bg-stone-500
-                  %w[ red orange amber yellow lime green emerald teal cyan sky blue indigo violet purple fuchsia pink rose slate gray zinc neutral stone ].each do |color|
-                    div(
-                      class:
-                        "flex rounded-full outline -outline-offset-1 outline-black/10"
-                    ) do
-                      whitespace
-                      input(
-                        aria_label: "#{color.capitalize}",
-                        type: "radio",
-                        name: "color-choice",
-                        value: "#{color}",
-                        class:
-                          "size-8 appearance-none rounded-full bg-#{color}-500 forced-color-adjust-none checked:outline-2 checked:outline-offset-2 checked:outline-#{color}-500 focus-visible:outline-3 focus-visible:outline-offset-3"
-                      )
-                    end
-                  end
-                end
-              end
-            end
-          end
+          # Setting.all_settings.each do |setting|
+          #   case setting.input_type
+          #   when "boolean"
+          #     true_false setting
+          #   when "input"
+          #     edit_input setting.label, setting.description, setting.value
+          #   end
+          # end
+          # true_false "Create projects", "Allow Users to create projects on Time & Material registrations"
+          # edit_input "Monitor email address", "The email address used for monitoring", "margotfoster@example.com"
+          # div(class: "px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0") do
+          #   dt(class: "text-sm/6 font-medium text-gray-900") do
+          #     "Max Invoice Amount"
+          #   end
+          #   dd(
+          #     class: "mt-1 flex text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0"
+          #   ) do
+
+          #     span(class: "grow") { "$120,000" }
+
+          #     span(class: "ml-4 shrink-0") do
+
+          #       button(
+          #         type: "button",
+          #         class:
+          #           "rounded-md bg-white font-medium text-indigo-600 hover:text-indigo-500"
+          #       ) { "Edit" }
+
+          #     end
+          #   end
+          # end
+          # div(class: "px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0") do
+          #   dt(class: "text-sm/6 font-medium text-gray-900") do
+          #     "Default Time/Material State"
+          #   end
+          #   dd(
+          #     class: "mt-1 flex-col text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0"
+          #   ) do
+          #     div do
+
+          #       label(
+          #         for: "location",
+          #         class: "block text-sm/6 font-medium text-gray-900"
+          #       ) { "State" }
+          #       div(class: "mt-2 grid grid-cols-1") do
+
+          #         select(
+          #           id: "location",
+          #           name: "location",
+          #           class:
+          #             "col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pr-8 pl-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+          #         ) do
+          #           option(selected: "selected") { "Done" }
+          #           option { "Draft" }
+          #           option { "Parked" }
+
+          #         end
+
+          #         svg(
+          #           class:
+          #             "pointer-events-none col-start-1 row-start-1 mr-2 size-5 self-center justify-self-end text-gray-500 sm:size-4",
+          #           viewbox: "0 0 16 16",
+          #           fill: "currentColor",
+          #           aria_hidden: "true",
+          #           data_slot: "icon"
+          #         ) do |s|
+          #           s.path(
+          #             fill_rule: "evenodd",
+          #             d:
+          #               "M4.22 6.22a.75.75 0 0 1 1.06 0L8 8.94l2.72-2.72a.75.75 0 1 1 1.06 1.06l-3.25 3.25a.75.75 0 0 1-1.06 0L4.22 7.28a.75.75 0 0 1 0-1.06Z",
+          #             clip_rule: "evenodd"
+          #           )
+          #         end
+          #       end
+          #     end
+
+          #     span(class: "grow") do
+          #       "Opening a new Time Material item will set the state to the one selected here"
+          #     end
+
+          # }
+          #   end
+          # end
+          # div(class: "px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0") do
+          #   dt(class: "text-sm/6 font-medium text-gray-900") { "Company Color" }
+          #   dd(class: "mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0") do
+          #     fieldset do
+          #       legend(class: "block text-sm/6 font-semibold text-gray-900") do
+          #         "Choose a label color"
+          #       end
+          #       div(class: "mt-6 flex flex-wrap items-center gap-x-3 gap-y-2") do
+          #         # bg-red-500 bg-orange-500 bg-amber-500 bg-yellow-500 bg-lime-500 bg-green-500 bg-emerald-500 bg-teal-500 bg-cyan-500 bg-sky-500 bg-blue-500 bg-indigo-500 bg-violet-500 bg-purple-500 bg-fuchsia-500 bg-pink-500 bg-rose-500 bg-slate-500 bg-gray-500 bg-zinc-500 bg-neutral-500 bg-stone-500
+          #         %w[ red orange amber yellow lime green emerald teal cyan sky blue indigo violet purple fuchsia pink rose slate gray zinc neutral stone ].each do |color|
+          #           div(
+          #             class:
+          #               "flex rounded-full outline -outline-offset-1 outline-black/10"
+          #           ) do
+
+          #             input(
+          #               aria_label: "#{color.capitalize}",
+          #               type: "radio",
+          #               name: "color-choice",
+          #               value: "#{color}",
+          #               class:
+          #                 "size-8 appearance-none rounded-full bg-#{color}-500 forced-color-adjust-none checked:outline-2 checked:outline-offset-2 checked:outline-#{color}-500 focus-visible:outline-3 focus-visible:outline-offset-3"
+          #             )
+          #           end
+          #         end
+          #       end
+          #     end
+          #   end
+          # end
         end
       end
     end
   end
 
-  def true_false(label, description, value = false)
+  def true_false(setting)
     div(class: "px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0") do
-      dt(class: "text-sm/6 font-medium text-gray-900") { label }
+      dt(class: "text-sm/6 font-medium text-gray-900") { setting.label }
       dd(
         class: "mt-1 flex text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0"
       ) do
         span(class: "grow") do
-          description
+          setting.description
         end
-        span(class: "ml-4 shrink-0") do
+        span(class: "ml-4 shrink-0", data: { controller: "setting", params: }) do
             render ToggleButton.new(resource: Setting.new,
             label: "toggle",
             value: value,
             url: nil,
-            action: "click->boolean#toggle",
+            action: "click->boolean#toggle save->setting#save",
             attributes: {}
           )
 

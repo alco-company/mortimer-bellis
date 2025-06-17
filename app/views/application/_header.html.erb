@@ -1,6 +1,7 @@
 <%= turbo_frame_tag "#{Current.user.id}_list_header" do %>
   <!-- Page Header -->
-  <div data-controller="header" class="border-b border-slate-100 mt-8 pb-5">
+  <% css = divider ? "border-b border-slate-100 mt-8 pb-5" : "mt-8 pb-5" %>
+  <div data-controller="header" class="<%= css %>">
     <div class="flex items-center sm:justify-between">
       <div class="sm:w-0 flex-1">
         <input name="batch[all]" type="hidden" value="0" autocomplete="off">
