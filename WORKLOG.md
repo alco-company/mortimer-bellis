@@ -5,6 +5,7 @@
 ### 20/6/2025
 
 - got a breakthrough on boolean and text settings
+- fix bug on filters
 
 ### 17/6/2025
 

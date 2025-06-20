@@ -47,7 +47,7 @@ class Contextmenu < Phlex::HTML
   end
 
   def more_button_list
-    a_button css: "flex items-center rounded-md ring-1 ring-gray-100 px-2 py-1 text-gray-400 hover:text-gray-600 focus:outline-hidden focus:ring-1 focus:ring-sky-500",
+    a_button css: "flex items-center rounded-md ring-0 sm:ring-1 ring-gray-100 pl-3 pr-1 py-1 mr-1 text-gray-400 hover:text-gray-600 focus:outline-hidden focus:ring-1 focus:ring-sky-500",
       label: I18n.t("more"),
       visible_label: true
   end
