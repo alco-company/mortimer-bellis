@@ -13,7 +13,7 @@ class ToggleButton < ApplicationComponent
     @action = action
     @attributes = attributes
     @data_attr = attributes[:data] || {}
-    @key = attributes[:key] || resource.name.underscore
+    @key = attributes[:key] || resource&.name&.underscore
     @input_name = input_name || attributes[:name] || "#{resource.class.name.underscore}[#{resource.id}]"
   end
 

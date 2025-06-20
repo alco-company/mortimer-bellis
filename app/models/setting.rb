@@ -93,6 +93,26 @@ class Setting < ApplicationRecord
     }
   end
 
+  def self.setting_options
+    {
+      "default_time_material_state" => {
+        "draft" => I18n.t("time_material.states.draft"),
+        "done" => I18n.t("time_material.states.done")
+      },
+      "default_time_material_rate" => {
+        "750,75" => "750,75",
+        "500,00" => "500,00",
+        "250,00" => "250,00"
+      }
+    }
+  end
+
+  # Create default settings for a new tenant
+  # This method initializes default settings for a new tenant.
+  #
+  # @param tenant [Tenant] The tenant for which to create default settings.
+  #
+
   def self.create_defaults_for_new(tenant)
     # create default settings for new tenant
     self.available_keys.each do |k|
@@ -188,7 +208,7 @@ class Setting < ApplicationRecord
       "run" => { "type" => "boolean", "value" => "0", "setable_type" => "BackgroundJob", "setable_id" => nil },
       "limit_time_to_quarters" => { "type" => "boolean", "value" => "1" },
       "default_time_material_date" => { "type" => "date", "value" => Time.current.to_date },
-      "default_time_material_state" => { "type" => "select", "value" =>  "draft", "options" => { "draft" => I18n.t("time_material.states.draft"), "done" => I18n.t("time_material.states.done") } },
+      "default_time_material_state" => { "type" => "option", "value" =>  "draft", "options" => { "draft" => I18n.t("time_material.states.draft"), "done" => I18n.t("time_material.states.done") } },
       "default_time_material_about" => { "type" => "text", "value" => I18n.t("time_material.default_assigned_about") },
       "default_time_material_hour_time" => { "type" => "text", "value" => "0" },
       "default_time_material_minute_time" => { "type" => "text", "value" => "15" },
@@ -210,7 +230,7 @@ class Setting < ApplicationRecord
       "delegate_time_materials" => { "type" => "boolean", "value" => true },
       "limit_time_to_quarters" => { "type" => "boolean", "value" => true },
       "default_time_material_date" => { "type" => "date", "value" => Time.current.to_date },
-      "default_time_material_state" => { "type" => "select", "value" =>  "draft", "options" => { "draft" => I18n.t("time_material.states.draft"), "done" => I18n.t("time_material.states.done") } },
+      "default_time_material_state" => { "type" => "option", "value" =>  "draft", "options" => { "draft" => I18n.t("time_material.states.draft"), "done" => I18n.t("time_material.states.done") } },
       "default_time_material_about" => { "type" => "text", "value" => I18n.t("time_material.default_assigned_about") },
       "default_time_material_hour_time" => { "type" => "text", "value" => "0" },
       "default_time_material_minute_time" => { "type" => "text", "value" => "15" },
@@ -226,7 +246,7 @@ class Setting < ApplicationRecord
       "run" => { "type" => "boolean", "value" => true },
       "limit_time_to_quarters" => { "type" => "boolean", "value" => true },
       "default_time_material_date" => { "type" => "date", "value" => Time.current.to_date },
-      "default_time_material_state" => { "type" => "select", "value" =>  "draft", "options" => { "draft" => I18n.t("time_material.states.draft"), "done" => I18n.t("time_material.states.done") } },
+      "default_time_material_state" => { "type" => "option", "value" =>  "draft", "options" => { "draft" => I18n.t("time_material.states.draft"), "done" => I18n.t("time_material.states.done") } },
       "default_time_material_about" => { "type" => "text", "value" => I18n.t("time_material.default_assigned_about") },
       "default_time_material_hour_time" => { "type" => "text", "value" => "0" },
       "default_time_material_minute_time" => { "type" => "text", "value" => "15" },
@@ -260,7 +280,7 @@ class Setting < ApplicationRecord
       "delegate_time_materials" => { "type" => "boolean", "value" => true },
       "limit_time_to_quarters" => { "type" => "boolean", "value" => true },
       "default_time_material_date" => { "type" => "date", "value" => Time.current.to_date },
-      "default_time_material_state" => { "type" => "select", "value" =>  "draft", "options" => { "draft" => I18n.t("time_material.states.draft"), "done" => I18n.t("time_material.states.done") } },
+      "default_time_material_state" => { "type" => "option", "value" =>  "draft", "options" => { "draft" => I18n.t("time_material.states.draft"), "done" => I18n.t("time_material.states.done") } },
       "default_time_material_about" => { "type" => "text", "value" => I18n.t("time_material.default_assigned_about") },
       "default_time_material_hour_time" => { "type" => "text", "value" => "0" },
       "default_time_material_minute_time" => { "type" => "text", "value" => "15" },

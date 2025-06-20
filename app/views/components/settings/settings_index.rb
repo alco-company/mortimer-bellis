@@ -95,7 +95,7 @@ class Settings::SettingsIndex < ApplicationComponent
           case setting.second["type"]
           when "boolean"; true_false setting, index
           when "text";    text_input setting, index
-          when "select";  select_input setting, index
+          when "option";  select_input setting, index
           when "color";   color_input setting, index
           end
           index += 1
@@ -227,14 +227,9 @@ class Settings::SettingsIndex < ApplicationComponent
   def text_input(setting, index)
     url = setting.second["id"] == "0" ? "/settings?target=setting_i_#{index}" : "/settings/#{setting.second["object"].id}"
     target = setting.second["id"] == "0" ? "setting_i_#{index}" : dom_id(setting.second["object"])
-
     div(class: "px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0") do
-      dt(class: "text-sm/6 font-medium text-gray-900") do
-        setting.second["object"].label
-      end
-      dd(
-        class: "mt-1 flex text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0"
-      ) do
+      dt(class: "text-sm/6 font-medium text-gray-900") { setting.second["object"].label }
+      dd(class: "mt-1 flex text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0") do
         render TextBox.new(
           resource: setting.second["object"],
           value: setting.second["value"],
@@ -248,9 +243,26 @@ class Settings::SettingsIndex < ApplicationComponent
     end
   end
   def select_input(setting, index)
+    url = setting.second["id"] == "0" ? "/settings?target=setting_i_#{index}" : "/settings/#{setting.second["object"].id}"
+    target = setting.second["id"] == "0" ? "setting_i_#{index}" : dom_id(setting.second["object"])
     div(id: "setting_#{index}", class: "px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0") do
       dt(class: "text-sm/6 font-medium text-gray-900") { setting.second["object"].label }
       dd(class: "mt-1 flex-col text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0") do
+        render SelectComponent.new(
+          resource: setting.second["object"],
+          field: :value,
+          hint: setting.second["object"].description,
+          collection: setting.second["options"],
+          show_label: false,
+          prompt: "Select an option",
+          field_class: "flex col-span-2 grow",
+          label_class: "sr-only",
+          value_class: "flex flex-col grow",
+          url: url,
+          target: target,
+          attributes: { key: setting.second["key"], class: "flex col-span-2 grow", data: { action: "change->select#change" } },
+          editable: false
+        )
       end
     end
   end

@@ -6,6 +6,7 @@
 
 - got a breakthrough on boolean and text settings
 - fix bug on filters
+- now the select was a walk in the park (almost)
 
 ### 17/6/2025
 

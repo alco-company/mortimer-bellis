@@ -13,7 +13,7 @@ class Settings::Setting < ApplicationComponent
     case @params["type"]
     when "boolean"; true_false
     when "text";    text_box
-    when "options";  select_input
+    when "option";  select_input
     when "color";   color_input
     end
   end
@@ -41,6 +41,25 @@ class Settings::Setting < ApplicationComponent
       state: "show",
       hint: @resource.description,
       attributes: { class: "flex col-span-2 grow" },
+    )
+  end
+
+  def select_input
+    url = "/settings/#{@resource.id}"
+    render SelectComponent.new(
+      resource: @resource,
+      field: :value,
+      hint: @resource.description,
+      collection: Setting.setting_options[@resource.key],
+      show_label: false,
+      prompt: "Select an option",
+      field_class: "flex col-span-2 grow",
+      label_class: "sr-only",
+      value_class: "flex flex-col grow",
+      url: url,
+      target: @target,
+      attributes: { key: @resource.key, class: "flex col-span-2 grow", data: { action: "change->select#change" } },
+      editable: false
     )
   end
 end
