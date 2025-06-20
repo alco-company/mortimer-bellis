@@ -2,6 +2,10 @@
 
 ## CHANGELOG
 
+### 20/6/2025
+
+- got a breakthrough on boolean and text settings
+
 ### 17/6/2025
 
 - settings basic navigation

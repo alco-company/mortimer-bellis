@@ -2,7 +2,7 @@ module Settingable
   extend ActiveSupport::Concern
 
   included do
-    has_many :settings, as: :setable
+    has_many :settings, as: :setable, dependent: :destroy
 
     # do not unless expressively allowed
     def can?(action)

@@ -2,12 +2,12 @@ class Broadcasters::Resource
   include Turbo::StreamsHelper
   include ActionView::RecordIdentifier
 
-  attr_reader :tenant, :resource, :resource_class, :resources_stream, :params, :target, :user, :partial
+  attr_accessor :tenant, :resource, :resource_class, :resources_stream, :params, :target, :user, :partial
 
-  def initialize(resource, params = {}, target = "record_list", user = Current.get_user, stream = nil, partial = nil)
+  def initialize(resource, params = {}, target = nil, user = Current.get_user, stream = nil, partial = nil)
     @resource = resource
     @params = params.respond_to?(:to_unsafe_h) ? params.to_unsafe_h : params
-    @target = target
+    @target = target || dom_id(resource)
     @resource_class = resource.class rescue nil
     @user = user
     @tenant = resource.respond_to?(:tenant) ? resource.tenant : user.tenant rescue nil
@@ -30,12 +30,13 @@ class Broadcasters::Resource
   def create
     return unless tenant
     return unless resource.persisted?
+    @target = (@target == dom_id(resource)) ? "record_list" : @target
     Turbo::StreamsChannel.broadcast_action_later_to(
       resources_stream,
-      target: target,
+      target: @target,
       action: :prepend,
       partial: partial,
-      locals: { resource_class.to_s.underscore => resource, params: params, user: user }
+      locals: { resource_class.to_s.underscore => resource, params: params, user: user, target: @target }
     )
   end
 
@@ -43,16 +44,16 @@ class Broadcasters::Resource
     return unless tenant
     Turbo::StreamsChannel.broadcast_action_later_to(
       resources_stream,
-      target: dom_id(resource),
+      target: target,
       action: :replace,
       partial: partial,
-      locals: { resource_class.to_s.underscore => resource, params: params, user: user }
+      locals: { resource_class.to_s.underscore => resource, params: params, user: user, target: target }
     )
   end
 
   def destroy
     return unless tenant
-    Turbo::StreamsChannel.broadcast_remove_to resources_stream, target: dom_id(resource)
+    Turbo::StreamsChannel.broadcast_remove_to resources_stream, target: target
   end
 
   def destroy_all

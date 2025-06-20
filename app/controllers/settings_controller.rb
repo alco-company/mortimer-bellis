@@ -63,6 +63,16 @@ class SettingsController < MortimerController
     #   @setting = Setting.find(params[:id])
     # end
 
+    def create_callback
+      params[:type] = resource.type
+      Broadcasters::Resource.new(resource, params.permit!, params[:target], Current.get_user, "#{Current.get_tenant.id}_settings_view", "settings/special").replace
+    end
+
+    def update_callback
+      params[:type] = resource.type
+      Broadcasters::Resource.new(resource, params.permit!, params[:target], Current.get_user, "#{Current.get_tenant.id}_settings_view", "settings/special").replace
+    end
+
     # Only allow a list of trusted parameters through.
     def resource_params
       params.expect(setting: [ :tenant_id, :setable_id, :setable_type, :key, :priority, :formating, :value ])
