@@ -5,7 +5,7 @@ if Rails.env.development?
     # port: ENV["WEB_PORT"] || Rails.configuration.action_mailer.default_url_options[:port],
     # # protocol: Rails.env.production? ? "https" : "http"
     # protocol: "https"
-    host: "mortimer.test",
+    host: "localhost",
     protocol: "https"
   }
 end
@@ -17,7 +17,7 @@ if Rails.env.production?
 end
 if Rails.env.test?
   Rails.application.routes.default_url_options = {
-    host: "mortimer.test",
+    host: "localhost",
     protocol: "http"
   }
 end

@@ -88,4 +88,8 @@ class ApplicationComponent < Phlex::HTML
   def params_id
     rc_params[:id]
   end
+
+  def unsafe_raw(msg)
+    raw(msg.html_safe) if msg
+  end
 end
