@@ -19,7 +19,7 @@ gem "turbo-rails"
 gem "stimulus-rails"
 # Use Tailwind CSS [https://github.com/rails/tailwindcss-rails]
 gem "tailwindcss-rails"
-gem "tailwindcss-ruby", "4.0.17"
+gem "tailwindcss-ruby", "4.1.11"
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem "jbuilder"
 # Use Redis adapter to run Action Cable in production
@@ -102,7 +102,7 @@ gem "redcarpet", "~> 3.6"
 
 gem "httparty", "~> 0.23.1"
 
-gem "psych", "~> 5.2.0"
+gem "psych", "~> 5.2.6"
 
 gem "rrule", "~> 0.6.0"
 
@@ -110,9 +110,9 @@ gem "httpx", "~> 1.4"
 
 gem "mission_control-jobs", "~> 0.6.0"
 
-gem "noticed", "~> 2.4"
+gem "noticed", "~> 2.8"
 
-gem "x", "~> 0.14.1"
+gem "x", "~> 0.16.0"
 
 gem "omniauth", "~> 2.1"
 gem "omniauth-entra-id", "~> 3.0"

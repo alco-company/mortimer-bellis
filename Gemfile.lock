@@ -505,13 +505,13 @@ GEM
     tailwindcss-rails (4.3.0)
       railties (>= 7.0.0)
       tailwindcss-ruby (~> 4.0)
-    tailwindcss-ruby (4.0.17)
-    tailwindcss-ruby (4.0.17-aarch64-linux-gnu)
-    tailwindcss-ruby (4.0.17-aarch64-linux-musl)
-    tailwindcss-ruby (4.0.17-arm64-darwin)
-    tailwindcss-ruby (4.0.17-x86_64-darwin)
-    tailwindcss-ruby (4.0.17-x86_64-linux-gnu)
-    tailwindcss-ruby (4.0.17-x86_64-linux-musl)
+    tailwindcss-ruby (4.1.11)
+    tailwindcss-ruby (4.1.11-aarch64-linux-gnu)
+    tailwindcss-ruby (4.1.11-aarch64-linux-musl)
+    tailwindcss-ruby (4.1.11-arm64-darwin)
+    tailwindcss-ruby (4.1.11-x86_64-darwin)
+    tailwindcss-ruby (4.1.11-x86_64-linux-gnu)
+    tailwindcss-ruby (4.1.11-x86_64-linux-musl)
     thor (1.4.0)
     thruster (0.1.14)
     thruster (0.1.14-aarch64-linux)
@@ -544,7 +544,8 @@ GEM
       base64
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
-    x (0.14.1)
+    x (0.16.0)
+      base64 (>= 0.2)
     xpath (3.2.0)
       nokogiri (~> 1.8)
     zeitwerk (2.7.3)
@@ -585,7 +586,7 @@ DEPENDENCIES
   mailersend-ruby (~> 3.0)
   mission_control-jobs (~> 0.6.0)
   net-pop!
-  noticed (~> 2.4)
+  noticed (~> 2.8)
   omniauth (~> 2.1)
   omniauth-entra-id (~> 3.0)
   omniauth-rails_csrf_protection (~> 1.0)
@@ -594,7 +595,7 @@ DEPENDENCIES
   positioning
   posthog-ruby (~> 3.0)
   propshaft
-  psych (~> 5.2.0)
+  psych (~> 5.2.6)
   puma (>= 5.0)
   rails!
   redcarpet (~> 3.6)
@@ -609,13 +610,13 @@ DEPENDENCIES
   stripe (~> 15.1)
   superform (~> 0.5.0)
   tailwindcss-rails
-  tailwindcss-ruby (= 4.0.17)
+  tailwindcss-ruby (= 4.1.11)
   thruster
   turbo-rails
   tzinfo-data
   web-console
   web-push (~> 3.0)
-  x (~> 0.14.1)
+  x (~> 0.16.0)
 
 BUNDLED WITH
    2.5.23
