@@ -15,19 +15,19 @@ module FieldSpecializations
           active_record_relation_options_enumerable(relation).each(&options)
         # in [TimeMaterial::State, *] => colr
         #   enumerable_list(colr).each(&options)
-        in [Colorable::Color, *] => colr
+        in [ Colorable::Color, * ] => colr
           enumerable_list(colr).each(&options)
-        in [Localeable::Locale, *] => locl
+        in [ Localeable::Locale, * ] => locl
           enumerable_list(locl).each(&options)
-        in [Countryable::Country, *] => ctry
+        in [ Countryable::Country, * ] => ctry
           enumerable_list(ctry).each(&options)
-        in [[ String, /^\([+-]\d{1,2}\:\d\d\)$/ ], *] => arr
+        in [ [ String, /^\([+-]\d{1,2}\:\d\d\)$/ ], * ] => arr
           timezone_list(arr).each(&options)
-        in [[ String, String ], *] => arr
+        in [ [ String, String ], * ] => arr
           id_value_list(arr).each(&options)
-        in [[ Integer, String ], *] => arr
+        in [ [ Integer, String ], * ] => arr
           id_value_list(arr).each(&options)
-        in [[ Symbol, String ], *] => arr
+        in [ [ Symbol, String ], * ] => arr
           id_value_list(arr).each(&options)
         in id, value
           options.call id, value
@@ -222,7 +222,7 @@ module FieldSpecializations
             img(src: url_for(field.value), class: "mort-img m-2")
             div(class: "absolute top-0 right-0 w-8 h-8 rounded-lg bg-white/75") do
               link_to(
-                helpers.new_modal_url(modal_form: "delete", id: field.parent.object.id, attachment: field.value.name, api_key: @_parent.api_key, resource_class: field.parent.object.class.to_s.underscore, modal_next_step: "accept"),
+                helpers.new_modal_url(modal_form: "delete", id: field.parent.object.id, attachment: field.value.name, api_key: @_parent&.api_key, resource_class: field.parent.object.class.to_s.underscore, modal_next_step: "accept"),
                 data: { turbo_stream: true },
                 # link_to((@links[1] || resource),
                 class: "absolute top-1 right-1",
