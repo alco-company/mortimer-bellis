@@ -17,7 +17,7 @@ class ApplicationComponent < Phlex::HTML
   end
 
   def unsafe_raw(html)
-    Phlex::HTML::SafeString.new(html)
+    raw(html.html_safe)
   rescue StandardError => e
     Rails.logger.error "Error in unsafe_raw: #{e.message}"
     Rails.logger.error e.backtrace.join("\n")
