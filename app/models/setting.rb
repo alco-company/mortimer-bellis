@@ -57,21 +57,77 @@ class Setting < ApplicationRecord
     "#{key}"
   end
 
+  def label
+    I18n.t("settings.keys.#{key}", default: key.humanize)
+  end
+
+  def description
+    I18n.t("settings.descriptions.#{key}", default: key.humanize)
+  end
+
+  def type
+    Setting.setting_types[key] || "text"
+  end
+
+  def self.setting_types
+    {
+      "delegate_time_materials" => "boolean",
+      "run" => "boolean",
+      "limit_time_to_quarters" => "boolean",
+      "default_time_material_date" => "date",
+      "default_time_material_state" => "option",
+      "default_time_material_about" => "text",
+      "default_time_material_hour_time" => "text",
+      "default_time_material_minute_time" => "text",
+      "default_time_material_rate" => "text",
+      # "default_time_material_over_time" => "boolean",
+      "allow_create_time_material" => "boolean",
+      "allow_create_product" => "boolean",
+      "allow_create_customer" => "boolean",
+      "allow_create_project" => "boolean",
+      "allow_comments_on_time_material" => "boolean",
+      "import_customers_only" => "boolean",
+      "sync_with_erp" => "boolean",
+      "validate_time_material_done" => "boolean",
+      "show_all_time_material_posts" => "boolean"
+    }
+  end
+
+  def self.setting_options
+    {
+      "default_time_material_state" => {
+        "draft" => I18n.t("time_material.states.draft"),
+        "done" => I18n.t("time_material.states.done")
+      },
+      "default_time_material_rate" => {
+        "750,75" => "750,75",
+        "500,00" => "500,00",
+        "250,00" => "250,00"
+      }
+    }
+  end
+
+  # Create default settings for a new tenant
+  # This method initializes default settings for a new tenant.
+  #
+  # @param tenant [Tenant] The tenant for which to create default settings.
+  #
+
   def self.create_defaults_for_new(tenant)
     # create default settings for new tenant
     self.available_keys.each do |k|
       value, setable_type = case k[0]
-      when "default_time_material_state"; [ "draft", "TimeMaterial" ]
-      when "default_time_material_date"; [ "Time.current.to_date", "TimeMaterial" ]
-      when "default_time_material_about"; [ I18n.t("time_material.default_assigned_about"), "TimeMaterial" ]
-      when "default_time_material_hour_time"; [ "0", "TimeMaterial" ]
-      when "default_time_material_minute_time"; [ "15", "TimeMaterial" ]
+      when "default_time_material_state";         [ "draft", "TimeMaterial" ]
+      when "default_time_material_date";          [ "Time.current.to_date", "TimeMaterial" ]
+      when "default_time_material_about";         [ I18n.t("time_material.default_assigned_about"), "TimeMaterial" ]
+      when "default_time_material_hour_time";     [ "0", "TimeMaterial" ]
+      when "default_time_material_minute_time";   [ "15", "TimeMaterial" ]
       # when "default_time_material_rate"; [ "500", "TimeMaterial" ]
       # when "default_time_material_over_time"; [ "0", "TimeMaterial" ]
-      when "validate_time_material_done"; [ "false", "TimeMaterial" ]
-      when "limit_time_to_quarters"; [ "false", "TimeMaterial" ]
-      when "run"; [ "true", "BackgroundJob" ]
-      else [ "true", "User" ]
+      when "validate_time_material_done";         [ "false", "TimeMaterial" ]
+      when "limit_time_to_quarters";              [ "false", "TimeMaterial" ]
+      when "run";                                 [ "true", "BackgroundJob" ]
+      else                                        [ "true", "User" ]
       end
       self.create tenant: tenant, key: k[0], setable_type: setable_type, value: value
     end
@@ -119,5 +175,135 @@ class Setting < ApplicationRecord
       [ "TimeMaterial", I18n.t("settings.tables.time_materials") ],
       [ "User", I18n.t("settings.tables.users") ]
     ]
+  end
+
+  def self.get_settings(settings = {})
+    tenant_settings = Current.get_tenant.settings
+    settings.each do |key, setting|
+      found = false
+      tenant_settings.filter { |r| r.key == key }.each do |r|
+        found = true
+        settings[key]["id"] = r.id
+        settings[key]["value"] = r.value
+        settings[key]["object"] = r
+      end
+      settings[key] = settings[key].merge({
+        "id" => "0",
+        "value" => setting["value"],
+        "object" => Setting.create(tenant: Current.get_tenant, key: key, setable_type: setting["setable_type"], setable_id: setting["setable_id"], value: setting["value"])
+      }) unless found
+    end
+    settings
+  end
+
+  # General settings for the application
+  # This method returns a hash of settings with their types and default values.
+  # It can be used to initialize or display settings in the application.
+  #
+  # @return [Hash] A hash containing the general settings for the application.
+  #
+  def self.general_settings
+    self.get_settings({
+      "delegate_time_materials" => { "type" => "boolean", "value" => "1" },
+      "run" => { "type" => "boolean", "value" => "0", "setable_type" => "BackgroundJob", "setable_id" => nil },
+      "limit_time_to_quarters" => { "type" => "boolean", "value" => "1" },
+      "default_time_material_date" => { "type" => "date", "value" => Time.current.to_date },
+      "default_time_material_state" => { "type" => "option", "value" =>  "draft", "options" => { "draft" => I18n.t("time_material.states.draft"), "done" => I18n.t("time_material.states.done") } },
+      "default_time_material_about" => { "type" => "text", "value" => I18n.t("time_material.default_assigned_about") },
+      "default_time_material_hour_time" => { "type" => "text", "value" => "0" },
+      "default_time_material_minute_time" => { "type" => "text", "value" => "15" },
+      "default_time_material_rate" => { "type" => "text", "value" => "750,75" },
+      "default_time_material_over_time" => { "type" => "boolean", "value" => "1" },
+      "allow_create_time_material" => { "type" => "boolean", "value" => "1" },
+      "allow_create_product" => { "type" => "boolean", "value" => "1" },
+      "allow_create_customer" => { "type" => "boolean", "value" => "1" },
+      "allow_create_project" => { "type" => "boolean", "value" => "1" },
+      "allow_comments_on_time_material" => { "type" => "boolean", "value" => "1" },
+      "import_customers_only" => { "type" => "boolean", "value" => "1" },
+      "sync_with_erp" => { "type" => "boolean", "value" => "1" },
+      "validate_time_material_done" => { "type" => "boolean", "value" => "1" },
+      "show_all_time_material_posts" => { "type" => "boolean", "value" => "1" }
+    })
+  end
+  def self.time_material_settings
+    self.get_settings({
+      "delegate_time_materials" => { "type" => "boolean", "value" => true },
+      "limit_time_to_quarters" => { "type" => "boolean", "value" => true },
+      "default_time_material_date" => { "type" => "date", "value" => Time.current.to_date },
+      "default_time_material_state" => { "type" => "option", "value" =>  "draft", "options" => { "draft" => I18n.t("time_material.states.draft"), "done" => I18n.t("time_material.states.done") } },
+      "default_time_material_about" => { "type" => "text", "value" => I18n.t("time_material.default_assigned_about") },
+      "default_time_material_hour_time" => { "type" => "text", "value" => "0" },
+      "default_time_material_minute_time" => { "type" => "text", "value" => "15" },
+      "default_time_material_rate" => { "type" => "boolean", "value" => "750,75" },
+      "default_time_material_over_time" => { "type" => "boolean", "value" => true },
+      "allow_comments_on_time_material" => { "type" => "boolean", "value" => true },
+      "validate_time_material_done" => { "type" => "boolean", "value" => true }
+    })
+  end
+  def self.customer_settings
+    self.get_settings({
+      "delegate_time_materials" => { "type" => "boolean", "value" => true },
+      "run" => { "type" => "boolean", "value" => true },
+      "limit_time_to_quarters" => { "type" => "boolean", "value" => true },
+      "default_time_material_date" => { "type" => "date", "value" => Time.current.to_date },
+      "default_time_material_state" => { "type" => "option", "value" =>  "draft", "options" => { "draft" => I18n.t("time_material.states.draft"), "done" => I18n.t("time_material.states.done") } },
+      "default_time_material_about" => { "type" => "text", "value" => I18n.t("time_material.default_assigned_about") },
+      "default_time_material_hour_time" => { "type" => "text", "value" => "0" },
+      "default_time_material_minute_time" => { "type" => "text", "value" => "15" },
+      "default_time_material_rate" => { "type" => "boolean", "value" => "750,75" },
+      "default_time_material_over_time" => { "type" => "boolean", "value" => true },
+      "allow_create_time_material" => { "type" => "boolean", "value" => true },
+      "allow_create_product" => { "type" => "boolean", "value" => true },
+      "allow_create_customer" => { "type" => "boolean", "value" => true },
+      "allow_create_project" => { "type" => "boolean", "value" => true },
+      "allow_comments_on_time_material" => { "type" => "boolean", "value" => true },
+      "import_customers_only" => { "type" => "boolean", "value" => true },
+      "sync_with_erp" => { "type" => "boolean", "value" => true },
+      "validate_time_material_done" => { "type" => "boolean", "value" => true },
+      "show_all_time_material_posts" => { "type" => "boolean", "value" => true }
+    })
+  end
+  def self.project_settings
+    self.get_settings({
+      "allow_create_project" => { "type" => "boolean", "value" => true }
+    })
+  end
+  def self.product_settings
+    self.get_settings({
+      "allow_create_product" => { "type" => "boolean", "value" => true }
+    })
+  end
+  def self.team_settings
+  end
+  def self.user_settings
+    self.get_settings({
+      "delegate_time_materials" => { "type" => "boolean", "value" => true },
+      "limit_time_to_quarters" => { "type" => "boolean", "value" => true },
+      "default_time_material_date" => { "type" => "date", "value" => Time.current.to_date },
+      "default_time_material_state" => { "type" => "option", "value" =>  "draft", "options" => { "draft" => I18n.t("time_material.states.draft"), "done" => I18n.t("time_material.states.done") } },
+      "default_time_material_about" => { "type" => "text", "value" => I18n.t("time_material.default_assigned_about") },
+      "default_time_material_hour_time" => { "type" => "text", "value" => "0" },
+      "default_time_material_minute_time" => { "type" => "text", "value" => "15" },
+      "default_time_material_rate" => { "type" => "boolean", "value" => "750,75" },
+      "default_time_material_over_time" => { "type" => "boolean", "value" => true },
+      "allow_create_time_material" => { "type" => "boolean", "value" => true },
+      "allow_create_product" => { "type" => "boolean", "value" => true },
+      "allow_create_customer" => { "type" => "boolean", "value" => true },
+      "allow_create_project" => { "type" => "boolean", "value" => true },
+      "allow_comments_on_time_material" => { "type" => "boolean", "value" => true },
+      "show_all_time_material_posts" => { "type" => "boolean", "value" => true }
+    })
+  end
+  def self.erp_integration_settings
+    self.get_settings({
+      "import_customers_only" => { "type" => "boolean", "value" => true },
+      "sync_with_erp" => { "type" => "boolean", "value" => true }
+    })
+  end
+  def self.permissions_settings
+    self.get_settings({
+      "validate_time_material_done" => { "type" => "boolean", "value" => true },
+      "show_all_time_material_posts" => { "type" => "boolean", "value" => true }
+    })
   end
 end

@@ -1,11 +1,20 @@
 <%= turbo_frame_tag "#{Current.user.id}_list_header" do %>
   <!-- Page Header -->
-  <div data-controller="header" class="border-b border-slate-100 mt-8 pb-5">
+  <% 
+    if divider
+      css = "border-b border-slate-100 mt-8 pb-5"
+      title_css = "text-base font-semibold leading-6 pl-6 text-gray-900"
+    else
+      css = "mt-8 pb-5 mr-6"
+      title_css = "text-lg font-semibold leading-6 pl-8 text-gray-900"
+    end
+  %>
+  <div data-controller="header" class="<%= css %>">
     <div class="flex items-center sm:justify-between">
       <div class="sm:w-0 flex-1">
         <input name="batch[all]" type="hidden" value="0" autocomplete="off">
         <input class="hidden batch mort-form-checkbox ml-2" type="checkbox" value="1" checked="checked" name="batch[all]" id="batch_all">
-        <span id="message-heading" data-action="click->list#reload" class="cursor-pointer text-base font-semibold leading-6 pl-6 text-gray-900"><%= t("#{ resource_class.table_name}.list.title") %></span>
+        <span id="message-heading" data-action="click->list#reload" class="cursor-pointer <%= title_css %>"><%= t("#{ resource_class.table_name}.list.title") %></span>
         <p class=" mt-1 truncate pl-2 text-sm text-gray-500">
           <% case @filter_form %>
           <% when "background_jobs" %>
@@ -49,6 +58,7 @@
           <%= link_to( show_background_job_toggle_label, toggle_background_jobs_url, data: { turbo_stream: true}, class: "mort-btn-primary", role: "menuitem", tabindex: "-1", id: "user-menu-item-0")  %>
         <% end %>
         <% case params[:controller]
+           when "settings";
            when "calls"; %><%= link_to("New Call", new_call_path, data: { turbo_stream: true}, class: "mort-btn-primary", role: "menuitem", tabindex: "-1", id: "user-menu-item-0")  %>
         <% when "users"; %><%= link_to( t("profile.invite_new_user"), users_invitations_new_url, data: { turbo_stream: false}, class: "mort-btn-primary mr-2", role: "menuitem", tabindex: "-1", id: "user-menu-item-0") unless Current.user.user?  %>
         <% else; %>

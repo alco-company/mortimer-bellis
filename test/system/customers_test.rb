@@ -3,9 +3,12 @@ require "application_system_test_case"
 class CustomersTest < ApplicationSystemTestCase
   setup do
     @customer = customers(:one)
+    @user = users(:one)
+    login_as @user
   end
 
   test "visiting the index" do
+    debugger
     visit customers_url
     assert_selector "h1", text: "Customers"
   end

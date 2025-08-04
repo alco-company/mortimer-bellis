@@ -2,6 +2,50 @@
 
 ## CHANGELOG
 
+### 20/6/2025
+
+- got a breakthrough on boolean and text settings
+- fix bug on filters
+- now the select was a walk in the park (almost)
+
+### 17/6/2025
+
+- settings basic navigation
+- debug and dev choices reestablished (dev using puma-dev -d test = mortimer.test)
+- fail on run_test.rake
+
+### 16/6/2025
+
+- WIP: work on settings
+- setup puma-dev to handle https://mortimer.dev
+- WIP: invoiceable
+
+### 10/6/2025
+
+- hide block tab for now
+- first render of {{}}
+
+### 6/6/2025
+
+- pick individual block
+
+### 4/6/2025
+
+- show editor as tabs
+- don't create blocks while sorting
+- nested blocks editing
+- invalid drop prevention (server side only)
+
+### 3/6/2025
+
+- drag/drop & sort blocks
+- debounce sort
+- deserializer for HTML -> blocks
+
+### 2/6/2025
+
+- remember to require 'posthog'
+
 ### 27/5/2025
 
 - build html_serializer for documents and blocks

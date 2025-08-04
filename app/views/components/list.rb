@@ -7,7 +7,7 @@ class List < ApplicationComponent
 
   attr_reader :records, :pagy, :order_by, :group_by, :initial, :user, :batch_form
 
-  def initialize(records:, pagy: nil, initial: false, replace: false, filter: nil, params: {}, batch_form: nil, user: User.new, format: :html, group_by: nil, order_by: nil, &block)
+  def initialize(records:, pagy: nil, initial: false, replace: false, filter: nil, params: {}, batch_form: nil, divider: true, user: User.new, format: :html, group_by: nil, order_by: nil, &block)
     @order_by = order_by
     @group_by = group_by
     @records = records
@@ -19,6 +19,7 @@ class List < ApplicationComponent
     @params = params
     @user = user
     @batch_form = batch_form
+    @divider = divider
     @format = format
   end
 
@@ -96,7 +97,7 @@ class List < ApplicationComponent
   end
 
   def replace_list_header
-    turbo_stream.replace("#{user.id}_list_header", partial: "application/header", locals: { batch_form: batch_form })
+    turbo_stream.replace("#{user.id}_list_header", partial: "application/header", locals: { batch_form: batch_form, divider: @divider })
   end
 
   def next_pagy_page

@@ -1,70 +1,125 @@
 class Editor::BlocksController < ApplicationController
-  before_action :set_editor_block, only: %i[ show edit update destroy ]
-
-  # GET /editor/blocks or /editor/blocks.json
-  def index
-    @editor_blocks = Editor::Block.all
-  end
-
-  # GET /editor/blocks/1 or /editor/blocks/1.json
-  def show
-  end
-
-  # GET /editor/blocks/new
-  def new
-    @editor_block = Editor::Block.new
-  end
-
-  # GET /editor/blocks/1/edit
-  def edit
-  end
-
-  # POST /editor/blocks or /editor/blocks.json
   def create
-    @editor_block = Editor::Block.new(editor_block_params)
+    @document = Editor::Document.find(params[:document_id])
+    parent = params[:parent_id].present? ? Editor::Block.find(params[:parent_id]) : nil
+    block_type = params[:type]
+
+    unless Editor::BlockNesting.allowed_child?(parent&.type&.to_sym, block_type)
+      return head :unprocessable_entity
+    end
+
+    @block = @document.blocks.create!(
+      type: block_type,
+      text: params[:text] || "#{block_type} #{@document.blocks.count + 1}",
+      parent_id: parent&.id,
+      position: next_position(parent&.id)
+    )
 
     respond_to do |format|
-      if @editor_block.save
-        format.html { redirect_to @editor_block, notice: "Block was successfully created." }
-        format.json { render :show, status: :created, location: @editor_block }
-      else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @editor_block.errors, status: :unprocessable_entity }
-      end
+      format.turbo_stream
+      format.html { redirect_to editor_document_path(@document) }
     end
   end
 
-  # PATCH/PUT /editor/blocks/1 or /editor/blocks/1.json
-  def update
+  def move
+    @block = Editor::Block.find(params[:id])
+    @document = @block.document
+    new_parent_id = params[:parent_id].presence
+
+    @block.update!(parent_id: new_parent_id, position: next_position(new_parent_id))
+
     respond_to do |format|
-      if @editor_block.update(editor_block_params)
-        format.html { redirect_to @editor_block, notice: "Block was successfully updated." }
-        format.json { render :show, status: :ok, location: @editor_block }
-      else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @editor_block.errors, status: :unprocessable_entity }
-      end
+      format.turbo_stream
+      format.json { head :ok }
     end
   end
 
-  # DELETE /editor/blocks/1 or /editor/blocks/1.json
-  def destroy
-    @editor_block.destroy!
+  def reorder
+    blocks = params[:ids].each_with_index.map do |id, index|
+      block = Editor::Block.find(id)
+      block.update!(position: index + 1)
+      block
+    end
+
+    @document = blocks.first.document if blocks.any?
 
     respond_to do |format|
-      format.html { redirect_to editor_blocks_path, status: :see_other, notice: "Block was successfully destroyed." }
-      format.json { head :no_content }
+      format.turbo_stream
+      format.json { head :ok }
     end
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_editor_block
-      @editor_block = Editor::Block.find(params.expect(:id))
+    def next_position(parent_id)
+      scope = parent_id.present? ? Editor::Block.where(parent_id:) : @document.blocks.where(parent_id: nil)
+      scope.maximum(:position).to_i + 1
     end
+  # before_action :set_editor_block, only: %i[ show edit update destroy ]
 
-    # Only allow a list of trusted parameters through.
-    def editor_block_params
-      params.expect(editor_block: [ :document_id, :parent_id, :type, :data, :position ])
-    end
+  # # GET /editor/blocks or /editor/blocks.json
+  # def index
+  #   @editor_blocks = Editor::Block.all
+  # end
+
+  # # GET /editor/blocks/1 or /editor/blocks/1.json
+  # def show
+  # end
+
+  # # GET /editor/blocks/new
+  # def new
+  #   @editor_block = Editor::Block.new
+  # end
+
+  # # GET /editor/blocks/1/edit
+  # def edit
+  # end
+
+  # # POST /editor/blocks or /editor/blocks.json
+  # def create
+  #   @editor_block = Editor::Block.new(editor_block_params)
+
+  #   respond_to do |format|
+  #     if @editor_block.save
+  #       format.html { redirect_to @editor_block, notice: "Block was successfully created." }
+  #       format.json { render :show, status: :created, location: @editor_block }
+  #     else
+  #       format.html { render :new, status: :unprocessable_entity }
+  #       format.json { render json: @editor_block.errors, status: :unprocessable_entity }
+  #     end
+  #   end
+  # end
+
+  # # PATCH/PUT /editor/blocks/1 or /editor/blocks/1.json
+  # def update
+  #   respond_to do |format|
+  #     if @editor_block.update(editor_block_params)
+  #       format.html { redirect_to @editor_block, notice: "Block was successfully updated." }
+  #       format.json { render :show, status: :ok, location: @editor_block }
+  #     else
+  #       format.html { render :edit, status: :unprocessable_entity }
+  #       format.json { render json: @editor_block.errors, status: :unprocessable_entity }
+  #     end
+  #   end
+  # end
+
+  # # DELETE /editor/blocks/1 or /editor/blocks/1.json
+  # def destroy
+  #   @editor_block.destroy!
+
+  #   respond_to do |format|
+  #     format.html { redirect_to editor_blocks_path, status: :see_other, notice: "Block was successfully destroyed." }
+  #     format.json { head :no_content }
+  #   end
+  # end
+
+  # private
+  #   # Use callbacks to share common setup or constraints between actions.
+  #   def set_editor_block
+  #     @editor_block = Editor::Block.find(params.expect(:id))
+  #   end
+
+  #   # Only allow a list of trusted parameters through.
+  #   def editor_block_params
+  #     params.expect(editor_block: [ :document_id, :parent_id, :type, :data, :position ])
+  #   end
 end

@@ -11,6 +11,8 @@ class LogoComponent < ApplicationComponent
     @logo = attribs[:logo].present? ? attribs[:logo] : "mortimer"
     @root = attribs[:root] || nil
     @div_css = attribs[:div_css] || "relative left-0 pl-2 flex-shrink-0 py-5 lg:static"
+    @img_css = attribs[:img_css] || "h-8 w-auto"
+    @just_logo = attribs[:just_logo] || false
   end
 
   def view_template
@@ -22,6 +24,7 @@ class LogoComponent < ApplicationComponent
     unless @logo
       div { }
     else
+      return draw_logo if @just_logo
       div(class: @div_css) do
         a(href: @root || helpers.root_path) do
           span(class: "sr-only") { "Mortimer User App" }
@@ -35,6 +38,14 @@ class LogoComponent < ApplicationComponent
     end
   end
 
+  def draw_logo
+    if @logo == "mortimer"
+      mortimer_svg
+    else
+      image_tag @logo, class: @img_css
+    end
+  end
+
   def show_version
     mc = superadmin ? "text-pink-400" : "text-mortimer"
     div(class: "absolute top-[5px] #{mc} text-xs font-thin") { ENV["MORTIMER_VERSION"] }
@@ -43,7 +54,7 @@ class LogoComponent < ApplicationComponent
   def mortimer_svg
     mc = superadmin ? "text-pink-400" : "text-mortimer"
     svg(
-      class: "h-8 w-auto #{mc}",
+      class: "#{@img_css} #{mc}",
       xmlns: "http://www.w3.org/2000/svg",
       width: "16",
       height: "16",
@@ -61,7 +72,7 @@ class LogoComponent < ApplicationComponent
 
   def logo_svg
     svg(
-      class: "h-8 w-auto text-lime-400",
+      class: @img_css,
       data_slot: "icon",
       fill: "none",
       stroke_width: "1.5",

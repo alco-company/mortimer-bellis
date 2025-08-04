@@ -102,7 +102,7 @@ class ApplicationRecord < ActiveRecord::Base
   #   false
   # end
 
-  # # implement this method on model that has one/more photos
+  # # implement this method on model that has a mugshot
   # def mugshot
   #   raise "implement this method on the model if mugshot exist!" if has_mugshot?
   # end
@@ -162,6 +162,10 @@ class ApplicationRecord < ActiveRecord::Base
     }
   end
 
+  # to_html will render the resource as HTML
+  def to_html
+    raise "implement this method on the model in order to render HTML!"
+  end
 
   def say(msg, level = :info)
     Rails.logger.send(level, "-----------------")

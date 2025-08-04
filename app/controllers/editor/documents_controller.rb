@@ -21,29 +21,28 @@ class Editor::DocumentsController < ApplicationController
 
   # POST /editor/documents or /editor/documents.json
   def create
-    @editor_document = Editor::Document.new(editor_document_params)
+    @document = Editor::Document.new(editor_document_params)
 
     respond_to do |format|
-      if @editor_document.save
-        format.html { redirect_to @editor_document, notice: "Document was successfully created." }
-        format.json { render :show, status: :created, location: @editor_document }
+      if @document.save
+        format.html { redirect_to @document, notice: "Document was successfully created." }
+        format.json { render :show, status: :created, location: @document }
       else
         format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @editor_document.errors, status: :unprocessable_entity }
+        format.json { render json: @document.errors, status: :unprocessable_entity }
       end
     end
   end
 
   # PATCH/PUT /editor/documents/1 or /editor/documents/1.json
   def update
+    @document = Editor::Document.find(params[:id])
+    html = params[:html] || "<p></p>"
+    Editor::HtmlBlockDeserializer.new(html: html, document: @document).to_block
+
     respond_to do |format|
-      if @editor_document.update(editor_document_params)
-        format.html { redirect_to @editor_document, notice: "Document was successfully updated." }
-        format.json { render :show, status: :ok, location: @editor_document }
-      else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @editor_document.errors, status: :unprocessable_entity }
-      end
+      format.turbo_stream
+      format.html { redirect_to editor_document_path(@document), notice: "Updated from HTML." }
     end
   end
 

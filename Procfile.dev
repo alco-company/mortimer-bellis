@@ -1,5 +1,5 @@
 # web: bin/rails server -u puma -b 'ssl://0.0.0.0:3000?key=config/box.mortimer_3-key.pem&cert=config/box.mortimer_3.pem&verify_mode=peer&ca=config/box.mortimer_3.pem'
-web: bin/rails server -u puma -b 'ssl://0.0.0.0:3000?key=config/certs/localhost-key.pem&cert=config/certs/localhost.pem&verify_mode=none&ca=config/certs/localhost.pem'
+# web: bin/rails server -u puma -b 'ssl://0.0.0.0:3000?key=config/certs/localhost-key.pem&cert=config/certs/localhost.pem&verify_mode=none&ca=config/certs/localhost.pem'
 css: bin/rails tailwindcss:watch
 # job: bin/jobs
 #solid: bundle exec rake solid_queue:start #-- Puma should handle this if I'm not mistaken

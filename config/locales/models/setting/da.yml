@@ -65,6 +65,28 @@ da:
       run_background_jobs: Kør baggrundsopgaver
       run: Kør baggrundsopgaver
 
+    descriptions:
+      delegate_time_materials: Tillad at brugere kan delegere tid og materialer til andre brugere
+      default_time_material_state: Standard status for ny tid og materialer post
+      default_time_material_about: Standard tekst for ny tid og materialer post
+      default_time_material_hour_time: Standard timer for ny tid og materialer post
+      default_time_material_minute_time: Standard minutter for ny tid og materialer post
+      default_time_material_rate: Standard pris for ny tid og materialer post
+      default_time_material_over_time: Standard overtid for ny tid og materialer post
+      default_time_material_date: Standard arbejdsdato for ny tid og materialer post
+      allow_create_time_material: Tillad bruger at oprette tid og materialer poster
+      allow_create_product: Tillad bruger at oprette produkter på tid og materialer poster
+      allow_create_customer: Tillad bruger at oprette kunder på tid og materialer poster
+      allow_create_project: Tillad bruger at oprette projekter på tid og materialer poster
+      allow_comments_on_time_material: Tillad kommentarer på tid og materialer poster
+      import_customers_only: Tillad kun import af kunder, ikke projekter eller produkter
+      sync_with_erp: Synkronisér med ERP systemet, hvis det er konfigureret
+      validate_time_material_done: Valider at alle felter er udfyldt før en t/m post kan markeres som 'færdig'
+      limit_time_to_quarters: Begræns tidsforbrug til kvart timers intervaller (15 minutter)
+      show_all_time_material_posts: Vis alle brugeres t/m poster i oversigten, ikke kun egne
+      run_background_jobs: Kør baggrundsopgaver i baggrunden, hvis aktiveret
+      run: Kør baggrundsopgaver, hvis aktiveret
+
     tables:
       background_jobs: Baggrundsopgaver
       customers: Kunder

@@ -47,7 +47,7 @@ class Contextmenu < Phlex::HTML
   end
 
   def more_button_list
-    a_button css: "flex items-center rounded-md ring-1 ring-gray-100 px-2 py-1 text-gray-400 hover:text-gray-600 focus:outline-hidden focus:ring-1 focus:ring-sky-500",
+    a_button css: "flex items-center rounded-md ring-0 sm:ring-1 ring-gray-100 pl-3 pr-1 py-1 mr-1 text-gray-400 hover:text-gray-600 focus:outline-hidden focus:ring-1 focus:ring-sky-500",
       label: I18n.t("more"),
       visible_label: true
   end
@@ -82,13 +82,15 @@ class Contextmenu < Phlex::HTML
       tabindex: "-1"
     ) do
       #  Active: "bg-gray-100 text-gray-900", Not Active: "text-gray-700"
-      link2 url: helpers.filtering_url(), data: { action: "click->contextmenu#hide", turbo_frame: "form" }, label: I18n.t("filters.title"), icon: "filter"
-      a_button action: "click->list#toggleBatch click->contextmenu#hide", css: "flex justify-between w-full px-4 py-2 text-sm text-gray-700 hover:text-gray-900" do
-        render_icon "select"
-        span { I18n.t(".batch") }
+      unless resource_class.to_s == "Setting"
+        link2(url: helpers.filtering_url(), data: { action: "click->contextmenu#hide", turbo_frame: "form" }, label: I18n.t("filters.title"), icon: "filter")
+        a_button action: "click->list#toggleBatch click->contextmenu#hide", css: "flex justify-between w-full px-4 py-2 text-sm text-gray-700 hover:text-gray-900" do
+          render_icon "select"
+          span { I18n.t(".batch") }
+        end
       end
 
-      resource_class.any? ?
+      resource_class.any? && resource_class.to_s != "Setting" ?
         link2(url: helpers.new_modal_url(modal_form: "delete",
           all: true,
           resource_class: resource_class.to_s.underscore,
@@ -97,7 +99,10 @@ class Contextmenu < Phlex::HTML
           action: "click->contextmenu#hide",
           icon: "trash",
           label: I18n.t(".delete_all")) :
-        div(class: "block px-3 py-1 text-sm leading-6 text-gray-400") { I18n.t(".delete_all") }
+        div(class: "flex justify-between px-4 py-2 text-sm text-gray-700 hover:text-gray-900") do
+          render_icon "trash"
+          div(class: "text-nowrap text-gray-400 pl-2") { I18n.t(".delete_all") }
+        end if resource_class.to_s != "Setting"
       hr
       # link2(url: helpers.new_modal_url(modal_form: "import", resource_class: resource_class.to_s.underscore, modal_next_step: "preview"),
       #   action: "click->contextmenu#hide",

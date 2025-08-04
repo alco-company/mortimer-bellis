@@ -247,48 +247,56 @@ module FieldSpecializations
     end
     def view_template(&)
       field.value = attributes[:value] if attributes[:value]
-      data_attr = attributes[:data] || {}
-      div(class: attributes[:class], data: { controller: "boolean" }) do
-        input(name: dom.name, data: data_attr.merge({ boolean_target: "input" }), type: :hidden, value: setValue)
-        button(
-          type: "button",
-          data: { action: (attributes[:disabled] ? "" : "click->boolean#toggle"), boolean_target: "button" },
-          class:
-            "group relative inline-flex h-6 w-10 flex-shrink-0 cursor-pointer items-center justify-center rounded-full focus:outline-hidden focus:ring-1 focus:ring-sky-200 focus:ring-offset-1",
-          role: "switch",
-          aria_checked: "false"
-        ) do
-          span(class: "sr-only") { "Use setting" }
-          span(
-            aria_hidden: "true",
-            class: "pointer-events-none absolute h-full w-full rounded-md bg-white"
-          )
-          comment { %(Enabled: "bg-sky-600", Not Enabled: "bg-gray-200") }
-          span(
-            aria_hidden: "true",
-            data: { boolean_target: "indicator" },
-            class:
-              "#{setIndicator} pointer-events-none absolute mx-auto h-4 w-9 rounded-full transition-colors duration-200 ease-in-out"
-          )
-          comment { %(Enabled: "translate-x-5", Not Enabled: "translate-x-0") }
-          span(
-            aria_hidden: "true",
-            data: { boolean_target: "handle" },
-            class:
-              "#{setHandle} pointer-events-none absolute left-0 inline-block h-5 w-5 transform rounded-full border border-gray-200 bg-white shadow-sm ring-0 transition-transform duration-200 ease-in-out"
-          )
-        end
-      end
+      render ToggleButton.new(resource: field.parent.object,
+        label: "toggle",
+        value: field.value,
+        url: nil,
+        action: "click->boolean#toggle",
+        attributes: attributes,
+        input_name: dom.name
+      )
+
+      # div(class: attributes[:class], data: { controller: "boolean" }) do
+      #   input(name: dom.name, data: data_attr.merge({ boolean_target: "input" }), type: :hidden, value: setValue)
+      #   button(
+      #     type: "button",
+      #     data: { action: (attributes[:disabled] ? "" : "click->boolean#toggle"), boolean_target: "button" },
+      #     class:
+      #       "group relative inline-flex h-6 w-10 flex-shrink-0 cursor-pointer items-center justify-center rounded-full focus:outline-hidden focus:ring-1 focus:ring-sky-200 focus:ring-offset-1",
+      #     role: "switch",
+      #     aria_checked: "false"
+      #   ) do
+      #     span(class: "sr-only") { "Use setting" }
+      #     span(
+      #       aria_hidden: "true",
+      #       class: "pointer-events-none absolute h-full w-full rounded-md bg-white"
+      #     )
+      #     comment { %(Enabled: "bg-sky-600", Not Enabled: "bg-gray-200") }
+      #     span(
+      #       aria_hidden: "true",
+      #       data: { boolean_target: "indicator" },
+      #       class:
+      #         "#{setIndicator} pointer-events-none absolute mx-auto h-4 w-9 rounded-full transition-colors duration-200 ease-in-out"
+      #     )
+      #     comment { %(Enabled: "translate-x-5", Not Enabled: "translate-x-0") }
+      #     span(
+      #       aria_hidden: "true",
+      #       data: { boolean_target: "handle" },
+      #       class:
+      #         "#{setHandle} pointer-events-none absolute left-0 inline-block h-5 w-5 transform rounded-full border border-gray-200 bg-white shadow-sm ring-0 transition-transform duration-200 ease-in-out"
+      #     )
+      #   end
+      # end
     end
-    def setValue
-      (field.value == true || field.value.to_s == "1") ? "1" : "0"
-    end
-    def setIndicator
-      (field.value == true || field.value.to_s == "1") ? "bg-sky-600" : "bg-gray-200"
-    end
-    def setHandle
-      (field.value == true || field.value.to_s == "1") ? "translate-x-5" : "translate-x-0"
-    end
+    # def setValue
+    #   (field.value == true || field.value.to_s == "1") ? "1" : "0"
+    # end
+    # def setIndicator
+    #   (field.value == true || field.value.to_s == "1") ? "bg-sky-600" : "bg-gray-200"
+    # end
+    # def setHandle
+    #   (field.value == true || field.value.to_s == "1") ? "translate-x-5" : "translate-x-0"
+    # end
   end
 
   #
