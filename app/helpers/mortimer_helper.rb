@@ -1,8 +1,8 @@
 module MortimerHelper
   def mortimer_version
     content_tag :h3, class: "text-xs text-slate-200" do
-      [ user_id, m_label, m_version ].join.html_safe
-    end
+      safe_join([ user_id, m_label, m_version ])
+    end.html_safe
   end
 
   def m_label

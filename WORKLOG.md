@@ -2,6 +2,12 @@
 
 ## CHANGELOG
 
+### 4/8/2025
+
+- forced upgrade of Ruby to 3.3.3
+- fixing issues 
+- undefined method api_key
+
 ### 20/6/2025
 
 - got a breakthrough on boolean and text settings
