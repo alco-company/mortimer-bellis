@@ -16,6 +16,13 @@ class ApplicationComponent < Phlex::HTML
     Current.user&.superadmin?
   end
 
+  def unsafe_raw(html)
+    Phlex::HTML::SafeString.new(html)
+  rescue StandardError => e
+    Rails.logger.error "Error in unsafe_raw: #{e.message}"
+    Rails.logger.error e.backtrace.join("\n")
+  end
+
   def say(msg, level = :info)
     Rails.logger.send(level, "-----------------")
     Rails.logger.send(level, msg)

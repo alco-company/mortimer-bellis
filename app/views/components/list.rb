@@ -78,14 +78,16 @@ class List < ApplicationComponent
   def list_records
     if order_by && records.any?
       fld = records.first.send(order_by)
-      render partial: "date", locals: { field: fld }
+      list_column(fld)
+      # render partial: "application/date", locals: { field: fld }
+      div
     end
 
     count = records.count
     records.each do |record|
       if record.send(order_by) != fld
         fld = (record.send(order_by))
-        render partial: "date", locals: { field: fld }
+        list_column(fld)
       end if order_by
       next_pagy_page if (count -= 1) < 2
       render "ListItems::#{resource_class}".classify.constantize.new(resource: record, params: params, user: user)
@@ -103,6 +105,25 @@ class List < ApplicationComponent
   def next_pagy_page
     if pagy.next
       turbo_frame_tag "pagination", src: resources_url(page: @pagy.next, format: :turbo_stream), loading: "lazy"
+    end
+  end
+
+  def list_column(field)
+    div(class: "flex justify-between gap-x-6 mb-1 px-2 py-1") do
+      div(
+        class: "w-full pt-10 border-b border-gray-100 text-xs font-semibold"
+      ) do
+        whitespace
+        if field.is_a? Date or field.is_a? Time or field.is_a? DateTime
+          whitespace
+          plain I18n.l field, format: :day_summary
+          whitespace
+        else
+          whitespace
+          plain field
+          whitespace
+        end
+      end
     end
   end
 end
