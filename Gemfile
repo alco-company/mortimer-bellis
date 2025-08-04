@@ -108,7 +108,7 @@ gem "rrule", "~> 0.6.0"
 
 gem "httpx", "~> 1.4"
 
-gem "mission_control-jobs", "~> 0.6.0"
+gem "mission_control-jobs", "~> 1.1.0"
 
 gem "noticed", "~> 2.8"
 
