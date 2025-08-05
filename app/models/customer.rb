@@ -132,10 +132,10 @@ class Customer  < ApplicationRecord
   def select_data_attributes
     {
       lookup_target: "item",
-      lookup_customer_id: id,
+      lookup_customer_id: id.to_s,
       lookup_customer_name: name,
-      lookup_customer_hourly_rate: hourly_rate,
-      value: id,
+      lookup_customer_hourly_rate: hourly_rate.to_s,
+      value: id.to_s,
       display_value: name,
       action: "keydown->lookup#optionKeydown click->lookup#selectOption"
     }

@@ -64,11 +64,11 @@ class Product < ApplicationRecord
   def select_data_attributes
     {
       lookup_target: "item",
-      lookup_quantity_param: quantity,
-      lookup_unit_price_param: base_amount_value,
-      lookup_unit_param: unit,
-      value: id,
-      display_value: name,
+      lookup_quantity_param: quantity.to_s,
+      lookup_unit_price_param: base_amount_value.to_s,
+      lookup_unit_param: unit.to_s,
+      value: id.to_s,
+      display_value: name.to_s,
       action: "keydown->lookup#optionKeydown click->lookup#selectOption"
     }
   end

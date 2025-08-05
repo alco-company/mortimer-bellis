@@ -156,7 +156,7 @@ class ApplicationRecord < ActiveRecord::Base
   def select_data_attributes
     {
       lookup_target: "item",
-      value: id,
+      value: id.to_s,
       display_value: name,
       action: "keydown->lookup#optionKeydown click->lookup#selectOption"
     }

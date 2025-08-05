@@ -84,11 +84,11 @@ class Project < ApplicationRecord
   def select_data_attributes
     {
       lookup_target: "item",
-      lookup_customer_id: customer.id,
-      lookup_customer_name: customer.name,
-      lookup_project_hourly_rate: hourly_rate_unset? ? customer.hourly_rate : hourly_rate,
-      value: id,
-      display_value: name,
+      lookup_customer_id: customer&.id&.to_s || "0",
+      lookup_customer_name: customer&.name || "",
+      lookup_project_hourly_rate: hourly_rate_unset? ? customer.hourly_rate.to_s : hourly_rate.to_s,
+      value: id.to_s,
+      display_value: name.to_s,
       action: "keydown->lookup#optionKeydown click->lookup#selectOption"
     }
   end
