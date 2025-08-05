@@ -427,10 +427,10 @@ GEM
     reline (0.6.2)
       io-console (~> 0.5)
     rotp (6.3.0)
-    rqrcode (2.2.0)
+    rqrcode (3.1.0)
       chunky_png (~> 1.0)
-      rqrcode_core (~> 1.0)
-    rqrcode_core (1.2.0)
+      rqrcode_core (~> 2.0)
+    rqrcode_core (2.0.0)
     rrule (0.6.0)
       activesupport (>= 2.3)
     rubocop (1.79.1)
@@ -599,7 +599,7 @@ DEPENDENCIES
   puma (>= 5.0)
   rails!
   redcarpet (~> 3.6)
-  rqrcode (~> 2.2)
+  rqrcode (~> 3.1)
   rrule (~> 0.6.0)
   rubocop-rails-omakase
   solid_cable!
