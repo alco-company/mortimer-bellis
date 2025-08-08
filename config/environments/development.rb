@@ -4,7 +4,7 @@ Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
   config.force_ssl = true
-  config.hosts << "mortimer.test"
+  config.hosts << "localhost:3000"
 
   # In the development environment your application's code is reloaded any time
   # it changes. This slows down response time but is perfect for development
@@ -48,7 +48,7 @@ Rails.application.configure do
 
   config.action_mailer.perform_caching = false
 
-  config.action_mailer.default_url_options = { protocol: "https", host: "mortimer.test" }
+  config.action_mailer.default_url_options = { protocol: "https", host: "localhost" }
 
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
@@ -74,11 +74,11 @@ Rails.application.configure do
 
   config.active_job.verbose_enqueue_logs = true
 
-  config.action_cable.url = "ws://mortimer.test/cable"
+  config.action_cable.url = "ws://localhost:3000/cable"
   config.action_cable.allowed_request_origins = [ %r{http://*}, %r{https://*} ]
   # config.hotwire_livereload.listen_paths << Rails.root.join("app/assets/builds")
 
-  config.action_controller.default_url_options = { protocol: "https", host: "mortimer.test" }
+  config.action_controller.default_url_options = { protocol: "https", host: "localhost" }
 
 
   # Raises error for missing translations.

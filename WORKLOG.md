@@ -2,6 +2,14 @@
 
 ## CHANGELOG
 
+### 8/8/2025
+
+- use localhost on development b/c puma-dev is hard to debug
+
+### 5/8/2025
+
+- bug on select_option
+
 ### 4/8/2025
 
 - forced upgrade of Ruby to 3.3.3
