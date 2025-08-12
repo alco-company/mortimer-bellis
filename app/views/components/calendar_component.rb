@@ -36,22 +36,22 @@ class CalendarComponent < ApplicationComponent
     when "day"
       div do
         h1(class: "text-base font-semibold leading-6 text-gray-900") do
-          time(datetime: I18n.l(date, format: :short_iso), class: "sm:hidden") { I18n.l(date, format: :short) }
-          time(datetime: I18n.l(date, format: :short_iso), class: "hidden sm:inline") do
-            plain "#{I18n.l(date, format: :short)}"
+          time(datetime: l(date, format: :short_iso), class: "sm:hidden") { l(date, format: :short) }
+          time(datetime: l(date, format: :short_iso), class: "hidden sm:inline") do
+            plain "#{l(date, format: :short)}"
           end
         end
-        p(class: "mt-1 text-sm text-gray-500") { I18n.l(date, format: :day_name) }
+        p(class: "mt-1 text-sm text-gray-500") { l(date, format: :day_name) }
       end
 
     when "week"
       div do
         h1(class: "text-base font-semibold leading-6 text-gray-900") do
-          time(datetime: I18n.l(date, format: :short_iso), class: "sm:hidden") do
-            plain "%s %s" % [ I18n.t("calendar.week_labels.abbr"), I18n.l(date, format: :week_year) ]
+          time(datetime: l(date, format: :short_iso), class: "sm:hidden") do
+            plain "%s %s" % [ t("calendar.week_labels.abbr"), l(date, format: :week_year) ]
           end
-          time(datetime: I18n.l(date, format: :short_iso), class: "hidden sm:inline") do
-            plain "%s %s" % [ I18n.t("calendar.week_labels.full"), I18n.l(date, format: :week_year) ]
+          time(datetime: l(date, format: :short_iso), class: "hidden sm:inline") do
+            plain "%s %s" % [ t("calendar.week_labels.full"), l(date, format: :week_year) ]
           end
         end
         # p(class: "mt-1 text-sm text-gray-500") { "Saturday" }
@@ -59,12 +59,12 @@ class CalendarComponent < ApplicationComponent
 
     when "month"
       h1(class: "text-base font-semibold leading-6 text-gray-900") do
-        time(datetime: I18n.l(date, format: :short_iso)) { I18n.l(date, format: :month_name_year) }
+        time(datetime: l(date, format: :short_iso)) { l(date, format: :month_name_year) }
       end
 
     when "year"
       h1(class: "text-base font-semibold leading-6 text-gray-900") do
-        time(datetime: I18n.l(date, format: :short_iso)) { I18n.l(date, format: :year) }
+        time(datetime: l(date, format: :short_iso)) { l(date, format: :year) }
       end
 
     end
@@ -73,13 +73,13 @@ class CalendarComponent < ApplicationComponent
   def period_navigator
     pe_url, pe, ne, ne_url = case view
     when "day"
-      [ "#{url}?view=#{view}&date=#{date - 1.day}", I18n.t("calendar.navigation.previous_day"), I18n.t("calendar.navigation.next_day"), "#{url}?view=#{view}&date=#{date + 1.day}" ]
+      [ "#{url}?view=#{view}&date=#{date - 1.day}", t("calendar.navigation.previous_day"), t("calendar.navigation.next_day"), "#{url}?view=#{view}&date=#{date + 1.day}" ]
     when "week"
-      [ "#{url}?view=#{view}&date=#{date - 7.days}", I18n.t("calendar.navigation.previous_week"), I18n.t("calendar.navigation.next_week"), "#{url}?view=#{view}&date=#{date + 7.days}" ]
+      [ "#{url}?view=#{view}&date=#{date - 7.days}", t("calendar.navigation.previous_week"), t("calendar.navigation.next_week"), "#{url}?view=#{view}&date=#{date + 7.days}" ]
     when "month"
-      [ "#{url}?view=#{view}&date=#{date - 1.month}", I18n.t("calendar.navigation.previous_month"), I18n.t("calendar.navigation.next_month"), "#{url}?view=#{view}&date=#{date + 1.month}" ]
+      [ "#{url}?view=#{view}&date=#{date - 1.month}", t("calendar.navigation.previous_month"), t("calendar.navigation.next_month"), "#{url}?view=#{view}&date=#{date + 1.month}" ]
     when "year"
-      [ "#{url}?view=#{view}&date=#{date - 1.year}", I18n.t("calendar.navigation.previous_year"), I18n.t("calendar.navigation.next_year"), "#{url}?view=#{view}&date=#{date + 1.year}" ]
+      [ "#{url}?view=#{view}&date=#{date - 1.year}", t("calendar.navigation.previous_year"), t("calendar.navigation.next_year"), "#{url}?view=#{view}&date=#{date + 1.year}" ]
     end
     div(class: "relative flex items-center rounded-md bg-white shadow-xs md:items-stretch") do
       link_to(pe_url, class: "flex h-9 w-12 items-center justify-center rounded-l-md border-y border-l border-gray-300 pr-1 text-gray-400 hover:text-gray-500 focus:relative md:w-9 md:pr-0 md:hover:bg-gray-50") do
@@ -88,7 +88,7 @@ class CalendarComponent < ApplicationComponent
           s.path(fill_rule: "evenodd", d: "M12.79 5.23a.75.75 0 01-.02 1.06L8.832 10l3.938 3.71a.75.75 0 11-1.04 1.08l-4.5-4.25a.75.75 0 010-1.08l4.5-4.25a.75.75 0 011.06.02z", clip_rule: "evenodd")
         end
       end
-      link_to("#{url}?view=#{view}&date=#{Date.today}", class: "hidden border-y border-gray-300 px-3.5 pt-1.5 text-sm font-semibold text-gray-900 hover:bg-gray-50 focus:relative md:block") {  I18n.t("calendar.go_today")  }
+      link_to("#{url}?view=#{view}&date=#{Date.today}", class: "hidden border-y border-gray-300 px-3.5 pt-1.5 text-sm font-semibold text-gray-900 hover:bg-gray-50 focus:relative md:block") {  t("calendar.go_today")  }
       span(class: "relative -mx-px h-5 w-px bg-gray-300 md:hidden")
       link_to(ne_url, class: "flex h-9 w-12 items-center justify-center rounded-r-md border-y border-r border-gray-300 pl-1 text-gray-400 hover:text-gray-500 focus:relative md:w-9 md:pl-0 md:hover:bg-gray-50") do
         span(class: "sr-only") { ne }
@@ -101,10 +101,10 @@ class CalendarComponent < ApplicationComponent
 
   def desktop_view_picker
     lbl = case view
-    when "day"; I18n.t("calendar.day_view")
-    when "week"; I18n.t("calendar.week_view")
-    when "month"; I18n.t("calendar.month_view")
-    when "year"; I18n.t("calendar.year_view")
+    when "day"; t("calendar.day_view")
+    when "week"; t("calendar.week_view")
+    when "month"; t("calendar.month_view")
+    when "year"; t("calendar.year_view")
     end
     div(class: "hidden md:ml-4 md:flex md:items-center") do
       div(class: "relative") do
@@ -144,7 +144,7 @@ class CalendarComponent < ApplicationComponent
         class: "mort-btn-primary",
         role: "menuitem",
         tabindex: "-1") do
-        plain I18n.t("calendar.create_event")
+        plain t("calendar.create_event")
       end
     end
   end
@@ -179,7 +179,7 @@ class CalendarComponent < ApplicationComponent
             class: "block px-4 py-2 text-sm text-gray-700",
             role: "menuitem",
             tabindex: "-1") do
-            plain I18n.t("calendar.create_event")
+            plain t("calendar.create_event")
           end
           # %(Active: "bg-gray-100 text-gray-900", Not Active: "text-gray-700")
           # a(
@@ -188,7 +188,7 @@ class CalendarComponent < ApplicationComponent
           #   role: "menuitem",
           #   tabindex: "-1",
           #   id: "menu-0-item-0"
-          # ) { I18n.t("calendar.create_event") }
+          # ) { t("calendar.create_event") }
         end
         div(class: "py-1", role: "none") do
           link_to("#{url}?view=#{view}&date=#{Date.today}",
@@ -196,7 +196,7 @@ class CalendarComponent < ApplicationComponent
             role: "menuitem",
             tabindex: "-1",
             id: "menu-0-item-1") do
-              I18n.t("calendar.go_today")
+              t("calendar.go_today")
           end
         end
         views_list
@@ -213,28 +213,28 @@ class CalendarComponent < ApplicationComponent
         role: "menuitem",
         tabindex: "-1",
         id: "menu-0-item-2"
-      ) { I18n.t("calendar.day_view") }
+      ) { t("calendar.day_view") }
       a(
         href: "#{url}?view=week&date=#{date}",
         class: "block px-4 py-2 text-sm text-gray-700",
         role: "menuitem",
         tabindex: "-1",
         id: "menu-0-item-3"
-      ) { I18n.t("calendar.week_view") }
+      ) { t("calendar.week_view") }
       a(
         href: "#{url}?view=month&date=#{date}",
         class: "block px-4 py-2 text-sm text-gray-700",
         role: "menuitem",
         tabindex: "-1",
         id: "menu-0-item-4"
-      ) { I18n.t("calendar.month_view") }
+      ) { t("calendar.month_view") }
       a(
         href: "#{url}?view=year&date=#{date}",
         class: "block px-4 py-2 text-sm text-gray-700",
         role: "menuitem",
         tabindex: "-1",
         id: "menu-0-item-5"
-      ) { I18n.t("calendar.year_view") }
+      ) { t("calendar.year_view") }
     end
   end
 
@@ -246,16 +246,16 @@ class CalendarComponent < ApplicationComponent
           dt = date.beginning_of_week
           dt += i.days if i > 0
           link_to(
-            helpers.new_modal_url(id: id, modal_form: "day_summary", resource_class: "calendar", modal_next_step: "accept", date: I18n.l(dt, format: :short_iso)),
+            helpers.new_modal_url(id: id, modal_form: "day_summary", resource_class: "calendar", modal_next_step: "accept", date: l(dt, format: :short_iso)),
             data: { turbo_stream: true },
             class: "flex flex-col items-center pb-3 pt-2",
             role: "menuitem",
             tabindex: "-1") do
-            plain I18n.t("calendar.weekday.#{wd[i]}.firstletter")
+            plain t("calendar.weekday.#{wd[i]}.firstletter")
             cls = (dt == Date.today) ? "bg-sky-500 text-white" : "text-gray-900"
             span(class: "mt-1 flex h-8 w-8 items-center justify-center font-semibold rounded-full #{cls}") { dt.day }
             span(class: "sr-only") do
-              plain "datetime: #{I18n.l(dt, format: :short_iso)} "
+              plain "datetime: #{l(dt, format: :short_iso)} "
               plain "day summary"
             end
           end
@@ -267,17 +267,17 @@ class CalendarComponent < ApplicationComponent
           dt = date.beginning_of_week
           dt += i.days if i > 0
           link_to(
-            helpers.new_modal_url(id: id, modal_form: "day_summary", resource_class: "calendar", modal_next_step: "accept", date: I18n.l(dt, format: :short_iso)),
+            helpers.new_modal_url(id: id, modal_form: "day_summary", resource_class: "calendar", modal_next_step: "accept", date: l(dt, format: :short_iso)),
             data: { turbo_stream: true },
             class: "flex justify-center py-2",
             role: "menuitem",
             tabindex: "-1") do
             cls = (dt == Date.today) ? "text-sky-500" : "text-gray-900"
             div(class: "flex place-items-center #{cls}") do
-              plain "%s" % I18n.t("calendar.weekday.#{wd[i]}.short")
+              plain "%s" % t("calendar.weekday.#{wd[i]}.short")
               span(class: "pl-1 items-center justify-center font-semibold #{cls}") { dt.day }
               span(class: "sr-only") do
-                plain "datetime: #{I18n.l(dt, format: :short_iso)} "
+                plain "datetime: #{l(dt, format: :short_iso)} "
                 plain "day summary"
               end
             end
@@ -381,7 +381,7 @@ class CalendarComponent < ApplicationComponent
     from_date = Date.new(date.year, month, 1)
     section(class: "text-center") do
       if show_navigation
-        pl, pt, nt, nl = [ "#{url}?view=#{view}&date=#{date - 1.month}", I18n.t("calendar.navigation.previous_month"), I18n.t("calendar.navigation.next_month"), "#{url}?view=#{view}&date=#{date + 1.month}" ]
+        pl, pt, nt, nl = [ "#{url}?view=#{view}&date=#{date - 1.month}", t("calendar.navigation.previous_month"), t("calendar.navigation.next_month"), "#{url}?view=#{view}&date=#{date + 1.month}" ]
         div(class: "flex items-center text-center text-gray-900") do
           link_to(pl, class: "-m-1.5 flex flex-none items-center justify-center p-1.5 text-gray-400 hover:text-gray-500") do
             span(class: "sr-only") { pt }
@@ -389,7 +389,7 @@ class CalendarComponent < ApplicationComponent
               s.path(fill_rule: "evenodd", d: "M12.79 5.23a.75.75 0 01-.02 1.06L8.832 10l3.938 3.71a.75.75 0 11-1.04 1.08l-4.5-4.25a.75.75 0 010-1.08l4.5-4.25a.75.75 0 011.06.02z", clip_rule: "evenodd")
             end
           end
-          div(class: "flex-auto text-sm font-semibold") { I18n.l(from_date, format: :month_name_year) }
+          div(class: "flex-auto text-sm font-semibold") { l(from_date, format: :month_name_year) }
           link_to(nl, class: "-m-1.5 flex flex-none items-center justify-center p-1.5 text-gray-400 hover:text-gray-500") do
             span(class: "sr-only") { nt }
             svg(class: "h-5 w-5", viewbox: "0 0 20 20", fill: "currentColor", aria_hidden: "true") do |s|
@@ -398,7 +398,7 @@ class CalendarComponent < ApplicationComponent
           end
         end
       else
-        h2(class: "text-sm font-semibold text-gray-900") { I18n.l(from_date, format: :month_name) }
+        h2(class: "text-sm font-semibold text-gray-900") { l(from_date, format: :month_name) }
       end
       dt = Date.new(date.year, month, 1).at_beginning_of_week
       weekday_header
@@ -430,22 +430,22 @@ class CalendarComponent < ApplicationComponent
           cls += (dt.month == from_date.month) ? " bg-white text-gray-900" : " bg-gray-50 text-gray-400"
           cls += holiday?(dt) ? " bg-violet-100" : ""
           # button(type: "button",
-          #   data: { action: "click->calendar#showDaySummary", date: I18n.l(dt, format: :short_iso) },
+          #   data: { action: "click->calendar#showDaySummary", date: l(dt, format: :short_iso) },
           #   class: "#{cls} bg-gray-50 py-1.5 text-gray-400 hover:bg-gray-100 focus:z-10") do
           #   # Always include: "mx-auto flex h-7 w-7 items-center justify-center rounded-full"
           #   # Is today, include: "bg-sky-200 font-semibold text-white")
           #   cls = (dt == Date.today && (dt.month == from_date.month)) ? "bg-sky-600 font-semibold text-white" : ""
-          #   time(datetime: I18n.l(dt, format: :short_iso), class: "#{cls} mx-auto flex h-7 w-7 items-center justify-center rounded-full") { dt.day }
+          #   time(datetime: l(dt, format: :short_iso), class: "#{cls} mx-auto flex h-7 w-7 items-center justify-center rounded-full") { dt.day }
           # end
           # div(class: "h-7 w-7") { dt.day }
           link_to(
-            helpers.new_modal_url(id: id, modal_form: "day_summary", resource_class: "calendar", modal_next_step: "accept", view: view, date: I18n.l(dt, format: :short_iso)),
+            helpers.new_modal_url(id: id, modal_form: "day_summary", resource_class: "calendar", modal_next_step: "accept", view: view, date: l(dt, format: :short_iso)),
             data: { turbo_stream: true },
             class: "#{cls} relative bg-gray-50 py-1.5 text-gray-400 hover:bg-gray-100 focus:z-10",
             role: "menuitem",
             tabindex: "-1") do
               cls = (dt == Date.today && (dt.month == from_date.month)) ? "bg-sky-600 font-semibold text-white" : ""
-              time(datetime: I18n.l(dt, format: :short_iso), class: " #{cls} mx-auto flex flex-col h-7 w-7 items-center justify-center rounded-full") do
+              time(datetime: l(dt, format: :short_iso), class: " #{cls} mx-auto flex flex-col h-7 w-7 items-center justify-center rounded-full") do
                 span { dt.day }
                 div(class: "absolute bottom-0") do
                   events?(dt, :year, { from: dt.beginning_of_month.to_time, to: dt.end_of_month.to_time })
@@ -453,7 +453,7 @@ class CalendarComponent < ApplicationComponent
                 end
               end
               span(class: "sr-only") do
-                plain "datetime: #{I18n.l(dt, format: :short_iso)} "
+                plain "datetime: #{l(dt, format: :short_iso)} "
                 plain "day summary"
               end
           end
@@ -464,13 +464,13 @@ class CalendarComponent < ApplicationComponent
 
   def weekday_header
     div(class: "mt-6 grid grid-cols-7 text-xs leading-6 text-gray-500") do
-      div { I18n.t("calendar.weekday.monday.firstletter") }
-      div { I18n.t("calendar.weekday.tuesday.firstletter") }
-      div { I18n.t("calendar.weekday.wednesday.firstletter") }
-      div { I18n.t("calendar.weekday.thursday.firstletter") }
-      div { I18n.t("calendar.weekday.friday.firstletter") }
-      div { I18n.t("calendar.weekday.saturday.firstletter") }
-      div { I18n.t("calendar.weekday.sunday.firstletter") }
+      div { t("calendar.weekday.monday.firstletter") }
+      div { t("calendar.weekday.tuesday.firstletter") }
+      div { t("calendar.weekday.wednesday.firstletter") }
+      div { t("calendar.weekday.thursday.firstletter") }
+      div { t("calendar.weekday.friday.firstletter") }
+      div { t("calendar.weekday.saturday.firstletter") }
+      div { t("calendar.weekday.sunday.firstletter") }
     end
   end
 
@@ -481,12 +481,12 @@ class CalendarComponent < ApplicationComponent
 
   def week_number(day, dt, cls = "")
     case day
-    when 0;   div(class: "#{cls} text-gray-300") { I18n.l(dt, format: :week_number) }
-    when 7;   div(class: "#{cls} text-gray-300") { I18n.l(dt, format: :week_number) }
-    when 14;  div(class: "#{cls} text-gray-300") { I18n.l(dt, format: :week_number) }
-    when 21;  div(class: "#{cls} text-gray-300") { I18n.l(dt, format: :week_number) }
-    when 28;  div(class: "#{cls} text-gray-300") { I18n.l(dt, format: :week_number) }
-    when 35;  div(class: "#{cls} text-gray-300") { I18n.l(dt, format: :week_number) }
+    when 0;   div(class: "#{cls} text-gray-300") { l(dt, format: :week_number) }
+    when 7;   div(class: "#{cls} text-gray-300") { l(dt, format: :week_number) }
+    when 14;  div(class: "#{cls} text-gray-300") { l(dt, format: :week_number) }
+    when 21;  div(class: "#{cls} text-gray-300") { l(dt, format: :week_number) }
+    when 28;  div(class: "#{cls} text-gray-300") { l(dt, format: :week_number) }
+    when 35;  div(class: "#{cls} text-gray-300") { l(dt, format: :week_number) }
     else;     div(class: "h-6") { " " }
     end
   end

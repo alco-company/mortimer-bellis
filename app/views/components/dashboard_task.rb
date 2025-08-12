@@ -83,13 +83,13 @@ class DashboardTask < ApplicationComponent
       end
       dl(class: "-my-3  px-2 py-4 text-sm/6") do
         div(class: "hidden flex justify-between gap-x-4 py-3 text-xs", data: { hidden_description_target: "description" }) { task.description } unless task.description.blank?
-        p { link_to I18n.t("tasks.dashboard.get_help_here"), help, class: "mort-link-error text-xs" }
+        p { link_to t("tasks.dashboard.get_help_here"), help, class: "mort-link-error text-xs" }
         # dt(class: "text-gray-500") { "Last invoice" }
         # dd(class: "text-gray-700") do
         #   time(datetime: "2022-12-13") { "December 13, 2022" }
         # end
         # end
-        # div(class: "flex justify-between  self-end gap-x-4 py-3") { link_to I18n.t(".start"), task.link, class: "mort-btn-primary" }
+        # div(class: "flex justify-between  self-end gap-x-4 py-3") { link_to t(".start"), task.link, class: "mort-btn-primary" }
         #   dt(class: "text-gray-500") { "Amount" }
         #   dd(class: "flex items-start gap-x-2") do
         #     div(class: "font-medium text-gray-900") { "$2,000.00" }

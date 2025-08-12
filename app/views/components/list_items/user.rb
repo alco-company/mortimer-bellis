@@ -91,7 +91,7 @@ class ListItems::User < ListItems::ListItem
   def show_time_info
     span(class: "text-xs text-sky-300 mr-2") { WORK_STATE_H[resource.state] }
     span(class: "truncate") do
-      plain I18n.l resource.created_at, format: :date
+      plain l(resource.created_at, format: :date)
     end
   end
 end

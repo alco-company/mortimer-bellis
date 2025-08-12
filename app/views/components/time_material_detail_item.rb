@@ -1,4 +1,4 @@
-class TimeMaterialDetailItem < Phlex::HTML
+class TimeMaterialDetailItem < ApplicationComponent
   attr_reader :item, :id
 
   def initialize(item:, id: nil, links: [])
@@ -23,7 +23,7 @@ class TimeMaterialDetailItem < Phlex::HTML
 
             customer_name "whitespace-nowrap sm:hidden"
             svg_circle
-            p(class: "truncate") { I18n.t("time_materials.list.time_logged", time: @item.time) }
+            p(class: "truncate") { t("time_materials.list.time_logged", time: @item.time) }
             svg_circle
             logged_date
           end

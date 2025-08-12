@@ -14,7 +14,7 @@
 #   </form>
 # </div>
 
-class SearchComponent < Phlex::HTML
+class SearchComponent < ApplicationComponent
   attr_accessor :params
 
   def initialize(params: {})
@@ -32,7 +32,7 @@ class SearchComponent < Phlex::HTML
         id: "search-field",
         class:
           "block h-full w-full border-0 py-0 pl-8 pr-0 text-#{@color} bg-transparent placeholder:text-slate-200 focus:ring-0 text-sm md:text-lg",
-        placeholder: I18n.t("topbar.search.placeholder"),
+        placeholder: t("topbar.search.placeholder"),
         type: "search",
         name: "search",
         value: search

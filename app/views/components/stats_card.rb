@@ -45,7 +45,7 @@ class StatsCard < Phlex::HTML
         #   a(
         #     href: @url,
         #     class: "font-medium text-cyan-700 hover:text-cyan-900"
-        #   ) { I18n.t("view_all") }
+        #   ) { t("view_all") }
         # end
       end
     end

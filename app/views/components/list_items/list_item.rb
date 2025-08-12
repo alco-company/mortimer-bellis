@@ -108,7 +108,7 @@ class ListItems::ListItem < ApplicationComponent
 
   def show_time_info
     span(class: "truncate") do
-      plain I18n.l resource.created_at, format: :date
+      plain l(resource.created_at, format: :date)
     end
   end
 

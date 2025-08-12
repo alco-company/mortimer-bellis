@@ -38,28 +38,28 @@ class EventComponent < ApplicationComponent
               value: 0,
               class: "tab-header w-1/4 border-b-2 border-transparent px-1 py-4 text-center text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700",
               role: "switch",
-              aria_checked: "false") { I18n.t("event.type.task") }
+              aria_checked: "false") { t("event.type.task") }
             button(
               type: "button",
               data: { tabs_target: "tab", action: "tabs#change" },
               value: 1,
               class: "tab-header w-1/4 border-b-2 border-transparent px-1 py-4 text-center text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700",
               role: "switch",
-              aria_checked: "false") { I18n.t("event.type.work") }
+              aria_checked: "false") { t("event.type.work") }
             button(
               type: "button",
               data: { tabs_target: "tab", action: "tabs#change" },
               value: 2,
               class: "tab-header w-1/4 border-b-2 border-transparent px-1 py-4 text-center text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700",
               role: "switch",
-              aria_checked: "false") { I18n.t("event.type.schedule") }
+              aria_checked: "false") { t("event.type.schedule") }
             button(
               type: "button",
               data: { tabs_target: "tab", action: "tabs#change" },
               value: 3,
               class: "tab-header w-1/4 border-b-2 border-transparent px-1 py-4 text-center text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700",
               role: "switch",
-              aria_checked: "false") { I18n.t("event.type.notes") }
+              aria_checked: "false") { t("event.type.notes") }
           end
         end
       end
@@ -68,14 +68,14 @@ class EventComponent < ApplicationComponent
 
   def show_task_tab
     div(data: { tabs_target: "tabPanel" }) do
-      name_field I18n.t("event.task_name") # "Titel / Overskrift på opgaven"
+      name_field t("event.task_name") # "Titel / Overskrift på opgaven"
       color_field
       start_date_time_field
       end_date_time_field()
 
       # comment { "duration" }
       duration_field
-      all_day_field I18n.t("event.all_day_event") # "Varer aftalen hele dagen?"
+      all_day_field t("event.all_day_event") # "Varer aftalen hele dagen?"
     end
   end
 
@@ -119,7 +119,7 @@ class EventComponent < ApplicationComponent
 
       # dates excluded
       # div(class: "mort-field") do
-      #   label(for: "event_excluded_days", class: "block text-sm font-medium leading-6 text-gray-900") { I18n.t("event.weekly.excluded_days") }
+      #   label(for: "event_excluded_days", class: "block text-sm font-medium leading-6 text-gray-900") { t("event.weekly.excluded_days") }
       #   div(class: "mt-2") do
       #     input(id: "event_excluded_days", aria_describedby: "comments-description", name: "event[excluded_days]", class: "mort-form-text mt-0 w-full")
       #   end
@@ -138,7 +138,7 @@ class EventComponent < ApplicationComponent
 
   def work_type_field
     div(class: "mt-4 sm:grid sm:grid-cols-3 sm:items-start") do
-      label(for: "reason", class: "block text-sm font-medium leading-6 text-gray-900 self-center") { I18n.t("event.work_type") }
+      label(for: "reason", class: "block text-sm font-medium leading-6 text-gray-900 self-center") { t("event.work_type") }
       div(class: "mt-2 sm:col-span-2 sm:mt-0") do
         div(class: "flex sm:max-w-md sm:place-content-end") do
           div(class: "gap-y1 grid grid-flow-row-dense grid-cols-3 grid-rows-2 justify-items-center gap-x-4") do
@@ -294,7 +294,7 @@ class EventComponent < ApplicationComponent
   # comment { "name of day" }
   def color_field
     div(class: "my-4 sm:grid sm:grid-cols-3 sm:items-start") do
-      label(for: "event_name", class: "block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5 self-center") { plain I18n.t("activerecord.attributes.event.color") }
+      label(for: "event_name", class: "block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5 self-center") { plain t("activerecord.attributes.event.color") }
       render SelectComponent.new(resource: resource,
         field: :color,
         field_class: "mt-2 flex sm:col-span-2 sm:mt-0 sm:place-content-end",
@@ -302,7 +302,7 @@ class EventComponent < ApplicationComponent
         value_class: "mt-2 sm:col-span-2 sm:mt-0",
         collection: Team.colors,
         show_label: false,
-        prompt: I18n.t(".select_team_color"),
+        prompt: t(".select_team_color"),
         editable: true)
     end
   end
@@ -310,7 +310,7 @@ class EventComponent < ApplicationComponent
   # comment { "start from_time only visible on non-all_day appointments" }
   def start_date_time_field(date_visible: true, time_visible: true)
     div(class: "my-4 sm:grid sm:grid-cols-3 sm:items-start") do
-      label(for: "from_at", class: "block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5 self-center") { I18n.t("event.from_at") }
+      label(for: "from_at", class: "block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5 self-center") { t("event.from_at") }
       div(class: "mt-2 flex sm:col-span-2 sm:mt-0 sm:place-content-end") do
         input(name: "event[from_date]", id: "event_from_date", type: "date", data_event_form_target: "fromDate", value: resource.from_date, class: "mort-form-text mt-0 max-w-44") if date_visible
         input(name: "event[from_time]", id: "event_from_time", type: "time", data_event_form_target: "fromTime", value: set_time(resource.from_time), class: "mort-form-text mt-0 ml-2 max-w-28") if time_visible
@@ -321,7 +321,7 @@ class EventComponent < ApplicationComponent
   # comment { "stop end_time only visible on non-all_day appointments" }
   def end_date_time_field(date_visible: true, time_visible: true)
     div(class: "my-4 sm:grid sm:grid-cols-3 sm:items-start") do
-      label(for: "end_at", class: "block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5 self-center")  { I18n.t("event.to_at") }
+      label(for: "end_at", class: "block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5 self-center")  { t("event.to_at") }
       div(class: "mt-2 flex sm:col-span-2 sm:mt-0 sm:place-content-end") do
         input(name: "event[to_date]", id: "event_to_date", type: "date", data_event_form_target: "toDate", value: resource.to_date, class: "mort-form-text mt-0 max-w-44") if date_visible
         input(name: "event[to_time]", id: "event_to_time", type: "time", data_event_form_target: "toTime", value: set_time(resource.to_time), class: "mort-form-text mt-0 ml-2 max-w-28") if time_visible
@@ -358,7 +358,7 @@ class EventComponent < ApplicationComponent
   # comment { "duration" }
   def duration_field
     div(class: "my-4 sm:grid sm:grid-cols-3 sm:items-start", data: { event_form_target: "durationInput" }) do
-      label(for: "event_duration", class: "block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5 self-center") { I18n.t("event.duration") } # "Varighed (angiv evt. t:m pr dag hvis aftalen strækker sig over flere dage)"
+      label(for: "event_duration", class: "block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5 self-center") { t("event.duration") } # "Varighed (angiv evt. t:m pr dag hvis aftalen strækker sig over flere dage)"
       div(class: "mt-2 flex sm:col-span-2 sm:mt-0 sm:place-content-end") do
         input(name: "event[duration]", id: "event_duration", type: "text", data_event_form_target: "duration", class: "mort-form-text mt-0 max-w-24")
       end
@@ -367,7 +367,7 @@ class EventComponent < ApplicationComponent
 
   def show_daily_inputs
     div(class: "flex w-full", data: { tabs_target: "tabPanel" }) do
-      # show_period_picker I18n.t("event.pickers.daily") # "col-span-3 flex border-b sm:col-span-1 sm:flex-row-reverse sm:place-items-center sm:border-0"
+      # show_period_picker t("event.pickers.daily") # "col-span-3 flex border-b sm:col-span-1 sm:flex-row-reverse sm:place-items-center sm:border-0"
       div(id: "dailyInputs", class: "mt-2 tab grid grid-cols-1 gap-y-2") do
         legend(class: "sr-only") { "Dagligt" }
         div(class: "relative flex items-center") do
@@ -375,22 +375,22 @@ class EventComponent < ApplicationComponent
             input(id: "event_event_metum_daily_interval", aria_describedby: "comments-description", name: "event[event_metum_attributes][daily_interval]", value: resource.get_field(:daily_interval), class: "mort-form-text w-20 mt-0")
           end
           div(class: "ml-3 text-sm leading-5") do
-            label(for: "comments", class: "mr-2") { I18n.t("event.daily.label") }
+            label(for: "comments", class: "mr-2") { t("event.daily.label") }
             span(id: "comments-description", class: "text-gray-500") do
               span(class: "sr-only") { "interval " }
-              plain I18n.t("event.daily.explain")
+              plain t("event.daily.explain")
             end
           end
         end
         div(class: "relative flex items-center") do
           div(class: "flex items-center") do
-            label(for: "comments", class: "mr-2") { I18n.t("event.daily.count") }
+            label(for: "comments", class: "mr-2") { t("event.daily.count") }
             input(id: "event_event_metum_days_count", aria_describedby: "comments-description", name: "event[event_metum_attributes][days_count]", value: resource.get_field(:days_count), class: "mort-form-text w-20 mt-0")
           end
           div(class: "ml-3 text-sm leading-5") do
             span(id: "comments-description", class: "text-gray-500") do
               span(class: "sr-only") { "count " }
-              plain I18n.t("event.daily.counts_explain")
+              plain t("event.daily.counts_explain")
             end
           end
         end
@@ -400,33 +400,33 @@ class EventComponent < ApplicationComponent
 
   def show_weekly_inputs
     div(class: "flex w-full", data: { tabs_target: "tabPanel" }) do
-      # show_period_picker I18n.t("event.pickers.weekly") # , "col-span-4 flex sm:col-span-2 sm:flex-row-reverse sm:place-items-center border-b sm:border-0"
+      # show_period_picker t("event.pickers.weekly") # , "col-span-4 flex sm:col-span-2 sm:flex-row-reverse sm:place-items-center border-b sm:border-0"
       div(id: "weeklyInputs", class: "mt-2 tab w-full") do
         div(class: "flex items-center mt-2 ") do
           div(class: "ml-3 text-sm leading-5") do
-            label(for: "event_weekly_days", class: " mr-2")  { I18n.t("event.weekly.repeat") }
+            label(for: "event_weekly_days", class: " mr-2")  { t("event.weekly.repeat") }
           end
           div(class: "flex") do
             input(id: "event_event_metum_weekly_interval", aria_describedby: "comments-description", name: "event[event_metum_attributes][weekly_interval]", value: resource.get_field(:weekly_interval), class: "mort-form-text mt-0 w-12")
           end
           div(class: "ml-3 text-sm leading-5") do
-            label(for: "events_weekly_day", class: "") { I18n.t("event.weekly.day") }
+            label(for: "events_weekly_day", class: "") { t("event.weekly.day") }
           end
           div(class: "relative flex items-center ml-2") do
             div(class: "flex items-center") do
-              label(for: "comments", class: "mr-2") { I18n.t("event.weekly.count.for") }
+              label(for: "comments", class: "mr-2") { t("event.weekly.count.for") }
               input(id: "event_event_metum_weeks_count", aria_describedby: "comments-description", name: "event[event_metum_attributes][weeks_count]", value: resource.get_field(:weeks_count), class: "mort-form-text w-20 mt-0")
             end
             div(class: "ml-3 text-sm leading-5") do
               span(id: "comments-description", class: "text-gray-500") do
                 span(class: "sr-only") { "count " }
-                plain I18n.t("event.weekly.count.explain")
+                plain t("event.weekly.count.explain")
               end
             end
           end
         end
         div(class: "mt-2 ") do # flex col-span-3 place-content-stretch
-          legend(class: "sr-only")  { I18n.t("event.weekly.week_day") }
+          legend(class: "sr-only")  { t("event.weekly.week_day") }
           show_weekdays_inputs("weekly")
         end
       end
@@ -435,44 +435,44 @@ class EventComponent < ApplicationComponent
 
   def show_monthly_inputs
     div(class: "flex w-full", data: { tabs_target: "tabPanel" }) do
-      # show_period_picker I18n.t("event.pickers.monthly") # "col-span-3 flex border-b sm:col-span-1 sm:flex-row-reverse sm:place-items-center sm:border-0"
+      # show_period_picker t("event.pickers.monthly") # "col-span-3 flex border-b sm:col-span-1 sm:flex-row-reverse sm:place-items-center sm:border-0"
       div(id: "monthlyInputs", class: "mt-2 tab w-full grid col-span-3 sm:col-span-2") do
-        legend(class: "sr-only") { I18n.t("event.monthly.tab") }
+        legend(class: "sr-only") { t("event.monthly.tab") }
 
         div(class: "flex items-center col-span-2 mt-2 sm:place-content-start") do
           div(class: "text-sm leading-5") do
-            label(for: "events_monthly_every", class: "font-medium text-gray-900 mr-2")  { I18n.t("event.monthly.every_month.label") }
+            label(for: "events_monthly_every", class: "font-medium text-gray-900 mr-2")  { t("event.monthly.every_month.label") }
           end
           div(class: "flex") do
             input(id: "event_event_metum_monthly_interval", aria_describedby: "comments-description", name: "event[event_metum_attributes][monthly_interval]", value: resource.get_field(:monthly_interval), class: "mort-form-text mt-0 w-12")
           end
           div(class: "ml-3 text-sm leading-5") do
-            label(for: "event_event_metum_monthly_interval", class: "font-medium text-gray-900 mr-2")  { I18n.t("event.monthly.every_month.explain") }
+            label(for: "event_event_metum_monthly_interval", class: "font-medium text-gray-900 mr-2")  { t("event.monthly.every_month.explain") }
           end
           div(class: "flex") do
             input(id: "event_event_metum_monthly_count", aria_describedby: "comments-description", name: "event[event_metum_attributes][months_count]", value: resource.get_field(:months_count), class: "mort-form-text mt-0 w-12")
           end
           div(class: "ml-3 text-sm leading-5") do
-            label(for: "event_event_metum_monthly_count", class: "font-medium text-gray-900 mr-2")  { I18n.t("event.monthly.every_month.count") }
+            label(for: "event_event_metum_monthly_count", class: "font-medium text-gray-900 mr-2")  { t("event.monthly.every_month.count") }
           end
         end
 
         div(class: "flex items-center col-span-2 mt-2 ") do
           div(class: "flex items-center ") do
-            label(for: "comments", class: "font-medium text-sm text-nowrap text-gray-500 mr-2") { I18n.t("event.monthly.days.label") } # "dag(e)" }
+            label(for: "comments", class: "font-medium text-sm text-nowrap text-gray-500 mr-2") { t("event.monthly.days.label") } # "dag(e)" }
             input(id: "event_event_metum_monthly_days", aria_describedby: "comments-description", name: "event[event_metum_attributes][monthly_days]", value: resource.get_field(:monthly_days), class: "mort-form-text mt-0")
           end
           div(class: "ml-3 text-sm leading-5") do
             span(id: "comments-description", class: "text-gray-500") do
-              span(class: "sr-only")  { I18n.t("event.monthly.days.label") }  # { "dag(e) " }
-              plain I18n.t("event.monthly.days.explain") # "i måneden"
+              span(class: "sr-only")  { t("event.monthly.days.label") }  # { "dag(e) " }
+              plain t("event.monthly.days.explain") # "i måneden"
             end
           end
         end
         div(class: "flex items-center col-span-2 mt-2 ") do
           div(class: "flex items-center") do
             div(class: "text-sm leading-5 h-3") do
-              label(for: "comments", class: "font-medium text-gray-900 mr-2")  { I18n.t("event.monthly.day.label") }
+              label(for: "comments", class: "font-medium text-gray-900 mr-2")  { t("event.monthly.day.label") }
             end
             div(class: "flex mr-2") do
               input(id: "event_event_metum_monthly_dow", aria_describedby: "comments-description", name: "event[event_metum_attributes][monthly_dow]", value: resource.get_field(:monthly_dow), class: "mort-form-text w-12")
@@ -482,13 +482,13 @@ class EventComponent < ApplicationComponent
 
           # div(class: "flex items-center") do
           #   select(id: "event_monthly_weekdays", name: "event[monthly_weekdays]", class: "mort-form-text w-32") do
-          #     option { I18n.t("event.weekly.monday") }
-          #     option { I18n.t("event.weekly.tuesday") }
-          #     option { I18n.t("event.weekly.wednesday") }
-          #     option { I18n.t("event.weekly.thursday") }
-          #     option { I18n.t("event.weekly.friday") }
-          #     option { I18n.t("event.weekly.saturday") }
-          #     option { I18n.t("event.weekly.sunday") }
+          #     option { t("event.weekly.monday") }
+          #     option { t("event.weekly.tuesday") }
+          #     option { t("event.weekly.wednesday") }
+          #     option { t("event.weekly.thursday") }
+          #     option { t("event.weekly.friday") }
+          #     option { t("event.weekly.saturday") }
+          #     option { t("event.weekly.sunday") }
           #   end
           # end
         end
@@ -498,21 +498,21 @@ class EventComponent < ApplicationComponent
 
   def show_yearly_inputs
     div(class: "flex w-full", data: { tabs_target: "tabPanel" }) do
-      # show_period_picker I18n.t("event.pickers.yearly") #  "col-span-3 flex border-b sm:col-span-1 sm:flex-row-reverse sm:place-items-center sm:border-0"
+      # show_period_picker t("event.pickers.yearly") #  "col-span-3 flex border-b sm:col-span-1 sm:flex-row-reverse sm:place-items-center sm:border-0"
       div(id: "yearlyInputs", class: "mt-2 tab grid col-span-3 w-full") do
         legend(class: "sr-only") { "Årligt" }
         div(class: "flex items-center col-span-2 mt-2") do
           div(class: "ml-3 text-sm leading-5") do
-            label(for: "event_event_metum_yearly_interval", class: "text-nowrap font-medium text-gray-900 mr-2")  { I18n.t("event.yearly.repeat") } # { "Gentages hvert" }
+            label(for: "event_event_metum_yearly_interval", class: "text-nowrap font-medium text-gray-900 mr-2")  { t("event.yearly.repeat") } # { "Gentages hvert" }
           end
           div(class: "flex") do
             input(id: "event_event_metum_yearly_interval", aria_describedby: "comments-description", name: "event[event_metum_attributes][yearly_interval]", value: resource.get_field(:yearly_interval), class: "mort-form-text mt-0 w-12")
           end
           div(class: "ml-3 text-sm leading-5") do
-            label(for: "event_event_metum_yearly_interval", class: "font-medium text-gray-900") { I18n.t("event.yearly.year") }
+            label(for: "event_event_metum_yearly_interval", class: "font-medium text-gray-900") { t("event.yearly.year") }
           end
           div(class: "ml-3 text-sm leading-5") do
-            label(for: "event_event_metum_yearly_doy", class: "text-nowrap font-medium text-gray-900 mr-2")  { I18n.t("event.yearly.repeat_on_days_of_year") } # { "på følgende dage i året" }
+            label(for: "event_event_metum_yearly_doy", class: "text-nowrap font-medium text-gray-900 mr-2")  { t("event.yearly.repeat_on_days_of_year") } # { "på følgende dage i året" }
           end
           div(class: "flex") do
             input(id: "event_event_metum_yearly_doy", aria_describedby: "comments-description", name: "event[event_metum_attributes][yearly_doy]", value: resource.get_field(:yearly_doy), class: "mort-form-text mt-0 w-24")
@@ -520,14 +520,14 @@ class EventComponent < ApplicationComponent
         end
         div(class: "flex items-center col-span-3 mt-2") do
           div(class: "flex items-center") do
-            label(for: "event_event_metum_yearly_weeks", class: "text-nowrap mx-2 text-sm leading-5 text-gray-500") { I18n.t("event.yearly.for_the_weeks") }
+            label(for: "event_event_metum_yearly_weeks", class: "text-nowrap mx-2 text-sm leading-5 text-gray-500") { t("event.yearly.for_the_weeks") }
             input(id: "event_event_metum_yearly_weeks", aria_describedby: "comments-description", name: "event[event_metum_attributes][yearly_weeks]", value: resource.get_field(:yearly_weeks), class: "mort-form-text w-full mt-0")
           end
         end
 
         div(class: "flex items-center col-span-2 mt-2 ") do
           div(class: "flex items-center ") do
-            label(for: "event_event_metum_yearly_days", class: "font-medium text-sm text-nowrap text-gray-500 mr-2") { I18n.t("event.monthly.days.label") } # "dag(e)" }
+            label(for: "event_event_metum_yearly_days", class: "font-medium text-sm text-nowrap text-gray-500 mr-2") { t("event.monthly.days.label") } # "dag(e)" }
             input(id: "event_event_metum_yearly_days", aria_describedby: "comments-description", name: "event[event_metum_attributes][yearly_days]", value: resource.get_field(:yearly_days), class: "mort-form-text mt-0")
           end
         end
@@ -539,7 +539,7 @@ class EventComponent < ApplicationComponent
         div(class: "flex items-center col-span-2 mt-2 ") do
           div(class: "flex items-center") do
             div(class: "text-sm leading-5 h-3") do
-              label(for: "comments", class: "text-nowrap font-medium text-gray-900 mr-2") { I18n.t("event.yearly.on_weekday") }
+              label(for: "comments", class: "text-nowrap font-medium text-gray-900 mr-2") { t("event.yearly.on_weekday") }
             end
             div(class: "flex mr-2") do
               input(id: "event_event_metum_yearly_dows", aria_describedby: "comments-description", name: "event[event_metum_attributes][yearly_dows]", value: resource.get_field(:yearly_dows), class: "mort-form-text w-12")
@@ -549,13 +549,13 @@ class EventComponent < ApplicationComponent
         end
         div(class: "flex items-center col-span-2 mt-2 sm:place-content-end") do
           div(class: "text-sm leading-5") do
-            label(for: "comments", class: "font-medium text-gray-900 mr-2") { I18n.t("event.yearly.next_years.label") }
+            label(for: "comments", class: "font-medium text-gray-900 mr-2") { t("event.yearly.next_years.label") }
           end
           div(class: "flex") do
             input(id: "event_event_metum_years_count", aria_describedby: "comments-description", name: "event[event_metum_attributes][years_count]", value: resource.get_field(:years_count), class: "mort-form-text mt-0 w-12")
           end
           div(class: "ml-3 text-sm leading-5") do
-            label(for: "comments", class: "font-medium text-gray-900 mr-2") { I18n.t("event.yearly.next_years.explain") } # { "år, startende i" }
+            label(for: "comments", class: "font-medium text-gray-900 mr-2") { t("event.yearly.next_years.explain") } # { "år, startende i" }
           end
           div(class: "flex") do
             input(id: "event_event_metum_yearly_next_years_start", aria_describedby: "comments-description", name: "event[event_metum_attributes][yearly_next_years_start]", value: resource.get_field(:yearly_next_years_start), class: "mort-form-text mt-0 w-20")
@@ -579,7 +579,7 @@ class EventComponent < ApplicationComponent
           end
           div(class: "ml-3 text-sm leading-6") do
             span(class: "sr-only") { day }
-            label(for: "comments", class: "")  { I18n.t("event.#{prefix}.#{day}") }
+            label(for: "comments", class: "")  { t("event.#{prefix}.#{day}") }
           end
         end
       end
@@ -587,7 +587,7 @@ class EventComponent < ApplicationComponent
   end
 
   def show_months_selected
-    label(for: "comments", class: "text-nowrap text-sm mr-2") { I18n.t("event.yearly.months") }
+    label(for: "comments", class: "text-nowrap text-sm mr-2") { t("event.yearly.months") }
     div(class: "flex items-center col-span-2 mt-2") do
       # div(class: "flex items-center") do
       #   div(class: "text-sm leading-5 h-3") do
@@ -603,7 +603,7 @@ class EventComponent < ApplicationComponent
             end
             div(class: "ml-3 text-sm leading-6") do
               span(class: "sr-only") { mth }
-              label(for: "event_event_metum_yearly_months_#{mth}", class: "")  { I18n.t("event.yearly.month.#{mth}") }
+              label(for: "event_event_metum_yearly_months_#{mth}", class: "")  { t("event.yearly.month.#{mth}") }
             end
           end
         end
@@ -616,10 +616,10 @@ class EventComponent < ApplicationComponent
       div(class: "sm:hidden") do
         label(for: "tabs", class: "sr-only") { "Select a tab" }
         select(data: { action: "tabs#change" }, class: "block w-full rounded-md border-gray-300 focus:border-sky-500 focus:ring-sky-500") do
-          option(value: 0) { I18n.t("event.daily.tab") }
-          option(value: 1) { I18n.t("event.weekly.tab") }
-          option(value: 2) { I18n.t("event.monthly.tab") }
-          option(value: 3) { I18n.t("event.yearly.tab") }
+          option(value: 0) { t("event.daily.tab") }
+          option(value: 1) { t("event.weekly.tab") }
+          option(value: 2) { t("event.monthly.tab") }
+          option(value: 3) { t("event.yearly.tab") }
         end
       end
       div(class: "hidden sm:block") do
@@ -633,7 +633,7 @@ class EventComponent < ApplicationComponent
               # data_event_form_target: "workButton",
               class: "tab-header w-1/4 border-b-2 border-transparent px-1 py-4 text-center text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700",
               role: "switch",
-              aria_checked: "false") { I18n.t("event.daily.tab") }
+              aria_checked: "false") { t("event.daily.tab") }
             button(
               type: "button",
               data: { tabs_target: "tab", action: "tabs#change" },
@@ -641,7 +641,7 @@ class EventComponent < ApplicationComponent
               # data_event_form_target: "taskButton",
               class: "tab-header w-1/4 border-b-2 border-transparent px-1 py-4 text-center text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700",
               role: "switch",
-              aria_checked: "false") { I18n.t("event.weekly.tab") }
+              aria_checked: "false") { t("event.weekly.tab") }
             button(
               type: "button",
               data: { tabs_target: "tab", action: "tabs#change" },
@@ -649,7 +649,7 @@ class EventComponent < ApplicationComponent
               # data_event_form_target: "recurringButton",
               class: "tab-header w-1/4 border-b-2 border-transparent px-1 py-4 text-center text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700",
               role: "switch",
-              aria_checked: "false") { I18n.t("event.monthly.tab") }
+              aria_checked: "false") { t("event.monthly.tab") }
             button(
               type: "button",
               data: { tabs_target: "tab", action: "tabs#change" },
@@ -657,7 +657,7 @@ class EventComponent < ApplicationComponent
               # data_event_form_target: "notesButton",
               class: "tab-header w-1/4 border-b-2 border-transparent px-1 py-4 text-center text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700",
               role: "switch",
-              aria_checked: "false") { I18n.t("event.yearly.tab")  }
+              aria_checked: "false") { t("event.yearly.tab")  }
           end
         end
       end
@@ -667,7 +667,7 @@ class EventComponent < ApplicationComponent
   # comment { "comments" }
   def comment_field
     div(class: "mort-field") do
-      label(for: "event_comment", class: "block text-sm font-medium leading-6 text-gray-900")  { I18n.t("event.comment") }
+      label(for: "event_comment", class: "block text-sm font-medium leading-6 text-gray-900")  { t("event.comment") }
       div(class: "mt-2") do
         textarea(rows: "4", name: "event[comment]", id: "event_comment", class: "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-xs ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-sky-600 sm:text-sm sm:leading-6")
       end
@@ -677,7 +677,7 @@ class EventComponent < ApplicationComponent
   # comment { "attachments" }
   def attachment_field
     div(class: "mort-field") do
-      label(for: "event_files")  { I18n.t("event.bilag") }
+      label(for: "event_files")  { t("event.bilag") }
       br
       input(class: "mort-form-file", type: "file", name: "event[files]", id: "event_files", multiple: "multiple")
     end
@@ -719,7 +719,7 @@ end
 # def show_schedule_inputs
 #   div(id: "schedule_inputs", data: { event_form_target: "scheduleInputs" }, class: "event-type schedule hidden") do
 #     # comment { "schedule subject/title" }
-#     name_field I18n.t("event.schedule_name")
+#     name_field t("event.schedule_name")
 #     work_type_field
 #     let_mortimer_punch
 #     start_date_time_field(date_visible: false)
@@ -775,7 +775,7 @@ end
 
 # def show_task_inputs
 #   div(id: "task_inputs", data: { event_form_target: "taskInputs" }, class: "event-type task hidden") do
-#     name_field I18n.t("event.task_name") # "Titel / Overskrift på opgaven"
+#     name_field t("event.task_name") # "Titel / Overskrift på opgaven"
 #     # all_day_field "Varer aftalen hele dagen?"
 #     start_date_time_field
 #     end_date_time_field
@@ -788,7 +788,7 @@ end
 # def show_appointment_inputs
 #   # comment { "aftale" }
 #   div(id: "appointment_inputs", data: { event_form_target: "appointmentInputs" }, class: "event-type appointment hidden") do
-#     name_field I18n.t("event.appointment_name") # "Titel / Overskrift på aftalen/opgaven"
+#     name_field t("event.appointment_name") # "Titel / Overskrift på aftalen/opgaven"
 #     all_day_field "Varer aftalen hele dagen?"
 #     start_date_time_field
 #     end_date_time_field
@@ -801,7 +801,7 @@ end
 # comment { "helligdag" }
 # def show_holiday_inputs
 #   div(id: "holiday_inputs", data: { event_form_target: "workInputs" }, class: "event-type holiday hidden") do
-#     name_field I18n.t("event.holiday_name")
+#     name_field t("event.holiday_name")
 #     all_day_field "Er helligdagen en hel fridag?"
 #     start_date_time_field
 #     end_date_time_field

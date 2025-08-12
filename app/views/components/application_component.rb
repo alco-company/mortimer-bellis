@@ -2,6 +2,8 @@
 
 class ApplicationComponent < Phlex::HTML
   include Phlex::Rails::Helpers::Routes
+  include Phlex::Rails::Helpers::TurboFrameTag
+  include Phlex::Rails::Helpers::ImageTag
 
   # temporarily define helpers
   register_value_helper :filtering_url
@@ -45,6 +47,18 @@ class ApplicationComponent < Phlex::HTML
     Rails.logger.send(level, "-----------------")
   end
 
+  def t(key, **options)
+    I18n.t(key, **options)
+  rescue
+    key
+  end
+
+  def l(key, **options)
+    I18n.l(key, **options)
+  rescue
+    key
+  end
+
   def show_resource_link(resource:, url: nil, turbo_frame: "form", turbo_action: "advance")
     return "" unless resource
     link_to((url || url_for(resource)),
@@ -62,7 +76,7 @@ class ApplicationComponent < Phlex::HTML
       role: "menuitem",
       data: { turbo_action: "advance", turbo_frame: turbo_frame },
       tabindex: "-1") do
-      plain I18n.t(".edit")
+      plain t(".edit")
       span(class: "sr-only") do
         plain ", "
         plain resource.name rescue ""

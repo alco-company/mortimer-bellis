@@ -19,7 +19,7 @@ class ListItems::ProvidedService < ListItems::ListItem
     end
     unless resource.authorized?
       span { " - " }
-      link_to I18n.t("provided_service.authorize_now"), Dinero::Service.new(user: user).auth_url("/provided_services"), class: "mort-link-primary text-sm hover:underline", target: "_top"
+      link_to t("provided_service.authorize_now"), Dinero::Service.new(user: user).auth_url("/provided_services"), class: "mort-link-primary text-sm hover:underline", target: "_top"
       # render partial: "provided_services/#{resource.service.underscore}/authorize", locals: { path: resources_url } unless resource.authorized?
     end
   end

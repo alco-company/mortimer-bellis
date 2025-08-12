@@ -17,7 +17,7 @@ class PunchClockButtons < ApplicationComponent
 
   def view_template(&block)
     if user.archived?
-      I18n.t("user.archived")
+      t("user.archived")
     else
       if tab == "payroll"
         punch_add

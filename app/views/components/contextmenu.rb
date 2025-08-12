@@ -2,7 +2,7 @@ class Contextmenu < ApplicationComponent
   include Phlex::Rails::Helpers::Request
   include Phlex::Rails::Helpers::LinkTo
   include Phlex::Rails::Helpers::ButtonTo
-  include Rails.application.routes.url_helpers
+  # include Rails.application.routes.url_helpers
 
   attr_accessor :resource, :resource_class, :list
 
@@ -34,7 +34,7 @@ class Contextmenu < ApplicationComponent
 
   def archived_button
     a_button(css: "-m-2.5 block p-2.5 text-gray-500 hover:text-gray-900",
-      label: I18n.t("more"),
+      label: t("more"),
       visible_label: true) do
         svg(xmlns: "http://www.w3.org/2000/svg", height: "24px", viewBox: "0 -960 960 960", width: "24px", fill: "#5f6368") do |s|
           s.path(d: "M200-80q-33 0-56.5-23.5T120-160v-451q-18-11-29-28.5T80-680v-120q0-33 23.5-56.5T160-880h640q33 0 56.5 23.5T880-800v120q0 23-11 40.5T840-611v451q0 33-23.5 56.5T760-80H200Zm0-520v440h560v-440H200Zm-40-80h640v-120H160v120Zm200 280h240v-80H360v80Zm120 20Z")
@@ -48,7 +48,7 @@ class Contextmenu < ApplicationComponent
 
   def more_button_list
     a_button css: "flex items-center rounded-md ring-0 sm:ring-1 ring-gray-100 pl-3 pr-1 py-1 mr-1 text-gray-400 hover:text-gray-600 focus:outline-hidden focus:ring-1 focus:ring-sky-500",
-      label: I18n.t("more"),
+      label: t("more"),
       visible_label: true
   end
 
@@ -83,10 +83,10 @@ class Contextmenu < ApplicationComponent
     ) do
       #  Active: "bg-gray-100 text-gray-900", Not Active: "text-gray-700"
       unless resource_class.to_s == "Setting"
-        link2(url: filtering_url(), data: { action: "click->contextmenu#hide", turbo_frame: "form" }, label: I18n.t("filters.title"), icon: "filter")
+        link2(url: filtering_url(), data: { action: "click->contextmenu#hide", turbo_frame: "form" }, label: t("filters.title"), icon: "filter")
         a_button action: "click->list#toggleBatch click->contextmenu#hide", css: "flex justify-between w-full px-4 py-2 text-sm text-gray-700 hover:text-gray-900" do
           render_icon "select"
-          span { I18n.t(".batch") }
+          span { t(".batch") }
         end
       end
 
@@ -98,15 +98,15 @@ class Contextmenu < ApplicationComponent
           search: request.query_parameters.dig(:search)),
           action: "click->contextmenu#hide",
           icon: "trash",
-          label: I18n.t(".delete_all")) :
+          label: t(".delete_all")) :
         div(class: "flex justify-between px-4 py-2 text-sm text-gray-700 hover:text-gray-900") do
           render_icon "trash"
-          div(class: "text-nowrap text-gray-400 pl-2") { I18n.t(".delete_all") }
+          div(class: "text-nowrap text-gray-400 pl-2") { t(".delete_all") }
         end if resource_class.to_s != "Setting"
       hr
       # link2(url: new_modal_url(modal_form: "import", resource_class: resource_class.to_s.underscore, modal_next_step: "preview"),
       #   action: "click->contextmenu#hide",
-      #   label: I18n.t(".import")) if resource_class.to_s == "User"
+      #   label: t(".import")) if resource_class.to_s == "User"
       show_ERP_link
       link2 url: new_modal_url(modal_form: "export",
         all: true,
@@ -115,15 +115,15 @@ class Contextmenu < ApplicationComponent
         search: request.query_parameters.dig(:search)),
         action: "click->contextmenu#hide",
         icon: "download",
-        label: I18n.t(".export")
+        label: t(".export")
       # link2 url: resources_url() + ".csv",
       #   data: { turbo_frame: "_top" },
       #   icon: "download",
-      #   label: I18n.t(".export")
+      #   label: t(".export")
       # link2 url: resources_url() + ".pdf",
       #   data: { turbo_frame: "_top" },
       #   icon: "pdf",
-      #   label: I18n.t(".pdf")
+      #   label: t(".pdf")
     end
   end
 
@@ -159,8 +159,8 @@ class Contextmenu < ApplicationComponent
       #     data: { turbo_action: "advance", turbo_frame: "_top" },
       #     tabindex: "-1") do
       #     resource.archived? ?
-      #       plain(I18n.t(".unarchive")) :
-      #       plain(I18n.t(".archive"))
+      #       plain(t(".unarchive")) :
+      #       plain(t(".archive"))
       #     span(class: "sr-only") do
       #       plain ", "
       #       plain resource.name rescue ""
@@ -171,13 +171,13 @@ class Contextmenu < ApplicationComponent
       link2(url: (@links[0] || edit_resource_url(id: resource.id)),
         data: { turbo_action: "advance", turbo_frame: @turbo_frame },
         icon: "edit",
-        label: I18n.t(".edit")) unless (resource_class.to_s == "TimeMaterial" && resource.pushed_to_erp?) || resource.respond_to?(:archived?) && resource.archived?
+        label: t(".edit")) unless (resource_class.to_s == "TimeMaterial" && resource.pushed_to_erp?) || resource.respond_to?(:archived?) && resource.archived?
       # delete resource
       link2(url: erp_pull_link,
         data: { turbo_prefetch: "false" },
         action: "click->contextmenu#hide",
         icon: "ArrowsHunting",
-        label: I18n.t(".sync all with ERP")) if %(ProvidedService).include? resource_class.to_s
+        label: t(".sync all with ERP")) if %(ProvidedService).include? resource_class.to_s
 
       delete_record
     end
@@ -188,11 +188,11 @@ class Contextmenu < ApplicationComponent
       (resource_class.to_s == "Tenant" && Current.tenant == resource) ||
       (resource_class.to_s == "TimeMaterial" && resource.pushed_to_erp?)
       span(class: "block px-3 py-1 text-sm leading-6 text-gray-400") do
-        plain I18n.t(".delete")
+        plain t(".delete")
       end
     else
       link2 url: new_modal_url(modal_form: "delete", id: resource.id, resource_class: resource_class.to_s.underscore, modal_next_step: "accept", url: @links[1]),
-        label: I18n.t(".delete"), icon: "trash"
+        label: t(".delete"), icon: "trash"
     end
   end
 
@@ -213,20 +213,20 @@ class Contextmenu < ApplicationComponent
           modal_next_step: "preview"),
           action: "click->contextmenu#hide",
           icon: "ArrowsHunting",
-          label: I18n.t(".upload to ERP")) if resource_class.to_s == "TimeMaterial"
+          label: t(".upload to ERP")) if resource_class.to_s == "TimeMaterial"
         link2(url: erp_pull_link,
           data: { turbo_prefetch: "false" },
           action: "click->contextmenu#hide",
           icon: "ArrowsHunting",
-          label: I18n.t(".sync with ERP")) if %(Customer Product Invoice).include? resource_class.to_s
+          label: t(".sync with ERP")) if %(Customer Product Invoice).include? resource_class.to_s
       else
         if %(Customer Product Invoice TimeMaterial).include? resource_class.to_s
           div(class: "flex justify-between px-4 py-2 text-sm text-gray-400") do
             render_icon "ArrowsHunting"
-            span(class: "text-nowrap pl-2 truncate") { I18n.t(".sync with ERP") } if resource_class.to_s == "TimeMaterial"
-            span(class: "text-nowrap pl-2 truncate") { I18n.t(".sync with ERP") } if %(Customer Product Invoice).include? resource_class.to_s
-            # div(class: "block px-3 py-1 text-sm leading-6 text-gray-400") { I18n.t(".upload to ERP") } if resource_class.to_s == "TimeMaterial"
-            # div(class: "block px-3 py-1 text-sm leading-6 text-gray-400") { I18n.t(".sync with ERP") } if %(Customer Product Invoice).include? resource_class.to_s
+            span(class: "text-nowrap pl-2 truncate") { t(".sync with ERP") } if resource_class.to_s == "TimeMaterial"
+            span(class: "text-nowrap pl-2 truncate") { t(".sync with ERP") } if %(Customer Product Invoice).include? resource_class.to_s
+            # div(class: "block px-3 py-1 text-sm leading-6 text-gray-400") { t(".upload to ERP") } if resource_class.to_s == "TimeMaterial"
+            # div(class: "block px-3 py-1 text-sm leading-6 text-gray-400") { t(".sync with ERP") } if %(Customer Product Invoice).include? resource_class.to_s
           end
         end
       end
@@ -251,7 +251,7 @@ class Contextmenu < ApplicationComponent
 
     def a_button(
       css: "flex items-center rounded-md ring-1 ring-gray-100 bg-transparent px-2 py-1 text-gray-400 hover:text-gray-600 focus:outline-hidden focus:ring-1 focus:ring-sky-500",
-      label: I18n.t("more"),
+      label: t("more"),
       visible_label: false,
       data: { contextmenu_target: "button" },
       action: "touchstart->contextmenu#tap:passive click->contextmenu#tap click@window->contextmenu#hide", &block)

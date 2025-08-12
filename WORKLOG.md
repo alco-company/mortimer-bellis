@@ -6,6 +6,7 @@
 
 - remove helpers - shutting up Phlex in the process II
 - set .gitignore and backup scripts straight
+- fallback on localization in components
 
 ### 8/8/2025
 

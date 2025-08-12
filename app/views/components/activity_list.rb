@@ -1,4 +1,4 @@
-class ActivityList < Phlex::HTML
+class ActivityList < ApplicationComponent
   def initialize(list:, params:, url:)
     @list = list
     @params = params
@@ -18,7 +18,7 @@ class ActivityList < Phlex::HTML
   #   h2(
   #     class:
   #       "mx-auto mt-8 max-w-6xl px-4 text-lg font-medium leading-6 text-gray-900 sm:px-6 lg:px-8"
-  #   ) { I18n.t("landing.recent_activity") }
+  #   ) { t("landing.recent_activity") }
 
   #   comment { "Activity list (smallest breakpoint only)" }
   #   #
@@ -29,7 +29,7 @@ class ActivityList < Phlex::HTML
   #     div(role: "list", class: "mt-2 divide-y divide-gray-200 overflow-hidden shadow-sm ") do
   #       if @list.empty?
   #         div do
-  #           div(class: "px-4") { I18n.t("landing.no_activity_description") }
+  #           div(class: "px-4") { t("landing.no_activity_description") }
   #         end
   #       else
   #         @list.each do |item|
@@ -42,7 +42,7 @@ class ActivityList < Phlex::HTML
   #         a(
   #           href: @url,
   #           class: "font-medium text-cyan-700 hover:text-cyan-900"
-  #         ) { I18n.t("view_all") }
+  #         ) { t("view_all") }
   #       end
   #     end
 
@@ -81,22 +81,22 @@ class ActivityList < Phlex::HTML
   #                 class:
   #                   "bg-gray-50 px-6 py-3 text-left text-sm font-semibold text-gray-900",
   #                 scope: "col"
-  #               ) { I18n.t("landing.activity_list.transaction") }
+  #               ) { t("landing.activity_list.transaction") }
   #               th(
   #                 class:
   #                   "bg-gray-50 px-6 py-3 text-right text-sm font-semibold text-gray-900",
   #                 scope: "col"
-  #               ) { I18n.t("landing.activity_list.time") }
+  #               ) { t("landing.activity_list.time") }
   #               th(
   #                 class:
   #                   "hidden bg-gray-50 px-6 py-3 text-left text-sm font-semibold text-gray-900 md:block",
   #                 scope: "col"
-  #               ) { I18n.t("landing.activity_list.state") }
+  #               ) { t("landing.activity_list.state") }
   #               th(
   #                 class:
   #                   "bg-gray-50 px-6 py-3 text-right text-sm font-semibold text-gray-900",
   #                 scope: "col"
-  #               ) { I18n.t("landing.activity_list.date") }
+  #               ) { t("landing.activity_list.date") }
   #             end
   #           end
 
@@ -105,7 +105,7 @@ class ActivityList < Phlex::HTML
   #               tr(class: "bg-white") do
   #                 td(colspan: 4, class: "w-full max-w-0 whitespace-nowrap px-6 py-4 text-sm text-gray-900") do
   #                   div(class: "flex") do
-  #                     plain I18n.t("landing.no_activity_description")
+  #                     plain t("landing.no_activity_description")
   #                   end
   #                 end
   #               end
@@ -122,7 +122,7 @@ class ActivityList < Phlex::HTML
   #             a(
   #               href: @url,
   #               class: "font-medium text-cyan-700 hover:text-cyan-900"
-  #             ) { I18n.t("view_all") }
+  #             ) { t("view_all") }
   #           end
   #         end
 
@@ -170,12 +170,12 @@ class ActivityList < Phlex::HTML
   #         span(class: "flex flex-1 space-x-2 truncate") do
   #           punch_clock_svg
   #           span(class: "flex flex-col truncate text-sm text-gray-500") do
-  #             span(class: "truncate") { I18n.t("landing.activity_description", name: item.user.name, punch_clock: item.punch_clock.name) }
+  #             span(class: "truncate") { t("landing.activity_description", name: item.user.name, punch_clock: item.punch_clock.name) }
   #             span do
-  #               span(class: "font-medium text-gray-900 mr-2") { I18n.l(item.punched_at, format: :ultra_short) }
+  #               span(class: "font-medium text-gray-900 mr-2") { l(item.punched_at, format: :ultra_short) }
   #               plain WORK_STATE_H[item.state]
   #             end
-  #             time(datetime: item.punched_at) { I18n.l(item.punched_at, format: :date) }
+  #             time(datetime: item.punched_at) { l(item.punched_at, format: :date) }
   #           end
   #         end
   #         svg(
@@ -211,7 +211,7 @@ class ActivityList < Phlex::HTML
   #           p(
   #             class:
   #               "truncate text-gray-500 group-hover:text-gray-900"
-  #           ) { I18n.t("landing.activity_description", name: item.user.name, punch_clock: item.punch_clock.name) }
+  #           ) { t("landing.activity_description", name: item.user.name, punch_clock: item.punch_clock.name) }
   #         end
   #       end
   #     end
@@ -219,7 +219,7 @@ class ActivityList < Phlex::HTML
   #       class:
   #         "whitespace-nowrap px-6 py-4 text-right text-sm text-gray-500"
   #     ) do
-  #       span(class: "font-medium text-gray-900") { I18n.l(item.punched_at, format: :ultra_short) }
+  #       span(class: "font-medium text-gray-900") { l(item.punched_at, format: :ultra_short) }
   #     end
   #     td(
   #       class:
@@ -233,7 +233,7 @@ class ActivityList < Phlex::HTML
   #     td(
   #       class:
   #         "whitespace-nowrap px-6 py-4 text-right text-sm text-gray-500"
-  #     ) { time(datetime: item.punched_at) { I18n.l(item.punched_at, format: :date) } }
+  #     ) { time(datetime: item.punched_at) { l(item.punched_at, format: :date) } }
   #   end
   # end
 
