@@ -16,10 +16,10 @@ module FormSpecializations
 
     def view_only(component, outer_class = "mort-field")
       div(class: outer_class) do
-        render(component.field.label) do
-          plain I18n.t("activerecord.attributes.#{component.field.parent.key}.#{component.field.key}")
-          # span(class: "font-bold") do
-          # end
+        unless component.class == ApplicationForm::HiddenField
+          label(for: component.field.dom.id, class: "block") do
+            plain I18n.t("activerecord.attributes.#{component.field.parent.key}.#{component.field.key}")
+          end
         end
         div() do
           display_field(component.field)
@@ -29,19 +29,20 @@ module FormSpecializations
 
     def row(component, outer_class = "mort-field", label_suffix = "")
       div(class: outer_class, data: { controller: "input" }) do
-        render(component.field.label) do
+        unless component.class == ApplicationForm::HiddenField
+          # Avoid using the Superform label component (which was invoking Rails helpers too early)
           div(class: "relative") do
-            span { I18n.t("activerecord.attributes.#{component.field.parent.key}.#{component.field.key}") }
-            span { label_suffix.html_safe }
+            label(for: component.field.dom.id, class: "block") do
+              span { I18n.t("activerecord.attributes.#{component.field.parent.key}.#{component.field.key}") }
+              span { label_suffix.to_s.html_safe }
+            end
             if component.send(:attributes).keys&.include?(:help)
               button(type: "button", data: { action: "click->input#help", src: component.send(:attributes)[:help] }, class: "absolute inset-y-0 right-0 -top-1 flex items-center") do
                 render Icons::Help.new css: "h-5 w-5 text-gray-400 rotate-15 hover:rotate-30 hover:text-gray-600"
               end
             end
-            # span(class: "text-sm font-light") do
-            # end
           end
-        end unless component.class == ApplicationForm::HiddenField
+        end
         @editable ?
           render(component) :
           div(class: "mr-5") do
@@ -54,11 +55,11 @@ module FormSpecializations
 
     def naked_row(component)
       div() do
-        render(component.field.label) do
-          plain I18n.t("activerecord.attributes.#{component.field.parent.key}.#{component.field.key}")
-          # span(class: "text-sm font-light") do
-          # end
-        end unless component.class == ApplicationForm::HiddenField
+        unless component.class == ApplicationForm::HiddenField
+          label(for: component.field.dom.id, class: "block") do
+            plain I18n.t("activerecord.attributes.#{component.field.parent.key}.#{component.field.key}")
+          end
+        end
         @editable ?
           render(component) :
           div(class: "mr-5") do

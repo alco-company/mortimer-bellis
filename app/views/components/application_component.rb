@@ -3,6 +3,22 @@
 class ApplicationComponent < Phlex::HTML
   include Phlex::Rails::Helpers::Routes
 
+  # temporarily define helpers
+  register_value_helper :filtering_url
+  register_value_helper :new_modal_url
+  register_value_helper :edit_resource_url
+  register_value_helper :erp_pull_customers_url
+  register_value_helper :erp_pull_products_url
+  register_value_helper :erp_pull_invoices_url
+  register_value_helper :erp_pull_provided_services_url
+  register_value_helper :edit_tenant_path
+  register_value_helper :users_invitations_new_url
+  register_value_helper :root_path
+  register_value_helper :number_to_currency
+  register_value_helper :notification_url
+  register_output_helper :render
+
+
   attr_accessor :params
 
   if Rails.env.development?
@@ -29,15 +45,31 @@ class ApplicationComponent < Phlex::HTML
     Rails.logger.send(level, "-----------------")
   end
 
-  def show_resource_link(item)
-    link_to(url_for(item),
+  def show_resource_link(resource:, url: nil, turbo_frame: "form", turbo_action: "advance")
+    return "" unless resource
+    link_to((url || url_for(resource)),
       class: "inline grow flex-nowrap truncate",
       role: "menuitem",
-      data: { turbo_action: "advance", turbo_frame: "form" },
+      data: { turbo_action: turbo_action, turbo_frame: turbo_frame },
       tabindex: "-1") do
-      item.name
-    end if item
+      resource.name
+    end
   end
+
+  def edit_resource_link(resource:, url: nil, turbo_frame: "form")
+    link_to((url || edit_resource_url(id: resource.id)),
+      class: "block px-3 py-1 text-sm leading-6 text-gray-900",
+      role: "menuitem",
+      data: { turbo_action: "advance", turbo_frame: turbo_frame },
+      tabindex: "-1") do
+      plain I18n.t(".edit")
+      span(class: "sr-only") do
+        plain ", "
+        plain resource.name rescue ""
+      end
+    end
+  end
+
 
   def new_resource_url(**options)
     url_for(controller: params_ctrl, action: :new, **options)
@@ -58,12 +90,19 @@ class ApplicationComponent < Phlex::HTML
   end
 
   def resources_url(**options)
-    options[:search] = params.dig(:search) if params.dig(:search).present?
+    options[:search] = params_search
     url_for(controller: params_ctrl, action: :index, **options)
+  rescue ActionController::UrlGenerationError, NoMethodError => e
+    Rails.logger.debug("resources_url fallback for #{params_ctrl}: #{e.message}")
+    begin
+      url_for(controller: params_ctrl.gsub(/\/.*$/, ""), action: :index)
+    rescue
+      "/" # final safe fallback
+    end
   end
 
   def resource_class
-    @resource_class ||= case params_ctrl.split("/").last
+    @resource_class ||= case params_ctrl&.split("/")&.last
     # when "invitations"; UserInvitation
     when "notifications"; Noticed::Notification
     when "applications"; Doorkeeper::Application
@@ -72,27 +111,38 @@ class ApplicationComponent < Phlex::HTML
   end
 
   def rc_params
-    params.respond_to?(:permit) ? params.to_unsafe_h : params
-    # params.permit(:id, :s, :d, :page, :format, :_method, :commit, :authenticity_token, :controller)
+    par = params.present? ? params : request_params
+    par.respond_to?(:permit) ? par.to_unsafe_h : par
+  end
+
+  def request_params
+    self.respond_to?(:request) ? request.params : {}
   end
 
   def params_ctrl
-    params.dig(:controller)
+    rc_params.dig(:controller)
+  rescue
+    debugger
+     nil
   end
 
   def params_s
-    params.dig(:s)
+    rc_params.dig(:s) rescue nil
   end
 
   def params_d
-    params.dig(:d)
+    rc_params.dig(:d) rescue nil
   end
 
   def params_parent(ref)
-    params.permit(:team_id, :user_id, :tenant_id)[ref]
+    rc_params.permit(:team_id, :user_id, :tenant_id)[ref] rescue nil
   end
 
   def params_id
-    rc_params[:id]
+    rc_params[:id] rescue nil
+  end
+
+  def params_search
+    rc_params.dig(:search) rescue nil
   end
 end

@@ -2,6 +2,7 @@ class Settings::SettingsIndex < ApplicationComponent
   include Phlex::Rails::Helpers::TurboStreamFrom
   include Phlex::Rails::Helpers::TurboFrameTag
   include Phlex::Rails::Helpers::DOMID
+  include Phlex::Rails::Helpers::ImageTag
 
   def initialize(resources_stream: nil, divider: true, params: {})
     @resources_stream = resources_stream || "settings:resources"
@@ -22,7 +23,11 @@ class Settings::SettingsIndex < ApplicationComponent
 
   def show_index
     turbo_stream_from @resources_stream
-    render partial: "header", locals: { batch_form: form, divider: @divider }
+    # NOTE: Phlex components can't use the Rails partial API (render partial: ...)
+    # so we delegate to the Rails view context manually and inject the HTML.
+    # Using unsafe_raw since the partial returns already-safe HTML.
+    # unsafe_raw helpers.render(partial: "application/header", locals: { batch_form: nil, divider: @divider })
+    render(partial: "application/header", locals: { batch_form: nil, divider: @divider })
     turbo_frame_tag "settings_list" do
       div(id: "list", role: "list", class: "") do
         comment { "Help Box" }
@@ -145,7 +150,7 @@ class Settings::SettingsIndex < ApplicationComponent
     ) do
       div(class: "flex items-center space-x-3") do
         div(class: "p-2 rounded-md") do
-          helpers.user_mugshot(Current.get_user, css: "w-8", size: "32x32!")
+          user_mugshot(Current.get_user, css: "w-8", size: "32x32!")
         end
         div do
           p(class: "font-medium text-gray-900") { "User Profile" }
@@ -266,6 +271,21 @@ class Settings::SettingsIndex < ApplicationComponent
       end
     end
   end
+
+  #
+  def user_mugshot(user, size: nil, css: "")
+    size = size.blank? ? "40x40!" : size
+    if (user.mugshot.attached? rescue false)
+      image_tag(url_for(user.mugshot), class: css)
+    else
+      # size.gsub!("x", "/") if size =~ /x/
+      # size.gsub!("!", "") if size =~ /!/
+      image_tag "icons8-customer-64.png", class: css
+    end
+  rescue
+    image_tag "icons8-customer-64.png", class: css
+  end
+
 
   def color_input(setting, index)
     div(id: "setting_#{index}", class: "px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0") do

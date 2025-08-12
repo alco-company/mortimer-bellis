@@ -59,7 +59,7 @@ class ListItems::User < ListItems::ListItem
   def show_matter_link
     show_matter_mugshot
     if user&.global_queries? && resource.respond_to?(:tenant)
-      span(class: "hidden md:inline text-xs mr-2") { show_resource_link(resource.tenant) }
+      span(class: "hidden md:inline text-xs mr-2") { show_resource_link(resource: resource.tenant) }
     end unless resource_class == Tenant
     lbl = resource.name.blank? ? "" : resource.email
     span(class: "md:inline text-xs truncate") do

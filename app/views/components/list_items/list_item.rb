@@ -77,7 +77,7 @@ class ListItems::ListItem < ApplicationComponent
   def show_matter_link
     show_matter_mugshot
     if user&.global_queries? && resource.respond_to?(:tenant)
-      span(class: "hidden md:inline text-xs mr-2 truncate ") { show_resource_link(resource.tenant) }
+      span(class: "hidden md:inline text-xs mr-2 truncate ") { show_resource_link(resource: resource.tenant) }
     end unless resource_class == Tenant
     span(class: "md:inline text-xs truncate") do
       link_to(resource_url,
@@ -93,6 +93,18 @@ class ListItems::ListItem < ApplicationComponent
   def show_secondary_info
     plain "implement show_secondary_info"
   end
+  #
+  # show_secondary_info is placed in the upper right corner of the ListItem
+  #
+  # def show_secondary_info(resource:)
+  #   case resource.class.name
+  #   when "User"
+  #   when "TimeMaterial"; show_time_material_quantative resource: resource
+  #   else; ""
+  #   end
+  # end
+
+
 
   def show_time_info
     span(class: "truncate") do

@@ -56,8 +56,14 @@ class ProvidedService < ApplicationRecord
     f
   end
 
-  def self.form(resource:, editable: true)
-    ProvidedServices::Form.new resource: resource, editable: editable
+  def self.form(resource:, editable: true, **options)
+    LazyFormComponent.new(
+      form_class: ProvidedServices::Form,
+      resource: resource,
+      editable: editable,
+      fields: options.delete(:fields) || [],
+      **options
+    )
   end
 
   def authorized?

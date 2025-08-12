@@ -236,15 +236,25 @@ class User < ApplicationRecord
     name.split(" ").map { |n| n[0] }.join.upcase
   end
 
-  def self.form(resource:, editable: true, registration: false)
-    registration ?
-      Users::Registrations::Form.new(resource: resource,
-        editable: editable,
+  def self.form(resource:, editable: true, registration: false, **options)
+    form_class = registration ? Users::Registrations::Form : Users::Form
+    default_options = if registration
+      {
         enctype: "multipart/form-data",
-        class: "group mort-form", method: :put,
-        data: { form_target: "form", profile_target: "buttonForm", controller: "profile password-strength" })
-      :
-      Users::Form.new(resource: resource, editable: editable, enctype: "multipart/form-data")
+        class: "group mort-form",
+        method: :put,
+        data: { form_target: "form", profile_target: "buttonForm", controller: "profile password-strength" }
+      }
+    else
+      { enctype: "multipart/form-data" }
+    end
+    LazyFormComponent.new(
+      form_class: form_class,
+      resource: resource,
+      editable: editable,
+      fields: options.delete(:fields) || [],
+      **default_options.merge(options)
+    )
   end
 
   def add_role

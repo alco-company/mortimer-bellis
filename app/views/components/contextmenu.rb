@@ -1,18 +1,18 @@
-class Contextmenu < Phlex::HTML
+class Contextmenu < ApplicationComponent
   include Phlex::Rails::Helpers::Request
-  include Phlex::Rails::Helpers::Routes
   include Phlex::Rails::Helpers::LinkTo
   include Phlex::Rails::Helpers::ButtonTo
   include Rails.application.routes.url_helpers
 
   attr_accessor :resource, :resource_class, :list
 
-  def initialize(resource: nil, list: nil, resource_class: nil, turbo_frame: "_top", alter: true, links: [], cls: "relative flex")
+  def initialize(resource: nil, list: nil, resource_class: nil, turbo_frame: "_top", alter: true, links: [], cls: "relative flex", filter: nil)
     @resource = resource
     @resource_class = resource_class || resource.class
     @list = list
     @turbo_frame = turbo_frame
     @alter = alter
+    @filter = filter
     @links = links
     @css = cls
   end
@@ -83,7 +83,7 @@ class Contextmenu < Phlex::HTML
     ) do
       #  Active: "bg-gray-100 text-gray-900", Not Active: "text-gray-700"
       unless resource_class.to_s == "Setting"
-        link2(url: helpers.filtering_url(), data: { action: "click->contextmenu#hide", turbo_frame: "form" }, label: I18n.t("filters.title"), icon: "filter")
+        link2(url: filtering_url(), data: { action: "click->contextmenu#hide", turbo_frame: "form" }, label: I18n.t("filters.title"), icon: "filter")
         a_button action: "click->list#toggleBatch click->contextmenu#hide", css: "flex justify-between w-full px-4 py-2 text-sm text-gray-700 hover:text-gray-900" do
           render_icon "select"
           span { I18n.t(".batch") }
@@ -91,7 +91,7 @@ class Contextmenu < Phlex::HTML
       end
 
       resource_class.any? && resource_class.to_s != "Setting" ?
-        link2(url: helpers.new_modal_url(modal_form: "delete",
+        link2(url: new_modal_url(modal_form: "delete",
           all: true,
           resource_class: resource_class.to_s.underscore,
           modal_next_step: "accept",
@@ -104,11 +104,11 @@ class Contextmenu < Phlex::HTML
           div(class: "text-nowrap text-gray-400 pl-2") { I18n.t(".delete_all") }
         end if resource_class.to_s != "Setting"
       hr
-      # link2(url: helpers.new_modal_url(modal_form: "import", resource_class: resource_class.to_s.underscore, modal_next_step: "preview"),
+      # link2(url: new_modal_url(modal_form: "import", resource_class: resource_class.to_s.underscore, modal_next_step: "preview"),
       #   action: "click->contextmenu#hide",
       #   label: I18n.t(".import")) if resource_class.to_s == "User"
       show_ERP_link
-      link2 url: helpers.new_modal_url(modal_form: "export",
+      link2 url: new_modal_url(modal_form: "export",
         all: true,
         resource_class: resource_class.to_s.underscore,
         modal_next_step: "setup",
@@ -116,11 +116,11 @@ class Contextmenu < Phlex::HTML
         action: "click->contextmenu#hide",
         icon: "download",
         label: I18n.t(".export")
-      # link2 url: helpers.resources_url() + ".csv",
+      # link2 url: resources_url() + ".csv",
       #   data: { turbo_frame: "_top" },
       #   icon: "download",
       #   label: I18n.t(".export")
-      # link2 url: helpers.resources_url() + ".pdf",
+      # link2 url: resources_url() + ".pdf",
       #   data: { turbo_frame: "_top" },
       #   icon: "pdf",
       #   label: I18n.t(".pdf")
@@ -153,7 +153,7 @@ class Contextmenu < Phlex::HTML
       # archive employee
       # on roadmap for now
       # if resource_class.to_s == "User" || (resource_class.to_s == "TimeMaterial" && (resource.pushed_to_erp? || resource.archived?))
-      #   button_to((helpers.archive_resource_url(resource)),
+      #   button_to((archive_resource_url(resource)),
       #     class: "flex justify-between px-4 py-2 text-sm text-gray-700 mb-0",
       #     role: "menuitem",
       #     data: { turbo_action: "advance", turbo_frame: "_top" },
@@ -168,7 +168,7 @@ class Contextmenu < Phlex::HTML
       #   end
       # end
       # edit resource
-      link2(url: (@links[0] || helpers.edit_resource_url(id: resource.id)),
+      link2(url: (@links[0] || edit_resource_url(id: resource.id)),
         data: { turbo_action: "advance", turbo_frame: @turbo_frame },
         icon: "edit",
         label: I18n.t(".edit")) unless (resource_class.to_s == "TimeMaterial" && resource.pushed_to_erp?) || resource.respond_to?(:archived?) && resource.archived?
@@ -191,7 +191,7 @@ class Contextmenu < Phlex::HTML
         plain I18n.t(".delete")
       end
     else
-      link2 url: helpers.new_modal_url(modal_form: "delete", id: resource.id, resource_class: resource_class.to_s.underscore, modal_next_step: "accept", url: @links[1]),
+      link2 url: new_modal_url(modal_form: "delete", id: resource.id, resource_class: resource_class.to_s.underscore, modal_next_step: "accept", url: @links[1]),
         label: I18n.t(".delete"), icon: "trash"
     end
   end
@@ -207,7 +207,7 @@ class Contextmenu < Phlex::HTML
 
     def show_ERP_link
       if should_show_ERP_sync_link?
-        link2(url: helpers.new_modal_url(modal_form: "upload_dinero",
+        link2(url: new_modal_url(modal_form: "upload_dinero",
           resource_class: resource_class.to_s.underscore,
           search: request.query_parameters.dig(:search),
           modal_next_step: "preview"),
@@ -255,7 +255,6 @@ class Contextmenu < Phlex::HTML
       visible_label: false,
       data: { contextmenu_target: "button" },
       action: "touchstart->contextmenu#tap:passive click->contextmenu#tap click@window->contextmenu#hide", &block)
-
       data[:action] = action if action
       button(
         type: "button",
@@ -284,10 +283,25 @@ class Contextmenu < Phlex::HTML
 
     def erp_pull_link
       case resource_class.to_s
-      when "Customer"; helpers.erp_pull_customers_url
-      when "Product"; helpers.erp_pull_products_url
-      when "Invoice"; helpers.erp_pull_invoices_url
-      when "ProvidedService"; helpers.erp_pull_provided_services_url
+      when "Customer"; erp_pull_customers_url
+      when "Product"; erp_pull_products_url
+      when "Invoice"; erp_pull_invoices_url
+      when "ProvidedService"; erp_pull_provided_services_url
       end
     end
+
+    def filtering_url
+      @filter.persisted? ?
+        edit_filter_url(@filter, url: resources_url, filter_form: params_ctrl.split("/").last):
+        new_filter_url(url: resources_url, filter_form: params_ctrl.split("/").last)
+    end
+
+
+    # def archive_resource_url(resource)
+    #   case resource.class.name
+    #   when "User"; archive_user_url(resource)
+    #   when "TimeMaterial"; archive_time_material_url(resource)
+    #   else; ""
+    #   end
+    # end # rubocop:disable Layout/CommentIndentation
 end

@@ -90,7 +90,7 @@ class ListItems::TimeMaterial < ListItems::ListItem
   def show_matter_link
     mugshot(resource.user, css: "sm:hidden mr-2 h-5 w-5 flex-none rounded-full bg-gray-50")
     if resource&.user&.global_queries?
-      span(class: "hidden md:inline text-xs mr-2 truncate") { show_resource_link(resource.tenant) }
+      span(class: "hidden md:inline text-xs mr-2 truncate") { show_resource_link(resource: resource.tenant) }
     end
     span(class: "md:inline text-xs font-bold truncate mr-2") { "%s:" % resource.user.name }
     span(class: "md:inline text-xs truncate") do

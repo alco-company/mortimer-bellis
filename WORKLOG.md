@@ -2,9 +2,14 @@
 
 ## CHANGELOG
 
+### 12/8/2025
+
+- remove helpers - shutting up Phlex in the process II
+
 ### 8/8/2025
 
 - use localhost on development b/c puma-dev is hard to debug
+- remove helpers - shutting up Phlex in the process
 
 ### 5/8/2025
 

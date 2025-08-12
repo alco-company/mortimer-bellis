@@ -6,7 +6,7 @@ class Users::Registrations::Form < ApplicationForm
   def view_template(&)
     div(class: "mx-auto w-72 sm:w-96 mt-4") do
       h1 { I18n.t("users.edit_profile.name") }
-      raw helpers.mortimer_version
+      p(class: "text-xs font-thin pb-3 text-gray-400") { "version: #{ENV["MORTIMER_VERSION"]}" }
 
       if user.superadmin?
         row field(:tenant_id).select(Tenant.all.order(name: :asc).select(:id, :name), prompt: I18n.t(".select_tenant"), class: "mort-form-select")

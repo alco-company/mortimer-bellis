@@ -123,7 +123,7 @@ class ApplicationRecord < ActiveRecord::Base
   # the fields array passed to the form method
   #
   def self.form(resource:, editable: true, fields: [])
-    ApplicationForm.new resource: resource, editable: editable, fields: fields
+    LazyFormComponent.new(form_class: ApplicationForm, resource: resource, editable: editable, fields: fields)
   end
 
   # FIXME - implement this method on models that have users

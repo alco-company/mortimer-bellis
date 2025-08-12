@@ -68,7 +68,7 @@
               <%= render Icons::Add.new css: "h-6 text-gray-400" %>
               <span class="hidden pl-2 sm:inline text-gray-400 text-2xs"><%= t("#{ resource_class.table_name}.list.new") %></span>
             </span>
-          <% end if user_can_create? %>
+          <% end if user_can_create? && !(resource_class == Filter)%>
         <% end %>
 
         <span class="batch hidden items-center group rounded-md bg-gray-100 px-2 py-1.5 text-xs font-medium text-gray-600 hover:text-white hover:bg-gray-400 sm:ring-1 ring-inset ring-gray-500/10">
@@ -77,7 +77,7 @@
         </span>
 
         <div class="relative ml-3 inline-block text-left">
-          <%= render_contextmenu list: @resources, resource_class: resource_class %>
+          <%= render_contextmenu list: @resources, resource_class: resource_class, filter: @filter %>
         </div>
       </div>
     </div>
