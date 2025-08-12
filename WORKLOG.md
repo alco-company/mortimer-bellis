@@ -5,6 +5,7 @@
 ### 12/8/2025
 
 - remove helpers - shutting up Phlex in the process II
+- set .gitignore and backup scripts straight
 
 ### 8/8/2025
 
