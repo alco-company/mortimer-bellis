@@ -6,6 +6,7 @@
 
 - set clock straight in line with timezone
 - translations missing
+- make settings find 1|true, 0|false
 
 ### 12/8/2025
 
