@@ -5,6 +5,7 @@
 ### 13/8/2025
 
 - set clock straight in line with timezone
+- translations missing
 
 ### 12/8/2025
 

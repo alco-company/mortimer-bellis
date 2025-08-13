@@ -11,6 +11,15 @@ da:
         button: Slet
 
   invoices:
+
+    list:
+      title: Fakturaer
+      new: Ny faktura
+      edit: Rediger
+      delete: Slet
+      show: Vis
+      updated_at: Opdateret den
+
     validation_errors: Der er fejl i det indtastede
 
     
