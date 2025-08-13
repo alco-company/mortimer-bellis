@@ -11,10 +11,8 @@ module TimezoneLocale
     # about handling date and timezone
     # https://nandovieira.com/working-with-dates-on-ruby-on-rails
     #
-    around_action :user_time_zone if Current.user || Current.tenant
+    around_action :user_time_zone # if Current.user || Current.tenant
   end
-
-
 
   private
 
@@ -52,9 +50,22 @@ module TimezoneLocale
     # make sure we use the timezone (of the current_user)
     #
     def user_time_zone(&block)
-      timezone = Current.user&.time_zone || Current.tenant&.time_zone rescue nil
-      timezone.blank? ?
-        Time.use_zone("Europe/Copenhagen", &block) :
-        Time.use_zone(timezone, &block)
+      # timezone = Current.user&.time_zone || Current.tenant&.time_zone rescue nil
+      # timezone.blank? ?
+      #   Time.use_zone("Europe/Copenhagen", &block) :
+      #   Time.use_zone(timezone, &block)
+      # Accept either `time_zone` or `timezone` attribute names.
+      zone =
+        Current.user&.try(:time_zone).presence ||
+        Current.user&.try(:timezone).presence ||
+        Current.tenant&.try(:time_zone).presence ||
+        Current.tenant&.try(:timezone).presence ||
+        "Europe/Copenhagen"
+
+      zone = "Europe/Copenhagen" unless ActiveSupport::TimeZone[zone] # fallback if invalid
+      Time.use_zone(zone, &block)
+    rescue => e
+      # Fallback hard and still run the action
+      Time.use_zone("Europe/Copenhagen", &block)
     end
 end
