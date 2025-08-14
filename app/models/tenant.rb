@@ -1,4 +1,5 @@
 class Tenant < ApplicationRecord
+  LICENSE_TYPES = { trial: 0, free: 1, ambassador: 2, essential: 3, pro: 4 }
   #
   # add time zone support - if eg there is no user assigned when
   # some process executes
@@ -43,7 +44,7 @@ class Tenant < ApplicationRecord
   validates :name, presence: true, uniqueness: { message: I18n.t("tenants.errors.messages.name_exist") }
   validates :email, presence: true
 
-  enum :license, { trial: 0, free: 1, ambassador: 2, essential: 3, pro: 4 }, default: :trial, scope: true
+  enum :license, LICENSE_TYPES, default: :trial, scope: true
 
   def self.filtered(filter)
     flt = filter.filter
@@ -162,12 +163,28 @@ class Tenant < ApplicationRecord
   def license_expires_shortly?
     license_expires_at.present? && license_expires_at < 1.week.from_now
   end
-
-  def license_valid?
-    if license == "trial" && license_expires_at < Time.now
-      update(license: "free", license_expires_at: 10.years.from_now)
+  # Returns true if the tenant's license rank is >= required level.
+  def license_at_least?(required = :trial)
+    if required.is_a?(Array)
+      return required.all? { |r| license_at_least?(r) }
     end
-    license_expires_at.present? && license_expires_at > Time.now
+    LICENSE_TYPES[license.to_sym] >= LICENSE_TYPES[required.to_sym]
+  rescue
+    true
+  end
+
+  # Valid if current license meets required level; trial also checks expiry.
+  def license_valid?(required_license = :trial)
+    # Maintain your trial auto-upgrade logic
+    if license == "trial" && license_expires_at.present? && license_expires_at < Time.current
+      update(license: :free, license_expires_at: 10.years.from_now)
+    end
+
+    return false unless license_at_least?(required_license)
+
+    # Only trial depends on expiry; paid tiers are always valid here
+    return true unless license == "trial"
+    license_expires_at.nil? || (license_expires_at.present? && license_expires_at.future?)
   end
 
   def license_expired?
