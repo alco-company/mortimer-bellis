@@ -274,6 +274,23 @@ class Setting < ApplicationRecord
     })
   end
   def self.team_settings
+    self.get_settings({
+      "delegate_time_materials" => { "type" => "boolean", "value" => true },
+      "limit_time_to_quarters" => { "type" => "boolean", "value" => true },
+      "default_time_material_date" => { "type" => "date", "value" => Time.current.to_date },
+      "default_time_material_state" => { "type" => "option", "value" =>  "draft", "options" => { "draft" => I18n.t("time_material.states.draft"), "done" => I18n.t("time_material.states.done") } },
+      "default_time_material_about" => { "type" => "text", "value" => I18n.t("time_material.default_assigned_about") },
+      "default_time_material_hour_time" => { "type" => "text", "value" => "0" },
+      "default_time_material_minute_time" => { "type" => "text", "value" => "15" },
+      "default_time_material_rate" => { "type" => "boolean", "value" => "750,75" },
+      "default_time_material_over_time" => { "type" => "boolean", "value" => true },
+      "allow_create_time_material" => { "type" => "boolean", "value" => true },
+      "allow_create_product" => { "type" => "boolean", "value" => true },
+      "allow_create_customer" => { "type" => "boolean", "value" => true },
+      "allow_create_project" => { "type" => "boolean", "value" => true },
+      "allow_comments_on_time_material" => { "type" => "boolean", "value" => true },
+      "show_all_time_material_posts" => { "type" => "boolean", "value" => true }
+    })
   end
   def self.user_settings
     self.get_settings({

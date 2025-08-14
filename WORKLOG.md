@@ -7,6 +7,7 @@
 - add settings link to contextmenu
 - fix language inspection on load
 - show description above settings
+- don't fail on team settings
 
 ### 13/8/2025
 
