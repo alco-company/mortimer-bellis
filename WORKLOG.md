@@ -10,6 +10,7 @@
 - don't fail on team settings
 - cannot cancel changes on settings - they are ACID
 - make license_valid? respond straight to :pro, "pro", [:trial,"ambassador"]
+- warn when downgrading trial licenses
 
 ### 13/8/2025
 

@@ -176,8 +176,13 @@ class Tenant < ApplicationRecord
   # Valid if current license meets required level; trial also checks expiry.
   def license_valid?(required_license = :trial)
     # Maintain your trial auto-upgrade logic
+    if license_expires_at.nil?
+      update(license: :trial, license_expires_at: 4.week.from_now)
+      UserMailer.info_report("license expiration not found", "tenants/#{id} #{name}'s license has been set to Trial with a 4 week grace period!").deliver_later
+    end
     if license == "trial" && license_expires_at.present? && license_expires_at < Time.current
       update(license: :free, license_expires_at: 10.years.from_now)
+      UserMailer.info_report("Trial license expired", "tenants/#{id} #{name}'s trial license has expired and was downgraded to a free license.").deliver_later
     end
 
     return false unless license_at_least?(required_license)
