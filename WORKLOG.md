@@ -8,6 +8,7 @@
 - fix language inspection on load
 - show description above settings
 - don't fail on team settings
+- cannot cancel changes on settings - they are ACID
 
 ### 13/8/2025
 
