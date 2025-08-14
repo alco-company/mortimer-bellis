@@ -4,16 +4,17 @@ class Settings::SettingsIndex < ApplicationComponent
   include Phlex::Rails::Helpers::DOMID
   include Phlex::Rails::Helpers::ImageTag
 
-  def initialize(resources_stream: nil, divider: true, params: {})
+  def initialize(resources_stream: nil, divider: true, params: {}, breadcrumb: true)
     @resources_stream = resources_stream || "settings:resources"
     @divider = divider
     @params = params
+    @breadcrumb = breadcrumb
   end
 
   def view_template
     if @params[:tab].present?
       turbo_frame_tag "settings_list" do
-        bread_crumb
+        bread_crumb # if @breadcrumb
         show_tab
       end
     else
@@ -32,7 +33,7 @@ class Settings::SettingsIndex < ApplicationComponent
       div(id: "list", role: "list", class: "") do
         comment { "Help Box" }
         div(class: "mx-4 mb-6 p-4 bg-blue-50 border border-blue-200 rounded-xl") do
-          h2(class: "font-semibold text-sky-700 mb-1") { "Need help?" }
+          h2(class: "font-semibold text-sky-700 mb-1") { "What - settings!?" }
           p(class: "text-sm text-sky-700") do
             "Adjust how your time and material tracking works. Your changes apply to all users unless otherwise noted."
           end
@@ -247,6 +248,7 @@ class Settings::SettingsIndex < ApplicationComponent
       end
     end
   end
+
   def select_input(setting, index)
     url = setting.second["id"] == "0" ? "/settings?target=setting_i_#{index}" : "/settings/#{setting.second["object"].id}"
     target = setting.second["id"] == "0" ? "setting_i_#{index}" : dom_id(setting.second["object"])

@@ -108,6 +108,16 @@ class Contextmenu < ApplicationComponent
       #   action: "click->contextmenu#hide",
       #   label: t(".import")) if resource_class.to_s == "User"
       show_ERP_link
+
+      link2 url: new_modal_url(modal_form: "settings",
+        all: true,
+        resource_class: resource_class.to_s.underscore,
+        modal_next_step: "setup"),
+        # search: request.query_parameters.dig(:search)),
+        action: "click->contextmenu#hide",
+        icon: "setting",
+        label: t("settings.label")
+
       link2 url: new_modal_url(modal_form: "export",
         all: true,
         resource_class: resource_class.to_s.underscore,
@@ -179,8 +189,20 @@ class Contextmenu < ApplicationComponent
         icon: "ArrowsHunting",
         label: t(".sync all with ERP")) if %(ProvidedService).include? resource_class.to_s
 
+      setting_link
       delete_record
     end
+  end
+
+  def setting_link
+    link2 url: new_modal_url(modal_form: "settings",
+      all: true,
+      resource_class: resource_class.to_s.underscore,
+      modal_next_step: "setup"),
+      # search: request.query_parameters.dig(:search)),
+      action: "click->contextmenu#hide",
+      icon: "setting",
+      label: t("settings.label")
   end
 
   def delete_record

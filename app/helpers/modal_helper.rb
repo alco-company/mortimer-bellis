@@ -15,6 +15,17 @@ module ModalHelper
       end
   end
 
+  def setting_modal_title
+    resource.id.present? ?
+      I18n.t("#{resource_class.to_s.underscore}.modal.setting.title") :
+      I18n.t("#{resource_class.to_s.underscore}.modal.setting_all.title")
+  end
+  def setting_modal_instruction
+    resource.id.present? ?
+      I18n.t("#{resource_class.to_s.underscore}.modal.setting.instruction", name: resource.name) :
+      I18n.t("#{resource_class.to_s.underscore}.modal.setting_all.instruction", count: resources.count)
+  end
+
   def delete_account_modal_title
     I18n.t("modal.destroy.account.title")
   end

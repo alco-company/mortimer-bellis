@@ -2,6 +2,10 @@
 
 ## CHANGELOG
 
+### 14/8/2025
+
+- add settings link to contextmenu
+
 ### 13/8/2025
 
 - set clock straight in line with timezone
