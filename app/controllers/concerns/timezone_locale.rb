@@ -21,13 +21,21 @@ module TimezoneLocale
     # https://phrase.com/blog/posts/rails-i18n-best-practices/
     #
     def switch_locale(&action)
-      locale = extract_locale_from_tld || I18n.default_locale
-      locale = params.dig(:lang) || locale
-      locale = params.dig(:locale) || locale
-      parsed_locale = get_locale_from_user_or_tenant || locale
-      I18n.with_locale(parsed_locale, &action)
-    rescue I18n::MissingTranslationData => e
+      locale =
+        normalize_locale(params[:locale]) ||
+        normalize_locale(params[:lang]) ||
+        get_locale_from_user_or_tenant ||
+        extract_locale_from_tld ||
+        I18n.default_locale
+
+      I18n.with_locale(locale, &action)
+    rescue I18n::InvalidLocale => e
+      # Fallback to default rather than 500
+      Rails.logger.warn("Invalid locale #{locale.inspect}: #{e.message}")
+      I18n.with_locale(I18n.default_locale, &action)
+    rescue => e
       UserMailer.error_report(e.to_s, "TimezoneLocale#switch_locale - failed with params: #{params}").deliver_later
+      I18n.with_locale(I18n.default_locale, &action)
     end
 
     # Get locale from top-level domain or return +nil+ if such locale is not available
@@ -37,13 +45,42 @@ module TimezoneLocale
     #   127.0.0.1 application.pl
     # in your /etc/hosts file to try this out locally
     def extract_locale_from_tld
-      parsed_locale = request.host.split(".").last
-      I18n.available_locales.map(&:to_s).include?(parsed_locale) ? parsed_locale : nil
+      parsed = request.host.split(".").last
+      return nil unless parsed
+      parsed = parsed.tr("-", "_")
+      short = parsed.split("_").first
+      [ parsed, short ].find { |code| I18n.available_locales.include?(code.to_sym) }
     end
 
     def get_locale_from_user_or_tenant
-      Current.user&.locale ||
-      Current.tenant&.locale
+      normalize_locale(Current.user&.locale) ||
+      normalize_locale(Current.tenant&.locale)
+    end
+
+    # Accept objects (e.g., Localeable::Locale), strings ("da", "da-DK"), or symbols.
+    def normalize_locale(val)
+      return nil if val.blank?
+      code =
+        if val.is_a?(Symbol) || val.is_a?(String)
+          val.to_s
+        elsif val.respond_to?(:code)
+          val.code.to_s
+        elsif val.respond_to?(:locale)
+          val.locale.to_s
+        elsif val.respond_to?(:to_str)
+          val.to_str
+        else
+          nil
+        end
+      return nil if code.blank?
+
+      code = code.tr("-", "_")
+      short = code.split("_").first
+      [ code, short ].each do |c|
+        sym = c.to_s.downcase.to_sym
+        return sym if I18n.available_locales.include?(sym)
+      end
+      nil
     end
 
     #
