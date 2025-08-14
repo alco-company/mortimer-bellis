@@ -14,8 +14,18 @@ class Settings::SettingsIndex < ApplicationComponent
   def view_template
     if @params[:tab].present?
       turbo_frame_tag "settings_list" do
-        bread_crumb # if @breadcrumb
-        show_tab
+        div(id: "list", role: "list", class: "") do
+          comment { "Help Box" }
+          div(class: "mx-4 mb-6 p-4 bg-blue-50 border border-blue-200 rounded-xl") do
+            h2(class: "font-semibold text-sky-700 mb-1") { "What - settings!?" }
+            p(class: "text-sm text-sky-700") do
+              plain t("settings.tabs.descriptions.#{@params[:tab]}")
+            end
+          end
+
+          bread_crumb # if @breadcrumb
+          show_tab
+        end
       end
     else
       show_index
@@ -35,7 +45,7 @@ class Settings::SettingsIndex < ApplicationComponent
         div(class: "mx-4 mb-6 p-4 bg-blue-50 border border-blue-200 rounded-xl") do
           h2(class: "font-semibold text-sky-700 mb-1") { "What - settings!?" }
           p(class: "text-sm text-sky-700") do
-            "Adjust how your time and material tracking works. Your changes apply to all users unless otherwise noted."
+            plain t("settings.tabs.description")
           end
         end
 
@@ -69,7 +79,7 @@ class Settings::SettingsIndex < ApplicationComponent
     div(class: "mx-8 flex items-center space-x-2 mb-4") do
       a(
         href: "/settings",
-        class: "text-sm text-gray-500 hover:text-gray-700"
+        class: "text-sm text-sky-500 hover:text-sky-700"
       ) { "Settings" }
       span(class: "text-sm text-gray-400") { ">" }
       span(class: "text-sm font-medium text-gray-900") { @params[:tab].humanize }
@@ -94,7 +104,7 @@ class Settings::SettingsIndex < ApplicationComponent
 
   def settings_tab(settings)
     div(class: "ml-6 mr-1") do
-      div(class: "text-sm/6 pt-6") { "Settings for organization, team, or user - choose wisely in some situations" }
+      div(class: "text-sm/6 pt-6") { t("settings.tabs.descriptions.#{@params[:tab]}") }
       dl(class: "divide-y divide-gray-100") do
         index = 1
         settings.each do |setting|

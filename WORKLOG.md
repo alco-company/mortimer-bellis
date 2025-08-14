@@ -6,6 +6,7 @@
 
 - add settings link to contextmenu
 - fix language inspection on load
+- show description above settings
 
 ### 13/8/2025
 
