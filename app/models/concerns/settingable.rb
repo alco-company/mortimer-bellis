@@ -122,6 +122,46 @@ module Settingable
   end
 
   class_methods do
+    def can?(action)
+      key = action.to_s
+      tenant = try(:tenant) || Current.tenant
+
+      # 3) Class-level for this resource (e.g., User defaults)
+      rel = self.settings_for_tenant(tenant)
+      return false if rel.for_key(key).denied.exists?
+      return true  if rel.for_key(key).allowed.exists?
+
+      # 5) Tenant/global defaults (no setable_type/id)
+      if tenant
+        rel = Setting.where(tenant:, setable_type: nil, setable_id: nil)
+        return false if rel.for_key(key).denied.exists?
+        return true  if rel.for_key(key).allowed.exists?
+      end
+
+      # Default confirm (that user can perform the action)
+      false
+    end
+
+    # do unless expressively denied
+    def cannot?(action)
+      key = action.to_s
+      tenant = try(:tenant) || Current.tenant
+
+      # 3) Class-level for this resource (e.g., User defaults)
+      rel = self.settings_for_tenant(tenant)
+      return true if rel.for_key(key).denied.exists?
+      return false if rel.for_key(key).allowed.exists?
+
+      # 5) Tenant/global defaults (no setable_type/id)
+      if tenant
+        rel = Setting.where(tenant:, setable_type: nil, setable_id: nil)
+        return true if rel.for_key(key).denied.exists?
+        return false if rel.for_key(key).allowed.exists?
+      end
+
+      # Default confirm (that user cannot perform the action)
+      true
+    end
     def settings
       Setting.by_tenant.where(setable_type: self.to_s, setable_id: nil)
     end

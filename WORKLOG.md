@@ -5,6 +5,7 @@
 ### 18/8/2025
 
 - manage settings better
+- missed class can? more
 
 ### 14/8/2025
 
