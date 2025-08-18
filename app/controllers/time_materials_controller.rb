@@ -125,7 +125,7 @@ class TimeMaterialsController < MortimerController
         user_id: Current.user.id,
         started_at: Time.current,
         time_spent: 0,
-        date: get_default_time_material_date("Time.current.to_date.yesterday"),
+        date: get_default_time_material_date("Time.current.to_date"),
         about: Current.user.default(:default_time_material_about, "")
       }
       params.delete(:play)

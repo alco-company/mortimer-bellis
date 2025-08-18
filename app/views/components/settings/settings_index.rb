@@ -4,11 +4,12 @@ class Settings::SettingsIndex < ApplicationComponent
   include Phlex::Rails::Helpers::DOMID
   include Phlex::Rails::Helpers::ImageTag
 
-  def initialize(resources_stream: nil, divider: true, params: {}, breadcrumb: true)
+  def initialize(resources_stream: nil, divider: true, params: {}, breadcrumb: true, resource: nil)
     @resources_stream = resources_stream || "settings:resources"
     @divider = divider
     @params = params
     @breadcrumb = breadcrumb
+    @resource = resource
   end
 
   def view_template
@@ -90,7 +91,7 @@ class Settings::SettingsIndex < ApplicationComponent
     div(class: "p-4") do
       case @params[:tab]
       when "general";         settings_tab Setting.general_settings
-      when "time_material";   settings_tab Setting.time_material_settings
+      when "time_material";   settings_tab Setting.time_material_settings resource: @resource
       when "customer";        settings_tab Setting.customer_settings
       when "project";         settings_tab Setting.project_settings
       when "product";         settings_tab Setting.product_settings

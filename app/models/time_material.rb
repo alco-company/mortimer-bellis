@@ -18,13 +18,13 @@
 # t.string "about"                                                        |                                         default_time_material_about fx 'ongoing task'
 # t.text "comment"                                                        |
 #
-# t.string "customer_name"                                                                                          allow_create_customer
+# t.string "customer_name"                                                                                          add_customer
 # t.string "customer_id"                                                  required
 #
-# t.string "project_name"                                                                                           allow_create_project
+# t.string "project_name"                                                                                           add_project
 # t.string "project_id"
 #
-# t.string "product_name"                                                 |                                         allow_create_product
+# t.string "product_name"                                                 |                                         add_product
 # t.string "product_id"                                                   | either
 #
 # t.string "quantity"                                                     required                                  default_quantity            fx 1
@@ -118,9 +118,9 @@ class TimeMaterial < ApplicationRecord
 
   def has_insufficient_data?
     hid = false
-    hid = true if project_name.present? && project_id.blank? && Current.get_user.cannot?(:allow_create_project)
-    hid = true if customer_name.present? && customer_id.blank? && Current.get_user.cannot?(:allow_create_customer)
-    hid = true if product_name.present? && product_id.blank? && Current.get_user.cannot?(:allow_create_product)
+    hid = true if project_name.present? && project_id.blank? && Current.get_user.cannot?(:add_project)
+    hid = true if customer_name.present? && customer_id.blank? && Current.get_user.cannot?(:add_customer)
+    hid = true if product_name.present? && product_id.blank? && Current.get_user.cannot?(:add_product)
     hid = true if is_invoice? && customer_id.blank?
     hid
   rescue
@@ -513,7 +513,7 @@ class TimeMaterial < ApplicationRecord
   end
 
   def create_customer(resource_params)
-    return resource_params unless Current.get_user.can?(:allow_create_customer)
+    return resource_params unless Current.get_user.can?(:add_customer)
     resource_params[:customer_id] = "" if resource_params[:customer_name].blank?
     if (resource_params[:customer_id].present? && (Customer.find(resource_params[:customer_id]).name != resource_params[:customer_name])) ||
       resource_params[:customer_name].present? && resource_params[:customer_id].blank?
@@ -524,7 +524,7 @@ class TimeMaterial < ApplicationRecord
   end
 
   def create_project(resource_params)
-    return resource_params unless Current.get_user.can?(:allow_create_project)
+    return resource_params unless Current.get_user.can?(:add_project)
     resource_params[:project_id] = "" if resource_params[:project_name].blank?
     if (resource_params[:project_id].present? && (Project.find(resource_params[:project_id]).name != resource_params[:project_name])) ||
       resource_params[:project_name].present? && resource_params[:project_id].blank?

@@ -4,6 +4,7 @@ class Team < ApplicationRecord
   include Localeable
   include Stateable
   include Calendarable
+  include Settingable
   include TimeZoned
 
   has_many :users

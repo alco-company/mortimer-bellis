@@ -31,13 +31,13 @@ class TimeMaterials::Form < ApplicationForm
             nav(class: "-mb-px flex space-x-2", aria_label: "Tabs") do
               time_tab
               material_tab
-              # mileage_tab
+              mileage_tab
             end
           end
-        end
+        end if Current.get_user.can? :see_material_tab
         show_time_tab
         show_material_tab
-        # show_mileage_tab
+        show_mileage_tab
       end
       #
       #
@@ -86,6 +86,7 @@ class TimeMaterials::Form < ApplicationForm
     # comment do
     #   %(Current: "border-sky-500 text-sky-600", Default: "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700")
     # end
+    return unless Current.get_user.can? :see_material_tab
     button(
       type: "button",
       data: { tabs_target: "tab", action: "tabs#change" },
@@ -105,6 +106,7 @@ class TimeMaterials::Form < ApplicationForm
     # comment do
     #   %(Current: "border-sky-500 text-sky-600", Default: "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700")
     # end
+    return unless Current.get_user.can? :see_mileage_tab
     button(
       type: "button",
       data: { tabs_target: "tab", action: "tabs#change" },
@@ -142,12 +144,12 @@ class TimeMaterials::Form < ApplicationForm
               row field(:minute_time).input(type: "tel"), "mort-field my-1"
             end
             #
-            rate_field I18n.t("time_material.rate.hourly")
+            rate_field(I18n.t("time_material.rate.hourly")) if Current.get_user.can?(:edit_hourly_rate)
             #
             div(class: "col-span-4") do
               div(class: "hidden", id: "time_values", data: {})
               row field(:over_time).select(TimeMaterial.overtimes, data: { action: "change->time-material#updateOverTime" }, class: "mort-form-select"), "mort-field my-1"
-            end
+            end if Current.get_user.can?(:edit_overtime)
           end
         end
       end
@@ -168,7 +170,7 @@ class TimeMaterials::Form < ApplicationForm
         div(class: " pb-2") do
           div(class: "mt-2 grid grid-cols-4 gap-x-4 gap-y-1") do
             div(class: "col-span-4") do
-              row field(:product_id).lookup(class: "mort-form-text #{ field_id_error(resource.product_name, resource.product_id, user.cannot?(:allow_create_product)) }",
+              row field(:product_id).lookup(class: "mort-form-text #{ field_id_error(resource.product_name, resource.product_id, user.cannot?(:add_product)) }",
                 data: {
                   url: "/products/lookup",
                   div_id: "time_material_product_id",
@@ -273,6 +275,7 @@ class TimeMaterials::Form < ApplicationForm
   end
 
   def customer_field
+    return unless Current.get_user.can? :use_customers
     row field(:customer_id).lookup(class: "mort-form-text #{field_id_error(resource.customer_name, resource.customer_id, resource.is_invoice?)}",
       data: {
         url: "/customers/lookup",
@@ -284,7 +287,10 @@ class TimeMaterials::Form < ApplicationForm
   end
 
   def project_field
-    return unless Current.get_tenant.license_valid? && %w[trial ambassador pro].include?(Current.get_tenant.license) || Current.user.superadmin?
+    return unless Current.get_user.can?(:use_projects) &&
+      Current.get_tenant.license_valid? &&
+      %w[trial ambassador pro].include?(Current.get_tenant.license)
+
     row field(:project_id).lookup(class: "mort-form-text #{field_id_error(resource.project_name, resource.project_id)}",
       data: {
         url: "/projects/lookup",
@@ -304,6 +310,7 @@ class TimeMaterials::Form < ApplicationForm
   end
 
   def invoicing
+    return unless Current.get_user.can? :do_invoicing
     div(class: "pb-4") do
       div(class: "mt-1 space-y-1") do
         row field(:state).select(TimeMaterial.time_material_states, class: "my-auto mort-form-select"), "mort-field" # , "flex justify-end flex-row-reverse items-center"
@@ -385,13 +392,13 @@ class TimeMaterials::Form < ApplicationForm
   end
 
   def show_comments
-    return unless Current.get_user.should? :allow_comments_on_time_material
+    return unless Current.get_user.can? :add_comments_on_time_material
     render TagComponent.new(resource: resource,
         field: :tag_list,
         show_label: true,
         value_class: "mr-5",
         value: resource.tags,
-        editable: true)
+        editable: true) if Current.get_user.can?(:add_tags_on_time_material)
 
     div(class: "col-span-full") do
       div(class: "mort-field my-0") do

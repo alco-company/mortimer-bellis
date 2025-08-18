@@ -2,6 +2,10 @@
 
 ## CHANGELOG
 
+### 18/8/2025
+
+- manage settings better
+
 ### 14/8/2025
 
 - add settings link to contextmenu

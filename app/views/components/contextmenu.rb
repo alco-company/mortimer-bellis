@@ -187,16 +187,16 @@ class Contextmenu < ApplicationComponent
         data: { turbo_prefetch: "false" },
         action: "click->contextmenu#hide",
         icon: "ArrowsHunting",
-        label: t(".sync all with ERP")) if %(ProvidedService).include? resource_class.to_s
+        label: t(".sync all with ERP")) if erp_pull_link && %(ProvidedService).include?(resource_class.to_s)
 
-      setting_link
+      setting_link unless resource_class.to_s == "TimeMaterial"
       delete_record
     end
   end
 
   def setting_link
     link2 url: new_modal_url(modal_form: "settings",
-      all: true,
+      id: resource.id,
       resource_class: resource_class.to_s.underscore,
       modal_next_step: "setup"),
       # search: request.query_parameters.dig(:search)),
@@ -305,10 +305,10 @@ class Contextmenu < ApplicationComponent
 
     def erp_pull_link
       case resource_class.to_s
-      when "Customer"; erp_pull_customers_url
-      when "Product"; erp_pull_products_url
-      when "Invoice"; erp_pull_invoices_url
-      when "ProvidedService"; erp_pull_provided_services_url
+      when "Customer"; erp_pull_customers_url if Current.get_user.can?(:sync_with_erp) && Current.get_user.can?(:pull_customers)
+      when "Product"; erp_pull_products_url if Current.get_user.can?(:sync_with_erp) && Current.get_user.can?(:pull_products)
+      when "Invoice"; erp_pull_invoices_url if Current.get_user.can?(:sync_with_erp) && Current.get_user.can?(:pull_invoices)
+      when "ProvidedService"; erp_pull_provided_services_url if Current.get_user.can?(:sync_with_erp) && Current.get_user.can?(:pull_provided_services)
       end
     end
 

@@ -18,7 +18,7 @@
         <%= form.hidden_field :search, value: params.dig(:search) %>
         <%= form.hidden_field :url, value: @url %>
 
-        <%= render Settings::SettingsIndex.new resources_stream: "#{Current.get_tenant.id}_settings_view", divider: false, breadcrumb: false, params: { modal: true, tab: resource_class.to_s.underscore.downcase } %>
+        <%= render Settings::SettingsIndex.new resources_stream: "#{Current.get_tenant.id}_settings_view", divider: false, breadcrumb: false, resource: (resource or resource_class), params: { modal: true, tab: resource_class.to_s.underscore.downcase } %>
       </div>
     </div>
   </div>
