@@ -36,9 +36,13 @@ module Settingable
 
       # 5) Resource-level settings (e.g., specific time_material, background_job, more, settings)
       if resource
-        rel = resource.settings
-        return false if rel.for_key(key).denied.exists?
-        return true  if rel.for_key(key).allowed.exists?
+        begin
+          rel = resource.settings
+          return false if rel.for_key(key).denied.exists?
+          return true  if rel.for_key(key).allowed.exists?
+        rescue => e
+          Rails.logger.error("Error checking resource (#{resource.inspect}) settings: #{e.message}")
+        end
       end
 
       # 6) Tenant/global defaults (no setable_type/id)
@@ -84,9 +88,13 @@ module Settingable
 
       # 5) Resource-level settings (e.g., specific time_material, background_job, more, settings)
       if resource
-        rel = resource.settings
-        return true if rel.for_key(key).denied.exists?
-        return false if rel.for_key(key).allowed.exists?
+        begin
+          rel = resource.settings
+          return true if rel.for_key(key).denied.exists?
+          return false if rel.for_key(key).allowed.exists?
+        rescue => e
+          Rails.logger.error("Error checking resource (#{resource.inspect}) settings: #{e.message}")
+        end
       end
 
       # 6) Tenant/global defaults (no setable_type/id)
