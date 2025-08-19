@@ -111,7 +111,7 @@ class InvoicesController < MortimerController
     if @resource.invoice_items.empty?
       json = Dinero::Service.new.pull_invoice guid: @resource.erp_guid
       json["ProductLines"].each do |item|
-        InvoiceItem.add_from_erp item, @resource
+        InvoiceItem.add_from_erp item, @resource, resource: @resource
       end
     end
   end

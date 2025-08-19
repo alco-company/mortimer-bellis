@@ -109,7 +109,10 @@ class Dinero::Service < SaasService
     return list[:ok] if just_consume
 
     list[:ok].parsed_response["Collection"].each do |item|
-      resource_class.add_from_erp item
+      case resource_class.to_s
+      when "InvoiceItem"; # 20250819 whd - we have no invoice to feed the item with! InvoiceItem.add_from_erp item, resource: resource_class
+      else; resource_class.add_from_erp item, resource: resource_class
+      end
     end
     if list[:ok].parsed_response["Pagination"]["ResultWithoutFilter"].to_i > (query[:pageSize].to_i * (query[:page].to_i + 1))
       pull resource_class: resource_class, organizationId: organizationId, all: all, page: query[:page].to_i + 1, pageSize: query[:pageSize].to_i, fields: fields, start_date: start_date, end_date: end_date

@@ -9,6 +9,7 @@
 - watch out for resouces w/o settings!
 - set title for settings
 - fix translations for settings + new button on Edge
+- fix add_from_erp
 
 ### 18/8/2025
 

@@ -95,7 +95,7 @@ class Customer  < ApplicationRecord
     Customers::Form.new resource: resource, editable: editable
   end
 
-  def self.add_from_erp(item)
+  def self.add_from_erp(item, resource: nil)
     return false unless item["Name"].present?
     return true if User.can?(:import_customers_only, resource: Customer) and !item["IsDebitor"]
 
