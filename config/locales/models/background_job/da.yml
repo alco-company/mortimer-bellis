@@ -2,6 +2,9 @@ da:
   background_job:
     in_active: "Inaktiv"
     modal:
+      setting_all:
+        title: Indstillinger for baggrundsjob
+        instruction: Her kan du indstille hvordan baggrundsjob skal fungere i Mortimer.
       delete_all: 
         title: Slet alle baggrundsjob
         instruction: Er du sikker på, at du vil slette alle baggrundsjob?

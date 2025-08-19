@@ -78,11 +78,15 @@ class Settings::SettingsIndex < ApplicationComponent
 
   def bread_crumb
     div(class: "mx-8 flex items-center space-x-2 mb-4") do
-      a(
-        href: "/settings",
-        class: "text-sm text-sky-500 hover:text-sky-700"
-      ) { "Settings" }
-      span(class: "text-sm text-gray-400") { ">" }
+      if @breadcrumb
+        a(
+          href: "/settings",
+          class: "text-sm text-sky-500 hover:text-sky-700"
+        ) { t("settings.label") }
+      else
+        span(class: "text-sm text-gray-400") { t("settings.label") }
+      end
+      span(class: "text-sm text-gray-400") { " > " }
       span(class: "text-sm font-medium text-gray-900") { @params[:tab].humanize }
     end
   end

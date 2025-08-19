@@ -80,7 +80,7 @@ da:
       add_customer: Tillad bruger at oprette kunder på tid og materialer poster
       add_project: Tillad bruger at oprette projekter på tid og materialer poster
       add_comments_on_time_material: Tillad kommentarer på tid og materialer poster
-      import_customers_only: Tillad kun import af kunder, ikke projekter eller produkter
+      import_customers_only: Tillad kun import af kunder, ikke alle kontakter (privatpersoner og leverandører)
       sync_with_erp: Synkronisér med ERP systemet, hvis det er konfigureret
       validate_time_material_done: Valider at alle felter er udfyldt før en t/m post kan markeres som 'færdig'
       limit_time_to_quarters: Begræns tidsforbrug til kvart timers intervaller (15 minutter)

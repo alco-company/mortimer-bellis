@@ -2,6 +2,9 @@ da:
 
   task:
     modal:
+      setting_all:
+        title: Indstillinger for opgaver
+        instruction: Her kan du indstille hvordan opgaver skal fungere i Mortimer.
       delete_all: 
         title: Slet alle opgaver
         instruction: Er du sikker på, at du vil slette alle opgaver?

@@ -84,6 +84,9 @@ da:
       session: Session
       tonne: Ton
     modal:
+      setting_all:
+        title: Indstillinger for tid/materialer
+        instruction: Her kan du indstille hvordan tid/materialer skal fungere i Mortimer.
       delete_all: 
         title: Slet alle tid/materialer
         instruction: Er du sikker på, at du vil slette alle tid/materialer?

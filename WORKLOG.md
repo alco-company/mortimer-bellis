@@ -8,6 +8,7 @@
 - make resource_class chip into the authorization/setting model
 - watch out for resouces w/o settings!
 - set title for settings
+- fix translations for settings + new button on Edge
 
 ### 18/8/2025
 
