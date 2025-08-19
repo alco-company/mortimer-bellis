@@ -10,6 +10,7 @@
 - set title for settings
 - fix translations for settings + new button on Edge
 - fix add_from_erp
+- ret notifikation til success for 'din konto er godkendt'
 
 ### 18/8/2025
 
