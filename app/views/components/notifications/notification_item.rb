@@ -135,7 +135,7 @@ class Notifications::NotificationItem < ApplicationComponent
       div(class: "flex flex-none items-center gap-x-4") do
         whitespace
         a(
-          href: helpers.notification_url(notification),
+          href: notification_url(notification),
           data: { turbo_stream: true },
           class:
             "hidden rounded-md bg-white px-2.5 py-1.5 text-xs font-semibold text-gray-900 shadow-xs ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:block"

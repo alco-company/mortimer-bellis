@@ -26,7 +26,7 @@ class LogoComponent < ApplicationComponent
     else
       return draw_logo if @just_logo
       div(class: @div_css) do
-        a(href: @root || helpers.root_path) do
+        a(href: @root || root_path) do
           span(class: "sr-only") { "Mortimer User App" }
           if @logo == "mortimer"
             mortimer_svg

@@ -8,6 +8,7 @@
 - make resource_class chip into the authorization/setting model
 - watch out for resouces w/o settings!
 
+
 ### 18/8/2025
 
 - manage settings better

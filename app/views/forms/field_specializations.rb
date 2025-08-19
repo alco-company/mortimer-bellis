@@ -209,6 +209,7 @@ module FieldSpecializations
 
   class FileField < InputField
     include Phlex::Rails::Helpers::LinkTo
+    include Phlex::Rails::Helpers::Routes
 
     def field_attributes
       @attributes.keys&.include?(:multiple) ? super.merge(type: "file", accept: "image/*", multiple: true) : super.merge(type: "file", accept: "image/*")
@@ -222,7 +223,7 @@ module FieldSpecializations
             img(src: url_for(field.value), class: "mort-img m-2")
             div(class: "absolute top-0 right-0 w-8 h-8 rounded-lg bg-white/75") do
               link_to(
-                helpers.new_modal_url(modal_form: "delete", id: field.parent.object.id, attachment: field.value.name, api_key: @_parent&.api_key, resource_class: field.parent.object.class.to_s.underscore, modal_next_step: "accept"),
+                new_modal_url(modal_form: "delete", id: field.parent.object.id, attachment: field.value.name, api_key: @_parent&.api_key, resource_class: field.parent.object.class.to_s.underscore, modal_next_step: "accept"),
                 data: { turbo_stream: true },
                 # link_to((@links[1] || resource),
                 class: "absolute top-1 right-1",
