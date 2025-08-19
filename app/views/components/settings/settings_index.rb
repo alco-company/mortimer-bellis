@@ -18,7 +18,7 @@ class Settings::SettingsIndex < ApplicationComponent
         div(id: "list", role: "list", class: "") do
           comment { "Help Box" }
           div(class: "mx-4 mb-6 p-4 bg-blue-50 border border-blue-200 rounded-xl") do
-            h2(class: "font-semibold text-sky-700 mb-1") { "What - settings!?" }
+            h2(class: "font-semibold text-sky-700 mb-1") { t("settings.tabs.h2-title") }
             p(class: "text-sm text-sky-700") do
               plain t("settings.tabs.descriptions.#{@params[:tab]}")
             end
@@ -44,7 +44,7 @@ class Settings::SettingsIndex < ApplicationComponent
       div(id: "list", role: "list", class: "") do
         comment { "Help Box" }
         div(class: "mx-4 mb-6 p-4 bg-blue-50 border border-blue-200 rounded-xl") do
-          h2(class: "font-semibold text-sky-700 mb-1") { "What - settings!?" }
+          h2(class: "font-semibold text-sky-700 mb-1") { t("settings.tabs.h2-title") }
           p(class: "text-sm text-sky-700") do
             plain t("settings.tabs.description")
           end

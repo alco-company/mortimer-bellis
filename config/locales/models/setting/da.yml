@@ -106,6 +106,7 @@ da:
       users: Brugere
 
     tabs:
+      h2-title: "Indstillinger - sådan fungerer de"
       description: "Indstillinger kan du bruge til at ændre måde tid/materialer fungerer på. Du kan ændre indstillinger på en række niveauer, fra generelle til den enkelte bruger. Rækkefølgen er: generelt < kunder < projekter < produkter < hold < brugere. Ændrer du en indstilling på et hold overstyrer det den tilsvarende ændring på et produkt, projekt, kunde, eller generelt. Ændrer du en indstilling på en bruger overstyrer det den tilsvarende ændring på et hold, produkt, projekt, kunde, eller generelt."
 
       title:
