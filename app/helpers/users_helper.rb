@@ -9,7 +9,7 @@ module UsersHelper
     return true if Current.user.superadmin?
     return false if params.dig(:controller) == "tenants"
     key = "add_#{resource_class.to_s.underscore}"
-    Current.user.can? key
+    Current.user.can? key, resource: resource_class
   rescue
     false
   end

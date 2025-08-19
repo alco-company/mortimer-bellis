@@ -513,7 +513,7 @@ class TimeMaterial < ApplicationRecord
   end
 
   def create_customer(resource_params)
-    return resource_params unless Current.get_user.can?(:add_customer)
+    return resource_params unless Current.get_user.can?(:add_customer, resource: resource)
     resource_params[:customer_id] = "" if resource_params[:customer_name].blank?
     if (resource_params[:customer_id].present? && (Customer.find(resource_params[:customer_id]).name != resource_params[:customer_name])) ||
       resource_params[:customer_name].present? && resource_params[:customer_id].blank?
@@ -524,7 +524,7 @@ class TimeMaterial < ApplicationRecord
   end
 
   def create_project(resource_params)
-    return resource_params unless Current.get_user.can?(:add_project)
+    return resource_params unless Current.get_user.can?(:add_project, resource: resource)
     resource_params[:project_id] = "" if resource_params[:project_name].blank?
     if (resource_params[:project_id].present? && (Project.find(resource_params[:project_id]).name != resource_params[:project_name])) ||
       resource_params[:project_name].present? && resource_params[:project_id].blank?

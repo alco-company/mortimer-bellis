@@ -224,7 +224,7 @@ class Contextmenu < ApplicationComponent
       (Current.get_tenant.provided_services.by_name("Dinero").any? and
       Current.get_tenant.license_valid? and
       %W[trial ambassador pro].include? Current.get_tenant.license and
-      Current.get_user.can?(:sync_with_erp))
+      Current.get_user.can?(:sync_with_erp, resource: resource_class))
     end
 
     def show_ERP_link
@@ -305,10 +305,10 @@ class Contextmenu < ApplicationComponent
 
     def erp_pull_link
       case resource_class.to_s
-      when "Customer"; erp_pull_customers_url if Current.get_user.can?(:sync_with_erp) && Current.get_user.can?(:pull_customers)
-      when "Product"; erp_pull_products_url if Current.get_user.can?(:sync_with_erp) && Current.get_user.can?(:pull_products)
-      when "Invoice"; erp_pull_invoices_url if Current.get_user.can?(:sync_with_erp) && Current.get_user.can?(:pull_invoices)
-      when "ProvidedService"; erp_pull_provided_services_url if Current.get_user.can?(:sync_with_erp) && Current.get_user.can?(:pull_provided_services)
+      when "Customer"; erp_pull_customers_url if Current.get_user.can?(:sync_with_erp, resource: Customer) && Current.get_user.can?(:pull_customers, resource: Customer)
+      when "Product"; erp_pull_products_url if Current.get_user.can?(:sync_with_erp, resource: Product) && Current.get_user.can?(:pull_products, resource: Product)
+      when "Invoice"; erp_pull_invoices_url if Current.get_user.can?(:sync_with_erp, resource: Invoice) && Current.get_user.can?(:pull_invoices, resource: Invoice)
+      when "ProvidedService"; erp_pull_provided_services_url if Current.get_user.can?(:sync_with_erp, resource: ProvidedService) && Current.get_user.can?(:pull_provided_services, resource: ProvidedService)
       end
     end
 

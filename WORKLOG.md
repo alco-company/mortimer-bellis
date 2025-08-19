@@ -2,6 +2,11 @@
 
 ## CHANGELOG
 
+## 19/8/2025
+
+- bug in settings modal
+- make resource_class chip into the authorization/setting model
+
 ### 18/8/2025
 
 - manage settings better

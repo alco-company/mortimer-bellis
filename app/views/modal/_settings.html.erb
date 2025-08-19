@@ -1,4 +1,4 @@
-<% url = resource.id.present? ? modal_url(resource) : modal_url(resource_class.first) %>
+<% url = resources_url %>
 <%= form_with(url: url, method: :delete, multipart: true) do |form| %>
   <div class="sm:flex sm:items-start">
     <div class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full text-red-500 bg-red-100 sm:mx-0 sm:h-10 sm:w-10">

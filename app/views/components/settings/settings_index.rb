@@ -92,13 +92,13 @@ class Settings::SettingsIndex < ApplicationComponent
       case @params[:tab]
       when "general";         settings_tab Setting.general_settings
       when "time_material";   settings_tab Setting.time_material_settings resource: @resource
-      when "customer";        settings_tab Setting.customer_settings
-      when "project";         settings_tab Setting.project_settings
-      when "product";         settings_tab Setting.product_settings
-      when "team";            settings_tab Setting.team_settings
-      when "user";            settings_tab Setting.user_settings
-      when "erp_integration"; settings_tab Setting.erp_integration_settings
-      when "permissions";     settings_tab Setting.permissions_settings
+      when "customer";        settings_tab Setting.customer_settings resource: @resource
+      when "project";         settings_tab Setting.project_settings resource: @resource
+      when "product";         settings_tab Setting.product_settings resource: @resource
+      when "team";            settings_tab Setting.team_settings resource: @resource
+      when "user";            settings_tab Setting.user_settings resource: @resource
+      when "erp_integration"; settings_tab Setting.erp_integration_settings resource: @resource
+      when "permissions";     settings_tab Setting.permissions_settings resource: @resource
       end
     end
   end

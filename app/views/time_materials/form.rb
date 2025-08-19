@@ -9,7 +9,7 @@ class TimeMaterials::Form < ApplicationForm
       end
       # date_field
       # user
-      if user.can?(:delegate_time_materials)
+      if user.can?(:delegate_time_materials, resource: @resource)
         div(class: "my-1 grid grid-cols-4 gap-x-1 md:gap-x-4 gap-y-1 ") do
           div(class: "my-0 col-span-4 xs:col-span-2") do
             row field(:date).date(class: "mort-form-date"), "mort-field my-0"
@@ -34,7 +34,7 @@ class TimeMaterials::Form < ApplicationForm
               mileage_tab
             end
           end
-        end if Current.get_user.can? :see_material_tab
+        end if Current.get_user.can? :see_material_tab, resource: @resource
         show_time_tab
         show_material_tab
         show_mileage_tab
@@ -86,7 +86,7 @@ class TimeMaterials::Form < ApplicationForm
     # comment do
     #   %(Current: "border-sky-500 text-sky-600", Default: "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700")
     # end
-    return unless Current.get_user.can? :see_material_tab
+    return unless Current.get_user.can? :see_material_tab, resource: @resource
     button(
       type: "button",
       data: { tabs_target: "tab", action: "tabs#change" },
@@ -106,7 +106,7 @@ class TimeMaterials::Form < ApplicationForm
     # comment do
     #   %(Current: "border-sky-500 text-sky-600", Default: "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700")
     # end
-    return unless Current.get_user.can? :see_mileage_tab
+    return unless Current.get_user.can? :see_mileage_tab, resource: @resource
     button(
       type: "button",
       data: { tabs_target: "tab", action: "tabs#change" },
@@ -144,12 +144,12 @@ class TimeMaterials::Form < ApplicationForm
               row field(:minute_time).input(type: "tel"), "mort-field my-1"
             end
             #
-            rate_field(I18n.t("time_material.rate.hourly")) if Current.get_user.can?(:edit_hourly_rate)
+            rate_field(I18n.t("time_material.rate.hourly")) if Current.get_user.can?(:edit_hourly_rate, resource: @resource)
             #
             div(class: "col-span-4") do
               div(class: "hidden", id: "time_values", data: {})
               row field(:over_time).select(TimeMaterial.overtimes, data: { action: "change->time-material#updateOverTime" }, class: "mort-form-select"), "mort-field my-1"
-            end if Current.get_user.can?(:edit_overtime)
+            end if Current.get_user.can?(:edit_overtime, resource: @resource)
           end
         end
       end
@@ -275,7 +275,7 @@ class TimeMaterials::Form < ApplicationForm
   end
 
   def customer_field
-    return unless Current.get_user.can? :use_customers
+    return unless Current.get_user.can? :use_customers, resource: @resource
     row field(:customer_id).lookup(class: "mort-form-text #{field_id_error(resource.customer_name, resource.customer_id, resource.is_invoice?)}",
       data: {
         url: "/customers/lookup",
@@ -287,7 +287,7 @@ class TimeMaterials::Form < ApplicationForm
   end
 
   def project_field
-    return unless Current.get_user.can?(:use_projects) &&
+    return unless Current.get_user.can?(:use_projects, resource: @resource) &&
       Current.get_tenant.license_valid? &&
       %w[trial ambassador pro].include?(Current.get_tenant.license)
 
@@ -310,7 +310,7 @@ class TimeMaterials::Form < ApplicationForm
   end
 
   def invoicing
-    return unless Current.get_user.can? :do_invoicing
+    return unless Current.get_user.can? :do_invoicing, resource: @resource
     div(class: "pb-4") do
       div(class: "mt-1 space-y-1") do
         row field(:state).select(TimeMaterial.time_material_states, class: "my-auto mort-form-select"), "mort-field" # , "flex justify-end flex-row-reverse items-center"
@@ -392,13 +392,13 @@ class TimeMaterials::Form < ApplicationForm
   end
 
   def show_comments
-    return unless Current.get_user.can? :add_comments_on_time_material
+    return unless Current.get_user.can? :add_comments_on_time_material, resource: @resource
     render TagComponent.new(resource: resource,
         field: :tag_list,
         show_label: true,
         value_class: "mr-5",
         value: resource.tags,
-        editable: true) if Current.get_user.can?(:add_tags_on_time_material)
+        editable: true) if Current.get_user.can?(:add_tags_on_time_material, resource: @resource)
 
     div(class: "col-span-full") do
       div(class: "mort-field my-0") do

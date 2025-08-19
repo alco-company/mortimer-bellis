@@ -5,7 +5,7 @@ module Settingable
     has_many :settings, as: :setable, dependent: :destroy
 
     # do not unless expressively allowed
-    def can?(action)
+    def can?(action, resource: nil)
       key = action.to_s
       tenant = try(:tenant) || Current.tenant
 
@@ -34,7 +34,14 @@ module Settingable
         return true  if rel.for_key(key).allowed.exists?
       end
 
-      # 5) Tenant/global defaults (no setable_type/id)
+      # 5) Resource-level settings (e.g., specific time_material, background_job, more, settings)
+      if resource
+        rel = resource.settings
+        return false if rel.for_key(key).denied.exists?
+        return true  if rel.for_key(key).allowed.exists?
+      end
+
+      # 6) Tenant/global defaults (no setable_type/id)
       if tenant
         rel = Setting.where(tenant:, setable_type: nil, setable_id: nil)
         return false if rel.for_key(key).denied.exists?
@@ -46,7 +53,7 @@ module Settingable
     end
 
     # do unless expressively denied
-    def cannot?(action)
+    def cannot?(action, resource: nil)
       key = action.to_s
       tenant = try(:tenant) || Current.tenant
 
@@ -75,7 +82,14 @@ module Settingable
         return false if rel.for_key(key).allowed.exists?
       end
 
-      # 5) Tenant/global defaults (no setable_type/id)
+      # 5) Resource-level settings (e.g., specific time_material, background_job, more, settings)
+      if resource
+        rel = resource.settings
+        return true if rel.for_key(key).denied.exists?
+        return false if rel.for_key(key).allowed.exists?
+      end
+
+      # 6) Tenant/global defaults (no setable_type/id)
       if tenant
         rel = Setting.where(tenant:, setable_type: nil, setable_id: nil)
         return true if rel.for_key(key).denied.exists?
