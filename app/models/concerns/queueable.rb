@@ -11,12 +11,20 @@ module Queueable
     #
     # when the background_job has performed
     # it will callback and make sure the job_id
-    # is reset
+    # is reset and next run is scheduled
     def job_done
       begin
-        schedule.blank? ? persist(nil, nil) : plan_job
+        if schedule.blank?
+          # One-time job - clear job_id and next_run_at
+          persist(nil, nil)
+        else
+          # Recurring job - plan the next execution
+          result = plan_job(false) # false = get next occurrence, not first
+          result
+        end
       rescue => exception
-        say "BackgroundJob.job_done failed due to #{exception}"
+        Rails.logger.error "BackgroundJob.job_done failed due to #{exception}"
+        Rails.logger.error exception.backtrace.join("\n")
         [ nil, nil ]
       end
     end
@@ -47,10 +55,13 @@ module Queueable
     def plan_job(first = true)
       begin
         t = active? ? self.next_run(schedule, first) : nil
-        if next_run_at && t
+        # When rescheduling after completion (first=false), always use the new calculated time
+        # When scheduling for the first time (first=true), keep the earlier time if one exists
+        if next_run_at && t && first
           t = Time.at(t).in_time_zone("UTC") < Time.at(next_run_at).in_time_zone("UTC") ? t : next_run_at
         end
-        t ? run_job(t) : persist(nil, nil)
+        result = t ? run_job(t) : persist(nil, nil)
+        result
       rescue => exception
         say "BackgroundJob.plan_job failed due to #{exception}"
       end

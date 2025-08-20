@@ -1,13 +1,16 @@
 class ApplicationJob < ActiveJob::Base
   include Alco::SqlStatements
 
-  attr_accessor :tenant, :user
+  attr_accessor :tenant, :user, :background_job
 
   # Automatically retry jobs that encountered a deadlock
   # retry_on ActiveRecord::Deadlocked
 
   # Most jobs are safe to ignore if the underlying records are no longer available
   # discard_on ActiveJob::DeserializationError
+
+  after_perform :mark_job_completed
+  before_perform :mark_job_started
 
   #
   # most jobs will need to know what tenant and user they are working with
@@ -44,4 +47,21 @@ class ApplicationJob < ActiveJob::Base
 
 
   private
+
+  def mark_job_started
+    # Find the background job record that scheduled this job
+    @background_job = BackgroundJob.find_by(job_id: job_id) if job_id
+    if @background_job
+      @background_job.update!(state: :running)
+      say "Job #{self.class.name} started"
+    end
+  end
+
+  def mark_job_completed
+    if @background_job
+      @background_job.update!(state: :finished)
+      @background_job.job_done
+      say "Job #{self.class.name} completed and next run scheduled"
+    end
+  end
 end

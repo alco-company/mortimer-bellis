@@ -12,6 +12,7 @@
 - allow more classes to call .settings
 - add Tidewave
 - report on params error
+- fix setting next_run_at on jobs
 
 ## 19/8/2025
 
