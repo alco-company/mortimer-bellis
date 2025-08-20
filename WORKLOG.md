@@ -2,6 +2,10 @@
 
 ## CHANGELOG
 
+## 20/8/2025
+
+- add session_timeout setting key
+
 ## 19/8/2025
 
 - bug in settings modal

@@ -94,6 +94,12 @@ class Tenant < ApplicationRecord
     access_token == token
   end
 
+  def get_session_timeout
+    eval(settings.where(key: "session_timeout").first&.value) || 7.days
+  rescue
+    7.days
+  end
+
 
   def all_calendars
     calendars

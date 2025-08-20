@@ -45,6 +45,7 @@ da:
       updated_at: Opdateret den
 
     keys:
+      session_timeout: "Angiv varighed for session timeout"
       delegate_time_materials: Delegér tid og materialer
       default_time_material_state: Standard status for ny tid og materialer post
       default_time_material_about: Standard tekst for ny tid og materialer post
@@ -67,6 +68,7 @@ da:
       run: Kør baggrundsopgaver
 
     descriptions:
+      session_timeout: Varigheden beregnes, hvorfor det er vigtigt at angive en gyldig varighed, f.eks. '7.days' eller '1.hour'. Dette vil bestemme, hvor længe en session forbliver aktiv, før brugeren skal logge ind igen.
       delegate_time_materials: Tillad at brugere kan delegere tid og materialer til andre brugere
       default_time_material_state: Standard status for ny tid og materialer post
       default_time_material_about: Standard tekst for ny tid og materialer post

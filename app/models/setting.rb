@@ -77,6 +77,7 @@ class Setting < ApplicationRecord
 
   def self.setting_types
     {
+      "session_timeout" => "text",
       "run" => "boolean",
       "limit_time_to_quarters" => "boolean",
       "default_time_material_date" => "text",
@@ -155,6 +156,7 @@ class Setting < ApplicationRecord
     [
       [ "delegate_time_materials", I18n.t("settings.keys.delegate_time_materials") ],
       [ "run", I18n.t("settings.keys.run_background_jobs") ],
+      [ "session_timeout", I18n.t("settings.keys.session_timeout") ],
       [ "limit_time_to_quarters", I18n.t("settings.keys.limit_time_to_quarters") ],
       [ "default_time_material_date", I18n.t("settings.keys.default_time_material_date") ],
       [ "default_time_material_state", I18n.t("settings.keys.default_time_material_state") ],
@@ -252,6 +254,7 @@ class Setting < ApplicationRecord
   #
   def self.general_settings(resource: nil)
     self.get_settings(DEFAULT_TIME_SETTINGS.merge(
+      "session_timeout" => { "type" => "text", "value" => "7.days" },
       "run" => { "type" => "boolean", "value" => "0", "setable_type" => "BackgroundJob", "setable_id" => nil },
       "import_customers_only" => { "type" => "boolean", "value" => "1" },
       "sync_with_erp" => { "type" => "boolean", "value" => "1" },
@@ -263,7 +266,7 @@ class Setting < ApplicationRecord
   end
   def self.customer_settings(resource: nil)
     self.get_settings({
-      "sync_with_erp" => { "type" => "boolean", "value" => true },
+      "sync_with_erp" => { "type" => "boolean", "value" => "true" },
       "pull_customers" => { "type" => "boolean", "value" => "1" }
     })
   end
