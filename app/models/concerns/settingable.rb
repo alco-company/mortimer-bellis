@@ -127,12 +127,12 @@ module Settingable
     #   false
     # end
 
-    def should?(action)
-      can?(action)
+    def should?(action, resource: nil)
+      can?(action, resource:)
     end
 
-    def shouldnt?(action)
-      cannot?(action)
+    def shouldnt?(action, resource: nil)
+      cannot?(action, resource:)
     end
 
     def default(key, default)
@@ -144,7 +144,7 @@ module Settingable
   end
 
   class_methods do
-    def can?(action)
+    def can?(action, resource: nil)
       key = action.to_s
       tenant = try(:tenant) || Current.tenant
 
@@ -155,7 +155,9 @@ module Settingable
 
       # 5) Tenant/global defaults (no setable_type/id)
       if tenant
-        rel = Setting.where(tenant:, setable_type: nil, setable_id: nil)
+        stype = resource.is_a? Class ? resource.to_s : resource&.class&.name
+        sid = resource.is_a? Class ? nil : resource&.id
+        rel = Setting.where(tenant:, setable_type: stype, setable_id: sid)
         return false if rel.for_key(key).denied.exists?
         return true  if rel.for_key(key).allowed.exists?
       end
@@ -165,7 +167,7 @@ module Settingable
     end
 
     # do unless expressively denied
-    def cannot?(action)
+    def cannot?(action, resource: nil)
       key = action.to_s
       tenant = try(:tenant) || Current.tenant
 
@@ -176,7 +178,9 @@ module Settingable
 
       # 5) Tenant/global defaults (no setable_type/id)
       if tenant
-        rel = Setting.where(tenant:, setable_type: nil, setable_id: nil)
+        stype = resource.is_a? Class ? resource.to_s : resource&.class&.name
+        sid = resource.is_a? Class ? nil : resource&.id
+        rel = Setting.where(tenant:, setable_type: stype, setable_id: sid)
         return true if rel.for_key(key).denied.exists?
         return false if rel.for_key(key).allowed.exists?
       end
