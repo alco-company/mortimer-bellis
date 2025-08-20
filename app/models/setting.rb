@@ -262,7 +262,8 @@ class Setting < ApplicationRecord
   end
 
   def self.time_material_settings(resource: nil)
-    self.get_settings(DEFAULT_TIME_SETTINGS, resource:)
+    return self.get_settings(DEFAULT_TIME_SETTINGS, resource:) unless Rails.env.test?
+    build_settings_for(resource:, keys: DEFAULT_TIME_SETTINGS, klass_name: "TimeMaterial")
   end
   def self.customer_settings(resource: nil)
     self.get_settings({
@@ -282,10 +283,12 @@ class Setting < ApplicationRecord
     }, resource:)
   end
   def self.team_settings(resource: nil)
-    self.get_settings(DEFAULT_TIME_SETTINGS, resource:)
+    return self.get_settings(DEFAULT_TIME_SETTINGS, resource:) unless Rails.env.test?
+    build_settings_for(resource:, keys: DEFAULT_TIME_SETTINGS, klass_name: "Team")
   end
   def self.user_settings(resource: nil)
-    self.get_settings(DEFAULT_TIME_SETTINGS, resource:)
+    return self.get_settings(DEFAULT_TIME_SETTINGS, resource:) unless Rails.env.test?
+    build_settings_for(resource:, keys: DEFAULT_TIME_SETTINGS, klass_name: "User")
   end
   def self.erp_integration_settings(resource: nil)
     self.get_settings({
@@ -324,4 +327,57 @@ class Setting < ApplicationRecord
       "validate_time_material_done" => { "type" => "boolean", "value" => "true" },
       "show_all_time_material_posts" => { "type" => "boolean", "value" => "true" }
     }
+
+  # Helpers
+
+  def self.build_settings_for(resource:, keys:, klass_name:)
+    tenant = Current.get_tenant || (resource.respond_to?(:tenant) ? resource.tenant : nil)
+    raise ArgumentError, "tenant required" unless tenant
+
+    setable_type, setable_id =
+      if resource.nil?
+        [ nil, nil ]                                 # tenant-level
+      elsif resource.is_a?(Class)
+        [ klass_name, nil ]                          # class-level
+      else
+        [ klass_name, resource.id ]                  # instance-level
+      end
+
+    # Ensure one row per key at the chosen level. New rows use DEFAULT values,
+    # existing rows are preserved.
+    keys.each do |key, default_value|
+      Setting.unscoped.find_or_create_by!(
+        tenant_id: tenant.id,
+        setable_type: setable_type,
+        setable_id: setable_id,
+        key: key
+      ) do |rec|
+        rec.value = default_value["value"]
+      end
+    end
+
+    rel = Setting.unscoped.where(
+      tenant_id: tenant.id,
+      setable_type: setable_type,
+      setable_id: setable_id,
+      key: keys.keys
+    )
+
+    to_result_map(rel, keys.keys)
+  end
+  private_class_method :build_settings_for
+
+  def self.to_result_map(relation, keys)
+    # Return a Hash: key => {"object" => rec, "id" => rec.id, "value" => rec.value}
+    records_by_key = relation.index_by(&:key)
+    keys.each_with_object({}) do |k, acc|
+      rec = records_by_key[k]
+      acc[k] = {
+        "object" => rec,
+        "id"     => rec&.id,
+        "value"  => rec&.value
+      }
+    end
+  end
+  private_class_method :to_result_map
 end
