@@ -135,9 +135,9 @@ class ApplicationComponent < Phlex::HTML
 
   def params_ctrl
     rc_params.dig(:controller)
-  rescue
-    debugger
-     nil
+  rescue => error
+    UserMailer.error_report(error.message, "ApplicationComponent#params_ctrl failed ").deliver_later
+    nil
   end
 
   def params_s

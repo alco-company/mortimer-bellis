@@ -11,6 +11,7 @@
 - bug on add_from_erp
 - allow more classes to call .settings
 - add Tidewave
+- report on params error
 
 ## 19/8/2025
 
