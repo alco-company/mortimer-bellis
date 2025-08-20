@@ -1,5 +1,7 @@
 class InvoiceItem < ApplicationRecord
   include Tenantable
+  include Settingable
+
   belongs_to :invoice
   belongs_to :product
   belongs_to :project, optional: true

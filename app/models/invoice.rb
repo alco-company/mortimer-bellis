@@ -1,5 +1,6 @@
 class Invoice < ApplicationRecord
   include Tenantable
+  include Settingable
   include Localeable
 
   belongs_to :customer

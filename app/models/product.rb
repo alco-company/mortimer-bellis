@@ -1,5 +1,6 @@
 class Product < ApplicationRecord
   include Tenantable
+  include Settingable
   include Unitable
 
   scope :by_fulltext, ->(query) { where("name LIKE :query OR product_number LIKE :query OR quantity LIKE :query OR unit LIKE :query OR base_amount_value LIKE :query OR account_number LIKE :query OR external_reference LIKE :query", query: "%#{query}%") if query.present? }

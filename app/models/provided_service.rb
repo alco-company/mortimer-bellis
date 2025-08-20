@@ -1,5 +1,6 @@
 class ProvidedService < ApplicationRecord
   include Tenantable
+  include Settingable
 
   belongs_to :authorized_by, class_name: "User", optional: true, foreign_key: "authorized_by_id"
 

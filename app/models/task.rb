@@ -59,6 +59,7 @@
 
 class Task < ApplicationRecord
   include Tenantable
+  include Settingable
   include TaskStateable
 
   belongs_to :tasked_for, polymorphic: true

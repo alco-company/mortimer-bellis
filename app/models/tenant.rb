@@ -8,7 +8,7 @@ class Tenant < ApplicationRecord
   include Localeable
   include Colorable
   include Calendarable
-  include Setable # we need the tenant_id - not the polymorphic setable!
+  include Setable # we need the tenant_id - not the polymorphic setable! ie: WHERE tenant_id: setting.tenant_id
   include Serviceable
 
   has_many :background_jobs, dependent: :destroy

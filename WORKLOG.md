@@ -8,6 +8,8 @@
 - move Mission Control Jobs + toggle bj's to more
 - update dashboard displaying session_timeout
 - refining tests for settings
+- bug on add_from_erp
+- allow more classes to call .settings
 
 ## 19/8/2025
 
