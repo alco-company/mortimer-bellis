@@ -14,6 +14,7 @@
 - report on params error
 - fix setting next_run_at on jobs
 - rename the tag component test
+- fix missing customer pulls
 
 ## 19/8/2025
 

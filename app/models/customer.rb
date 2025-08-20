@@ -123,7 +123,7 @@ class Customer  < ApplicationRecord
     customer.company_status = item["CompanyStatus"]
     customer.vat_region_key = item["VatRegionKey"]
     customer.invoice_mail_out_option_key = item["InvoiceMailOutOptionKey"]
-    if customer.save
+    if customer.save(validate: false)
        Broadcasters::Resource.new(customer, { controller: "customers" }).create
     end
   rescue => error
