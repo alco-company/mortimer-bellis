@@ -8,7 +8,7 @@ class SessionInformation < ApplicationComponent
   def view_template
     dt(class: "sr-only") { "sign in information" }
     dd(class: "mt-3 flex items-center text-xs font-light text-gray-500 sm:mr-6 sm:mt-0") do
-      remains = ((Current.user.last_sign_in_at + 7.days) - Time.now).seconds
+      remains = ((Current.user.last_sign_in_at + Current.get_tenant.get_session_timeout) - Time.now).seconds
       days, hours, minutes, seconds = TimeMaterial.new.calc_hrs_minutes(remains)
       str = case true
       when minutes==0;t("session_done_shortly", seconds: seconds)

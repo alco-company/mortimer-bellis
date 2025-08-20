@@ -6,6 +6,7 @@
 
 - add session_timeout setting key
 - move Mission Control Jobs + toggle bj's to more
+- update dashboard displaying session_timeout
 
 ## 19/8/2025
 
