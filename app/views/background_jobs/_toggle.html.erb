@@ -1,0 +1,14 @@
+<% tf = "toggle_background_jobs" %>
+<%= turbo_frame_tag tf do 
+    link_to toggle_background_jobs_url(turbo_frame: tf, partial: "background_jobs/toggle"),
+      data: { turbo_stream: true, turbo_frame: tf },
+      class: "flex justify-between px-4 py-2 text-sm text-gray-700 hover:text-gray-900",
+      role: "menuitem",
+      tabindex: "-1" do %>
+        <%= render Icons::BackgroundJob.new(css: "h-4 w-4 text-gray-400") %>
+        <span class="text-nowrap pl-2"><%= show_background_job_toggle_label %></span>
+        <span class="sr-only">
+          <%= show_background_job_toggle_label %>
+        </span>
+      <% end 
+    end %>

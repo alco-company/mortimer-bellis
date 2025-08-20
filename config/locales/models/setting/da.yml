@@ -44,6 +44,10 @@ da:
       value: Værdi
       updated_at: Opdateret den
 
+    run:
+      start: "Start baggrundsopgaver"
+      stop: "Stop baggrundsopgaver"
+      
     keys:
       session_timeout: "Angiv varighed for session timeout"
       delegate_time_materials: Delegér tid og materialer

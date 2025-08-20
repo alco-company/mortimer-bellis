@@ -30,7 +30,9 @@ module DefaultActions
     def toggle
       posthog_capture
       resource_class.toggle
-      render turbo_stream: turbo_stream.replace("#{Current.tenant.id}_list_header", partial: "application/header", locals: { tenant: Current.tenant, user: Current.user, divider: true })
+      rs = params[:turbo_frame].present? ? params[:turbo_frame] : "#{Current.tenant.id}_list_header"
+      p = params[:partial].present? ? params[:partial] : "application/header"
+      render turbo_stream: turbo_stream.replace(rs, partial: p, locals: { tenant: Current.tenant, user: Current.user, divider: true })
     end
 
     # GET /users/lookup

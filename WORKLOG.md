@@ -5,6 +5,7 @@
 ## 20/8/2025
 
 - add session_timeout setting key
+- move Mission Control Jobs + toggle bj's to more
 
 ## 19/8/2025
 

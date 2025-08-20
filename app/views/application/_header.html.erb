@@ -17,8 +17,6 @@
         <span id="message-heading" data-action="click->list#reload" class="cursor-pointer <%= title_css %>"><%= t("#{ resource_class.table_name}.list.title") %></span>
         <p class=" mt-1 truncate pl-2 text-sm text-gray-500">
           <% case @filter_form %>
-          <% when "background_jobs" %>
-            <%= link_to t("Mission Control Jobs"), "/solid_queue_jobs", class: "mort-link-primary", data: { turbo_prefetch: "false" } %>
           <% when 'punch_cards' %>
             <%= link_to t(:payroll_order), new_modal_url(modal_form: 'payroll', resource_class: 'punch_card'), class: "inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10", data: { turbo_stream: true } %>
             <%= link_to t(:state_order), new_modal_url(modal_form: 'state', resource_class: 'punch_card'), class: "inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10", data: { turbo_stream: true } %>
@@ -54,9 +52,6 @@
       </div>
 
       <div class="mt-0 flex items-center sm:ml-6 sm:flex-shrink-0 sm:justify-start">
-        <% if params[:controller] == "background_jobs" && Current.get_user.superadmin? %>
-          <%= link_to( show_background_job_toggle_label, toggle_background_jobs_url, data: { turbo_stream: true}, class: "mort-btn-primary", role: "menuitem", tabindex: "-1", id: "user-menu-item-0")  %>
-        <% end %>
         <% case params[:controller]
            when "settings";
            when "calls"; %><%= link_to("New Call", new_call_path, data: { turbo_stream: true}, class: "mort-btn-primary", role: "menuitem", tabindex: "-1", id: "user-menu-item-0")  %>

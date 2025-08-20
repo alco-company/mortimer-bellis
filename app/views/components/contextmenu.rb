@@ -109,6 +109,9 @@ class Contextmenu < ApplicationComponent
       #   label: t(".import")) if resource_class.to_s == "User"
       show_ERP_link
 
+      show_mission_control_link
+      toggle_jobs
+
       link2 url: new_modal_url(modal_form: "settings",
         all: true,
         resource_class: resource_class.to_s.underscore,
@@ -194,6 +197,36 @@ class Contextmenu < ApplicationComponent
     end
   end
 
+  # link_to t("Mission Control Jobs"), "/solid_queue_jobs", class: "mort-link-primary", data: { turbo_prefetch: "false" }
+  def show_mission_control_link
+    link2target url: "/solid_queue_jobs",
+      target: "_blank",
+      data: { turbo_prefetch: "false", turbo: false, turbo_frame: "_blank" },
+      icon: "link",
+      label: t("mission_control_jobs")
+  end
+
+  def toggle_jobs
+    return unless resource_class.to_s == "BackgroundJob" && Current.get_user.superadmin?
+    tf = "toggle_background_jobs"
+    link2frame url: toggle_background_jobs_url(turbo_frame: tf, partial: "background_jobs/toggle"),
+      data: { turbo_stream: true, turbo_frame: tf },
+      icon: "background_job",
+      turbo_frame: tf,
+      label: show_background_job_toggle_label
+  end
+
+  def show_background_job_toggle_label
+    if Tenant.first.background_jobs.build.shouldnt? :run
+      t("settings.run.start")
+    else
+      t("settings.run.stop")
+    end
+  end
+
+
+
+
   def setting_link
     link2 url: new_modal_url(modal_form: "settings",
       id: resource.id,
@@ -267,6 +300,42 @@ class Contextmenu < ApplicationComponent
           plain label
           plain " "
           plain resource.name rescue ""
+        end
+      end
+    end
+
+    def link2target(url:, label:, target: nil, data: { turbo_stream: true }, icon: nil, css: "flex justify-between px-4 py-2 text-sm text-gray-700 hover:text-gray-900")
+      link_to url,
+        data: data,
+        class: css,
+        role: "menuitem",
+        target: target,
+        tabindex: "-1" do
+        render_icon icon
+        span(class: "text-nowrap pl-2") { label }
+        span(class: "sr-only") do
+          plain label
+          plain " "
+          plain resource.name rescue ""
+        end
+      end
+    end
+
+    def link2frame(url:, label:, turbo_frame: nil, target: nil, data: { turbo_stream: true }, icon: nil, css: "flex justify-between px-4 py-2 text-sm text-gray-700 hover:text-gray-900")
+      turbo_frame_tag turbo_frame do
+        link_to url,
+          data: data,
+          class: css,
+          role: "menuitem",
+          target: target,
+          tabindex: "-1" do
+          render_icon icon
+          span(class: "text-nowrap pl-2") { label }
+          span(class: "sr-only") do
+            plain label
+            plain " "
+            plain resource.name rescue ""
+          end
         end
       end
     end
