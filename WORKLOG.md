@@ -10,6 +10,7 @@
 - refining tests for settings
 - bug on add_from_erp
 - allow more classes to call .settings
+- add Tidewave
 
 ## 19/8/2025
 
