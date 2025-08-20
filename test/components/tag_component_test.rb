@@ -1,6 +1,6 @@
 require "application_system_test_case"
 
-class TagTest < ApplicationSystemTestCase
+class TagComponentTest < ApplicationSystemTestCase
   setup do
     @tenant = tenants(:one)
     @user = users(:superadmin)

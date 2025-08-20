@@ -13,6 +13,7 @@
 - add Tidewave
 - report on params error
 - fix setting next_run_at on jobs
+- rename the tag component test
 
 ## 19/8/2025
 
