@@ -6,7 +6,7 @@ class Contextmenu < ApplicationComponent
 
   attr_accessor :resource, :resource_class, :list
 
-  def initialize(resource: nil, list: nil, resource_class: nil, turbo_frame: "_top", alter: true, links: [], cls: "relative flex", filter: nil, user: nil)
+  def initialize(resource: nil, list: nil, resource_class: nil, turbo_frame: "_top", alter: true, links: [], cls: "relative flex", filter: nil, user: nil, show_all: "false")
     @resource = resource
     @resource_class = resource_class || resource.class
     @list = list
@@ -16,6 +16,7 @@ class Contextmenu < ApplicationComponent
     @links = links
     @css = cls
     @user = user
+    @show_all = show_all != "false"            # particular to TimeMaterial - show all or only my unfinished time materials
   end
 
   def view_template
@@ -89,6 +90,23 @@ class Contextmenu < ApplicationComponent
           render_icon "select"
           span { t(".batch") }
         end
+      end
+
+      if resource_class.to_s == "TimeMaterial"
+        current_param = request.query_parameters.dig(:show_all)
+        current = ActiveModel::Type::Boolean.new.cast(current_param)
+        base = request.query_parameters.symbolize_keys
+        if current
+          lbl = t(".toggle_show_my_unfinished")
+          url = resources_url(**base.merge(show_all: false, replace: true))
+        else
+          lbl = t(".toggle_show_all")
+          url = resources_url(**base.merge(show_all: true, replace: true))
+        end
+        link2 url: url,
+          data: { action: "click->contextmenu#toggle_show_all", href: url, turbo_frame: @turbo_frame },
+          label: lbl,
+          icon: "reload"
       end
 
       resource_class.any? && resource_class.to_s != "Setting" ?
@@ -200,6 +218,7 @@ class Contextmenu < ApplicationComponent
 
   # link_to t("Mission Control Jobs"), "/solid_queue_jobs", class: "mort-link-primary", data: { turbo_prefetch: "false" }
   def show_mission_control_link
+    return unless resource_class.to_s == "BackgroundJob" && @user.superadmin?
     link2target url: "/solid_queue_jobs",
       target: "_blank",
       data: { turbo_prefetch: "false", turbo: false, turbo_frame: "_blank" },

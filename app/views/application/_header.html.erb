@@ -72,7 +72,7 @@
         </span>
 
         <div class="relative ml-3 inline-block text-left">
-          <%= render_contextmenu list: @resources, resource_class: resource_class, filter: @filter %>
+          <%= render_contextmenu list: @resources, resource_class: resource_class, filter: @filter, show_all: params[:show_all] || "false" %>
         </div>
       </div>
     </div>

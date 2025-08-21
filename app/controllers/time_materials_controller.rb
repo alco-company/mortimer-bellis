@@ -14,7 +14,9 @@ class TimeMaterialsController < MortimerController
 
   def index
     @resources = resources
-    if request.format.html? && params[:page].blank? && params[:search].blank? && params[:s].blank? && params[:d].blank? && !(@filter.persisted? rescue false)
+    if ActiveModel::Type::Boolean.new.cast(params[:show_all])
+      @resources = @resources.order(wdate: :desc)
+    elsif params[:search].blank? && params[:s].blank? && params[:d].blank? && !(@filter.persisted? rescue false)
       my_open = @resources.where(user_id: Current.user.id).not_done_or_pushed
       @resources = (my_open.exists? ? my_open : @resources).order(wdate: :desc)
     else

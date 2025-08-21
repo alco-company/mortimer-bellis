@@ -27,6 +27,13 @@ export default class extends Controller {
     }
   }
 
+  toggle_show_all(event) {
+    event.preventDefault();
+    leave(this.popupTarget);
+    const url = event.target.closest("a").dataset.href || event.target.closest("a").href;
+    get(url, { responseKind: 'turbo-stream' });
+  }
+
   show() {
     this.buttonTarget.setAttribute('aria-expanded', 'true');
     this.buttonTarget.classList.add('active');
