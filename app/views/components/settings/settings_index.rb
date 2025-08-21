@@ -38,7 +38,7 @@ class Settings::SettingsIndex < ApplicationComponent
     # NOTE: Phlex components can't use the Rails partial API (render partial: ...)
     # so we delegate to the Rails view context manually and inject the HTML.
     # Using unsafe_raw since the partial returns already-safe HTML.
-    # unsafe_raw helpers.render(partial: "application/header", locals: { batch_form: nil, divider: @divider })
+    # unsafe_raw render(partial: "application/header", locals: { batch_form: nil, divider: @divider })
     render(partial: "application/header", locals: { batch_form: nil, divider: @divider })
     turbo_frame_tag "settings_list" do
       div(id: "list", role: "list", class: "") do

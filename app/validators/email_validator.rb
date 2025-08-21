@@ -7,7 +7,7 @@ class EmailValidator < ActiveModel::Validator
 
   def issues(record, field)
     if record.send(field).present? && !record.send(field).match(URI::MailTo::EMAIL_REGEXP)
-      record.errors.add field, ApplicationController.helpers.tl("not a valid email address")
+      record.errors.add field, ApplicationController.tl("not a valid email address")
       return false
     end
     if record.send(field).present?
@@ -15,7 +15,7 @@ class EmailValidator < ActiveModel::Validator
       email_exist = Lead.where(email: record.send(field)).any? # .where(lead[:trial_ends_at].gt(DateTime.now).or(lead[:trial_ends_at].eq(nil)))
       email_exist ||= User.unscoped.where(email: record.send(field)).exists?
       if email_exist
-        record.errors.add field, ApplicationController.helpers.tl("you_have_a_current_demo_account_already")
+        record.errors.add field, ApplicationController.tl("you_have_a_current_demo_account_already")
         return false
       end
 

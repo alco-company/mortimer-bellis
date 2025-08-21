@@ -18,6 +18,8 @@ class Contextmenu < ApplicationComponent
   end
 
   def view_template
+    @user ||= Current.get_user
+    Rails.logger.debug("------------------------------------ Contextmenu initialized for user: #{@user.id}")
     div(data_controller: "contextmenu", class: @css) do
       contextmenu_button
       case true
@@ -207,7 +209,7 @@ class Contextmenu < ApplicationComponent
   end
 
   def toggle_jobs
-    return unless resource_class.to_s == "BackgroundJob" && Current.get_user.superadmin?
+    return unless resource_class.to_s == "BackgroundJob" && @user.superadmin?
     tf = "toggle_background_jobs"
     link2frame url: toggle_background_jobs_url(turbo_frame: tf, partial: "background_jobs/toggle"),
       data: { turbo_stream: true, turbo_frame: tf },
@@ -257,7 +259,7 @@ class Contextmenu < ApplicationComponent
       (Current.get_tenant.provided_services.by_name("Dinero").any? and
       Current.get_tenant.license_valid? and
       %W[trial ambassador pro].include? Current.get_tenant.license and
-      Current.get_user.can?(:sync_with_erp, resource: resource_class))
+      @user.can?(:sync_with_erp, resource: resource_class))
     end
 
     def show_ERP_link
@@ -374,10 +376,10 @@ class Contextmenu < ApplicationComponent
 
     def erp_pull_link
       case resource_class.to_s
-      when "Customer"; erp_pull_customers_url if Current.get_user.can?(:sync_with_erp, resource: Customer) && Current.get_user.can?(:pull_customers, resource: Customer)
-      when "Product"; erp_pull_products_url if Current.get_user.can?(:sync_with_erp, resource: Product) && Current.get_user.can?(:pull_products, resource: Product)
-      when "Invoice"; erp_pull_invoices_url if Current.get_user.can?(:sync_with_erp, resource: Invoice) && Current.get_user.can?(:pull_invoices, resource: Invoice)
-      when "ProvidedService"; erp_pull_provided_services_url if Current.get_user.can?(:sync_with_erp, resource: ProvidedService) && Current.get_user.can?(:pull_provided_services, resource: ProvidedService)
+      when "Customer"; erp_pull_customers_url if @user.can?(:sync_with_erp, resource: Customer) && @user.can?(:pull_customers, resource: Customer)
+      when "Product"; erp_pull_products_url if @user.can?(:sync_with_erp, resource: Product) && @user.can?(:pull_products, resource: Product)
+      when "Invoice"; erp_pull_invoices_url if @user.can?(:sync_with_erp, resource: Invoice) && @user.can?(:pull_invoices, resource: Invoice)
+      when "ProvidedService"; erp_pull_provided_services_url if @user.can?(:sync_with_erp, resource: ProvidedService) && @user.can?(:pull_provided_services, resource: ProvidedService)
       end
     end
 

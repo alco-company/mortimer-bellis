@@ -73,7 +73,7 @@ class DashboardTask < ApplicationComponent
         class:
           "flex justify-between items-center gap-x-4 border-b border-slate-100 bg-gray-50 p-2"
       ) do
-        url, turbo = url.include?("/") ? [ url, true ] : helpers.send(url)
+        url, turbo = url.include?("/") ? [ url, true ] : [ url, false ]
         div(class: "flex text-sm/6 text-gray-900") do
           link_to task.title, url, class: "mort-link-primary mr-2 text-sm", data: { turbo_stream: turbo }
           render Icons::Link.new css: "mort-link-primary h-6 "
@@ -171,7 +171,7 @@ class DashboardTask < ApplicationComponent
   def completed_task(task)
     url, help = task.link.split(/,| |;/)
     help ||= "https://mortimer.pro/help"
-    url, turbo = url.include?("/") ? [ url, true ] : helpers.send(url)
+    url, turbo = url.include?("/") ? [ url, true ] : [ url, false ]
     li(class: "relative") do
       comment { "Complete Step" }
       link_to(url, class: "relative flex text-sm group", data: { turbo_stream: turbo }) do
@@ -199,7 +199,7 @@ class DashboardTask < ApplicationComponent
   def incomplete_task(task)
     url, help = task.link.split(/,| |;/)
     help ||= "https://mortimer.pro/help"
-    url, turbo = url.include?("/") ? [ url, true ] : helpers.send(url)
+    url, turbo = url.include?("/") ? [ url, true ] : [ url, false ]
     li(class: "relative") do
       comment { "Upcoming Step" }
       link_to(url, class: "relative flex text-sm group", data: { turbo_stream: turbo, turbo: turbo }) do

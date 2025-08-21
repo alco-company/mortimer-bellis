@@ -80,7 +80,7 @@ class HeaderProfile < ApplicationComponent
     #                 if Current.user.user?
     #                   plain Current.user.tenant.name
     #                 else
-    #                   link_to Current.user.tenant.name, helpers.edit_tenant_path(Current.user.tenant), class: "mort-link-primary", data: { turbo_stream: true, turbo_action: "advance", turbo_frame: "form" }
+    #                   link_to Current.user.tenant.name, edit_tenant_path(Current.user.tenant), class: "mort-link-primary", data: { turbo_stream: true, turbo_action: "advance", turbo_frame: "form" }
     #                 end
     #               end
     #               render SessionInformation.new Current.user
@@ -109,7 +109,7 @@ class HeaderProfile < ApplicationComponent
     #         end
     #       end
     #       # div(class: "mt-6 flex space-x-3 md:ml-4 md:mt-0") do
-    #       #   link_to(t("profile.invite_new_user"), helpers.users_invitations_new_url, class: "mort-btn-primary", role: "menuitem", tabindex: "-1", id: "user-menu-item-0") unless Current.user.user?
+    #       #   link_to(t("profile.invite_new_user"), users_invitations_new_url, class: "mort-btn-primary", role: "menuitem", tabindex: "-1", id: "user-menu-item-0") unless Current.user.user?
     #       # end
     #       # div(class: "mort-field ml-2 ") do
     #       #   form(class: "group m-0", data: { profile_target: "buttonForm" }) do

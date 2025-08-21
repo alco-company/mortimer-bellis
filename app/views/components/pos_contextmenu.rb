@@ -24,7 +24,7 @@ class PosContextmenu < ApplicationComponent
   def folded
     div(data_controller: "contextmenu", class: "relative flex-none") do
       whitespace
-      link_to(helpers.pos_employee_punches_url(id: resource.id, user_id: employee&.id, punch_clock_id: punch_clock&.id), data: { turbo_stream: "" }) do
+      link_to(pos_employee_punches_url(id: resource.id, user_id: employee&.id, punch_clock_id: punch_clock&.id), data: { turbo_stream: "" }) do
         whitespace
         span(class: "sr-only") { "Get todays punches" }
         whitespace
@@ -99,7 +99,7 @@ class PosContextmenu < ApplicationComponent
       whitespace
       comment { %(Active: "bg-gray-50", Not Active: "") }
       whitespace
-      link_to helpers.pos_delete_all_url(date: resource.punched_at.to_date),
+      link_to pos_delete_all_url(date: resource.punched_at.to_date),
         data: { turbo_method: :delete, turbo_confirm: "Are you sure?", turbo_stream: true, action: "click->contextmenu#hide" },
         class: "block px-3 py-1 text-sm leading-6 text-gray-900",
         role: "menuitem",

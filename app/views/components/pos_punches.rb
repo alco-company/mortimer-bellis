@@ -18,26 +18,26 @@ class PosPunches < ApplicationComponent
       Time.use_zone(user.time_zone) do
         if punch.punched_at.to_date != current_date
           current_date = punch.punched_at&.to_date
-          li(id: "#{tab}_#{(helpers.dom_id punch)}", class: "flex items-center justify-between gap-x-6 py-5") do
+          li(id: "#{tab}_#{(dom_id punch)}", class: "flex items-center justify-between gap-x-6 py-5") do
             div(class: "grid grid-cols-2 min-w-0 w-full") do
               display_date(punch, user, punch_clock)
               div(class: "text-right") { display_work(punch.punch_card) }
             end
             div(class: "flex flex-none items-center gap-x-4") do
-              render(PosContextmenu.new(resource: punch, punch_clock: punch_clock, user: user, list: true, turbo_frame: helpers.dom_id(punch), alter: edit))
+              render(PosContextmenu.new(resource: punch, punch_clock: punch_clock, user: user, list: true, turbo_frame: dom_id(punch), alter: edit))
             end
           end
         end
-        li(id: (helpers.dom_id punch), class: "flex items-center justify-between gap-x-6 py-5") do
+        li(id: (dom_id punch), class: "flex items-center justify-between gap-x-6 py-5") do
           div(class: "min-w-0 w-full grid grid-cols-5 items-center") do
-            div do helpers.render_text_column(value: helpers.tell_state(punch), css: "truncate") end
+            div do render_text_column(value: tell_state(punch), css: "truncate") end
             div(class: "col-span-3") do
-               helpers.render_text_column(value: punch.comment, css: "hidden md:block truncate")
+               render_text_column(value: punch.comment, css: "hidden md:block truncate")
             end
-            div do helpers.render_time_column(value: punch.punched_at, css: "text-right") end
+            div do render_time_column(value: punch.punched_at, css: "text-right") end
           end
           div(class: "flex flex-none items-center gap-x-4") do
-            render PosContextmenu.new resource: punch, turbo_frame: helpers.dom_id(punch), alter: edit, links: [ pos_user_edit_url(api_key: user.access_token, id: punch.id), pos_user_delete_url(api_key: user.access_token, id: punch.id) ]
+            render PosContextmenu.new resource: punch, turbo_frame: dom_id(punch), alter: edit, links: [ pos_user_edit_url(api_key: user.access_token, id: punch.id), pos_user_delete_url(api_key: user.access_token, id: punch.id) ]
           end
         end unless folded
       end
@@ -53,11 +53,11 @@ class PosPunches < ApplicationComponent
 
   def folded_icon(punch, user, punch_clock, folded)
     folded ?
-      link_to(helpers.pos_user_punches_url(id: punch.id, user_id: user&.id, punch_clock_id: punch_clock&.id), data: { turbo_stream: "" }) do
+      link_to(pos_user_punches_url(id: punch.id, user_id: user&.id, punch_clock_id: punch_clock&.id), data: { turbo_stream: "" }) do
         span(class: "sr-only") { "Get todays punches" }
         svg_icon(folded)
       end :
-      link_to(helpers.pos_user_url(api_key: user.access_token, tab: "payroll")) do
+      link_to(pos_user_url(api_key: user.access_token, tab: "payroll")) do
         span(class: "sr-only") { "Get todays punches" }
         svg_icon(folded)
       end
@@ -95,6 +95,6 @@ class PosPunches < ApplicationComponent
       counters[:work] = punch_card&.work_minutes || 0
       counters[:break] = punch_card&.break_minutes || 0
     end
-    "(%s) %s" % [ helpers.display_hours_minutes(counters[:break]), helpers.display_hours_minutes(counters[:work]) ]
+    "(%s) %s" % [ display_hours_minutes(counters[:break]), display_hours_minutes(counters[:work]) ]
   end
 end

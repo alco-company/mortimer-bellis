@@ -91,10 +91,10 @@ class EventComponent < ApplicationComponent
 
         reason = resource.work_type == "in" ? "" : resource.reason
         # set the free Options
-        set_options(reason: "free", label: helpers.t(".free_reason"), reasons: %w[rr_free senior_free unpaid_free maternity_free leave_free], value: reason)
+        set_options(reason: "free", label: t(".free_reason"), reasons: %w[rr_free senior_free unpaid_free maternity_free leave_free], value: reason)
 
         # set the sick Options
-        set_options(reason: "sick", label: helpers.t(".sick_reason"), reasons: %w[iam_sick child_sick nursing_sick lost_work_sick p56_sick], value: reason)
+        set_options(reason: "sick", label: t(".sick_reason"), reasons: %w[iam_sick child_sick nursing_sick lost_work_sick p56_sick], value: reason)
       end
     end
   end
@@ -237,7 +237,7 @@ class EventComponent < ApplicationComponent
                       checked: chck,
                       class: "h-4 w-4 border-gray-300 text-sky-600 focus:ring-sky-600"
                     )
-                    label(for: r, class: "ml-3 block text-sm font-medium leading-6 text-gray-900") { helpers.t(".#{r}") }
+                    label(for: r, class: "ml-3 block text-sm font-medium leading-6 text-gray-900") { t(".#{r}") }
                   end
                 end
               end
@@ -706,10 +706,10 @@ end
 #     set_work_options
 
 #     # set the free Options
-#     set_options(reason: "free", label: helpers.t(".free_reason"), reasons: %w[rr_free senior_free unpaid_free maternity_free leave_free])
+#     set_options(reason: "free", label: t(".free_reason"), reasons: %w[rr_free senior_free unpaid_free maternity_free leave_free])
 
 #     # set the sick Options
-#     set_options(reason: "sick", label: helpers.t(".sick_reason"), reasons: %w[iam_sick child_sick nursing_sick lost_work_sick p56_sick])
+#     set_options(reason: "sick", label: t(".sick_reason"), reasons: %w[iam_sick child_sick nursing_sick lost_work_sick p56_sick])
 
 #     comment_field
 #     attachment_field
@@ -730,10 +730,10 @@ end
 #     set_work_options
 
 #     # set the free Options
-#     set_options(reason: "free", label: helpers.t(".free_reason"), reasons: %w[rr_free senior_free unpaid_free maternity_free leave_free])
+#     set_options(reason: "free", label: t(".free_reason"), reasons: %w[rr_free senior_free unpaid_free maternity_free leave_free])
 
 #     # set the sick Options
-#     set_options(reason: "sick", label: helpers.t(".sick_reason"), reasons: %w[iam_sick child_sick nursing_sick lost_work_sick p56_sick])
+#     set_options(reason: "sick", label: t(".sick_reason"), reasons: %w[iam_sick child_sick nursing_sick lost_work_sick p56_sick])
 
 #     hr
 #     h3(class: "text-md mt-5") { "Gentagelser" }

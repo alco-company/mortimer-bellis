@@ -165,7 +165,7 @@ class ActivityList < ApplicationComponent
 
   # def list_item(item:)
   #   div do
-  #     a(href: helpers.url_for(item), class: "block bg-white px-4 py-4 hover:bg-gray-50") do
+  #     a(href: url_for(item), class: "block bg-white px-4 py-4 hover:bg-gray-50") do
   #       span(class: "flex items-center space-x-4") do
   #         span(class: "flex flex-1 space-x-2 truncate") do
   #           punch_clock_svg
@@ -204,7 +204,7 @@ class ActivityList < ApplicationComponent
   #     ) do
   #       div(class: "flex") do
   #         a(
-  #           href: helpers.url_for(item),
+  #           href: url_for(item),
   #           class: "group inline-flex space-x-2 truncate text-sm"
   #         ) do
   #             punch_clock_svg

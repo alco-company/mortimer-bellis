@@ -12,7 +12,7 @@ class Tenants::Form < ApplicationForm
     row field(:locale).select(Tenant.locales, prompt: I18n.t(".select_tenant_locale"), class: "mort-form-select")
     # row field(:country).input()
     row field(:time_zone).select(Tenant.time_zones_for_phlex, class: "mort-form-select")
-    # qr_code field(:tenant).input, helpers.resource_url
+    # qr_code field(:tenant).input, resource_url
     buy_product
     delete_account
   end

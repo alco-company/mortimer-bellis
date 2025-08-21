@@ -95,12 +95,12 @@ class MonthComponent < CalendarComponent
     cls += holiday?(dt) ? " border-violet-600" : " border-white hover:border-gray-100"
     cls += (dt.month == from_date.month) ? " bg-white" : " bg-gray-50 text-gray-500"
     link_to(
-      helpers.new_modal_url(id: id, modal_form: "day_summary", resource_class: "calendar", modal_next_step: "accept", date: l(dt, format: :short_iso)),
+      new_modal_url(id: id, modal_form: "day_summary", resource_class: "calendar", modal_next_step: "accept", date: l(dt, format: :short_iso)),
       data: { turbo_stream: true },
       class: "#{cls} bg-gray-50 py-1.5 text-gray-400 hover:bg-gray-100 focus:z-10",
       role: "menuitem",
       tabindex: "-1") do
-      # helpers.calendar_events_url(calendar_id: id, date: dt),
+      # calendar_events_url(calendar_id: id, date: dt),
       # data: { turbo_frame: "events_list", turbo_stream: true },
       # class: cls,
       # role: "menuitem",
@@ -209,7 +209,7 @@ class MonthComponent < CalendarComponent
     cls += holiday?(dt) ? " border-violet-600" : " border-white"
     cls += (dt == Date.today && (dt.month == from_date.month)) ? " text-gray-900" : " text-gray-500"
     link_to(
-      helpers.new_modal_url(id: id, modal_form: "day_summary", resource_class: "calendar", modal_next_step: "accept", date: l(dt, format: :short_iso)),
+      new_modal_url(id: id, modal_form: "day_summary", resource_class: "calendar", modal_next_step: "accept", date: l(dt, format: :short_iso)),
       data: { turbo_stream: true },
       class: cls,
       role: "menuitem",
@@ -229,10 +229,10 @@ class MonthComponent < CalendarComponent
 
 
     # link_to(
-    #   helpers.events_calendar_url(id: id, date: dt),
+    #   events_calendar_url(id: id, date: dt),
     #   data: { turbo_frame: "events_list", turbo_stream: true },
     #   # modal view alternative:
-    #   # helpers.new_modal_url(id: id, modal_form: "day_summary", resource_class: "calendar", modal_next_step: "accept", date: l(dt, format: :short_iso)),
+    #   # new_modal_url(id: id, modal_form: "day_summary", resource_class: "calendar", modal_next_step: "accept", date: l(dt, format: :short_iso)),
     #   # data: { turbo_stream: true },
     #   class: cls,
     #   role: "menuitem",

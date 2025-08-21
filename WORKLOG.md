@@ -2,6 +2,10 @@
 
 ## CHANGELOG
 
+## 21/8/2025
+
+- get rid of the rest of helpers. references to clear out Phlex deprecated mention
+
 ## 20/8/2025
 
 - add session_timeout setting key

@@ -137,9 +137,9 @@ class CalendarComponent < ApplicationComponent
       end
       div(class: "ml-6 h-6 w-px bg-gray-300")
       link_to(
-        helpers.new_modal_url(id: id, modal_form: "event", resource_class: "event", step: "new", view: view),
+        new_modal_url(id: id, modal_form: "event", resource_class: "event", step: "new", view: view),
         data: { turbo_stream: true },
-        # link_to helpers.delete_all_url(),
+        # link_to delete_all_url(),
         # data: { turbo_method: :delete, turbo_confirm: "Are you sure?", turbo_stream: true, action: "click->contextmenu#hide" },
         class: "mort-btn-primary",
         role: "menuitem",
@@ -172,9 +172,9 @@ class CalendarComponent < ApplicationComponent
       ) do
         div(class: "py-1", role: "none") do
           link_to(
-            helpers.new_modal_url(id: id, modal_form: "event", resource_class: "event", step: "new"),
+            new_modal_url(id: id, modal_form: "event", resource_class: "event", step: "new"),
             data: { turbo_stream: true },
-            # link_to helpers.delete_all_url(),
+            # link_to delete_all_url(),
             # data: { turbo_method: :delete, turbo_confirm: "Are you sure?", turbo_stream: true, action: "click->contextmenu#hide" },
             class: "block px-4 py-2 text-sm text-gray-700",
             role: "menuitem",
@@ -246,7 +246,7 @@ class CalendarComponent < ApplicationComponent
           dt = date.beginning_of_week
           dt += i.days if i > 0
           link_to(
-            helpers.new_modal_url(id: id, modal_form: "day_summary", resource_class: "calendar", modal_next_step: "accept", date: l(dt, format: :short_iso)),
+            new_modal_url(id: id, modal_form: "day_summary", resource_class: "calendar", modal_next_step: "accept", date: l(dt, format: :short_iso)),
             data: { turbo_stream: true },
             class: "flex flex-col items-center pb-3 pt-2",
             role: "menuitem",
@@ -267,7 +267,7 @@ class CalendarComponent < ApplicationComponent
           dt = date.beginning_of_week
           dt += i.days if i > 0
           link_to(
-            helpers.new_modal_url(id: id, modal_form: "day_summary", resource_class: "calendar", modal_next_step: "accept", date: l(dt, format: :short_iso)),
+            new_modal_url(id: id, modal_form: "day_summary", resource_class: "calendar", modal_next_step: "accept", date: l(dt, format: :short_iso)),
             data: { turbo_stream: true },
             class: "flex justify-center py-2",
             role: "menuitem",
@@ -334,7 +334,7 @@ class CalendarComponent < ApplicationComponent
             if event.all_day?
               li(class: "relative col-start-#{index+1} flex ", style: "grid-row:1 /span 1") do
                 link_to(
-                  helpers.new_modal_url(id: event.id, modal_form: "event", resource_class: "event", step: "edit", view: view, date: date),
+                  new_modal_url(id: event.id, modal_form: "event", resource_class: "event", step: "edit", view: view, date: date),
                   data: { turbo_stream: true },
                   class: "#{event.color} border group absolute inset-1 flex flex-col overflow-hidden rounded-md bg-amber-50 pl-2 text-amber-500 text-xs hover:bg-amber-100",
                   role: "menuitem",
@@ -356,7 +356,7 @@ class CalendarComponent < ApplicationComponent
               cls = duration < 12 ? "hidden" : ""
               li(class: "relative col-start-#{index+1} flex ", style: "grid-row:#{start + 2} /span #{duration}") do
                 link_to(
-                  helpers.new_modal_url(id: event.id, modal_form: "event", resource_class: "event", step: "edit", view: view, date: date),
+                  new_modal_url(id: event.id, modal_form: "event", resource_class: "event", step: "edit", view: view, date: date),
                   data: { turbo_stream: true },
                   class: "#{event.color} border group absolute inset-1 flex flex-col overflow-hidden rounded-md bg-blue-50 pl-2 text-blue-500 text-xs hover:bg-blue-100",
                   role: "menuitem",
@@ -439,7 +439,7 @@ class CalendarComponent < ApplicationComponent
           # end
           # div(class: "h-7 w-7") { dt.day }
           link_to(
-            helpers.new_modal_url(id: id, modal_form: "day_summary", resource_class: "calendar", modal_next_step: "accept", view: view, date: l(dt, format: :short_iso)),
+            new_modal_url(id: id, modal_form: "day_summary", resource_class: "calendar", modal_next_step: "accept", view: view, date: l(dt, format: :short_iso)),
             data: { turbo_stream: true },
             class: "#{cls} relative bg-gray-50 py-1.5 text-gray-400 hover:bg-gray-100 focus:z-10",
             role: "menuitem",
@@ -537,7 +537,7 @@ class CalendarComponent < ApplicationComponent
     end
     li(class: "relative col-start-#{i+1} flex", style: "grid-row:#{from_at + 2} /span 2") do
       div(href: "#", class: "absolute flex flex-col overflow-hidden text-md ") do
-        link_to(helpers.modal_url(id: punch.id, modal_form: "punch", resource_class: "punch", step: "view"), data: { turbo_stream: true }) do
+        link_to(modal_url(id: punch.id, modal_form: "punch", resource_class: "punch", step: "view"), data: { turbo_stream: true }) do
           svg(
             class: "pr-1 #{punch_color}  h-6 w-6 ml-2",
             xmlns: "http://www.w3.org/2000/svg",

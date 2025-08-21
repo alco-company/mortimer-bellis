@@ -10,7 +10,7 @@ class Pos::PunchesController < Pos::PosController
       user = first_punch.user
       date_range = first_punch.punched_at.beginning_of_day..first_punch.punched_at.end_of_day
       @punches = Punch.where(user: user, punched_at: date_range)
-      render turbo_stream: turbo_stream.replace("date_#{helpers.dom_id(first_punch)}", partial: "pos/punches/index")
+      render turbo_stream: turbo_stream.replace("date_#{dom_id(first_punch)}", partial: "pos/punches/index")
     else
       head :not_found
     end

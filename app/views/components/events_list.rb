@@ -283,7 +283,7 @@ class EventsList < ApplicationComponent
         end
       end
       div(class: "flex-grow-0") do
-        link_to(helpers.new_modal_url(id: event.id, modal_form: "event", resource_class: "event", step: "edit", view: view, date: date),
+        link_to(new_modal_url(id: event.id, modal_form: "event", resource_class: "event", step: "edit", view: view, date: date),
             data: { turbo_stream: true },
             role: "menuitem",
             tabindex: "-1") do
