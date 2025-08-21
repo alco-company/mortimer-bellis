@@ -90,6 +90,7 @@ class TimeMaterial < ApplicationRecord
   scope :weekdays, -> { where("cast(strftime('%w', wdate) as integer) BETWEEN 1 AND 5") }
   scope :billed, -> { where("is_invoice = ?", 1).where(state: [ :done, :pushed_to_erp ]) }
   scope :drafted, -> { where(state: [ :draft, :active, :paused ]) }
+  scope :not_done_or_pushed, -> { where.not(state: [ states[:done], states[:pushed_to_erp] ]) }
   scope :by_state, ->(state) { where("state = ?", state) if state.present? }
   scope :by_customer, ->(customer) { where("customer_id = ?", customer.id) if customer.present? }
   scope :by_project, ->(project) { where("project_id = ?", project.id) if project.present? }

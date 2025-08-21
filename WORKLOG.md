@@ -6,6 +6,7 @@
 
 - get rid of the rest of helpers. references to clear out Phlex deprecated mention
 - make contextmenu work in background
+- initially list not_done_or_pushed time_materials
 
 ## 20/8/2025
 
