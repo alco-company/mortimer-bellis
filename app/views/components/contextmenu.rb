@@ -6,7 +6,7 @@ class Contextmenu < ApplicationComponent
 
   attr_accessor :resource, :resource_class, :list
 
-  def initialize(resource: nil, list: nil, resource_class: nil, turbo_frame: "_top", alter: true, links: [], cls: "relative flex", filter: nil)
+  def initialize(resource: nil, list: nil, resource_class: nil, turbo_frame: "_top", alter: true, links: [], cls: "relative flex", filter: nil, user: nil)
     @resource = resource
     @resource_class = resource_class || resource.class
     @list = list
@@ -15,11 +15,10 @@ class Contextmenu < ApplicationComponent
     @filter = filter
     @links = links
     @css = cls
+    @user = user
   end
 
   def view_template
-    @user ||= Current.get_user
-    Rails.logger.debug("------------------------------------ Contextmenu initialized for user: #{@user.id}")
     div(data_controller: "contextmenu", class: @css) do
       contextmenu_button
       case true

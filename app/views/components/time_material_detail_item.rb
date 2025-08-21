@@ -1,10 +1,11 @@
 class TimeMaterialDetailItem < ApplicationComponent
   attr_reader :item, :id
 
-  def initialize(item:, id: nil, links: [])
+  def initialize(item:, id: nil, links: [], user: nil)
     @item = item
     @id = id
     @links = links
+    @user = user
   end
 
   def view_template
@@ -35,7 +36,7 @@ class TimeMaterialDetailItem < ApplicationComponent
           customer_name "mt-1 flex text-xs leading-5 text-gray-500"
           time_material_state
         end
-        render Contextmenu.new resource: item, turbo_frame: "form", alter: true, links: @links, cls: "relative flex-none"
+        render Contextmenu.new resource: item, turbo_frame: "form", alter: true, links: @links, cls: "relative flex-none", user: @user
         # div(class: "relative flex-none") do
         #   whitespace
         #   button(

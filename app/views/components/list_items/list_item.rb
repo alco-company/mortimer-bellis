@@ -143,7 +143,8 @@ class ListItems::ListItem < ApplicationComponent
       turbo_frame: "form",
       resource_class: resource_class,
       alter: true,
-      links: [ edit_resource_url, resource_url ]
+      links: [ edit_resource_url, resource_url ],
+      user: user
   end
 
   #

@@ -244,8 +244,8 @@ class TimeMaterial < ApplicationRecord
     destroy!
   end
 
-  def list_item(links: [], context:)
-    TimeMaterialDetailItem.new(item: self, links: links, id: context.dom_id(self))
+  def list_item(links: [], context:, user: nil)
+    TimeMaterialDetailItem.new(item: self, links: links, id: context.dom_id(self), user: user)
   end
 
   def notify(action: nil, title: nil, msg: nil, rcp: nil, priority: 0)

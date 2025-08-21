@@ -5,6 +5,7 @@
 ## 21/8/2025
 
 - get rid of the rest of helpers. references to clear out Phlex deprecated mention
+- make contextmenu work in background
 
 ## 20/8/2025
 
