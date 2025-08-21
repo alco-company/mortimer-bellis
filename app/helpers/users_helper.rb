@@ -8,7 +8,7 @@ module UsersHelper
   def user_can_create?
     return true if Current.user.superadmin?
     return false if params.dig(:controller) == "tenants"
-    key = "add_#{resource_class.to_s.underscore}"
+    key = "add_#{resource_class.to_s.underscore.pluralize}"
     Current.user.can? key, resource: resource_class
   rescue
     false

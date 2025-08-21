@@ -16,14 +16,16 @@ class TimeMaterialButtonComponent < ApplicationComponent
 
   def view_template
     div(id: "time_material_buttons", class: "lg:hidden fixed flex px-6 z-20 w-full bottom-6 justify-between right-0 ") do
-      add_time_material_button
-      start_timer_button
-      # case state
-      # when "out", "break"; punch_in
-      # when "in"
-      #   punch_break
-      #   punch_out
-      # end
+      if user.can? :add_time_materials
+        add_time_material_button
+        start_timer_button
+        # case state
+        # when "out", "break"; punch_in
+        # when "in"
+        #   punch_break
+        #   punch_out
+        # end
+      end
     end
   end
 

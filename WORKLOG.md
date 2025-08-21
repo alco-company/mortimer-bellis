@@ -9,6 +9,7 @@
 - initially list not_done_or_pushed time_materials
 - fix MCJ in contextmenu - only on background_jobs#contextmenu
 - toggle list_all in contextmenu
+- only show new_time_material_url if user.can? :add_time_materials
 
 ## 20/8/2025
 
