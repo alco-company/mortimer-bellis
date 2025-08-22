@@ -2,6 +2,10 @@
 
 ## CHANGELOG
 
+## 22/8/2025
+
+- make batch work across infite scroll
+
 ## 21/8/2025
 
 - get rid of the rest of helpers. references to clear out Phlex deprecated mention
