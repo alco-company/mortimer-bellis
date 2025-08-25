@@ -4,7 +4,7 @@ class TenantsControllerTest < ActionDispatch::IntegrationTest
   setup do
     Current.tenant = tenants(:one)
     @tenant = tenants(:one)
-    sign_in users(:one)
+    ui_sign_in users(:one)
   end
 
   test "should get index" do
@@ -48,7 +48,7 @@ class TenantsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update tenant" do
-    sign_in users(:one)
+    ui_sign_in users(:one)
     patch tenant_url(@tenant), params: { tenant: { email: @tenant.email, locale: @tenant.locale, name: @tenant.name, pp_identification: @tenant.pp_identification, time_zone: @tenant.time_zone } }
     assert_response :success
     # assert_redirected_to tenants_url()

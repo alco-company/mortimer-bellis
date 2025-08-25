@@ -4,7 +4,7 @@ class SettingsTest < ApplicationSystemTestCase
   setup do
     @setting = settings(:one)
     user = users(:superadmin)
-    sign_in user
+    ui_sign_in user
   end
 
   test "visiting the index" do

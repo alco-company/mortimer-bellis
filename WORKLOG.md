@@ -2,9 +2,15 @@
 
 ## CHANGELOG
 
+## 25/08/2025
+
+- batch does not work across scroll = more pages
+- improving tests
+
 ## 22/8/2025
 
 - make batch work across infite scroll
+- make search work with batch enabled
 
 ## 21/8/2025
 
