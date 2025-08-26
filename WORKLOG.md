@@ -2,6 +2,12 @@
 
 ## CHANGELOG
 
+### 27/8/2025 - cherry-picked
+
+- added backup/restore_tenant_job
+- added rake task to control backup/restore
+
+
 ### 4/8/2025
 
 - forced upgrade of Ruby to 3.3.3
