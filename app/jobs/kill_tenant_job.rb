@@ -4,8 +4,12 @@ class KillTenantJob < ApplicationJob
   def perform(**args)
     super(**args)
     tenant = Tenant.find(args[:t_id])
+    return if tenant.nil? or tenant == Tenant.first
     if tenant
       Tenant.transaction do
+        tenant.tasks.destroy_all
+        tenant.settings.destroy_all
+        tenant.tags.destroy_all
         tenant.background_jobs.destroy_all
         tenant.batches.destroy_all
         tenant.events.destroy_all
@@ -13,11 +17,10 @@ class KillTenantJob < ApplicationJob
         tenant.calls.destroy_all
         tenant.dashboards.destroy_all
         tenant.filters.destroy_all
-        tenant.projects.destroy_all
-        tenant.products.destroy_all
         tenant.invoice_items.destroy_all
         tenant.invoices.destroy_all
-        tenant.tasks.destroy_all
+        tenant.projects.destroy_all
+        tenant.products.destroy_all
         tenant.time_materials.destroy_all
         tenant.customers.destroy_all
         tenant.punch_cards.destroy_all
@@ -25,7 +28,6 @@ class KillTenantJob < ApplicationJob
         tenant.punches.destroy_all
         tenant.locations.destroy_all
         tenant.provided_services.destroy_all
-        tenant.settings.destroy_all
 
         tenant.users.order(id: :desc).each do |user|
           next if user.id == 1
