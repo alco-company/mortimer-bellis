@@ -263,8 +263,17 @@ class Setting < ApplicationRecord
 
   def self.time_material_settings(resource: nil)
     return self.get_settings(DEFAULT_TIME_SETTINGS, resource:) unless Rails.env.test?
-    build_settings_for(resource:, keys: DEFAULT_TIME_SETTINGS, klass_name: "TimeMaterial")
+    build_settings_for(resource:, keys: DEFAULT_TIME_SETTINGS, klass_name: klass_for(resource))
   end
+  def self.team_settings(resource: nil)
+    return self.get_settings(DEFAULT_TIME_SETTINGS, resource:) unless Rails.env.test?
+    build_settings_for(resource:, keys: DEFAULT_TIME_SETTINGS, klass_name: klass_for(resource))
+  end
+  def self.user_settings(resource: nil)
+    return self.get_settings(DEFAULT_TIME_SETTINGS, resource:) unless Rails.env.test?
+    build_settings_for(resource:, keys: DEFAULT_TIME_SETTINGS, klass_name: klass_for(resource))
+  end
+
   def self.customer_settings(resource: nil)
     self.get_settings({
       "sync_with_erp" => { "type" => "boolean", "value" => "true" },
@@ -282,14 +291,6 @@ class Setting < ApplicationRecord
       "pull_products" => { "type" => "boolean", "value" => "1" }
     }, resource:)
   end
-  def self.team_settings(resource: nil)
-    return self.get_settings(DEFAULT_TIME_SETTINGS, resource:) unless Rails.env.test?
-    build_settings_for(resource:, keys: DEFAULT_TIME_SETTINGS, klass_name: "Team")
-  end
-  def self.user_settings(resource: nil)
-    return self.get_settings(DEFAULT_TIME_SETTINGS, resource:) unless Rails.env.test?
-    build_settings_for(resource:, keys: DEFAULT_TIME_SETTINGS, klass_name: "User")
-  end
   def self.erp_integration_settings(resource: nil)
     self.get_settings({
       "import_customers_only" => { "type" => "boolean", "value" => "true" },
@@ -302,6 +303,13 @@ class Setting < ApplicationRecord
     self.get_settings({}, resource:)
   end
 
+  def self.klass_for(resource)
+    return "User" if resource.is_a?(User) || resource == User
+    return "Team" if resource.is_a?(Team) || resource == Team
+    return "TimeMaterial" if resource.is_a?(TimeMaterial) || resource == TimeMaterial
+    resource&.class&.name || "TimeMaterial"
+  end
+  private_class_method :klass_for
   DEFAULT_TIME_SETTINGS = {
       "delegate_time_materials" => { "type" => "boolean", "value" => "true" },
       "limit_time_to_quarters" => { "type" => "boolean", "value" => "true" },

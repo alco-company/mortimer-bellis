@@ -514,10 +514,10 @@ class TimeMaterial < ApplicationRecord
   end
 
   def create_customer(resource_params)
-    return resource_params unless Current.get_user.can?(:add_customer, resource: resource)
     resource_params[:customer_id] = "" if resource_params[:customer_name].blank?
     if (resource_params[:customer_id].present? && (Customer.find(resource_params[:customer_id]).name != resource_params[:customer_name])) ||
       resource_params[:customer_name].present? && resource_params[:customer_id].blank?
+      return resource_params unless Current.get_user.can?(:add_customer, resource: self)
       customer = Customer.find_or_create_by(tenant: Current.get_tenant, name: resource_params[:customer_name], is_person: true)
       resource_params[:customer_id] = customer.id
     end
@@ -525,10 +525,10 @@ class TimeMaterial < ApplicationRecord
   end
 
   def create_project(resource_params)
-    return resource_params unless Current.get_user.can?(:add_project, resource: resource)
     resource_params[:project_id] = "" if resource_params[:project_name].blank?
     if (resource_params[:project_id].present? && (Project.find(resource_params[:project_id]).name != resource_params[:project_name])) ||
       resource_params[:project_name].present? && resource_params[:project_id].blank?
+      return resource_params unless Current.get_user.can?(:add_project, resource: self)
       project = Project.find_or_create_by(tenant: Current.get_tenant, name: resource_params[:project_name], customer_id: resource_params[:customer_id])
       resource_params[:project_id] = project.id
     end

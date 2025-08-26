@@ -23,20 +23,23 @@ class SearchComponent < ApplicationComponent
   end
 
   def view_template
-    search = params.dig(:search) || ""
-    form(class: "relative flex flex-1", action: "#", method: "GET") do
-      label(for: "search-field", class: "sr-only") { "Search" }
-      render Icons::Search.new css: "pointer-events-none absolute top-0 left-0 h-full w-5 text-#{@color}"
-      render Icons::Ai.new css: "h-8 top-4 w-8 absolute right-0 text-#{@color}/20"
-      input(
-        id: "search-field",
-        class:
-          "block h-full w-full border-0 py-0 pl-8 pr-0 text-#{@color} bg-transparent placeholder:text-slate-200 focus:ring-0 text-sm md:text-lg",
-        placeholder: t("topbar.search.placeholder"),
-        type: "search",
-        name: "search",
-        value: search
-      )
+    div(class: "flex grow", data: { controller: "live-search", "live-search-url-value": url_for(controller: params_ctrl, action: :index) }) do
+      search = params.dig(:search) || ""
+      form(class: "relative flex flex-1", action: resources_url, method: "GET") do
+        label(for: "search-field", class: "sr-only") { t("search") }
+        render Icons::Search.new css: "pointer-events-none absolute top-0 left-0 h-full w-5 text-#{@color}"
+        render Icons::Ai.new css: "h-8 top-4 w-8 absolute right-0 text-#{@color}/20"
+        input(
+          id: "search-field",
+          class:
+            "block h-full w-full border-0 py-0 pl-8 pr-0 text-#{@color} bg-transparent placeholder:text-slate-200 focus:ring-0 text-sm md:text-lg",
+          placeholder: t("topbar.search.placeholder"),
+          type: "search",
+          name: "search",
+          value: search,
+          data: { action: "input->live-search#search", live_search_target: "input" }
+        )
+      end
     end
   end
 end

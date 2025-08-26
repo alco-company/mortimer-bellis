@@ -2,6 +2,10 @@
 
 ## CHANGELOG
 
+## 26/08/2025
+
+- improve live search
+
 ## 25/08/2025
 
 - batch does not work across scroll = more pages
