@@ -8,6 +8,8 @@
 - debounce live search
 - kill live-search for now
 - disable show only some time_material
+- added backup/restore_tenant_job
+- added rake task to control backup/restore
 
 ## 25/08/2025
 
