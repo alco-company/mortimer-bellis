@@ -5,6 +5,8 @@
 ## 26/08/2025
 
 - improve live search
+- debounce live search
+- kill live-search for now
 
 ## 25/08/2025
 

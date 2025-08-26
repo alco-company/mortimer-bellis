@@ -23,7 +23,7 @@ class SearchComponent < ApplicationComponent
   end
 
   def view_template
-    div(class: "flex grow", data: { controller: "live-search", "live-search-url-value": url_for(controller: params_ctrl, action: :index) }) do
+    div(class: "flex grow", data: { controller: "live-search", "live-search-url-value": resources_url }) do
       search = params.dig(:search) || ""
       form(class: "relative flex flex-1", action: resources_url, method: "GET") do
         label(for: "search-field", class: "sr-only") { t("search") }
