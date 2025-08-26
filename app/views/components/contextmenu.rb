@@ -92,22 +92,22 @@ class Contextmenu < ApplicationComponent
         end
       end
 
-      if resource_class.to_s == "TimeMaterial"
-        current_param = request.query_parameters.dig(:show_all)
-        current = ActiveModel::Type::Boolean.new.cast(current_param)
-        base = request.query_parameters.symbolize_keys
-        if current
-          lbl = t(".toggle_show_my_unfinished")
-          url = resources_url(**base.merge(show_all: false, replace: true))
-        else
-          lbl = t(".toggle_show_all")
-          url = resources_url(**base.merge(show_all: true, replace: true))
-        end
-        link2 url: url,
-          data: { action: "click->contextmenu#toggle_show_all", href: url, turbo_frame: @turbo_frame },
-          label: lbl,
-          icon: "reload"
-      end
+      # if resource_class.to_s == "TimeMaterial"
+      #   current_param = request.query_parameters.dig(:show_all)
+      #   current = ActiveModel::Type::Boolean.new.cast(current_param)
+      #   base = request.query_parameters.symbolize_keys
+      #   if current
+      #     lbl = t(".toggle_show_my_unfinished")
+      #     url = resources_url(**base.merge(show_all: false, replace: true))
+      #   else
+      #     lbl = t(".toggle_show_all")
+      #     url = resources_url(**base.merge(show_all: true, replace: true))
+      #   end
+      #   link2 url: url,
+      #     data: { action: "click->contextmenu#toggle_show_all", href: url, turbo_frame: @turbo_frame },
+      #     label: lbl,
+      #     icon: "reload"
+      # end
 
       resource_class.any? && resource_class.to_s != "Setting" ?
         link2(url: new_modal_url(modal_form: "delete",

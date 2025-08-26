@@ -7,6 +7,7 @@
 - improve live search
 - debounce live search
 - kill live-search for now
+- disable show only some time_material
 
 ## 25/08/2025
 
