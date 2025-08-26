@@ -70,4 +70,27 @@ class TenantMailer < ApplicationMailer
 
     mail to: rcpt, subject: I18n.t("tenant_mailer.report_state.subject")
   end
+
+  def backup_created
+    @tenant = params[:tenant]
+    @link = params[:link]
+    mail to: "info@mortimer.pro",
+      subject: "Tenant Backup Created",
+      delivery_method: :mailersend,
+      delivery_method_options: {
+        api_key: ENV["MAILERSEND_API_TOKEN"]
+      }
+  end
+
+  def restore_completed
+    @tenant = params[:tenant]
+    @summary = params[:summary]
+    @archive = params[:archive]
+    mail to: "info@mortimer.pro",
+      subject: "Tenant Restore Completed",
+      delivery_method: :mailersend,
+      delivery_method_options: {
+        api_key: ENV["MAILERSEND_API_TOKEN"]
+      }
+  end
 end
