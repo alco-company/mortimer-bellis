@@ -2,6 +2,10 @@
 
 ## CHANGELOG
 
+## 27/8/2025
+
+- improve on restore_tenant_job
+
 ## 26/08/2025
 
 - improve live search
