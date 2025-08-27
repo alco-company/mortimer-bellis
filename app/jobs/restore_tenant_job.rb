@@ -278,6 +278,7 @@ class RestoreTenantJob < ApplicationJob
       next unless k
       records.each do |attrs|
         attrs.each do |key, val|
+          next if key == "tenant_id"
           next unless key.end_with?("_id") && val
           assoc_name = key.sub(/_id\z/, "")
           candidates = [assoc_name.camelize, assoc_name.camelize.pluralize.singularize].uniq
