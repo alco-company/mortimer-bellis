@@ -15,9 +15,12 @@ namespace :tenant do
     if perform_now
       jid = "inline-#{SecureRandom.hex(6)}"
       bg.update_column(:job_id, jid)
+      bg.update!(state: :running)
       job = BackupTenantJob.new
       job.instance_variable_set(:@job_id, jid)
       job.perform(tenant: tenant, user: user, background_job: bg)
+      bg.update!(state: :finished)
+      bg.job_done
       puts "Ran BackupTenantJob inline job_id=#{jid} background_job_id=#{bg.id}"
     else
       job = BackupTenantJob.perform_later(tenant: tenant, user: user, background_job: bg)
@@ -43,9 +46,12 @@ namespace :tenant do
     if perform_now
       jid = "inline-#{SecureRandom.hex(6)}"
       bg.update_column(:job_id, jid)
+      bg.update!(state: :running)
       job = RestoreTenantJob.new
       job.instance_variable_set(:@job_id, jid)
       job.perform(tenant: tenant, user: user, archive_path: archive, dry_run: dry_run, purge: purge, restore: restore_flag, remap: remap, skip_email: skip_email, background_job: bg)
+      bg.update!(state: :finished)
+      bg.job_done
       puts "Ran RestoreTenantJob inline job_id=#{jid} background_job_id=#{bg.id} dry_run=#{dry_run} purge=#{purge} restore=#{restore_flag} remap=#{remap}"
     else
       job = RestoreTenantJob.perform_later(tenant: tenant, user: user, archive_path: archive, dry_run: dry_run, purge: purge, restore: restore_flag, remap: remap, skip_email: skip_email, background_job: bg)

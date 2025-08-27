@@ -19,6 +19,7 @@ class ApplicationJob < ActiveJob::Base
   def perform **args
     @tenant = args[:tenant] || Tenant.find(args[:tenant_id]) rescue Tenant.first
     @user = args[:user] || User.find(args[:user_id]) || tenant.users.first rescue User.first
+    @background_job = args[:background_job] if args[:background_job].is_a?(BackgroundJob)
     Current.system_user = @user
   rescue => exception
     say exception
