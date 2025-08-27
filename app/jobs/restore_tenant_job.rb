@@ -67,17 +67,23 @@ class RestoreTenantJob < ApplicationJob
         if dry_run
           purge_plan.each { |p| summary << { model: p[:model], planned_purge: p[:existing] } }
         else
-          purge_plan.each do |p|
+          purge_plan.sort_by { |p| sorted_models.index(p[:model]) || 9999 }.reverse_each do |p|
             klass = safe_constantize(p[:model])
             next unless klass
             deleted = 0
-            klass.transaction do
-              rel = klass.unscoped.where(tenant_id: tenant.id)
-              deleted = rel.count
-              rel.delete_all
+            begin
+              klass.transaction do
+                rel = klass.unscoped.where(tenant_id: tenant.id)
+                deleted = rel.count
+                rel.delete_all
+              end
+              summary << { model: p[:model], purged: deleted }
+              log_progress(summary, step: :purged_model, model: p[:model], deleted: deleted)
+            rescue => e
+              summary << { model: p[:model], purge_error: e.message }
+              log_progress(summary, step: :purge_error, model: p[:model], message: e.message)
+              raise
             end
-            summary << { model: p[:model], purged: deleted }
-            log_progress(summary, step: :purged_model, model: p[:model], deleted: deleted)
           end
         end
         log_progress(summary, step: :purge_complete)
@@ -280,11 +286,18 @@ class RestoreTenantJob < ApplicationJob
         attrs.each do |key, val|
           next if key == "tenant_id"
           next unless key.end_with?("_id") && val
-          assoc_name = key.sub(/_id\z/, "")
+          base = key.sub(/_id\z/, "")
+          # polymorphic skip: if there is a corresponding *_type key, skip generic inference here
+          if attrs.key?("#{base}_type")
+            next
+          end
+          assoc_name = base
           candidates = [assoc_name.camelize, assoc_name.camelize.pluralize.singularize].uniq
           parent_model = candidates.map { |c| model_cache[c] || safe_constantize(c) }.compact.first
           next unless parent_model
           pm_name = parent_model.name
+          # skip if parent model not in dump (we can't validate it here)
+          next unless id_index.key?(pm_name)
           unless id_index[pm_name].include?(val)
             result[:missing_parent_refs] << { child_model: model_name, parent_model: pm_name, fk: key, value: val }
           end

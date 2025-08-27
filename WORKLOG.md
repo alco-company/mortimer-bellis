@@ -7,6 +7,7 @@
 - improve on restore_tenant_job
 - small change to tenant:backup/restore to update background_job
 - skip tenant_id
+- better purge
 
 ## 26/08/2025
 
