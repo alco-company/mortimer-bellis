@@ -1,387 +1,528 @@
 class RestoreTenantJob < ApplicationJob
   queue_as :default
 
+  #
+  # tenant  = the tenant to restore data for
+  # remap   = whether to remap ID's (backed up tenant ID not same as tenant to restore for)
+  #
   def perform(**args)
     super(**args)
+    @background_job = nil
+    #
+    # initialize variables
     tenant = @tenant
     archive_path = args[:archive_path]
-    remap = args.fetch(:remap, true)
-    dry_run = args.fetch(:dry_run, false)
-    purge = args.fetch(:purge, false)
-    do_restore = dry_run ? false : args.fetch(:restore, true)
+    @args = args
+
+    #
+    # crucial checks
     raise ArgumentError, "archive_path required" unless archive_path && File.exist?(archive_path)
-
-    Rails.application.eager_load! unless Rails.application.config.eager_load
-
-    work_dir = Rails.root.join("tmp", "restore_#{tenant.id}_#{Time.now.utc.strftime("%Y%m%d%H%M%S")}")
-    FileUtils.mkdir_p(work_dir)
-    system("tar -xzf #{archive_path} -C #{work_dir}") or raise "Failed to extract archive"
-    extracted_root = Dir.children(work_dir).map { |d| work_dir.join(d) }.find { |p| File.directory?(p) }
-    raise "Could not determine extracted root" unless extracted_root
-    dump_file = extracted_root.join("dump.jsonl")
-    raise "dump.jsonl missing" unless File.exist?(dump_file)
-
-    grouped = Hash.new { |h, k| h[k] = [] }
-    original_tenant_id = nil
-    File.foreach(dump_file) do |line|
-      next if line.strip.empty?
-      row = JSON.parse(line)
-      model_name = row["model"]
-      attrs = row["data"]
-      original_tenant_id ||= attrs["tenant_id"] if attrs.is_a?(Hash) && attrs["tenant_id"]
-      if remap && attrs.is_a?(Hash) && attrs["tenant_id"] && attrs["tenant_id"] != tenant.id
-        attrs["tenant_id"] = tenant.id
-      end
-      grouped[model_name] << attrs
-    end
-
-    priority = %w[Tenant Team User Customer Project Product TimeMaterial PunchClock PunchCard Punch Setting Tag Task BackgroundJob Batch Calendar Event Invoice InvoiceItem ProvidedService Location Filter Dashboard Editor::Document Editor::Block]
-    model_names = grouped.keys
-
-    if !purge && existing_tenant_data?(tenant, model_names)
-      raise "Target tenant has existing data. Re-run with purge: true (PURGE=1) to allow restore."
-    end
-
-    sorted_models = dependency_order(model_names, priority)
+    raise ArgumentError, "tenant missing - ID required" unless tenant && tenant.id
+    @dry_run = setting(:dry_run)
+    #
+    # prepare files
     summary = []
+    base_dir = Rails.root.join("tmp")
+    log_progress(summary, step: :initialize, tenant: @tenant, archive_path: archive_path, args: @args)
+    Rails.application.eager_load! unless Rails.application.config.eager_load
+    @restore_work_dir = base_dir.join("restore_#{tenant.id}_#{Time.now.utc.strftime("%Y%m%d%H%M%S")}")
+    FileUtils.mkdir_p(@restore_work_dir)
+    system("tar -xzf #{archive_path} -C #{@restore_work_dir}") or raise "Failed to extract archive"
+    extracted_root = Dir.children(@restore_work_dir).map { |d| @restore_work_dir.join(d) }.find { |p| File.directory?(p) }
+    raise "Could not determine extracted root" unless extracted_root
+    log_progress(summary, step: :initialized, restore_work_dir: @restore_work_dir, extracted_root: extracted_root)
+    #
+    # extract metadata_file from the archive
+    summary, metadata, manifest = extract_metadata_file(extracted_root, summary)
+    log_progress(summary, step: :metadata_extracted, metadata: metadata, manifest: manifest)
+    #
+    # extract file_ids.jsonl from the archive
+    summary, file_ids = extract_file_ids_file(extracted_root, summary, manifest)
+    log_progress(summary, step: :file_ids_extracted, file_ids: file_ids)
 
-    if dry_run
-      integrity = validate_integrity(grouped, sorted_models)
-      summary << { integrity: integrity }
-      log_progress(summary, step: :integrity_validated, missing_parents: integrity[:missing_parent_refs].size, unknown_models: integrity[:unknown_models].size)
-      return summary unless purge || do_restore # pure dry run no purge/restore requested
-    end
+    summary, collisions = data_values_collide(summary, file_ids)
+    raise "Data collisions detected - cannot restore strict!" if collisions.include?(true) && setting(:strict)
 
-    ActiveRecord::Base.transaction do
-      ActiveRecord::Base.connection.execute('PRAGMA defer_foreign_keys = ON') rescue nil
+    #
+    # purge or remap existing tables/records
+    summary, purges = purge_or_remap_records(summary, manifest, @restore_work_dir)
+    log_progress(summary, step: :data_purged, purges: purges)
+    return summary if purges.nil? && setting(:purge)
+    return summary if !setting(:restore)
+    #
+    # restore data/records from archive
+    summary, restores = restore_data_records(extracted_root, summary, file_ids)
+    log_progress(summary, step: :data_restored, restores: restores)
+    return summary if !setting(:remap)
+    #
+    # we need to sweep all tables looking for '-remap-' added during remapping
+    summary, remaps = sweep_for_remaps(summary, restores)
+    log_progress(summary, step: :remaps_swept, remaps: remaps)
 
-      if purge
-        log_progress(summary, step: :purge_start)
-        purge_plan = []
-        sorted_models.each do |model_name|
-          klass = safe_constantize(model_name)
-            next unless klass && klass < ActiveRecord::Base && klass.column_names.include?("tenant_id")
-          count_existing = klass.unscoped.where(tenant_id: tenant.id).count
-          purge_plan << { model: model_name, existing: count_existing }
-        end
-        if dry_run
-          purge_plan.each { |p| summary << { model: p[:model], planned_purge: p[:existing] } }
-        else
-          purge_plan.sort_by { |p| sorted_models.index(p[:model]) || 9999 }.reverse_each do |p|
-            klass = safe_constantize(p[:model])
-            next unless klass
-            deleted = 0
-            begin
-              klass.transaction do
-                rel = klass.unscoped.where(tenant_id: tenant.id)
-                deleted = rel.count
-                rel.delete_all
-              end
-              summary << { model: p[:model], purged: deleted }
-              log_progress(summary, step: :purged_model, model: p[:model], deleted: deleted)
-            rescue => e
-              summary << { model: p[:model], purge_error: e.message }
-              log_progress(summary, step: :purge_error, model: p[:model], message: e.message)
-              raise
-            end
-          end
-        end
-        log_progress(summary, step: :purge_complete)
-      end
-
-      log_progress(summary, step: :restore_loop_start)
-      fk_retry = Hash.new { |h, k| h[k] = [] }
-      sorted_models.each do |model_name|
-        process_model(grouped, model_name, tenant, dry_run, do_restore, summary, fk_retry)
-      end
-      if fk_retry.any?
-        log_progress(summary, step: :retry_pass_start, models: fk_retry.keys)
-        fk_retry.each do |model_name, recs|
-          process_model({ model_name => recs }, model_name, tenant, dry_run, do_restore, summary, nil, retry_pass: true) unless recs.empty?
-        end
-        log_progress(summary, step: :retry_pass_complete)
-      end
-      log_progress(summary, step: :restore_loop_complete)
-
-      unless dry_run || !do_restore
-        restore_active_storage(extracted_root, tenant, remap, summary)
-        log_progress(summary, step: :active_storage_restored)
-      else
-        summary << { model: "ActiveStorage", skipped: true, reason: "dry_run" } if dry_run
-        log_progress(summary, step: :active_storage_skipped)
-      end
-    end
-
-    TenantMailer.with(tenant: tenant, summary: summary, archive: archive_path.to_s).restore_completed.deliver_later unless args.fetch(:skip_email, false)
     summary
-  rescue => e
-    say "RestoreTenantJob failed: #{e.message}"
-    UserMailer.error_report(e.full_message, "RestoreTenantJob#perform").deliver_later rescue nil
-    raise
   end
 
   private
 
-  def existing_tenant_data?(tenant, model_names)
-    model_names.any? do |name|
-      k = safe_constantize(name)
-      k && k < ActiveRecord::Base && k.column_names.include?("tenant_id") && k.unscoped.where(tenant_id: tenant.id).limit(1).exists?
+    def setting(setting)
+      case setting
+      when :remap;              @args.fetch(:remap, true) && !setting(:dry_run)
+      when :restore;            @args.fetch(:restore, true)
+      when :allow_remap;        setting(:remap) && @args.fetch(:allow_remap, true) && ENV["RESTORE_NO_REMAP"] != "1"
+      when :dry_run;            @args.fetch(:dry_run, false) || ENV["DRY_RUN"] == "1"
+      when :purge;              @args.fetch(:purge, false) && !setting(:dry_run)
+      when :strict;             @args.fetch(:strict, false)
+      when :skip_models;        @args.fetch(:skip_models, "").to_s.split(",").map { |m| m.strip }.reject(&:blank?)
+      when :debug_fk;           ENV["RESTORE_DEBUG_FK"].present? || @args.fetch(:debug_fk, false)
+      when :no_tx;              ENV["RESTORE_NO_TX"].present? || @args.fetch(:no_tx, false)
+      when :max_passes;         (ENV["RESTORE_MAX_PASSES"] || "5").to_i
+      when :env_record_debug;   ENV["RESTORE_DEBUG_RECORDS"].present?
+      end
     end
-  end
 
-  def dependency_order(model_names, priority)
-    models = model_names.map { |n| safe_constantize(n) }.compact
-    table_for_model = models.to_h { |m| [m.table_name, m] }
-    edges = Hash.new { |h, k| h[k] = [] }
-    incoming = Hash.new(0)
-    model_names.each { |n| incoming[n] = 0 }
-    conn = ActiveRecord::Base.connection
-    adapter = conn.adapter_name.downcase
-    models.each do |m|
-      table = m.table_name
-      fks = []
-      begin
-        if adapter.include?("sqlite")
-          conn.execute("PRAGMA foreign_key_list(#{table})").each do |row|
-            fks << row[2] rescue nil
-          end
-        else
-          conn.foreign_keys(table).each { |fk| fks << fk.to_table } if conn.respond_to?(:foreign_keys)
-        end
-      rescue
-      end
-      fks.compact.uniq.each do |parent_table|
-        parent_model = table_for_model[parent_table]
-        next unless parent_model
-        child_name = m.name
-        parent_name = parent_model.name
-        unless edges[parent_name].include?(child_name)
-          edges[parent_name] << child_name
-          incoming[child_name] += 1
-        end
-      end
-    end
-    queue = incoming.select { |k, v| v == 0 && model_names.include?(k) }.keys
-    order = []
-    weight = lambda { |name| [priority.index(name) || 999, name] }
-    queue.sort_by! { |n| weight.call(n) }
-    until queue.empty?
-      n = queue.shift
-      order << n
-      edges[n].each do |child|
-        incoming[child] -= 1
-        if incoming[child] == 0
-          queue << child
-          queue.sort_by! { |x| weight.call(x) }
-        end
-      end
-    end
-    remaining = (model_names - order)
-    order + remaining.sort_by { |n| weight.call(n) }
-  end
+    def extract_metadata_file(extracted_root, summary)
+      metadata_file = extracted_root.join("metadata.json")
+      manifest = JSON.parse(File.read(extracted_root.join("manifest.json"))) rescue nil
 
-  def process_model(grouped, model_name, tenant, dry_run, do_restore, summary, fk_retry, retry_pass: false)
-    klass = safe_constantize(model_name)
-    unless klass && klass < ActiveRecord::Base
-      summary << { model: model_name, skipped: true, reason: "Unknown model" }
-      log_progress(summary, step: :skipped_model, model: model_name)
-      return
+      metadata = nil
+      if File.exist?(metadata_file)
+        begin
+          require "digest"
+          metadata = JSON.parse(File.read(metadata_file)) rescue nil
+          dump_file = extracted_root.join("dump.jsonl")
+          actual_sha = File.exist?(dump_file) ? Digest::SHA256.file(dump_file).hexdigest : nil
+          expected_sha = metadata && metadata["record_dump_sha256"]
+          verified = expected_sha && actual_sha && expected_sha == actual_sha
+          summary << ({ metadata: { expected_sha256: expected_sha, actual_sha256: actual_sha, verified: verified }, manifest: manifest })
+          raise "Metadata SHA256 mismatch" if setting(:strict) && !verified
+        rescue => e
+          summary << ({ metadata_error: e.message })
+        end
+      else
+        summary << ({ metadata: { missing: true } })
+        raise "metadata.json missing" if setting(:strict)
+      end
+      [ summary, metadata, manifest ]
     end
-    records = grouped[model_name]
-    return if records.empty?
-    pk = klass.primary_key
-    inserted = 0
-    updated = 0
-    planned_inserted = 0
-    planned_updated = 0
-    errors = 0
-    records.each do |attrs|
-      begin
-        id = attrs[pk]
-        target = id ? klass.unscoped.where(pk => id).first : nil
-        if target
-          target.assign_attributes(attrs)
-          if target.changed?
-            if dry_run || !do_restore
-              planned_updated += 1
-            else
-              target.save!(validate: false)
-              updated += 1
-            end
+
+    # when we purge existing data records
+    # we have two objectives
+    # 1. remove all data for the tenant, including associated records, and ensure no orphaned records remain
+    # 2. verify that no id's exist that collide with file_ids
+    #
+    def purge_or_remap_records(summary, manifest, dir)
+      # Don't skip this step - we need to process even if we're not purging or remapping
+      # Just return success indicator when nothing needs to be done
+      unless setting(:purge) || setting(:remap)
+        return [ summary, {} ] # return empty hash instead of true
+      end
+
+      seen_blob_ids = Set.new
+      storage_root = dir.join("blobs")
+      summary, collected_ids = collect_table_ids(summary, manifest, nil, nil)
+      summary, remapped_ids = setting(:allow_remap) ?
+        remap_table_ids(summary, collected_ids, seen_blob_ids, storage_root) :
+        purge_records(summary, collected_ids)
+
+      [ summary, remapped_ids ]
+
+    rescue => e
+      summary << ({ purge_records_error: e.message })
+      log_progress(summary, step: :purge_records, message: e.message)
+      [ summary, nil ]
+    end
+
+    def collect_table_ids(summary, manifest, seen_blob_ids, storage_root)
+      table_ids = {}
+      processed = 0
+      manifest.each do |m|
+        puts ""
+        begin
+          table = m["table"]
+          print "Processing table: #{table}"
+          next if setting(:skip_models).include?(table)
+          next unless m["count"].is_a?(Integer) && m["count"] > 0
+
+          klass = safe_constantize(table)
+          table_ids[table] = klass.collect_ids(tenant_id: @tenant.id) if klass
+          puts " - collected table IDs: #{table_ids[table]}"
+          summary << { table: table, model: table.to_s, count: (table_ids[table]&.size || 0) }
+
+          processed += table_ids[table]&.size if table_ids[table].is_a? Array
+          log_progress(summary, step: :collect_table, table: table, processed: processed)
+
+        rescue => e
+          manifest << { table: table, model: m["table"], error: e.message }
+          log_progress(summary, step: :error, table: table, message: e.message)
+        end
+      end
+      log_progress(summary, step: :collect_table_done, table_ids_count: table_ids.size)
+      [ summary, table_ids ]
+    end
+
+    # table_ids = [ { table: "users", ids: [1, 2, 3] }, ... ]
+    # remapped_ids = {
+    #   "users" => {
+    #     "id" => { "1" => 4, "2" => 7, ... },
+    #     "invited_by_id" => { "3" => 8, "4" => nil, ... }
+    #   },
+    # }
+    def remap_table_ids(summary, table_ids, seen_blob_ids, storage_root)
+      remapped_ids = {}
+      unless setting(:strict)
+        # Allow remapping of IDs for colliding records
+        puts "Remapping table IDs...#{table_ids}"
+        table_ids.each do |table, _ids|
+          next if setting(:skip_models).include?(table)
+          summary, remapped_ids = remap_table(summary, table_ids, table, remapped_ids)
+        end
+        summary, remapped_ids = purge_records(summary, table_ids) if setting(:purge) # purge after remap to clean up 'old' records
+      end
+      [ summary, remapped_ids ]
+    end
+
+    def remap_table(summary, table_ids, table, remapped_ids)
+      remapped_ids[table] = { "id" => {} }
+      klass = safe_constantize(table)
+      unique_indexes = DependencyGraph.field_unique_indexes(table)
+      klass.unscoped.where(id: table_ids[table]).each do |record|
+        unless setting(:dry_run)
+          summary, new_record, self_referencing = remap_record(summary, record.dup, record.id, table_ids, remapped_ids, unique_indexes)
+          new_record.save(validate: false)
+          new_record.update self_referencing => new_record.id if self_referencing
+          if self_referencing
+            puts "self_referencing: #{self_referencing}, old_id: #{record.id}, new_id: #{new_record.id}"
           end
+          remapped_ids[table]["id"][record.id.to_s] = new_record.id
+          puts "remapped #{table} #{record.id} to #{new_record.id}"
+          summary << ({ table: table, old_id: record.id, new_id: new_record.id })
         else
-          if dry_run || !do_restore
-            planned_inserted += 1
-          else
-            begin
-              klass.unscoped.insert(attrs) if klass.respond_to?(:insert)
-            rescue
+          summary << ({ table: table, old_id: record.id, new_id: "-" })
+        end
+        log_progress(summary, step: :remap_progress)
+      end
+      [ summary, remapped_ids ]
+    end
+
+    #
+    # remap fx users.tenant_id from 1 -> 402
+    # or batches.user_id from 3 -> 6
+    # or settings.setable_type = "TimeMaterial", settings.setable_id = 5 -> 12
+    #
+    def remap_record(summary, record, record_id, table_ids, remapped_ids, unique_indexes = [])
+      table = record.class.table_name
+      foreign_keys, polymorphic_keys = foreign_polymorphic_keys(table)
+      self_referencing = nil
+      puts "Remapping foreign keys for #{table}/#{record_id} with #{foreign_keys.inspect} and #{polymorphic_keys.inspect}"
+      print "----------"
+      begin
+        if unique_indexes.any?
+          print "i: "
+          # remap unique fields
+          unique_indexes.each do |field|
+            if record.respond_to?(field)
+              record[field] = record[field] + "-remap-#{SecureRandom.hex(4)}" unless record[field].nil?
+              print "."
             end
-            unless id && klass.unscoped.where(pk => id).exists?
-              rec = klass.unscoped.new(attrs)
-              rec.save!(validate: false)
-            end
-            inserted += 1
           end
         end
       rescue => e
-        if e.message =~ /FOREIGN KEY constraint failed/ && fk_retry && !retry_pass
-          fk_retry[model_name] << attrs
+         summary << { table: table, error: e.message }
+         log_progress(summary, step: :remap_index_error, table: table, message: e.message)
+         print "e"
+      end
+      puts " "
+      begin
+        # remap foreign keys - user_id
+        foreign_keys.each do |fk|
+          # is association possible currently?
+          next if setting(:skip_models).include?(fk[:table])
+          if table_ids[fk[:table]]
+            print "fk: #{fk[:table]} #{ remapped_ids[fk[:table]] }"
+            summary, remapped_ids = remap_table(summary, table_ids, fk[:table], remapped_ids) if !remapped_ids[fk[:table]]
+            raise "no remapped table found" unless remapped_ids[fk[:table]]
+
+            # does association exist currently?
+            # table_ids["tenants"] = [1, 2, 3]
+            if record.respond_to?(fk[:key]) && table_ids[fk[:table]].include?(record[fk[:key]])
+              # has association been remapped?
+              # remapped_ids["tenants"] = { "id" => { "1" => "10", "2" => "20", "3" => "30" } }
+              raise "initialization error - should not happen" unless remapped_ids[fk[:table]]["id"]
+
+              # possibly remap self-referential foreign keys (like parent_id)
+              if fk[:table] == table && record[fk[:key]].to_s == record_id.to_s
+                self_referencing = fk[:key]
+                puts "self-referencing #{self_referencing} for #{table}/#{record_id}"
+              end
+              if remapped_ids[fk[:table]]["id"].keys.include?(record[fk[:key]].to_s)
+                puts " #{fk[:key]}= #{record[fk[:key]]} -> #{ remapped_ids[fk[:table]]["id"][record[fk[:key]].to_s] }"
+                record[fk[:key]] = remapped_ids[fk[:table]]["id"][record[fk[:key]].to_s]
+                self_referencing = nil
+              end
+            end
+          end
+        end
+        puts " "
+      rescue => e
+         summary << { table: table, error: e.message }
+         log_progress(summary, step: :remap_foreign_key_error, table: table, message: e.message)
+         print "e"
+      end
+      puts " "
+      begin
+        #
+        # remap polymorphic foreign keys
+        polymorphic_keys.each do |pk|
+          klass = safe_constantize(record["#{pk}_type"])
+          if klass && table_ids[klass.table_name]
+            puts "Remapping polymorphic keys for #{table} record #{record["#{pk}_type"]}/#{record["#{pk}_id"]}"
+            next if setting(:skip_models).include?(klass.table_name)
+            print "Remapping polymorphic key #{pk} for #{table} record #{record.id} "
+            summary, remapped_ids = remap_table(summary, table_ids, klass.table_name, remapped_ids) unless remapped_ids[klass.table_name]
+            raise "no remapped table found" unless remapped_ids[klass.table_name]
+            # does association exist currently?
+            if record.respond_to?("#{pk}_id") && table_ids[klass.table_name].include?(record["#{pk}_id"])
+              print ", found #{ table_ids[klass.table_name].include?(record["#{pk}_id"]) }"
+              # has association been remapped?
+              raise "initialization error - should not happen" unless remapped_ids[klass.table_name]["id"]
+              begin
+                if remapped_ids[klass.table_name]["id"].keys.include?(record["#{pk}_id"].to_s)
+                  record["#{pk}_id"] = remapped_ids[klass.table_name]["id"][record["#{pk}_id"].to_s]
+                  puts ", remapped #{record["#{pk}_id"]} to #{ remapped_ids[klass.table_name]["id"][record["#{pk}_id"].to_s] }"
+                end
+              rescue => e
+                summary << { table: table, field: pk, record_id: record.id, error: e.message }
+                log_progress(summary, step: :remap_polymorphic_key_error, table: table, message: e.message)
+                puts ", remapping failed: #{e.message}"
+              end
+            end
+          end
+        end
+      rescue => e
+         summary << { table: table, error: e.message }
+         log_progress(summary, step: :remap_polymorphic_key_error, table: table, message: e.message)
+         puts "Error - #{e.message}"
+      end
+      summary << { table: table, foreign_keys: foreign_keys, polymorphic_keys: polymorphic_keys }
+
+      [ summary, record, self_referencing ]
+    end
+
+    def foreign_polymorphic_keys(table)
+      foreign_keys = [ { table: "tenants", key: "tenant_id" } ]
+      polymorphic_keys = []
+
+      case table
+      when "tenants";           foreign_keys = []
+      when "users";             foreign_keys += [ { table: "teams", key: "team_id" }, { table: "users", key: "invited_by_id" } ]
+      # default foreign_keys/polymorphic_keys
+      # when "teams"
+      # when "calls"
+      # when "customers"
+      # when "dashboards"
+      # when "editor_documents"
+      # when "locations"
+      # when "products"
+      when "editor_blocks";     foreign_keys =  [ { table: "editor_documents", key: "document_id" }, { table: "editor_blocks", key: "parent_id" } ]
+      when "projects";          foreign_keys += [ { table: "customers", key: "customer_id" } ]
+      when "invoices";          foreign_keys += [ { table: "customers", key: "customer_id" }, { table: "projects", key: "project_id" } ]
+      when "invoice_items";     foreign_keys += [ { table: "invoices", key: "invoice_id" }, { table: "projects", key: "project_id" }, { table: "products", key: "product_id" }  ]
+      when "punch_card";        foreign_keys += [ { table: "users", key: "user_id" } ]
+      when "punch_clocks";      foreign_keys += [ { table: "locations", key: "location_id" } ]
+      when "punches";           foreign_keys += [ { table: "users", key: "user_id" }, { table: "punch_clocks", key: "punch_clock_id" } ]
+      when "background_jobs";   foreign_keys += [ { table: "users", key: "user_id" } ]
+      when "batches";           foreign_keys += [ { table: "users", key: "user_id" } ]
+      when "filters";           foreign_keys += [ { table: "users", key: "user_id" } ]
+      when "sessions";          foreign_keys =  [ { table: "users", key: "user_id" } ]
+      when "time_materials";    foreign_keys += [ { table: "customers", key: "customer_id" }, { table: "projects", key: "project_id" }, { table: "products", key: "product_id" }, { table: "users", key: "user_id" } ]
+      when "tasks";             polymorphic_keys = [ "tasked_for" ]
+      when "calendars";         polymorphic_keys = [ "calendarable" ]
+      when "provided_services"; foreign_keys += [ { table: "users", key: "authorized_by_id" } ]
+      when "tags";              foreign_keys += [ { table: "users", key: "user_id" } ]
+      when "taggings";          foreign_keys = [ { table: "tags", key: "tag_id" } ]; polymorphic_keys = [ "taggable" ]
+      when "settings";          polymorphic_keys = [ "setable" ]
+      end
+      [ foreign_keys, polymorphic_keys ]
+    end
+
+    def purge_records(summary, table_ids)
+      DependencyGraph.purge_order.each do |table|
+        next unless table_ids[table]
+        next if setting(:skip_models).include?(table)
+        begin
+          klass = safe_constantize(table)
+          print "Purging records for #{table}: #{table_ids[table]}"
+          if klass and !setting(:dry_run)
+            klass.unscoped.where(id: table_ids[table]).any? ?
+              klass.unscoped.where(id: table_ids[table]).delete_all :
+              puts("-- no records found") && summary << ({ table: table, message: "no records purged - none found" })
+          end
+          puts "-- done"
+        rescue => e
+          summary << ({ table: table, purge_records_error: e.message })
+          log_progress(summary, step: :purge_records, message: e.message)
+          puts "-- failed: #{e.message}"
+        end
+        log_progress(summary, step: :purge_records, table: table, ids: table_ids[table])
+      end
+      log_progress(summary, step: :purge_records, done: true)
+      [ summary, table_ids ]
+    end
+
+    def extract_file_ids_file(extracted_root, summary, manifest)
+      file_ids_path = extracted_root.join("file_ids.jsonl")
+      unless File.exist?(file_ids_path)
+        puts "file_ids.jsonl missing - trying to get ids from dump!"
+        # Try to extract file IDs from the dump
+        dump_file = extracted_root.join("dump.jsonl")
+        if File.exist?(dump_file)
+          file_ids = {}
+          File.foreach(dump_file) do |line|
+            row = JSON.parse(line)
+            next if setting(:skip_models).include?(row["model"])
+            table_name = safe_table_name(row["model"])
+            attrs = row["data"]
+            file_ids[table_name] ||= []
+            file_ids[table_name] << attrs["id"]
+          end
+          ids = file_ids
         else
-          summary << { model: model_name, error: e.message, id: attrs[pk] }
-          log_progress(summary, step: :error, model: model_name, message: e.message)
+          raise "dump.jsonl missing too!"
         end
-        errors += 1
-      end
-    end
-    summary << { model: model_name, inserted: inserted, updated: updated, total: records.size, planned_inserted: planned_inserted, planned_updated: planned_updated, errors: errors, retry: fk_retry && fk_retry[model_name]&.size.to_i }
-    log_progress(summary, step: retry_pass ? :model_retry_done : :model_done, model: model_name, inserted: inserted, updated: updated, planned_inserted: planned_inserted, planned_updated: planned_updated, errors: errors, retry: fk_retry && fk_retry[model_name]&.size.to_i)
-  end
-
-  def safe_constantize(name)
-    name.constantize
-  rescue NameError
-    nil
-  end
-
-  def log_progress(summary, step:, **data)
-    return unless @background_job
-    payload = { step: step, at: Time.now.utc.iso8601 }.merge(data)
-    begin
-      current = JSON.parse(@background_job.job_progress || '{}') rescue {}
-      current['log'] ||= []
-      current['log'] << payload
-      current['log'] = current['log'].last(200)
-      current['summary'] = summary if summary.is_a?(Array)
-      @background_job.update_column(:job_progress, current.to_json)
-    rescue
-    end
-  end
-
-  def validate_integrity(grouped, sorted_models)
-    require 'set'
-    result = { missing_parent_refs: [], unknown_models: [], stats: {} }
-    model_cache = {}
-    sorted_models.each do |name|
-      k = safe_constantize(name)
-      if k.nil?
-        result[:unknown_models] << name
-        next
-      end
-      model_cache[name] = k
-    end
-    id_index = Hash.new { |h,k| h[k] = Set.new }
-    grouped.each do |model_name, records|
-      k = model_cache[model_name]
-      next unless k
-      pk = k.primary_key
-      records.each do |attrs|
-        id_index[model_name] << attrs[pk] if attrs[pk]
-      end
-    end
-    grouped.each do |model_name, records|
-      k = model_cache[model_name]
-      next unless k
-      records.each do |attrs|
-        attrs.each do |key, val|
-          next if key == "tenant_id"
-          next unless key.end_with?("_id") && val
-          base = key.sub(/_id\z/, "")
-          # polymorphic skip: if there is a corresponding *_type key, skip generic inference here
-          if attrs.key?("#{base}_type")
-            next
-          end
-          assoc_name = base
-          candidates = [assoc_name.camelize, assoc_name.camelize.pluralize.singularize].uniq
-          parent_model = candidates.map { |c| model_cache[c] || safe_constantize(c) }.compact.first
-          next unless parent_model
-          pm_name = parent_model.name
-          # skip if parent model not in dump (we can't validate it here)
-          next unless id_index.key?(pm_name)
-          unless id_index[pm_name].include?(val)
-            result[:missing_parent_refs] << { child_model: model_name, parent_model: pm_name, fk: key, value: val }
-          end
-        end
-      end
-    end
-    result[:stats][:models] = grouped.keys.size
-    result[:stats][:records] = grouped.values.map(&:size).sum
-    result
-  end
-
-  def restore_active_storage(root, tenant, remap, summary)
-    attachments_file = root.join("active_storage_attachments.jsonl")
-    blobs_file = root.join("active_storage_blobs.jsonl")
-    return unless File.exist?(attachments_file) && File.exist?(blobs_file)
-    blob_attrs = []
-    File.foreach(blobs_file) do |line|
-      next if line.strip.empty?
-      blob_attrs << JSON.parse(line)
-    end
-    service = ActiveStorage::Blob.service if defined?(ActiveStorage::Blob)
-    blob_inserted = 0
-    blob_skipped = 0
-    if defined?(ActiveStorage::Blob)
-      blob_attrs.each do |attrs|
+      else
         begin
-          id = attrs["id"]
-          existing = ActiveStorage::Blob.unscoped.where(id: id).first
-          if existing
-            blob_skipped += 1
-            next
+          ids = {}
+          manifested_tables = manifest.filter { |t| t["table"] if t.keys.include? :count } rescue []
+          file_ids_json = File.read(file_ids_path)
+          file_ids = JSON.parse(file_ids_json)
+          manifested_tables.each do |table|
+            next if setting(:skip_models).include?(table)
+            ids[table] = file_ids[table] ||= []
           end
-          if ActiveStorage::Blob.where(key: attrs["key"]).exists?
-            attrs["key"] = SecureRandom.hex(10) + attrs["key"]
+          summary << ({ file_ids_path: file_ids_path, file_tables: ids.keys })
+        rescue => e
+          summary << ({ file_ids_error: e.message })
+        end
+      end
+
+      [ summary, ids ]
+    end
+
+    def restore_data_records(extracted_root, summary, file_ids)
+      restores = {}
+      remapped_ids = {}
+      begin
+        restorable_records = read_dump_file(extracted_root)
+        puts "Restoring data records...#{restorable_records.keys}"
+        DependencyGraph.restore_order.each do |table|
+          restores[table] = []
+          begin
+            remapped_ids[table] ||= { "id" => {} }
+            klass = safe_constantize(table)
+            raise "#{table} model not found when preparing to restore data records" unless klass
+            restorable_records[table].each do |attrs|
+              puts "Restoring record for #{table} with attrs: #{attrs.inspect}"
+              record = klass.new attrs
+              summary, record = klass.restore(summary, extracted_root, record, remapped_ids)
+              # summary, record = remap_record(summary, record, file_ids, remapped_ids, false) if setting(:allow_remap) && !setting(:strict)
+              if klass && !setting(:dry_run)
+                # record.save!(validate: false)
+                restores[table] << { id: record["id"], record: record }
+                # remapped_ids[table]["id"][attrs["id"]] = record.id
+                summary << ({ restored: { model: table, from: { id: attrs["id"], attrs: attrs }, to: { id: record.id, attrs: record.attributes } } })
+                log_progress(summary, step: :restored_data_record, model: table, id: record.id)
+              else
+                summary << ({ restored: { model: table, id: record["id"], attrs: record } }) if setting(:dry_run)
+                log_progress(summary, step: :restore_data_record)
+              end
+              # remapped_ids[table][attrs["id"]] = record
+            end
+          rescue => e
+            summary << ({ restore_data_records_error: e.message })
+            log_progress(summary, step: :restore_data_records, message: e.message)
           end
-          ActiveStorage::Blob.unscoped.insert(attrs) if ActiveStorage::Blob.respond_to?(:insert)
-          unless ActiveStorage::Blob.unscoped.where(id: id).exists?
-            ActiveStorage::Blob.unscoped.create!(attrs)
-          end
-          blob_inserted += 1
-          if service && service.respond_to?(:path_for)
-            src = root.join("blobs", attrs["key"][0, 2], attrs["key"][2, 2], attrs["key"][4, 2], attrs["key"])
-            dest = service.path_for(attrs["key"]) rescue nil
-            if src && File.exist?(src) && dest
-              FileUtils.mkdir_p(File.dirname(dest))
-              FileUtils.cp(src, dest) unless File.exist?(dest)
+        end
+      rescue => e
+        summary << ({ dump_file: dump_file, file_ids: file_ids })
+        log_progress(summary, step: :restore_data_records, message: e.message)
+      end
+      [ summary, restores ]
+    end
+
+    def read_dump_file(extracted_root)
+      dump_file = extracted_root.join("dump.jsonl")
+      raise "dump.jsonl missing" unless File.exist?(dump_file)
+      restorable_records = {}
+      File.foreach(dump_file) do |line|
+        row = JSON.parse(line)
+        next if setting(:skip_models).include?(row["model"])
+        table_name = safe_table_name(row["model"])
+        attrs = row["data"]
+        restorable_records[table_name] ||= []
+        restorable_records[table_name] << attrs
+      end
+      restorable_records
+    end
+
+    def data_values_collide(summary, file_ids)
+      collisions = {}
+      file_ids.each do |table, ids|
+        next if setting(:skip_models).include?(table)
+        begin
+          collisions[table] = safe_constantize(table).where(id: ids).any?
+        rescue => e
+          summary << ({ table: table, ids: ids, data_values_collide_error: e.message })
+        end
+      end
+      [ summary, collisions ]
+    end
+
+    # restores[table] << { id: record["id"], record: record }
+    def sweep_for_remaps(summary, restores)
+      remaps = {}
+      summary << { step: :sweep_for_remaps }
+      restores.keys.each do |table|
+        klass = safe_constantize(table)
+        records = restores[table]
+        records.each do |record|
+          next unless record[:record].is_a?(Hash)
+          record[:record].each do |field, value|
+            begin
+              if value.is_a?(String) && value.include?("-remap-")
+                cleaned_value = value.gsub(/-remap-.*$/, "")
+                klass.find(record[:id]).update(field => cleaned_value)
+                remaps[table] ||= []
+                remaps[table] << { id: record[:id], field: field, value: value }
+              end
+              summary << ({ table: table, id: record[:id], field: field, value: value, cleaned_value: cleaned_value })
+            rescue => e
+              summary << ({ table: table, id: record[:id], field: field, value: value, remap_error: e.message })
             end
           end
-        rescue => e
-          summary << { model: "ActiveStorage::Blob", error: e.message, id: attrs["id"] }
         end
+        log_progress(summary, step: :sweep_for_remaps, message: "Completed remapping for #{table}")
+      end
+      [ summary, remaps ]
+    end
+
+    #
+    # "tenants" => Tenant
+    #
+    def safe_constantize(name)
+      case name
+      when "editor_documents";  Editor::Document
+      when "editor_blocks";     Editor::Block
+      else;                     name.classify.constantize
+      end
+    rescue NameError
+      nil
+    end
+
+    def safe_table_name(name)
+      case name
+      when "editor_documents";  "editor_documents"
+      when "editor_blocks";     "editor_blocks"
+      else;                     name.underscore.pluralize
       end
     end
-    attach_inserted = 0
-    attach_skipped = 0
-    if defined?(ActiveStorage::Attachment)
-      File.foreach(attachments_file) do |line|
-        next if line.strip.empty?
-        attrs = JSON.parse(line)
-        begin
-          id = attrs["id"]
-          if ActiveStorage::Attachment.unscoped.where(id: id).exists?
-            attach_skipped += 1
-            next
-          end
-          record_type = attrs["record_type"]
-          record_id = attrs["record_id"]
-            rec_klass = safe_constantize(record_type)
-          if rec_klass && rec_klass.unscoped.where(id: record_id).exists?
-            ActiveStorage::Attachment.unscoped.insert(attrs) if ActiveStorage::Attachment.respond_to?(:insert)
-            unless ActiveStorage::Attachment.unscoped.where(id: id).exists?
-              ActiveStorage::Attachment.unscoped.create!(attrs)
-            end
-            attach_inserted += 1
-          else
-            summary << { model: "ActiveStorage::Attachment", skipped: true, reason: "Missing record", id: id }
-          end
-        rescue => e
-          summary <<({ model: "ActiveStorage::Attachment", error: e.message, id: attrs["id"] })
-        end
-      end
-    end
-    summary << { model: "ActiveStorage::Blob", inserted: blob_inserted, skipped: blob_skipped, total: blob_attrs.size }
-    summary << { model: "ActiveStorage::Attachment", inserted: attach_inserted, skipped: attach_skipped }
-  end
 end
-

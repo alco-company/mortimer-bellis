@@ -3,11 +3,15 @@ class ApplicationRecord < ActiveRecord::Base
 
   include ExportCsv
   include ExportPdf
+  include Persistence
 
   has_many :noticed_events, as: :record, dependent: :destroy, class_name: "Noticed::Event"
 
   scope :by_user, ->() { model.new.attributes.keys.include?("user_id") ? where(user_id: Current.user.id) : all }
   scope :ordered, ->(s, d) { order(s => d) }
+
+  # mortimer_scoped - override on tables with other tenant scoping association
+  scope :mortimer_scoped, ->(ids) { unscoped.where(tenant_id: ids) }
 
   #
   # make it possible to handle model deletion differently from model to model

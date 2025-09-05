@@ -1,6 +1,14 @@
 class EventMetum < ApplicationRecord
   belongs_to :event
 
+  # mortimer_scoped - override on tables with other tenant scoping association
+  scope :mortimer_scoped, ->(ids) { unscoped.where(event_id: ids) }
+
+  def self.scoped_for_tenant(id = 1)
+    ids = Event.where(tenant_id: id).pluck(:id)
+    mortimer_scoped(ids)
+  end
+
   attr_accessor :rule, :uivalues
 
   def rule(from, tz)

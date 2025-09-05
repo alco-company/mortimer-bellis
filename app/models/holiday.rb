@@ -8,7 +8,14 @@ class Holiday < ApplicationRecord
   scope :by_country, ->(country) { where("countries LIKE ?", "%#{country}%") if country.present? }
   scope :order_by_number, ->(field) { order("length(#{field}) DESC, #{field} DESC") }
 
+  # mortimer_scoped - override on tables with other tenant scoping association
+  scope :mortimer_scoped, ->(ids) { unscoped.where("0=#{ids}") } # effectively returns no records
+
   validates :name, presence: true
+
+  def self.scoped_for_tenant(ids = 1)
+    mortimer_scoped(ids)
+  end
 
   def self.today?(dt)
     today(dt).any?

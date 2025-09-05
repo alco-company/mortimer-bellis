@@ -41,6 +41,13 @@ class Tenant < ApplicationRecord
   scope :by_locale, ->(locale) { where("locale LIKE ?", "%#{locale}%") if locale.present? }
   scope :by_time_zone, ->(time_zone) { where("time_zone LIKE ?", "%#{time_zone}%") if time_zone.present? }
 
+  # mortimer_scoped - override on tables with other tenant scoping association
+  scope :mortimer_scoped, ->(ids) { unscoped.where(id: ids) } # effectively returns no records
+
+  def self.scoped_for_tenant(ids = 1)
+    mortimer_scoped(ids)
+  end
+
   validates :name, presence: true, uniqueness: { message: I18n.t("tenants.errors.messages.name_exist") }
   validates :email, presence: true
 

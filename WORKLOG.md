@@ -2,6 +2,14 @@
 
 ## CHANGELOG
 
+## 05/09/2025
+
+- work on backup/restore II
+
+## 28/8/2025
+
+- work on backup/restore
+
 ## 27/8/2025
 
 - improve on restore_tenant_job
