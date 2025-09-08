@@ -4,6 +4,7 @@
 
 ## 08/09/2025
 
+- deploy to app2
 - restore strict
 
 ## 05/09/2025
