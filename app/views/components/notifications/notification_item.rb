@@ -1,4 +1,4 @@
-class Notifications::NotificationItem < Phlex::HTML
+class Notifications::NotificationItem < ApplicationComponent
   include Phlex::Rails::Helpers::Routes
   include Phlex::Rails::Helpers::LinkTo
 
@@ -53,7 +53,7 @@ class Notifications::NotificationItem < Phlex::HTML
             aria_haspopup: "true"
           ) do
             span(class: "sr-only") { "Open list options" }
-            # span(class: "text-2xs hidden sm:inline") { I18n.t("more") }
+            # span(class: "text-2xs hidden sm:inline") { t("more") }
             render Icons::More.new
           end
           context_menu
@@ -100,7 +100,7 @@ class Notifications::NotificationItem < Phlex::HTML
           role: "menuitem",
           tabindex: "-1",
           id: "options-menu-0-item-1"
-        ) { I18n.t("notification.read_message") }
+        ) { t("notification.read_message") }
       end
     end
   end
@@ -122,8 +122,8 @@ class Notifications::NotificationItem < Phlex::HTML
             "mt-1 flex items-center gap-x-2 text-xs leading-5 text-gray-500"
         ) do
           p(class: "whitespace-nowrap") do
-            plain I18n.t("notification_sent_at")
-            time(datetime: I18n.l(notification.created_at, format: :short_iso)) { I18n.l(notification.created_at, format: :short) }
+            plain t("notification_sent_at")
+            time(datetime: l(notification.created_at, format: :short_iso)) { l(notification.created_at, format: :short) }
           end
           whitespace
           svg(viewbox: "0 0 2 2", class: "h-0.5 w-0.5 fill-current") do |s|
@@ -135,12 +135,12 @@ class Notifications::NotificationItem < Phlex::HTML
       div(class: "flex flex-none items-center gap-x-4") do
         whitespace
         a(
-          href: helpers.notification_url(notification),
+          href: notification_url(notification),
           data: { turbo_stream: true },
           class:
             "hidden rounded-md bg-white px-2.5 py-1.5 text-xs font-semibold text-gray-900 shadow-xs ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:block"
         ) do
-          plain I18n.t("mark_as_read")
+          plain t("mark_as_read")
           span(class: "sr-only") {  }
         end
         div(class: "relative flex-none") do

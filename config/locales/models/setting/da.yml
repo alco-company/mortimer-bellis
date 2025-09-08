@@ -11,6 +11,7 @@ da:
         button: Slet
 
   settings:
+    label: Indstillinger
     employee_device_punch_clock: Medarbejder indstilling
     validation_errors: Der er fejl i det indtastede
     default_punch_clock: Ur
@@ -43,7 +44,12 @@ da:
       value: Værdi
       updated_at: Opdateret den
 
+    run:
+      start: "Start baggrundsopgaver"
+      stop: "Stop baggrundsopgaver"
+      
     keys:
+      session_timeout: "Angiv varighed for session timeout"
       delegate_time_materials: Delegér tid og materialer
       default_time_material_state: Standard status for ny tid og materialer post
       default_time_material_about: Standard tekst for ny tid og materialer post
@@ -52,11 +58,11 @@ da:
       default_time_material_rate: Standard pris for ny tid og materialer post
       default_time_material_over_time: Standard overtid for ny tid og materialer post
       default_time_material_date: Standard arbejdsdato for ny tid og materialer post
-      allow_create_time_material: Tillad bruger at oprette tid og materialer
-      allow_create_product: Tillad bruger at oprette produkter på tid og materialer
-      allow_create_customer: Tillad bruger at oprette kunder på tid og materialer
-      allow_create_project: Tillad bruger at oprette projekter på tid og materialer
-      allow_comments_on_time_material: Tillad kommentarer på tid og materialer
+      add_time_material: Tillad bruger at oprette tid og materialer
+      add_product: Tillad bruger at oprette produkter på tid og materialer
+      add_customer: Tillad bruger at oprette kunder på tid og materialer
+      add_project: Tillad bruger at oprette projekter på tid og materialer
+      add_comments_on_time_material: Tillad kommentarer på tid og materialer
       import_customers_only: Tillad kun import af kunder
       sync_with_erp: Synkronisér med ERP
       validate_time_material_done: Valider at alle felter er udfyldt før en t/m post kan markeres som 'færdig'
@@ -66,6 +72,7 @@ da:
       run: Kør baggrundsopgaver
 
     descriptions:
+      session_timeout: Varigheden beregnes, hvorfor det er vigtigt at angive en gyldig varighed, f.eks. '7.days' eller '1.hour'. Dette vil bestemme, hvor længe en session forbliver aktiv, før brugeren skal logge ind igen.
       delegate_time_materials: Tillad at brugere kan delegere tid og materialer til andre brugere
       default_time_material_state: Standard status for ny tid og materialer post
       default_time_material_about: Standard tekst for ny tid og materialer post
@@ -74,12 +81,12 @@ da:
       default_time_material_rate: Standard pris for ny tid og materialer post
       default_time_material_over_time: Standard overtid for ny tid og materialer post
       default_time_material_date: Standard arbejdsdato for ny tid og materialer post
-      allow_create_time_material: Tillad bruger at oprette tid og materialer poster
-      allow_create_product: Tillad bruger at oprette produkter på tid og materialer poster
-      allow_create_customer: Tillad bruger at oprette kunder på tid og materialer poster
-      allow_create_project: Tillad bruger at oprette projekter på tid og materialer poster
-      allow_comments_on_time_material: Tillad kommentarer på tid og materialer poster
-      import_customers_only: Tillad kun import af kunder, ikke projekter eller produkter
+      add_time_material: Tillad bruger at oprette tid og materialer poster
+      add_product: Tillad bruger at oprette produkter på tid og materialer poster
+      add_customer: Tillad bruger at oprette kunder på tid og materialer poster
+      add_project: Tillad bruger at oprette projekter på tid og materialer poster
+      add_comments_on_time_material: Tillad kommentarer på tid og materialer poster
+      import_customers_only: Tillad kun import af kunder, ikke alle kontakter (privatpersoner og leverandører)
       sync_with_erp: Synkronisér med ERP systemet, hvis det er konfigureret
       validate_time_material_done: Valider at alle felter er udfyldt før en t/m post kan markeres som 'færdig'
       limit_time_to_quarters: Begræns tidsforbrug til kvart timers intervaller (15 minutter)
@@ -104,5 +111,27 @@ da:
       time_materials: Tid og materialer
       users: Brugere
 
+    tabs:
+      h2-title: "Indstillinger - sådan fungerer de"
+      description: "Indstillinger kan du bruge til at ændre måde tid/materialer fungerer på. Du kan ændre indstillinger på en række niveauer, fra generelle til den enkelte bruger. Rækkefølgen er: generelt < kunder < projekter < produkter < hold < brugere. Ændrer du en indstilling på et hold overstyrer det den tilsvarende ændring på et produkt, projekt, kunde, eller generelt. Ændrer du en indstilling på en bruger overstyrer det den tilsvarende ændring på et hold, produkt, projekt, kunde, eller generelt."
 
-
+      title:
+        general: Generelt
+        time_material: Tid og materialer
+        customer: Kunder
+        project: Projekter
+        product: Produkter
+        team: Hold
+        user: Brugere
+        erp_integration: ERP integration
+        permissions: Rettigheder
+      descriptions:
+        general: Generelle indstillinger gælder for alle brugere, kunder, projekter og produkter, og tid/materialer
+        time_material: Tid og materialer indstillinger gælder for hvordan tid og materialer håndteres, generelt - men kan overstyres af kunder, projekter, produkter, hold, og brugere
+        customer: Kunde indstillinger gælder for hvordan tid og materialer håndteres for kunder, generelt, men kan overstyres af den enkelte kunde, projekter, produkter, hold, og brugere
+        project: Projekt indstillinger gælder for hvordan tid og materialer håndteres for projekter, og overstyrer dermed generelle indstillinger og kunde indstillinger, men kan overstyres af det enkelte projekt, produkter, hold, og brugere
+        product: Produkt indstillinger gælder for hvordan tid og materialer håndteres for produkter generelt, og overstyrer dermed generelle, kunde, og projekt indstillinger, men kan overstyres af det enkelte produkt, hold, og brugere
+        team: Hold indstillinger gælder for hvordan tid og materialer håndteres for hold
+        user: Bruger indstillinger gælder for hvordan tid og materialer håndteres for brugere
+        erp_integration: ERP integration indstillinger gælder for hvordan tid og materialer håndteres for ERP integration
+        permissions: Rettigheds indstillinger

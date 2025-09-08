@@ -22,6 +22,6 @@ class NotificationsController < MortimerController
 
     def mark_read
       @resource.mark_as_read
-      Turbo::StreamsChannel.broadcast_remove_to @resources_stream, target: helpers.dom_id(@resource)
+      Turbo::StreamsChannel.broadcast_remove_to @resources_stream, target: dom_id(@resource)
     end
 end

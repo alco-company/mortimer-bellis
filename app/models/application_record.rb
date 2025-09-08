@@ -3,11 +3,15 @@ class ApplicationRecord < ActiveRecord::Base
 
   include ExportCsv
   include ExportPdf
+  include Persistence
 
   has_many :noticed_events, as: :record, dependent: :destroy, class_name: "Noticed::Event"
 
   scope :by_user, ->() { model.new.attributes.keys.include?("user_id") ? where(user_id: Current.user.id) : all }
   scope :ordered, ->(s, d) { order(s => d) }
+
+  # mortimer_scoped - override on tables with other tenant scoping association
+  scope :mortimer_scoped, ->(ids) { unscoped.where(tenant_id: ids) }
 
   #
   # make it possible to handle model deletion differently from model to model
@@ -123,7 +127,7 @@ class ApplicationRecord < ActiveRecord::Base
   # the fields array passed to the form method
   #
   def self.form(resource:, editable: true, fields: [])
-    ApplicationForm.new resource: resource, editable: editable, fields: fields
+    LazyFormComponent.new(form_class: ApplicationForm, resource: resource, editable: editable, fields: fields)
   end
 
   # FIXME - implement this method on models that have users
@@ -156,7 +160,7 @@ class ApplicationRecord < ActiveRecord::Base
   def select_data_attributes
     {
       lookup_target: "item",
-      value: id,
+      value: id.to_s,
       display_value: name,
       action: "keydown->lookup#optionKeydown click->lookup#selectOption"
     }

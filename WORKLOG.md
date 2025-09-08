@@ -2,6 +2,120 @@
 
 ## CHANGELOG
 
+## 08/09/2025
+
+- restore strict
+
+## 05/09/2025
+
+- problem with initial index view for new user
+- work on backup/restore II
+
+## 28/8/2025
+
+- work on backup/restore
+
+## 27/8/2025
+
+- improve on restore_tenant_job
+- small change to tenant:backup/restore to update background_job
+- skip tenant_id
+- better purge
+
+## 26/08/2025
+
+- improve live search
+- debounce live search
+- kill live-search for now
+- disable show only some time_material
+- added backup/restore_tenant_job
+- added rake task to control backup/restore
+
+## 25/08/2025
+
+- batch does not work across scroll = more pages
+- improving tests
+
+## 22/8/2025
+
+- make batch work across infite scroll
+- make search work with batch enabled
+
+## 21/8/2025
+
+- get rid of the rest of helpers. references to clear out Phlex deprecated mention
+- make contextmenu work in background
+- initially list not_done_or_pushed time_materials
+- fix MCJ in contextmenu - only on background_jobs#contextmenu
+- toggle list_all in contextmenu
+- only show new_time_material_url if user.can? :add_time_materials
+
+## 20/8/2025
+
+- add session_timeout setting key
+- move Mission Control Jobs + toggle bj's to more
+- update dashboard displaying session_timeout
+- refining tests for settings
+- bug on add_from_erp
+- allow more classes to call .settings
+- add Tidewave
+- report on params error
+- fix setting next_run_at on jobs
+- rename the tag component test
+- fix missing customer pulls
+
+## 19/8/2025
+
+- bug in settings modal
+- make resource_class chip into the authorization/setting model
+- watch out for resouces w/o settings!
+- set title for settings
+- fix translations for settings + new button on Edge
+- fix add_from_erp
+- ret notifikation til success for 'din konto er godkendt'
+
+### 18/8/2025
+
+- manage settings better
+- missed class can? more
+
+### 14/8/2025
+
+- add settings link to contextmenu
+- fix language inspection on load
+- show description above settings
+- don't fail on team settings
+- cannot cancel changes on settings - they are ACID
+- make license_valid? respond straight to :pro, "pro", [:trial,"ambassador"]
+- warn when downgrading trial licenses
+
+### 13/8/2025
+
+- set clock straight in line with timezone
+- translations missing
+- make settings find 1|true, 0|false
+
+### 12/8/2025
+
+- remove helpers - shutting up Phlex in the process II
+- set .gitignore and backup scripts straight
+- fallback on localization in components
+
+### 8/8/2025
+
+- use localhost on development b/c puma-dev is hard to debug
+- remove helpers - shutting up Phlex in the process
+
+### 5/8/2025
+
+- bug on select_option
+
+### 4/8/2025
+
+- forced upgrade of Ruby to 3.3.3
+- fixing issues 
+- undefined method api_key
+
 ### 20/6/2025
 
 - got a breakthrough on boolean and text settings

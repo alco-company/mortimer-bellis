@@ -26,7 +26,7 @@
                   <% if params["controller"].include?("users") %>
                     <%= render resource_class.form resource: resource, editable: true, registration: params["controller"].include?("registrations") %> <!-- #, fields: [:slug] -->
                   <% else %>
-                    <%= render resource_class.form resource: resource, editable: true %> <!-- #, fields: [:slug] -->
+                    <%= render resource_class.form resource: resource, editable: true %>
                   <% end %>
                 </div>
               </div>

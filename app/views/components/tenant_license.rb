@@ -1,8 +1,5 @@
 class TenantLicense < ApplicationComponent
-  include Phlex::Rails::Helpers::TurboFrameTag
   include Phlex::Rails::Helpers::LinkTo
-  include Phlex::Rails::Helpers::Routes
-  include Phlex::Rails::Helpers::T
 
   def view_template
     # return unless Current.get_user.admin? or Current.get_user.superadmin?
@@ -28,7 +25,7 @@ class TenantLicense < ApplicationComponent
             role: "buyitem",
             tabindex: "-1"
           ) do
-            plain I18n.t("users.edit_profile.buy_product.manage_status")
+            plain t("users.edit_profile.buy_product.manage_status")
             span(class: " sr-only") do
               begin
                 plain resource.name
@@ -49,13 +46,13 @@ class TenantLicense < ApplicationComponent
   end
 
   def license_ex
-    I18n.l(Current.get_tenant.license_expires_at, format: :short)
+    l(Current.get_tenant.license_expires_at, format: :short)
   rescue
     "N/A"
   end
 
   def license_changed
-    I18n.l(Current.get_tenant.license_changed_at, format: :short)
+    l(Current.get_tenant.license_changed_at, format: :short)
   rescue
     "N/A"
   end

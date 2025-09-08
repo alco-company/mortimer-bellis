@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_05_23_172511) do
+ActiveRecord::Schema[8.1].define(version: 2025_09_04_171419) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
@@ -43,6 +43,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_05_23_172511) do
     t.datetime "created_at", null: false
     t.string "job_id"
     t.string "job_klass"
+    t.text "job_progress"
     t.datetime "next_run_at"
     t.text "params"
     t.text "schedule"
@@ -406,7 +407,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_05_23_172511) do
 
   create_table "provided_services", force: :cascade do |t|
     t.string "account_for_one_off"
-    t.integer "authorized_by_id", null: false
+    t.integer "authorized_by_id"
     t.datetime "created_at", null: false
     t.datetime "last_sync_at"
     t.text "last_sync_status"
@@ -809,9 +810,11 @@ ActiveRecord::Schema[8.1].define(version: 2025_05_23_172511) do
     t.integer "team_id", default: 1, null: false
     t.integer "tenant_id", null: false
     t.string "time_zone", default: "UTC"
+    t.boolean "two_factor_app_enabled", default: false, null: false
+    t.datetime "two_factor_app_enabled_at"
     t.string "unlock_token"
     t.datetime "updated_at", null: false
-    t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["email"], name: "index_users_on_email"
     t.index ["invitation_token"], name: "index_users_on_invitation_token", unique: true
     t.index ["invited_by_id"], name: "index_users_on_invited_by_id"
     t.index ["invited_by_type", "invited_by_id"], name: "index_users_on_invited_by"

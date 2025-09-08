@@ -2,7 +2,7 @@ class ListItems::TimeMaterial < ListItems::ListItem
   def html_list
     @insufficient_data = resource.has_insufficient_data?
     comment { "bg-green-200 bg-yellow-200" }
-    div(id: (dom_id resource), class: "list_item relative #{ background }", data: { list_target: "item", controller: "time-material" }) do
+    div(id: (dom_id resource), class: "list_item relative #{ background }", data: { list_target: "item", controller: "time-material list-item" }) do
       div(class: "flex grow min-w-0 gap-x-4", data: time_material_controller?) do
         show_left_mugshot
         div(class: "min-w-0 flex-auto") do
@@ -60,7 +60,7 @@ class ListItems::TimeMaterial < ListItems::ListItem
   end
 
   # def say_how_much
-  #   u = resource.unit.blank? ? "" : unsafe_raw(I18n.t("time_material.responsive_units.#{resource.unit}"))
+  #   u = resource.unit.blank? ? "" : unsafe_raw(t("time_material.responsive_units.#{resource.unit}"))
   #   if resource.quantity.blank?
   #     resource.time.blank? ? "" : span(class: "truncate") { "%s %s" % [ resource.time, u ] }
   #   else
@@ -90,7 +90,7 @@ class ListItems::TimeMaterial < ListItems::ListItem
   def show_matter_link
     mugshot(resource.user, css: "sm:hidden mr-2 h-5 w-5 flex-none rounded-full bg-gray-50")
     if resource&.user&.global_queries?
-      span(class: "hidden md:inline text-xs mr-2 truncate") { show_resource_link(resource.tenant) }
+      span(class: "hidden md:inline text-xs mr-2 truncate") { show_resource_link(resource: resource.tenant) }
     end
     span(class: "md:inline text-xs font-bold truncate mr-2") { "%s:" % resource.user.name }
     span(class: "md:inline text-xs truncate") do
@@ -114,19 +114,19 @@ class ListItems::TimeMaterial < ListItems::ListItem
       paused_info if resource.paused?
     else
       span(class: "mr-2 truncate") do
-        plain (I18n.l(resource.date.to_datetime, format: :date) rescue unsafe_raw(I18n.t("time_material.no_date")))
+        plain (l(resource.date.to_datetime, format: :date) rescue unsafe_raw(t("time_material.no_date")))
       end
       if resource.is_invoice?
         color = resource.pushed_to_erp? ? "bg-green-700 text-green-50" : "bg-green-50 text-green-700"
         span(class: "hidden 2xs:inline-flex w-fit items-center rounded-md #{color} mr-1 px-1 xs:px-2 py-0 xs:py-0.5 text-2xs font-medium ring-1 ring-inset ring-green-600/20 truncate") do
           render Icons::Money.new(css: "#{color} h-4 w-4")
-          span(class: "hidden ml-2 md:inline") { resource.pushed_to_erp? ? I18n.t("time_material.billed") : I18n.t("time_material.billable") }
+          span(class: "hidden ml-2 md:inline") { resource.pushed_to_erp? ? t("time_material.billed") : t("time_material.billable") }
         end
       end
       if @insufficient_data
         span(class: "2xs:inline-flex w-fit items-center rounded-md bg-yellow-50 mr-1 px-1 xs:px-2 py-0 xs:py-0.5 text-2xs font-medium text-yellow-700 ring-1 ring-inset ring-yellow-600/20 truncate") do
           render Icons::Warning.new(css: "text-yellow-500 h-4 w-4")
-          span(class: "ml-2 md:inline") { I18n.t("time_material.insufficient_data") }
+          span(class: "ml-2 md:inline") { t("time_material.insufficient_data") }
         end
       end
     end
@@ -134,7 +134,7 @@ class ListItems::TimeMaterial < ListItems::ListItem
 
   def paused_info
     span(class: "flex") do
-      plain I18n.l(resource.paused_at.to_datetime, format: :short) rescue ""
+      plain l(resource.paused_at.to_datetime, format: :short) rescue ""
     end
   rescue
     {}
@@ -143,7 +143,7 @@ class ListItems::TimeMaterial < ListItems::ListItem
   def name_resource
     return resource.customer&.name || resource.customer_name if resource.customer.present? or !resource.customer_name.blank?
     return resource.project&.name || resource.project_name if resource.project.present? or !resource.project_name.blank?
-    I18n.t("time_material.internal_or_private")
+    t("time_material.internal_or_private")
   rescue
     "!145"
   end
@@ -173,7 +173,7 @@ class ListItems::TimeMaterial < ListItems::ListItem
   end
 
   def show_product_details
-    u = resource.unit.blank? ? "" : I18n.t("time_material.units.#{resource.unit}")
+    u = resource.unit.blank? ? "" : t("time_material.units.#{resource.unit}")
     "%s %s á %s" % [ resource.quantity, u, resource.unit_price ]
   rescue
     "!183"

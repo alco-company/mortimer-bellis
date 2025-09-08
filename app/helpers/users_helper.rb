@@ -7,26 +7,13 @@ module UsersHelper
 
   def user_can_create?
     return true if Current.user.superadmin?
-    return true if Current.user.admin? && params.dig(:controller) != "tenants"
-    key = "allow_create_#{resource_class.to_s.underscore}"
-    Current.user.can? key
+    return false if params.dig(:controller) == "tenants"
+    key = "add_#{resource_class.to_s.underscore.pluralize}"
+    Current.user.can? key, resource: resource_class
   rescue
     false
   end
 
-  #
-  def user_mugshot(user, size: nil, css: "")
-    size = size.blank? ? "40x40!" : size
-    if (user.mugshot.attached? rescue false)
-      image_tag(url_for(user.mugshot), class: css)
-    else
-      # size.gsub!("x", "/") if size =~ /x/
-      # size.gsub!("!", "") if size =~ /!/
-      image_tag "icons8-customer-64.png", class: css
-    end
-  rescue
-    image_tag "icons8-customer-64.png", class: css
-  end
 
   #
   def link_to_team_users_status(team)

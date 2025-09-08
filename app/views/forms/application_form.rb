@@ -2,6 +2,7 @@ class ApplicationForm < Superform::Rails::Form
   include Phlex::Rails::Helpers::Pluralize
   include Phlex::Rails::Helpers::LinkTo
   include Phlex::Rails::Helpers::TurboFrameTag
+  include Phlex::Rails::Helpers::Routes
   include FieldSpecializations
   include FormSpecializations
 

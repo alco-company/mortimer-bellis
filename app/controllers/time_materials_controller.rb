@@ -13,9 +13,15 @@ class TimeMaterialsController < MortimerController
   end
 
   def index
-    # tell user about his uncompleted tasks
-    # Current.user.notify(action: :tasks_remaining, title: t("tasks.remaining.title"), msg: t("tasks.remaining.msg", count: Current.user.tasks.first_tasks.uncompleted.count)) unless Current.user.notified?(:tasks_remaining)
-    @resources = resources&.order(wdate: :desc)
+    @resources = resources
+      # if ActiveModel::Type::Boolean.new.cast(params[:show_all])
+      #   @resources = @resources.order(wdate: :desc)
+      # elsif params[:search].blank? && params[:s].blank? && params[:d].blank? && !(@filter.persisted? rescue false)
+      #   my_open = @resources.where(user_id: Current.user.id).not_done_or_pushed
+      #   @resources = (my_open.exists? ? my_open : @resources).order(wdate: :desc)
+      # else
+      @resources = @resources.order(wdate: :desc)
+    # end
     super
   end
 
@@ -125,7 +131,7 @@ class TimeMaterialsController < MortimerController
         user_id: Current.user.id,
         started_at: Time.current,
         time_spent: 0,
-        date: get_default_time_material_date("Time.current.to_date.yesterday"),
+        date: get_default_time_material_date("Time.current.to_date"),
         about: Current.user.default(:default_time_material_about, "")
       }
       params.delete(:play)

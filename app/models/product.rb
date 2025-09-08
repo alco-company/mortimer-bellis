@@ -1,5 +1,6 @@
 class Product < ApplicationRecord
   include Tenantable
+  include Settingable
   include Unitable
 
   scope :by_fulltext, ->(query) { where("name LIKE :query OR product_number LIKE :query OR quantity LIKE :query OR unit LIKE :query OR base_amount_value LIKE :query OR account_number LIKE :query OR external_reference LIKE :query", query: "%#{query}%") if query.present? }
@@ -64,16 +65,16 @@ class Product < ApplicationRecord
   def select_data_attributes
     {
       lookup_target: "item",
-      lookup_quantity_param: quantity,
-      lookup_unit_price_param: base_amount_value,
-      lookup_unit_param: unit,
-      value: id,
-      display_value: name,
+      lookup_quantity_param: quantity.to_s,
+      lookup_unit_price_param: base_amount_value.to_s,
+      lookup_unit_param: unit.to_s,
+      value: id.to_s,
+      display_value: name.to_s,
       action: "keydown->lookup#optionKeydown click->lookup#selectOption"
     }
   end
 
-  def self.add_from_erp(item)
+  def self.add_from_erp(item, resource: nil)
     return false unless item["Name"].present?
     product = Product.find_or_create_by(tenant: Current.get_tenant, erp_guid: item["ProductGuid"])
     product.name = item["Name"]

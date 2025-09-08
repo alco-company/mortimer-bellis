@@ -18,6 +18,7 @@ class SaasService
   # service_params - hash of params to be persisted in the database, eg { access_token: "", refresh_token: "", expires_in: 0 }
   #
   def add_service(name, service_params)
+    return false unless sync_enabled?
     ps = ProvidedService.find_by(tenant: Current.get_tenant, service: self.class.to_s, name: name)
     ps.nil? ? create_service(name, service_params) : update_service(ps, service_params)
   end

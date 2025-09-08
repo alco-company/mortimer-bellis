@@ -39,7 +39,7 @@
       <div class="flex-grow-0">
         <%= link_to( new_modal_url(id: @resource.id, modal_form: "event", resource_class: "event", date: @date, step: "new", view: @view),
               data: { turbo_stream: true },
-              # link_to helpers.delete_all_url(),
+              # link_to delete_all_url(),
               # data: { turbo_method: :delete, turbo_confirm: "Are you sure?", turbo_stream: true, action: "click->contextmenu#hide" },
               class: "mort-btn-primary",
               role: "menuitem",

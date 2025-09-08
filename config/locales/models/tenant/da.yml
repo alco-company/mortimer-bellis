@@ -31,6 +31,9 @@ da:
         save_percent: Spar %{percent}%
         we_got_notified_you_will_hear_from_us_soon: "Vi har modtaget din anmodning, og vil snart kontakte dig."
 
+      setting_all:
+        title: Indstillinger for konti
+        instruction: Her kan du indstille hvordan konti skal fungere i Mortimer.
       delete_all: 
         title: Slet alle konti
         instruction: Er du sikker på, at du vil slette alle konti?

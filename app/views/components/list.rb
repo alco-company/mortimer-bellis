@@ -113,15 +113,10 @@ class List < ApplicationComponent
       div(
         class: "w-full pt-10 border-b border-gray-100 text-xs font-semibold"
       ) do
-        whitespace
         if field.is_a? Date or field.is_a? Time or field.is_a? DateTime
-          whitespace
-          plain I18n.l field, format: :day_summary
-          whitespace
+          plain l(field, format: :day_summary)
         else
-          whitespace
           plain field
-          whitespace
         end
       end
     end

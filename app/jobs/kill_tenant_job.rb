@@ -4,46 +4,85 @@ class KillTenantJob < ApplicationJob
   def perform(**args)
     super(**args)
     tenant = Tenant.find(args[:t_id])
-    if tenant
-      Tenant.transaction do
-        tenant.background_jobs.destroy_all
-        tenant.batches.destroy_all
-        tenant.events.destroy_all
-        tenant.calendars.destroy_all
-        tenant.calls.destroy_all
-        tenant.dashboards.destroy_all
-        tenant.filters.destroy_all
-        tenant.projects.destroy_all
-        tenant.products.destroy_all
-        tenant.invoice_items.destroy_all
-        tenant.invoices.destroy_all
-        tenant.tasks.destroy_all
-        tenant.time_materials.destroy_all
-        tenant.customers.destroy_all
-        tenant.punch_cards.destroy_all
-        tenant.punch_clocks.destroy_all
-        tenant.punches.destroy_all
-        tenant.locations.destroy_all
-        tenant.provided_services.destroy_all
-        tenant.settings.destroy_all
+    return if tenant.nil? || tenant == Tenant.first
+    Tenant.transaction do
+      purge_non_tenant_scoped_dependents(tenant)
+      purge_tenant_scoped_models(tenant)
+      purge_users(tenant)
+      tenant.teams.destroy_all
+      tenant.logo.purge if tenant.logo.attached?
+      tenant.delete
+    rescue => e
+      Rails.logger.error "Failed to delete tenant #{tenant.id}: #{e.message}"
+      raise
+    end
+  end
 
-        tenant.users.order(id: :desc).each do |user|
-          next if user.id == 1
-          user.mugshot.purge if user.mugshot.attached?
-          user.access_grants.destroy_all
-          user.access_tokens.destroy_all
-          user.notifications.destroy_all
-          user.web_push_subscriptions.destroy_all
-          user.sessions.destroy_all
-          user.delete
-        end
+  private
 
-        tenant.teams.destroy_all
-        tenant.logo.purge if tenant.logo.attached?
-        tenant.delete
-      rescue SQLite3::ConstraintException => e
-        Rails.logger.error "Failed to delete tenant #{step} #{tenant.id}: #{e.message}"
+  def purge_non_tenant_scoped_dependents(tenant)
+    user_ids = tenant.users.pluck(:id)
+    tag_ids = tenant.tags.pluck(:id)
+    begin
+      if ActiveRecord::Base.connection.table_exists?(:taggings) && tag_ids.any?
+        ActiveRecord::Base.connection.execute("DELETE FROM taggings WHERE tag_id IN (#{tag_ids.join(',')})")
+      end
+      if ActiveRecord::Base.connection.table_exists?(:sessions) && user_ids.any?
+        ActiveRecord::Base.connection.execute("DELETE FROM sessions WHERE user_id IN (#{user_ids.join(',')})")
+      end
+      if ActiveRecord::Base.connection.table_exists?(:oauth_access_tokens) && user_ids.any?
+        ActiveRecord::Base.connection.execute("DELETE FROM oauth_access_tokens WHERE resource_owner_id IN (#{user_ids.join(',')})")
+      end
+      if ActiveRecord::Base.connection.table_exists?(:oauth_access_grants) && user_ids.any?
+        ActiveRecord::Base.connection.execute("DELETE FROM oauth_access_grants WHERE resource_owner_id IN (#{user_ids.join(',')})")
+      end
+      if ActiveRecord::Base.connection.table_exists?(:noticed_notifications) && user_ids.any?
+        ActiveRecord::Base.connection.execute("DELETE FROM noticed_notifications WHERE recipient_id IN (#{user_ids.join(',')}) AND recipient_type='User'")
+      end
+      if ActiveRecord::Base.connection.table_exists?(:noticed_web_push_subs) && user_ids.any?
+        ActiveRecord::Base.connection.execute("DELETE FROM noticed_web_push_subs WHERE user_id IN (#{user_ids.join(',')})")
+      end
+    rescue => e
+      Rails.logger.error "Pre-purge cleanup failed for tenant #{tenant.id}: #{e.message}"
+    end
+  end
+
+  def purge_tenant_scoped_models(tenant)
+    order = DependencyGraph.purge_order
+    order.each do |model_name|
+      next if model_name == 'Tenant'
+      klass = safe_constantize(model_name)
+      next unless klass && klass.column_names.include?('tenant_id')
+      begin
+        klass.unscoped.where(tenant_id: tenant.id).delete_all
+      rescue => e
+        Rails.logger.error "Failed purging #{model_name} for tenant #{tenant.id}: #{e.message}"
+        raise
       end
     end
+  end
+
+  def purge_users(tenant)
+    tenant.users.order(id: :desc).each do |user|
+      next if user.id == 1
+      begin
+        user.mugshot.purge if user.mugshot.attached?
+        user.access_grants.delete_all
+        user.access_tokens.delete_all
+        user.notifications.delete_all
+        user.web_push_subscriptions.delete_all
+        user.sessions.delete_all
+        user.delete
+      rescue => e
+        Rails.logger.error "Failed deleting user #{user.id} in tenant #{tenant.id}: #{e.message}"
+        raise
+      end
+    end
+  end
+
+  def safe_constantize(name)
+    name.constantize
+  rescue NameError
+    nil
   end
 end

@@ -40,6 +40,25 @@ two:
   time_zone: London
 # column: value
 
+# column: value
+#
+three: 
+  tenant: one
+  team: two
+  email: "jane1@doe.com"
+  password_digest: <%= default_password_digest %>
+  confirmed_at: <%= Time.zone.now - 1.hour %>
+  confirmation_sent_at: <%= Time.zone.now - 2.hours %>
+  locale: "en"
+  name: Jane Doe
+  pincode: 1290
+  # payroll_user_ident: jd-2
+  # access_token: w123
+  last_punched_at: 2024-04-25 12:49:56
+  state: out
+  time_zone: London
+# column: value
+
 superadmin:
   tenant: one
   team: one

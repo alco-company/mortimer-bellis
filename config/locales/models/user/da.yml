@@ -1,6 +1,9 @@
 da:
   user:
     modal:
+      setting_all:
+        title: Indstillinger for brugere
+        instruction: Her kan du indstille hvordan brugere skal fungere i Mortimer.
       delete_all: 
         title: Slet alle brugere
         instruction: Er du sikker på, at du vil slette alle brugere?

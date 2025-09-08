@@ -1,4 +1,5 @@
 class Tenant < ApplicationRecord
+  LICENSE_TYPES = { trial: 0, free: 1, ambassador: 2, essential: 3, pro: 4 }
   #
   # add time zone support - if eg there is no user assigned when
   # some process executes
@@ -7,7 +8,7 @@ class Tenant < ApplicationRecord
   include Localeable
   include Colorable
   include Calendarable
-  include Setable # we need the tenant_id - not the polymorphic setable!
+  include Setable # we need the tenant_id - not the polymorphic setable! ie: WHERE tenant_id: setting.tenant_id
   include Serviceable
 
   has_many :background_jobs, dependent: :destroy
@@ -40,10 +41,17 @@ class Tenant < ApplicationRecord
   scope :by_locale, ->(locale) { where("locale LIKE ?", "%#{locale}%") if locale.present? }
   scope :by_time_zone, ->(time_zone) { where("time_zone LIKE ?", "%#{time_zone}%") if time_zone.present? }
 
+  # mortimer_scoped - override on tables with other tenant scoping association
+  scope :mortimer_scoped, ->(ids) { unscoped.where(id: ids) } # effectively returns no records
+
+  def self.scoped_for_tenant(ids = 1)
+    mortimer_scoped(ids)
+  end
+
   validates :name, presence: true, uniqueness: { message: I18n.t("tenants.errors.messages.name_exist") }
   validates :email, presence: true
 
-  enum :license, { trial: 0, free: 1, ambassador: 2, essential: 3, pro: 4 }, default: :trial, scope: true
+  enum :license, LICENSE_TYPES, default: :trial, scope: true
 
   def self.filtered(filter)
     flt = filter.filter
@@ -91,6 +99,12 @@ class Tenant < ApplicationRecord
 
   def has_this_access_token(token)
     access_token == token
+  end
+
+  def get_session_timeout
+    eval(settings.where(key: "session_timeout").first&.value) || 7.days
+  rescue
+    7.days
   end
 
 
@@ -162,12 +176,33 @@ class Tenant < ApplicationRecord
   def license_expires_shortly?
     license_expires_at.present? && license_expires_at < 1.week.from_now
   end
-
-  def license_valid?
-    if license == "trial" && license_expires_at < Time.now
-      update(license: "free", license_expires_at: 10.years.from_now)
+  # Returns true if the tenant's license rank is >= required level.
+  def license_at_least?(required = :trial)
+    if required.is_a?(Array)
+      return required.all? { |r| license_at_least?(r) }
     end
-    license_expires_at.present? && license_expires_at > Time.now
+    LICENSE_TYPES[license.to_sym] >= LICENSE_TYPES[required.to_sym]
+  rescue
+    true
+  end
+
+  # Valid if current license meets required level; trial also checks expiry.
+  def license_valid?(required_license = :trial)
+    # Maintain your trial auto-upgrade logic
+    if license_expires_at.nil?
+      update(license: :trial, license_expires_at: 4.week.from_now)
+      UserMailer.info_report("license expiration not found", "tenants/#{id} #{name}'s license has been set to Trial with a 4 week grace period!").deliver_later
+    end
+    if license == "trial" && license_expires_at.present? && license_expires_at < Time.current
+      update(license: :free, license_expires_at: 10.years.from_now)
+      UserMailer.info_report("Trial license expired", "tenants/#{id} #{name}'s trial license has expired and was downgraded to a free license.").deliver_later
+    end
+
+    return false unless license_at_least?(required_license)
+
+    # Only trial depends on expiry; paid tiers are always valid here
+    return true unless license == "trial"
+    license_expires_at.nil? || (license_expires_at.present? && license_expires_at.future?)
   end
 
   def license_expired?

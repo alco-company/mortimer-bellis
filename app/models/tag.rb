@@ -1,5 +1,6 @@
 class Tag < ApplicationRecord
   include Tenantable
+  include Settingable
   has_many :taggings, dependent: :destroy
   has_many :taggables, through: :taggings
   belongs_to :created_by, class_name: "User", foreign_key: "user_id"

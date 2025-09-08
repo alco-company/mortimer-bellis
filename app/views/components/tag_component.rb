@@ -77,7 +77,7 @@ class TagComponent < ApplicationComponent
       for: resource_field,
       class: @label_class) do
       span do
-        plain I18n.t("activerecord.attributes.#{ resource_field("%s.%s") }")
+        plain t("activerecord.attributes.#{ resource_field("%s.%s") }")
       end
     end
   end
@@ -103,7 +103,7 @@ class TagComponent < ApplicationComponent
       data: {
         tag_target: "input",
         action: "keydown->tag#keydown keyup->tag#keyup focus->tag#focus ",
-        placeholder: I18n.t("components.tag.#{@field}")
+        placeholder: t("components.tag.#{@field}")
       },
       style: "border: none; outline: none;",
       class: "grow ml-0.5 px-1",
@@ -119,7 +119,7 @@ class TagComponent < ApplicationComponent
   #     class: "py-2 relative md:absolute top-0 bg-white z-10 mt-0.5 mort-form-text min-h-[50px] max-w-sm shadow-md") do
   #     div(data: { action: "touchstart->tag#addTag click->tag#addTag", id: "0" }, class: "flex tag-list-item current-tag-list-item cursor-pointer bg-sky-100 hover:bg-sky-200 h-[40px] items-center") do
   #       span(class: "px-2") do
-  #         plain I18n.t("components.tag.add_tag")
+  #         plain t("components.tag.add_tag")
   #       end
   #     end if @resources.empty? || @resources.filter { |tag| tag.name == @search }.empty?
   #     @resources.each do |tag|
@@ -157,7 +157,7 @@ class TagComponent < ApplicationComponent
         comment do
           %(Selected: "font-semibold", Not Selected: "font-normal")
         end
-        span(class: "block truncate font-normal") { I18n.t("components.tag.add_tag") }
+        span(class: "block truncate font-normal") { t("components.tag.add_tag") }
       end if @resources.empty? || @resources.filter { |tag| tag.name == @search }.empty?
 
       @resources.each do |tag|

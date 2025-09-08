@@ -48,8 +48,8 @@ class Notifications::NotificationCenter < ApplicationComponent
                 div(class: "p-6") do
                   div(class: "flex items-start justify-between") do
                     div do
-                      h2(class: "text-base font-semibold text-gray-900", id: "slide-over-title") { I18n.t("notifications_salutation", name: recipient.name) }
-                      p { I18n.t("notifications", count: recipient.notifications.unread.count) }
+                      h2(class: "text-base font-semibold text-gray-900", id: "slide-over-title") { t("notifications_salutation", name: recipient.name) }
+                      p { t("notifications", count: recipient.notifications.unread.count) }
                     end
                     div(class: "ml-3 flex h-7 items-center") do
                       button(

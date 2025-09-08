@@ -36,32 +36,32 @@ class MonthComponent < CalendarComponent
   def month_header
     div(class: "grid grid-cols-7 gap-px border-b border-slate-100 bg-gray-200 text-center text-xs font-semibold leading-6 text-gray-700 lg:flex-none") do
       div(class: "flex justify-center bg-white py-2") do
-        span { I18n.t("calendar.weekday.monday.firstletter") }
-        span(class: "sr-only sm:not-sr-only") { I18n.t("calendar.weekday.monday.second_thirdletter") }
+        span { t("calendar.weekday.monday.firstletter") }
+        span(class: "sr-only sm:not-sr-only") { t("calendar.weekday.monday.second_thirdletter") }
       end
       div(class: "flex justify-center bg-white py-2") do
-        span { I18n.t("calendar.weekday.tuesday.firstletter") }
-        span(class: "sr-only sm:not-sr-only") { I18n.t("calendar.weekday.tuesday.second_thirdletter") }
+        span { t("calendar.weekday.tuesday.firstletter") }
+        span(class: "sr-only sm:not-sr-only") { t("calendar.weekday.tuesday.second_thirdletter") }
       end
       div(class: "flex justify-center bg-white py-2") do
-        span { I18n.t("calendar.weekday.wednesday.firstletter") }
-        span(class: "sr-only sm:not-sr-only") { I18n.t("calendar.weekday.wednesday.second_thirdletter") }
+        span { t("calendar.weekday.wednesday.firstletter") }
+        span(class: "sr-only sm:not-sr-only") { t("calendar.weekday.wednesday.second_thirdletter") }
       end
       div(class: "flex justify-center bg-white py-2") do
-        span { I18n.t("calendar.weekday.thursday.firstletter") }
-        span(class: "sr-only sm:not-sr-only") { I18n.t("calendar.weekday.thursday.second_thirdletter") }
+        span { t("calendar.weekday.thursday.firstletter") }
+        span(class: "sr-only sm:not-sr-only") { t("calendar.weekday.thursday.second_thirdletter") }
       end
       div(class: "flex justify-center bg-white py-2") do
-        span { I18n.t("calendar.weekday.friday.firstletter") }
-        span(class: "sr-only sm:not-sr-only") { I18n.t("calendar.weekday.friday.second_thirdletter") }
+        span { t("calendar.weekday.friday.firstletter") }
+        span(class: "sr-only sm:not-sr-only") { t("calendar.weekday.friday.second_thirdletter") }
       end
       div(class: "flex justify-center bg-white py-2") do
-        span { I18n.t("calendar.weekday.saturday.firstletter") }
-        span(class: "sr-only sm:not-sr-only") { I18n.t("calendar.weekday.saturday.second_thirdletter") }
+        span { t("calendar.weekday.saturday.firstletter") }
+        span(class: "sr-only sm:not-sr-only") { t("calendar.weekday.saturday.second_thirdletter") }
       end
       div(class: "flex justify-center bg-white py-2") do
-        span { I18n.t("calendar.weekday.sunday.firstletter") }
-        span(class: "sr-only sm:not-sr-only") { I18n.t("calendar.weekday.sunday.second_thirdletter") }
+        span { t("calendar.weekday.sunday.firstletter") }
+        span(class: "sr-only sm:not-sr-only") { t("calendar.weekday.sunday.second_thirdletter") }
       end
     end
   end
@@ -95,12 +95,12 @@ class MonthComponent < CalendarComponent
     cls += holiday?(dt) ? " border-violet-600" : " border-white hover:border-gray-100"
     cls += (dt.month == from_date.month) ? " bg-white" : " bg-gray-50 text-gray-500"
     link_to(
-      helpers.new_modal_url(id: id, modal_form: "day_summary", resource_class: "calendar", modal_next_step: "accept", date: I18n.l(dt, format: :short_iso)),
+      new_modal_url(id: id, modal_form: "day_summary", resource_class: "calendar", modal_next_step: "accept", date: l(dt, format: :short_iso)),
       data: { turbo_stream: true },
       class: "#{cls} bg-gray-50 py-1.5 text-gray-400 hover:bg-gray-100 focus:z-10",
       role: "menuitem",
       tabindex: "-1") do
-      # helpers.calendar_events_url(calendar_id: id, date: dt),
+      # calendar_events_url(calendar_id: id, date: dt),
       # data: { turbo_frame: "events_list", turbo_stream: true },
       # class: cls,
       # role: "menuitem",
@@ -117,11 +117,11 @@ class MonthComponent < CalendarComponent
       cls = "absolute col-span-2 place-self-center "
       cls += (dt == Date.today) ? " bg-sky-600 text-white rounded-full w-6 text-center" : "  "
         # div(class: "") do
-        time(datetime: I18n.l(dt, format: :short_iso), class: "#{cls}") { dt.day }
+        time(datetime: l(dt, format: :short_iso), class: "#{cls}") { dt.day }
         input(placeholder: dt.day, type: "text", name: "template[#{dt.to_s.gsub("-", "_")}]", class: "hidden absolute col-span-2 place-self-center mort-form-text placeholder:text-slate-200 py-1 px-1 h-6 w-16 text-xs mt-0 mr-2", data: { toggle_button_target: "templateSpan" }, value: "")
       # end
       span(class: "sr-only") do
-        plain "datetime: #{I18n.l(dt, format: :short_iso)} "
+        plain "datetime: #{l(dt, format: :short_iso)} "
         plain "day summary"
       end
     end
@@ -209,7 +209,7 @@ class MonthComponent < CalendarComponent
     cls += holiday?(dt) ? " border-violet-600" : " border-white"
     cls += (dt == Date.today && (dt.month == from_date.month)) ? " text-gray-900" : " text-gray-500"
     link_to(
-      helpers.new_modal_url(id: id, modal_form: "day_summary", resource_class: "calendar", modal_next_step: "accept", date: I18n.l(dt, format: :short_iso)),
+      new_modal_url(id: id, modal_form: "day_summary", resource_class: "calendar", modal_next_step: "accept", date: l(dt, format: :short_iso)),
       data: { turbo_stream: true },
       class: cls,
       role: "menuitem",
@@ -221,7 +221,7 @@ class MonthComponent < CalendarComponent
 
       cls = "absolute col-span-2 place-self-center "
       cls += (dt == Date.today) ? " bg-sky-600 text-white rounded-full w-6 text-center" : "  "
-      time(datetime: I18n.l(dt, format: :short_iso), class: "#{cls}") { dt.day }
+      time(datetime: l(dt, format: :short_iso), class: "#{cls}") { dt.day }
       span(class: "sr-only") do
         plain "0 events"
       end
@@ -229,10 +229,10 @@ class MonthComponent < CalendarComponent
 
 
     # link_to(
-    #   helpers.events_calendar_url(id: id, date: dt),
+    #   events_calendar_url(id: id, date: dt),
     #   data: { turbo_frame: "events_list", turbo_stream: true },
     #   # modal view alternative:
-    #   # helpers.new_modal_url(id: id, modal_form: "day_summary", resource_class: "calendar", modal_next_step: "accept", date: I18n.l(dt, format: :short_iso)),
+    #   # new_modal_url(id: id, modal_form: "day_summary", resource_class: "calendar", modal_next_step: "accept", date: l(dt, format: :short_iso)),
     #   # data: { turbo_stream: true },
     #   class: cls,
     #   role: "menuitem",
@@ -244,7 +244,7 @@ class MonthComponent < CalendarComponent
 
     #   cls = "absolute col-span-2 place-self-center "
     #   cls += (dt == Date.today) ? " bg-sky-600 text-white rounded-full w-6 text-center" : "  "
-    #   time(datetime: I18n.l(dt, format: :short_iso), class: "#{cls}") { dt.day }
+    #   time(datetime: l(dt, format: :short_iso), class: "#{cls}") { dt.day }
     #   span(class: "sr-only") do
     #     plain "0 events"
     #   end

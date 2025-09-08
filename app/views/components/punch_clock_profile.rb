@@ -11,7 +11,7 @@ class PunchClockProfile < ApplicationComponent
 
   def view_template(&block)
     div(id: "mortimer_form") do
-      render User.profile(user, helpers.pos_user_url(api_key: user.access_token))
+      render User.profile(user, pos_user_url(api_key: user.access_token))
     end
   end
 
@@ -22,13 +22,13 @@ class PunchClockProfile < ApplicationComponent
   #       type: "button",
   #       data: { action: "click->pos-employee#clearForm" },
   #       class: "mort-btn-cancel"
-  #     ) { helpers.t("cancel") }
+  #     ) { t("cancel") }
   #     whitespace
   #     button(
   #       type: "submit",
   #       class:
   #         "mort-btn-primary"
-  #     ) { helpers.t("save") }
+  #     ) { t("save") }
   #   end
   # end
 end

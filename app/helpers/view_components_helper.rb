@@ -60,6 +60,7 @@ module ViewComponentsHelper
   end
 
   def render_contextmenu **attribs, &block
+    attribs[:user] ||= Current.get_user
     render Contextmenu.new(**attribs), &block
   end
 

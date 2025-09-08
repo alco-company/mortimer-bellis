@@ -1,9 +1,12 @@
 require "test_helper"
 
 class DineroServiceTest < ActiveSupport::TestCase
-  test "should return auth_url" do
-    Current.user = users :no_dinero_authorization
+  setup do
+    user = users(:no_dinero_authorization)
+    Current.system_user = user
+  end
 
+  test "should return auth_url" do
     dinero_service = Dinero::Service.new
     host = "https://connect.visma.com/connect/authorize"
     path = "something"
@@ -11,7 +14,7 @@ class DineroServiceTest < ActiveSupport::TestCase
       client_id: ENV["DINERO_APP_ID"],
       response_type: "code",
       response_mode: "form_post",
-      state: Base64.encode64({ pos_token: Current.user.pos_token, path: path }.to_json),
+      state: Base64.encode64({ pos_token: Current.get_user.pos_token, path: path }.to_json),
       scope: "dineropublicapi:read dineropublicapi:write offline_access",
       redirect_uri: ENV["DINERO_APP_CALLBACK"]
     }
@@ -21,39 +24,32 @@ class DineroServiceTest < ActiveSupport::TestCase
   end
 
   test "should return false when tenant is wrong" do
-    Current.user = users :no_dinero_authorization
-
     dinero_service = Dinero::Service.new
     creds = { code: "DA4", pos_token: "wrong!" }
     assert_not dinero_service.get_creds(creds: creds)
   end
 
   test "should return {} when get_creds is successful" do
-    Current.user = users :no_dinero_authorization
-
     dinero_service = Dinero::Service.new
-    creds = { code: "test", pos_token: Current.user.pos_token }
+    creds = { code: "test", pos_token: Current.get_user.pos_token }
     res = dinero_service.get_creds(creds: creds)
     assert res[:result]
   end
 
   test "should return false when get_creds is unsuccessful" do
-    Current.user = users :no_dinero_authorization
-
     dinero_service = Dinero::Service.new
-    creds = { code: "error", pos_token: Current.user.pos_token }
+    creds = { code: "error", pos_token: Current.get_user.pos_token }
     res = dinero_service.get_creds(creds: creds)
     assert_not res[:result]
   end
 
   test "should add service if get_creds is successful" do
     # Current.tenant = tenants :no_dinero_authorization
-    Current.user = users :no_dinero_authorization
 
-    assert Current.tenant == Current.user.tenant
-    assert Current.tenant.has_service("Dinero") == false
+    assert Current.get_tenant == Current.get_user.tenant
+    assert Current.get_tenant.has_service("Dinero") == false
     dinero_service = Dinero::Service.new
-    creds = { code: "test", pos_token: Current.user.pos_token }
+    creds = { code: "test", pos_token: Current.get_user.pos_token }
     res = dinero_service.get_creds(creds: creds)
     assert_difference "ProvidedService.count", 1 do
       dinero_service.add_service("Dinero", res[:service_params])

@@ -105,6 +105,20 @@ class UserMailer < ApplicationMailer
     UserMailer.error_report(e.to_s, "UserMailer#last_farewell - failed for #{params[:user]&.email}").deliver_later
   end
 
+  def info_report(info, msg)
+    @info = info
+    @msg = msg
+    mail to: "monitor@alco.dk",
+      subject: "Info Report",
+      delivery_method: :mailersend,
+      delivery_method_options: {
+        api_key: ENV["MAILERSEND_API_TOKEN"]
+      }
+
+  rescue => e
+    Rails.logger.error "%s: %s" % [ "UserMailer#info_report - failed for #{info} on #{msg}", e.to_s ]
+  end
+
   def error_report(error, klass_method)
     @error = error
     @klass_method = klass_method
@@ -116,6 +130,6 @@ class UserMailer < ApplicationMailer
       }
 
   rescue => e
-    Rails.logger.error "%s: %s" % [ "UserMailer#error_report - failed for #{params[:user]&.email}", e.to_s ]
+    Rails.logger.error "%s: %s" % [ "UserMailer#error_report - failed for #{error} on #{klass_method}", e.to_s ]
   end
 end

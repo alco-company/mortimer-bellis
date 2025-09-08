@@ -219,8 +219,7 @@ module Resourceable
 
         def resource_resources
           case rc.to_s
-          # 2025/6/19 whd
-          # TODO not working as intended! when "TimeMaterial"; Current.user.can?(:show_all_time_material_posts) ? rc.by_tenant() : rc.by_user()
+          when "TimeMaterial"; Current.user.can?(:show_all_time_material_posts, resource: rc) ? rc.by_tenant() : rc.by_user()
           when "Noticed::Notification"; Current.user.notifications.unread.includes(event: :record)
           when "Oauth::Application"; rc.all
           else; rc.by_tenant

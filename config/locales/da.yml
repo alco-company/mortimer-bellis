@@ -54,6 +54,9 @@ da:
   no records were found: Ingen poster fundet
   enable_notifications: Abonnér på notifikationer
   disable_notifications: Abonnér ikke mere på notifikationer
+  mission_control_jobs: "Mission Control Jobs"
+  toggle_show_all: "Vis alle"
+  toggle_show_my_unfinished: "Vis uafsluttede"
 
   sign_in_info: "Du loggede ind kl %{signin} og din session udløber om %{session_done}"
   session_done_shortly: "%{seconds} sekunder"

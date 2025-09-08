@@ -87,7 +87,7 @@ class NavigationComponent < ApplicationComponent
       li do
         a(href: url, class: css, data: { action: "click->mobilesidebar#hide" }) do
           render_icon(icon) if icon
-          span(class: "", data: { menu_target: "menuitem" }) { I18n.t("menu.#{title}") }
+          span(class: "", data: { menu_target: "menuitem" }) { t("menu.#{title}") }
         end
       end if Current.user.superadmin? || licensed?(item)
     end
@@ -134,7 +134,7 @@ class NavigationComponent < ApplicationComponent
                 clip_rule: "evenodd"
               )
             end
-            span(class: "", data: { menu_target: "menuitem" }) { I18n.t("menu.#{text}") }
+            span(class: "", data: { menu_target: "menuitem" }) { t("menu.#{text}") }
           end
           # comment do
           #   "Expandable link section, show/hide based on state."

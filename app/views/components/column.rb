@@ -64,7 +64,7 @@ class Column < Phlex::HTML
   end
 
   def sort_url
-    helpers.url_for(controller: @sort[:controller], action: :index, s: field, d: direction)
+    url_for(controller: @sort[:controller], action: :index, s: field, d: direction)
   rescue
     "#"
   end

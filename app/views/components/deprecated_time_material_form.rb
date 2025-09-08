@@ -76,7 +76,7 @@ class TimeMaterialForm < ApplicationComponent
               "M10 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM3.465 14.493a1.23 1.23 0 0 0 .41 1.412A9.957 9.957 0 0 0 10 18c2.31 0 4.438-.784 6.131-2.1.43-.333.604-.903.408-1.41a7.002 7.002 0 0 0-13.074.003Z"
           )
         end
-        span(class: "pointer-events-none") { I18n.t("time_material.type.time") }
+        span(class: "pointer-events-none") { t("time_material.type.time") }
     end
   end
 
@@ -109,7 +109,7 @@ class TimeMaterialForm < ApplicationComponent
             clip_rule: "evenodd"
           )
         end
-        span(class: "pointer-events-none") { I18n.t("time_material.type.material") }
+        span(class: "pointer-events-none") { t("time_material.type.material") }
     end
   end
 
@@ -122,7 +122,7 @@ class TimeMaterialForm < ApplicationComponent
             about_field
             #
             div(class: "col-span-2") do
-              label(for: "time", class: "block text-sm font-medium leading-6 text-gray-900") { I18n.t("time_material.time.lbl") }
+              label(for: "time", class: "block text-sm font-medium leading-6 text-gray-900") { t("time_material.time.lbl") }
               div(class: "mt-2") do
                 div(
                   class:
@@ -140,7 +140,7 @@ class TimeMaterialForm < ApplicationComponent
               end
             end
             #
-            rate_field I18n.t("time_material.rate.hourly")
+            rate_field t("time_material.rate.hourly")
             #
           end
         end
@@ -158,7 +158,7 @@ class TimeMaterialForm < ApplicationComponent
               label(
                 for: "product_name",
                 class: "block text-sm font-medium leading-6 text-gray-900"
-              ) { I18n.t("time_material.product.lbl")  }
+              ) { t("time_material.product.lbl")  }
               div(class: "mt-2") do
                 div(
                   class:
@@ -171,7 +171,7 @@ class TimeMaterialForm < ApplicationComponent
                     value: @time_material.product_name,
                     class:
                       "block flex-1 border-0 bg-transparent py-1.5 pl-2 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6",
-                    placeholder: I18n.t("time_material.product.placeholder")
+                    placeholder: t("time_material.product.placeholder")
                   )
                 end
               end
@@ -181,7 +181,7 @@ class TimeMaterialForm < ApplicationComponent
               label(
                 for: "comment",
                 class: "block text-sm font-medium leading-6 text-gray-900"
-              ) { I18n.t("time_material.comment.lbl")  }
+              ) { t("time_material.comment.lbl")  }
               div(class: "mt-2") do
                 div(
                   class:
@@ -194,7 +194,7 @@ class TimeMaterialForm < ApplicationComponent
                     autofocus: true,
                     class:
                       "block w-full rounded-md border-0 py-1.5 px-2.5 text-gray-900 shadow-xs ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-sky-600 sm:text-sm sm:leading-6",
-                    placeholder: I18n.t("time_material.comment.placeholder")
+                    placeholder: t("time_material.comment.placeholder")
                   ) do
                     plain @time_material.comment
                   end
@@ -226,14 +226,14 @@ class TimeMaterialForm < ApplicationComponent
                 end
               end
               #
-              rate_field I18n.t("time_material.rate.unit_price")
+              rate_field t("time_material.rate.unit_price")
               #
               div(class: "col-span-2") do
                 whitespace
                 label(
                   for: "discount",
                   class: "block text-sm font-medium leading-6 text-gray-900"
-                ) { I18n.t("time_material.discount.lbl") }
+                ) { t("time_material.discount.lbl") }
                 div(class: "mt-2") do
                   div(
                     class:
@@ -246,7 +246,7 @@ class TimeMaterialForm < ApplicationComponent
                       value: @time_material.discount,
                       class:
                         "block flex-1 border-0 bg-transparent py-1.5 pl-2 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6",
-                      placeholder: I18n.t("time_material.discount.placeholder")
+                      placeholder: t("time_material.discount.placeholder")
                     )
                   end
                 end
@@ -264,7 +264,7 @@ class TimeMaterialForm < ApplicationComponent
       label(
         for: "time_material_about",
         class: "block text-sm font-medium leading-6 text-gray-900"
-      ) { I18n.t("time_material.about.lbl") }
+      ) { t("time_material.about.lbl") }
       div(class: "mt-2") do
         whitespace
         textarea(
@@ -274,20 +274,20 @@ class TimeMaterialForm < ApplicationComponent
           autofocus: true,
           class:
             "block w-full rounded-md border-0 py-1.5 px-2.5 text-gray-900 shadow-xs ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-sky-600 sm:text-sm sm:leading-6",
-          placeholder: I18n.t("time_material.about.placeholder")
+          placeholder: t("time_material.about.placeholder")
         ) do
           plain @time_material.about
         end
       end
       p(class: "mt-3 text-sm leading-6 text-gray-600") do
-        I18n.t("time_material.about.help")
+        t("time_material.about.help")
       end
     end
   end
 
   def customer_field
     div(class: "mt-4 col-span-4") do
-      label(for: "time_material_customer", class: "block text-sm font-medium leading-6 text-gray-900") { I18n.t("time_material.customer.lbl") }
+      label(for: "time_material_customer", class: "block text-sm font-medium leading-6 text-gray-900") { t("time_material.customer.lbl") }
       div(class: "mt-2") do
         div(class: "flex rounded-md shadow-xs ring-1 ring-inset ring-gray-300 focus-within:ring-1 focus-within:ring-inset focus-within:ring-sky-600 sm:max-w-md") do
           input(
@@ -297,7 +297,7 @@ class TimeMaterialForm < ApplicationComponent
             value: @time_material.customer_name,
             class:
               "block flex-1 border-0 bg-transparent py-1.5 pl-2 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6",
-            placeholder: I18n.t("time_material.customer.placeholder")
+            placeholder: t("time_material.customer.placeholder")
           )
         end
       end
@@ -306,7 +306,7 @@ class TimeMaterialForm < ApplicationComponent
 
   def project_field
     div(class: "mt-4 col-span-4") do
-      label(for: "time_material_project", class: "block text-sm font-medium leading-6 text-gray-900") { I18n.t("time_material.project.lbl") }
+      label(for: "time_material_project", class: "block text-sm font-medium leading-6 text-gray-900") { t("time_material.project.lbl") }
       div(class: "mt-2") do
         div(class: "flex rounded-md shadow-xs ring-1 ring-inset ring-gray-300 focus-within:ring-1 focus-within:ring-inset focus-within:ring-sky-600 sm:max-w-md") do
           input(
@@ -316,7 +316,7 @@ class TimeMaterialForm < ApplicationComponent
             value: @time_material.project_name,
             class:
               "block flex-1 border-0 bg-transparent py-1.5 pl-2 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6",
-            placeholder: I18n.t("time_material.project.placeholder")
+            placeholder: t("time_material.project.placeholder")
           )
         end
       end
@@ -349,7 +349,7 @@ class TimeMaterialForm < ApplicationComponent
     div(class: "border-b border-gray-900/10 pb-12") do
       div(class: "mt-2 space-y-4") do
         fieldset do
-          legend(class: "text-sm font-semibold leading-6 text-gray-900") { I18n.t("time_material.invoicing.lead") }
+          legend(class: "text-sm font-semibold leading-6 text-gray-900") { t("time_material.invoicing.lead") }
           div(class: "mt-6 space-y-3") do
             div(class: "relative flex gap-x-3") do
               div(class: "flex h-6 items-center") do
@@ -362,8 +362,8 @@ class TimeMaterialForm < ApplicationComponent
                 )
               end
               div(class: "text-sm leading-6") do
-                label(for: "time_material_is_invoice", class: "font-medium text-gray-900") { I18n.t("time_material.invoicing.invoice.lbl") }
-                p(class: "text-gray-500") { I18n.t("time_material.invoicing.invoice.help") }
+                label(for: "time_material_is_invoice", class: "font-medium text-gray-900") { t("time_material.invoicing.invoice.lbl") }
+                p(class: "text-gray-500") { t("time_material.invoicing.invoice.help") }
               end
             end
             div(class: "relative flex gap-x-3") do
@@ -377,8 +377,8 @@ class TimeMaterialForm < ApplicationComponent
                 )
               end
               div(class: "text-sm leading-6") do
-                label(for: "time_material_is_free", class: "font-medium text-gray-900") { I18n.t("time_material.invoicing.free.lbl") }
-                p(class: "text-gray-500") { I18n.t("time_material.invoicing.free.help") }
+                label(for: "time_material_is_free", class: "font-medium text-gray-900") { t("time_material.invoicing.free.lbl") }
+                p(class: "text-gray-500") { t("time_material.invoicing.free.help") }
               end
             end
             div(class: "relative flex gap-x-3") do
@@ -392,14 +392,14 @@ class TimeMaterialForm < ApplicationComponent
                 )
               end
               div(class: "text-sm leading-6") do
-                label(for: "time_material_is_offer", class: "font-medium text-gray-900") { I18n.t("time_material.invoicing.offer.lbl") }
-                p(class: "text-gray-500") { I18n.t("time_material.invoicing.offer.help") }
+                label(for: "time_material_is_offer", class: "font-medium text-gray-900") { t("time_material.invoicing.offer.lbl") }
+                p(class: "text-gray-500") { t("time_material.invoicing.offer.help") }
               end
             end
           end
         end
         fieldset do
-          legend(class: "text-sm font-semibold leading-6 text-gray-900") { I18n.t("time_material.invoicing.batch.lbl") }
+          legend(class: "text-sm font-semibold leading-6 text-gray-900") { t("time_material.invoicing.batch.lbl") }
           div(class: "mt-6 space-y-6") do
             div(class: "relative flex gap-x-3") do
               div(class: "flex h-6 items-center") do
@@ -412,8 +412,8 @@ class TimeMaterialForm < ApplicationComponent
                 )
               end
               div(class: "text-sm leading-6") do
-                label(for: "time_material_is_separate", class: "font-medium text-gray-900") { I18n.t("time_material.invoicing.separate.lbl") }
-                p(class: "text-gray-500") { I18n.t("time_material.invoicing.separate.help") }
+                label(for: "time_material_is_separate", class: "font-medium text-gray-900") { t("time_material.invoicing.separate.lbl") }
+                p(class: "text-gray-500") { t("time_material.invoicing.separate.help") }
               end
             end
           end
@@ -425,7 +425,7 @@ class TimeMaterialForm < ApplicationComponent
   def error_messages
     if @time_material.errors.any?
       div(id: "error_explanation", class: "mt-4 p-4 sm: p-1") do
-        h2(class: "mort-err-resume") { I18n.t(:form_errors_prohibited, errors: @time_material.errors.count) }
+        h2(class: "mort-err-resume") { t(:form_errors_prohibited, errors: @time_material.errors.count) }
         ul do
           @time_material.errors.each do |error|
             li { error.full_message }
@@ -437,7 +437,7 @@ class TimeMaterialForm < ApplicationComponent
 
   def date_field
     div(class: "mt-2 sm:col-span-4") do
-      label(for: "date", class: "block text-sm font-medium leading-6 text-gray-900") { I18n.t("time_material.date.lbl") }
+      label(for: "date", class: "block text-sm font-medium leading-6 text-gray-900") { t("time_material.date.lbl") }
       div(class: "mt-2") do
         div(
           class:

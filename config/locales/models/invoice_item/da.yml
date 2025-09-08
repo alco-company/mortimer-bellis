@@ -1,6 +1,13 @@
 da:
   invoice_items:
     validation_errors: Der er fejl i det indtastede
+    list:
+      title: Faktura linjer
+      new: Ny fakturalinje
+      edit: Rediger
+      delete: Slet
+      show: Vis
+      updated_at: Opdateret den
 
     
     create:
@@ -10,8 +17,6 @@ da:
     destroy:
       post: Fakturalinjen blev slettet
 
-    list:
-      new: Ny fakturalinje
     form:
       new: Ny fakturalinje
       edit: Rediger fakturalinje
