@@ -2,8 +2,13 @@
 
 ## CHANGELOG
 
+## 08/09/2025
+
+- restore strict
+
 ## 05/09/2025
 
+- problem with initial index view for new user
 - work on backup/restore II
 
 ## 28/8/2025

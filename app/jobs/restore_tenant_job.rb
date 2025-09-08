@@ -422,8 +422,14 @@ class RestoreTenantJob < ApplicationJob
             raise "#{table} model not found when preparing to restore data records" unless klass
             restorable_records[table].each do |attrs|
               puts "Restoring record for #{table} with attrs: #{attrs.inspect}"
-              record = klass.new attrs
-              summary, record = klass.restore(summary, extracted_root, record, remapped_ids)
+              if setting(:strict) || (!setting(:purge) && !setting(:remap))
+                record = klass.find_by(id: attrs["id"]) || raise("Record not found - cannot restore :strict!")
+                record.update(attrs) unless setting(:dry_run)
+                remapped_ids[record.class.table_name]["id"][record.id.to_s] = record.id.to_s
+              else
+                record = klass.new attrs
+                summary, record = klass.restore(summary, extracted_root, record, remapped_ids)
+              end
               # summary, record = remap_record(summary, record, file_ids, remapped_ids, false) if setting(:allow_remap) && !setting(:strict)
               if klass && !setting(:dry_run)
                 # record.save!(validate: false)
