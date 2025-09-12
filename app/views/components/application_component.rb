@@ -61,7 +61,7 @@ class ApplicationComponent < Phlex::HTML
 
   def show_resource_link(resource:, url: nil, turbo_frame: "form", turbo_action: "advance")
     return "" unless resource
-    link_to((url || url_for(resource)),
+    link_to((url || build_url_for(resource)),
       class: "inline grow flex-nowrap truncate",
       role: "menuitem",
       data: { turbo_action: turbo_action, turbo_frame: turbo_frame },
@@ -86,36 +86,36 @@ class ApplicationComponent < Phlex::HTML
 
 
   def new_resource_url(**options)
-    url_for(controller: params_ctrl, action: :new, **options)
+    build_url_for(controller: params_ctrl, action: :new, **options)
   end
 
   def resource_url(**options)
-    url_for(controller: params_ctrl, action: :show, id: @resource.id, **options)
+    build_url_for(controller: params_ctrl, action: :show, id: @resource.id, **options)
   end
 
   def copy_resource_url(**options)
     options[:id] = @resource.try(:id) || options.delete(:id)
-    url_for(controller: params_ctrl, action: :copy, **options)
+    build_url_for(controller: params_ctrl, action: :copy, **options)
   rescue
   end
 
   def edit_resource_url(**options)
     options[:id] = @resource.try(:id) || options.delete(:id)
-    url_for(controller: params_ctrl, action: :edit, **options)
+    build_url_for(controller: params_ctrl, action: :edit, **options)
   rescue
   end
 
   def delete_resource_url(resource)
-    url_for(resource)
+    build_url_for(resource)
   end
 
   def resources_url(**options)
     options[:search] = params_search
-    url_for(controller: params_ctrl, action: :index, **options)
+    build_url_for(controller: params_ctrl, action: :index, **options)
   rescue ActionController::UrlGenerationError, NoMethodError => e
     Rails.logger.debug("resources_url fallback for #{params_ctrl}: #{e.message}")
     begin
-      url_for(controller: params_ctrl.gsub(/\/.*$/, ""), action: :index)
+      build_url_for(controller: params_ctrl.gsub(/\/.*$/, ""), action: :index)
     rescue
       "/" # final safe fallback
     end
@@ -168,5 +168,15 @@ class ApplicationComponent < Phlex::HTML
 
   def unsafe_raw(msg)
     raw(msg.html_safe) if msg
+  end
+
+  def build_url_for resource = nil, controller: nil, action: nil, id: nil, **options
+    if resource
+      Rails.application.routes.url_for(resource)
+    else
+      controller ||= resource_class.to_s.underscore.pluralize
+      action ||= :index
+      Rails.application.routes.url_for({ controller: controller, action: action, id: id, only_path: false }.merge(options))
+    end
   end
 end

@@ -326,7 +326,7 @@ class Contextmenu < ApplicationComponent
           plain " "
           plain resource.name rescue ""
         end
-      end
+      end if url.present?
     end
 
     def link2target(url:, label:, target: nil, data: { turbo_stream: true }, icon: nil, css: "flex justify-between px-4 py-2 text-sm text-gray-700 hover:text-gray-900")

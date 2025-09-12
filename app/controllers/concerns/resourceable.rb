@@ -83,21 +83,27 @@ module Resourceable
     end
 
     def new_resource_url
-      url_for(controller: params_ctrl, action: :new)
+      build_url_for(controller: params_ctrl, action: :new)
     end
 
     def resource_url(**options)
-      url_for(controller: params_ctrl, action: :show, id: @resource.id, **options)
+      build_url_for(controller: params_ctrl, action: :show, id: @resource.id, **options)
+    end
+
+    def copy_resource_url(**options)
+      options[:id] = @resource.try(:id) || options.delete(:id)
+      build_url_for(controller: params_ctrl, action: :copy, **options)
+    rescue
     end
 
     def edit_resource_url(**options)
       options[:id] = @resource.try(:id) || options.delete(:id)
-      url_for(controller: params_ctrl, action: :edit, **options)
+      build_url_for(controller: params_ctrl, action: :edit, **options)
     rescue
     end
 
     def delete_resource_url(resource)
-      url_for(resource)
+      build_url_for(resource)
     end
 
     #
@@ -106,7 +112,7 @@ module Resourceable
     #
     def resources_url(**options)
       options[:search] = params.dig(:search) if params.dig(:search).present?
-      url_for(controller: params_ctrl, action: :index, **options)
+      build_url_for(controller: params_ctrl, action: :index, **options)
     rescue => e
       Rails.logger.error("Error generating resources_url: #{e.message}")
       root_url
@@ -119,11 +125,11 @@ module Resourceable
     end
 
     def delete_all_url
-      url_for(controller: params_ctrl, id: 1, action: :show, all: true)
+      build_url_for(controller: params_ctrl, id: 1, action: :show, all: true)
     end
 
     def pos_delete_all_url(date: nil)
-      url_for(controller: params_ctrl, id: 1, action: :show, all: true, date: date, api_key: @resource.access_token)
+      build_url_for(controller: params_ctrl, id: 1, action: :show, all: true, date: date, api_key: @resource.access_token)
     end
 
     def find_resource
@@ -145,6 +151,12 @@ module Resourceable
     # def rc_params
     #   params.permit! # (:id, :s, :d, :page, :format, :_method, :commit, :authenticity_token, :controller)
     # end
+
+    def build_url_for controller: nil, action: nil, id: nil, **options
+      controller ||= resource_class.to_s.underscore.pluralize
+      action ||= :index
+      Rails.application.routes.url_for({ controller: controller, action: action, id: id, only_path: false }.merge(options))
+    end
 
     def params_ctrl
       params.dig :controller
