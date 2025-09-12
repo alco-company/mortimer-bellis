@@ -2,6 +2,15 @@
 
 ## CHANGELOG
 
+
+- settings to decide updating time/minut with player time
+- on resume start player time from now - not last paused_at
+- show simple stats on dashboard - total invoiceable/invoiced
+
+## 12/09/2025
+
+- allow user to copy time_material record from more/context_menu
+
 ## 08/09/2025
 
 - deploy to app2

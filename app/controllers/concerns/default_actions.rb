@@ -94,6 +94,12 @@ module DefaultActions
       redirect_to root_path, alert: I18n.t("errors.messages.something_went_wrong", error: e.message)
     end
 
+    def copy
+      posthog_capture
+      attribs = resource.attributes.except("id", "created_at", "updated_at")
+      @resource = resource_class.new(attribs)
+    end
+
     # GET /users/1/edit
     # renders default views/:models/edit.html.erb or views/application/edit.html.erb
     # which renders a views/:models/form.rb

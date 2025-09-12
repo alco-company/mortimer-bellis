@@ -105,10 +105,16 @@ Rails.application.routes.draw do
     end
   end
 
+  concern :copyable do
+    member do
+      get "copy"
+    end
+  end
+
   resources :calls
   resources :tasks
 
-  resources :time_materials do
+  resources :time_materials, concerns: [ :copyable ] do
     member do
       post :archive
     end

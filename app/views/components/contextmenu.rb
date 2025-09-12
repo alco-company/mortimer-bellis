@@ -204,6 +204,11 @@ class Contextmenu < ApplicationComponent
         data: { turbo_action: "advance", turbo_frame: @turbo_frame },
         icon: "edit",
         label: t(".edit")) unless (resource_class.to_s == "TimeMaterial" && resource.pushed_to_erp?) || resource.respond_to?(:archived?) && resource.archived?
+      # copy resource
+      link2(url: copy_resource_url(id: resource.id),
+        data: { turbo_action: "advance", turbo_frame: @turbo_frame },
+        icon: "copy",
+        label: t(".copy")) if resource_class.to_s == "TimeMaterial"
       # delete resource
       link2(url: erp_pull_link,
         data: { turbo_prefetch: "false" },

@@ -93,6 +93,12 @@ class ApplicationComponent < Phlex::HTML
     url_for(controller: params_ctrl, action: :show, id: @resource.id, **options)
   end
 
+  def copy_resource_url(**options)
+    options[:id] = @resource.try(:id) || options.delete(:id)
+    url_for(controller: params_ctrl, action: :copy, **options)
+  rescue
+  end
+
   def edit_resource_url(**options)
     options[:id] = @resource.try(:id) || options.delete(:id)
     url_for(controller: params_ctrl, action: :edit, **options)
