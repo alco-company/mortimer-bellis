@@ -9,6 +9,7 @@
 ## 15/09/2025
 
 - settings to decide updating time/minut with player time
+- set database back to production
 
 ## 12/09/2025
 

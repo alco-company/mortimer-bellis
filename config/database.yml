@@ -42,20 +42,20 @@ test:
 production:
   writer:
     <<: *default
-    database: storage/production_app2.sqlite3
+    database: storage/production.sqlite3
   reader:
     <<: *default
-    database: storage/production_app2.sqlite3
+    database: storage/production.sqlite3
   cache:
     <<: *default
-    database: storage/production_cache_app2.sqlite3
+    database: storage/production_cache.sqlite3
     migrations_paths: db/cache_migrate
   queue:
     <<: *default
-    database: storage/production_queue_app2.sqlite3
+    database: storage/production_queue.sqlite3
     migrations_paths: db/queue_migrate
   cable:
     <<: *default
-    database: storage/production_cable_app2.sqlite3
+    database: storage/production_cable.sqlite3
     migrations_paths: db/cable_migrate
     
