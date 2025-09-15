@@ -70,6 +70,8 @@ da:
       show_all_time_material_posts: Vis alle brugeres t/m poster
       run_background_jobs: Kør baggrundsopgaver
       run: Kør baggrundsopgaver
+      show_stop_button: Vis stop knap
+      fill_play_time_in_time_fields: Fyld anvendt tid i tid felter
 
     descriptions:
       session_timeout: Varigheden beregnes, hvorfor det er vigtigt at angive en gyldig varighed, f.eks. '7.days' eller '1.hour'. Dette vil bestemme, hvor længe en session forbliver aktiv, før brugeren skal logge ind igen.
@@ -93,6 +95,8 @@ da:
       show_all_time_material_posts: Vis alle brugeres t/m poster i oversigten, ikke kun egne
       run_background_jobs: Kør baggrundsopgaver i baggrunden, hvis aktiveret
       run: Kør baggrundsopgaver, hvis aktiveret
+      show_stop_button: Stop knappen stopper tiden, og åbner registreringen for færdigredigering og afslutning
+      fill_play_time_in_time_fields: Den anvendte tid fyldes automatisk i time og minutter felterne på registreringen
 
     tables:
       background_jobs: Baggrundsopgaver

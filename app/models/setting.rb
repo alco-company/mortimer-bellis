@@ -108,7 +108,9 @@ class Setting < ApplicationRecord
       "pull_invoices" => "boolean",
       "pull_provided_services" => "boolean",
       "validate_time_material_done" => "boolean",
-      "show_all_time_material_posts" => "boolean"
+      "show_all_time_material_posts" => "boolean",
+      "show_stop_button" => "boolean",
+      "fill_play_time_in_time_fields" => "boolean"
     }
   end
 
@@ -186,7 +188,9 @@ class Setting < ApplicationRecord
       [ "pull_invoices", I18n.t("settings.keys.pull_invoices") ],
       [ "pull_provided_services", I18n.t("settings.keys.pull_provided_services") ],
       [ "validate_time_material_done", I18n.t("settings.keys.validate_time_material_done") ],
-      [ "show_all_time_material_posts", I18n.t("settings.keys.show_all_time_material_posts") ]
+      [ "show_all_time_material_posts", I18n.t("settings.keys.show_all_time_material_posts") ],
+      [ "show_stop_button", I18n.t("settings.keys.show_stop_button") ],
+      [ "fill_play_time_in_time_fields", I18n.t("settings.keys.fill_play_time_in_time_fields") ]
     ]
   end
 
@@ -333,7 +337,9 @@ class Setting < ApplicationRecord
       "add_comments_on_time_material" => { "type" => "boolean", "value" => "true" },
       "see_material_tab" => { "type" => "boolean", "value" => "true" },
       "validate_time_material_done" => { "type" => "boolean", "value" => "true" },
-      "show_all_time_material_posts" => { "type" => "boolean", "value" => "true" }
+      "show_all_time_material_posts" => { "type" => "boolean", "value" => "true" },
+      "show_stop_button" => { "type" => "boolean", "value" => "false" },
+      "fill_play_time_in_time_fields" => { "type" => "boolean", "value" => "false" }
     }
 
   # Helpers

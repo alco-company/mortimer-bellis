@@ -2,9 +2,13 @@
 
 ## CHANGELOG
 
-- settings to decide updating time/minut with player time
+
 - on resume start player time from now - not last paused_at
 - show simple stats on dashboard - total invoiceable/invoiced
+
+## 15/09/2025
+
+- settings to decide updating time/minut with player time
 
 ## 12/09/2025
 
