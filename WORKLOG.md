@@ -3,8 +3,12 @@
 ## CHANGELOG
 
 
-- on resume start player time from now - not last paused_at
 - show simple stats on dashboard - total invoiceable/invoiced
+- on resume start player time from now - not last paused_at
+
+## 17/09/2025
+
+- watch out for associationId on lookup fields
 
 ## 15/09/2025
 
