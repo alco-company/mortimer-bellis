@@ -22,11 +22,11 @@ class TimeMaterialsController < MortimerController
   end
 
   def edit
-    preprocess_time_for_edit
     resource.customer_name =  resource.customer&.name || resource.customer_name  # unless resource.customer_id.blank?
     resource.project_name =   resource.project&.name  || resource.project_name   # unless resource.project_id.blank?
     resource.product_name =   resource.product&.name  || resource.product_name   # unless resource.product_id.blank?
     super
+    preprocess_time
   end
 
   # pick up the play button from the time_material#index view
@@ -79,7 +79,6 @@ class TimeMaterialsController < MortimerController
     end
 
     def before_create_callback
-      preprocess_time
       r = resource.prepare_tm resource_params
       return false if r == false
       resource_params(r)
@@ -92,12 +91,12 @@ class TimeMaterialsController < MortimerController
       resource.save
     end
 
-    def create_callback
-      postprocess_time
-    end
+    # def create_callback
+    #   # postprocess_time
+    #   true
+    # end
 
     def before_update_callback
-      preprocess_time
       r = resource.prepare_tm resource_params
       return false if r == false
       resource_params(r)
@@ -106,6 +105,7 @@ class TimeMaterialsController < MortimerController
 
     def update_callback
       postprocess_time
+      true
     end
 
     # called before showing the edit form
@@ -115,23 +115,22 @@ class TimeMaterialsController < MortimerController
     # or after hitting the 'stop' button
     #
     def preprocess_time
-      set_play_time
+      set_time
       resource_params[:hour_time] = resource.hour_time
       resource_params[:minute_time] = resource.minute_time
-      ht, mt = resource.time.split(":")
-      resource_params[:registered_minutes] = ht.to_i * 60 + mt.to_i
-      resource_params[:started_at] = resource.started_at
-      resource_params[:time_spent] = resource.time_spent
+      # ht, mt = resource.time.split(":")
+      # resource_params[:registered_minutes] = ht.to_i * 60 + mt.to_i
+      # resource_params[:started_at] = resource.started_at
+      # resource_params[:time_spent] = resource.time_spent
     end
 
     # called after create or update of a time_material
     # hour_time, minute_time, registered_minutes, started_at, time_spent should be set straight
     #
     def postprocess_time
-      set_play_time
-      # resource.registered_minutes =
-      # resource.started_at =
-      # resource.time_spent =
+      ht, mt = resource.time.split(":").map(&:to_i).each_with_index { |v, i| i==0 ? v : v.clamp(0, 59) }
+      resource.registered_minutes = ht * 60 + mt
+      resource.minutes_reloaded_at = Time.current
       resource.save
     end
 
@@ -141,10 +140,10 @@ class TimeMaterialsController < MortimerController
     # if stopped or done, keep time_spent as is
     def reload_time_spent
       if resource.active?
-        rsa = resource.started_at || Time.current
-        time_spent = (Time.current.to_i - rsa.to_i)
-        resource.hour_time, resource.minute_time = ((resource.registered_minutes || 0) + (time_spent / 60)).divmod(60)
-        resource.update time_spent: time_spent, time: resource.time, paused_at: nil, started_at: rsa
+        seconds = (resource.elapsed_seconds_now).round
+        minutes = (seconds / 60.0).round + (resource.registered_minutes || 0)
+        resource.hour_time, resource.minute_time = (minutes).divmod(60)
+        resource.update time_spent: resource.elapsed_seconds_now, registered_minutes: minutes, paused_at: nil, minutes_reloaded_at: Time.current
       end
     end
 
@@ -159,26 +158,10 @@ class TimeMaterialsController < MortimerController
       # resource.minute_time = mt
     end
 
-    def set_time
-      # return true if resource_params[:product_name].present? or resource_params[:product_id].present?
-      # ht = resource_params[:hour_time] || resource.hour_time
-      # mt = resource_params[:minute_time] || resource.minute_time
-      # unless ht.blank? || mt.blank? && !resource.active?
-      #   ht, mt = resource.sanitize_time(ht, mt).split(":")
-      #   rmin = ht.to_i * 60 + mt.to_i
-      #   resource.update registered_minutes: rmin
-      # end
-      # if Current.get_user.should? :fill_play_time_in_time_fields
-      #   resource.update started_at: Time.current - rmin.minutes
-      #   resource.update time_spent: rmin * 60
-      # end
-      true
-    end
-
     def create_play
       return unless params[:play].present?
 
-      ht, mt = resource.sanitize_time("0", "0").split(":")
+      # ht, mt = resource.sanitize_time("0", "0").split(":")
 
       params[:time_material] = {
         time: "0",
@@ -186,10 +169,11 @@ class TimeMaterialsController < MortimerController
         user_id: Current.user.id,
         started_at: Time.current,
         paused_at: nil,
-        time_spent: mt.to_i * 60,
-        hour_time: ht,
-        minute_time: mt,
+        time_spent: 0,
+        hour_time: 0,
+        minute_time: 0,
         hour_rate: get_hourly_rate,
+        registered_minutes: 0,
         date: get_default_time_material_date,
         about: Current.user.default(:default_time_material_about, "")
       }
@@ -268,24 +252,37 @@ class TimeMaterialsController < MortimerController
     def stop
       @_action_name = "edit"
 
-      # Compute total minutes BEFORE resetting the running segment
-      elapsed_minutes = resource.started_at ? (resource.elapsed_seconds_now / 60.0).round : 0
-      total_minutes   = (resource.registered_minutes || 0) + elapsed_minutes
-
       resource.pause_time_spent(true) && flash.now[:success] = t("time_material.stopped")
+      set_time
 
       Broadcasters::Resource.new(resource, params).replace
-
-      if Current.get_user.should? :fill_play_time_in_time_fields
-        ht, mt = total_minutes.divmod(60)
-        resource.hour_time = ht
-        resource.minute_time = mt
-      end
 
       respond_to do |format|
         format.html { stream_it_all }
         format.turbo_stream { stream_it_all }
       end
+    end
+
+    def set_time
+      total_minutes = (resource.registered_minutes || 0)
+      ht, mt = total_minutes.divmod(60)
+      if Current.user.should?(:limit_time_to_quarters)
+        mt = case mt
+        when 0; ht==0 ? 15 : 0
+        when 1..15; 15
+        when 16..30; 30
+        when 31..45; 45
+        else; ht += 1; 0
+        end
+      end
+
+      if Current.get_user.should? :fill_play_time_in_time_fields
+        resource.hour_time = ht
+        resource.minute_time = mt
+        resource.registered_minutes = ht * 60 + mt
+        resource.minutes_reloaded_at = Time.current
+      end
+      resource.save
     end
 
     def stream_it_all

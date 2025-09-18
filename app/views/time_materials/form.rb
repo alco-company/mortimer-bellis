@@ -249,7 +249,8 @@ class TimeMaterials::Form < ApplicationForm
           label(for: "time_material_about", class: "block text-sm font-medium leading-6 text-gray-900") { I18n.t("time_material.about.lbl") }
           if resource.active? or resource.paused?
             color = resource.paused? ? "text-gray-500" : "text-lime-500"
-            counter = resource.time_spent # resource.paused? ? resource.time_spent : (Time.current.to_i - resource.started_at.to_i) +
+            seconds = resource.minutes_reloaded_at.nil? ? (Time.current.to_i - resource.started_at.to_i) : (Time.current.to_i - resource.minutes_reloaded_at.to_i)
+            counter = (resource.registered_minutes || 0) * 60 + seconds
             _days, hours, minutes, seconds = resource.calc_hrs_minutes counter
             timestring = "%02d:%02d:%02d" % [ hours, minutes, seconds ]
             div(class: "float-right") do

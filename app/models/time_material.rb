@@ -73,8 +73,9 @@ class TimeMaterial < ApplicationRecord
   include TimeMaterialStateable
   include Settingable
   include Unitable
+  include Timing
 
-  attr_accessor :hour_time, :minute_time, :calculated_unit_price
+  attr_accessor :calculated_unit_price
 
   belongs_to :customer, optional: true
   belongs_to :project, optional: true
@@ -130,20 +131,20 @@ class TimeMaterial < ApplicationRecord
   end
 
   def initialize_new(hr = 0, dd = "")
-    self.customer_name      = TimeMaterial.by_exact_user(Current.get_user).last&.customer_name
-    self.state              = Current.get_user.default(:default_time_material_state, "draft")
-    self.about              = Current.get_user.default(:default_time_material_about, "")
-    self.hour_time          = Current.get_user.default(:default_time_material_hour_time, "")
-    self.minute_time        = Current.get_user.default(:default_time_material_minute_time, "")
-    self.rate               = hr
-    # resource.over_time =     Current.user.default(:default_time_material_over_time, 0)
-    self.date               = dd
-    self.user_id            = Current.get_user.id
-    self.started_at         = Time.current
-    self.registered_minutes = 0
-    self.time_spent         = 0
+    self.customer_name       = TimeMaterial.by_exact_user(Current.get_user).last&.customer_name
+    self.state               = Current.get_user.default(:default_time_material_state, "draft")
+    self.about               = Current.get_user.default(:default_time_material_about, "")
+    self.hour_time           = Current.get_user.default(:default_time_material_hour_time, "")
+    self.minute_time         = Current.get_user.default(:default_time_material_minute_time, "")
+    self.rate                = hr
+    # resource.over_time =      Current.user.default(:default_time_material_over_time, 0)
+    self.date                = dd
+    self.user_id             = Current.get_user.id
+    self.started_at          = Time.current
+    self.minutes_reloaded_at = Time.current
+    self.registered_minutes  = 0
+    self.time_spent          = 0
   end
-
 
   # def self.filtered(filter)
   #   flt = filter.collect_filters self
@@ -295,38 +296,6 @@ class TimeMaterial < ApplicationRecord
     ""
   end
 
-  def hour_time
-    return "" if self.time.blank?
-    return self.time.split(":")[0] if self.time.include?(":")
-    return self.time.split(",")[0] if self.time.include?(",")
-    return self.time.split(".")[0] if self.time.include?(".")
-    time
-  end
-
-  def hour_time=(val)
-    return if val.blank?
-    self.time = "#{val}:00" if self.time.blank?
-    self.time = "%s:%s" % [ val, self.time.split(":")[1] ] if self.time.include?(":")
-    self.time = "%s:%s" % [ val, self.time.split(",")[1] ] if self.time.include?(",")
-    self.time = "%s:%s" % [ val, self.time.split(".")[1] ] if self.time.include?(".")
-  end
-
-  def minute_time
-    return "" if self.time.blank?
-    return self.time.split(":")[1] if self.time.include?(":")
-    return self.time.split(",")[1] if self.time.include?(",")
-    return self.time.split(".")[1] if self.time.include?(".")
-    time
-  end
-
-  def minute_time=(val)
-    return if val.blank?
-    self.time = "00:#{val}" if self.time.blank?
-    self.time = "%s:%s" % [ self.time.split(":")[0], val ] if self.time.include?(":")
-    self.time = "%s:%s" % [ self.time.split(",")[0], val ] if self.time.include?(",")
-    self.time = "%s:%s" % [ self.time.split(".")[0], val ] if self.time.include?(".")
-  end
-
   def has_mugshot?
     false
   end
@@ -362,92 +331,6 @@ class TimeMaterial < ApplicationRecord
       [ "pickup", I18n.t("time_material.trip_purposes.pickup") ]
     ]
   end
-
-  def calc_hrs_minutes(t)
-      days, hours = t.to_i.divmod 86400
-      hours, minutes = hours.divmod 3600
-      minutes, seconds = minutes.divmod 60
-      [ days, hours, minutes, seconds ]
-  end
-
-  #
-  # return time as a decimal number
-  # eg 1:30 => 1.5
-  #
-  def calc_time_to_decimal(t = nil)
-    t ||= time
-    return 0.25 if t.blank?
-    return t if t.is_a?(Numeric)
-    t = if t.include?(":")
-      h, m = t.split(":")
-      m = (m.to_i*100.0/60.0).to_f.round
-      "%s.%i" % [ h, m ]
-    else
-      t = t.split(",") if t.include?(",")
-      t = t.split(".") if t.include?(".")
-      if t.is_a? Array
-        "%s.%i" % [ t[0], t[1] ]
-      else
-        t
-      end
-    end
-  end
-
-  # first make sure time is a number -
-  # ie if it's a string with 1.25 or 1,25 or 1:25 reformat it
-  # then calculate the hours and minutes from the time integer
-  # if the resource should be limited to quarters, then round up the minutes to the nearest quarter
-  # finally return the hours and minutes as a string with a colon
-  #
-  def sanitize_time(ht, mt)
-    ptime = set_ptime ht, mt
-    # return "" if ptime.blank? or ptime.gsub(/[,.:]/, "").to_i == 0
-    t = ptime.split(":")
-    minutes = t[0].to_i*60 + t[1].to_i
-    # minutes = case true
-    # when ptime.to_s.include?(":"); t = ptime.split(":"); t[1]=t[1].to_i*10 if t[1].size==1; t[0].to_i*60 + t[1].to_i
-    #   # when ptime.to_s.include?(":"); t = ptime.split(":"); t[1]=t[1].to_i*10 if t[1].size==1; t[0].to_i*60 + t[1].to_i
-    #   # when ptime.to_s.include?(","); t = ptime.split(","); t[1]=t[1].to_i*10 if t[1].size==1; t[0].to_i*60 + t[1].to_i*60/100
-    #   # when ptime.to_s.include?("."); t = ptime.split("."); t[1]=t[1].to_i*10 if t[1].size==1; t[0].to_i*60 + t[1].to_i*60/100
-    #   # else ptime.to_i * 60
-    # end
-    hours, minutes = minutes.divmod 60
-    if Current.user.should?(:limit_time_to_quarters) # && !ptime.include?(":")
-      minutes = case minutes
-      when 0; 0
-      when 1..15; 15
-      when 16..30; 30
-      when 31..45; 45
-      else hours += 1; 0
-      end
-    end
-    "%02d:%02d" % [ hours.to_i, minutes.to_i ] rescue "00:00"
-  end
-
-  def set_ptime(ht, mt)
-    self.hour_time=ht
-    self.minute_time=mt
-    self.time
-  end
-
-  # def split_time(time, minutes)
-  #   if minutes
-  #     d, h, m, _s = calc_hrs_minutes(time)
-  #     time = d * 24 * 60 + h * 60 + m
-  #     time = time.divmod 60
-  #   else
-  #     time = case true
-  #     when resource_params[:time].present? && resource_params[:time].include?(","); resource_params[:time].split(",")
-  #     when resource_params[:time].present? && resource_params[:time].include?("."); resource_params[:time].split(".")
-  #     else [ time, "0" ]
-  #     end
-  #     time[0] = time[0].blank? ? "0" : time[0].to_s
-  #     time[1] = (time[1].to_i*60.0/100.0).to_i if time.is_a? Array
-  #   end
-  #   time
-  # rescue
-  #   time
-  # end
 
   #
   # make sure this record is good for pushing to the ERP
@@ -550,45 +433,5 @@ class TimeMaterial < ApplicationRecord
       resource_params[:project_id] = project.id
     end
     resource_params
-  end
-
-  # seconds elapsed in current run (nil if not started)
-  def elapsed_seconds_now
-    return 0 unless started_at
-    (Time.current.to_i - started_at.to_i).clamp(0, 24.hours)
-  end
-
-  def add_elapsed_to_registered!(rounding: :round)
-    secs = elapsed_seconds_now
-    mins =
-      case rounding
-      when :ceil  then (secs / 60.0).ceil
-      when :floor then (secs / 60.0).floor
-      else              (secs / 60.0).round
-      end
-    update!(
-      registered_minutes: (registered_minutes || 0) + mins
-    )
-    mins
-  end
-
-  # Pause current timer, roll current elapsed into registered_minutes and reset the running segment.
-  # If stop is true, also mark inactive when possible.
-  def pause_time_spent(stop = false)
-    add_elapsed_to_registered!
-    s = stop ? 3 : 2
-    updates = { state: s, started_at: nil, paused_at: Time.current, time_spent: 0 }
-    update!(updates)
-    if stop
-      # Try to mark inactive/done if you have states
-      # inactive_set = false
-      # inactive_set ||= (respond_to?(:inactive!) && !!inactive!) rescue false
-      # inactive_set ||= (respond_to?(:archived!) && !!archived!) rescue false
-    end
-    true
-  end
-
-  def resume_time_spent
-    update state: 1, started_at: Time.current, paused_at: nil
   end
 end
