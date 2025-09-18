@@ -50,15 +50,22 @@ export default class extends Controller {
     console.log(`loaded: ${e.currentTarget}`);
   }
 
-  toggleActive(e){
+  clickIcon(e){
+    let icon = e.target.closest("SVG").dataset.icon;
+    let url = this.listlabelTarget.dataset.url;
     this.stopTimer()
-    fetch(e.currentTarget.dataset.url, {
+    if (icon == "stop") {
+      url = url.replace(/\?pause\=.*$/, "?pause=stop");
+    }
+    fetch(url, {
       method: "GET",
       headers: {
         "X-CSRF-Token": this.token,
         "Content-Type": "text/vnd.turbo.stream.html",
       },
-    });
+    })
+      .then((r) => r.text())
+      .then((html) => Turbo.renderStreamMessage(html));
     // if (this.interval) {
     //   this.stopTimer();
     //   e.currentTarget.classList.remove("bg-green-200");

@@ -257,12 +257,12 @@ class Setting < ApplicationRecord
   # @return [Hash] A hash containing the general settings for the application.
   #
   def self.general_settings(resource: nil)
-    self.get_settings(DEFAULT_TIME_SETTINGS.merge(
+    self.get_settings({
       "session_timeout" => { "type" => "text", "value" => "7.days" },
       "run" => { "type" => "boolean", "value" => "0", "setable_type" => "BackgroundJob", "setable_id" => nil },
       "import_customers_only" => { "type" => "boolean", "value" => "1" },
-      "sync_with_erp" => { "type" => "boolean", "value" => "1" },
-    ), resource: resource)
+      "sync_with_erp" => { "type" => "boolean", "value" => "1" }
+    }, resource: resource)
   end
 
   def self.time_material_settings(resource: nil)

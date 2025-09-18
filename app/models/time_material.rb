@@ -110,6 +110,7 @@ class TimeMaterial < ApplicationRecord
 
   # validates :about, presence: true
   # validates :about, presence: true, if: [ Proc.new { |c| c.comment.blank? && c.product_name.blank? } ]
+  # validates_with InvoiceItemValidator, on: :incoming_params
 
   before_save :set_wdate
 
@@ -127,6 +128,22 @@ class TimeMaterial < ApplicationRecord
   rescue
     false
   end
+
+  def initialize_new(hr = 0, dd = "")
+    self.customer_name      = TimeMaterial.by_exact_user(Current.get_user).last&.customer_name
+    self.state              = Current.get_user.default(:default_time_material_state, "draft")
+    self.about              = Current.get_user.default(:default_time_material_about, "")
+    self.hour_time          = Current.get_user.default(:default_time_material_hour_time, "")
+    self.minute_time        = Current.get_user.default(:default_time_material_minute_time, "")
+    self.rate               = hr
+    # resource.over_time =     Current.user.default(:default_time_material_over_time, 0)
+    self.date               = dd
+    self.user_id            = Current.get_user.id
+    self.started_at         = Time.current
+    self.registered_minutes = 0
+    self.time_spent         = 0
+  end
+
 
   # def self.filtered(filter)
   #   flt = filter.collect_filters self
@@ -376,10 +393,6 @@ class TimeMaterial < ApplicationRecord
     end
   end
 
-  # def sanitize_time_spent
-  #   split_time(time_spent, true)
-  # end
-
   # first make sure time is a number -
   # ie if it's a string with 1.25 or 1,25 or 1:25 reformat it
   # then calculate the hours and minutes from the time integer
@@ -399,7 +412,7 @@ class TimeMaterial < ApplicationRecord
     #   # else ptime.to_i * 60
     # end
     hours, minutes = minutes.divmod 60
-    if should?(:limit_time_to_quarters) # && !ptime.include?(":")
+    if Current.user.should?(:limit_time_to_quarters) # && !ptime.include?(":")
       minutes = case minutes
       when 0; 0
       when 1..15; 15
@@ -439,8 +452,11 @@ class TimeMaterial < ApplicationRecord
   #
   # make sure this record is good for pushing to the ERP
   #
-  def pushable?
-    entry = InvoiceItemValidator.new(self, user)
+  def pushable?(resource_params)
+    shadow_tm = self.dup
+    permitted = resource_params
+    shadow_tm.assign_attributes(permitted)
+    entry = InvoiceItemValidator.new(shadow_tm, user)
     return true if entry.valid?
     self.project = entry.project if entry.project.present?
     self.errors.add(:base, entry.errors.full_messages.join(", "))
@@ -479,6 +495,7 @@ class TimeMaterial < ApplicationRecord
       resource_params[:rate] = ""
       resource_params[:over_time] = ""
       self.over_time = 0
+      self.time_spent = 0
     end
     if resource_params[:state].present? &&
       resource_params[:state] == "done"
@@ -499,7 +516,7 @@ class TimeMaterial < ApplicationRecord
           resource_params.delete(:played)
           return true
         end
-        unless pushable?
+        unless pushable?(resource_params)
           errors.add(:base, errors.full_messages.join(", "))
           return false
         end
@@ -533,5 +550,45 @@ class TimeMaterial < ApplicationRecord
       resource_params[:project_id] = project.id
     end
     resource_params
+  end
+
+  # seconds elapsed in current run (nil if not started)
+  def elapsed_seconds_now
+    return 0 unless started_at
+    (Time.current.to_i - started_at.to_i).clamp(0, 24.hours)
+  end
+
+  def add_elapsed_to_registered!(rounding: :round)
+    secs = elapsed_seconds_now
+    mins =
+      case rounding
+      when :ceil  then (secs / 60.0).ceil
+      when :floor then (secs / 60.0).floor
+      else              (secs / 60.0).round
+      end
+    update!(
+      registered_minutes: (registered_minutes || 0) + mins
+    )
+    mins
+  end
+
+  # Pause current timer, roll current elapsed into registered_minutes and reset the running segment.
+  # If stop is true, also mark inactive when possible.
+  def pause_time_spent(stop = false)
+    add_elapsed_to_registered!
+    s = stop ? 3 : 2
+    updates = { state: s, started_at: nil, paused_at: Time.current, time_spent: 0 }
+    update!(updates)
+    if stop
+      # Try to mark inactive/done if you have states
+      # inactive_set = false
+      # inactive_set ||= (respond_to?(:inactive!) && !!inactive!) rescue false
+      # inactive_set ||= (respond_to?(:archived!) && !!archived!) rescue false
+    end
+    true
+  end
+
+  def resume_time_spent
+    update state: 1, started_at: Time.current, paused_at: nil
   end
 end

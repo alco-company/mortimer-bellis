@@ -8,6 +8,7 @@
 ## 18/09/2025
 
 - on resume start player time from now - not last paused_at
+- faster can?/should?
 
 ## 17/09/2025
 

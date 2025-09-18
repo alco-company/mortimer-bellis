@@ -5,107 +5,178 @@ module Settingable
     has_many :settings, as: :setable, dependent: :destroy
 
     # do not unless expressively allowed
-    def can?(action, resource: nil)
+    def can?(action, resource: nil, inverse: false)
       key = action.to_s
       tenant = try(:tenant) || Current.tenant
+      all_settings = tenant.settings
 
-      # 1) Self
-      rel = settings
-      return false if rel.for_key(key).denied.exists?
-      return true  if rel.for_key(key).allowed.exists?
+      # true on resource-level
+      result = can_query(key, all_settings.where(setable: resource), inverse) if resource
+      return result if !result.nil?
 
-      # 2) Team
-      if respond_to?(:team) && team
-        rel = team.settings
-        return false if rel.for_key(key).denied.exists?
-        return true  if rel.for_key(key).allowed.exists?
-      end
+      # true on user-level
+      result = can_query(key, all_settings.where(setable: Current.user), inverse)
+      return result if !result.nil?
 
-      # 3) Class-level for this resource (e.g., User defaults)
-      rel = self.class.settings_for_tenant(tenant)
-      return false if rel.for_key(key).denied.exists?
-      return true  if rel.for_key(key).allowed.exists?
+      # true on user's team-level
+      result = can_query(key, all_settings.where(setable: Current.user&.team), inverse) if Current.user&.team
+      return result if !result.nil?
 
-      # 4) Class-level for Team (e.g., "all teams" defaults)
-      if respond_to?(:team) && team
-        rel = Setting.where(setable_type: "Team", setable_id: nil)
-        rel = rel.where(tenant:) if tenant
-        return false if rel.for_key(key).denied.exists?
-        return true  if rel.for_key(key).allowed.exists?
-      end
+      # true on resource class-level
+      result = can_query(key, all_settings.where(setable_type: self.class.name, setable_id: nil), inverse)
+      return result if !result.nil?
 
-      # 5) Resource-level settings (e.g., specific time_material, background_job, more, settings)
-      if resource
-        begin
-          rel = resource.settings
-          return false if rel.for_key(key).denied.exists?
-          return true  if rel.for_key(key).allowed.exists?
-        rescue => e
-          Rails.logger.error("Error checking resource (#{resource.inspect}) settings: #{e.message}")
-        end
-      end
+      # true on user class-level
+      result = can_query(key, all_settings.where(setable_type: "User", setable_id: nil), inverse)
+      return result if !result.nil?
 
-      # 6) Tenant/global defaults (no setable_type/id)
-      if tenant
-        rel = Setting.where(tenant:, setable_type: nil, setable_id: nil)
-        return false if rel.for_key(key).denied.exists?
-        return true  if rel.for_key(key).allowed.exists?
-      end
+      # true on team class-level
+      result = can_query(key, all_settings.where(setable_type: "Team", setable_id: nil), inverse)
+      return result if !result.nil?
+
+      # true on tenant/global-level
+      result = can_query(key, all_settings.where(setable_type: nil, setable_id: nil), inverse)
+      return result if !result.nil?
+
+      Rails.logger.debug "CAN? no specific setting found for #{key}, defaulting to false"
+      # 1) Self - whatever that might be, TimeMaterial, User, Team, more
+      # rel = settings
+      # if rel.any?
+      #   Rails.logger.debug "CAN? checking self settings for #{key}: #{rel.pluck(:key, :value)}"
+      #   return false if rel.for_key(key).denied.exists?
+      #   return true  if rel.for_key(key).allowed.exists?
+      # end
+
+      # if @user.present? && @user.settings.any?
+      #   Rails.logger.debug "CAN? checking user settings for #{key}: #{rel.pluck(:key, :value)}"
+      #   rel = @user.settings
+      #   return false if rel.for_key(key).denied.exists?
+      #   return true  if rel.for_key(key).allowed.exists?
+      # end
+
+      # # 2) Team
+      # if respond_to?(:team) && team
+      #   rel = team.settings
+      #   if rel.any?
+      #     Rails.logger.debug "CAN? checking team settings for #{key}: #{rel.pluck(:key, :value)}"
+      #     return false if rel.for_key(key).denied.exists?
+      #     return true  if rel.for_key(key).allowed.exists?
+      #   end
+      # end
+
+      # # 3) Class-level for this resource (e.g., User defaults)
+      # rel = self.class.settings_for_tenant(tenant)
+      # if rel.any?
+      #   Rails.logger.debug "CAN? checking #{self.class} class-level settings for #{key}: #{rel.pluck(:key, :value)}"
+      #   return false if rel.for_key(key).denied.exists?
+      #   return true  if rel.for_key(key).allowed.exists?
+      # end
+
+      # # 4) Class-level for Team (e.g., "all teams" defaults)
+      # if respond_to?(:team) && team
+      #   rel = Setting.where(setable_type: "Team", setable_id: nil)
+      #   rel = rel.where(tenant:) if tenant
+      #   if rel.any?
+      #     Rails.logger.debug "CAN? checking Team class-level settings for #{key}: #{rel.pluck(:key, :value)}"
+      #     return false if rel.for_key(key).denied.exists?
+      #     return true  if rel.for_key(key).allowed.exists?
+      #   end
+      # end
+
+      # # 5) Resource-level settings (e.g., specific time_material, background_job, more, settings)
+      # if resource
+      #   begin
+      #     rel = resource.settings
+      #     Rails.logger.debug "CAN? checking resource (#{resource&.name}) settings for #{key}: #{rel.pluck(:key, :value)}"
+      #     return false if rel.for_key(key).denied.exists?
+      #     return true  if rel.for_key(key).allowed.exists?
+      #   rescue => e
+      #     Rails.logger.error("Error checking resource (#{resource.inspect}) settings: #{e.message}")
+      #   end
+      # end
+
+      # # 6) Tenant/global defaults (no setable_type/id)
+      # if tenant
+      #   rel = Setting.where(tenant:, setable_type: nil, setable_id: nil)
+      #   Rails.logger.debug "CAN? checking tenant/global settings for #{key}: #{rel.pluck(:key, :value)}"
+      #   return false if rel.for_key(key).denied.exists?
+      #   return true  if rel.for_key(key).allowed.exists?
+      # end
 
       # Default confirm (that user can perform the action)
       false
     end
 
+    def can_query(key, rel, inverse = false)
+      if rel.any?
+        inverse ?
+          (return true if rel.for_key(key).denied.exists?) :
+          (return true if rel.for_key(key).allowed.exists?)
+      end
+      nil
+    end
+
     # do unless expressively denied
     def cannot?(action, resource: nil)
-      key = action.to_s
-      tenant = try(:tenant) || Current.tenant
+      !can?(action, resource: resource, inverse: true)
+      # key = action.to_s
+      # tenant = try(:tenant) || Current.tenant
 
-      # 1) Self
-      rel = settings
-      return true if rel.for_key(key).denied.exists?
-      return false if rel.for_key(key).allowed.exists?
+      # # 1) Self
+      # rel = settings
+      # return true if rel.for_key(key).denied.exists?
+      # return false if rel.for_key(key).allowed.exists?
 
-      # 2) Team
-      if respond_to?(:team) && team
-        rel = team.settings
-        return true if rel.for_key(key).denied.exists?
-        return false if rel.for_key(key).allowed.exists?
-      end
+      # if Current.user.settings.any?
+      #   rel = Current.user.settings
+      #   return true if rel.for_key(key).denied.exists?
+      #   return false if rel.for_key(key).allowed.exists?
+      # end
 
-      # 3) Class-level for this resource (e.g., User defaults)
-      rel = self.class.settings_for_tenant(tenant)
-      return true if rel.for_key(key).denied.exists?
-      return false if rel.for_key(key).allowed.exists?
+      # # 2) Team
+      # if respond_to?(:team) && team
+      #   rel = team.settings
+      #   if rel.any?
+      #     return true if rel.for_key(key).denied.exists?
+      #     return false if rel.for_key(key).allowed.exists?
+      #   end
+      # end
 
-      # 4) Class-level for Team (e.g., "all teams" defaults)
-      if respond_to?(:team) && team
-        rel = Setting.where(setable_type: "Team", setable_id: nil)
-        rel = rel.where(tenant:) if tenant
-        return true if rel.for_key(key).denied.exists?
-        return false if rel.for_key(key).allowed.exists?
-      end
+      # # 3) Class-level for this resource (e.g., User defaults)
+      # rel = self.class.settings_for_tenant(tenant)
+      # return true if rel.for_key(key).denied.exists?
+      # return false if rel.for_key(key).allowed.exists?
 
-      # 5) Resource-level settings (e.g., specific time_material, background_job, more, settings)
-      if resource
-        begin
-          rel = resource.settings
-          return true if rel.for_key(key).denied.exists?
-          return false if rel.for_key(key).allowed.exists?
-        rescue => e
-          Rails.logger.error("Error checking resource (#{resource.inspect}) settings: #{e.message}")
-        end
-      end
+      # # 4) Class-level for Team (e.g., "all teams" defaults)
+      # if respond_to?(:team) && team
+      #   rel = Setting.where(setable_type: "Team", setable_id: nil)
+      #   rel = rel.where(tenant:) if tenant
+      #   if rel.any?
+      #     return true if rel.for_key(key).denied.exists?
+      #     return false if rel.for_key(key).allowed.exists?
+      #   end
+      # end
 
-      # 6) Tenant/global defaults (no setable_type/id)
-      if tenant
-        rel = Setting.where(tenant:, setable_type: nil, setable_id: nil)
-        return true if rel.for_key(key).denied.exists?
-        return false if rel.for_key(key).allowed.exists?
-      end
+      # # 5) Resource-level settings (e.g., specific time_material, background_job, more, settings)
+      # if resource
+      #   begin
+      #     rel = resource.settings
+      #     return true if rel.for_key(key).denied.exists?
+      #     return false if rel.for_key(key).allowed.exists?
+      #   rescue => e
+      #     Rails.logger.error("Error checking resource (#{resource.inspect}) settings: #{e.message}")
+      #   end
+      # end
 
-      # Default confirm (that user cannot perform the action)
-      true
+      # # 6) Tenant/global defaults (no setable_type/id)
+      # if tenant
+      #   rel = Setting.where(tenant:, setable_type: nil, setable_id: nil)
+      #   return true if rel.for_key(key).denied.exists?
+      #   return false if rel.for_key(key).allowed.exists?
+      # end
+
+      # # Default confirm (that user cannot perform the action)
+      # true
     end
     #   key = action.to_s
 

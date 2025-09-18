@@ -2,7 +2,6 @@ class Contextmenu < ApplicationComponent
   include Phlex::Rails::Helpers::Request
   include Phlex::Rails::Helpers::LinkTo
   include Phlex::Rails::Helpers::ButtonTo
-  # include Rails.application.routes.url_helpers
 
   attr_accessor :resource, :resource_class, :list
 

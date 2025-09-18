@@ -1,15 +1,7 @@
 class TimeMaterialsController < MortimerController
   def new
     super
-    resource.customer_name = TimeMaterial.by_exact_user(Current.get_user).last&.customer_name
-    resource.state =         Current.get_user.default(:default_time_material_state, "draft")
-    resource.about =         Current.get_user.default(:default_time_material_about, "")
-    resource.hour_time =     Current.get_user.default(:default_time_material_hour_time, "")
-    resource.minute_time =   Current.get_user.default(:default_time_material_minute_time, "")
-    resource.rate =          get_hourly_rate
-    # resource.over_time =     Current.user.default(:default_time_material_over_time, 0)
-    resource.date =          get_default_time_material_date "Time.current.to_date"
-    resource.user_id =       Current.get_user.id
+    resource.initialize_new get_hourly_rate, get_default_time_material_date
   end
 
   def index
@@ -26,24 +18,15 @@ class TimeMaterialsController < MortimerController
   end
 
   def show
-    if params.dig(:reload).present? and resource.active?
-      resource.time_spent ||= 0
-      resource.started_at ||= Time.current
-      time_spent = (Time.current.to_i - resource.started_at.to_i) + resource.time_spent
-      resource.update time_spent: time_spent, paused_at: nil, started_at: Time.current
-      Broadcasters::Resource.new(resource.reload, { controller: "time_materials" }, Current.user).replace
-      head :ok
-    else
-      params.dig(:pause).present? ? pause_resume : super
-    end
+    process_state_toggle or super
   end
 
   def edit
-    resource.update time_spent: resource.time_spent + (Time.current.to_i - resource.started_at.to_i) if resource.active? # or resource.paused?
-    # resource.update time: resource.sanitize_time_spent
-    resource.customer_name = resource.customer&.name  || resource.customer_name  # unless resource.customer_id.blank?
-    resource.project_name = resource.project&.name    || resource.project_name   # unless resource.project_id.blank?
-    resource.product_name = resource.product&.name    || resource.product_name   # unless resource.product_id.blank?
+    preprocess_time_for_edit
+    resource.customer_name =  resource.customer&.name || resource.customer_name  # unless resource.customer_id.blank?
+    resource.project_name =   resource.project&.name  || resource.project_name   # unless resource.project_id.blank?
+    resource.product_name =   resource.product&.name  || resource.product_name   # unless resource.product_id.blank?
+    super
   end
 
   # pick up the play button from the time_material#index view
@@ -70,8 +53,33 @@ class TimeMaterialsController < MortimerController
 
   private
 
+    def process_state_toggle
+      process_reload or process_pause_resume
+    end
+
+    def process_reload
+      return false unless params.dig(:reload).present?
+      reload_time_spent
+
+      Broadcasters::Resource.new(resource.reload,
+        { controller: "time_materials" },
+        Current.user).replace if resource.active?
+
+      head :ok
+    end
+
+    def process_pause_resume
+      return false unless params.dig(:pause).present?
+
+      if params.dig(:pause) == "stop"
+        stop
+      else
+        pause_resume
+      end
+    end
+
     def before_create_callback
-      active_time_material
+      preprocess_time
       r = resource.prepare_tm resource_params
       return false if r == false
       resource_params(r)
@@ -85,11 +93,11 @@ class TimeMaterialsController < MortimerController
     end
 
     def create_callback
-      set_time
+      postprocess_time
     end
 
     def before_update_callback
-      active_time_material
+      preprocess_time
       r = resource.prepare_tm resource_params
       return false if r == false
       resource_params(r)
@@ -97,41 +105,92 @@ class TimeMaterialsController < MortimerController
     end
 
     def update_callback
-      set_time
+      postprocess_time
     end
 
-    def active_time_material
+    # called before showing the edit form
+    # fix hour_time, minute_time, registered_minutes, started_at, time_spent
+    # user can edit from an active or paused, other state
+    # after hitting the 'edit' context_menu button
+    # or after hitting the 'stop' button
+    #
+    def preprocess_time
+      set_play_time
+      resource_params[:hour_time] = resource.hour_time
+      resource_params[:minute_time] = resource.minute_time
+      ht, mt = resource.time.split(":")
+      resource_params[:registered_minutes] = ht.to_i * 60 + mt.to_i
+      resource_params[:started_at] = resource.started_at
+      resource_params[:time_spent] = resource.time_spent
+    end
+
+    # called after create or update of a time_material
+    # hour_time, minute_time, registered_minutes, started_at, time_spent should be set straight
+    #
+    def postprocess_time
+      set_play_time
+      # resource.registered_minutes =
+      # resource.started_at =
+      # resource.time_spent =
+      resource.save
+    end
+
+    #
+    # if the time_material is active, recalculate time_spent from started_at
+    # if paused, keep time_spent as is
+    # if stopped or done, keep time_spent as is
+    def reload_time_spent
       if resource.active?
-        resource.time_spent ||= 0
-        resource.started_at ||= Time.current
-        time_spent = (Time.current.to_i - resource.started_at.to_i) + resource.time_spent
-        resource.update time_spent: time_spent, paused_at: nil, started_at: Time.current
+        rsa = resource.started_at || Time.current
+        time_spent = (Time.current.to_i - rsa.to_i)
+        resource.hour_time, resource.minute_time = ((resource.registered_minutes || 0) + (time_spent / 60)).divmod(60)
+        resource.update time_spent: time_spent, time: resource.time, paused_at: nil, started_at: rsa
       end
+    end
+
+    def set_play_time
+      # return unless Current.get_user.should? :fill_play_time_in_time_fields
+      # rmin = resource.registered_minutes || 0
+      # ts = resource.time_spent || 0
+      # ht, mt = (rmin + ts).divmod(3600)
+      # mt, _sec = mt.divmod(60)
+      # ht, mt = resource.sanitize_time(ht, mt).split(":")
+      # resource.hour_time = ht
+      # resource.minute_time = mt
     end
 
     def set_time
-      return true if resource_params[:product_name].present? or resource_params[:product_id].present?
-      ht = resource_params[:hour_time] # && resource.hour_time=0
-      mt = resource_params[:minute_time] # && resource.minute_time=0
-      unless ht.blank? || mt.blank?
-        tm = resource.sanitize_time(ht, mt)
-        rmin = ht.to_i * 60 + mt.to_i
-        resource.update registered_minutes: rmin
-        resource.update time: tm if resource.done?
-      end
+      # return true if resource_params[:product_name].present? or resource_params[:product_id].present?
+      # ht = resource_params[:hour_time] || resource.hour_time
+      # mt = resource_params[:minute_time] || resource.minute_time
+      # unless ht.blank? || mt.blank? && !resource.active?
+      #   ht, mt = resource.sanitize_time(ht, mt).split(":")
+      #   rmin = ht.to_i * 60 + mt.to_i
+      #   resource.update registered_minutes: rmin
+      # end
+      # if Current.get_user.should? :fill_play_time_in_time_fields
+      #   resource.update started_at: Time.current - rmin.minutes
+      #   resource.update time_spent: rmin * 60
+      # end
       true
     end
 
     def create_play
       return unless params[:play].present?
 
+      ht, mt = resource.sanitize_time("0", "0").split(":")
+
       params[:time_material] = {
         time: "0",
         state: 1,
         user_id: Current.user.id,
         started_at: Time.current,
-        time_spent: 0,
-        date: get_default_time_material_date("Time.current.to_date"),
+        paused_at: nil,
+        time_spent: mt.to_i * 60,
+        hour_time: ht,
+        minute_time: mt,
+        hour_rate: get_hourly_rate,
+        date: get_default_time_material_date,
         about: Current.user.default(:default_time_material_about, "")
       }
       params.delete(:play)
@@ -140,7 +199,9 @@ class TimeMaterialsController < MortimerController
 
     def pause_resume
       if resource.user == Current.user or Current.user.admin? or Current.user.superadmin?
-        params.dig(:pause) == "pause" ? pause : resume
+        params.dig(:pause) == "pause" ?
+          resource.pause_time_spent && flash.now[:success] = t("time_material.paused") :
+          resource.resume_time_spent && flash.now[:success] = t("time_material.resumed")
         Broadcasters::Resource.new(resource, params).replace
         respond_to do |format|
           format.html { render turbo_stream: [ turbo_stream.replace("flash_container", partial: "application/flash_message", locals: { tenant: Current.get_tenant, messages: flash, user: Current.get_user }) ] }
@@ -156,17 +217,6 @@ class TimeMaterialsController < MortimerController
       end
     end
 
-    # def set_mileage
-    #   return unless params[:time_material].present?
-    #   if resource_params[:odo_from_time].present? &&
-    #      resource_params[:odo_to_time].present? &&
-    #      resource_params[:odo_from].present? &&
-    #      resource_params[:odo_to].present? &&
-    #      resource_params[:kilometers].present?
-    #      params[:time_material][:about] = I18n.t("time_material.type.mileage")
-    #   end
-    # end
-
     # Only allow a list of trusted parameters through.
     def resource_params(rp = nil)
       return params unless params[:time_material].present?
@@ -175,16 +225,6 @@ class TimeMaterialsController < MortimerController
       if rp
         params[:time_material] = rp
       end
-      #
-      # TODO make odo work
-      #
-      # if params.require(:time_material)[:odo_from_time].present? &&
-      #    params.require(:time_material)[:odo_to_time].present? &&
-      #    params.require(:time_material)[:odo_from].present? &&
-      #    params.require(:time_material)[:odo_to].present? &&
-      #    params.require(:time_material)[:kilometers].present?
-      #    params[:time_material][:about] = I18n.t("time_material.type.mileage")
-      # end
       params.expect(time_material: [
         :tenant_id,
         :date,
@@ -225,22 +265,38 @@ class TimeMaterialsController < MortimerController
       ])
     end
 
-    def pause
-      resource.time_spent ||= 0
-      resource.started_at ||= Time.current
-      time_spent = (Time.current.to_i - resource.started_at.to_i) + resource.time_spent
-      paused_at = Time.current
-      resource.update state: 2, time_spent: time_spent, paused_at: paused_at
-      flash.now[:success] = t("time_material.paused")
+    def stop
+      @_action_name = "edit"
+
+      # Compute total minutes BEFORE resetting the running segment
+      elapsed_minutes = resource.started_at ? (resource.elapsed_seconds_now / 60.0).round : 0
+      total_minutes   = (resource.registered_minutes || 0) + elapsed_minutes
+
+      resource.pause_time_spent(true) && flash.now[:success] = t("time_material.stopped")
+
+      Broadcasters::Resource.new(resource, params).replace
+
+      if Current.get_user.should? :fill_play_time_in_time_fields
+        ht, mt = total_minutes.divmod(60)
+        resource.hour_time = ht
+        resource.minute_time = mt
+      end
+
+      respond_to do |format|
+        format.html { stream_it_all }
+        format.turbo_stream { stream_it_all }
+      end
     end
 
-    def resume
-      resource.update state: 1, started_at: Time.current, paused_at: nil
-      flash.now[:success] = t("time_material.resumed")
+    def stream_it_all
+      render turbo_stream: [
+        turbo_stream.replace("flash_container", partial: "application/flash_message", locals: { tenant: Current.get_tenant, messages: flash, user: Current.get_user }),
+        turbo_stream.replace("form", partial: "application/edit", locals: { resource: resource, tenant: Current.get_tenant, messages: flash, user: Current.get_user })
+      ]
     end
 
-    def get_default_time_material_date(default_date)
-      dt=Current.get_user.default(:default_time_material_date, default_date)
+    def get_default_time_material_date
+      dt=Current.get_user.default(:default_time_material_date, "Time.current.to_date")
       if dt =~ /.to_date/
         parts = dt.split(".")
         eval(parts.join(".")).class == Date ? eval(parts.join(".")) : eval(default_date)
