@@ -93,10 +93,10 @@ class TimeMaterialsController < MortimerController
       resource.save
     end
 
-    # def create_callback
-    #   # postprocess_time
-    #   true
-    # end
+    def create_callback
+      postprocess_time
+      true
+    end
 
     def before_update_callback
       r = resource.prepare_tm resource_params
