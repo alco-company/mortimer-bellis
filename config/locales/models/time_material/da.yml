@@ -19,6 +19,7 @@ da:
     draft: Kladde
     active: Aktiv
     paused: Opgaven blev parkeret
+    stopped: Opgaven blev stoppet
     done: Afsluttet
     resumed: Opgaven blev genoptaget
     pushed_to_erp: Overført til ERP

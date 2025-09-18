@@ -2,8 +2,8 @@ class ListItems::TimeMaterial < ListItems::ListItem
   def html_list
     @insufficient_data = resource.has_insufficient_data?
     comment { "bg-green-200 bg-yellow-200" }
-    div(id: (dom_id resource), class: "list_item relative #{ background }", data: { list_target: "item", controller: "time-material list-item" }) do
-      div(class: "flex grow min-w-0 gap-x-4", data: time_material_controller?) do
+    div(id: (dom_id resource), class: "list_item relative #{ background } ", data: { list_target: "item", controller: "time-material list-item" }) do
+      div(class: "z-20 flex grow min-w-0 gap-x-4", data: time_material_controller?) do
         show_left_mugshot
         div(class: "min-w-0 flex-auto") do
           p(class: "text-sm font-semibold leading-6 text-gray-900 truncate") do
@@ -14,7 +14,7 @@ class ListItems::TimeMaterial < ListItems::ListItem
           end
         end
       end
-      div(class: "flex shrink-0 items-center gap-x-6 ") do
+      div(class: "flex shrink-0 items-center gap-x-6") do
         div(class: "hidden 2xs:flex 2xs:flex-col 2xs:items-end") do
           p(class: "text-sm leading-6 text-gray-900") do
             show_secondary_info
@@ -36,8 +36,7 @@ class ListItems::TimeMaterial < ListItems::ListItem
       {
         time_material_target: "listlabel",
         reload_url: resource_url(reload: true),
-        url: resource_url(pause: (resource.paused? ? "resume" : "pause")),
-        action: "click->time-material#toggleActive"
+        url: resource_url(pause: (resource.paused? ? "resume" : "pause"))
       }
     else
       {
@@ -48,13 +47,14 @@ class ListItems::TimeMaterial < ListItems::ListItem
 
   def render_play_pause
     return unless resource.user == user or user&.admin? or user&.superadmin?
-    div(class: "absolute inset-0 flex items-center justify-center pointer-events-none") do
+    div(class: "z-40 absolute inset-0 flex items-center justify-center w-1/4 mx-auto", data: { action: "click->time-material#clickIcon" }) do
       if resource.active? or resource.paused? # and this_user?(resource.user_id)
         resource.paused? ?
-          render(Icons::Play.new(css: "text-gray-500/15 h-1/2 w-1/2 sm:h-22 sm:w-22")) :
-          render(Icons::Pause.new(css: "text-gray-500/15 h-1/2 w-1/2 sm:h-22 sm:w-22"))
+          render(Icons::Play.new(css: "z-50 text-gray-500/15 h-12 w-12 sm:h-22 sm:w-22")) :
+          render(Icons::Pause.new(css: "z-50 text-gray-500/15 h-12 w-12 sm:h-22 sm:w-22"))
         # link_to(resource_url(pause: (resource.paused? ? "resume" : "pause")), data: { turbo_prefetch: "false", turbo_stream: "true" }) do
         # end
+        render(Icons::Stop.new(css: "z-50 text-gray-500/15 h-12 w-12 sm:h-22 sm:w-22")) if user.should? :show_stop_button
       end
     end
   end
@@ -150,10 +150,13 @@ class ListItems::TimeMaterial < ListItems::ListItem
 
   def show_time_material_quantative
     if resource.active? or resource.paused?
-      counter = resource.paused? ? resource.time_spent : (Time.current.to_i - resource.started_at.to_i) + resource.time_spent
+      # counter = (resource.paused? ? resource.time_spent : (Time.current.to_i - resource.started_at.to_i) + resource.time_spent) * 60
+      counter = (resource&.registered_minutes || 0) * 60
+      counter += resource.paused? ? 0 : resource.time_spent.to_i
       days, hours, minutes, seconds = resource.calc_hrs_minutes counter
       timestring = "%d %02d:%02d:%02d" % [ days, hours, minutes, seconds ]
-      span(class: "grow mr-2 time_counter", data: { counter: counter, state: resource.state, time_material_target: "counter" }) { timestring }
+      Rails.logger.info "TIMESPENT: #{timestring} ----------------------------------------------------------"
+      span(class: "grow time_counter", data: { counter: counter, state: resource.state, time_material_target: "counter" }) { timestring }
     else
       case true
       when (!resource.kilometers.blank? and resource.kilometers != 0); "#{ resource.kilometers}km"
@@ -162,21 +165,21 @@ class ListItems::TimeMaterial < ListItems::ListItem
       end
     end
   rescue
-    "!169"
+    "!165"
   end
 
   def show_time_details
     rate = resource.rate.blank? ? product_rates : resource.rate
     "#{ resource.time}t á #{ rate }"
   rescue
-    "!176"
+    "!172"
   end
 
   def show_product_details
     u = resource.unit.blank? ? "" : t("time_material.units.#{resource.unit}")
     "%s %s á %s" % [ resource.quantity, u, resource.unit_price ]
   rescue
-    "!183"
+    "!179"
   end
 
   def product_rates

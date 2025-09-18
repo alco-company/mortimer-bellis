@@ -4,6 +4,9 @@
 
 
 - show simple stats on dashboard - total invoiceable/invoiced
+
+## 18/09/2025
+
 - on resume start player time from now - not last paused_at
 
 ## 17/09/2025
