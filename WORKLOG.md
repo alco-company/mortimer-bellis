@@ -10,6 +10,7 @@
 - on resume start player time from now - not last paused_at
 - faster can?/should?
 - fix time_material.active reload every 60 sec
+- fix broadcast reloads
 
 ## 17/09/2025
 

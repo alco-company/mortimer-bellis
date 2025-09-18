@@ -38,18 +38,20 @@ class TimeMaterialsController < MortimerController
   end
 
   # POST /users/:id/archive
-  def archive
-    resource = TimeMaterial.find(params[:id])
-    if resource
-      resource.archived? ?
-        (resource.pushed_to_erp! && notice = t("time_material.unarchived")) :
-        (resource.archived! && notice = t("time_material.archived"))
-      redirect_back(fallback_location: root_path, notice: notice)
-      Broadcasters::Resource.new(resource, { controller: "time_materials" }).replace
-    else
-      redirect_back(fallback_location: root_path, warning: t("users.not_found"))
-    end
-  end
+  # roadmapped for future use iaw sales
+  #
+  # def archive
+  #   resource = TimeMaterial.find(params[:id])
+  #   if resource
+  #     resource.archived? ?
+  #       (resource.pushed_to_erp! && notice = t("time_material.unarchived")) :
+  #       (resource.archived! && notice = t("time_material.archived"))
+  #     redirect_back(fallback_location: root_path, notice: notice)
+  #     Broadcasters::Resource.new(resource, { controller: "time_materials" }).replace
+  #   else
+  #     redirect_back(fallback_location: root_path, warning: t("users.not_found"))
+  #   end
+  # end
 
   private
 
@@ -60,10 +62,10 @@ class TimeMaterialsController < MortimerController
     def process_reload
       return false unless params.dig(:reload).present?
       reload_time_spent
-
-      Broadcasters::Resource.new(resource.reload,
-        { controller: "time_materials" },
-        Current.user).replace if resource.active?
+      Broadcasters::Resource.new(resource, { controller: "time_materials" }).replace if resource.active?
+      # Broadcasters::Resource.new(resource.reload,
+      #   { controller: "time_materials" },
+      #   Current.user).replace if resource.active?
 
       head :ok
     end
