@@ -377,7 +377,7 @@ GEM
     positioning (0.4.6)
       activerecord (>= 6.1)
       activesupport (>= 6.1)
-    posthog-ruby (3.1.0)
+    posthog-ruby (3.3.0)
       concurrent-ruby (~> 1)
     pp (0.6.2)
       prettyprint
@@ -593,7 +593,7 @@ DEPENDENCIES
   pagy (~> 9.0)
   phlex-rails
   positioning
-  posthog-ruby (~> 3.0)
+  posthog-ruby (~> 3.3)
   propshaft
   psych (~> 5.2.6)
   puma (>= 5.0)
