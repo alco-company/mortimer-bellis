@@ -10,7 +10,8 @@ export default class extends Controller {
     "odofrom",
     "odoto",
     "mileage",
-    "listlabel"
+    "listlabel",
+    "item"
   ]
 
   static values = {
@@ -30,30 +31,27 @@ export default class extends Controller {
   }
 
   connect() {
-    let tmr = document.getElementById("time_material_rate");
-    this.token = document.querySelector('meta[name="csrf-token"]').content;
-    if (tmr) 
-      this.hourRate = document.getElementById("time_material_rate").value;
-    try {      
-      if (this.counterTarget.dataset.state == "active") {
-        this.startTimer();
-      }
-    } catch (error) {      
+    try {
+      this.playerId = this.itemTarget.id;
+      let tmr = document.getElementById("time_material_rate");
+      this.token = document.querySelector('meta[name="csrf-token"]').content;
+      if (tmr)
+        this.hourRate = document.getElementById("time_material_rate").value;
+      this.loadTimingState();
+    } catch (e) {
+      console.error(`Error initializing TimeMaterialController ${this.playerId || 'hmm'} `);
     }
   }
 
   disconnect() {
     this.stopTimer();
-  }
-  
-  tellLoaded(e) {
-    console.log(`loaded: ${e.currentTarget}`);
+    this.persistTimingState();
   }
 
   clickIcon(e){
     let icon = e.target.closest("SVG").dataset.icon;
     let url = this.listlabelTarget.dataset.url;
-    this.stopTimer()
+    this.pauseTimer()
     if (icon == "stop") {
       url = url.replace(/\?pause\=.*$/, "?pause=stop");
     }
@@ -65,7 +63,10 @@ export default class extends Controller {
       },
     })
       .then((r) => r.text())
-      .then((html) => Turbo.renderStreamMessage(html));
+      .then((html) => {
+        icon == "play" ? this.resumeTimer() : this.pauseTimer();
+        Turbo.renderStreamMessage(html)
+      });
     // if (this.interval) {
     //   this.stopTimer();
     //   e.currentTarget.classList.remove("bg-green-200");
@@ -77,54 +78,12 @@ export default class extends Controller {
     // }
   }
 
-  startTimer() {
-    this.interval = setInterval(() => {
-      // if (this.counterTarget.dataset.state == "active") {
-      // }
-      console.log(this.counterTarget.dataset.state);
-      this.timeValue = (parseInt(this.counterTarget.dataset.counter) || this.timeValue) + 1;
-      this.counterTarget.dataset.counter = this.timeValue
-      let hours = Math.floor(this.timeValue / 3600);
-      let minuts = Math.floor((this.timeValue - (hours * 3600)) / 60);
-      let sec = Math.floor(this.timeValue - (hours * 3600) - (minuts * 60));
-      this.counterTarget.innerText = hours.toString().padStart(2, "0") + ":" + minuts.toString().padStart(2, "0") + ":" + sec.toString().padStart(2, "0");
-    }, this.intervalValue);
-    this.reload = setInterval(() => {
-      console.log(` reload: ${this.listlabelTarget.dataset.reloadUrl}`);
-      fetch(this.listlabelTarget.dataset.reloadUrl, {
-        method: "GET",
-        headers: {
-          "X-CSRF-Token": this.token,
-          "Content-Type": "text/vnd.turbo.stream.html",
-        },
-      });
-    }, this.reloadValue);
-  }
-  
-
-  stopTimer() {
-    if (this.interval) {
-      clearInterval(this.interval);
-      this.interval = null;
-    }
-    if (this.reload) {
-      clearInterval(this.reload);
-      this.reload = null;
-    }
-  }
-
   updateOverTime(e) {
     let elem = document.getElementById("time_material_over_time");
     if (this.productsValue.length >= elem.value) {
       document.getElementById("time_material_rate").value =
         this.hourRate * (this.productsValue[ elem.value ] / this.productsValue[0] );
     }
-  }
-
-  rateChange(e) {
-    // if (e.currentTarget.value != this.hourRate) {
-    //   this.hourRate = e.currentTarget.value;
-    // }
   }
 
   customerChange(e) {
@@ -155,7 +114,6 @@ export default class extends Controller {
       e.target.previousSibling.value = "";
       return
     }
-    
     if (document.querySelector("#time_material_project_id").dataset.lookupCustomerName) {
       document.querySelector("#time_material_customer_id").value =
       document.querySelector(
@@ -189,8 +147,8 @@ export default class extends Controller {
   }
 
   setMileage(e) {
-    this.mileageTarget.value =
-      this.odotoTarget.value - this.odofromTarget.value;
+    // this.mileageTarget.value =
+    //   this.odotoTarget.value - this.odofromTarget.value;
   }
 
   empty_value(e, value = 0.0) {
@@ -209,5 +167,110 @@ export default class extends Controller {
     return e.value
   }
 
+  // Timer related functions ----------------------------------
 
+  loadTimingState() {
+    try {
+      const raw = JSON.parse(localStorage.getItem(this.playerId + ":timing") || "{}");
+      this.baseSeconds = (Number.isFinite(raw.baseSeconds) ? raw.baseSeconds : 0);
+      this.startedAtMs = raw.startedAtMs || null;
+    } catch {
+      this.baseSeconds = 0;
+      this.startedAtMs = null;
+    }
+    try {
+      let value = parseInt(this.counterTarget.dataset.counter, 10) || 0;
+      if (value > this.timeValue + 30) {
+        this.baseSeconds = value;
+        this.startedAtMs = null;
+        this.persistTimingState();
+      }
+    } catch (error) {
+    }
+    this.timeValue = this.baseSeconds;
+    try {
+      if (this.counterTarget.dataset.state === "active") {
+        this.startTimer();
+      }
+
+    } catch(e) {
+    }
+  }
+
+  persistTimingState() {
+    try {
+      localStorage.setItem(
+        this.playerId + ":timing",
+        JSON.stringify({ baseSeconds: this.baseSeconds, startedAtMs: this.startedAtMs })
+      );
+    } catch {}
+  }
+
+  startTimer() {
+    if (!this.startedAtMs) {
+      this.startedAtMs = Date.now();
+      this.persistTimingState();
+    }
+    if (this.interval) return;
+    this.tick(); // immediate update
+  }
+
+  stopTimer() {
+    if (this.interval) {
+      clearTimeout(this.interval);
+      this.interval = null;
+    }
+  }
+
+  // Call this when user hits “pause/stop” (after server confirms if needed)
+  pauseTimer() {
+    if (this.startedAtMs) {
+      const now = Date.now();
+      const elapsed = Math.floor((now - this.startedAtMs) / 1000);
+      this.baseSeconds += elapsed;
+      this.startedAtMs = null;
+      this.timeValue = this.baseSeconds;
+      this.persistTimingState();
+      this.render();
+    }
+    this.stopTimer();
+  }
+
+  // Call this on “resume” (after server confirms)
+  resumeTimer() {
+    if (!this.startedAtMs) {
+      this.startedAtMs = Date.now();
+      this.persistTimingState();
+      this.startTimer();
+    }
+  }
+
+
+  tick() {
+    if (!this.startedAtMs) return; // paused
+    const now = Date.now();
+    const elapsed = Math.floor((now - this.startedAtMs) / this.intervalValue);
+    this.timeValue = this.baseSeconds + elapsed;
+    this.render();
+
+    // Schedule next tick exactly at next whole second boundary
+    const msToNextSecond = this.intervalValue - (now % this.intervalValue);
+    this.interval = setTimeout(() => this.tick(), msToNextSecond);
+  }
+
+  render() {
+    const total = this.timeValue || 0;
+    const hours = Math.floor(total / 3600);
+    const mins  = Math.floor((total % 3600) / 60);
+    const secs  = total % 60;
+    try {
+      this.counterTarget.innerText =
+        hours.toString().padStart(2, "0") + ":" +
+        mins.toString().padStart(2, "0") + ":" +
+        secs.toString().padStart(2, "0");
+      this.counterTarget.dataset.counter = total;
+    } catch (error) {
+      // console.error("Error rendering timer - missing this.counterTarget!");
+    }
+  }
 }

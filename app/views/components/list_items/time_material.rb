@@ -2,7 +2,13 @@ class ListItems::TimeMaterial < ListItems::ListItem
   def html_list
     @insufficient_data = resource.has_insufficient_data?
     comment { "bg-green-200 bg-yellow-200" }
-    div(id: (dom_id resource), class: "list_item relative #{ background } ", data: { list_target: "item", controller: "time-material list-item" }) do
+    div(id: (dom_id resource),
+      class: "list_item relative #{ background } ",
+      data: {
+        list_target: "item",
+        time_material_target: "item",
+        controller: "time-material list-item"
+      }) do
       div(class: "z-20 flex grow min-w-0 gap-x-4", data: time_material_controller?) do
         show_left_mugshot
         div(class: "min-w-0 flex-auto") do

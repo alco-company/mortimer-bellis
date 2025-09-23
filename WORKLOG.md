@@ -5,6 +5,10 @@
 
 - show simple stats on dashboard - total invoiceable/invoiced
 
+## 23/09/2025
+
+- persist playing_time in local_storage
+
 ## 18/09/2025
 
 - on resume start player time from now - not last paused_at
