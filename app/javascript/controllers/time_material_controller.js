@@ -134,6 +134,10 @@ export default class extends Controller {
     }
   }
 
+  pauseResumeStop(e) {
+    alert(e)
+  }
+
   toggleOptions(e) {
     const options = this.lookupOptionsTarget;
     if (options.classList.contains("hidden")) {

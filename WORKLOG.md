@@ -5,6 +5,10 @@
 
 - show simple stats on dashboard - total invoiceable/invoiced
 
+## 24/09/2025
+
+- pause/resume/stop not working on mobile, test
+
 ## 23/09/2025
 
 - persist playing_time in local_storage

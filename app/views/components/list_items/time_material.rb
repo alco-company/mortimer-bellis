@@ -42,7 +42,8 @@ class ListItems::TimeMaterial < ListItems::ListItem
       {
         time_material_target: "listlabel",
         reload_url: resource_url(reload: true),
-        url: resource_url(pause: (resource.paused? ? "resume" : "pause"))
+        url: resource_url(pause: (resource.paused? ? "resume" : "pause")),
+        action: "click->time-material#pauseResumeStop"
       }
     else
       {
