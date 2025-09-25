@@ -70,8 +70,6 @@ class ListItems::TimeMaterial < ListItems::ListItem
     end if resource.active? or resource.paused?
   end
 
-
-
   #   div(class: "flex items-center justify-center w-1/4 mx-auto", data: { action: "click->time-material#clickIcon" }) do
   #     if resource.active? or resource.paused? # and this_user?(resource.user_id)
   #       resource.paused? ?
@@ -199,19 +197,22 @@ class ListItems::TimeMaterial < ListItems::ListItem
       counter = (resource&.registered_minutes || 0) * 60
       counter += resource.paused? ? 0 : resource.time_spent.to_i
       _days, hours, minutes, seconds = resource.calc_hrs_minutes counter
-      if resource.user.should? :limit_time_to_quarters
-        qhours = hours
-        qminutes = minutes
-        qminutes = case minutes
-        when 0; qhours==0 ? 15 : 0
-        when 1..15; 15
-        when 16..30; 30
-        when 31..45; 45
-        else; qhours += 1; 0
-        end
-      end
       timestring = "%02d:%02d:%02d" % [ hours, minutes, seconds ]
-      span(class: "text-yellow-700") { "%02d:%02d / " % [ qhours, qminutes ] } if user.should? :limit_time_to_quarters
+      #
+      # deferred by sales 25/09/2025
+      # if resource.user.should? :limit_time_to_quarters
+      #   qhours = hours
+      #   qminutes = minutes
+      #   qminutes = case minutes
+      #   when 0; qhours==0 ? 15 : 0
+      #   when 1..15; 15
+      #   when 16..30; 30
+      #   when 31..45; 45
+      #   else; qhours += 1; 0
+      #   end
+      # end
+      # span(class: "text-yellow-700") { "%02d:%02d / " % [ qhours, qminutes ] } if user.should? :limit_time_to_quarters
+      #
       span(class: "grow time_counter", data: { counter: counter, state: resource.state, time_material_target: "counter" }) { timestring }
     else
       case true
