@@ -16,6 +16,8 @@ class ListItems::Tag < ListItems::ListItem
   end
 
   def show_secondary_info
-    plain "%s " % [ resource.created_by.name ]
+    p(class: "text-sm font-medium text-gray-900 dark:text-white") do
+      plain "%s " % [ resource.created_by.name ]
+    end
   end
 end

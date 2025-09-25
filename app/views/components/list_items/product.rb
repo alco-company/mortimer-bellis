@@ -25,6 +25,8 @@ class ListItems::Product < ListItems::ListItem
   end
 
   def show_secondary_info
-    plain "%s %s" % [ resource.product_number, number_to_currency(resource.base_amount_value) ]
+    p(class: "text-sm font-medium text-gray-900 dark:text-white") do
+      plain "%s %s" % [ resource.product_number, number_to_currency(resource.base_amount_value) ]
+    end
   end
 end

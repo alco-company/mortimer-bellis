@@ -34,6 +34,8 @@ class ListItems::Tenant < ListItems::ListItem
   end
 
   def show_secondary_info
-    plain "%s %s " % [ resource.email, resource.time_zone ]
+    p(class: "text-sm font-medium text-gray-900 dark:text-white") do
+      plain "%s %s " % [ resource.email, resource.time_zone ]
+    end
   end
 end

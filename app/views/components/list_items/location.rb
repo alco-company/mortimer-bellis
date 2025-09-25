@@ -15,6 +15,8 @@ class ListItems::Location < ListItems::ListItem
   end
 
   def show_secondary_info
-    plain "%s " % [ resource.color ]
+    p(class: "text-sm font-medium text-gray-900 dark:text-white") do
+      plain "%s " % [ resource.color ]
+    end
   end
 end

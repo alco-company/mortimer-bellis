@@ -14,6 +14,7 @@
 - show invoiced right + flow time right
 - allow to batch time_material list_item
 - show listings with proper format
+- forgot users listing - and show_secondary_info
 
 ## 24/09/2025
 

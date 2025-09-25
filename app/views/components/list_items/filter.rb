@@ -15,30 +15,36 @@ class ListItems::Filter < ListItems::ListItem
   end
 
   def show_secondary_info
-    plain "%s " % [ resource.filter.length ]
+    p(class: "text-sm font-medium text-gray-900 dark:text-white") do
+      plain "%s " % [ resource.filter.length ]
+    end
   end
 
   def show_recipient_link
-    link_to(resource_url,
-      class: "inline grow flex-nowrap truncate",
-      role: "menuitem",
-      data: { turbo_action: "advance", turbo_frame: "form" },
-      tabindex: "-1") do
-      resource.view
+    p(class: "text-sm/6 font-semibold text-gray-900 dark:text-white") do
+      link_to(resource_url,
+        class: "inline grow flex-nowrap truncate",
+        role: "menuitem",
+        data: { turbo_action: "advance", turbo_frame: "form" },
+        tabindex: "-1") do
+        resource.view
+      end
     end
   end
 
   def show_matter_link
-    mugshot(resource.user, css: "sm:hidden mr-2 h-5 w-5 flex-none rounded-full bg-gray-50")
-    if resource&.user&.global_queries?
-      span(class: "hidden md:inline text-xs mr-2 truncate") { show_resource_link(resource: resource.tenant) }
-    end
-    span(class: "md:inline text-xs truncate") do
-      link_to(edit_resource_url,
-        class: "truncate hover:underline inline grow flex-nowrap",
-        data: { turbo_action: "advance", turbo_frame: "form" },
-        tabindex: -1) do
-        span(class: " truncate") { resource.view }
+    div(class: "flex flex-row items-center") do
+      mugshot(resource.user, css: "sm:hidden mr-2 h-5 w-5 flex-none rounded-full bg-gray-50")
+      if resource&.user&.global_queries?
+        span(class: "hidden md:inline text-xs mr-2 truncate") { show_resource_link(resource: resource.tenant) }
+      end
+      span(class: "md:inline text-xs truncate") do
+        link_to(edit_resource_url,
+          class: "truncate hover:underline inline grow flex-nowrap",
+          data: { turbo_action: "advance", turbo_frame: "form" },
+          tabindex: -1) do
+          span(class: " truncate") { resource.view }
+        end
       end
     end
   end

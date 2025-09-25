@@ -38,6 +38,8 @@ class ListItems::ProvidedService < ListItems::ListItem
   end
 
   def show_secondary_info
-    plain "%s %s " % [ resource.service, resource.organizationID ]
+    p(class: "text-sm font-medium text-gray-900 dark:text-white") do
+      plain "%s %s " % [ resource.service, resource.organizationID ]
+    end
   end
 end
