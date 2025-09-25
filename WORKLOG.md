@@ -2,7 +2,6 @@
 
 ## CHANGELOG
 
-- batches controller undefined collect for nil - line 75
 - find proper hour_rate
 
 ## 25/09/2025
@@ -11,6 +10,7 @@
 - show simple stats on dashboard - total invoiceable/invoiced
 - dont show 15min segments on playing time
 - undo dark mode
+- batches controller undefined collect for nil - line 75
 
 ## 24/09/2025
 
