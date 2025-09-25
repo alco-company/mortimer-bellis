@@ -2,6 +2,8 @@
 
 @config '../../../config/tailwind.config.js';
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
   --color-mortimer: #0284c7;    /* old was "#1f9cd8" */
   --font-inter: Inter, sans-serif;
