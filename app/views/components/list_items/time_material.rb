@@ -109,7 +109,7 @@ class ListItems::TimeMaterial < ListItems::ListItem
         role: "menuitem",
         data: { turbo_action: "advance", turbo_frame: "form" },
         tabindex: "-1") do
-          span(class: "absolute inset-x-0 -top-px bottom-0") { }
+          # span(class: "absolute inset-x-0 -top-px bottom-0") { }
           span(class: "relative truncate") { name_resource }
         end
     end

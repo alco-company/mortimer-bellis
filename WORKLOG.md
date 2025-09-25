@@ -3,7 +3,6 @@
 ## CHANGELOG
 
 - find proper hour_rate
-- allow to batch time_material list_item
 
 ## 25/09/2025
 
@@ -13,6 +12,7 @@
 - undo dark mode
 - batches controller undefined collect for nil - line 75
 - show invoiced right + flow time right
+- allow to batch time_material list_item
 
 ## 24/09/2025
 
