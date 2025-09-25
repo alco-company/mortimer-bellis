@@ -97,6 +97,55 @@ class TimeMaterial < ApplicationRecord
   scope :by_project, ->(project) { where("project_id = ?", project.id) if project.present? }
   scope :by_product, ->(product) { where("product_id = ?", product.id) if product.present? }
   scope :by_date, ->(date) { where("wdate = ?", date) if date.present? }
+  scope :this_month, -> { where_op(:gt, created_at: Time.current.at_beginning_of_month) }
+  scope :invoiceable, -> { where(is_invoice: true).where.not(customer_id: nil).where.not(state: states[:draft]) }
+
+  # STATS
+  def self.total_time_registered
+    h, m = this_month.sum(:registered_minutes).to_f.divmod(60)
+    "%d,%02d" % [ (h rescue 0), (m / 60 * 100 rescue 0) ]
+  end
+
+  def self.avg_total_time_per_day
+    h, m = (this_month.sum(:registered_minutes).to_f / weekdays_this_month rescue 0).divmod(60)
+    "%d,%02d" % [ (h rescue 0), (m / 60 * 100 rescue 0) ]
+  end
+
+  def self.total_invoiceable_time
+    h, m = invoiceable.this_month.sum(:registered_minutes).to_f.divmod(60)
+    "%d,%02d" % [ (h rescue 0), (m / 60 * 100 rescue 0) ]
+  end
+
+  def self.avg_total_invoiceable_per_day
+    h, m = (invoiceable.this_month.sum(:registered_minutes).to_f / weekdays_this_month rescue 0).divmod(60)
+    "%d,%02d" % [ (h rescue 0), (m / 60 * 100 rescue 0) ]
+  end
+
+  def self.weekdays_this_month
+    start_date = Time.current.at_beginning_of_month.to_date
+    end_date = Time.current.to_date
+    (start_date..end_date).select { |d| (1..5).include?(d.wday) }.count
+  end
+
+  def self.total_time_spent
+    time_spent.sum(:time_spent)
+  end
+
+  def self.total_billed_time_spent
+    billed.sum(:time_spent)
+  end
+
+  def self.average_time_per_day
+    return 0 if count == 0
+    (total_time_spent / count / 60.0).round(2)
+  end
+
+  def self.average_billed_time_per_day
+    return 0 if billed.count == 0
+    (total_billed_time_spent / billed.count / 60.0).round(2)
+  end
+  # --------
+
 
   # # SQLite
   # scope :weekdays_only, -> { where("strftime('%w', created_at) BETWEEN 1 AND 5") }

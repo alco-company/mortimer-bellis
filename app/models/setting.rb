@@ -110,7 +110,8 @@ class Setting < ApplicationRecord
       "validate_time_material_done" => "boolean",
       "show_all_time_material_posts" => "boolean",
       "show_stop_button" => "boolean",
-      "fill_play_time_in_time_fields" => "boolean"
+      "fill_play_time_in_time_fields" => "boolean",
+      "show_time_stats" => "boolean"
     }
   end
 
@@ -190,7 +191,8 @@ class Setting < ApplicationRecord
       [ "validate_time_material_done", I18n.t("settings.keys.validate_time_material_done") ],
       [ "show_all_time_material_posts", I18n.t("settings.keys.show_all_time_material_posts") ],
       [ "show_stop_button", I18n.t("settings.keys.show_stop_button") ],
-      [ "fill_play_time_in_time_fields", I18n.t("settings.keys.fill_play_time_in_time_fields") ]
+      [ "fill_play_time_in_time_fields", I18n.t("settings.keys.fill_play_time_in_time_fields") ],
+      [ "show_time_stats", I18n.t("settings.keys.show_time_stats") ]
     ]
   end
 
@@ -339,7 +341,8 @@ class Setting < ApplicationRecord
       "validate_time_material_done" => { "type" => "boolean", "value" => "true" },
       "show_all_time_material_posts" => { "type" => "boolean", "value" => "true" },
       "show_stop_button" => { "type" => "boolean", "value" => "false" },
-      "fill_play_time_in_time_fields" => { "type" => "boolean", "value" => "false" }
+      "fill_play_time_in_time_fields" => { "type" => "boolean", "value" => "false" },
+      "show_time_stats" => { "type" => "boolean", "value" => "false" }
     }
 
   # Helpers

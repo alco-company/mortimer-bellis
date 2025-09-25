@@ -2,12 +2,15 @@
 
 ## CHANGELOG
 
-
-- show simple stats on dashboard - total invoiceable/invoiced
+- batches controller undefined collect for nil - line 75
+- undo dark mode
+- return 15min step on STOP if set
+- find proper hour_rate
 
 ## 25/09/2025
 
 - move buttons on active tasks
+- show simple stats on dashboard - total invoiceable/invoiced
 
 ## 24/09/2025
 
