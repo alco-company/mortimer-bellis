@@ -13,6 +13,7 @@
 - batches controller undefined collect for nil - line 75
 - show invoiced right + flow time right
 - allow to batch time_material list_item
+- show listings with proper format
 
 ## 24/09/2025
 

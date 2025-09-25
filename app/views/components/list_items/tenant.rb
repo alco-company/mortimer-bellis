@@ -15,8 +15,10 @@ class ListItems::Tenant < ListItems::ListItem
 
 
   def show_recipient_link
-    link_to tenant_url(resource), data: { turbo_action: "advance", turbo_frame: "form", tabindex: "-1" }, class: "hover:underline" do
-      plain resource.name
+    p(class: "text-sm/6 font-semibold text-gray-900 dark:text-white") do
+      link_to tenant_url(resource), data: { turbo_action: "advance", turbo_frame: "form", tabindex: "-1" }, class: "hover:underline" do
+        plain resource.name
+      end
     end
   end
 

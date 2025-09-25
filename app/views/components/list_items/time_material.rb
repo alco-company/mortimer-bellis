@@ -24,19 +24,6 @@ class ListItems::TimeMaterial < ListItems::ListItem
         end
       end
       render_play_pause
-      #   div(class: "hidden 2xs:flex 2xs:flex-col 2xs:items-end") do
-      #     p(class: "text-sm leading-6 text-gray-900") do
-      #       show_secondary_info
-      #     end
-      #     p(class: "mt-1 text-xs leading-5 text-gray-500 flex items-center") do
-      #       show_time_info
-      #     end
-      #   end
-      #   div(class: "flex-col justify-center") do
-      #     render_context_menu "relative justify-self-center"
-      #   end
-      # end
-      # render_play_pause
     end
   end
 

@@ -14,13 +14,15 @@ class ListItems::ProvidedService < ListItems::ListItem
 
 
   def show_recipient_link
-    link_to resource_url(), data: { turbo_action: "advance", turbo_frame: "form", tabindex: "-1" }, class: "hover:underline" do
-      plain resource.name
-    end
-    unless resource.authorized?
-      span { " - " }
-      link_to t("provided_service.authorize_now"), Dinero::Service.new(user: user).auth_url("/provided_services"), class: "mort-link-primary text-sm hover:underline", target: "_top"
-      # render partial: "provided_services/#{resource.service.underscore}/authorize", locals: { path: resources_url } unless resource.authorized?
+    p(class: "text-sm/6 font-semibold text-gray-900 dark:text-white") do
+      link_to resource_url(), data: { turbo_action: "advance", turbo_frame: "form", tabindex: "-1" }, class: "hover:underline" do
+        plain resource.name
+      end
+      unless resource.authorized?
+        span { " - " }
+        link_to t("provided_service.authorize_now"), Dinero::Service.new(user: user).auth_url("/provided_services"), class: "mort-link-primary text-sm hover:underline", target: "_top"
+        # render partial: "provided_services/#{resource.service.underscore}/authorize", locals: { path: resources_url } unless resource.authorized?
+      end
     end
   end
 
