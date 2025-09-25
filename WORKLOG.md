@@ -3,6 +3,7 @@
 ## CHANGELOG
 
 - find proper hour_rate
+- allow to batch time_material list_item
 
 ## 25/09/2025
 
@@ -11,6 +12,7 @@
 - dont show 15min segments on playing time
 - undo dark mode
 - batches controller undefined collect for nil - line 75
+- show invoiced right + flow time right
 
 ## 24/09/2025
 

@@ -12,11 +12,13 @@ class ListItems::TimeMaterial < ListItems::ListItem
           end
         end
         div(class: "flex shrink-0 items-center") do
-          div(class: "flex-col items-end text-right") do
-            div(class: "flex flex-row") do
-              show_secondary_info
+          div(class: "flex -mt-1 items-center") do
+            div(class: "flex flex-col items-end") do
+              div(class: "flex flex-row") do
+                show_secondary_info
+              end
+              p(class: "truncate text-xs/5 text-gray-500 dark:text-gray-400") { show_time_info }
             end
-            p(class: "truncate text-xs/5 text-gray-500 dark:text-gray-400") { show_time_info }
           end
           render_context_menu "relative justify-self-center"
         end
@@ -146,7 +148,7 @@ class ListItems::TimeMaterial < ListItems::ListItem
     if resource.active? or resource.paused? # and this_user?(resource.user_id)
       paused_info if resource.paused?
     else
-      span(class: "mr-2 truncate") do
+      span(class: "truncate") do
         plain (l(resource.date.to_datetime, format: :date) rescue unsafe_raw(t("time_material.no_date")))
       end
       if @insufficient_data
@@ -168,14 +170,14 @@ class ListItems::TimeMaterial < ListItems::ListItem
 
   def render_invoiceable_info
     if resource.is_invoice?
-      div(class: "w-2 h-2 bg-emerald-200 rounded-full mx-2 animate-pulse xs:hidden") { }
+      txt, dot_bgcolor, bgcolor, txtcolor, bordercolor = resource.pushed_to_erp? ? [ "Faktureret", "bg-emerald-600", "bg-emerald-200", "text-emerald-500", "border-emerald-100" ] : [ "Fakturérbar", "bg-emerald-200 animate-pulse", "bg-emerald-500", "text-emerald-100", "border-emerald-600" ]
+      div(class: "w-2 h-2 #{dot_bgcolor} rounded-full mx-2 xs:hidden") { }
       span(data_slot: "badge",
-        class: "hidden mr-2 xs:inline-flex items-center justify-center rounded-md border px-2 py-0.5 text-xs font-medium w-fit whitespace-nowrap shrink-0 [&>svg]:size-3 gap-1 [&>svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden [a&]:hover:bg-primary/90 bg-emerald-500 text-emerald-100 border-emerald-600 shadow-sm") do
-        div(class: "w-2 h-2 bg-emerald-200 rounded-full mr-2 animate-pulse")
-        plain " Fakturérbar "
+        class: "hidden mr-2 xs:inline-flex items-center justify-center rounded-md border px-2 py-0.5 text-xs font-medium w-fit whitespace-nowrap shrink-0 [&>svg]:size-3 gap-1 [&>svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden [a&]:hover:bg-primary/90 #{bgcolor} #{txtcolor} #{bordercolor} shadow-sm") do
+        div(class: "w-2 h-2 #{dot_bgcolor} rounded-full mr-2 ")
+        plain txt
       end
 
-      # color = resource.pushed_to_erp? ? "bg-green-700 text-green-50" : "bg-green-50 text-green-700"
       # span(class: "hidden 2xs:inline-flex w-fit items-center rounded-md #{color} mr-1 px-1 xs:px-2 py-0 xs:py-0.5 text-2xs font-medium ring-1 ring-inset ring-green-600/20 truncate") do
       #   render Icons::Money.new(css: "#{color} h-4 w-4")
       #   span(class: "hidden ml-2 md:inline") { resource.pushed_to_erp? ? t("time_material.billed") : t("time_material.billable") }
