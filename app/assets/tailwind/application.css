@@ -6,6 +6,8 @@
   --color-mortimer: #0284c7;    /* old was "#1f9cd8" */
   --font-inter: Inter, sans-serif;
   --font-sans: Inter, sans-serif;
+  --breakpoint-xs: 20rem;   /* 480px */
+  --breakpoint-xs: 30rem;   /* 480px */
 }
 
 @layer theme {
@@ -297,7 +299,7 @@ h1 {
 }
 
 .list_item {
-  @apply flex justify-between gap-x-6 mb-1 px-2 py-5 rounded-xs;
+  @apply col-span-1 rounded-lg bg-white shadow-sm dark:divide-white/10 dark:bg-gray-800/50 dark:shadow-none dark:outline dark:-outline-offset-1 dark:outline-white/10;
 }
 
 .list_context_menu {

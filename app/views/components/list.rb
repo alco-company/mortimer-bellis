@@ -70,7 +70,7 @@ class List < ApplicationComponent
     flash_it
     replace_list_header
     turbo_stream.replace "record_list" do
-      div(id: "record_list", class: "scrollbar-hide") { }
+      div(id: "record_list", class: "scrollbar-hide gap-y-4 grid grid-cols-1 gap-6 sm:grid-cols-1 lg:grid-cols-1 m-2 ") { }
     end
     append_list
   end

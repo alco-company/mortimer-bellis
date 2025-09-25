@@ -2,38 +2,39 @@ class ListItems::TimeMaterial < ListItems::ListItem
   def html_list
     @insufficient_data = resource.has_insufficient_data?
     comment { "bg-green-200 bg-yellow-200" }
-    div(id: (dom_id resource),
-      class: "list_item relative #{ background } ",
-      data: {
-        list_target: "item",
-        time_material_target: "item",
-        controller: "time-material list-item"
-      }) do
-      div(class: "z-20 flex grow min-w-0 gap-x-4", data: time_material_controller?) do
-        show_left_mugshot
-        div(class: "min-w-0 flex-auto") do
-          p(class: "text-sm font-semibold leading-6 text-gray-900 truncate") do
+    div(id: (dom_id resource), class: "list_item group  #{ background } ", data: { list_target: "item", time_material_target: "item", controller: "time-material list-item" }) do
+      div(class: "relative flex justify-between gap-x-6 px-4 py-2 group-hover:bg-gray-50 sm:px-6 dark:group-hover:bg-white/2.5 ", data: time_material_controller?) do
+        div(class: "flex min-w-0 gap-x-2") do
+          show_left_mugshot
+          div(class: "min-w-0 flex-auto ") do
             show_recipient_link
-          end
-          p(class: "mt-1 flex text-xs leading-5 text-gray-500") do
             show_matter_link
           end
         end
-      end
-      div(class: "flex shrink-0 items-center gap-x-6") do
-        div(class: "hidden 2xs:flex 2xs:flex-col 2xs:items-end") do
-          p(class: "text-sm leading-6 text-gray-900") do
-            show_secondary_info
+        div(class: "flex shrink-0 items-center") do
+          div(class: "flex-col items-end text-right") do
+            div(class: "flex flex-row") do
+              show_secondary_info
+            end
+            p(class: "truncate text-xs/5 text-gray-500 dark:text-gray-400") { show_time_info }
           end
-          p(class: "mt-1 text-xs leading-5 text-gray-500 flex items-center") do
-            show_time_info
-          end
-        end
-        div(class: "flex-col justify-center") do
           render_context_menu "relative justify-self-center"
         end
       end
       render_play_pause
+      #   div(class: "hidden 2xs:flex 2xs:flex-col 2xs:items-end") do
+      #     p(class: "text-sm leading-6 text-gray-900") do
+      #       show_secondary_info
+      #     end
+      #     p(class: "mt-1 text-xs leading-5 text-gray-500 flex items-center") do
+      #       show_time_info
+      #     end
+      #   end
+      #   div(class: "flex-col justify-center") do
+      #     render_context_menu "relative justify-self-center"
+      #   end
+      # end
+      # render_play_pause
     end
   end
 
@@ -42,8 +43,7 @@ class ListItems::TimeMaterial < ListItems::ListItem
       {
         time_material_target: "listlabel",
         reload_url: resource_url(reload: true),
-        url: resource_url(pause: (resource.paused? ? "resume" : "pause")),
-        action: "click->time-material#pauseResumeStop"
+        url: resource_url(pause: (resource.paused? ? "resume" : "pause"))
       }
     else
       {
@@ -54,17 +54,35 @@ class ListItems::TimeMaterial < ListItems::ListItem
 
   def render_play_pause
     return unless resource.user == user or user&.admin? or user&.superadmin?
-    div(class: "z-40 absolute inset-0 flex items-center justify-center w-1/4 mx-auto", data: { action: "click->time-material#clickIcon" }) do
-      if resource.active? or resource.paused? # and this_user?(resource.user_id)
-        resource.paused? ?
-          render(Icons::Play.new(css: "z-50 text-gray-500/15 h-12 w-12 sm:h-22 sm:w-22")) :
-          render(Icons::Pause.new(css: "z-50 text-gray-500/15 h-12 w-12 sm:h-22 sm:w-22"))
-        # link_to(resource_url(pause: (resource.paused? ? "resume" : "pause")), data: { turbo_prefetch: "false", turbo_stream: "true" }) do
-        # end
-        render(Icons::Stop.new(css: "z-50 text-gray-500/15 h-12 w-12 sm:h-22 sm:w-22")) if user.should? :show_stop_button
+    div(class: "place-self-stretch group-hover:bg-gray-50 sm:px-6 dark:group-hover:bg-white/2.5 ") do
+      div(class: "flex gap-3 mx-8 py-2", data: { action: "click->time-material#clickIcon"  }) do
+        button(type: "button", data: { icon: "stop" }, class: "inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background text-foreground hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 h-10 rounded-md has-[>svg]:px-4 px-6 border-slate-200 shadow-sm transition-all duration-200") do
+          render Icons::Stop.new(css: "w-4 h-4 mr-2")
+          plain "Stop"
+        end
+        div(class: "inline-flex items-center justify-center w-full") { }
+        btn = resource.active? ? "pause" : "play"
+        button(type: "button", data: { icon: btn }, class: "inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background text-foreground hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 h-10 rounded-md has-[>svg]:px-4 px-6 border-slate-200 shadow-sm transition-all duration-200") do
+          resource.active? ? render(Icons::Pause.new(css: "w-4 h-4 mr-2")) : render(Icons::Play.new(css: "w-4 h-4 mr-2"))
+          plain resource.active? ? "Pause" : "Genoptag"
+        end
       end
-    end
+    end if resource.active? or resource.paused?
   end
+
+
+
+  #   div(class: "flex items-center justify-center w-1/4 mx-auto", data: { action: "click->time-material#clickIcon" }) do
+  #     if resource.active? or resource.paused? # and this_user?(resource.user_id)
+  #       resource.paused? ?
+  #         render(Icons::Play.new(css: "z-50 text-gray-500/15 h-12 w-12 sm:h-22 sm:w-22")) :
+  #         render(Icons::Pause.new(css: "z-50 text-gray-500/15 h-12 w-12 sm:h-22 sm:w-22"))
+  #       # link_to(resource_url(pause: (resource.paused? ? "resume" : "pause")), data: { turbo_prefetch: "false", turbo_stream: "true" }) do
+  #       # end
+  #       render(Icons::Stop.new(css: "z-50 text-gray-500/15 h-12 w-12 sm:h-22 sm:w-22")) if user.should? :show_stop_button
+  #     end
+  #   end
+  # end
 
   # def say_how_much
   #   u = resource.unit.blank? ? "" : unsafe_raw(t("time_material.responsive_units.#{resource.unit}"))
@@ -85,35 +103,45 @@ class ListItems::TimeMaterial < ListItems::ListItem
   end
 
   def show_recipient_link
-    link_to(resource_url,
-      class: "inline grow flex-nowrap truncate",
-      role: "menuitem",
-      data: { turbo_action: "advance", turbo_frame: "form" },
-      tabindex: "-1") do
-      name_resource
+    p(class: "text-sm/6 font-semibold text-gray-900 dark:text-white") do
+      link_to(resource_url,
+        class: "flex",
+        role: "menuitem",
+        data: { turbo_action: "advance", turbo_frame: "form" },
+        tabindex: "-1") do
+          span(class: "absolute inset-x-0 -top-px bottom-0") { }
+          span(class: "relative truncate") { name_resource }
+        end
     end
   end
 
   def show_matter_link
-    mugshot(resource.user, css: "sm:hidden mr-2 h-5 w-5 flex-none rounded-full bg-gray-50")
-    if resource&.user&.global_queries?
-      span(class: "hidden md:inline text-xs mr-2 truncate") { show_resource_link(resource: resource.tenant) }
-    end
-    span(class: "md:inline text-xs font-bold truncate mr-2") { "%s:" % resource.user.name }
-    span(class: "md:inline text-xs truncate") do
-      # link_to(edit_resource_url,
-      #   class: "truncate hover:underline inline grow flex-nowrap",
-      #   data: { turbo_action: "advance", turbo_frame: "form" },
-      #   tabindex: -1) do
-      #   span(class: "2xs:hidden") { show_time_material_quantative unless resource.active? }
-      #   span(class: " truncate") { resource.name }
-      # end
-      span(class: " truncate") { resource.name }
+    # mugshot(resource.user, css: "sm:hidden mr-2 h-5 w-5 flex-none rounded-full bg-gray-50")
+    div(class: "flex flex-row items-center") do
+      render_invoiceable_info
+      p(class: "flex text-xs/5 text-gray-500 dark:text-gray-400") do
+        if resource&.user&.global_queries?
+          span(class: "hidden md:inline text-xs mr-2 truncate") { show_resource_link(resource: resource.tenant) }
+        end
+        link_to user.team, data: { turbo_action: "advance", turbo_frame: "form" }, class: "hidden sm:flex relative truncate hover:underline mr-2.5" do
+          resource.user.team.name
+        end if resource.user.team
+        link_to resource.user, data: { turbo_action: "advance", turbo_frame: "form" }, class: "relative truncate hover:underline mr-2.5" do
+          resource.user.name
+        end if resource.user
+        link_to resource, data: { turbo_action: "advance", turbo_frame: "form" }, class: "relative truncate hover:underline mr-2.5" do
+          resource.name
+        end if resource
+      end
     end
   end
 
   def show_secondary_info
-    show_time_material_quantative
+    if resource.active? or resource.paused?
+      p(class: "text-xs xs:text-sm sm:text-lg md:text-2xl font-mono font-bold") { show_time_material_quantative }
+    else
+      p(class: "text-sm font-medium text-gray-900 dark:text-white") { show_time_material_quantative }
+    end
   end
 
   def show_time_info
@@ -122,13 +150,6 @@ class ListItems::TimeMaterial < ListItems::ListItem
     else
       span(class: "mr-2 truncate") do
         plain (l(resource.date.to_datetime, format: :date) rescue unsafe_raw(t("time_material.no_date")))
-      end
-      if resource.is_invoice?
-        color = resource.pushed_to_erp? ? "bg-green-700 text-green-50" : "bg-green-50 text-green-700"
-        span(class: "hidden 2xs:inline-flex w-fit items-center rounded-md #{color} mr-1 px-1 xs:px-2 py-0 xs:py-0.5 text-2xs font-medium ring-1 ring-inset ring-green-600/20 truncate") do
-          render Icons::Money.new(css: "#{color} h-4 w-4")
-          span(class: "hidden ml-2 md:inline") { resource.pushed_to_erp? ? t("time_material.billed") : t("time_material.billable") }
-        end
       end
       if @insufficient_data
         span(class: "2xs:inline-flex w-fit items-center rounded-md bg-yellow-50 mr-1 px-1 xs:px-2 py-0 xs:py-0.5 text-2xs font-medium text-yellow-700 ring-1 ring-inset ring-yellow-600/20 truncate") do
@@ -145,6 +166,23 @@ class ListItems::TimeMaterial < ListItems::ListItem
     end
   rescue
     {}
+  end
+
+  def render_invoiceable_info
+    if resource.is_invoice?
+      div(class: "w-2 h-2 bg-emerald-200 rounded-full mx-2 animate-pulse xs:hidden") { }
+      span(data_slot: "badge",
+        class: "hidden mr-2 xs:inline-flex items-center justify-center rounded-md border px-2 py-0.5 text-xs font-medium w-fit whitespace-nowrap shrink-0 [&>svg]:size-3 gap-1 [&>svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden [a&]:hover:bg-primary/90 bg-emerald-500 text-emerald-100 border-emerald-600 shadow-sm") do
+        div(class: "w-2 h-2 bg-emerald-200 rounded-full mr-2 animate-pulse")
+        plain " Fakturérbar "
+      end
+
+      # color = resource.pushed_to_erp? ? "bg-green-700 text-green-50" : "bg-green-50 text-green-700"
+      # span(class: "hidden 2xs:inline-flex w-fit items-center rounded-md #{color} mr-1 px-1 xs:px-2 py-0 xs:py-0.5 text-2xs font-medium ring-1 ring-inset ring-green-600/20 truncate") do
+      #   render Icons::Money.new(css: "#{color} h-4 w-4")
+      #   span(class: "hidden ml-2 md:inline") { resource.pushed_to_erp? ? t("time_material.billed") : t("time_material.billable") }
+      # end
+    end
   end
 
   def name_resource

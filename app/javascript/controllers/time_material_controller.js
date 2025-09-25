@@ -39,7 +39,7 @@ export default class extends Controller {
         this.hourRate = document.getElementById("time_material_rate").value;
       this.loadTimingState();
     } catch (e) {
-      console.error(`Error initializing TimeMaterialController ${this.playerId || 'hmm'} `);
+      // console.error(`Error initializing TimeMaterialController ${this.playerId || 'hmm'} `);
     }
   }
 
@@ -49,7 +49,7 @@ export default class extends Controller {
   }
 
   clickIcon(e){
-    let icon = e.target.closest("SVG").dataset.icon;
+    let icon = e.target.dataset.icon;
     let url = this.listlabelTarget.dataset.url;
     this.pauseTimer()
     if (icon == "stop") {

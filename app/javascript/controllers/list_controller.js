@@ -9,19 +9,6 @@ export default class extends Controller {
   connect() {
   }
 
-
-  // itemTargetConnected(element) {
-  //   if (!this.firstListItemSet) {
-  //     this.firstListItemSet = true
-  //     let ctxs = document.querySelectorAll(".list_context_menu")
-  //     if (ctxs.length > 0){
-  //       let ctx = ctxs[ ctxs.length - 1 ]
-  //       ctx.classList.remove("top-0");
-  //       ctx.classList.add("bottom-6");
-  //     }
-  //   }
-  // }
-
   toggleBatch(event) {
     const checkboxes = document.querySelectorAll('.batch')
     checkboxes.forEach((checkbox) => {

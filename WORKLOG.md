@@ -5,6 +5,10 @@
 
 - show simple stats on dashboard - total invoiceable/invoiced
 
+## 25/09/2025
+
+- move buttons on active tasks
+
 ## 24/09/2025
 
 - pause/resume/stop not working on mobile, test
