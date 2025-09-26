@@ -110,9 +110,7 @@ class List < ApplicationComponent
 
   def list_column(field)
     div(class: "flex justify-between gap-x-6 mb-1 px-2 py-1") do
-      div(
-        class: "w-full pt-10 border-b border-gray-100 text-xs font-semibold"
-      ) do
+      div(class: "w-full pl-4 pt-10 border-b border-gray-100 text-xs font-semibold") do
         if field.is_a? Date or field.is_a? Time or field.is_a? DateTime
           plain l(field, format: :day_summary)
         else

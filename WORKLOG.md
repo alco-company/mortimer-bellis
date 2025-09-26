@@ -2,7 +2,14 @@
 
 ## CHANGELOG
 
+- impersonate user - not only tenant
+- backup/restore menu items
 - find proper hour_rate
+- deferred finish
+
+## 26/09/2025
+
+- clean time_material index
 
 ## 25/09/2025
 

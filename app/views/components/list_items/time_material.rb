@@ -11,8 +11,8 @@ class ListItems::TimeMaterial < ListItems::ListItem
             show_matter_link
           end
         end
-        div(class: "flex shrink-0 items-center") do
-          div(class: "flex -mt-1 items-center") do
+        div(class: "flex shrink-0 mt-1 items-center") do
+          div(class: "flex items-center") do
             div(class: "flex flex-col items-end") do
               div(class: "flex flex-row") do
                 show_secondary_info
@@ -45,40 +45,20 @@ class ListItems::TimeMaterial < ListItems::ListItem
     return unless resource.user == user or user&.admin? or user&.superadmin?
     div(class: "place-self-stretch group-hover:bg-gray-50 sm:px-6 dark:group-hover:bg-white/2.5 ") do
       div(class: "flex gap-3 mx-8 py-2", data: { action: "click->time-material#clickIcon"  }) do
-        button(type: "button", data: { icon: "stop" }, class: "inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background text-foreground hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 h-10 rounded-md has-[>svg]:px-4 px-6 border-slate-200 shadow-sm transition-all duration-200") do
-          render Icons::Stop.new(css: "w-4 h-4 mr-2")
+        button(type: "button", data: { icon: "stop" }, class: "icon-stop") do
+          render Icons::Stop.new
           plain "Stop"
         end
         div(class: "inline-flex items-center justify-center w-full") { }
         btn = resource.active? ? "pause" : "play"
-        button(type: "button", data: { icon: btn }, class: "inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background text-foreground hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 h-10 rounded-md has-[>svg]:px-4 px-6 border-slate-200 shadow-sm transition-all duration-200") do
-          resource.active? ? render(Icons::Pause.new(css: "w-4 h-4 mr-2")) : render(Icons::Play.new(css: "w-4 h-4 mr-2"))
+        # class="icon-play icon-pause"
+        button(type: "button", data: { icon: btn }, class: "icon-#{btn}") do
+          resource.active? ? render(Icons::Pause.new) : render(Icons::Play.new)
           plain resource.active? ? "Pause" : "Genoptag"
         end
       end
     end if resource.active? or resource.paused?
   end
-
-  #   div(class: "flex items-center justify-center w-1/4 mx-auto", data: { action: "click->time-material#clickIcon" }) do
-  #     if resource.active? or resource.paused? # and this_user?(resource.user_id)
-  #       resource.paused? ?
-  #         render(Icons::Play.new(css: "z-50 text-gray-500/15 h-12 w-12 sm:h-22 sm:w-22")) :
-  #         render(Icons::Pause.new(css: "z-50 text-gray-500/15 h-12 w-12 sm:h-22 sm:w-22"))
-  #       # link_to(resource_url(pause: (resource.paused? ? "resume" : "pause")), data: { turbo_prefetch: "false", turbo_stream: "true" }) do
-  #       # end
-  #       render(Icons::Stop.new(css: "z-50 text-gray-500/15 h-12 w-12 sm:h-22 sm:w-22")) if user.should? :show_stop_button
-  #     end
-  #   end
-  # end
-
-  # def say_how_much
-  #   u = resource.unit.blank? ? "" : unsafe_raw(t("time_material.responsive_units.#{resource.unit}"))
-  #   if resource.quantity.blank?
-  #     resource.time.blank? ? "" : span(class: "truncate") { "%s %s" % [ resource.time, u ] }
-  #   else
-  #     span(class: "truncate") { "%s %s" % [ resource.quantity, u ] }
-  #   end
-  # end
 
   def background
     return "bg-green-200" if resource.active?
@@ -106,7 +86,7 @@ class ListItems::TimeMaterial < ListItems::ListItem
     # mugshot(resource.user, css: "sm:hidden mr-2 h-5 w-5 flex-none rounded-full bg-gray-50")
     div(class: "flex flex-row items-center") do
       render_invoiceable_info
-      p(class: "flex text-xs/5 text-gray-500 dark:text-gray-400") do
+      p(class: "flex text-xs/5 text-gray-500 dark:text-gray-400 truncate") do
         if resource&.user&.global_queries?
           span(class: "hidden md:inline text-xs mr-2 truncate") { show_resource_link(resource: resource.tenant) }
         end
@@ -125,7 +105,8 @@ class ListItems::TimeMaterial < ListItems::ListItem
 
   def show_secondary_info
     if resource.active? or resource.paused?
-      p(class: "text-xs xs:text-sm sm:text-lg md:text-2xl font-mono font-bold") { show_time_material_quantative }
+      # p(class: "text-xs xs:text-sm sm:text-lg md:text-2xl font-mono font-bold") { show_time_material_quantative }
+      p(class: "text-sm font-medium text-gray-900 dark:text-white") { show_time_material_quantative }
     else
       p(class: "text-sm font-medium text-gray-900 dark:text-white") { show_time_material_quantative }
     end
