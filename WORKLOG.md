@@ -19,6 +19,8 @@
 - add reactionview gem with tooling for development
 - sketching for the changelog
 - route /changelog to /home/show
+- set version to 1.1.1
+- link to changelog on the dashboard
 
 ### 25/09/2025
 
