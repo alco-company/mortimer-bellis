@@ -252,6 +252,14 @@ GEM
     globalid (1.2.1)
       activesupport (>= 6.1)
     hashie (5.0.0)
+    herb (0.7.3-aarch64-linux-gnu)
+    herb (0.7.3-aarch64-linux-musl)
+    herb (0.7.3-arm-linux-gnu)
+    herb (0.7.3-arm-linux-musl)
+    herb (0.7.3-arm64-darwin)
+    herb (0.7.3-x86_64-darwin)
+    herb (0.7.3-x86_64-linux-gnu)
+    herb (0.7.3-x86_64-linux-musl)
     hotwire-spark (0.1.13)
       listen
       rails (>= 7.0.0)
@@ -462,6 +470,9 @@ GEM
     rdoc (6.14.2)
       erb
       psych (>= 4.0.0)
+    reactionview (0.1.2)
+      actionview (>= 7.0)
+      herb (>= 0.7.0, < 1.0.0)
     redcarpet (3.6.1)
     regexp_parser (2.11.0)
     reline (0.6.2)
@@ -642,6 +653,7 @@ DEPENDENCIES
   psych (~> 5.2.6)
   puma (>= 5.0)
   rails!
+  reactionview (~> 0.1.2)
   redcarpet (~> 3.6)
   rqrcode (~> 2.2)
   rrule (~> 0.6.0)

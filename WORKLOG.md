@@ -14,6 +14,7 @@
 - fix tap title to reload
 - fix unequal size select/text input
 - error on create material
+- add reactionview gem with tooling for development
 
 ## 25/09/2025
 

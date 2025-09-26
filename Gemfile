@@ -138,3 +138,5 @@ gem "mailersend-ruby", "~> 3.0"
 # gem "turnstiled", "~> 0.1.14"
 
 gem "positioning"
+
+gem "reactionview", "~> 0.1.2"
