@@ -130,6 +130,7 @@ class TimeMaterialsController < MortimerController
     # hour_time, minute_time, registered_minutes, started_at, time_spent should be set straight
     #
     def postprocess_time
+      return unless resource.is_time?
       ht, mt = resource.time.split(":").map(&:to_i).each_with_index { |v, i| i==0 ? v : v.clamp(0, 59) }
       resource.registered_minutes = ht * 60 + mt
       resource.minutes_reloaded_at = Time.current
