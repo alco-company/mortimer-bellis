@@ -18,6 +18,7 @@
 - error on create material
 - add reactionview gem with tooling for development
 - sketching for the changelog
+- route /changelog to /home/show
 
 ### 25/09/2025
 
