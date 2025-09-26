@@ -30,6 +30,7 @@ export default class extends Controller {
   }
 
   reload(event) {
-    window.location.reload();
+    const url = event.target.dataset.url
+    Turbo.visit(url)
   }
 }
