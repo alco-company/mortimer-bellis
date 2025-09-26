@@ -99,7 +99,7 @@ class List < ApplicationComponent
   end
 
   def replace_list_header
-    turbo_stream.replace("#{user.id}_list_header", partial: "application/header", locals: { batch_form: batch_form, divider: @divider })
+    turbo_stream.replace("#{user.id}_list_header", partial: "application/header", locals: { batch_form: batch_form, divider: @divider, user: Current.get_user })
   end
 
   def next_pagy_page

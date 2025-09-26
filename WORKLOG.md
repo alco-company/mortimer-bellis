@@ -22,6 +22,7 @@
 - set version to 1.1.1
 - link to changelog on the dashboard
 - check tasks.count > 0
+- add user as argument for TurboStream broadcasts
 
 ### 25/09/2025
 
