@@ -99,7 +99,7 @@
 
   .mort-form-text {
     /* @apply block shadow-sm rounded-md border border-gray-200 focus:outline-hidden px-3 py-2 mt-2 w-full focus-visible:border-sky-200; */
-    @apply w-full rounded-md border-0 bg-white py-1.5 pl-3 text-gray-900 shadow-xs ring-1 ring-inset ring-gray-300 focus:ring-1 focus:ring-inset focus:ring-sky-200 focus:outline-2 focus:-outline-offset-2 focus:outline-sky-200 sm:text-sm sm:leading-6;
+    @apply w-full rounded-md border-0 bg-white py-1.5 pl-3 text-base text-gray-900 shadow-xs ring-1 ring-inset ring-gray-300 focus:ring-1 focus:ring-inset focus:ring-sky-200 focus:outline-2 focus:-outline-offset-2 focus:outline-sky-200 sm:text-sm/6 sm:leading-6;
   }
 
   .mort-form-date {
@@ -113,7 +113,7 @@
   }
 
   .mort-form-select {
-    @apply col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pr-8 pl-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-sky-200 sm:text-sm/6
+    @apply col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-2 pr-8 pl-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-sky-200 sm:text-sm/6
     /* @apply block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-1 focus:ring-sky-200 sm:text-sm sm:leading-6; */
   }
 

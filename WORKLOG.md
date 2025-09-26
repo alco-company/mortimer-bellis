@@ -12,6 +12,7 @@
 - clean time_material index
 - fix error on material tab when editing item with material on
 - fix tap title to reload
+- fix unequal size select/text input
 
 ## 25/09/2025
 
