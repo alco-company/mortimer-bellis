@@ -6,74 +6,34 @@
   <div class="bg-white py-12 dark:bg-gray-900 dark:scheme-dark">
     <div class="mt-8 mx-auto max-w-lg px-6">
       <ul role="list" class="space-y-6">
-        <li class="relative flex gap-x-4">
-          <div class="absolute top-0 -bottom-6 left-0 flex w-6 justify-center">
-            <div class="w-px bg-gray-200 dark:bg-white/15"></div>
-          </div>
-          <div class="relative flex size-6 flex-none items-center justify-center bg-white dark:bg-gray-900">
-            <div class="size-1.5 rounded-full bg-gray-100 ring ring-gray-300 dark:bg-white/10 dark:ring-white/20"></div>
-          </div>
-          <p class="flex-auto py-0.5 text-xs/5 text-gray-500 dark:text-gray-400"><span class="font-medium text-gray-900 dark:text-white">Chelsea Hagon</span> created the invoice.</p>
-          <time datetime="2023-01-23T10:32" class="flex-none py-0.5 text-xs/5 text-gray-500 dark:text-gray-400">7d ago</time>
-        </li>
-        <li class="relative flex gap-x-4">
-          <div class="absolute top-0 -bottom-6 left-0 flex w-6 justify-center">
-            <div class="w-px bg-gray-200 dark:bg-white/15"></div>
-          </div>
-          <div class="relative flex size-6 flex-none items-center justify-center bg-white dark:bg-gray-900">
-            <div class="size-1.5 rounded-full bg-gray-100 ring ring-gray-300 dark:bg-white/10 dark:ring-white/20"></div>
-          </div>
-          <p class="flex-auto py-0.5 text-xs/5 text-gray-500 dark:text-gray-400"><span class="font-medium text-gray-900 dark:text-white">Chelsea Hagon</span> edited the invoice.</p>
-          <time datetime="2023-01-23T11:03" class="flex-none py-0.5 text-xs/5 text-gray-500 dark:text-gray-400">6d ago</time>
-        </li>
-        <li class="relative flex gap-x-4">
-          <div class="absolute top-0 -bottom-6 left-0 flex w-6 justify-center">
-            <div class="w-px bg-gray-200 dark:bg-white/15"></div>
-          </div>
-          <div class="relative flex size-6 flex-none items-center justify-center bg-white dark:bg-gray-900">
-            <div class="size-1.5 rounded-full bg-gray-100 ring ring-gray-300 dark:bg-white/10 dark:ring-white/20"></div>
-          </div>
-          <p class="flex-auto py-0.5 text-xs/5 text-gray-500 dark:text-gray-400"><span class="font-medium text-gray-900 dark:text-white">Chelsea Hagon</span> sent the invoice.</p>
-          <time datetime="2023-01-23T11:24" class="flex-none py-0.5 text-xs/5 text-gray-500 dark:text-gray-400">6d ago</time>
-        </li>
-        <li class="relative flex gap-x-4">
-          <div class="absolute top-0 -bottom-6 left-0 flex w-6 justify-center">
-            <div class="w-px bg-gray-200 dark:bg-white/15"></div>
-          </div>
-          <img src="https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="" class="relative mt-3 size-6 flex-none rounded-full bg-gray-50 outline -outline-offset-1 outline-black/5 dark:bg-gray-800 dark:outline-white/10" />
-          <div class="flex-auto rounded-md p-3 ring-1 ring-gray-200 ring-inset dark:ring-white/15">
-            <div class="flex justify-between gap-x-4">
-              <div class="py-0.5 text-xs/5 text-gray-500 dark:text-gray-400"><span class="font-medium text-gray-900 dark:text-white">Chelsea Hagon</span> commented</div>
-              <time datetime="2023-01-23T15:56" class="flex-none py-0.5 text-xs/5 text-gray-500 dark:text-gray-400">3d ago</time>
+        <% @entries.each do |entry| %>
+          <li class="relative flex gap-x-4">
+            <div class="absolute top-0 -bottom-6 left-0 flex w-6 justify-center">
+              <div class="w-px bg-gray-200 dark:bg-white/15"></div>
             </div>
-            <p class="text-sm/6 text-gray-500 dark:text-gray-400">Called client, they reassured me the invoice would be paid by the 25th.</p>
-          </div>
-        </li>
-        <li class="relative flex gap-x-4">
-          <div class="absolute top-0 -bottom-6 left-0 flex w-6 justify-center">
-            <div class="w-px bg-gray-200 dark:bg-white/15"></div>
-          </div>
-          <div class="relative flex size-6 flex-none items-center justify-center bg-white dark:bg-gray-900">
-            <div class="size-1.5 rounded-full bg-gray-100 ring ring-gray-300 dark:bg-white/10 dark:ring-white/20"></div>
-          </div>
-          <p class="flex-auto py-0.5 text-xs/5 text-gray-500 dark:text-gray-400"><span class="font-medium text-gray-900 dark:text-white">Alex Curren</span> viewed the invoice.</p>
-          <time datetime="2023-01-24T09:12" class="flex-none py-0.5 text-xs/5 text-gray-500 dark:text-gray-400">2d ago</time>
-        </li>
-        <li class="relative flex gap-x-4">
-          <div class="absolute top-0 left-0 flex h-6 w-6 justify-center">
-            <div class="w-px bg-gray-200 dark:bg-white/15"></div>
-          </div>
-          <div class="relative flex size-6 flex-none items-center justify-center bg-white dark:bg-gray-900">
-            <svg viewBox="0 0 24 24" fill="currentColor" data-slot="icon" aria-hidden="true" class="size-6 text-indigo-600 dark:text-indigo-500">
-              <path d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm13.36-1.814a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z" clip-rule="evenodd" fill-rule="evenodd" />
-            </svg>
-          </div>
-          <p class="flex-auto py-0.5 text-xs/5 text-gray-500 dark:text-gray-400"><span class="font-medium text-gray-900 dark:text-white">Alex Curren</span> paid the invoice.</p>
-          <time datetime="2023-01-24T09:20" class="flex-none py-0.5 text-xs/5 text-gray-500 dark:text-gray-400">1d ago</time>
-        </li>
+            <div class="relative flex size-6 flex-none items-center justify-center bg-white dark:bg-gray-900">
+              <div class="size-1.5 rounded-full bg-gray-100 ring ring-gray-300 dark:bg-white/10 dark:ring-white/20"></div>
+            </div>
+            <!-- <img src="https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="" class="relative mt-3 size-6 flex-none rounded-full bg-gray-50 outline -outline-offset-1 outline-black/5 dark:bg-gray-800 dark:outline-white/10" /> -->
+            <div class="flex-auto rounded-md p-3 ring-1 ring-gray-200 ring-inset dark:ring-white/15">
+              <div class="flex justify-between gap-x-4">
+                <div class="py-0.5 text-xs/5 text-gray-500 dark:text-gray-400"><span class="font-medium text-gray-900 dark:text-white"><%= entry[:date] %></span> </div>
+                <time datetime="<%= entry[:date].iso8601 %>" class="flex-none py-0.5 text-xs text-gray-500"> <%= time_ago_in_words(entry[:date]) %> siden </time>
+              </div>
+                <ul class="list-disc ms-5 text-sm text-gray-500 dark:text-gray-400">
+                  <% entry[:bullets].each do |b| %>
+                    <li><%= b %></li>
+                  <% end if entry[:bullets].present? %>
+                </ul>
+              <p class="text-sm/6 text-gray-500 dark:text-gray-400">
+                <%= entry[:text] || '' %>
+              </p>
+            </div>            
+          </li>
+        <% end %>
       </ul>
 
-      <!-- New comment form -->
+      <!-- New comment form 
       <div class="mt-6 flex gap-x-3">
         <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="" class="size-6 flex-none rounded-full bg-gray-50 outline -outline-offset-1 outline-black/5 dark:bg-gray-800 dark:outline-white/10" />
         <form action="#" class="relative flex-auto">
@@ -178,7 +138,7 @@
           </div>
         </form>
       </div>
-
+      -->
     </div>
   </div>
 </div>
