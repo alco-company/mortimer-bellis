@@ -41,6 +41,6 @@
 <%= time_material_buttons(user: current_user) %>
 
 <!-- # notify user instead !! -->
-<% if Current.user.tasks.first_tasks.uncompleted %>
+<% if Current.user.tasks.first_tasks.uncompleted.count > 0 %>
   <%= render partial: "toast", locals: { count: Current.user.tasks.first_tasks.uncompleted.count } %>
 <% end %>

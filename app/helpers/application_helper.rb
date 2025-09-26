@@ -15,9 +15,9 @@ module ApplicationHelper
     else
       link_to(new_resource_url, id: "new_list_item", class: "-my-2 flex items-center rounded-md p-2 text-gray-400 hover:text-gray-600 focus:outline-hidden focus:ring-1 focus:ring-sky-200", data: { turbo_frame: "form" }) do
         content_tag(:span, "Add new", class: "sr-only")
-        content_tag(:span, class: "inline-flex items-center rounded-md bg-white px-1.5 py-0.5 text-xs font-medium text-gray-600 sm:ring-1 ring-inset ring-gray-500/10") do
+        content_tag(:span, class: "inline-flex items-center rounded-md bg-white px-1.5 py-2 text-xs font-medium text-gray-600 sm:ring-1 ring-inset ring-gray-500/10") do
           render Icons::Add.new css: "h-6 w-6 text-gray-400"
-          content_tag(:span, t("#{ resource_class.table_name}.list.new"), class: "hidden pl-2 sm:inline text-gray-400 text-2xs")
+          content_tag(:span, t("#{ resource_class.table_name}.list.new"), class: "pl-2 sm:inline text-gray-400 text-2xs")
         end
       end
     end if user_can_create? && !(resource_class == Filter)

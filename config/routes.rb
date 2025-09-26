@@ -217,4 +217,9 @@ Rails.application.routes.draw do
   root "time_materials#index"
 
   # root "home#show"
+
+  # when adding singular routes - likes /users/:id/company
+  # add this to routes.rb: resolve("Company") { |company| [ :user, :company ] }
+  # as mentioned here: https://medium.com/@kristina.kabosiene/simplifying-your-rails-forms-for-singular-nested-resources-using-resolve-to-fix-a-routing-bug-e403a990a9ae
+  #
 end
