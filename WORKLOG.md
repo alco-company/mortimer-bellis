@@ -10,6 +10,7 @@
 ## 26/09/2025
 
 - clean time_material index
+- fix error on material tab when editing item with material on
 
 ## 25/09/2025
 

@@ -34,10 +34,10 @@ class TimeMaterials::Form < ApplicationForm
               mileage_tab
             end
           end
-        end if Current.get_user.can? :see_material_tab, resource: @resource
+        end
         show_time_tab
         show_material_tab
-        show_mileage_tab
+        show_mileage_tab if Current.get_user.can? :see_mileage_tab, resource: @resource
       end
       #
       #
@@ -165,6 +165,7 @@ class TimeMaterials::Form < ApplicationForm
   # discount
   #
   def show_material_tab
+    return unless Current.get_user.can? :see_material_tab, resource: @resource
     div(id: "material", data: { tabs_target: "tabPanel" }, class: "time-material-type material tab #{'hidden' if @resource.is_time?}") do
       div(class: "space-y-2") do
         div(class: " pb-2") do
@@ -206,7 +207,8 @@ class TimeMaterials::Form < ApplicationForm
   end
 
   def show_mileage_tab
-    div(id: "material", data: { tabs_target: "tabPanel" }, class: "time-material-type material tab hidden") do
+    return unless Current.get_user.can? :see_mileage_tab, resource: @resource
+    div(id: "mileage", data: { tabs_target: "tabPanel" }, class: "time-material-type material tab hidden") do
       div(class: "space-y-2") do
         div(class: "pb-2") do
           div(class: "mt-2 grid grid-cols-4 gap-x-4 gap-y-1") do
