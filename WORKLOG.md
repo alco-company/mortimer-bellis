@@ -12,6 +12,7 @@
 ### 29/09/2025
 
 - sync play time with server
+- url cannot be undefined
 
 ### 26/09/2025
 

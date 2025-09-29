@@ -60,18 +60,20 @@ export default class extends Controller {
   }
 
   updateServer(url) {
-    fetch(url, {
-      method: "GET",
-      headers: {
-        "X-CSRF-Token": this.token,
-        "Content-Type": "text/vnd.turbo.stream.html",
-      },
-    })
-      .then((r) => r.text())
-      .then((html) => {
-        icon == "play" ? this.resumeTimer() : this.pauseTimer();
-        Turbo.renderStreamMessage(html);
-      });
+    if (typeof url !== "undefined") {
+      fetch(url, {
+        method: "GET",
+        headers: {
+          "X-CSRF-Token": this.token,
+          "Content-Type": "text/vnd.turbo.stream.html",
+        },
+      })
+        .then((r) => r.text())
+        .then((html) => {
+          icon == "play" ? this.resumeTimer() : this.pauseTimer();
+          Turbo.renderStreamMessage(html);
+        });
+    }
   }
 
   updateOverTime(e) {
