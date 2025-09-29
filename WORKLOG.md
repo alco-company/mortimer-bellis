@@ -16,6 +16,7 @@
 - fix play time skewing
 - fix broadcasts across multiple devices
 - fix broadcasts across multiple devices II
+- sync registered_minutes when editing hr:min
 
 ### 26/09/2025
 

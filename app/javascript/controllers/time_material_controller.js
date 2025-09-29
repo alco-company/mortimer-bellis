@@ -202,7 +202,7 @@ export default class extends Controller {
     this.timeValue = this.baseSeconds;
     try {
       let value = parseInt(this.counterTarget.dataset.counter, 10) || 0;
-      if (value > this.timeValue + 30) {
+      if (value > this.timeValue + 30 || value < this.timeValue - 30) {
         this.baseSeconds = value;
         this.startedAtMs = null;
         this.timeValue = this.baseSeconds;

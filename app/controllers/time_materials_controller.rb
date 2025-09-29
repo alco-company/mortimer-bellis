@@ -119,10 +119,10 @@ class TimeMaterialsController < MortimerController
       true
     end
 
-    def stream_update
-      Broadcasters::Resource.new(resource, params.permit!, user: Current.user, stream: "#{Current.user.id}_time_materials").replace
+    def stream_update(usr = Current.user)
+      Broadcasters::Resource.new(resource, params.permit!, user: usr, stream: "#{usr.id}_time_materials").replace
       Current.get_tenant.users.each do |u|
-        next unless u.current_sign_in_at.present? && u != Current.user
+        next unless u.current_sign_in_at.present? && u != usr
         Broadcasters::Resource.new(resource, params.permit!, user: u, stream: "#{u.id}_time_materials").replace
       end
     end
@@ -215,7 +215,7 @@ class TimeMaterialsController < MortimerController
         params.dig(:pause) == "pause" ?
           resource.pause_time_spent && flash.now[:success] = t("time_material.paused") :
           resource.resume_time_spent && flash.now[:success] = t("time_material.resumed")
-        Broadcasters::Resource.new(resource, params, stream: "#{resource.user.id}_time_materials").replace
+        stream_update(resource.user)
         respond_to do |format|
           format.html { render turbo_stream: [ turbo_stream.replace("flash_container", partial: "application/flash_message", locals: { tenant: Current.get_tenant, messages: flash, user: Current.get_user }) ] }
           format.turbo_stream { render turbo_stream: [ turbo_stream.replace("flash_container", partial: "application/flash_message", locals: { tenant: Current.get_tenant, messages: flash, user: Current.get_user }) ] }
