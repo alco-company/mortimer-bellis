@@ -44,7 +44,7 @@ class ListItems::TimeMaterial < ListItems::ListItem
   def render_play_pause
     return unless resource.user == user or user&.admin? or user&.superadmin?
     div(class: "place-self-stretch group-hover:bg-gray-50 sm:px-6 dark:group-hover:bg-white/2.5 ") do
-      div(class: "flex gap-3 mx-8 py-2", data: { action: "click->time-material#clickIcon"  }) do
+      div(class: "flex gap-3 mx-8 py-2", data: { action: "click->time-material#changeState"  }) do
         button(type: "button", data: { icon: "stop" }, class: "icon-stop") do
           render Icons::Stop.new
           plain "Stop"

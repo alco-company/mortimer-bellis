@@ -28,6 +28,7 @@ export default class extends Controller {
   initialize() {
     this.interval = null;
     this.reload = null;
+    this.state = null;
   }
 
   connect() {
@@ -48,13 +49,17 @@ export default class extends Controller {
     this.persistTimingState();
   }
 
-  clickIcon(e){
+  changeState(e){
     let icon = e.target.dataset.icon;
     let url = this.listlabelTarget.dataset.url;
     this.pauseTimer()
     if (icon == "stop") {
       url = url.replace(/\?pause\=.*$/, "?pause=stop");
     }
+    this.updateServer(url);
+  }
+
+  updateServer(url) {
     fetch(url, {
       method: "GET",
       headers: {
@@ -65,17 +70,8 @@ export default class extends Controller {
       .then((r) => r.text())
       .then((html) => {
         icon == "play" ? this.resumeTimer() : this.pauseTimer();
-        Turbo.renderStreamMessage(html)
+        Turbo.renderStreamMessage(html);
       });
-    // if (this.interval) {
-    //   this.stopTimer();
-    //   e.currentTarget.classList.remove("bg-green-200");
-    //   e.currentTarget.classList.add("bg-yellow-200");
-    // } else {
-    //   this.startTimer();
-    //   e.currentTarget.classList.remove("bg-yellow-200");
-    //   e.currentTarget.classList.add("bg-green-200");
-    // }
   }
 
   updateOverTime(e) {
@@ -182,21 +178,21 @@ export default class extends Controller {
       this.baseSeconds = 0;
       this.startedAtMs = null;
     }
+    this.timeValue = this.baseSeconds;
     try {
       let value = parseInt(this.counterTarget.dataset.counter, 10) || 0;
       if (value > this.timeValue + 30) {
         this.baseSeconds = value;
         this.startedAtMs = null;
+        this.timeValue = this.baseSeconds;
         this.persistTimingState();
       }
     } catch (error) {
     }
-    this.timeValue = this.baseSeconds;
     try {
       if (this.counterTarget.dataset.state === "active") {
         this.startTimer();
       }
-
     } catch(e) {
     }
   }
@@ -256,6 +252,10 @@ export default class extends Controller {
     const elapsed = Math.floor((now - this.startedAtMs) / this.intervalValue);
     this.timeValue = this.baseSeconds + elapsed;
     this.render();
+    if (this.reloadValue > 0 && (now % this.reloadValue) < 10) {
+      let url = this.listlabelTarget.dataset.reloadUrl;
+      this.updateServer(url);
+    }
 
     // Schedule next tick exactly at next whole second boundary
     const msToNextSecond = this.intervalValue - (now % this.intervalValue);

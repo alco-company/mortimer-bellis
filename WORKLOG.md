@@ -5,9 +5,13 @@
 - impersonate user - not only tenant
 - backup/restore menu items
 - find proper hour_rate
-- deferred finish
+- deferred finish - set to automate closing
 
 ## CHANGELOG
+
+### 29/09/2025
+
+- sync play time with server
 
 ### 26/09/2025
 

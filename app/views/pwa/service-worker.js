@@ -1,3 +1,8 @@
+// Service Worker for Mortimer PWA
+// excellent work by Alicia Rojas: https://alicia-paz.medium.com/make-your-rails-app-work-offline-part-2-caching-assets-and-adding-an-offline-fallback-334729ade904
+// TODO: implement caching of assets and offline fallback
+// 
+
 // Add a service worker for processing Web Push notifications:
 //
 // self.addEventListener("push", async (event) => {
