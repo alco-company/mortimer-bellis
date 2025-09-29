@@ -13,6 +13,7 @@
 
 - sync play time with server
 - url cannot be undefined
+- fix play time skewing
 
 ### 26/09/2025
 

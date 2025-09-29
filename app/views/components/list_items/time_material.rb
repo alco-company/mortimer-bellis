@@ -2,7 +2,7 @@ class ListItems::TimeMaterial < ListItems::ListItem
   def html_list
     @insufficient_data = resource.has_insufficient_data?
     comment { "bg-green-200 bg-yellow-200" }
-    div(id: (dom_id resource), class: "list_item group  #{ background } ", data: { list_target: "item", time_material_target: "item", controller: "time-material list-item" }) do
+    div(id: (dom_id resource), class: "list_item group  #{ background } ", data: { list_target: "item", state: resource.state, time_material_target: "item", controller: "time-material list-item" }) do
       div(class: "relative flex justify-between gap-x-6 px-4 py-2 group-hover:bg-gray-50 sm:px-6 dark:group-hover:bg-white/2.5 ", data: time_material_controller?) do
         div(class: "flex min-w-0 gap-x-2") do
           show_left_mugshot

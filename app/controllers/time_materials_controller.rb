@@ -68,6 +68,7 @@ class TimeMaterialsController < MortimerController
       #   Current.user).replace if resource.active?
 
       head :ok
+      true
     end
 
     def process_pause_resume
@@ -143,10 +144,10 @@ class TimeMaterialsController < MortimerController
     # if stopped or done, keep time_spent as is
     def reload_time_spent
       if resource.active?
-        seconds = (resource.elapsed_seconds_now).round
-        minutes = (seconds / 60.0).round + (resource.registered_minutes || 0)
+        minutes = resource.add_elapsed_to_registered!
         resource.hour_time, resource.minute_time = (minutes).divmod(60)
-        resource.update time_spent: resource.elapsed_seconds_now, registered_minutes: minutes, paused_at: nil, minutes_reloaded_at: Time.current
+        resource.save
+        # resource.update time_spent: resource.elapsed_seconds_now, registered_minutes: minutes, paused_at: nil, minutes_reloaded_at: Time.current
       end
     end
 

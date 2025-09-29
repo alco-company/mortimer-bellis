@@ -50,10 +50,10 @@ export default class extends Controller {
   }
 
   changeState(e){
-    let icon = e.target.dataset.icon;
+    this.state = e.target.dataset.icon;
     let url = this.listlabelTarget.dataset.url;
     this.pauseTimer()
-    if (icon == "stop") {
+    if (this.state == "stop") {
       url = url.replace(/\?pause\=.*$/, "?pause=stop");
     }
     this.updateServer(url);
@@ -70,8 +70,27 @@ export default class extends Controller {
       })
         .then((r) => r.text())
         .then((html) => {
-          icon == "play" ? this.resumeTimer() : this.pauseTimer();
           Turbo.renderStreamMessage(html);
+          this.state = this.itemTarget.dataset.state;
+          this.timeValue = parseInt(this.counterTarget.dataset.counter, 10);
+          this.startedAtMs = null;
+          this.baseSeconds = this.timeValue;
+          console.log(`state: ${this.state}, timeValue: ${this.timeValue}, baseSeconds: ${this.baseSeconds}`);
+          switch (this.state) {
+            case "active":
+              this.resumeTimer();
+              break;
+            case "paused":
+              this.pauseTimer();
+              break;
+            case "stopped":
+              this.stopTimer();
+              this.baseSeconds = 0;
+              this.startedAtMs = null;
+              this.timeValue = 0;
+              this.persistTimingState();
+              break;
+          }
         });
     }
   }

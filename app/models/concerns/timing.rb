@@ -128,7 +128,7 @@ module Timing
         when :floor then (secs / 60.0).floor
         else              (secs / 60.0).round
         end
-      updates = { registered_minutes: (registered_minutes || 0) + mins, time_spent: 0, minutes_reloaded_at: Time.current }
+      updates = { registered_minutes: (registered_minutes || 0) + mins, paused_at: nil, time_spent: 0, minutes_reloaded_at: Time.current }
       update!(updates)
       mins
     end
