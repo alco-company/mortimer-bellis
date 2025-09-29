@@ -313,7 +313,7 @@ class ModalController < MortimerController
           if resource.remove params[:step]
             eval(cb) unless cb.nil?
             @url.gsub!(/\/\d+$/, "") if @url.match?(/\d+$/)
-            Broadcasters::Resource.new(r).destroy
+            resource_class == TimeMaterial ? time_material_stream_destroy : Broadcasters::Resource.new(r).destroy
             r.notify(action: :destroy)
             r.destroy
             flash[:success] = t(".post")
@@ -347,6 +347,14 @@ class ModalController < MortimerController
 
     def html_content
       render_to_string "employees/report_state", layout: "pdf", formats: :pdf
+    end
+
+    def time_material_stream_destroy
+      Broadcasters::Resource.new(resource, user: Current.user, stream: "#{Current.user.id}_time_materials").destroy
+      Current.get_tenant.users.each do |u|
+        next unless u.current_sign_in_at.present? && u != Current.user
+        Broadcasters::Resource.new(resource, user: u, stream: "#{u.id}_time_materials").destroy
+      end
     end
 
   # def any_filters?

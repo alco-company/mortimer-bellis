@@ -63,12 +63,9 @@ class TimeMaterialsController < MortimerController
       return false unless params.dig(:reload).present?
       reload_time_spent
       Current.get_tenant.users.each do |u|
+        next unless u.current_sign_in_at.present?
         Broadcasters::Resource.new(resource, { controller: "time_materials" }, user: u, stream: "#{u.id}_time_materials").replace if resource.active?
       end
-      # Broadcasters::Resource.new(resource, { controller: "time_materials" }).replace if resource.active?
-      # Broadcasters::Resource.new(resource.reload,
-      #   { controller: "time_materials" },
-      #   Current.user).replace if resource.active?
 
       head :ok
       true
@@ -102,6 +99,14 @@ class TimeMaterialsController < MortimerController
       true
     end
 
+    def stream_create
+      Broadcasters::Resource.new(resource, params.permit!, user: Current.user, stream: "#{Current.user.id}_time_materials").create
+      Current.get_tenant.users.each do |u|
+        next unless u.current_sign_in_at.present? && u != Current.user
+        Broadcasters::Resource.new(resource, params.permit!, user: u, stream: "#{u.id}_time_materials").create
+      end
+    end
+
     def before_update_callback
       r = resource.prepare_tm resource_params
       return false if r == false
@@ -112,6 +117,23 @@ class TimeMaterialsController < MortimerController
     def update_callback
       postprocess_time
       true
+    end
+
+    def stream_update
+      Broadcasters::Resource.new(resource, params.permit!, user: Current.user, stream: "#{Current.user.id}_time_materials").replace
+      Current.get_tenant.users.each do |u|
+        next unless u.current_sign_in_at.present? && u != Current.user
+        Broadcasters::Resource.new(resource, params.permit!, user: u, stream: "#{u.id}_time_materials").replace
+      end
+    end
+
+    def stream_destroy
+      Broadcasters::Resource.new(resource, user: Current.user, stream: "#{Current.user.id}_time_materials").destroy
+      Current.get_tenant.users.each do |u|
+        debugger
+        next unless u.current_sign_in_at.present? && u != Current.user
+        Broadcasters::Resource.new(resource, user: u, stream: "#{u.id}_time_materials").destroy
+      end
     end
 
     # called before showing the edit form
@@ -193,7 +215,7 @@ class TimeMaterialsController < MortimerController
         params.dig(:pause) == "pause" ?
           resource.pause_time_spent && flash.now[:success] = t("time_material.paused") :
           resource.resume_time_spent && flash.now[:success] = t("time_material.resumed")
-        Broadcasters::Resource.new(resource, params).replace
+        Broadcasters::Resource.new(resource, params, stream: "#{resource.user.id}_time_materials").replace
         respond_to do |format|
           format.html { render turbo_stream: [ turbo_stream.replace("flash_container", partial: "application/flash_message", locals: { tenant: Current.get_tenant, messages: flash, user: Current.get_user }) ] }
           format.turbo_stream { render turbo_stream: [ turbo_stream.replace("flash_container", partial: "application/flash_message", locals: { tenant: Current.get_tenant, messages: flash, user: Current.get_user }) ] }
@@ -262,7 +284,7 @@ class TimeMaterialsController < MortimerController
       resource.pause_time_spent(true) && flash.now[:success] = t("time_material.stopped")
       set_time
 
-      Broadcasters::Resource.new(resource, params).replace
+      Broadcasters::Resource.new(resource, params, stream: "#{resource.user.id}_time_materials").replace
 
       respond_to do |format|
         format.html { stream_it_all }

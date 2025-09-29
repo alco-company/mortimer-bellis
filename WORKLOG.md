@@ -15,6 +15,7 @@
 - url cannot be undefined
 - fix play time skewing
 - fix broadcasts across multiple devices
+- fix broadcasts across multiple devices II
 
 ### 26/09/2025
 

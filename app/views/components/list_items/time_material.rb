@@ -113,7 +113,7 @@ class ListItems::TimeMaterial < ListItems::ListItem
   end
 
   def show_time_info
-    if resource.active? or resource.paused? # and this_user?(resource.user_id)
+    if resource.active? or resource.paused?
       paused_info if resource.paused?
     else
       span(class: "truncate") do
@@ -165,7 +165,7 @@ class ListItems::TimeMaterial < ListItems::ListItem
     if resource.active? or resource.paused?
       # counter = (resource.paused? ? resource.time_spent : (Time.current.to_i - resource.started_at.to_i) + resource.time_spent) * 60
       counter = (resource&.registered_minutes || 0) * 60
-      counter += resource.paused? ? 0 : resource.time_spent.to_i
+      counter += resource.paused? ? 0 : resource.elapsed_seconds_now
       _days, hours, minutes, seconds = resource.calc_hrs_minutes counter
       timestring = "%02d:%02d:%02d" % [ hours, minutes, seconds ]
       #

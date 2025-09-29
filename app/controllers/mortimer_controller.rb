@@ -10,7 +10,7 @@ class MortimerController < BaseController
   before_action :set_filter, only: %i[ new index destroy ] # new b/c of modal
   before_action :set_resources, only: %i[ index destroy ]
   before_action :set_resources_stream
-  before_action :set_user_resources_stream
+  before_action :set_user_resources_stream, only: %i[ index ]
 
   include Authorize
   include Resourceable

@@ -23,6 +23,7 @@ class Users::SessionsController < MortimerController
   end
 
   def destroy
+    Current.user.update current_sign_in_at: nil, current_sign_in_ip: ""
     terminate_session
     session[:otp_passed] = false
     flash[:notice] = "You have been signed out."
@@ -68,6 +69,7 @@ class Users::SessionsController < MortimerController
 
     def start_session
       start_new_session_for attempting_user
+      attempting_user.update current_sign_in_at: Time.current
       Current.session.password!
       respond_to do |format|
         format.turbo_stream { render turbo_stream: turbo_stream.replace("body", partial: "users/sessions/redirect") }

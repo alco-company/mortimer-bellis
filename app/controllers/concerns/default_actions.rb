@@ -30,7 +30,7 @@ module DefaultActions
     def toggle
       posthog_capture
       resource_class.toggle
-      rs = params[:turbo_frame].present? ? params[:turbo_frame] : "#{Current.tenant.id}_list_header"
+      rs = params[:turbo_frame].present? ? params[:turbo_frame] : "#{(Current.tenant.id rescue false) || "1"}_list_header"
       p = params[:partial].present? ? params[:partial] : "application/header"
       render turbo_stream: turbo_stream.replace(rs, partial: p, locals: { tenant: Current.tenant, user: Current.user, divider: true })
     end
@@ -126,7 +126,7 @@ module DefaultActions
 
       respond_to do |format|
         if before_create_callback && resource_create && create_callback
-          Broadcasters::Resource.new(resource, params.permit!).create
+          stream_create
           resource.notify action: :create
           flash[:success] = t(".post")
           format.turbo_stream { render turbo_stream: [
@@ -163,7 +163,7 @@ module DefaultActions
       posthog_capture
       respond_to do |format|
         if before_update_callback && resource_update && update_callback
-          Broadcasters::Resource.new(resource, params.permit!).replace
+          stream_update
           resource.notify action: :update
           flash[:success] = t(".post")
           format.turbo_stream { render turbo_stream: [
@@ -211,7 +211,7 @@ module DefaultActions
           begin
             ActiveRecord::Base.connected_to(role: :writing) do
               # All code in this block will be connected to the reading role.
-              eval(cb) && resource.notify(action: :destroy) && Broadcasters::Resource.new(resource).destroy if resource.destroy!
+              eval(cb) && resource.notify(action: :destroy) && stream_destroy if resource.destroy!
             end
           rescue => error
             say error
@@ -254,6 +254,12 @@ module DefaultActions
     end
 
     #
+    # default broadcaster stream for create
+    def stream_create
+      Broadcasters::Resource.new(resource, params.permit!).create
+    end
+
+    #
     # implement on the controller inheriting this concern
     # in order to 'fix' stuff right before the resource gets updated
     #
@@ -278,6 +284,12 @@ module DefaultActions
     end
 
     #
+    # default broadcaster stream for update
+    def stream_update
+      Broadcasters::Resource.new(resource, params.permit!).replace
+    end
+
+    #
     # implement on the controller inheriting this concern
     # in order to not having to extend the update method on this concern
     #
@@ -285,6 +297,12 @@ module DefaultActions
     # ie - it cannot call methods on the object istself!
     #
     def destroy_callback
+    end
+
+    #
+    # default broadcaster stream for destroy
+    def stream_destroy
+      Broadcasters::Resource.new(resource).destroy
     end
 
     private
