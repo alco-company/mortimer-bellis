@@ -26,7 +26,7 @@ class PunchesController < MortimerController
       @resource = Current.user.punch(punch_clock, resource_params[:state], request.remote_ip)
       flash[:success] = t(".post")
       @activity_list = Current.user.tenant.punches.order(punched_at: :desc).take(10)
-      Broadcasters::Resource.new(@resource, { controller: "punches" }, "activity_list").create
+      Broadcasters::Resource.new(@resource, { controller: "punches" }, target: "activity_list").create
       Broadcasters::Resource.new(@resource, params.permit!).create
       render turbo_stream: [
         turbo_stream.replace("punch_button", partial: "punches/punch_button", locals: { user: Current.user, punch_clock: punch_clock }, alert: I18n.t("punch.create.failed")),
@@ -38,7 +38,7 @@ class PunchesController < MortimerController
       user = User.find(resource_params[:user_id])
       respond_to do |format|
         if @resource = user.punch(punch_clock, resource_params[:state], request.remote_ip)
-          Broadcasters::Resource.new(@resource, { controller: "punches" }, "activity_list").create
+          Broadcasters::Resource.new(@resource, { controller: "punches" }, target: "activity_list").create
           Broadcasters::Resource.new(@resource, params.permit!).create
           flash[:success] = t(".post")
           format.turbo_stream {

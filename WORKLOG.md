@@ -14,6 +14,7 @@
 - sync play time with server
 - url cannot be undefined
 - fix play time skewing
+- fix broadcasts across multiple devices
 
 ### 26/09/2025
 

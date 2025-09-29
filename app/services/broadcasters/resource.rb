@@ -4,12 +4,12 @@ class Broadcasters::Resource
 
   attr_accessor :tenant, :resource, :resource_class, :resources_stream, :params, :target, :user, :partial
 
-  def initialize(resource, params = {}, target = nil, user = Current.get_user, stream = nil, partial = nil)
+  def initialize(resource, params = {}, target: nil, user: nil, stream: nil, partial: nil)
     @resource = resource
     @params = params.respond_to?(:to_unsafe_h) ? params.to_unsafe_h : params
     @target = target || dom_id(resource)
     @resource_class = resource.class rescue nil
-    @user = user
+    @user = user || Current.get_user
     @tenant = resource.respond_to?(:tenant) ? resource.tenant : user.tenant rescue nil
     @resources_stream = stream || "%s_%s" % [ tenant&.id, resource_class.to_s.underscore.pluralize ] rescue nil
     @partial = partial || resource

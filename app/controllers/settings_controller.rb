@@ -65,12 +65,12 @@ class SettingsController < MortimerController
 
     def create_callback
       params[:type] = resource.type
-      Broadcasters::Resource.new(resource, params.permit!, params[:target], Current.get_user, "#{Current.get_tenant.id}_settings_view", "settings/special").replace
+      Broadcasters::Resource.new(resource, params.permit!, target: params[:target], user: Current.get_user, stream: "#{Current.get_tenant.id}_settings_view", partial: "settings/special").replace
     end
 
     def update_callback
       params[:type] = resource.type
-      Broadcasters::Resource.new(resource, params.permit!, params[:target], Current.get_user, "#{Current.get_tenant.id}_settings_view", "settings/special").replace
+      Broadcasters::Resource.new(resource, params.permit!, target: params[:target], user: Current.get_user, stream: "#{Current.get_tenant.id}_settings_view", partial: "settings/special").replace
     end
 
     # Only allow a list of trusted parameters through.

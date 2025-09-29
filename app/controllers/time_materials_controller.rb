@@ -62,7 +62,10 @@ class TimeMaterialsController < MortimerController
     def process_reload
       return false unless params.dig(:reload).present?
       reload_time_spent
-      Broadcasters::Resource.new(resource, { controller: "time_materials" }).replace if resource.active?
+      Current.get_tenant.users.each do |u|
+        Broadcasters::Resource.new(resource, { controller: "time_materials" }, user: u, stream: "#{u.id}_time_materials").replace if resource.active?
+      end
+      # Broadcasters::Resource.new(resource, { controller: "time_materials" }).replace if resource.active?
       # Broadcasters::Resource.new(resource.reload,
       #   { controller: "time_materials" },
       #   Current.user).replace if resource.active?

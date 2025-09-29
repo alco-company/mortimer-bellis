@@ -36,6 +36,11 @@ module Resourceable
         "%s_%s" % [ tenant&.id, resource_class.to_s.underscore.pluralize ]
     end
 
+    def set_user_resources_stream
+      user = Current.get_user || (@resource&.user rescue false) || User.first
+      @user_resources_stream ||= "%s_%s" % [ user&.id, resource_class.to_s.underscore.pluralize ]
+    end
+
     def set_resources
       # @resources ||= ResourceableResource.new(resource_class, request.path, params)
       @resources = ResourceableResource.new(resource_class, request.path, params, @filter, @batch)
