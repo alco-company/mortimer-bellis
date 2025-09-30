@@ -57,7 +57,6 @@ class KillTenantJob < ApplicationJob
         klass.unscoped.where(tenant_id: tenant.id).delete_all
       rescue => e
         Rails.logger.error "Failed purging #{model_name} for tenant #{tenant.id}: #{e.message}"
-        raise
       end
     end
   end
