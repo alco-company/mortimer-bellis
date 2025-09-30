@@ -50,7 +50,7 @@ class KillTenantJob < ApplicationJob
   def purge_tenant_scoped_models(tenant)
     order = DependencyGraph.purge_order
     order.each do |model_name|
-      next if model_name == "Tenant"
+      next if model_name == "tenants"
       klass = safe_constantize(model_name)
       next unless klass && klass.column_names.include?("tenant_id")
       begin
@@ -81,7 +81,7 @@ class KillTenantJob < ApplicationJob
   end
 
   def safe_constantize(name)
-    name.constantize
+    name.singularize.classify.constantize
   rescue NameError
     nil
   end
