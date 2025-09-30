@@ -72,6 +72,13 @@ class KillTenantJob < ApplicationJob
         next if user.id == 1
         begin
           user.mugshot.purge if user.mugshot.attached?
+          user.taggings.delete_all
+          user.tags.delete_all
+          user.time_materials.delete_all
+          user.punches.delete_all
+          user.filters.delete_all
+          user.batches.delete_all
+          user.background_jobs.delete_all
           user.access_grants.delete_all
           user.access_tokens.delete_all
           user.noticed_events.delete_all
