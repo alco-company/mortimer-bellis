@@ -51,9 +51,9 @@ class KillTenantJob < ApplicationJob
     order = DependencyGraph.purge_order
     order.each do |model_name|
       next if model_name == "tenants"
-      klass = safe_constantize(model_name)
-      next unless klass && klass.column_names.include?("tenant_id")
       begin
+        klass = safe_constantize(model_name)
+        next unless klass && klass.column_names.include?("tenant_id")
         klass.unscoped.where(tenant_id: tenant.id).delete_all
       rescue => e
         Rails.logger.error "Failed purging #{model_name} for tenant #{tenant.id}: #{e.message}"
