@@ -13,7 +13,7 @@ class KillTenantJob < ApplicationJob
       step = 3
       purge_users(tenant)
       step = 4
-      tenant.teams.destroy_all
+      purge_teams(tenant)
       step = 5
       tenant.logo.purge if tenant.logo.attached?
       step = 6
@@ -91,6 +91,20 @@ class KillTenantJob < ApplicationJob
           user.destroy
         rescue => e
           Rails.logger.error "Failed deleting user #{user.id} in tenant #{tenant.id}: #{e.message}"
+        end
+      end
+    end
+
+    def purge_teams(tenant)
+      tenant.teams.order(id: :desc).each do |team|
+        begin
+          team.noticed_events.delete_all
+          team.calendars.delete_all
+          team.settings.delete_all
+          team.punch_cards.delete_all
+          team.destroy
+        rescue => e
+          Rails.logger.error "Failed deleting team #{team.id} in tenant #{tenant.id}: #{e.message}"
         end
       end
     end
