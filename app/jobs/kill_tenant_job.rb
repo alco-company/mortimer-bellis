@@ -72,10 +72,9 @@ class KillTenantJob < ApplicationJob
         next if user.id == 1
         begin
           user.mugshot.purge if user.mugshot.attached?
-          user.taggings.delete_all
-          user.tags.delete_all
           user.time_materials.delete_all
           user.punches.delete_all
+          user.punch_cards.delete_all
           user.filters.delete_all
           user.batches.delete_all
           user.background_jobs.delete_all
@@ -85,6 +84,7 @@ class KillTenantJob < ApplicationJob
           user.notifications.delete_all
           user.web_push_subscriptions.delete_all
           user.sessions.delete_all
+          user.tasks.delete_all
           user.delete
         rescue => e
           Rails.logger.error "Failed deleting user #{user.id} in tenant #{tenant.id}: #{e.message}"
