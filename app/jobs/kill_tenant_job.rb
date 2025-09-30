@@ -15,9 +15,11 @@ class KillTenantJob < ApplicationJob
       step = 4
       purge_teams(tenant)
       step = 5
+      ActiveRecord::Base.connection.execute("PRAGMA foreign_keys = OFF")
       tenant.logo.purge if tenant.logo.attached?
       step = 6
-      tenant.destroy rescue false
+      tenant.destroy
+      ActiveRecord::Base.connection.execute("PRAGMA foreign_keys = ON")
     rescue => e
       Rails.logger.error "Failed to delete tenant at step #{step} #{tenant.id}: #{e.message}"
       step == 6
@@ -71,6 +73,7 @@ class KillTenantJob < ApplicationJob
       tenant.users.order(id: :desc).each do |user|
         next if user.id == 1
         begin
+          ActiveRecord::Base.connection.execute("PRAGMA foreign_keys = OFF")
           user.mugshot.purge if user.mugshot.attached?
           user.time_materials.delete_all
           user.punches.delete_all
@@ -89,6 +92,7 @@ class KillTenantJob < ApplicationJob
           user.tasks.delete_all
           user.calendars.delete_all
           user.destroy
+          ActiveRecord::Base.connection.execute("PRAGMA foreign_keys = ON")
         rescue => e
           Rails.logger.error "Failed deleting user #{user.id} in tenant #{tenant.id}: #{e.message}"
         end
@@ -98,10 +102,12 @@ class KillTenantJob < ApplicationJob
     def purge_teams(tenant)
       tenant.teams.order(id: :desc).each do |team|
         begin
+          ActiveRecord::Base.connection.execute("PRAGMA foreign_keys = OFF")
           team.noticed_events.delete_all
           team.calendars.delete_all
           team.settings.delete_all
           team.destroy
+          ActiveRecord::Base.connection.execute("PRAGMA foreign_keys = ON")
         rescue => e
           Rails.logger.error "Failed deleting team #{team.id} in tenant #{tenant.id}: #{e.message}"
         end

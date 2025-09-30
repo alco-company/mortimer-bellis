@@ -22,6 +22,7 @@
 - make kill_tenant_job great again IX
 - make kill_tenant_job great again X
 - make kill_tenant_job great again XI
+- make kill_tenant_job great again XII
 
 ### 29/09/2025
 
