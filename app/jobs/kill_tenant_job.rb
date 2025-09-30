@@ -101,7 +101,6 @@ class KillTenantJob < ApplicationJob
           team.noticed_events.delete_all
           team.calendars.delete_all
           team.settings.delete_all
-          team.punch_cards.delete_all
           team.destroy
         rescue => e
           Rails.logger.error "Failed deleting team #{team.id} in tenant #{tenant.id}: #{e.message}"
