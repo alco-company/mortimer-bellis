@@ -26,6 +26,7 @@ class Tenant < ApplicationRecord
   has_many :punch_cards, dependent: :destroy
   has_many :punch_clocks, dependent: :destroy
   has_many :punches, dependent: :destroy
+  has_many :tags, dependent: :destroy
   has_many :tasks, dependent: :destroy
   has_many :teams, dependent: :destroy
   has_many :time_materials, dependent: :destroy

@@ -172,11 +172,13 @@ class ApplicationComponent < Phlex::HTML
 
   def build_url_for resource = nil, controller: nil, action: nil, id: nil, **options
     if resource
-      Rails.application.routes.url_for(resource)
+      Rails.application.routes.url_helpers.url_for(resource)
     else
       controller ||= resource_class.to_s.underscore.pluralize
       action ||= :index
-      Rails.application.routes.url_for({ controller: controller, action: action, id: id, only_path: false }.merge(options))
+      Rails.application.routes.url_helpers.url_for({ controller: controller, action: action, id: id, only_path: false }.merge(options))
     end
+  rescue
+    root_url
   end
 end

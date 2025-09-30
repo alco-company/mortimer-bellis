@@ -50,9 +50,9 @@ class KillTenantJob < ApplicationJob
   def purge_tenant_scoped_models(tenant)
     order = DependencyGraph.purge_order
     order.each do |model_name|
-      next if model_name == 'Tenant'
+      next if model_name == "Tenant"
       klass = safe_constantize(model_name)
-      next unless klass && klass.column_names.include?('tenant_id')
+      next unless klass && klass.column_names.include?("tenant_id")
       begin
         klass.unscoped.where(tenant_id: tenant.id).delete_all
       rescue => e

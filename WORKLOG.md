@@ -9,6 +9,10 @@
 
 ## CHANGELOG
 
+### 30/09/2025
+
+- make kill_tenant_job great again
+
 ### 29/09/2025
 
 - sync play time with server
