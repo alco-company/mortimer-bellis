@@ -3,9 +3,11 @@ class User < ApplicationRecord
   include Punchable
   include Settingable
   include Stateable
+  include Taggable
   include Tenantable
   include TimeMaterialable
   include TimeZoned
+  include Calendarable
 
   belongs_to :team
 

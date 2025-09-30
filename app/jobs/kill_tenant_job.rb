@@ -17,7 +17,7 @@ class KillTenantJob < ApplicationJob
       step = 5
       tenant.logo.purge if tenant.logo.attached?
       step = 6
-      tenant.delete rescue false
+      tenant.destroy rescue false
     rescue => e
       Rails.logger.error "Failed to delete tenant at step #{step} #{tenant.id}: #{e.message}"
       step == 6
@@ -84,8 +84,11 @@ class KillTenantJob < ApplicationJob
           user.notifications.delete_all
           user.web_push_subscriptions.delete_all
           user.sessions.delete_all
+          user.tags.delete_all
+          user.taggings.delete_all
           user.tasks.delete_all
-          user.delete
+          user.calendars.delete_all
+          user.destroy
         rescue => e
           Rails.logger.error "Failed deleting user #{user.id} in tenant #{tenant.id}: #{e.message}"
         end
