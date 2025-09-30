@@ -74,6 +74,7 @@ class KillTenantJob < ApplicationJob
           user.mugshot.purge if user.mugshot.attached?
           user.access_grants.delete_all
           user.access_tokens.delete_all
+          user.noticed_events.delete_all
           user.notifications.delete_all
           user.web_push_subscriptions.delete_all
           user.sessions.delete_all
