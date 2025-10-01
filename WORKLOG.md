@@ -2,12 +2,17 @@
 
 ## ISSUES
 
+- https://binarysolo.blog/custom-error-pages-in-rails/ && https://beon.tech/blog/how-to-handle-exceptions-in-rails-full-guide
 - impersonate user - not only tenant
 - backup/restore menu items
 - find proper hour_rate
 - deferred finish - set to automate closing
 
 ## CHANGELOG
+
+### 01/10/2025
+
+- handle sessions better
 
 ### 30/09/2025
 

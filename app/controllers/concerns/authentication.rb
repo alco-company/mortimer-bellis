@@ -13,6 +13,14 @@ module Authentication
     end
   end
 
+  class Terminator
+    def self.terminate_user_session
+      Current.user.update(current_sign_in_at: nil, current_sign_in_ip: nil)
+      Current.session.destroy
+      # cookies.delete(:session_id)
+    end
+  end
+
   private
     def authenticated?
       resume_session && Current.session.user.confirmed?
