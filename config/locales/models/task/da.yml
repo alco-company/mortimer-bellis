@@ -39,6 +39,26 @@ da:
       get_help_here: Få hjælp her
       no_unfinished_tasks: Du har ingen opgaver, der ikke er afsluttet
 
+    template_tasks:
+      notifications:
+        title: Aktivér notifikationer
+        instruction: Notifikationer bruges til at levere beskeder til dig, i Mortimer.
+      enable_2fa:
+        title: Aktivér to-faktor-godkendelse
+        instruction: To-faktor-godkendelse giver et ekstra lag af sikkerhed til din konto.
+      setup_tenant:
+        title: Opsæt din virksomhed
+        instruction: Tilpas Mortimer til din virksomheds behov.
+      setup_user_profile:
+        title: Opsæt din brugerprofil
+        instruction: Tilpas din brugerprofil med dine oplysninger.
+      integrate_with_dinero:
+        title: Integrér med Dinero
+        instruction: Forbind Mortimer med Dinero for at synkronisere dine data.
+      invite_colleagues:
+        title: Inviter kollegaer
+        instruction: Tilføj dine kollegaer til Mortimer for at samarbejde effektivt.
+
     list:
       title: Opgaver
       new: Ny opgave

@@ -160,7 +160,9 @@ module Resourceable
     def build_url_for controller: nil, action: nil, id: nil, **options
       controller ||= resource_class.to_s.underscore.pluralize
       action ||= :index
-      Rails.application.routes.url_for({ controller: controller, action: action, id: id, only_path: false }.merge(options))
+      Rails.application.routes.url_helpers.url_for({ controller: controller, action: action, id: id, only_path: false }.merge(options))
+    rescue
+      root_url
     end
 
     def params_ctrl

@@ -14,6 +14,7 @@
 
 - handle sessions better
 - last_activity missing
+- fix seeding
 
 ### 30/09/2025
 
