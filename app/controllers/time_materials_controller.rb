@@ -325,16 +325,18 @@ class TimeMaterialsController < MortimerController
       dt=Current.get_user.default(:default_time_material_date, "Time.current.to_date")
       if dt =~ /.to_date/
         parts = dt.split(".")
-        eval(parts.join(".")).class == Date ? eval(parts.join(".")) : eval(default_date)
+        eval(parts.join(".")).class == Date ? eval(parts.join(".")) : Time.current.to_date
       else
         raise "no date expected"
       end
     rescue
-      eval(default_date)
+      Time.current.to_date
     end
 
     def get_hourly_rate
       return Current.get_user.hourly_rate if Current.get_user.hourly_rate != 0
       Current.get_tenant.time_products.first.base_amount_value || Current.get_user.default(:default_time_material_rate, 0)
+    rescue
+      0
     end
 end

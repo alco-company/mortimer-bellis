@@ -15,6 +15,7 @@
 - handle sessions better
 - last_activity missing
 - fix seeding
+- guard default hour_rate & default_date
 
 ### 30/09/2025
 
