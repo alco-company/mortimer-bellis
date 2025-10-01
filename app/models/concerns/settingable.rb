@@ -105,6 +105,9 @@ module Settingable
 
       # Default confirm (that user can perform the action)
       false
+    rescue
+      Rails.logger.error "Error in can? for #{action} on #{self.class.name}# with resource #{resource.id rescue 'nil'}"
+      false
     end
 
     def can_query(key, rel, inverse = false)
@@ -211,6 +214,8 @@ module Settingable
         team.settings.where(key: key.to_s).any? ? team.settings.where(key: key.to_s) :
         Current.get_tenant.settings.where(key: key.to_s)
       defaults.count.positive? ? defaults.first.value : default
+    rescue
+      default
     end
   end
 

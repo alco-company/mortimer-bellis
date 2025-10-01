@@ -16,6 +16,7 @@
 - last_activity missing
 - fix seeding
 - guard default hour_rate & default_date
+- admin user can create
 
 ### 30/09/2025
 
