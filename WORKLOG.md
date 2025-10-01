@@ -13,6 +13,7 @@
 ### 01/10/2025
 
 - handle sessions better
+- last_activity missing
 
 ### 30/09/2025
 
