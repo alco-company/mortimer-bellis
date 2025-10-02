@@ -7,8 +7,15 @@
 - backup/restore menu items
 - find proper hour_rate
 - deferred finish - set to automate closing
+- emails for gmail go to spam
+- multiple email adr in invitation do not get processed
+- 
 
 ## CHANGELOG
+
+### 02/10/2025
+
+- tasks with helper link errs
 
 ### 01/10/2025
 

@@ -130,7 +130,6 @@ class TimeMaterialsController < MortimerController
     def stream_destroy
       Broadcasters::Resource.new(resource, user: Current.user, stream: "#{Current.user.id}_time_materials").destroy
       Current.get_tenant.users.each do |u|
-        debugger
         next unless u.current_sign_in_at.present? && u != Current.user
         Broadcasters::Resource.new(resource, user: u, stream: "#{u.id}_time_materials").destroy
       end
