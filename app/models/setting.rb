@@ -149,7 +149,11 @@ class Setting < ApplicationRecord
       when "validate_time_material_done";         [ "false", "TimeMaterial" ]
       when "limit_time_to_quarters";              [ "false", "TimeMaterial" ]
       when "run";                                 [ "true", "BackgroundJob" ]
-      else                                        [ "true", "User" ]
+      when "see_mileage_tab";                     [ "false", "TimeMaterial" ]
+      when "see_material_tab";                    [ "false", "TimeMaterial" ]
+      when "add_tags_on_time_material";           [ "false", "TimeMaterial" ]
+      when "add_comments_on_time_material";       [ "false", "TimeMaterial" ]
+      else                                        [ "true", "TimeMaterial" ]
       end
       self.create tenant: tenant, key: k[0], setable_type: setable_type, value: value
     end
@@ -315,6 +319,7 @@ class Setting < ApplicationRecord
     return "TimeMaterial" if resource.is_a?(TimeMaterial) || resource == TimeMaterial
     resource&.class&.name || "TimeMaterial"
   end
+
   private_class_method :klass_for
   DEFAULT_TIME_SETTINGS = {
       "delegate_time_materials" => { "type" => "boolean", "value" => "true" },
@@ -382,6 +387,7 @@ class Setting < ApplicationRecord
 
     to_result_map(rel, keys.keys)
   end
+
   private_class_method :build_settings_for
 
   def self.to_result_map(relation, keys)
