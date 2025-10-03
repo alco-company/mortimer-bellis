@@ -14,8 +14,8 @@
             <div class="truncate text-sm font-medium text-gray-500 dark:text-gray-400">Timer ialt og gns /dag</div>
             <div class="mt-1 w-full text-xl md:text-3xl font-semibold tracking-tight text-gray-900 dark:text-white">
               <div class="flex items-stretch ">
-                <div class="py-2 grow"><%= TimeMaterial.total_time_registered %></div>
-                <div class="py-2 grow text-right"><%= TimeMaterial.avg_total_time_per_day %></div>
+                <div class="py-2 grow"><%= TimeMaterial.by_tenant.total_time_registered %></div>
+                <div class="py-2 grow text-right"><%= TimeMaterial.by_tenant.avg_total_time_per_day %></div>
               </div>
             </div>
           </div>
@@ -23,8 +23,8 @@
             <div class="truncate text-sm font-medium text-gray-500 dark:text-gray-400">Fakturérbare timer og gns /dag</div>
             <div class="mt-1 w-full  text-xl md:text-3xl  font-semibold tracking-tight text-gray-900 dark:text-white">
               <div class="flex items-stretch ">
-                <div class="py-2 grow"><%= TimeMaterial.total_invoiceable_time %></div>
-                <div class="py-2 grow text-right"><%= TimeMaterial.avg_total_invoiceable_per_day %></div>
+                <div class="py-2 grow"><%= TimeMaterial.by_tenant.total_invoiceable_time %></div>
+                <div class="py-2 grow text-right"><%= TimeMaterial.by_tenant.avg_total_invoiceable_per_day %></div>
               </div>
             </div>
           </div>

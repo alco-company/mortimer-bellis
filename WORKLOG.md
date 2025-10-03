@@ -18,6 +18,7 @@
 ### 03/10/2025
 
 - new account settings presets
+- stats by tenant
 
 ### 02/10/2025
 
