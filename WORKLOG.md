@@ -19,6 +19,7 @@
 
 - new account settings presets
 - stats by tenant
+- fix view_context err
 
 ### 02/10/2025
 
