@@ -20,6 +20,7 @@
 - new account settings presets
 - stats by tenant
 - fix view_context err
+- missed session_timeout
 
 ### 02/10/2025
 

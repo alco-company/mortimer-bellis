@@ -153,6 +153,7 @@ class Setting < ApplicationRecord
       when "see_material_tab";                    [ "false", "TimeMaterial" ]
       when "add_tags_on_time_material";           [ "false", "TimeMaterial" ]
       when "add_comments_on_time_material";       [ "false", "TimeMaterial" ]
+      when "session_timeout";                     [ "7.days", nil ]
       else                                        [ "true", "TimeMaterial" ]
       end
       self.create tenant: tenant, key: k[0], setable_type: setable_type, value: value
