@@ -8,6 +8,7 @@ module Settingable
     def can?(action, resource: nil, inverse: false)
       key = action.to_s
       tenant = try(:tenant) || Current.tenant
+      resource ||= self if self.class != Class
       all_settings = tenant.settings
 
       # true on resource-level
@@ -15,7 +16,7 @@ module Settingable
       return result if !result.nil?
 
       # true on user-level
-      result = can_query(key, all_settings.where(setable: Current.user), inverse)
+      result = can_query(key, all_settings.where(setable: Current.user), inverse) unless resource.class == User
       return result if !result.nil?
 
       # true on user's team-level
@@ -23,7 +24,7 @@ module Settingable
       return result if !result.nil?
 
       # true on resource class-level
-      result = can_query(key, all_settings.where(setable_type: self.class.name, setable_id: nil), inverse)
+      result = can_query(key, all_settings.where(setable_type: resource.class.to_s, setable_id: nil), inverse)
       return result if !result.nil?
 
       # true on user class-level

@@ -21,6 +21,7 @@
 - stats by tenant
 - fix view_context err
 - missed session_timeout
+- fix errs on the can? method
 
 ### 02/10/2025
 

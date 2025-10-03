@@ -97,8 +97,8 @@ class TimeMaterial < ApplicationRecord
   scope :by_project, ->(project) { where("project_id = ?", project.id) if project.present? }
   scope :by_product, ->(product) { where("product_id = ?", product.id) if product.present? }
   scope :by_date, ->(date) { where("wdate = ?", date) if date.present? }
-  scope :this_month, -> { where_op(:gt, created_at: Time.current.at_beginning_of_month) }
-  scope :invoiceable, -> { where(is_invoice: true).where.not(customer_id: nil).where.not(state: states[:draft]) }
+  scope :this_month, -> { by_tenant.where_op(:gt, created_at: Time.current.at_beginning_of_month) }
+  scope :invoiceable, -> { by_tenant.where(is_invoice: true).where.not(customer_id: nil).where.not(state: states[:draft]) }
 
   # STATS
   def self.total_time_registered
