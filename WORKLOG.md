@@ -19,6 +19,7 @@
 - Tidy subject (no spaced caps).
 - Add List-Unsubscribe + List-Unsubscribe-Post headers.
 - skiftet til MailTrap - fuldstændig problemløst
+- missed the deploy yaml
 
 ### 03/10/2025
 
