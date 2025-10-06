@@ -11,9 +11,12 @@
 - Enable custom tracking domain (e.g., lnk.mortimer.pro) in Mailersend and use it in all links/pixels.
 - Fix the i18n so no translation_missing appears; make the Danish copy clean in both HTML and plaintext.
 - Clean the preheader to a short sentence; remove weird/invisible characters.
-- Tidy subject (no spaced caps).
 
 ## CHANGELOG
+
+### 06/10/2025
+
+- Tidy subject (no spaced caps).
 
 ### 03/10/2025
 

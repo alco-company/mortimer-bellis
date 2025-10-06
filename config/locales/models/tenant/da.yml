@@ -45,10 +45,10 @@ da:
 
     mailer:
       welcome:
-        preheader: "Velkomst email fra  M O R T I M E R  - måske Europa's enkleste og billigste tidsregistreringssystem"
-        subject: Velkommen til M O R T I M E R
+        preheader: "Velkomst email fra  MORTIMER  - måske Europa's enkleste og billigste tidsregistreringssystem"
+        subject: Velkommen til MORTIMER
         hello: Velkommen %{name},
-        we_created_an_tenant: "Vi har oprettet en konto til jer på  M O R T I M E R.<br>For at logge på, skal du <a href='https://app.mortimer.pro'>klikke her</a> og den nedenstående oplysning.<p>Du bør rette adgangskoden, når du er logget korrekt ind (faktisk vil vi endnu hellere at du straks efter første login vælger at føje 2FA til din konto):"
+        we_created_an_tenant: "Vi har oprettet en konto til jer på  MORTIMER.<br>For at logge på, skal du <a href='https://app.mortimer.pro'>klikke her</a> og den nedenstående oplysning.<p>Du bør rette adgangskoden, når du er logget korrekt ind (faktisk vil vi endnu hellere at du straks efter første login vælger at føje 2FA til din konto):"
         confirmation_instruction: "Brugernavn: %{email}"
         ignore: "Hvis du ikke har bedt om en konto, kan du ignorere denne e-mail, og så beklager vi ulejligheden."
         regards: Med venlig hilsen,
@@ -57,7 +57,7 @@ da:
       send_invoice:
         hello: "Hej %{name},"
         page_title: "Betal for Mortimer"
-        preheader: Invoice email from  M O R T I M E R  - maybe Europe's easiest and cheapest time tracking system
+        preheader: Invoice email from  MORTIMER  - maybe Europe's easiest and cheapest time tracking system
         confirmed_license: Du har nu valgt at betale for Mortimer. Du har valgt en %{license} licens, og det vil vi gerne sige mange tak for!
         license_subscription_renewal: Dit abonnement på licensen udløber %{renewal_date} - da skal du senest forny den for at fortsætte med at bruge de funktioner licensen giver adgang til.
         we_created_an_invoice_for_you: "Vi har oprettet en faktura for dig, som du kan hente her: <a href='%{url}'>PDF faktura</a>"
@@ -137,7 +137,7 @@ da:
           Den vedhæftede PDF viser en oversigt over medarbejdernes indstemplinger det sidste døgn, opsummeret på arbejdstid, pauser, overarbejde, mm.
 
           Med venlig hilsen,
-          M O R T I M E R
+          MORTIMER
       datalon_email:
         subject: Datafil til Datalon vedhæftet
         body: |
@@ -146,4 +146,4 @@ da:
           Her er den datafil, du har bedt om.
 
           Med venlig hilsen,
-          M O R T I M E R
+          MORTIMER

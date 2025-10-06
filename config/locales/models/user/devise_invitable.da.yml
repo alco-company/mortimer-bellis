@@ -23,7 +23,7 @@ da:
       invitation_instructions:
         hello: "Hej"
         page_title: "Invitation til at oprette en brugerprofil på Mortimer"
-        subject: "Invitation til at oprette en brugerprofil på  M O R T I M E R"
+        subject: "Invitation til at oprette en brugerprofil på  MORTIMER"
         preheader: "Invitation til at oprette en brugerprofil på Mortimer"
         hi: "Hej"
         title: "Er %{email} din email adresse?"

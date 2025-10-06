@@ -9,7 +9,7 @@ class PosEmployeeLayout < ApplicationView
 
     html(class: "h-full bg-white", lang: "da") do
       head do
-        title { "M O R T I M E R #{ 'DEV' if Rails.env.local?}" }
+        title { "MORTIMER #{ 'DEV' if Rails.env.local?}" }
         meta name: "viewport", content: "width=device-width,initial-scale=1"
         csp_meta_tag
         csrf_meta_tags

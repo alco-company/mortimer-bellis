@@ -224,6 +224,12 @@
     .leading-8 {
         line-height: 32px
     }
+    .tracking-\[\.25em\] {
+        letter-spacing: 0.25em
+    }
+    .text-mortimer {
+        color: #0284c7
+    }
     .text-black {
         color: #000
     }
@@ -371,16 +377,7 @@
                 <p class="m-0 text-sm text-gray-500">
                   <%== t("tenant.mailer.welcome.ignore") %>
                 </p>
-                <div class="my-8 text-sm">
-                  <%= I18n.t("tenant.mailer.welcome.regards") %>
-                  <br>
-                  <strong class="text-sky-700 text-xl">
-                    M O R T I M E R
-                  </strong>
-                  <br>
-                  <br>
-                  <span class="text-sm italic text-gray-500"><%= @resource.invited_by.name rescue @tenant.name %></span>
-                </div>
+                <%= render MortimerMailFooter.new signature: true, sender: (@resource.invited_by.name rescue @tenant.name) %>
               </td>
             </tr>
             <tr role="separator">
@@ -388,15 +385,7 @@
             </tr>
             <tr>
               <td class="text-center text-slate-600 text-xs px-6">
-                <p class="m-0 mb-4 uppercase">
-                  M O R T I M E R
-                </p>
-                <p class="m-0 italic">
-                  The easiest, fastest, and most affordable Time & Attendance software in Europe. Most likely.
-                </p>
-                <p class="cursor-default"></p>
-                  <%= render SomelinksComponent.new %>
-                <p></p>
+                <%= render MortimerMailFooter.new %>
               </td>
             </tr>
           </table>

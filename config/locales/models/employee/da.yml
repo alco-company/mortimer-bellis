@@ -68,21 +68,21 @@ da:
 
   employee_mailer:
     welcome:
-      title: "Velkommen til M O R T I M E R"
-      preheader: "Du er blevet inviteret til at tidsregistrere med  M O R T I M E R  - fra din smartphone, tablet eller computer"
+      title: "Velkommen til MORTIMER"
+      preheader: "Du er blevet inviteret til at tidsregistrere med  MORTIMER  - fra din smartphone, tablet eller computer"
       subject: "Invitation til at tidsregistrere"
       hi: Hej,
       you: er din email adresse %{email}?
-      introduction: "Hvis det er, har <strong>%{tenant}</strong> inviteret dig til at tidsregistrere med   M O R T I M E R. Du kan starte ved at trykke på knappen herunder."
+      introduction: "Hvis det er, har <strong>%{tenant}</strong> inviteret dig til at tidsregistrere med   MORTIMER. Du kan starte ved at trykke på knappen herunder."
       action: "Ja, det er mig"
-      not_interested: "Hvis du ikke er interesseret, eller hvis det er den forkerte email adresse, der er blevet benyttet, så beklager holdet bag  M O R T I M E R  ulejligheden, og beder dig ignorere denne email."
+      not_interested: "Hvis du ikke er interesseret, eller hvis det er den forkerte email adresse, der er blevet benyttet, så beklager holdet bag  MORTIMER  ulejligheden, og beder dig ignorere denne email."
       salutations: "Med venlig hilsen"
     pos_link:
-      title: "Dit personlige link til tidsregistrering i M O R T I M E R"
-      preheader: "Dit personlige link til tidsregistrering i M O R T I M E R"
-      subject: "Dit personlige link til tidsregistrering i M O R T I M E R"
+      title: "Dit personlige link til tidsregistrering i MORTIMER"
+      preheader: "Dit personlige link til tidsregistrering i MORTIMER"
+      subject: "Dit personlige link til tidsregistrering i MORTIMER"
       hi: Hej,
-      you: du har afsluttet registreringen af dine personlige oplysninger - og er nu klar til at tidsregistrere med  M O R T I M E R.
+      you: du har afsluttet registreringen af dine personlige oplysninger - og er nu klar til at tidsregistrere med  MORTIMER.
       introduction: "Du kan stemple ind, ud, og pause, som du kommer igennem din dag. Du kan starte ved at trykke på knappen herunder, og derefter fx knytte siden til din hjemmeskærm på din smartphone; så bliver det nemmere, hvis du fx har haft slukket telefonen eller 'smidt' alle apps ud."
       action: "Vis mig mit stempelur"
       salutations: "Med venlig hilsen"
@@ -92,16 +92,16 @@ da:
       subject: "Invitation til at færdiggøre en medarbejder profil"
       hi: Hej,
       you: er din email adresse %{email}?
-      introduction: "Hvis det er, har %{inviter} hos <strong>%{tenant}</strong> inviteret dig til at færdiggøre en medarbejder profil på  M O R T I M E R. Du kan modtage invitationen ved at trykke på knappen herunder."
+      introduction: "Hvis det er, har %{inviter} hos <strong>%{tenant}</strong> inviteret dig til at færdiggøre en medarbejder profil på  MORTIMER. Du kan modtage invitationen ved at trykke på knappen herunder."
       action: "Ja, det er mig"
-      not_interested: "Hvis du ikke er interesseret, eller hvis det er den forkerte email adresse, der er blevet benyttet, så beklager holdet bag  M O R T I M E R  ulejligheden, og beder dig ignorere denne email."
+      not_interested: "Hvis du ikke er interesseret, eller hvis det er den forkerte email adresse, der er blevet benyttet, så beklager holdet bag  MORTIMER  ulejligheden, og beder dig ignorere denne email."
       salutations: "Med venlig hilsen"
     confetti:
       title: "Succes!"
       preheader: "Fejring af din første stempling"
       subject: "Fejring af din første stempling"
       hi: Hej,
-      you: "%{name} - du har lige stemplet ind for første gang på  M O R T I M E R. Tillykke! Du er nu en del af holdet hos <strong>%{tenant}</strong>."
+      you: "%{name} - du har lige stemplet ind for første gang på  MORTIMER. Tillykke! Du er nu en del af holdet hos <strong>%{tenant}</strong>."
       introduction: "Husk at tidsregistrering er i din egen interesse! Du kan bruge det i samtalen med din leder, din personlige udvikling, og hvis du har brug for at dokumentere din arbejdstid."
       rights: "Du har ret til at se og rette dine egne data, og du kan slette din profil, hvis du ikke længere skal arbejde i virksomheden. Dine data skal virksomheden opbevare i 5 år. Hvis du har spørgsmål, så kontakt din leder."
       salutations: "Med venlig hilsen"

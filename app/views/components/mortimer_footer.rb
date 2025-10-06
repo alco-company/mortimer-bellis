@@ -20,7 +20,7 @@ class MortimerFooter < ApplicationComponent
             "border-gray-200 py-2 text-xs text-gray-400 text-center sm:text-left text-nowrap"
         ) do
           span(class: "inline text-nowrap") do
-            plain "© 2018-#{DateTime.current.year} &nbsp;&nbsp;M O R T I M E R&nbsp;&nbsp;".html_safe
+            plain "© 2018-#{DateTime.current.year} &nbsp;&nbsp;MORTIMER&nbsp;&nbsp;".html_safe
           end
           span(class: "text-nowrap inline") { t(:all_rights_reserved) }
           if Rails.env.local?
