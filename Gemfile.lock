@@ -270,6 +270,7 @@ GEM
       http-cookie (~> 1.0)
       http-form_data (~> 2.2)
       llhttp-ffi (~> 0.5.0)
+    http-accept (1.7.0)
     http-cookie (1.0.8)
       domain_name (~> 0.5)
     http-form_data (2.3.0)
@@ -331,6 +332,8 @@ GEM
       http (~> 5.2)
       json (~> 2.9)
       uri (~> 1.0)
+    mailtrap (2.4.1)
+      base64
     marcel (1.0.4)
     matrix (0.4.3)
     mime-types (3.7.0)
@@ -369,6 +372,7 @@ GEM
     net-smtp (0.5.1)
       net-protocol
     net-ssh (7.3.0)
+    netrc (0.11.0)
     nio4r (2.7.4)
     nokogiri (1.18.9-aarch64-linux-gnu)
       racc (~> 1.4)
@@ -477,6 +481,11 @@ GEM
     regexp_parser (2.11.0)
     reline (0.6.2)
       io-console (~> 0.5)
+    rest-client (2.1.0)
+      http-accept (>= 1.7.0, < 2.0)
+      http-cookie (>= 1.0.2, < 2.0)
+      mime-types (>= 1.16, < 4.0)
+      netrc (~> 0.8)
     rotp (6.3.0)
     rqrcode (2.2.0)
       chunky_png (~> 1.0)
@@ -622,6 +631,7 @@ DEPENDENCIES
   activerecord-enhancedsqlite3-adapter (~> 0.8.0)
   amazing_print
   anthropic (~> 0.4.0)
+  base64 (~> 0.3.0)
   bcrypt (~> 3.1.7)
   bootsnap
   brakeman
@@ -639,6 +649,7 @@ DEPENDENCIES
   jbuilder
   kamal
   mailersend-ruby (~> 3.0)
+  mailtrap (~> 2.4)
   mission_control-jobs (~> 0.6.0)
   net-pop!
   noticed (~> 2.8)
@@ -655,6 +666,7 @@ DEPENDENCIES
   rails!
   reactionview (~> 0.1.2)
   redcarpet (~> 3.6)
+  rest-client (~> 2.1)
   rqrcode (~> 2.2)
   rrule (~> 0.6.0)
   rubocop-rails-omakase

@@ -34,6 +34,10 @@ class User < ApplicationRecord
 
   enum :role, { user: 0, admin: 1, superadmin: 2 }
   has_one_attached :mugshot
+
+  #
+  # 6/10/2025 using it for unsubscribe links in emails!!!
+  #
   has_secure_token :pos_token
 
   has_secure_password

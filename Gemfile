@@ -140,3 +140,9 @@ gem "mailersend-ruby", "~> 3.0"
 gem "positioning"
 
 gem "reactionview", "~> 0.1.2"
+
+gem "rest-client", "~> 2.1"
+
+gem "base64", "~> 0.3.0"
+
+gem "mailtrap", "~> 2.4"

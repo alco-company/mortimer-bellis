@@ -95,7 +95,9 @@ da:
           leave_empty: "Lad være tom, hvis du ikke vil ændre adgangskoden"
           minimum: "(mindst %{count} tegn)"
           need_current_password: "Du skal indtaste din nuværende adgangskode for at ændre den."
-        
+      unsubscribed: "Du er blevet afmeldt"
+      unsubscribe_failed: "Afmelding mislykkedes"
+
     passwords:
       new: 
         reset_password: Nulstil adgangskoden

@@ -57,6 +57,16 @@ class Users::RegistrationsController < MortimerController
       ]
       flash.clear
     end
+
+    def unsubscribe
+      user = User.find_by(pos_token: params[:user_token])
+      if user
+        user.update(user_token: nil)
+        redirect_to root_path, notice: I18n.t("users.registrations.unsubscribed")
+      else
+        redirect_to root_path, alert: I18n.t("users.registrations.unsubscribe_failed")
+      end
+    end
   end
 
 
