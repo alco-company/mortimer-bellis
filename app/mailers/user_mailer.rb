@@ -11,6 +11,7 @@ class UserMailer < ApplicationMailer
       mail(
         to: "monitor@alco.dk",
         subject: I18n.t("user_mailer.welcome.subject"),
+        headers: xtra_headers(@rcpt),
         delivery_method: :mailersend,
         delivery_method_options: {
           api_key: ENV["MAILERSEND_API_TOKEN"]
@@ -32,6 +33,7 @@ class UserMailer < ApplicationMailer
     mail(
       to: @user.email,
       subject: "Confirm your account",
+      headers: xtra_headers(@user.email),
       delivery_method: :mailersend,
       delivery_method_options: {
         api_key: ENV["MAILERSEND_API_TOKEN"]
@@ -45,12 +47,13 @@ class UserMailer < ApplicationMailer
     @invitation_message = invitation_message
     @accept_url = users_invitations_accept_url(token: invitee.invitation_token)
     mail to: invitee.email,
-      subject: I18n.t("devise.mailer.invitation_instructions.subject",
+      subject: I18n.t("devise.mailer.invitation_instructions.subject"),
+      headers: xtra_headers(invitee.email),
       delivery_method: :mailersend,
       delivery_method_options: {
         api_key: ENV["MAILERSEND_API_TOKEN"]
       }
-    )
+
   rescue => e
     UserMailer.error_report(e.to_s, "UserMailer#invitation_instructions - failed for #{invitee&.email}").deliver_later
   end
@@ -62,6 +65,7 @@ class UserMailer < ApplicationMailer
     @sender = "info@mortimer.pro"
     mail to: @user.email,
       subject: I18n.t("user_mailer.confetti.subject"),
+      headers: xtra_headers(@user.email),
       delivery_method: :mailersend,
       delivery_method_options: {
         api_key: ENV["MAILERSEND_API_TOKEN"]
@@ -80,6 +84,7 @@ class UserMailer < ApplicationMailer
     @sender = @user.tenant.email
     mail to: @user.email,
       subject: I18n.t("user_mailer.user_farewell.subject"),
+      headers: xtra_headers(@user.email),
       delivery_method: :mailersend,
       delivery_method_options: {
         api_key: ENV["MAILERSEND_API_TOKEN"]
@@ -131,5 +136,12 @@ class UserMailer < ApplicationMailer
 
   rescue => e
     Rails.logger.error "%s: %s" % [ "UserMailer#error_report - failed for #{error} on #{klass_method}", e.to_s ]
+  end
+
+  def xtra_headers(email)
+    {
+      "List-Unsubscribe" => "<mailto:unsubscribe@mortimer.pro>, <https://mortimer.pro/unsubscribe?u=#{email}>",
+      "List-Unsubscribe-Post" => "List-Unsubscribe=One-Click"
+    }
   end
 end

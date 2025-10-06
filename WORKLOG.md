@@ -17,6 +17,7 @@
 ### 06/10/2025
 
 - Tidy subject (no spaced caps).
+- Add List-Unsubscribe + List-Unsubscribe-Post headers.
 
 ### 03/10/2025
 

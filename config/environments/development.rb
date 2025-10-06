@@ -45,6 +45,7 @@ Rails.application.configure do
 
   # Don't care if the mailer can't send.
   config.action_mailer.raise_delivery_errors = false
+  config.action_mailer.show_previews = true
 
   config.action_mailer.perform_caching = false
 
