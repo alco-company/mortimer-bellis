@@ -1,3 +1,5 @@
-User#welcome
+<%= I18n.t("user_mailer.salutations", name: @name) %>
 
-<%= @greeting %>, find me in app/views/user_mailer/welcome.text.erb
+<%= I18n.t("user_mailer.welcome.message", email: @rcpt ) %>
+
+<%= render MortimerMailSignature.new format: :text %>

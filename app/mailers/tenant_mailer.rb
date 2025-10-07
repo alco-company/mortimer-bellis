@@ -23,23 +23,29 @@ class TenantMailer < ApplicationMailer
     @email = params[:recipient]
     @pdf = params[:invoice_pdf]
     # attachments["invoice.pdf"] = File.read(@pdf)
-    mail to: @email,
-      subject: "Mortimer Invoice",
-      delivery_method: :mailersend,
-      delivery_method_options: {
-        api_key: ENV["MAILERSEND_API_TOKEN"]
-      }
+    locale = @tenant.locale
+    I18n.with_locale(locale) do
+      mail to: @email,
+        subject: "Mortimer Invoice",
+        delivery_method: :mailersend,
+        delivery_method_options: {
+          api_key: ENV["MAILERSEND_API_TOKEN"]
+        }
+    end
   end
 
   def send_ambassador_request
     @tenant = params[:tenant]
     @email = params[:recipient]
-    mail to: @email,
-      subject: "Mortimer Ambassador Request",
-      delivery_method: :mailersend,
-      delivery_method_options: {
-        api_key: ENV["MAILERSEND_API_TOKEN"]
-      }
+    locale = @tenant.locale
+    I18n.with_locale(locale) do
+      mail to: @email,
+        subject: "Mortimer Ambassador Request",
+        delivery_method: :mailersend,
+        delivery_method_options: {
+          api_key: ENV["MAILERSEND_API_TOKEN"]
+        }
+    end
   end
 
   # params:

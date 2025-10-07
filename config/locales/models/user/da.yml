@@ -129,22 +129,35 @@ da:
       messages:
         pincode_exist_for_tenant: "Pinkoden er allerede i brug af en anden bruger."
   user_mailer:
+    salutations: "Hej %{name}"
+    regards: "Med venlig hilsen"
     welcome:
       title: "ding ding!"
-      preheader: "Nyt lead!"
       subject: "ding ding!"
-      hello: "Hej,"
-      introduction: "nu krøb der en rotte mere i fælden! Registranten er %{email} - "
+      message: "nu krøb der en rotte mere i fælden! Registranten er %{email} - "
+    invitation_instructions:
+      page_title: "Invitation til at oprette en brugerprofil på Mortimer"
+      subject: "Invitation til at oprette en brugerprofil på  MORTIMER"
+      title: "Er %{email} din email adresse?"
+      introduction: "%{sender} hos %{tenant} har inviteret dig til at færdiggøre oprettelsen af en brugerprofil på %{url}. Du kan acceptere invitationen ved at trykke på knappen her nedenfor."
+      accept: "Ja det er min email adresse"
+      action: "Jeg accepterer invitationen"
+      accept_until: "Invitationen er gyldig indtil %{due_date}."
+      ignore: "Ønsker du ikke at acceptere invitationen, behøver du intet at gøre (måske bortset fra evt at smide email'en bort). <br /><br />Din bruger konto bliver først oprettet i det øjeblik, du klikker på link'et her ovenfor, og derefter angiver din adgangskode."
+    confirmation_instructions:
+      title: "Instruktion"
+      subject: "Instruktioner til at bekræfte din email-adresse"
+      introduction: "Vi er vældigt glade for at se dig her! For at du ikke bliver overrasket, så er det sådan, at vi har brug for at bekræfte din email adresse. Det kan du gøre ved at klikke på knappen herunder."
+      action: "Jeg accepterer oprettelsen af min brugerprofil"
+      ignore: "Har du fortrudt, ønsker du ikke at oprette din profil alligevel, eller har du modtaget denne email ved en fejl, behøver du intet at gøre (måske bortset fra evt at smide email'en bort). <br /><br />Din bruger konto bliver først oprettet i det øjeblik, du klikker på knappen her ovenfor."
       regards: "Med venlig hilsen"
+
     confetti:
       title: "Succes!"
-      preheader: "Fejring af din første stempling"
       subject: "Fejring af din første stempling"
-      hi: Hej,
       you: "%{name} - du har lige stemplet ind for første gang på  MORTIMER. Tillykke! Du er nu en del af holdet hos <strong>%{tenant}</strong>."
       introduction: "Husk at tidsregistrering er i din egen interesse! Du kan bruge det i samtalen med din leder, din personlige udvikling, og hvis du har brug for at dokumentere din arbejdstid."
       rights: "Du har ret til at se og rette dine egne data, og du kan slette din profil, hvis du ikke længere skal arbejde i virksomheden. Dine data skal virksomheden opbevare i 5 år. Hvis du har spørgsmål, så kontakt din leder."
-      salutations: "Med venlig hilsen"
     user_farewell:
       title: "Din konto er blevet slettet!"
       preheader: "Du er blevet slettet fra  MORTIMER"
@@ -189,18 +202,6 @@ da:
       unauthenticated: "Du skal logge ind eller oprette en konto for at fortsætte."
       unconfirmed: "Du skal bekræfte din email-adresse for at fortsætte."
     mailer:
-      invitation_instructions:
-        page_title: "Invitation til at oprette en brugerprofil på Mortimer"
-        subject: "Invitation til at oprette en brugerprofil på  MORTIMER"
-        preheader: "Invitation til at oprette en brugerprofil på Mortimer"
-        hi: "Hej"
-        title: "Er %{email} din email adresse?"
-        introduction: "%{sender} hos %{tenant} har inviteret dig til at færdiggøre oprettelsen af en brugerprofil på %{url}. Du kan acceptere invitationen ved at trykke på knappen her nedenfor."
-        accept: "Ja det er min email adresse"
-        action: "Jeg accepterer invitationen"
-        accept_until: "Invitationen er gyldig indtil %{due_date}."
-        ignore: "Ønsker du ikke at acceptere invitationen, behøver du intet at gøre (måske bortset fra evt at smide email'en bort). <br /><br />Din bruger konto bliver først oprettet i det øjeblik, du klikker på link'et her ovenfor, og derefter angiver din adgangskode."
-        regards: "Med venlig hilsen"
 
       confirmation_instructions:
         title: "Instruktion"

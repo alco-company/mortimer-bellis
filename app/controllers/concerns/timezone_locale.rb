@@ -14,6 +14,49 @@ module TimezoneLocale
     around_action :user_time_zone # if Current.user || Current.tenant
   end
 
+  class Resolver
+    def self.call(params: {}, request: nil, user: nil, tenant: nil)
+      user ||= Current.user
+      tenant ||= Current.tenant
+      (normalize(params.dig(:locale)) rescue false) ||
+      (normalize(params.dig(:lang)) rescue false) ||
+      normalize(user&.locale) ||
+      normalize(tenant&.locale) ||
+      normalize(extract_from_tld(request)) ||
+      I18n.default_locale
+    end
+
+    def self.normalize(val)
+      return nil if val.blank?
+      code =
+        case val
+        when Symbol, String then val.to_s
+        else
+          val.respond_to?(:code)   ? val.code.to_s   :
+          val.respond_to?(:locale) ? val.locale.to_s :
+          val.respond_to?(:to_str) ? val.to_str      : nil
+        end
+      return nil if code.blank?
+      code = code.tr("-", "_")
+      short = code.split("_").first
+      [ code, short ].each do |c|
+        sym = c.to_s.downcase.to_sym
+        return sym if I18n.available_locales.include?(sym)
+      end
+      nil
+    end
+
+    private_class_method :normalize
+
+    def self.extract_from_tld(request)
+      return nil unless request
+      request.host.split(".").last&.tr("-", "_") rescue nil
+    end
+
+    private_class_method :extract_from_tld
+  end
+
+
   private
 
     #
@@ -21,12 +64,7 @@ module TimezoneLocale
     # https://phrase.com/blog/posts/rails-i18n-best-practices/
     #
     def switch_locale(&action)
-      locale =
-        normalize_locale(params[:locale]) ||
-        normalize_locale(params[:lang]) ||
-        get_locale_from_user_or_tenant ||
-        extract_locale_from_tld ||
-        I18n.default_locale
+      locale = get_locale
 
       I18n.with_locale(locale, &action)
     rescue I18n::InvalidLocale => e
@@ -38,6 +76,21 @@ module TimezoneLocale
       I18n.with_locale(I18n.default_locale, &action)
     end
 
+    def get_locale
+      TimezoneLocale::Resolver.call(
+        params: params,
+        request: request,
+        user: Current.user,
+        tenant: Current.tenant
+      )
+
+      # normalize_locale(params[:locale]) ||
+      # normalize_locale(params[:lang]) ||
+      # get_locale_from_user_or_tenant ||
+      # extract_locale_from_tld ||
+      # I18n.default_locale
+    end
+
     # Get locale from top-level domain or return +nil+ if such locale is not available
     # You have to put something like:
     #   127.0.0.1 application.com
@@ -45,7 +98,7 @@ module TimezoneLocale
     #   127.0.0.1 application.pl
     # in your /etc/hosts file to try this out locally
     def extract_locale_from_tld
-      parsed = request.host.split(".").last
+      parsed = request.host.split(".").last rescue nil
       return nil unless parsed
       parsed = parsed.tr("-", "_")
       short = parsed.split("_").first

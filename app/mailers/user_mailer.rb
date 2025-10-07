@@ -8,20 +8,20 @@ class UserMailer < ApplicationMailer
   def welcome
     @user = params[:user]
     @rcpt = params[:user].email
-    switch_locale do
-      mail(
-        to: "monitor@alco.dk",
-        subject: I18n.t("user_mailer.welcome.subject"),
-        headers: xtra_headers(@user)
-        # delivery_method: :mailersend,
-        # delivery_method_options: {
-        #   api_key: ENV["MAILERSEND_API_TOKEN"]
-        # }
-      )
-      # User.where(role: "admin").each do |admin|
-      #   mail to: admin.email, subject: I18n.t("user_mailer.welcome.new_user")
-      # end
-    end
+    set_locale
+    mail(
+      to: "monitor@alco.dk",
+      subject: I18n.t("user_mailer.welcome.subject"),
+      headers: xtra_headers(@user)
+      # delivery_method: :mailersend,
+      # delivery_method_options: {
+      #   api_key: ENV["MAILERSEND_API_TOKEN"]
+      # }
+    )
+    # User.where(role: "admin").each do |admin|
+    #   mail to: admin.email, subject: I18n.t("user_mailer.welcome.new_user")
+    # end
+    # end
   rescue => e
     UserMailer.error_report(e.to_s, "UserMailer#welcome - failed for #{params[:user]&.email}").deliver_later
   end
@@ -30,7 +30,7 @@ class UserMailer < ApplicationMailer
     @user = user
     @email = user.email
     @confirmation_url = confirm_users_confirmations_url(token: @user.confirmation_token)
-
+    set_locale
     mail(
       to: @user.email,
       subject: "Confirm your account",
@@ -47,6 +47,7 @@ class UserMailer < ApplicationMailer
     @invited_by = invited_by
     @invitation_message = invitation_message
     @accept_url = users_invitations_accept_url(token: invitee.invitation_token)
+    set_locale
     mail(to: invitee.email,
       subject: I18n.t("devise.mailer.invitation_instructions.subject"),
       headers: xtra_headers(invitee)
@@ -64,6 +65,7 @@ class UserMailer < ApplicationMailer
     @name = @user.name
     @company = @user.tenant.name
     @sender = "info@mortimer.pro"
+    set_locale
     mail(to: @user.email,
       subject: I18n.t("user_mailer.confetti.subject"),
       headers: xtra_headers(@user)
@@ -83,6 +85,7 @@ class UserMailer < ApplicationMailer
     @name = @user.name
     @company = @user.tenant.name
     @sender = @user.tenant.email
+    set_locale
     mail(to: @user.email,
       subject: I18n.t("user_mailer.user_farewell.subject"),
       headers: xtra_headers(@user)
@@ -100,8 +103,10 @@ class UserMailer < ApplicationMailer
     @name = @user.name
     @company = @user.tenant.name
     @sender = "info@mortimer.pro"
+    set_locale
     mail(to: @user.email,
-      subject: I18n.t("user_mailer.farewell.subject")
+      subject: I18n.t("user_mailer.farewell.subject"),
+      headers: xtra_headers(@user)
       # delivery_method: :mailersend,
       # delivery_method_options: {
       #   api_key: ENV["MAILERSEND_API_TOKEN"]
@@ -114,6 +119,7 @@ class UserMailer < ApplicationMailer
   def info_report(info, msg)
     @info = info
     @msg = msg
+    set_locale
     mail(to: "monitor@alco.dk",
       subject: "Info Report"
       # delivery_method: :mailersend,
@@ -128,6 +134,7 @@ class UserMailer < ApplicationMailer
   def error_report(error, klass_method)
     @error = error
     @klass_method = klass_method
+    set_locale
     mail(to: "monitor@alco.dk",
       subject: "Error Report"
       # delivery_method: :mailersend,

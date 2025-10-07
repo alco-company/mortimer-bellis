@@ -26,7 +26,7 @@ Rails.application.routes.draw do
   # end
   get "/users/sign_in", to: "users/sessions#new"
   get "/users/login", to: "users/sessions#new"
-  get "/unsubscribe", to: "users/registrations#unsubscribe", as: :unsubscribe
+  post "/unsubscribe", to: "users/registrations#unsubscribe", as: :unsubscribe
 
   namespace :tenants do
     resource :registrations

@@ -1,0 +1,10 @@
+<%= I18n.t("user_mailer.salutations", name: @name) %>
+
+<%= I18n.t("user_mailer.confirmation_instructions.introduction") %>
+
+<%= I18n.t("user_mailer.confirmation_instructions.action") %>
+<%= @confirmation_url %>
+
+<%== t("user_mailer.confirmation_instructions.ignore") %>
+
+<%= render MortimerMailSignature.new(format: :text) %>
