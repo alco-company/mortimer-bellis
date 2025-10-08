@@ -1,22 +1,20 @@
 <% content_for :head do %>
 
-  <title><%= I18n.t("tenant.mailer.welcome.page_title") %></title>
+  <title><%= I18n.t("tenant.mailer.backup.page_title") %></title>
   <style>
   </style>
 <% end %>
 <% content_for :email_body do %>
   <h1 class="m-0 mb-6 text-base sm:leading-8 text-black font-semibold">
-    <%= I18n.t("tenant.mailer.welcome.salutations", name: @tenant.name) %>
+    <%= I18n.t("tenant.mailer.salutations", name: @tenant.name) %>
   </h1>
   <p class="m-0 leading-6">
-      <%== t("tenant.mailer.welcome.we_created_an_tenant") %>
+      <%== t("tenant.mailer.backup.we_created_a_backup") %>
   </p>
+  <br>
   <p class="m-0 leading-6">
-      <%== t("tenant.mailer.welcome.confirmation_instruction", email: @user&.email) %>
+      <%== t("tenant.mailer.backup.how_to_download_instruction", link: @link ) %>
   </p>
   <div role="separator" class="false bg-slate-200" style="height: 1px; line-height: 1px; margin: 0; margin-top: 32px; margin-bottom: 32px">&zwj;</div>
-  <p class="m-0 text-sm text-gray-500">
-      <%== t("tenant.mailer.welcome.ignore") %>
-  </p>
   <%= render MortimerMailSignature.new %>
 <% end %>

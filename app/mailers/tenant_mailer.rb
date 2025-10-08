@@ -2,50 +2,49 @@ class TenantMailer < ApplicationMailer
   #
   #
   def welcome
-    @rcpt =  email_address_with_name params[:tenant].email, params[:tenant].name
+    @rcpt = email_address_with_name params[:tenant].email, params[:tenant].name
     @tenant = params[:tenant]
-    locale = @tenant.locale
-    @resource = @tenant.users.first
-    I18n.with_locale(locale) do
-      mail to: @rcpt,
-        subject: I18n.t("tenant.mailer.welcome.subject"),
-        delivery_method: :mailersend,
-        delivery_method_options: {
-          api_key: ENV["MAILERSEND_API_TOKEN"]
-        }
-    end
+    @user = @tenant.users.first
+    set_locale
+    mail to: @rcpt,
+      subject: I18n.t("tenant.mailer.welcome.subject"),
+      headers: xtra_headers(@user)
+    # delivery_method: :mailersend,
+    # delivery_method_options: {
+    #   api_key: ENV["MAILERSEND_API_TOKEN"]
+    # }
+
   rescue => e
     UserMailer.error_report(e.to_s, "TenantMailer#welcome - failed for #{params[:tenant]&.id}").deliver_later
   end
 
   def send_invoice
     @tenant = params[:tenant]
-    @email = params[:recipient]
-    @pdf = params[:invoice_pdf]
-    # attachments["invoice.pdf"] = File.read(@pdf)
-    locale = @tenant.locale
-    I18n.with_locale(locale) do
+    @pdf = params.dig(:invoice_pdf) || nil
+    @email = params.dig(:recipient) || @tenant.email
+    set_locale
+    attachments["invoice.pdf"] = File.read(@pdf) if @pdf.present? && File.exist?(@pdf)
+    @user = @tenant.users.first
       mail to: @email,
         subject: "Mortimer Invoice",
-        delivery_method: :mailersend,
-        delivery_method_options: {
-          api_key: ENV["MAILERSEND_API_TOKEN"]
-        }
-    end
+        headers: xtra_headers(@user)
+    # delivery_method: :mailersend,
+    # delivery_method_options: {
+    #   api_key: ENV["MAILERSEND_API_TOKEN"]
+    # }
   end
 
   def send_ambassador_request
     @tenant = params[:tenant]
     @email = params[:recipient]
-    locale = @tenant.locale
-    I18n.with_locale(locale) do
+    @user = @tenant.users.first
       mail to: @email,
         subject: "Mortimer Ambassador Request",
-        delivery_method: :mailersend,
-        delivery_method_options: {
-          api_key: ENV["MAILERSEND_API_TOKEN"]
-        }
-    end
+        headers: xtra_headers(@user)
+    # delivery_method: :mailersend,
+    # delivery_method_options: {
+    #   api_key: ENV["MAILERSEND_API_TOKEN"]
+    # }
   end
 
   # params:
@@ -79,24 +78,39 @@ class TenantMailer < ApplicationMailer
 
   def backup_created
     @tenant = params[:tenant]
+    @user = @tenant.users.first || @tenant.users.build
     @link = params[:link]
-    mail to: "info@mortimer.pro",
+    @email = params.dig(:recipient) || @tenant.email
+    mail to: @email,
       subject: "Tenant Backup Created",
-      delivery_method: :mailersend,
-      delivery_method_options: {
-        api_key: ENV["MAILERSEND_API_TOKEN"]
-      }
+      headers: xtra_headers(@user)
+    # delivery_method: :mailersend,
+    # delivery_method_options: {
+    #   api_key: ENV["MAILERSEND_API_TOKEN"]
+    # }
   end
 
   def restore_completed
     @tenant = params[:tenant]
+    @user = @tenant.users.first || @tenant.users.build
     @summary = params[:summary]
     @archive = params[:archive]
-    mail to: "info@mortimer.pro",
-      subject: "Tenant Restore Completed",
-      delivery_method: :mailersend,
-      delivery_method_options: {
-        api_key: ENV["MAILERSEND_API_TOKEN"]
-      }
+    @email = params.dig(:recipient) || @tenant.email
+    set_locale
+    mail to: @email,
+      subject: "Tenant Backup Restore Completed",
+      headers: xtra_headers(@user)
+    # delivery_method: :mailersend,
+    # delivery_method_options: {
+    #   api_key: ENV["MAILERSEND_API_TOKEN"]
+    # }
+  end
+
+  def xtra_headers(user)
+    token = user.present? && user.respond_to?(:pos_token) ? user.pos_token : "no-token"
+    {
+      "List-Unsubscribe" => "<mailto:unsubscribe@mortimer.pro>, <https://app.mortimer.pro/unsubscribe?user_token=#{token}>",
+      "List-Unsubscribe-Post" => "List-Unsubscribe=One-Click"
+    }
   end
 end

@@ -1,0 +1,7 @@
+<%= I18n.t("tenant.mailer.salutations", name: @tenant.name) %>
+
+<%== t("tenant.mailer.restore.we_restored_a_backup") %>
+
+<%== t("tenant.mailer.restore.summary", summary: @summary ) %>
+
+<%= render MortimerMailSignature.new format: :text %>

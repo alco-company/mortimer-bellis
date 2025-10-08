@@ -12,9 +12,13 @@
 
 ## CHANGELOG
 
+### 08/10/2025
+
+- Fix the i18n so no translation_missing appears; make the Danish copy clean in both HTML and plaintext. - tenant_mailer
+
 ### 07/10/2025
 
-- Fix the i18n so no translation_missing appears; make the Danish copy clean in both HTML and plaintext.
+- Fix the i18n so no translation_missing appears; make the Danish copy clean in both HTML and plaintext. - user_mailer
 
 ### 06/10/2025
 
