@@ -118,6 +118,7 @@ Rails.application.routes.draw do
   resources :time_materials, concerns: [ :copyable ] do
     member do
       post :archive
+      post :sync
     end
   end
 

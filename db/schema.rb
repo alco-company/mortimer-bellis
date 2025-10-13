@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_09_18_123758) do
+ActiveRecord::Schema[8.1].define(version: 2025_10_09_123335) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
@@ -730,6 +730,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_09_18_123758) do
     t.boolean "is_separate"
     t.integer "kilometers"
     t.text "location_comment"
+    t.integer "lock_version"
     t.datetime "minutes_reloaded_at"
     t.integer "odo_from"
     t.datetime "odo_from_time"

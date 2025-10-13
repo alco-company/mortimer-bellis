@@ -37,6 +37,43 @@ class TimeMaterialsController < MortimerController
     super
   end
 
+  def sync
+    resource # ensures @resource is loaded
+    ops = params.require(:ops)
+    client_version = params[:version].to_i if params[:version]
+
+    TimeMaterial.transaction do
+      if client_version && @resource.lock_version != client_version
+        return render json: snapshot(@resource), status: :conflict
+      end
+
+      ops.each do |op|
+        case op[:type]
+        when "resume"
+          @resource.resume!(at: Time.at(op[:at_ms].to_i / 1000.0))
+        when "pause_delta"
+          @resource.add_elapsed_seconds!(op[:delta_sec].to_i)
+          @resource.update!(started_at: nil, state: "paused")
+        when "stop"
+          @resource.stop!(at: Time.at(op[:at_ms].to_i / 1000.0))
+        end
+      end
+    end
+
+    render json: snapshot(@resource)
+  end
+
+  def snapshot(rec)
+    {
+      id: rec.id,
+      state: rec.state,
+      total_seconds: rec.total_seconds,
+      registered_minutes: rec.registered_minutes,
+      started_at: rec.started_at&.iso8601,
+      version: rec.lock_version
+    }
+  end
+
   # POST /users/:id/archive
   # roadmapped for future use iaw sales
   #

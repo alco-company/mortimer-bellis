@@ -2,15 +2,27 @@
 
 ## ISSUES
 
+- https://railsdesigner.com/kanban-rails-hotwire/
+- VMC, BIMI - https://www.valimail.com/resources/guides/bimi-email/verified-mark-certificate/
 - https://binarysolo.blog/custom-error-pages-in-rails/ && https://beon.tech/blog/how-to-handle-exceptions-in-rails-full-guide
 - impersonate user - not only tenant
 - backup/restore menu items
 - find proper hour_rate
 - deferred finish - set to automate closing
 - Enable custom tracking domain (e.g., lnk.mortimer.pro) in Mailersend and use it in all links/pixels.
-- Clean the preheader to a short sentence; remove weird/invisible characters.
+
+
+- priser
+- certifikater forretningsområde
+- 
+
+
 
 ## CHANGELOG
+
+### 09/10/2025
+
+- tried to make sync time work w/AI
 
 ### 08/10/2025
 
