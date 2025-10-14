@@ -151,7 +151,13 @@ da:
       action: "Jeg accepterer oprettelsen af min brugerprofil"
       ignore: "Har du fortrudt, ønsker du ikke at oprette din profil alligevel, eller har du modtaget denne email ved en fejl, behøver du intet at gøre (måske bortset fra evt at smide email'en bort). <br /><br />Din bruger konto bliver først oprettet i det øjeblik, du klikker på knappen her ovenfor."
       regards: "Med venlig hilsen"
-
+    reset_password_instructions:
+      title: "Instruktion"
+      subject: "Instruktioner til at nulstille din adgangskode"
+      hello: "Hej %{email},"
+      introduction: "nogen har bedt om at få din adgangskode nulstillet. Det kan du gøre ved at klikke på knappen herunder."
+      action: "Nulstil min adgangskode"
+      ignore: "Har du fortrudt, ønsker du ikke at nulstille din adgangskode alligevel, eller har du modtaget denne email ved en fejl, behøver du intet at gøre (måske bortset fra evt at smide email'en bort). Din adgangskode bliver først nulstillet i det øjeblik, du klikker på knappen her ovenfor."
     confetti:
       title: "Succes!"
       subject: "Fejring af din første stempling"

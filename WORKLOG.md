@@ -30,6 +30,7 @@
 ### 14/10/2025
 
 - redo sync from ground up - test 1
+- forgot about the reset password email 
 
 ### 09/10/2025
 

@@ -97,6 +97,13 @@ en:
       introduction: "We are very happy to see you here! To avoid any surprises, we need to confirm your email address. You can do this by clicking the button below."
       action: "I accept the creation of my user profile"
       ignore: "If you have changed your mind, do not wish to create your profile after all, or have received this email by mistake, you do not need to do anything (perhaps apart from possibly throwing the email away). <br /><br />Your user account will only be created at the moment you click the button above."
+    reset_password_instructions:
+      title: "Instruction"
+      subject: "Instructions for resetting your password"
+      hello: "Hello %{email},"
+      introduction: "Someone has requested to reset your password. You can do this by clicking the button below."
+      action: "Reset my password"
+      ignore: "If you have changed your mind, do not wish to reset your password after all, or have received this email by mistake, you do not need to do anything (perhaps apart from possibly throwing the email away). Your password will only be reset at the moment you click the button above."
     confetti:
       title: "Success!"
       subject: "Celebrating your first clock-in"
