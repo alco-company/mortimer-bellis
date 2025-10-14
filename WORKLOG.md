@@ -1,8 +1,17 @@
 # WORKLOG
 
+## IDEAS
+
+- using n8n on profeting on stock markets - https://medium.com/predict/the-crash-i-see-coming-why-ive-liquidated-my-portfolio-ea9bd4ae6837
+- using MCP's to automate development - https://generativeai.pub/model-context-protocol-mcp-10-must-try-mcp-servers-for-developers-4cf054836308 / https://ai.plainenglish.io/5-essential-mcp-servers-that-give-claude-cursor-real-superpowers-2025-509a822dd4fd
+
+
 ## ISSUES
 
+- https://svgconverter.online/
+- consistent icons - https://phosphoricons.com/
 - https://railsdesigner.com/kanban-rails-hotwire/
+- https://radanskoric.com/articles/turbo-extraframe-updates
 - VMC, BIMI - https://www.valimail.com/resources/guides/bimi-email/verified-mark-certificate/
 - https://binarysolo.blog/custom-error-pages-in-rails/ && https://beon.tech/blog/how-to-handle-exceptions-in-rails-full-guide
 - impersonate user - not only tenant
@@ -10,15 +19,17 @@
 - find proper hour_rate
 - deferred finish - set to automate closing
 - Enable custom tracking domain (e.g., lnk.mortimer.pro) in Mailersend and use it in all links/pixels.
-
-
+- display turbo frames being busy - https://www.dotruby.com/articles/improving-turbo-frame-ux-with-the-busy-attribute
+- display other users editing the record you're wanting to edit: https://unagisoftware.com/articles/preventing-edit-conflicts-in-rails-with-turbo-hotwire-and-stimulusjs
+- find ways to utilise <output> - https://denodell.com/blog/html-best-kept-secret-output-tag
+- ways to test before launch: https://bhavyansh001.medium.com/the-rails-performance-checklist-i-run-before-every-launch-b02f605285cf
 - priser
-- certifikater forretningsområde
-- 
-
-
 
 ## CHANGELOG
+
+### 14/10/2025
+
+- redo sync from ground up - test 1
 
 ### 09/10/2025
 

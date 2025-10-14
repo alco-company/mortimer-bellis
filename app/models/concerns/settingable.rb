@@ -6,6 +6,7 @@ module Settingable
 
     # do not unless expressively allowed
     def can?(action, resource: nil, inverse: false)
+      return true if Current.get_user&.superadmin?
       key = action.to_s
       tenant = try(:tenant) || Current.tenant
       resource ||= self if self.class != Class

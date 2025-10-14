@@ -45,16 +45,23 @@ class ListItems::TimeMaterial < ListItems::ListItem
     return unless resource.user == user or user&.admin? or user&.superadmin?
     div(class: "place-self-stretch group-hover:bg-gray-50 sm:px-6 dark:group-hover:bg-white/2.5 ") do
       div(class: "flex gap-3 mx-8 py-2", data: { action: "click->time-material#changeState"  }) do
-        button(type: "button", data: { icon: "stop" }, class: "icon-stop") do
+        button(type: "button", data: { icon: "stop", state: "stopped" }, class: "icon-stop") do
           render Icons::Stop.new
           plain "Stop"
         end
         div(class: "inline-flex items-center justify-center w-full") { }
-        btn = resource.active? ? "pause" : "play"
+
+        hide = resource.active? ? "" : "hidden"
         # class="icon-play icon-pause"
-        button(type: "button", data: { icon: btn }, class: "icon-#{btn}") do
-          resource.active? ? render(Icons::Pause.new) : render(Icons::Play.new)
-          plain resource.active? ? "Pause" : "Genoptag"
+        button(type: "button", data: { time_material_target: "pausebutton", icon: "pause", state: "paused" }, class: "#{hide} icon-pause") do
+          render(Icons::Pause.new)
+          plain "Pause"
+        end
+
+        hide = resource.active? ? "hidden" : ""
+        button(type: "button", data: { time_material_target: "resumebutton", icon: "play", state: "resume" }, class: "#{hide} icon-play") do
+          render(Icons::Play.new)
+          plain "Genoptag"
         end
       end
     end if resource.active? or resource.paused?
@@ -106,7 +113,7 @@ class ListItems::TimeMaterial < ListItems::ListItem
   def show_secondary_info
     if resource.active? or resource.paused?
       # p(class: "text-xs xs:text-sm sm:text-lg md:text-2xl font-mono font-bold") { show_time_material_quantative }
-      p(class: "text-sm font-medium text-gray-900 dark:text-white") { show_time_material_quantative }
+      p(class: "flex text-sm font-medium text-gray-900 dark:text-white items-center") { show_time_material_quantative }
     else
       p(class: "text-sm font-medium text-gray-900 dark:text-white") { show_time_material_quantative }
     end
@@ -167,7 +174,7 @@ class ListItems::TimeMaterial < ListItems::ListItem
       counter = (resource&.registered_minutes || 0) * 60
       counter += resource.paused? ? 0 : resource.elapsed_seconds_now
       _days, hours, minutes, seconds = resource.calc_hrs_minutes counter
-      timestring = "%02d:%02d:%02d" % [ hours, minutes, seconds ]
+      timestring = "%02d:%02d" % [ hours, minutes ]
       #
       # deferred by sales 25/09/2025
       # if resource.user.should? :limit_time_to_quarters
@@ -183,6 +190,7 @@ class ListItems::TimeMaterial < ListItems::ListItem
       # end
       # span(class: "text-yellow-700") { "%02d:%02d / " % [ qhours, qminutes ] } if user.should? :limit_time_to_quarters
       #
+      show_ping(resource.active? ? "" : "hidden")
       span(class: "grow time_counter", data: { counter: counter, state: resource.state, time_material_target: "counter" }) { timestring }
     else
       case true
@@ -193,6 +201,13 @@ class ListItems::TimeMaterial < ListItems::ListItem
     end
   rescue
     "!165"
+  end
+
+  def show_ping(hide = "")
+    span(data: { time_material_target: "activelamp" }, class: "#{hide} relative flex size-3 mr-2") do
+      span(class: "absolute inline-flex h-full w-full animate-ping rounded-full bg-sky-400 opacity-75") { }
+      span(class: "relative inline-flex size-3 rounded-full bg-sky-500") { }
+    end
   end
 
   def show_time_details

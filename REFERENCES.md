@@ -264,3 +264,11 @@ https://getgrav.org/blog/macos-sequoia-apache-ssl
 ### Contenteditable
 
 * Frank M Taylor - https://blog.frankmtaylor.com/2012/01/23/html5-contenteditable-and-css/
+
+### Systems Design
+
+* organize big systems into packages - https://simonnjunu16.medium.com/building-large-rails-applications-lessons-from-dukanet-a3ccc3a9fd13
+
+### N8N building
+
+* https://medium.com/@aksh8t/build-n8n-ai-agents-in-minutes-make-thousands-of-dollars-00d9b3acd369

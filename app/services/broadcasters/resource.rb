@@ -42,6 +42,7 @@ class Broadcasters::Resource
 
   def replace
     return unless tenant
+
     Turbo::StreamsChannel.broadcast_action_later_to(
       resources_stream,
       target: target,
