@@ -38,6 +38,7 @@ export default class extends Controller {
     this.inflightReload = false;
     this.state = null;
     this.opQueue = []; // offline ops
+    this.startedAtMs = null; // ms epoch when the current active stint began
   }
 
   connect() {
@@ -45,14 +46,26 @@ export default class extends Controller {
       this.state = this.itemTarget.dataset.state;
       this.playerId = this.itemTarget.id;
       this.setTimerOnState();
+      document.addEventListener("visibilitychange", this.onVisibilityChange);
     } catch (e) {
       console.error("Error connecting TimeMaterialController:", e);
     }
   }
 
   disconnect() {
+    document.removeEventListener("visibilitychange", this.onVisibilityChange);
     this.stopTimer();
   }
+
+  // Handle visibility change events ------------------------------------------
+
+  onVisibilityChange = () => {
+    if (document.visibilityState === "visible" && this.state === "active" && this.startedAtMs) {
+      // instant catch-up render
+      this.timeValue = Math.floor((Date.now() - this.startedAtMs) / 1000);
+      this.render();
+    }
+  };  
 
   // Timer --------------------------------------------------------------------
 
@@ -75,22 +88,39 @@ export default class extends Controller {
   startTimer() {
     if (this.interval) return; // already running
     this.loadTimingState();
-    this.tick(); // initial tick
+
+    // If we don't have a startedAtMs yet, derive it from current wall time minus accumulated seconds
+    if (!this.startedAtMs) {
+      this.startedAtMs = Date.now() - (this.timeValue || 0) * 1000;
+    }
+
+    // Do an immediate render and schedule next tick
+    this.tick();
   }
 
   stopTimer() {
     if (this.interval) {
-      this.persistTimingState();
       clearInterval(this.interval);
       this.interval = null;
     }
+    // Lock in the final elapsed value at stop/pause time
+    if (this.startedAtMs) {
+      this.timeValue = Math.floor((Date.now() - this.startedAtMs) / 1000);
+    }
+    this.startedAtMs = null;
+    this.persistTimingState();
   }
 
   tick() {
     const now = Date.now();
-    this.timeValue++;
+
+    // Derive from wall clock so background throttling doesn’t matter
+    if (this.state === "active" && this.startedAtMs) {
+      this.timeValue = Math.max(0, Math.floor((now - this.startedAtMs) / 1000));
+    }
     this.render();
-    if (this.shouldReloadTimingStateFromServer()) this.reloadTimingStateFromServer();
+    if (this.shouldReloadTimingStateFromServer())
+      this.reloadTimingStateFromServer();
 
     // Schedule next tick exactly at next whole second boundary
     const msToNextSecond = 1000 - (now % 1000);
@@ -114,16 +144,21 @@ export default class extends Controller {
       );
       this.timeValue = Number.isFinite(raw.timeValue) ? raw.timeValue : 0;
       this.state = raw.state || null;
+      this.startedAtMs = Number.isFinite(raw.startedAtMs) ? raw.startedAtMs : null;
     } catch {
       this.timeValue = 0;
       this.state = "active";
+      this.startedAtMs = null;
     }
     try {
       let value = parseInt(this.counterTarget.dataset.counter, 10) || 0;
-      if (value > this.timeValue + 30 || value < this.timeValue - 30) {
+      if (Math.abs(value - this.timeValue) > 30) {
         this.timeValue = value;
+        if (this.state === "active") {
+          this.startedAtMs = Date.now() - this.timeValue * 1000;
+        }
       }
-    } catch (error) {}
+    } catch {}
   }
 
   persistTimingState() {
@@ -133,6 +168,7 @@ export default class extends Controller {
         JSON.stringify({
           timeValue: this.timeValue,
           state: this.state,
+          startedAtMs: this.startedAtMs
         })
       );
     } catch {}
@@ -214,6 +250,8 @@ export default class extends Controller {
   handleOffline() {
     switch (this.state) {
       case "resume":
+        if (!this.startedAtMs)
+          this.startedAtMs = Date.now() - (this.timeValue || 0) * 1000;
         this.startTimer();
         this.state = "active";
         this.pausebuttonTarget.classList.remove("hidden");
@@ -221,18 +259,27 @@ export default class extends Controller {
         this.activelampTarget.classList.remove("hidden");
         break;
       case "paused":
+        if (this.startedAtMs) {
+          this.timeValue = Math.floor((Date.now() - this.startedAtMs) / 1000);
+          this.startedAtMs = null;
+        }
         this.stopTimer();
         this.pausebuttonTarget.classList.add("hidden");
         this.activelampTarget.classList.add("hidden");
         this.resumebuttonTarget.classList.remove("hidden");
         break;
       case "stopped":
+        if (this.startedAtMs) {
+          this.timeValue = Math.floor((Date.now() - this.startedAtMs) / 1000);
+          this.startedAtMs = null;
+        }
         this.stopTimer();
         this.activelampTarget.classList.add("hidden");
         this.pausebuttonTarget.classList.add("hidden");
         this.resumebuttonTarget.classList.remove("hidden");
         break;
     }
+    this.persistTimingState();
     this.enqueue({ time: this.timeValue, state: this.state });
   }
 
