@@ -2,8 +2,20 @@ class ListItems::TimeMaterial < ListItems::ListItem
   def html_list
     @insufficient_data = resource.has_insufficient_data?
     comment { "bg-green-200 bg-yellow-200" }
-    div(id: (dom_id resource), class: "list_item group  #{ background } ", data: { list_target: "item", state: resource.state, time_material_target: "item", controller: "time-material list-item" }) do
-      div(class: "relative flex justify-between gap-x-6 px-4 py-2 group-hover:bg-gray-50 sm:px-6 dark:group-hover:bg-white/2.5 ", data: time_material_controller?) do
+    div(id: (dom_id resource), class: "list_item group  #{ background } ", data: {
+      list_target: "item",
+      state: resource.state,
+      time_material_target: "item",
+      reload_url: resource_url,
+      time_material: {
+        target: "item",
+        sync_url_value: sync_time_material_path(resource, format: :json),
+        change_state_url_value: sync_time_material_path(resource, format: :turbo_stream),
+        version_value: resource.lock_version
+      },
+      controller: "time-material list-item"
+    }) do
+      div(class: "relative flex justify-between gap-x-6 px-4 py-2 group-hover:bg-gray-50 sm:px-6 dark:group-hover:bg-white/2.5 ", data: { time_material_target: "listlabel" }) do
         div(class: "flex min-w-0 gap-x-2") do
           show_left_mugshot
           div(class: "min-w-0 flex-auto ") do
@@ -24,20 +36,6 @@ class ListItems::TimeMaterial < ListItems::ListItem
         end
       end
       render_play_pause
-    end
-  end
-
-  def time_material_controller?
-    if (resource.user == user or user&.admin? or user&.superadmin?) and (resource.active? or resource.paused?)
-      {
-        time_material_target: "listlabel",
-        reload_url: resource_url(reload: true),
-        url: resource_url(pause: (resource.paused? ? "resume" : "pause"))
-      }
-    else
-      {
-        time_material_target: "listlabel"
-      }
     end
   end
 
@@ -204,9 +202,9 @@ class ListItems::TimeMaterial < ListItems::ListItem
   end
 
   def show_ping(hide = "")
-    span(data: { time_material_target: "activelamp" }, class: "#{hide} relative flex size-3 mr-2") do
+    span(data: { time_material_target: "activelamp" }, class: "#{hide} relative flex size-2 mr-2") do
       span(class: "absolute inline-flex h-full w-full animate-ping rounded-full bg-sky-400 opacity-75") { }
-      span(class: "relative inline-flex size-3 rounded-full bg-sky-500") { }
+      span(class: "relative inline-flex size-2 rounded-full bg-sky-500") { }
     end
   end
 

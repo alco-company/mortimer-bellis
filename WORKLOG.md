@@ -27,6 +27,10 @@
 
 ## CHANGELOG
 
+### 16/10/2025
+
+- yet another sync try
+
 ### 14/10/2025
 
 - redo sync from ground up - test 1

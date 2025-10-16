@@ -7,6 +7,7 @@ export default class extends Controller {
   ]
 
   connect() {
+    this.cleanLocalStorage()
   }
 
   toggleBatch(event) {
@@ -32,5 +33,23 @@ export default class extends Controller {
   reload(event) {
     const url = event.target.dataset.url
     Turbo.visit(url)
+  }
+
+  cleanLocalStorage() {
+    // Clean up any stale timing data in localStorage
+    const items = this.itemTargets
+    const validKeys = items.map( item => item.id + ":timing" )
+    validKeys.push( items.map( item => item.id + ":version" ) )
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i)
+      if (key.endsWith(":timing") && !validKeys.includes(key)) {
+        // console.log(`cleaning stale localStorage key ${key}`)
+        localStorage.removeItem(key)
+      }
+      if (key.endsWith(":version") && !validKeys.includes(key)) {
+        // console.log(`cleaning stale localStorage key ${key}`)
+        localStorage.removeItem(key)
+      }
+    }
   }
 }

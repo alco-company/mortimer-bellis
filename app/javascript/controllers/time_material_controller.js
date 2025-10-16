@@ -24,7 +24,9 @@ export default class extends Controller {
     time: Number,
     interval: 1000,
     reload: 60000,
-    products: Array
+    products: Array,
+    syncUrl: String,
+    changeStateUrl: String
   }
 
   hourRate = 0.0;
@@ -37,7 +39,6 @@ export default class extends Controller {
     this.lastSyncAt = Date.now();
     this.inflightReload = false;
     this.state = null;
-    this.opQueue = []; // offline ops
     this.startedAtMs = null; // ms epoch when the current active stint began
   }
 
@@ -45,7 +46,10 @@ export default class extends Controller {
     try {
       this.state = this.itemTarget.dataset.state;
       this.playerId = this.itemTarget.id;
+      this.token = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
+      this.setVersion( parseInt(this.itemTarget.dataset.timeMaterialVersionValue, 10) );
       this.setTimerOnState();
+      window.addEventListener( "online", (this.flushQueueBound = () => this.flushQueue()) );
       document.addEventListener("visibilitychange", this.onVisibilityChange);
     } catch (e) {
       console.error("Error connecting TimeMaterialController:", e);
@@ -54,12 +58,14 @@ export default class extends Controller {
 
   disconnect() {
     document.removeEventListener("visibilitychange", this.onVisibilityChange);
+    document.removeEventListener("online", this.flushQueueBound);
     this.stopTimer();
   }
 
   // Handle visibility change events ------------------------------------------
 
   onVisibilityChange = () => {
+    if (document.visibilityState === "visible") this.flushQueue();
     if (document.visibilityState === "visible" && this.state === "active" && this.startedAtMs) {
       // instant catch-up render
       this.timeValue = Math.floor((Date.now() - this.startedAtMs) / 1000);
@@ -71,9 +77,18 @@ export default class extends Controller {
 
   setTimerOnState() {
     switch (this.state) {
+      case "resume":
+        this.state = "active";
+        this.lastSyncAt = Date.now();
+        this.timeValue = parseInt(this.counterTarget.dataset.counter, 10) || 0;
+        this.setStartedAt();
+        this.persistTimingState();
+        this.startTimer();
+        break;
       case "active":
         this.lastSyncAt = Date.now();
         this.timeValue = parseInt(this.counterTarget.dataset.counter, 10) || 0;
+        this.persistTimingState();
         this.startTimer();
         break;
       case "paused":
@@ -104,26 +119,39 @@ export default class extends Controller {
       this.interval = null;
     }
     // Lock in the final elapsed value at stop/pause time
-    if (this.startedAtMs) {
-      this.timeValue = Math.floor((Date.now() - this.startedAtMs) / 1000);
-    }
+    this.moveHand();
     this.startedAtMs = null;
     this.persistTimingState();
   }
 
   tick() {
-    const now = Date.now();
+    this.moveHand();
+    this.render();
 
+    if (this.shouldReloadTimingStateFromServer())
+      this.syncStateWithServer();
+      // this.reloadTimingStateFromServer();
+
+    this.next_tick();
+  }
+
+  moveHand() {
     // Derive from wall clock so background throttling doesn’t matter
     if (this.state === "active" && this.startedAtMs) {
-      this.timeValue = Math.max(0, Math.floor((now - this.startedAtMs) / 1000));
+      this.timeValue = Math.max(
+        0,
+        Math.floor((Date.now() - this.startedAtMs) / 1000)
+      );
     }
-    this.render();
-    if (this.shouldReloadTimingStateFromServer())
-      this.reloadTimingStateFromServer();
+  }
 
+  setStartedAt() {
+    this.startedAtMs = Date.now() - (this.timeValue || 0) * 1000;
+  }
+
+  next_tick() {
     // Schedule next tick exactly at next whole second boundary
-    const msToNextSecond = 1000 - (now % 1000);
+    const msToNextSecond = 1000 - (Date.now() % 1000);
     this.interval = setTimeout(() => this.tick(), msToNextSecond);
   }
 
@@ -132,9 +160,18 @@ export default class extends Controller {
     this.state === "active" &&
     navigator.onLine &&
     !document.hidden &&
-    !this.inflightReload &&
     (this.lastSyncAt === null ||
       Date.now() - this.lastSyncAt >= this.reloadValue)
+  }
+
+  checkInLater() {
+    if (!navigator.onLine) {
+      setTimeout(() => this.checkInLater(), 15000);
+      console.log(`offline - will check in later, ${this.playerId} - ${this.state} - ${this.timeValue}`);
+      return;
+    }
+    this.flushQueue();
+    this.setTimerOnState();
   }
 
   loadTimingState() {
@@ -143,7 +180,7 @@ export default class extends Controller {
         localStorage.getItem(this.playerId + ":timing") || "{}"
       );
       this.timeValue = Number.isFinite(raw.timeValue) ? raw.timeValue : 0;
-      this.state = raw.state || null;
+      this.state = raw.state || "active";
       this.startedAtMs = Number.isFinite(raw.startedAtMs) ? raw.startedAtMs : null;
     } catch {
       this.timeValue = 0;
@@ -176,6 +213,26 @@ export default class extends Controller {
 
   // Server Dialogue ---------------------------------------------------------
   
+  async syncStateWithServer() {
+    if (this.state === "active" && navigator.onLine) {
+      try {
+        const body = {
+          ops: [ { type: "sync", at_ms: Date.now() } ],
+          version: this.getVersion(), // optimistic lock
+        };
+        // try empty the queue first
+        this.flushQueue()
+        .then(async (r) => r)
+        .then(() => { 
+          this.flushQueue(body); 
+        })
+
+      } catch (error) {
+        console.error("Error syncing state with server:", error);
+      }
+    }
+  }
+
   reloadTimingStateFromServer(url=null) {
     this.inflightReload = true;
     url = url || this.listlabelTarget?.dataset?.reloadUrl; // URL to fetch the latest timing state
@@ -193,70 +250,173 @@ export default class extends Controller {
     .then(async (r) => r.text())
     .then((html) => {
       Turbo.renderStreamMessage(html);
+      this.lastSyncAt = Date.now();
+      this.flushQueue();
     })
     .catch((e) => {
       // could not reloadTimingStateFromServer
       // will continue ticking locally
+      this.checkInLater();
       this.setTimerOnState();
       if (url.match(/(\?|&)pause=stop/)) {
         this.state = "stopped";
-        this.stopTimer();
       } else {
         if (url.match(/(\?|&)pause=paused/)) {
           this.state = "paused";
-          this.stopTimer();
         } else {
           if (url.match(/(\?|&)pause=resume/)) {
-            this.state = "active";
-            this.startTimer();
+            this.state = "resume";
           }
         }
       }
-      this.enqueue({ time: this.timeValue, state: this.state });
+      this.handleOffline();
     })
     .finally(() => { 
       this.inflightReload = false; 
-      console.log(
-        `reloadTimingStateFromServer - minutes: ${this.counterTarget.dataset.counter}, state: ${this.itemTarget.dataset.state}`
-      );
     });
   }
 
   // Queue helpers ------------------------------------------------------------
+  
+  queueKey() { return this.playerId + ":ops"; }
+  versionKey() { return this.playerId + ":version"; }
 
-  enqueue(op) {
-    try {
-      const key = this.playerId + ":ops";
-      const arr = JSON.parse(localStorage.getItem(key) || "[]");
-      arr.push(op);
-      localStorage.setItem(key, JSON.stringify(arr));
-    } catch {}
+  readQueue() {
+    try { return JSON.parse(localStorage.getItem(this.queueKey()) || "[]"); } catch { return []; }
+  }
+  saveQueue(arr) {
+    try { localStorage.setItem(this.queueKey(), JSON.stringify(arr)); } catch {}
+  }
+  pushOp(op) {
+    // ensure stable id for dedupe on retries
+    const withId = { id: crypto.randomUUID(), ...op };
+    const arr = this.readQueue();
+    arr.push(withId);
+    this.saveQueue(arr);
+    return withId;
+  }
+  getVersion() {
+    const v = parseInt(localStorage.getItem(this.versionKey()), 10);
+    return Number.isFinite(v) ? v : null;
+  }
+  setVersion(v) {
+    if (Number.isFinite(v)) localStorage.setItem(this.versionKey(), String(v));
   }
 
-  // Actions ------------------------------------------------------------------
+  // when user hits Resume while offline
+  enqueueResume() {
+    // startedAtMs must reflect when work resumed
+    if (!this.startedAtMs) this.startedAtMs = Date.now() - (this.timeValue || 0) * 1000;
+    this.pushOp({ type: "resume", at_ms: Date.now() });
+  }
 
-  changeState(e){
-    this.state = e.target.dataset.state;
-    let url = this.listlabelTarget.dataset.url;
-    this.setTimerOnState();
-    if (this.state == "stopped") url = url.replace(/\?pause\=.*$/, "?pause=stop");
-    if (navigator.onLine) {
-      this.reloadTimingStateFromServer(url);
-    } else {
-      this.handleOffline();
+  // when user hits Pause while offline
+  enqueuePause() {
+    if (this.startedAtMs) {
+      const deltaSec = Math.max(0, Math.floor((Date.now() - this.startedAtMs) / 1000));
+      this.startedAtMs = null;
+      this.pushOp({ type: "pause_delta", delta_sec: deltaSec });
     }
+  }
+
+  // when user hits Stop while offline
+  enqueueStop() {
+    this.pushOp({ type: "stop", at_ms: Date.now() });
+    this.startedAtMs = null;
+  }
+
+  async flushQueue(body = null, url = this.syncUrlValue, headers = { "Content-Type": "application/json", "X-CSRF-Token": this.token }) {
+    if (!navigator.onLine) return;
+    if (!url) return;
+
+    let ops = []
+    let batch = [];
+    if (!body) {
+
+      ops = this.readQueue();
+      if (ops.length === 0) return;
+  
+  
+      // Send a small batch to reduce risk (e.g. 25 ops at a time)
+      batch = ops.slice(0, 25);
+      body = {
+        ops: batch,
+        version: this.getVersion() // optimistic lock
+      };
+    }
+
+    let resp;
+    try {
+      resp = await fetch(url, {
+        method: "POST",
+        headers: headers,
+        body: JSON.stringify(body)
+      });
+    } catch {
+      // network error; keep queue and back off silently
+      if (batch.length < 1) this.handleOffline();
+      return;
+    }
+    
+    if (resp.status === 409) {
+      // Version conflict. Server returns current snapshot; replace local state.
+      const snapshot = await resp.json();
+      this.reconcileFromSnapshot(snapshot);
+      // IMPORTANT: drop whole queue since server state won
+      this.saveQueue([]);
+      return;
+    }
+    
+    if (!resp.ok) {
+      // 5xx or 422 – leave queue and try again later
+      return;
+    }
+    
+    // Success: server returns fresh snapshot with new lock_version
+    if (url.match(/turbo/)){
+      const html = await resp.text();
+      Turbo.renderStreamMessage(html);
+      this.lastSyncAt = Date.now();
+      this.flushQueue();
+    } else {
+      const snapshot = await resp.json();
+      this.reconcileFromSnapshot(snapshot);
+  
+      // Remove the batch we sent successfully and keep flushing until empty
+      const remaining = ops.slice(batch.length);
+      this.saveQueue(remaining);
+  
+      // Tail recursion-ish: try again quickly while online
+      if (remaining.length > 0) {
+        // small delay to avoid tight loop
+        setTimeout(() => this.flushQueue(), 50);
+      }
+    }
+  }
+
+  reconcileFromSnapshot(s) {
+    // s: { id, state, total_seconds, registered_minutes, started_at, version }
+    this.setVersion(s.version);
+    this.timeValue = s.total_seconds ?? this.timeValue;
+    this.counterTarget.dataset.counter = this.timeValue;
+    this.state = s.state ?? this.state;
+    this.startedAtMs = s.started_at ? Date.parse(s.started_at) : null;
+    this.persistTimingState();
+    this.render();
+    this.setTimerOnState(); // start/stop local tickers to match state
   }
 
   handleOffline() {
     switch (this.state) {
       case "resume":
+        this.state = "active";
         if (!this.startedAtMs)
           this.startedAtMs = Date.now() - (this.timeValue || 0) * 1000;
         this.startTimer();
-        this.state = "active";
         this.pausebuttonTarget.classList.remove("hidden");
         this.resumebuttonTarget.classList.add("hidden");
         this.activelampTarget.classList.remove("hidden");
+        this.enqueueResume();
         break;
       case "paused":
         if (this.startedAtMs) {
@@ -267,6 +427,7 @@ export default class extends Controller {
         this.pausebuttonTarget.classList.add("hidden");
         this.activelampTarget.classList.add("hidden");
         this.resumebuttonTarget.classList.remove("hidden");
+        this.enqueuePause();
         break;
       case "stopped":
         if (this.startedAtMs) {
@@ -277,10 +438,30 @@ export default class extends Controller {
         this.activelampTarget.classList.add("hidden");
         this.pausebuttonTarget.classList.add("hidden");
         this.resumebuttonTarget.classList.remove("hidden");
+        this.enqueueStop();
         break;
     }
     this.persistTimingState();
-    this.enqueue({ time: this.timeValue, state: this.state });
+    this.checkInLater();
+  }
+
+  // Actions ------------------------------------------------------------------
+
+  changeState(e){
+    this.state = e.target.dataset.state;
+    if (navigator.onLine) {
+      const body = {
+        ops: [{ type: this.state, at_ms: Date.now() }],
+        version: this.getVersion()
+      };
+      const headers = {
+        "X-CSRF-Token": this.token,
+      };
+      const url = this.changeStateUrlValue;
+      this.flushQueue(body, url);
+    } else {
+      this.handleOffline();
+    }
   }
 
   updateOverTime(e) {
@@ -357,7 +538,7 @@ export default class extends Controller {
   }
 
   empty_value(e, value = 0.0) {
-    console.log(`hourRate: ${this.hourRate}`);
+    // console.log(`hourRate: ${this.hourRate}`);
     if (
       e.value === "" ||
       e.value == 0 ||
@@ -366,7 +547,7 @@ export default class extends Controller {
       value != 0.0
     ) {
       this.hourRate = value;
-      console.log(`hourRate updated: ${this.hourRate}`);
+      // console.log(`hourRate updated: ${this.hourRate}`);
       return value;
     }
     return e.value
@@ -383,7 +564,6 @@ export default class extends Controller {
         mins.toString().padStart(2, "0")
       this.counterTarget.dataset.counter = total;
     } catch (error) {
-      // console.error("Error rendering timer - missing this.counterTarget!");
     }
   }
 }

@@ -41,6 +41,8 @@ module Authentication
 
     def resume_session
       Current.session ||= find_session_by_cookie
+      Current.session.touch if Current.session.present?
+      Current.session
     end
 
     def find_session_by_cookie

@@ -60,6 +60,10 @@ class User < ApplicationRecord
 
   normalizes :email, with: ->(e) { e.strip.downcase }
 
+  def signed_in?
+    !current_sign_in_at.nil? && sessions.pluck(:updated_at).max > 8.hours.ago
+  end
+
   def confirm!
     update!(confirmed_at: Time.current, confirmation_token: nil)
   end

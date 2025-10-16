@@ -162,18 +162,18 @@ module Timing
       update!(registered_minutes: registered_minutes.to_i + mins)
     end
 
-    def pause!(at: Time.current)
-      add_elapsed_seconds!((at - started_at).to_i) if started_at
-      update!(started_at: nil, state: "paused")
+    def pause!(at: Time.current, st: "paused")
+      minutes_reloaded_at.nil? ?
+        update!(minutes_reloaded_at: at, state: st, paused_at: at, registered_minutes: (registered_minutes || 0) + ((at - started_at).to_i / 60)) :
+        update!(minutes_reloaded_at: at, state: st, paused_at: at, registered_minutes: (registered_minutes || 0) + ((at - minutes_reloaded_at).to_i / 60))
     end
 
     def resume!(at: Time.current)
-      update!(started_at: at, state: "active")
+      update!(minutes_reloaded_at: at, paused_at: nil, state: "active")
     end
 
     def stop!(at: Time.current)
-      pause!(at: at)
-      update!(state: "stopped")
+      pause!(at: at, st: "done")
     end
   end
 
