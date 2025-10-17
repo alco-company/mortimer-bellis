@@ -291,8 +291,9 @@ class TimeMaterialsController < MortimerController
     end
 
     def set_time
-      total_minutes = (resource.elapsed_seconds_now / 60 rescue 0)
-      ht, mt = total_minutes.divmod(60)
+      # total_minutes = (resource.elapsed_seconds_now / 60 rescue 0)
+      total_minutes = resource.total_seconds / 60
+      ht, mt = total_minutes.divmod(60) # total_minutes.divmod(60)
       if Current.user.should?(:limit_time_to_quarters)
         mt = case mt
         when 0; ht==0 ? 15 : 0
