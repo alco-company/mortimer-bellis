@@ -2,9 +2,9 @@ class Broadcasters::Resource
   include Turbo::StreamsHelper
   include ActionView::RecordIdentifier
 
-  attr_accessor :tenant, :resource, :resource_class, :resources_stream, :params, :target, :user, :partial
+  attr_accessor :tenant, :resource, :resource_class, :resources_stream, :params, :target, :user, :partial, :stream_action
 
-  def initialize(resource, params = {}, target: nil, user: nil, stream: nil, partial: nil)
+  def initialize(resource, params = {}, target: nil, user: nil, stream: nil, partial: nil, stream_action: nil)
     @resource = resource
     @params = params.respond_to?(:to_unsafe_h) ? params.to_unsafe_h : params
     @target = target || dom_id(resource)
@@ -13,6 +13,7 @@ class Broadcasters::Resource
     @tenant = resource.respond_to?(:tenant) ? resource.tenant : user.tenant rescue nil
     @resources_stream = stream || "%s_%s" % [ tenant&.id, resource_class.to_s.underscore.pluralize ] rescue nil
     @partial = partial || resource
+    @stream_action = stream_action || :prepend
   end
 
   ## TODO - use Broadcasters::Resource.new(resource)#flash instead of flash[:*] in controllers, elsewhere
@@ -34,7 +35,7 @@ class Broadcasters::Resource
     Turbo::StreamsChannel.broadcast_action_later_to(
       resources_stream,
       target: @target,
-      action: :prepend,
+      action: @stream_action,
       partial: partial,
       locals: { resource_class.to_s.underscore => resource, params: params, user: user, target: @target }
     )

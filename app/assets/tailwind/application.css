@@ -315,7 +315,7 @@ h1 {
 }
 
 .list_item {
-  @apply col-span-1 rounded-lg bg-white shadow-sm dark:divide-white/10 dark:bg-gray-800/50 dark:shadow-none dark:outline dark:-outline-offset-1 dark:outline-white/10;
+  @apply col-span-1 mb-1 rounded-lg bg-white shadow-sm dark:divide-white/10 dark:bg-gray-800/50 dark:shadow-none dark:outline dark:-outline-offset-1 dark:outline-white/10;
 }
 
 .list_context_menu {

@@ -30,6 +30,14 @@ class List < ApplicationComponent
     end
   end
 
+  #
+  # HTML list rendering
+  #
+  # This method renders the HTML list of records.
+  # If a order_by hash/key-value pairs is provided, it groups the records accordingly.
+  # and adds turbo_frames for each order_by group.
+  # ex. order_by: { due_date: :asc } => turbo_frame "due_date_2023-10-01", etc.
+  #
   def html_list(&block)
     if initial
       # list_records
@@ -61,7 +69,11 @@ class List < ApplicationComponent
 
   def append_list
     turbo_stream.append "record_list" do
-      list_records
+      if order_by
+        grouped_list
+      else
+        list_records
+      end
       # next_pagy_page
     end
   end
@@ -70,9 +82,28 @@ class List < ApplicationComponent
     flash_it
     replace_list_header
     turbo_stream.replace "record_list" do
-      div(id: "record_list", class: "scrollbar-hide gap-y-4 grid grid-cols-1 gap-6 sm:grid-cols-1 lg:grid-cols-1 m-2 ") { }
+      div(id: "record_list", class: "scrollbar-hide gap-y-4 grid grid-cols-1 gap-6 sm:grid-cols-1 lg:grid-cols-1 m-2 ") do
+        if order_by
+          grouped_list
+        else
+          list_records
+        end
+      end
     end
-    append_list
+  end
+
+  def grouped_list
+    records.group_by { |r| r.send(order_by) }.each do |ordby, recs|
+      turbo_frame_tag "#{recs.first.class}_#{ordby}" do
+        list_column(ordby)
+        recs.each do |rec|
+          render "ListItems::#{rec.class}".classify.constantize.new(resource: rec, params: params, user: user)
+        end
+        # div(class: "font-semibold text-gray-900") { plain ordby }
+        # div(class: "grid grid-cols-1 gap-6 sm:grid-cols-1 lg:grid-cols-1") do
+        # end
+      end
+    end
   end
 
   def list_records

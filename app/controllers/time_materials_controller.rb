@@ -167,10 +167,14 @@ class TimeMaterialsController < MortimerController
     end
 
     def stream_create
+      resources.pluck(:wdate).include?(resource.wdate) ?
+        (t = "TimeMaterial_#{wdate}"; sa = :append) :
+        (t = "record_list"; sa = :prepend)
+
       Broadcasters::Resource.new(resource, params.permit!, user: Current.user, stream: "#{Current.user.id}_time_materials").create
       Current.get_tenant.users.filter { |u| u != Current.user }.each do |u|
         next unless u.signed_in?
-        Broadcasters::Resource.new(resource, params.permit!, user: u, stream: "#{u.id}_time_materials").create
+        Broadcasters::Resource.new(resource, params.permit!, target: t, stream_action: sa, user: u, stream: "#{u.id}_time_materials").create
       end
     end
 

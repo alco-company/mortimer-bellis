@@ -8,6 +8,7 @@
 
 ## ISSUES
 
+- security gems to add soon - https://blog.devops.dev/8-essential-rails-security-gems-you-shouldnt-deploy-without-2025-edition-8b89f7e3c743
 - https://svgconverter.online/
 - consistent icons - https://phosphoricons.com/
 - https://railsdesigner.com/kanban-rails-hotwire/
@@ -31,6 +32,7 @@
 
 - inching closer on sync by-the-minute
 - another inch
+- better ordering of list items
 
 ### 16/10/2025
 
