@@ -126,36 +126,14 @@ class TimeMaterialsController < MortimerController
       }
     end
 
-    # def process_state_toggle
-    #   process_reload or process_pause_resume
-    # end
-
     def process_reload
       return false unless params.dig(:reload).present?
       status = sync_state
       render json: snapshot(resource), status: status
-      # reload_time_spent
-      # Current.get_tenant.users.each do |u|
-      #   next unless u.current_sign_in_at.present?
-      #   Broadcasters::Resource.new(resource, { controller: "time_materials" }, user: u, stream: "#{u.id}_time_materials").replace if resource.active?
-      # end
-
-      # head :ok
-      # true
     end
 
-    # def process_pause_resume
-    #   return false unless params.dig(:pause).present?
-
-    #   if params.dig(:pause) == "stop"
-    #     stop
-    #   else
-    #     pause_resume
-    #   end
-    # end
-
     #
-    # default_actions callbacks
+    # default_actions callbacks - called before and after create/update
     #
     def before_create_callback
       r = resource.prepare_tm resource_params
@@ -176,6 +154,7 @@ class TimeMaterialsController < MortimerController
     end
 
     def before_update_callback
+      return false unless resource.user == Current.user or Current.user.admin? or Current.user.superadmin?
       r = resource.prepare_tm resource_params
       return false if r == false
       resource_params(r)
@@ -229,37 +208,15 @@ class TimeMaterialsController < MortimerController
 
     # called after create or update of a time_material
     # hour_time, minute_time, registered_minutes, started_at, time_spent should be set straight
+    # making sure that time is in sync with registered_minutes
     #
     def postprocess_time
       return unless resource.is_time?
       ht, mt = resource.time.split(":").map(&:to_i).each_with_index { |v, i| i==0 ? v : v.clamp(0, 59) }
       resource.registered_minutes = ht * 60 + mt
+      resource.started_at = resource.registered_minutes.minutes.ago
       resource.minutes_reloaded_at = Time.current
       resource.save
-    end
-
-    #
-    # if the time_material is active, recalculate time_spent from started_at
-    # if paused, keep time_spent as is
-    # if stopped or done, keep time_spent as is
-    def reload_time_spent
-      if resource.active?
-        minutes = resource.add_elapsed_to_registered!
-        resource.hour_time, resource.minute_time = (minutes).divmod(60)
-        resource.save
-        # resource.update time_spent: resource.elapsed_seconds_now, registered_minutes: minutes, paused_at: nil, minutes_reloaded_at: Time.current
-      end
-    end
-
-    def set_play_time
-      # return unless Current.get_user.should? :fill_play_time_in_time_fields
-      # rmin = resource.registered_minutes || 0
-      # ts = resource.time_spent || 0
-      # ht, mt = (rmin + ts).divmod(3600)
-      # mt, _sec = mt.divmod(60)
-      # ht, mt = resource.sanitize_time(ht, mt).split(":")
-      # resource.hour_time = ht
-      # resource.minute_time = mt
     end
 
     def create_play
@@ -283,41 +240,6 @@ class TimeMaterialsController < MortimerController
       }
       params.delete(:play)
       params[:played] = true
-    end
-
-    def pause_resume
-      if resource.user == Current.user or Current.user.admin? or Current.user.superadmin?
-        params.dig(:pause) == "pause" ?
-          resource.pause! && flash.now[:success] = t("time_material.paused") :
-          resource.resume! && flash.now[:success] = t("time_material.resumed")
-        stream_update
-        respond_to do |format|
-          format.html { render turbo_stream: [ turbo_stream.replace("flash_container", partial: "application/flash_message", locals: { tenant: Current.get_tenant, messages: flash, user: Current.get_user }) ] }
-          format.turbo_stream { render turbo_stream: [ turbo_stream.replace("flash_container", partial: "application/flash_message", locals: { tenant: Current.get_tenant, messages: flash, user: Current.get_user }) ] }
-        end
-      else
-        respond_to do |format|
-          format.turbo_stream { render turbo_stream: [
-            flash.now[:warning] = t("time_material.not_your_time_material"),
-            turbo_stream.replace("flash_container", partial: "application/flash_message", locals: { tenant: Current.get_tenant, messages: flash, user: Current.get_user })
-          ] }
-        end
-      end
-    end
-
-    def stop
-      @_action_name = "edit"
-      flash.now[:success] = t("time_material.stopped")
-      set_time
-
-      stream_update
-      stream_it_all
-      # Broadcasters::Resource.new(resource, params, stream: "#{resource.user.id}_time_materials").replace
-
-      # respond_to do |format|
-      #   format.html { stream_it_all }
-      #   format.turbo_stream {  }
-      # end
     end
 
     # Only allow a list of trusted parameters through.
@@ -369,7 +291,7 @@ class TimeMaterialsController < MortimerController
     end
 
     def set_time
-      total_minutes = (resource.registered_minutes || 0)
+      total_minutes = (resource.elapsed_seconds_now / 60 rescue 0)
       ht, mt = total_minutes.divmod(60)
       if Current.user.should?(:limit_time_to_quarters)
         mt = case mt

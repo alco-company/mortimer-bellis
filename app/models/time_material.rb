@@ -100,6 +100,18 @@ class TimeMaterial < ApplicationRecord
   scope :this_month, -> { by_tenant.where_op(:gt, created_at: Time.current.at_beginning_of_month) }
   scope :invoiceable, -> { by_tenant.where(is_invoice: true).where.not(customer_id: nil).where.not(state: states[:draft]) }
 
+  def name
+    # about
+    case false
+    when product_name.blank?; product_name
+    when about.blank?; about
+    when comment.blank?; comment
+    else; user.default(:default_time_material_about, I18n.t("time_material.default_assigned_about"))
+    end
+  rescue
+    ""
+  end
+
   # STATS
   def self.total_time_registered
     h, m = this_month.sum(:registered_minutes).to_f.divmod(60)
@@ -333,18 +345,6 @@ class TimeMaterial < ApplicationRecord
     end
   end
 
-  def name
-    # about
-    case false
-    when product_name.blank?; product_name
-    when about.blank?; about
-    when comment.blank?; comment
-    else; user.default(:default_time_material_about, I18n.t("time_material.default_assigned_about"))
-    end
-  rescue
-    ""
-  end
-
   def has_mugshot?
     false
   end
@@ -440,7 +440,8 @@ class TimeMaterial < ApplicationRecord
           when "0"; ""
           when "0%"; 0
           when "100%"; 100
-          else resource_params[:discount].to_f
+          when /%/; resource_params[:discount].to_s.delete("%").gsub(",", ".").to_f
+          else resource_params[:discount].gsub(",", ".").to_f
           end
         end
 
@@ -464,9 +465,10 @@ class TimeMaterial < ApplicationRecord
 
   def create_customer(resource_params)
     resource_params[:customer_id] = "" if resource_params[:customer_name].blank?
+    return resource_params unless Current.get_user.can?(:add_customer, resource: self)
+
     if (resource_params[:customer_id].present? && (Customer.find(resource_params[:customer_id]).name != resource_params[:customer_name])) ||
       resource_params[:customer_name].present? && resource_params[:customer_id].blank?
-      return resource_params unless Current.get_user.can?(:add_customer, resource: self)
       customer = Customer.find_or_create_by(tenant: Current.get_tenant, name: resource_params[:customer_name], is_person: true)
       resource_params[:customer_id] = customer.id
     end
@@ -475,9 +477,10 @@ class TimeMaterial < ApplicationRecord
 
   def create_project(resource_params)
     resource_params[:project_id] = "" if resource_params[:project_name].blank?
+    return resource_params unless Current.get_user.can?(:add_project, resource: self)
+
     if (resource_params[:project_id].present? && (Project.find(resource_params[:project_id]).name != resource_params[:project_name])) ||
       resource_params[:project_name].present? && resource_params[:project_id].blank?
-      return resource_params unless Current.get_user.can?(:add_project, resource: self)
       project = Project.find_or_create_by(tenant: Current.get_tenant, name: resource_params[:project_name], customer_id: resource_params[:customer_id])
       resource_params[:project_id] = project.id
     end

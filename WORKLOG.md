@@ -27,6 +27,10 @@
 
 ## CHANGELOG
 
+### 17/10/2025
+
+- inching closer on sync by-the-minute
+
 ### 16/10/2025
 
 - yet another sync try

@@ -169,9 +169,10 @@ class ListItems::TimeMaterial < ListItems::ListItem
   def show_time_material_quantative
     if resource.active? or resource.paused?
       # counter = (resource.paused? ? resource.time_spent : (Time.current.to_i - resource.started_at.to_i) + resource.time_spent) * 60
-      counter = (resource&.registered_minutes || 0) * 60
-      counter += resource.paused? ? 0 : resource.elapsed_seconds_now
-      _days, hours, minutes, seconds = resource.calc_hrs_minutes counter
+      # counter = (resource&.registered_minutes || 0) * 60
+      # counter += resource.paused? ? 0 : resource.elapsed_seconds_now
+      counter = resource.total_seconds
+      _days, hours, minutes, _seconds = resource.calc_hrs_minutes counter
       timestring = "%02d:%02d" % [ hours, minutes ]
       #
       # deferred by sales 25/09/2025

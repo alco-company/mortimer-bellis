@@ -37,7 +37,7 @@ module Settingable
       return result if !result.nil?
 
       # true on tenant/global-level
-      result = can_query(key, all_settings.where(setable_type: nil, setable_id: nil), inverse)
+      result = can_query(key, all_settings.where(setable: nil), inverse)
       return result if !result.nil?
 
       Rails.logger.debug "CAN? no specific setting found for #{key}, defaulting to false"

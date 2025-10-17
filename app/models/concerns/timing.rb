@@ -113,11 +113,14 @@ module Timing
     #
     # return the number of seconds elapsed in current run (nil if not started)
     #
-    def elapsed_seconds_now
+    def elapsed_seconds_now(now: Time.current)
       return 0 unless started_at
-      minutes_reloaded_at ?
-        (Time.current.to_i - minutes_reloaded_at.to_i) :
-        (Time.current.to_i - started_at.to_i).clamp(0, 24.hours)
+      paused_at ?
+        (paused_at.to_i - (minutes_reloaded_at || started_at).to_i).clamp(0, 24.hours) :
+        (now.to_i - (minutes_reloaded_at || started_at).to_i).clamp(0, 24.hours)
+      # minutes_reloaded_at ?
+      #   (Time.current.to_i - minutes_reloaded_at.to_i) :
+      #   (Time.current.to_i - started_at.to_i).clamp(0, 24.hours)
     end
 
     def add_elapsed_to_registered!(rounding: :round)
@@ -135,26 +138,27 @@ module Timing
 
     # Pause current timer, roll current elapsed into registered_minutes and reset the running segment.
     # If stop is true, also mark inactive when possible.
-    def pause_time_spent(stop = false)
-      add_elapsed_to_registered!
-      s = stop ? 3 : 2
-      updates = { state: s, paused_at: Time.current, time_spent: 0 }
-      update!(updates)
-      if stop
-        # Try to mark inactive/done if you have states
-        # inactive_set = false
-        # inactive_set ||= (respond_to?(:inactive!) && !!inactive!) rescue false
-        # inactive_set ||= (respond_to?(:archived!) && !!archived!) rescue false
-      end
-      true
-    end
+    # def pause_time_spent(stop = false)
+    #   add_elapsed_to_registered!
+    #   s = stop ? 3 : 2
+    #   updates = { state: s, paused_at: Time.current, time_spent: 0 }
+    #   update!(updates)
+    #   if stop
+    #     # Try to mark inactive/done if you have states
+    #     # inactive_set = false
+    #     # inactive_set ||= (respond_to?(:inactive!) && !!inactive!) rescue false
+    #     # inactive_set ||= (respond_to?(:archived!) && !!archived!) rescue false
+    #   end
+    #   true
+    # end
 
     def resume_time_spent
       update state: 1, minutes_reloaded_at: Time.current, paused_at: nil, time_spent: 0
     end
 
     def total_seconds(now: Time.current)
-      registered_minutes.to_i * 60 + (started_at ? (now - started_at).to_i : 0)
+      elapsed_seconds_now(now: now) + registered_minutes.to_i * 60
+      # registered_minutes.to_i * 60 + (started_at ? (now - started_at).to_i : 0)
     end
 
     def add_elapsed_seconds!(seconds)
