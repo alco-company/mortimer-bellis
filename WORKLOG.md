@@ -25,6 +25,7 @@
 - find ways to utilise <output> - https://denodell.com/blog/html-best-kept-secret-output-tag
 - ways to test before launch: https://bhavyansh001.medium.com/the-rails-performance-checklist-i-run-before-every-launch-b02f605285cf
 - priser
+- trying to inject new records in the correct work day area - works for days with > 0 records
 
 ## CHANGELOG
 
@@ -32,6 +33,8 @@
 
 - set task_comment right
 - let ":ops" be part of the clean-up in the list_controller.js
+- setting strict params on _header
+- don't replace item_header - MIGHT BE WRONG!!
 
 ### 17/10/2025
 

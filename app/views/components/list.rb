@@ -5,7 +5,7 @@ class List < ApplicationComponent
   include Phlex::Rails::Helpers::Flash
   include Phlex::Rails::Helpers::LinkTo
 
-  attr_reader :records, :pagy, :order_by, :group_by, :initial, :user, :batch_form
+  attr_accessor :records, :pagy, :order_by, :group_by, :initial, :user, :batch_form, :params, :filter, :replace, :divider, :format
 
   def initialize(records:, pagy: nil, initial: false, replace: false, filter: nil, params: {}, batch_form: nil, divider: true, user: User.new, format: :html, group_by: nil, order_by: nil, &block)
     @order_by = order_by
@@ -55,10 +55,10 @@ class List < ApplicationComponent
       div(class: "class") do
         div(class: "min-w-full") do
           table(role: "list", class: "divide-y divide-gray-100") do
-            render "ListItems::#{rc}".classify.constantize.new(resource: records, params: params, user: user, format: :pdf_header)
+            render "ListItems::#{rc}".classify.constantize.new(resource: records, params: params, user: @user, format: :pdf_header)
             tbody do
               records.each do |record|
-                render "ListItems::#{rc}".classify.constantize.new(resource: record, params: params, user: user, format: :pdf)
+                render "ListItems::#{rc}".classify.constantize.new(resource: record, params: params, user: @user, format: :pdf)
               end
             end
           end
@@ -80,7 +80,7 @@ class List < ApplicationComponent
 
   def replace_list
     flash_it
-    replace_list_header
+    # replace_list_header
     turbo_stream.replace "record_list" do
       div(id: "record_list", class: "scrollbar-hide gap-y-4 grid grid-cols-1 gap-6 sm:grid-cols-1 lg:grid-cols-1 m-2 ") do
         if order_by
@@ -93,11 +93,13 @@ class List < ApplicationComponent
   end
 
   def grouped_list
+    count = records.count
     records.group_by { |r| r.send(order_by) }.each do |ordby, recs|
       turbo_frame_tag "#{recs.first.class}_#{ordby}" do
         list_column(ordby)
         recs.each do |rec|
-          render "ListItems::#{rec.class}".classify.constantize.new(resource: rec, params: params, user: user)
+          next_pagy_page if (count -= 1) < 2
+          render "ListItems::#{rec.class}".classify.constantize.new(resource: rec, params: params, user: @user)
         end
         # div(class: "font-semibold text-gray-900") { plain ordby }
         # div(class: "grid grid-cols-1 gap-6 sm:grid-cols-1 lg:grid-cols-1") do
@@ -121,16 +123,16 @@ class List < ApplicationComponent
         list_column(fld)
       end if order_by
       next_pagy_page if (count -= 1) < 2
-      render "ListItems::#{resource_class}".classify.constantize.new(resource: record, params: params, user: user)
+      render "ListItems::#{resource_class}".classify.constantize.new(resource: record, params: params, user: @user)
     end
   end
 
   def flash_it
-    turbo_stream.replace("flash_container", partial: "application/flash_message", locals: { tenant: Current.get_tenant, messages: flash, user: Current.get_user }) if flash.any?
+    turbo_stream.replace("flash_container", partial: "application/flash_message", locals: { tenant: Current.get_tenant, messages: flash, user: @user }) if flash.any?
   end
 
   def replace_list_header
-    turbo_stream.replace("#{user.id}_list_header", partial: "application/header", locals: { batch_form: batch_form, divider: @divider, user: Current.get_user })
+    turbo_stream.replace("#{@user.id}_list_header", partial: "application/header", locals: { tenant: Current.tenant, batch_form: batch_form, divider: @divider, user: @user, params: @params })
   end
 
   def next_pagy_page
