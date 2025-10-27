@@ -167,17 +167,21 @@ module Timing
     end
 
     def pause!(at: Time.current, st: "paused")
+      return if state == st
       minutes_reloaded_at.nil? ?
         update!(minutes_reloaded_at: at, state: st, paused_at: at, registered_minutes: (registered_minutes || 0) + ((at - started_at).to_i / 60)) :
         update!(minutes_reloaded_at: at, state: st, paused_at: at, registered_minutes: (registered_minutes || 0) + ((at - minutes_reloaded_at).to_i / 60))
+      # Rails.logger.fatal("Timing#pause! at=#{at} st=#{st}, registered_minutes=#{registered_minutes}, started_at=#{started_at}, minutes_reloaded_at=#{minutes_reloaded_at}")
     end
 
     def resume!(at: Time.current)
       update!(minutes_reloaded_at: at, paused_at: nil, state: "active")
+      # Rails.logger.fatal("Timing#resume! at=#{at}, registered_minutes=#{registered_minutes}, minutes_reloaded_at=#{minutes_reloaded_at}, state=#{state}")
     end
 
     def stop!(at: Time.current)
       pause!(at: at, st: "done")
+      # Rails.logger.fatal("Timing#stop! at=#{at}, registered_minutes=#{registered_minutes}, minutes_reloaded_at=#{minutes_reloaded_at}, state=#{state}")
     end
   end
 
