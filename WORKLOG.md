@@ -36,6 +36,7 @@
 - don't replace item_header - MIGHT BE WRONG!!
 - trying to inject new records in the correct work day area - works for days with > 0 records
 - don't pause when stopping - if paused
+- handle params better
 
 ### 17/10/2025
 
