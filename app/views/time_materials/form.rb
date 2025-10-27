@@ -2,6 +2,8 @@ class TimeMaterials::Form < ApplicationForm
   def view_template(&)
     div(class: "overflow-y-auto", data: {
       controller: "time-material tabs",
+      time_material_target: "item",
+      form: "true",
       time_material_products_value: TimeMaterial.overtimes_products,
       tabs_index: @resource.is_time? ? "0" : "1" }) do
       if model.cannot_be_pushed?
@@ -247,7 +249,7 @@ class TimeMaterials::Form < ApplicationForm
   def about_field
     div(class: "col-span-full") do
       div(class: "mort-field my-0") do
-        div(class: "flex justify-between", data: { controller: "time-material" }) do
+        div(class: "flex justify-between", data: {}) do
           label(for: "time_material_about", class: "block text-sm font-medium leading-6 text-gray-900") { I18n.t("time_material.about.lbl") }
           if resource.active? or resource.paused?
             color = resource.paused? ? "text-gray-500" : "text-lime-500"
@@ -405,17 +407,17 @@ class TimeMaterials::Form < ApplicationForm
 
     div(class: "col-span-full") do
       div(class: "mort-field my-0") do
-        div(class: "flex justify-between", data: { controller: "time-material" }) do
+        div(class: "flex justify-between", data: {}) do
           label(for: "time_material_task_comment") do
             span { I18n.t("activerecord.attributes.time_material.task_comment") }
           end
         end
         textarea(id: "time_material_task_comment", name: "time_material[task_comment]", class: "mort-form-text") do
-          plain resource.comment
+          plain resource.task_comment
         end
       end
       div(class: "mort-field my-0") do
-        div(class: "flex justify-between", data: { controller: "time-material" }) do
+        div(class: "flex justify-between", data: {}) do
           label(for: "time_material_location_comment") do
             span { I18n.t("activerecord.attributes.time_material.location_comment") }
           end

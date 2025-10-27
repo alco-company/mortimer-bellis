@@ -28,6 +28,10 @@
 
 ## CHANGELOG
 
+### 27/10/2025
+
+- set task_comment right
+
 ### 17/10/2025
 
 - inching closer on sync by-the-minute
