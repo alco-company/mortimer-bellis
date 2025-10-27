@@ -32,7 +32,7 @@ module DefaultActions
       resource_class.toggle
       rs = params[:turbo_frame].present? ? params[:turbo_frame] : "#{(Current.tenant.id rescue false) || "1"}_list_header"
       p = params[:partial].present? ? params[:partial] : "application/header"
-      render turbo_stream: turbo_stream.replace(rs, partial: p, locals: { tenant: Current.tenant, user: Current.user, divider: true })
+      render turbo_stream: turbo_stream.replace(rs, partial: p, locals: { tenant: Current.tenant, divider: true, params: @params, user: Current.user })
     end
 
     # GET /users/lookup
@@ -129,12 +129,15 @@ module DefaultActions
           stream_create
           resource.notify action: :create
           flash[:success] = t(".post")
-          format.turbo_stream { render turbo_stream: [
-            turbo_stream.update("form", ""),
-            turbo_stream.replace("#{Current.get_user.id}_progress", partial: "dashboards/progress"),
-            turbo_stream.replace("flash_container", partial: "application/flash_message", locals: { tenant: Current.get_tenant, messages: flash, user: Current.get_user })
-            # special
-          ] ; flash.clear}
+          format.turbo_stream {
+            render turbo_stream: [
+              turbo_stream.update("form", ""),
+              turbo_stream.replace("#{Current.get_user.id}_progress", partial: "dashboards/progress"),
+              turbo_stream.replace("flash_container", partial: "application/flash_message", locals: { tenant: Current.get_tenant, messages: flash, user: Current.get_user })
+              # special
+            ]
+            flash.clear
+          }
           format.html { redirect_to resources_url, success: t(".post") }
           format.json { render :show, status: :created, location: resource }
         else

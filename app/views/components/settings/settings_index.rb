@@ -39,7 +39,7 @@ class Settings::SettingsIndex < ApplicationComponent
     # so we delegate to the Rails view context manually and inject the HTML.
     # Using unsafe_raw since the partial returns already-safe HTML.
     # unsafe_raw render(partial: "application/header", locals: { batch_form: nil, divider: @divider })
-    render(partial: "application/header", locals: { batch_form: nil, divider: @divider })
+    render(partial: "application/header", locals: { tenant: Current.tenant, batch_form: nil, divider: @divider, params: @params, user: Current.user })
     turbo_frame_tag "settings_list" do
       div(id: "list", role: "list", class: "") do
         comment { "Help Box" }

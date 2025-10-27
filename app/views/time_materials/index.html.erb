@@ -1,6 +1,6 @@
 <%= turbo_stream_from @user_resources_stream %>
 <%= form_with model: @batch, id: "batch_form", data: { controller: "list" } do |form| %>
-  <%= render partial: "header", locals: { batch_form: form, divider: true } %>
+  <%= render partial: "header", locals: { tenant: Current.tenant, batch_form: form, divider: true, user: Current.user, params: params } %>
   <div id="list" role="list" class="">
     <%= form.hidden_field :id%>
     <%= form.hidden_field :entity %>
