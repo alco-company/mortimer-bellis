@@ -6,13 +6,13 @@ class TimeMaterialsController < MortimerController
 
   def index
     @resources = resources
-      # if ActiveModel::Type::Boolean.new.cast(params[:show_all])
-      #   @resources = @resources.order(wdate: :desc)
-      # elsif params[:search].blank? && params[:s].blank? && params[:d].blank? && !(@filter.persisted? rescue false)
-      #   my_open = @resources.where(user_id: Current.user.id).not_done_or_pushed
-      #   @resources = (my_open.exists? ? my_open : @resources).order(wdate: :desc)
-      # else
-      @resources = @resources.order(wdate: :desc)
+    # if ActiveModel::Type::Boolean.new.cast(params[:show_all])
+    #   @resources = @resources.order(wdate: :desc)
+    # elsif params[:search].blank? && params[:s].blank? && params[:d].blank? && !(@filter.persisted? rescue false)
+    #   my_open = @resources.where(user_id: Current.user.id).not_done_or_pushed
+    #   @resources = (my_open.exists? ? my_open : @resources).order(wdate: :desc)
+    # else
+    @resources = @resources.order(wdate: :desc)
     # end
     super
   end
@@ -167,11 +167,10 @@ class TimeMaterialsController < MortimerController
     end
 
     def stream_create
-      resources.pluck(:wdate).include?(resource.wdate) ?
-        (t = "TimeMaterial_#{wdate}"; sa = :append) :
-        (t = "record_list"; sa = :prepend)
+      ut, usa, t, sa = find_target_action
+      return if ut.nil?
 
-      Broadcasters::Resource.new(resource, params.permit!, user: Current.user, stream: "#{Current.user.id}_time_materials").create
+      Broadcasters::Resource.new(resource, params.permit!, target: ut, stream_action: usa, user: Current.user, stream: "#{Current.user.id}_time_materials").create
       Current.get_tenant.users.filter { |u| u != Current.user }.each do |u|
         next unless u.signed_in?
         Broadcasters::Resource.new(resource, params.permit!, target: t, stream_action: sa, user: u, stream: "#{u.id}_time_materials").create
@@ -192,6 +191,34 @@ class TimeMaterialsController < MortimerController
         next unless u.current_sign_in_at.present? && u != Current.user
         Broadcasters::Resource.new(resource, user: u, stream: "#{u.id}_time_materials").destroy
       end
+    end
+
+    def find_target_action
+      if resources.where(wdate: resource.wdate).count > 1
+        ut = "time_material_#{resources.where(wdate: resource.wdate).order(wdate: :desc).second.id}"
+        t = "TimeMaterial_#{resource.wdate}"
+        sa = :append
+        usa = :before
+      else
+        # @records = "TimeMaterial.where(tenant_id: #{Current.get_tenant.id}).order(wdate: :desc)"
+
+        # Turbo::StreamsChannel.broadcast_action_later_to(
+        #   "#{Current.user.id}_time_materials",
+        #   target: "record_list",
+        #   action: :replace,
+        #   partial: "time_materials/index",
+        #   locals: { resource_class.to_s.underscore => resource, sql_stmt: @records, replace: true, params: params.permit!, user: Current.user }
+        # )
+        Broadcasters::Resource.new(resource, params.permit!, partial: "time_materials/index", target: "record_list", user: Current.user, stream: "#{Current.user.id}_time_materials").replace
+        Current.get_tenant.users.filter { |u| u != Current.user }.each do |u|
+          next unless u.signed_in?
+          Broadcasters::Resource.new(resource, params.permit!, partial: "time_materials/index", target: "record_list", user: u, stream: "#{u.id}_time_materials").replace
+        end
+        # ut = nil
+        t = ut = "record_list"
+        sa = usa = :prepend
+      end
+      [ ut, usa, t, sa ]
     end
 
     # called before showing the edit form
