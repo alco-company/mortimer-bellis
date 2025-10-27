@@ -37,6 +37,7 @@
 - trying to inject new records in the correct work day area - works for days with > 0 records
 - don't pause when stopping - if paused
 - handle params better
+- keep fighting the timing of TimeMaterial - especially off-line
 
 ### 17/10/2025
 
