@@ -40,6 +40,8 @@ export default class extends Controller {
     const items = this.itemTargets
     const validKeys = items.map( item => item.id + ":timing" )
     validKeys.push( items.map( item => item.id + ":version" ) )
+    validKeys.push( items.map( item => item.id + ":ops" ) )
+    // console.log("validKeys", validKeys.flat())
     for (let i = 0; i < localStorage.length; i++) {
       const key = localStorage.key(i)
       if (key.endsWith(":timing") && !validKeys.includes(key)) {

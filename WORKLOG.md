@@ -31,6 +31,7 @@
 ### 27/10/2025
 
 - set task_comment right
+- let ":ops" be part of the clean-up in the list_controller.js
 
 ### 17/10/2025
 
