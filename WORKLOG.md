@@ -32,6 +32,7 @@
 
 - setting defaults for all settings
 - allowing delete_all settings (resetting to default)
+- add xtra safety for resetting settings - type SLET
 
 ### 27/10/2025
 

@@ -397,14 +397,14 @@ class TimeMaterials::Form < ApplicationForm
   end
 
   def show_comments
-    return unless Current.get_user.can? :add_comments_on_time_material, resource: @resource
     render TagComponent.new(resource: resource,
-        field: :tag_list,
-        show_label: true,
-        value_class: "mr-5",
-        value: resource.tags,
-        editable: true) if Current.get_user.can?(:add_tags_on_time_material, resource: @resource)
+    field: :tag_list,
+    show_label: true,
+    value_class: "mr-5",
+    value: resource.tags,
+    editable: true) if Current.get_user.can?(:add_tags_on_time_material, resource: @resource)
 
+    return unless Current.get_user.can? :add_comments_on_time_material, resource: @resource
     div(class: "col-span-full") do
       div(class: "mort-field my-0") do
         div(class: "flex justify-between", data: {}) do

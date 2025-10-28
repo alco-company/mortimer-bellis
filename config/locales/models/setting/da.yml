@@ -2,19 +2,23 @@ da:
   setting:
     modal:
       delete_all: 
-        title: Slet alle Indstillinger
-        instruction: Er du sikker på, at du vil slette alle indstillinger?
-        instruction_selected: Er du sikker på, at du vil slette alle %{count} udvalgte indstillinger?
+        title: Nulstil alle Indstillinger
+        instruction: Er du sikker på, at du vil nulstille alle indstillinger?
+        instruction_selected: Er du sikker på, at du vil nulstille alle %{count} udvalgte indstillinger?
       delete:
         title: Slet denne indstilling
         instruction: Er du sikker på, at du vil slette indstillingen %{name}?
         button: Slet
+        reason_placeholder: skriv SLET
+        reason_required: Du skal skrive SLET i feltet for at bekræfte sletningen
+        reason_typed: SLET
 
   settings:
     label: Indstillinger
     employee_device_punch_clock: Medarbejder indstilling
     validation_errors: Der er fejl i det indtastede
     default_punch_clock: Ur
+    delete_all: Nulstil indstillinger
     
     create:
       post: Indstillingen blev oprettet
