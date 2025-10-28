@@ -12,7 +12,7 @@ class Customers::Form < ApplicationForm
     row field(:city).input()
     row field(:country_key).select(Customer.country_keys, prompt: I18n.t(".select_country"), class: "mort-form-select")
     row field(:phone).input()
-    row field(:email).input()
+    row field(:email).input(autocomplete: false)
     row field(:webpage).input()
     row field(:att_person).input()
     row field(:ean_number).input()

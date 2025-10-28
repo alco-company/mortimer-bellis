@@ -34,6 +34,7 @@
 - allowing delete_all settings (resetting to default)
 - add xtra safety for resetting settings - type SLET
 - make sure list honors infinite scroll
+- make sure customer form focus on name
 
 ### 27/10/2025
 
