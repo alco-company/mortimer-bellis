@@ -150,8 +150,8 @@ class Setting < ApplicationRecord
       when "limit_time_to_quarters";              [ "false", "TimeMaterial" ]
       when "run";                                 [ "true", "BackgroundJob" ]
       when "see_mileage_tab";                     [ "false", "TimeMaterial" ]
-      when "see_material_tab";                    [ "false", "TimeMaterial" ]
-      when "add_tags_on_time_material";           [ "false", "TimeMaterial" ]
+      when "see_material_tab";                    [ "true", "TimeMaterial" ]
+      when "add_tags_on_time_material";           [ "true", "TimeMaterial" ]
       when "add_comments_on_time_material";       [ "false", "TimeMaterial" ]
       when "session_timeout";                     [ "7.days", nil ]
       else                                        [ "true", "TimeMaterial" ]
@@ -187,12 +187,12 @@ class Setting < ApplicationRecord
       [ "add_tags_on_time_material", I18n.t("settings.keys.add_tags_on_time_material") ],
       [ "add_comments_on_time_material", I18n.t("settings.keys.add_comments_on_time_material") ],
       [ "see_material_tab", I18n.t("settings.keys.see_material_tab") ],
-      [ "import_customers_only", I18n.t("settings.keys.import_customers_only") ],
+      [ "import_customers_only", I18n.t("settings.keys.import_customers_only") ], # only pull from server - not push (new)
       [ "sync_with_erp", I18n.t("settings.keys.sync_with_erp") ],
       [ "pull_customers", I18n.t("settings.keys.pull_customers") ],
       [ "pull_products", I18n.t("settings.keys.pull_products") ],
       [ "pull_invoices", I18n.t("settings.keys.pull_invoices") ],
-      [ "pull_provided_services", I18n.t("settings.keys.pull_provided_services") ],
+      [ "pull_provided_services", I18n.t("settings.keys.pull_provided_services") ],   # pull all - customers, products, invoices, more
       [ "validate_time_material_done", I18n.t("settings.keys.validate_time_material_done") ],
       [ "show_all_time_material_posts", I18n.t("settings.keys.show_all_time_material_posts") ],
       [ "show_stop_button", I18n.t("settings.keys.show_stop_button") ],

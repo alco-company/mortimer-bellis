@@ -28,6 +28,10 @@
 
 ## CHANGELOG
 
+### 28/10/2025
+
+- setting defaults for all settings
+
 ### 27/10/2025
 
 - set task_comment right
