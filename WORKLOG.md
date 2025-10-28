@@ -33,6 +33,7 @@
 - setting defaults for all settings
 - allowing delete_all settings (resetting to default)
 - add xtra safety for resetting settings - type SLET
+- make sure list honors infinite scroll
 
 ### 27/10/2025
 
