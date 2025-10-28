@@ -28,8 +28,11 @@
   </div>
   <div class="mt-5 sm:mt-4 flex justify-between flex-row-reverse">
     <% unless url == "/" %>
-      <%= form.button t("#{resource_class.to_s.underscore}.modal.delete.button"), data: { modal_target: "submitForm", action: "modal#submitForm"}, class: "mort-btn-alert sm:ml-3" %>
+      <%= form.button t("#{resource_class.to_s.underscore}.modal.delete.button"), data: { modal_target: "submitForm", action: "modal#submitForm"}, class: "mort-btn-alert flex-none" %>
     <% end %>
-    <%= button_tag t(:cancel), form: "dialog_form", formmethod: :dialog,  data: { action: "click->modal#close" }, class: "mort-btn-cancel" %>
+    <% if resource_class == Setting %>
+      <%= form.text_field :reason, required: true, placeholder: t("#{resource_class.to_s.underscore}.modal.delete.reason_placeholder"), class: "mort-form-text shrink mx-2" %>
+    <% end %>
+    <%= button_tag t(:cancel), form: "dialog_form", formmethod: :dialog,  data: { action: "click->modal#close" }, class: "mort-btn-cancel flex-none" %>
   </div>
 <% end %>

@@ -95,31 +95,35 @@ class Settings::SettingsIndex < ApplicationComponent
     div(class: "p-4") do
       case @params[:tab]
       when "general";         settings_tab Setting.general_settings
-      when "time_material";   settings_tab Setting.time_material_settings resource: @resource
-      when "customer";        settings_tab Setting.customer_settings resource: @resource
-      when "project";         settings_tab Setting.project_settings resource: @resource
-      when "product";         settings_tab Setting.product_settings resource: @resource
-      when "team";            settings_tab Setting.team_settings resource: @resource
-      when "user";            settings_tab Setting.user_settings resource: @resource
-      when "erp_integration"; settings_tab Setting.erp_integration_settings resource: @resource
-      when "permissions";     settings_tab Setting.permissions_settings resource: @resource
+      when "time_material";   settings_tab Setting.time_material_settings(resource: @resource)
+      when "customer";        settings_tab Setting.customer_settings(resource: @resource)
+      when "project";         settings_tab Setting.project_settings(resource: @resource)
+      when "product";         settings_tab Setting.product_settings(resource: @resource)
+      when "team";            settings_tab Setting.team_settings(resource: @resource)
+      when "user";            settings_tab Setting.user_settings(resource: @resource)
+      when "erp_integration"; settings_tab Setting.erp_integration_settings(resource: @resource)
+      when "permissions";     settings_tab Setting.permissions_settings(resource: @resource)
+      when "list_view";       settings_tab Current.get_tenant.settings, true
       end
     end
   end
 
-  def settings_tab(settings)
+  def settings_tab(settings, list_view = false)
     div(class: "ml-6 mr-1") do
       div(class: "text-sm/6 pt-6") { t("settings.tabs.descriptions.#{@params[:tab]}") }
-      dl(class: "divide-y divide-gray-100") do
-        index = 1
-        settings.each do |setting|
-          case setting.second["type"]
-          when "boolean"; true_false setting, index
-          when "text";    text_input setting, index
-          when "option";  select_input setting, index
-          when "color";   color_input setting, index
+      if list_view
+      else
+        dl(class: "divide-y divide-gray-100") do
+          index = 1
+          settings.each do |setting|
+            case setting.second["type"]
+            when "boolean"; true_false setting, index
+            when "text";    text_input setting, index
+            when "option";  select_input setting, index
+            when "color";   color_input setting, index
+            end
+            index += 1
           end
-          index += 1
         end
       end
     end

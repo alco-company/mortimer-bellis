@@ -108,19 +108,8 @@ class Contextmenu < ApplicationComponent
       #     icon: "reload"
       # end
 
-      resource_class.any? && resource_class.to_s != "Setting" ?
-        link2(url: new_modal_url(modal_form: "delete",
-          all: true,
-          resource_class: resource_class.to_s.underscore,
-          modal_next_step: "accept",
-          search: request.query_parameters.dig(:search)),
-          action: "click->contextmenu#hide",
-          icon: "trash",
-          label: t(".delete_all")) :
-        div(class: "flex justify-between px-4 py-2 text-sm text-gray-700 hover:text-gray-900") do
-          render_icon "trash"
-          div(class: "text-nowrap text-gray-400 pl-2") { t(".delete_all") }
-        end if resource_class.to_s != "Setting"
+      delete_all_records
+
       hr
       # link2(url: new_modal_url(modal_form: "import", resource_class: resource_class.to_s.underscore, modal_next_step: "preview"),
       #   action: "click->contextmenu#hide",
@@ -248,9 +237,6 @@ class Contextmenu < ApplicationComponent
     end
   end
 
-
-
-
   def setting_link
     link2 url: new_modal_url(modal_form: "settings",
       id: resource.id,
@@ -272,6 +258,25 @@ class Contextmenu < ApplicationComponent
     else
       link2 url: new_modal_url(modal_form: "delete", id: resource.id, resource_class: resource_class.to_s.underscore, modal_next_step: "accept", url: @links[1]),
         label: t(".delete"), icon: "trash"
+    end
+  end
+
+  def delete_all_records
+    unless resource_class.any?
+      div(class: "flex justify-between px-4 py-2 text-sm text-gray-700 hover:text-gray-900") do
+        render_icon "trash"
+        div(class: "text-nowrap text-gray-400 pl-2") { t(".delete_all") }
+      end
+    else
+      lbl = resource_class != Setting ? t(".delete_all") : t("settings.delete_all")
+      link2(url: new_modal_url(modal_form: "delete",
+        all: true,
+        resource_class: resource_class.to_s.underscore,
+        modal_next_step: "accept",
+        search: request.query_parameters.dig(:search)),
+        action: "click->contextmenu#hide",
+        icon: "trash",
+        label: lbl)
     end
   end
 

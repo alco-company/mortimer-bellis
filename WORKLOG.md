@@ -31,6 +31,7 @@
 ### 28/10/2025
 
 - setting defaults for all settings
+- allowing delete_all settings (resetting to default)
 
 ### 27/10/2025
 

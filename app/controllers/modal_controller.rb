@@ -278,16 +278,25 @@ class ModalController < MortimerController
 
     def process_destroy_all
       begin
-        DeleteAllJob.perform_later tenant: Current.tenant, user: Current.user, resource_class: resource_class.to_s,
-          ids: resources.pluck(:id),
-          batch: @batch,
-          user_ids: (resource_class.first.respond_to?(:user_id) ? resources.pluck(:user_id).uniq : User.by_tenant.by_role(:user).pluck(:id)) rescue nil
-        @url.gsub!(/\/\d+$/, "") if @url.match?(/\d+$/)
-        flash[:success] = t("delete_all_later")
-        respond_to do |format|
-          format.turbo_stream { }
-          format.html { redirect_to @url, status: 303, success: t("delete_all_later") }
-          format.json { head :no_content }
+        if resource_class == Setting && params[:reason] != t("setting.modal.delete.reason_typed")
+          flash[:error] = t("setting.modal.delete.reason_required")
+          respond_to do |format|
+            format.turbo_stream { }
+            format.html { redirect_to resources_url, status: 303, error: t("setting.modal.delete.reason_required") }
+            format.json { head :no_content }
+          end
+        else
+          DeleteAllJob.perform_now tenant: Current.tenant, user: Current.user, resource_class: resource_class.to_s,
+            ids: resources.pluck(:id),
+            batch: @batch,
+            user_ids: (resource_class.first.respond_to?(:user_id) ? resources.pluck(:user_id).uniq : User.by_tenant.by_role(:user).pluck(:id)) rescue nil
+          @url.gsub!(/\/\d+$/, "") if @url.match?(/\d+$/)
+          flash[:success] = t("delete_all_later")
+          respond_to do |format|
+            format.turbo_stream { }
+            format.html { redirect_to @url, status: 303, success: t("delete_all_later") }
+            format.json { head :no_content }
+          end
         end
       rescue => e
         say "ERROR on destroy: #{e.message}"
