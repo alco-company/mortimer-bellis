@@ -142,7 +142,7 @@ class InvoiceItemValidator
   # end
 
   def product_must_exist
-    return true unless user.cannot?(:add_product)
+    return true unless user.cannot?(:add_products)
     if product_id.present? && !Product.by_tenant.find(product_id)
       errors.add(:product, tr("wrong_product_id_not_found"))
     end
@@ -167,7 +167,7 @@ class InvoiceItemValidator
 
   def project_name_creates_project_if_not_found
     if project_name.present?
-      if user.cannot?(:add_project)
+      if user.cannot?(:add_projects)
         errors.add(:project, tr("not_found_search_project_again")) unless Project.by_tenant.find_by(name: project_name)
       else
         self.project = Project.by_tenant.find_or_create_by(tenant: user.tenant, customer_id: customer_id, name: project_name)

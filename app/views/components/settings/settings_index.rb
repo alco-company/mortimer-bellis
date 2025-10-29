@@ -92,38 +92,35 @@ class Settings::SettingsIndex < ApplicationComponent
   end
 
   def show_tab
+    res = @resource.nil? ? @params[:tab].classify.constantize : @resource
     div(class: "p-4") do
       case @params[:tab]
       when "general";         settings_tab Setting.general_settings
-      when "time_material";   settings_tab Setting.time_material_settings(resource: @resource)
-      when "customer";        settings_tab Setting.customer_settings(resource: @resource)
-      when "project";         settings_tab Setting.project_settings(resource: @resource)
-      when "product";         settings_tab Setting.product_settings(resource: @resource)
-      when "team";            settings_tab Setting.team_settings(resource: @resource)
-      when "user";            settings_tab Setting.user_settings(resource: @resource)
-      when "erp_integration"; settings_tab Setting.erp_integration_settings(resource: @resource)
-      when "permissions";     settings_tab Setting.permissions_settings(resource: @resource)
-      when "list_view";       settings_tab Current.get_tenant.settings, true
+      when "time_material";   settings_tab Setting.time_material_settings(resource: res)
+      when "customer";        settings_tab Setting.customer_settings(resource: res)
+      when "project";         settings_tab Setting.project_settings(resource: res)
+      when "product";         settings_tab Setting.product_settings(resource: res)
+      when "team";            settings_tab Setting.team_settings(resource: res)
+      when "user";            settings_tab Setting.user_settings(resource: res)
+      when "erp_integration"; settings_tab Setting.erp_integration_settings(resource: res)
+      when "permissions";     settings_tab Setting.permissions_settings(resource: res)
       end
     end
   end
 
-  def settings_tab(settings, list_view = false)
+  def settings_tab(settings)
     div(class: "ml-6 mr-1") do
       div(class: "text-sm/6 pt-6") { t("settings.tabs.descriptions.#{@params[:tab]}") }
-      if list_view
-      else
-        dl(class: "divide-y divide-gray-100") do
-          index = 1
-          settings.each do |setting|
-            case setting.second["type"]
-            when "boolean"; true_false setting, index
-            when "text";    text_input setting, index
-            when "option";  select_input setting, index
-            when "color";   color_input setting, index
-            end
-            index += 1
+      dl(class: "divide-y divide-gray-100") do
+        index = 1
+        settings.each do |setting|
+          case setting.second["type"]
+          when "boolean"; true_false setting, index
+          when "text";    text_input setting, index
+          when "option";  select_input setting, index
+          when "color";   color_input setting, index
           end
+          index += 1
         end
       end
     end
@@ -228,8 +225,16 @@ class Settings::SettingsIndex < ApplicationComponent
     end
   end
 
+  def get_class_for_setting(setting_object)
+    rc = @resource&.class&.name || nil # || setting_object.class.name
+    # rc = @params[:tab].classify if @params[:tab].present? && rc == "Setting"
+    rc_id = @resource&.id || nil #  setting_object&.id || 0
+    [ rc, rc_id ]
+  end
+
   def true_false(setting, index)
-    url = setting.second["id"] == "0" ? "/settings?target=setting_i_#{index}" : "/settings/#{setting.second["object"].id}"
+    rc, rc_id = get_class_for_setting(setting.second["object"])
+    url = setting.second["id"] == "0" ? "/settings?rc=#{rc}&rc_id=#{rc_id}&target=setting_i_#{index}" : "/settings/#{setting.second["object"].id}"
     target = setting.second["id"] == "0" ? "setting_i_#{index}" : dom_id(setting.second["object"])
     div(class: "px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0") do
       dt(class: "text-sm/6 font-medium text-gray-900") { setting.second["object"].label }

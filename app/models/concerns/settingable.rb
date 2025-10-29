@@ -117,6 +117,9 @@ module Settingable
         inverse ?
           (return true if rel.for_key(key).denied.exists?) :
           (return true if rel.for_key(key).allowed.exists?)
+        inverse ?
+          (return false if rel.for_key(key).allowed.exists?) :
+          (return false if rel.for_key(key).denied.exists?)
       end
       nil
     end

@@ -182,9 +182,9 @@ class TimeMaterial < ApplicationRecord
 
   def has_insufficient_data?
     hid = false
-    hid = true if project_name.present? && project_id.blank? && Current.get_user.cannot?(:add_project)
-    hid = true if customer_name.present? && customer_id.blank? && Current.get_user.cannot?(:add_customer)
-    hid = true if product_name.present? && product_id.blank? && Current.get_user.cannot?(:add_product)
+    hid = true if project_name.present? && project_id.blank? && Current.get_user.cannot?(:add_projects)
+    hid = true if customer_name.present? && customer_id.blank? && Current.get_user.cannot?(:add_customers)
+    hid = true if product_name.present? && product_id.blank? && Current.get_user.cannot?(:add_products)
     hid = true if is_invoice? && customer_id.blank?
     hid
   rescue
@@ -465,7 +465,7 @@ class TimeMaterial < ApplicationRecord
 
   def create_customer(resource_params)
     resource_params[:customer_id] = "" if resource_params[:customer_name].blank?
-    return resource_params unless Current.get_user.can?(:add_customer, resource: self)
+    return resource_params unless Current.get_user.can?(:add_customers, resource: self)
 
     if (resource_params[:customer_id].present? && (Customer.find(resource_params[:customer_id]).name != resource_params[:customer_name])) ||
       resource_params[:customer_name].present? && resource_params[:customer_id].blank?

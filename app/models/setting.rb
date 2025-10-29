@@ -87,10 +87,10 @@ class Setting < ApplicationRecord
       "default_time_material_minute_time" => "text",
       "default_time_material_rate" => "text",
       # "default_time_material_over_time" => "boolean",
-      "add_time_material" => "boolean",
-      "add_customer" => "boolean",
-      "add_project" => "boolean",
-      "add_product" => "boolean",
+      "add_time_materials" => "boolean",
+      "add_customers" => "boolean",
+      "add_projects" => "boolean",
+      "add_products" => "boolean",
       "delegate_time_materials" => "boolean",
       "see_mileage_tab" => "boolean",
       "use_customers" => "boolean",
@@ -173,10 +173,10 @@ class Setting < ApplicationRecord
       [ "default_time_material_minute_time", I18n.t("settings.keys.default_time_material_minute_time") ],
       # [ "default_time_material_rate", I18n.t("settings.keys.default_time_material_rate") ],
       # [ "default_time_material_over_time", I18n.t("settings.keys.default_time_material_over_time") ],
-      [ "add_time_material", I18n.t("settings.keys.add_time_material") ],
-      [ "add_customer", I18n.t("settings.keys.add_customer") ],
-      [ "add_project", I18n.t("settings.keys.add_project") ],
-      [ "add_product", I18n.t("settings.keys.add_product") ],
+      [ "add_time_materials", I18n.t("settings.keys.add_time_material") ],
+      [ "add_customers", I18n.t("settings.keys.add_customer") ],
+      [ "add_projects", I18n.t("settings.keys.add_project") ],
+      [ "add_products", I18n.t("settings.keys.add_product") ],
       [ "delegate_time_materials", I18n.t("settings.keys.delegate_time_materials") ],
       [ "see_mileage_tab", I18n.t("settings.keys.see_mileage_tab") ],
       [ "use_customers", I18n.t("settings.keys.use_customers") ],
@@ -273,15 +273,15 @@ class Setting < ApplicationRecord
   end
 
   def self.time_material_settings(resource: nil)
-    return self.get_settings(DEFAULT_TIME_SETTINGS, resource:) unless Rails.env.test?
+    # return self.get_settings(DEFAULT_TIME_SETTINGS, resource:) unless Rails.env.test?
     build_settings_for(resource:, keys: DEFAULT_TIME_SETTINGS, klass_name: klass_for(resource))
   end
   def self.team_settings(resource: nil)
-    return self.get_settings(DEFAULT_TIME_SETTINGS, resource:) unless Rails.env.test?
+    # return self.get_settings(DEFAULT_TIME_SETTINGS, resource:) unless Rails.env.test?
     build_settings_for(resource:, keys: DEFAULT_TIME_SETTINGS, klass_name: klass_for(resource))
   end
   def self.user_settings(resource: nil)
-    return self.get_settings(DEFAULT_TIME_SETTINGS, resource:) unless Rails.env.test?
+    # return self.get_settings(DEFAULT_TIME_SETTINGS, resource:) unless Rails.env.test?
     build_settings_for(resource:, keys: DEFAULT_TIME_SETTINGS, klass_name: klass_for(resource))
   end
 
@@ -324,9 +324,15 @@ class Setting < ApplicationRecord
   private_class_method :klass_for
   DEFAULT_TIME_SETTINGS = {
       "delegate_time_materials" => { "type" => "boolean", "value" => "true" },
-      "limit_time_to_quarters" => { "type" => "boolean", "value" => "true" },
+      "limit_time_to_quarters" => { "type" => "boolean", "value" => "false" },
       "default_time_material_date" => { "type" => "text", "value" => "Time.current.to_date" },
-      "default_time_material_state" => { "type" => "option", "value" =>  "done", "options" => { "draft" => I18n.t("time_material.states.draft"), "done" => I18n.t("time_material.states.done") } },
+      "default_time_material_state" => { "type" => "option", "value" =>  "done", "options" => {
+        "draft" => I18n.t("time_material.states.draft"),
+        "active" => I18n.t("time_material.states.active"),
+        "paused" => I18n.t("time_material.states.paused"),
+        "done" => I18n.t("time_material.states.done")
+        }
+      },
       "default_time_material_about" => { "type" => "text", "value" => I18n.t("time_material.default_assigned_about") },
       "default_time_material_hour_time" => { "type" => "text", "value" => "0" },
       "default_time_material_minute_time" => { "type" => "text", "value" => "15" },
@@ -342,13 +348,13 @@ class Setting < ApplicationRecord
       "edit_hourly_rate" => { "type" => "boolean", "value" => "true" },
       "edit_overtime" => { "type" => "boolean", "value" => "true" },
       "add_tags_on_time_material" => { "type" => "boolean", "value" => "true" },
-      "add_comments_on_time_material" => { "type" => "boolean", "value" => "true" },
+      "add_comments_on_time_material" => { "type" => "boolean", "value" => "false" },
       "see_material_tab" => { "type" => "boolean", "value" => "true" },
       "validate_time_material_done" => { "type" => "boolean", "value" => "true" },
       "show_all_time_material_posts" => { "type" => "boolean", "value" => "true" },
-      "show_stop_button" => { "type" => "boolean", "value" => "false" },
-      "fill_play_time_in_time_fields" => { "type" => "boolean", "value" => "false" },
-      "show_time_stats" => { "type" => "boolean", "value" => "false" }
+      "show_stop_button" => { "type" => "boolean", "value" => "true" },
+      "fill_play_time_in_time_fields" => { "type" => "boolean", "value" => "true" },
+      "show_time_stats" => { "type" => "boolean", "value" => "true" }
     }
 
   # Helpers
@@ -368,25 +374,31 @@ class Setting < ApplicationRecord
 
     # Ensure one row per key at the chosen level. New rows use DEFAULT values,
     # existing rows are preserved.
+    rs = resource.nil? ? tenant.settings : resource.settings
+
+    mapped = {}
     keys.each do |key, default_value|
-      Setting.unscoped.find_or_create_by!(
-        tenant_id: tenant.id,
-        setable_type: setable_type,
-        setable_id: setable_id,
-        key: key
-      ) do |rec|
-        rec.value = default_value["value"]
+      Rails.logger.info "Looking for setting '#{key}' for #{setable_type}(#{setable_id || 'nil'})"
+      rec = rs.find { |s| s.key == key && s.setable_type == setable_type && s.setable_id == setable_id }
+      if rec.present?
+        mapped[key] = default_value.merge({
+          "id" => rec.id,
+          "object" => rec,
+          "value" => rec.value
+        })
+        next
       end
+
+      Rails.logger.info "Setting '#{key}' not found for #{setable_type}(#{setable_id || 'nil'}); creating with default value."
+      # new record
+      mapped[key] = default_value.merge({
+        "id" => "0",
+        "object" => Setting.new(tenant: tenant, setable_type: setable_type, setable_id: setable_id, key: key, value: default_value["value"]),
+        "value" => default_value["value"]
+      })
     end
-
-    rel = Setting.unscoped.where(
-      tenant_id: tenant.id,
-      setable_type: setable_type,
-      setable_id: setable_id,
-      key: keys.keys
-    )
-
-    to_result_map(rel, keys.keys)
+    mapped
+    # to_result_map(mapped, keys.keys)
   end
 
   private_class_method :build_settings_for

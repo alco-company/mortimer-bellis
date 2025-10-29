@@ -173,7 +173,7 @@ class TimeMaterials::Form < ApplicationForm
         div(class: " pb-2") do
           div(class: "mt-2 grid grid-cols-4 gap-x-4 gap-y-1") do
             div(class: "col-span-4") do
-              row field(:product_id).lookup(class: "mort-form-text #{ field_id_error(resource.product_name, resource.product_id, user.cannot?(:add_product)) }",
+              row field(:product_id).lookup(class: "mort-form-text #{ field_id_error(resource.product_name, resource.product_id, user.cannot?(:add_products)) }",
                 data: {
                   url: "/products/lookup",
                   div_id: "time_material_product_id",

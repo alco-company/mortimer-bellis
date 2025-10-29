@@ -110,8 +110,8 @@ class Dinero::Service < SaasService
   #
   def pull(resource_class:, all: false, page: 0, pageSize: 100, fields: nil, status_filter: nil, start_date: nil, end_date: nil, just_consume: false)
     case resource_class.to_s
-    when "Customer"; tbl = "contacts"; api_version = "v2"; can_create = Current.get_user.can? :add_customer, resource: Customer
-    when "Product"; tbl = "products"; api_version = "v1"; can_create = Current.get_user.can? :add_product, resource: Product
+    when "Customer"; tbl = "contacts"; api_version = "v2"; can_create = Current.get_user.can? :add_customers, resource: Customer
+    when "Product"; tbl = "products"; api_version = "v1"; can_create = Current.get_user.can? :add_products, resource: Product
     when "Invoice"; tbl = "invoices"; api_version = "v1"; can_create = false
     else
       return false

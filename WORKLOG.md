@@ -28,6 +28,10 @@
 
 ## CHANGELOG
 
+### 29/10/2025
+
+- incrementally better settings - now Users can have different setups
+
 ### 28/10/2025
 
 - setting defaults for all settings

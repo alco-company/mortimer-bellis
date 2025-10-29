@@ -1,6 +1,9 @@
 da:
   user:
     modal:
+      setting:
+        title: Indstillinger for bruger
+        instruction: Her kan du indstille hvordan brugeren skal fungere i Mortimer.
       setting_all:
         title: Indstillinger for brugere
         instruction: Her kan du indstille hvordan brugere skal fungere i Mortimer.

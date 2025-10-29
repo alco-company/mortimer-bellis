@@ -34,11 +34,14 @@ export default class extends Controller {
         },
         body: JSON.stringify({ key: this.keyValue, value: this.inputTarget.value }),
       })
-      .then((r) => r.text())
-      .then((html) => {
+      .then((r) => {
+        alert(r.status) 
+        return JSON.parse(r.text())
+      })
+      .then((json) => {
         this.buttonTarget.ariaBusy = false;
         if (method === "POST") {
-          Turbo.renderStreamMessage(html);
+          Turbo.renderStreamMessage(json);
         }
       })
 
