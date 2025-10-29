@@ -35,7 +35,9 @@ export default class extends Controller {
         body: JSON.stringify({ key: this.keyValue, value: this.inputTarget.value }),
       })
       .then((r) => {
-        alert(r.status) 
+        if (!r.ok) {
+          throw new Error(`HTTP error! status: ${r.status}`);
+        }
         return JSON.parse(r.text())
       })
       .then((json) => {

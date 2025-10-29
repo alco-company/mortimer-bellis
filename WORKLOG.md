@@ -31,6 +31,7 @@
 ### 29/10/2025
 
 - incrementally better settings - now Users can have different setups
+- button for play on header
 
 ### 28/10/2025
 
