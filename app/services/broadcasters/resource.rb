@@ -32,7 +32,7 @@ class Broadcasters::Resource
     return unless tenant
     return unless resource.persisted?
     @target = (@target == dom_id(resource)) ? "record_list" : @target
-    Turbo::StreamsChannel.broadcast_action_later_to(
+    Turbo::StreamsChannel.broadcast_action_to(
       resources_stream,
       target: @target,
       action: @stream_action,

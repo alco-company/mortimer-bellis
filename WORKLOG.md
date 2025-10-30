@@ -28,6 +28,10 @@
 
 ## CHANGELOG
 
+### 30/10/2025
+
+- inject new job on wdate w/o any tasks
+
 ### 29/10/2025
 
 - incrementally better settings - now Users can have different setups
