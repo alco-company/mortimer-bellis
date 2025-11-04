@@ -28,6 +28,10 @@
 
 ## CHANGELOG
 
+### 04/11/2025
+
+- avoid {} on time_materials & render tags on time_materials
+
 ### 30/10/2025
 
 - inject new job on wdate w/o any tasks

@@ -91,13 +91,14 @@ class ListItems::TimeMaterial < ListItems::ListItem
     # mugshot(resource.user, css: "sm:hidden mr-2 h-5 w-5 flex-none rounded-full bg-gray-50")
     div(class: "flex flex-row items-center") do
       render_invoiceable_info
-      p(class: "flex text-xs/5 text-gray-500 dark:text-gray-400 truncate") do
+      render_tags
+      p(class: "flex text-xs/5 text-gray-500 dark:text-gray-400 truncate items-center") do
         if resource&.user&.global_queries?
           span(class: "hidden md:inline text-xs mr-2 truncate") { show_resource_link(resource: resource.tenant) }
         end
         link_to user.team, data: { turbo_action: "advance", turbo_frame: "form" }, class: "hidden sm:flex relative truncate hover:underline mr-2.5" do
           resource.user.team.name
-        end if resource.user.team
+        end if resource&.user&.team
         link_to resource.user, data: { turbo_action: "advance", turbo_frame: "form" }, class: "relative truncate hover:underline mr-2.5" do
           resource.user.name
         end if resource.user
@@ -156,6 +157,23 @@ class ListItems::TimeMaterial < ListItems::ListItem
       #   span(class: "hidden ml-2 md:inline") { resource.pushed_to_erp? ? t("time_material.billed") : t("time_material.billable") }
       # end
     end
+  end
+
+  def render_tags
+    return unless user.can? :add_tags_on_time_material
+    bgcolor, txtcolor, bordercolor = [ "bg-lime-800", "text-lime-400", "border-lime-600" ]
+    resource.tags.each do |tag|
+      span(data_slot: "badge",
+        class: "hidden mr-2 xs:inline-flex items-center justify-center rounded-md border px-2 py-0.5 text-xs font-medium w-fit whitespace-nowrap shrink-0 [&>svg]:size-3 gap-1 [&>svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden [a&]:hover:bg-primary/90 #{bgcolor} #{txtcolor} #{bordercolor} shadow-sm") do
+        plain tag.name
+      end
+      # span(class: "inline-flex w-fit items-center rounded-md bg-blue-50 mr-1 px-1 xs:px-2 py-0 xs:py-0.5 text-2xs font-medium text-blue-700 ring-1 ring-inset ring-blue-600/20 truncate") do
+      #   render Icons::Tag.new(css: "text-blue-500 h-4 w-4")
+      #   span(class: "ml-2 md:inline") { tag&.name }
+      # end
+    end
+  rescue
+    "!136"
   end
 
   def name_resource
