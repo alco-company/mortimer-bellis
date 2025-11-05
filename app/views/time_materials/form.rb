@@ -316,7 +316,7 @@ class TimeMaterials::Form < ApplicationForm
 
   def invoicing
     return unless Current.get_user.can? :do_invoicing, resource: @resource
-    div(class: "pb-4") do
+    div(class: "pb-4 rounded-md border border-gray-300 bg-gray-50 p-2") do
       div(class: "mt-1 space-y-1") do
         row field(:state).select(TimeMaterial.time_material_states, class: "my-auto mort-form-select"), "mort-field" # , "flex justify-end flex-row-reverse items-center"
         fieldset do
@@ -406,7 +406,7 @@ class TimeMaterials::Form < ApplicationForm
 
     return unless Current.get_user.can? :add_comments_on_time_material, resource: @resource
     div(class: "col-span-full") do
-      div(class: "mort-field my-0") do
+      div(class: "mort-field my-1") do
         div(class: "flex justify-between", data: {}) do
           label(for: "time_material_task_comment") do
             span { I18n.t("activerecord.attributes.time_material.task_comment") }

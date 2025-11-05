@@ -288,17 +288,21 @@ class Setting < ApplicationRecord
   def self.customer_settings(resource: nil)
     self.get_settings({
       "sync_with_erp" => { "type" => "boolean", "value" => "true" },
-      "pull_customers" => { "type" => "boolean", "value" => "1" }
+      "pull_customers" => { "type" => "boolean", "value" => "1" },
+      "add_customers" => { "type" => "boolean", "value" => "true" },
+      "use_customers" => { "type" => "boolean", "value" => "true" }
     })
   end
   def self.project_settings(resource: nil)
     self.get_settings({
-      "add_project" => { "type" => "boolean", "value" => "true" }
+      "add_projects" => { "type" => "boolean", "value" => "true" },
+      "use_projects" => { "type" => "boolean", "value" => "true" }
     }, resource:)
   end
   def self.product_settings(resource: nil)
     self.get_settings({
-      "add_product" => { "type" => "boolean", "value" => "true" },
+      "add_products" => { "type" => "boolean", "value" => "true" },
+      "use_products" => { "type" => "boolean", "value" => "true" },
       "pull_products" => { "type" => "boolean", "value" => "1" }
     }, resource:)
   end

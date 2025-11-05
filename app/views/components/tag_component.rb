@@ -20,7 +20,7 @@ class TagComponent < ApplicationComponent
   def view_template
     turbo_frame_tag "#{Current.get_user.id}_tag" do
       div(
-        class: "mort-field",
+        class: "mort-field mt-0 mb-2",
         data: { controller: "tag" }) do
         input(type: "hidden",
           name: resource_field("%s[%s]"),
@@ -40,7 +40,7 @@ class TagComponent < ApplicationComponent
       #   id: "listbox-label",
       #   class: "block text-sm/6 font-medium text-gray-900"
       # ) { "Assigned to" }
-      div(class: "relative mt-2 mort-form-text") do
+      div(class: "relative mt-0 mort-form-text") do
         selected_container
         render_tags_list
       end
@@ -139,7 +139,7 @@ class TagComponent < ApplicationComponent
       id: resource_field("%s-%s-lookup-container"),
       data: { tag_target: "tagList", action: "click->tag#pickatju" },
       class:
-        "absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-hidden sm:text-sm",
+        "absolute z-10 mt-1 max-h-60 w-4/5 overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-hidden sm:text-sm",
       tabindex: "-1",
       role: "listbox",
       aria_labelledby: "#{@field}-listbox-label"

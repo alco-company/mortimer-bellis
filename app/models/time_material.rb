@@ -478,7 +478,7 @@ class TimeMaterial < ApplicationRecord
 
   def create_project(resource_params)
     resource_params[:project_id] = "" if resource_params[:project_name].blank?
-    return resource_params unless Current.get_user.can?(:add_project, resource: self)
+    return resource_params unless Current.get_user.can?(:add_projects, resource: self)
 
     if (resource_params[:project_id].present? && (Project.find(resource_params[:project_id]).name != resource_params[:project_name])) ||
       resource_params[:project_name].present? && resource_params[:project_id].blank?
