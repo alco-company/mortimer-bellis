@@ -17,9 +17,8 @@
 - https://binarysolo.blog/custom-error-pages-in-rails/ && https://beon.tech/blog/how-to-handle-exceptions-in-rails-full-guide
 - impersonate user - not only tenant
 - backup/restore menu items
-- find proper hour_rate
+- find proper hour_rate - see https://whimsical.com/priceable-PodwwnMvDvpAwybS916Ymj
 - deferred finish - set to automate closing
-- Enable custom tracking domain (e.g., lnk.mortimer.pro) in Mailersend and use it in all links/pixels.
 - display turbo frames being busy - https://www.dotruby.com/articles/improving-turbo-frame-ux-with-the-busy-attribute
 - display other users editing the record you're wanting to edit: https://unagisoftware.com/articles/preventing-edit-conflicts-in-rails-with-turbo-hotwire-and-stimulusjs
 - find ways to utilise <output> - https://denodell.com/blog/html-best-kept-secret-output-tag
@@ -33,6 +32,7 @@
 - fix show_matter_link,  error: "ActionView::Template::Error No route matches {}"
 - add_customer authorization does not work - actually it was create_customer missing country_key
 - add_project didn't work either
+- debug {} error on ActionJob
 
 ### 04/11/2025
 
