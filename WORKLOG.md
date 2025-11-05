@@ -34,6 +34,7 @@
 - add_project didn't work either
 - debug {} error on ActionJob
 - set user to resource.user
+- remove .logger statements
 
 ### 04/11/2025
 

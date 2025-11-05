@@ -90,28 +90,18 @@ class ListItems::TimeMaterial < ListItems::ListItem
   def show_matter_link
     # mugshot(resource.user, css: "sm:hidden mr-2 h-5 w-5 flex-none rounded-full bg-gray-50")
     div(class: "flex flex-row items-center") do
-      Rails.logger.warn ">>>"
-      Rails.logger.warn ">>> show_matter_link: resource=#{resource.inspect}"
-      Rails.logger.warn ">>> invoice"
       render_invoiceable_info
-      Rails.logger.warn ">>> tags"
       render_tags
-      Rails.logger.warn ">>> p"
       p(class: "flex text-xs/5 text-gray-500 dark:text-gray-400 truncate items-center") do
         if user.global_queries?
-          Rails.logger.warn ">>> show_matter_link: user has global queries"
-          Rails.logger.warn ">>> resource.tenant: #{resource.tenant.inspect}"
           span(class: "hidden md:inline text-xs mr-2 truncate") { show_resource_link(resource: resource.tenant, turbo_frame: "form") }
         end
-        Rails.logger.warn ">>> user team"
         link_to resource.user.team, data: { turbo_action: "advance", turbo_frame: "form" }, class: "hidden sm:flex relative truncate hover:underline mr-2.5" do
           resource.user.team.name
         end if resource&.user&.team
-        Rails.logger.warn ">>> user "
         link_to resource.user, data: { turbo_action: "advance", turbo_frame: "form" }, class: "relative truncate hover:underline mr-2.5" do
           resource.user.name
         end if resource.user
-        Rails.logger.warn ">>> resource"
         link_to resource, data: { turbo_action: "advance", turbo_frame: "form" }, class: "relative truncate hover:underline mr-2.5" do
           resource.name
         end if resource
