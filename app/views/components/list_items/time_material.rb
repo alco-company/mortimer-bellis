@@ -104,7 +104,7 @@ class ListItems::TimeMaterial < ListItems::ListItem
           span(class: "hidden md:inline text-xs mr-2 truncate") { show_resource_link(resource: resource.tenant, turbo_frame: "form") }
         end
         Rails.logger.warn ">>> user team"
-        link_to user.team, data: { turbo_action: "advance", turbo_frame: "form" }, class: "hidden sm:flex relative truncate hover:underline mr-2.5" do
+        link_to resource.user.team, data: { turbo_action: "advance", turbo_frame: "form" }, class: "hidden sm:flex relative truncate hover:underline mr-2.5" do
           resource.user.team.name
         end if resource&.user&.team
         Rails.logger.warn ">>> user "

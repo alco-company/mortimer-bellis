@@ -33,6 +33,7 @@
 - add_customer authorization does not work - actually it was create_customer missing country_key
 - add_project didn't work either
 - debug {} error on ActionJob
+- set user to resource.user
 
 ### 04/11/2025
 
