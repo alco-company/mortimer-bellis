@@ -28,6 +28,10 @@
 
 ## CHANGELOG
 
+### 05/11/2025
+
+- fix show_matter_link,  error: "ActionView::Template::Error No route matches {}"
+
 ### 04/11/2025
 
 - avoid {} on time_materials & render tags on time_materials

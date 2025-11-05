@@ -93,8 +93,10 @@ class ListItems::TimeMaterial < ListItems::ListItem
       render_invoiceable_info
       render_tags
       p(class: "flex text-xs/5 text-gray-500 dark:text-gray-400 truncate items-center") do
-        if resource&.user&.global_queries?
-          span(class: "hidden md:inline text-xs mr-2 truncate") { show_resource_link(resource: resource.tenant) }
+        if user.global_queries?
+          Rails.logger.debug ">>> show_matter_link: user has global queries"
+          Rails.logger.debug ">>> resource.tenant: #{resource.tenant.inspect}"
+          span(class: "hidden md:inline text-xs mr-2 truncate") { show_resource_link(resource: resource.tenant, turbo_frame: "form") }
         end
         link_to user.team, data: { turbo_action: "advance", turbo_frame: "form" }, class: "hidden sm:flex relative truncate hover:underline mr-2.5" do
           resource.user.team.name

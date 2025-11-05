@@ -67,7 +67,7 @@ module Authentication
       welcome_tenant(user)
       user.sessions.create!(user_agent: request.user_agent, ip_address: request.remote_ip, authentication_strategy: "password").tap do |session|
         Current.session = session
-        Current.user.update(sign_in_count: Current.user.sign_in_count + 1,
+        user.update(sign_in_count: Current.user.sign_in_count + 1,
           current_sign_in_at: Time.current,
           current_sign_in_ip: request.remote_ip,
           last_sign_in_at: Time.current,
