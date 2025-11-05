@@ -467,9 +467,10 @@ class TimeMaterial < ApplicationRecord
     resource_params[:customer_id] = "" if resource_params[:customer_name].blank?
     return resource_params unless Current.get_user.can?(:add_customers, resource: self)
 
+
     if (resource_params[:customer_id].present? && (Customer.find(resource_params[:customer_id]).name != resource_params[:customer_name])) ||
       resource_params[:customer_name].present? && resource_params[:customer_id].blank?
-      customer = Customer.find_or_create_by(tenant: Current.get_tenant, name: resource_params[:customer_name], is_person: true)
+      customer = Customer.find_or_create_by(tenant: Current.get_tenant, name: resource_params[:customer_name], is_person: true, country_key: "DK")
       resource_params[:customer_id] = customer.id
     end
     resource_params

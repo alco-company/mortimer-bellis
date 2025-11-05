@@ -31,6 +31,7 @@
 ### 05/11/2025
 
 - fix show_matter_link,  error: "ActionView::Template::Error No route matches {}"
+- add_customer authorization does not work - actually it was create_customer missing country_key
 
 ### 04/11/2025
 
