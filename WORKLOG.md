@@ -33,7 +33,7 @@
 - fix CRUD on tags
 - fix default team
 - fix {} on new empty t/m list
-
+- fix price setting
 
 ### 05/11/2025
 

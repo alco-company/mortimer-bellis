@@ -4,7 +4,7 @@ class TimeMaterials::Form < ApplicationForm
       controller: "time-material tabs",
       time_material_target: "item",
       form: "true",
-      time_material_products_value: TimeMaterial.overtimes_products,
+      time_material_products_value: TimeMaterial.overtimes_products || {},
       tabs_index: @resource.is_time? ? "0" : "1" }) do
       if model.cannot_be_pushed?
         show_possible_issues

@@ -44,14 +44,26 @@ export default class extends Controller {
   }
 
   connect() {
-    console.log(`connecting...`);
-    if (this.itemTarget.dataset.form) return;
+    // console.log(`connecting...`);
+    // if (this.itemTarget.dataset.form) return;
     try {
       this.state = this.itemTarget.dataset.state;
       this.playerId = this.itemTarget.id;
-      this.token = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
-      this.setVersion( parseInt(this.itemTarget.dataset.timeMaterialVersionValue, 10) );
+      this.token = document
+        .querySelector('meta[name="csrf-token"]')
+        .getAttribute("content");
+      this.setVersion(
+        parseInt(this.itemTarget.dataset.timeMaterialVersionValue, 10)
+      );
       this.setTimerOnState();
+      this.initialCustomer = document.querySelector(
+        "#time_material_customer_id"
+      ).value;
+      this.hourRate =
+        parseFloat(document.getElementById("time_material_rate").value) || 0.0;
+      this.initialProject = document.querySelector(
+        "#time_material_project_id"
+      ).value;
       if (
         this.state === "active" ||
         this.state === "resume" ||
@@ -67,13 +79,13 @@ export default class extends Controller {
     } catch (e) {
       console.error("Error connecting TimeMaterialController:", e);
     }
-    console.log(`connected: ${this.playerId} - ${this.state} - ${this.timeValue}`);
+    // console.log(`connected: ${this.playerId} - ${this.state} - ${this.timeValue} - ${this.hourRate}`);
   }
 
   disconnect() {
     if (this.itemTarget.dataset.form) return;
 
-    console.log(`disconnecting this ${this.playerId} - ${this.state} - ${this.timeValue}`);
+    // console.log(`disconnecting this ${this.playerId} - ${this.state} - ${this.timeValue}`);
     this.stopTimer();
     document.removeEventListener("visibilitychange", this.onVisibilityChange);
     document.removeEventListener("online", this.flushQueueBound);
@@ -82,7 +94,7 @@ export default class extends Controller {
   // Handle visibility change events ------------------------------------------
 
   onVisibilityChange = () => {
-    console.log(`visibility change: ${this.playerId} - ${this.state} - ${this.timeValue}`);
+    // console.log(`visibility change: ${this.playerId} - ${this.state} - ${this.timeValue}`);
     if (document.visibilityState === "visible") this.flushQueue();
     // if (document.visibilityState === "visible" && this.state === "active" && this.startedAtMs) {
     //   // instant catch-up render
@@ -94,7 +106,7 @@ export default class extends Controller {
   // Timer --------------------------------------------------------------------
 
   setTimerOnState() {
-    console.log(`setting timer on state: ${this.playerId} - ${this.state} - ${this.timeValue}`);
+    // console.log(`setting timer on state: ${this.playerId} - ${this.state} - ${this.timeValue}`);
     switch (this.state) {
       case "resume":
         this.state = "active";
@@ -121,7 +133,7 @@ export default class extends Controller {
   }
 
   startTimer() {
-    console.log(`starting timer: ${this.playerId} - ${this.state} - ${this.timeValue}`);
+    // console.log(`starting timer: ${this.playerId} - ${this.state} - ${this.timeValue}`);
     if (this.interval) return; // already running
     this.loadTimingState();
     this.state = "active";
@@ -136,7 +148,7 @@ export default class extends Controller {
   }
 
   stopTimer() {
-    console.log(`stopping timer: ${this.playerId} - ${this.state} - ${this.timeValue}`);
+    // console.log(`stopping timer: ${this.playerId} - ${this.state} - ${this.timeValue}`);
     if (this.interval) {
       clearInterval(this.interval);
       this.interval = null;
@@ -148,7 +160,7 @@ export default class extends Controller {
   }
 
   tick() {
-    console.log(`ticking: ${this.playerId} - ${this.state} - ${this.timeValue}`);
+    // console.log(`ticking: ${this.playerId} - ${this.state} - ${this.timeValue}`);
     this.moveHand();
     this.render();
 
@@ -207,14 +219,14 @@ export default class extends Controller {
   checkInLater() {
     if (!navigator.onLine) {
       setTimeout(() => this.checkInLater(), 15000);
-      console.log(`offline - will check in later, ${this.playerId} - ${this.state} - ${this.timeValue}`);
+      // console.log(`offline - will check in later, ${this.playerId} - ${this.state} - ${this.timeValue}`);
       return;
     }
     this.flushQueue();
   }
 
   loadTimingState() {
-    console.log(`loading timing state: ${this.playerId} - ${this.state} - ${this.timeValue}`);
+    // console.log(`loading timing state: ${this.playerId} - ${this.state} - ${this.timeValue}`);
     try {
       const raw = JSON.parse(
         localStorage.getItem(this.playerId + ":timing") || "{}"
@@ -236,9 +248,9 @@ export default class extends Controller {
         }
       }
     } catch {}
-    console.log(
-      `loaded timing state: ${this.playerId} - ${this.state} - ${this.timeValue} - ${this.startedAtMs}`
-    );
+    // console.log(
+    //   `loaded timing state: ${this.playerId} - ${this.state} - ${this.timeValue} - ${this.startedAtMs}`
+    // );
   }
 
   persistTimingState() {
@@ -252,13 +264,13 @@ export default class extends Controller {
         })
       );
     } catch {}
-    console.log(`persisted timing state: ${this.playerId} - ${this.state} - ${this.timeValue} - ${this.startedAtMs}`);
+    // console.log(`persisted timing state: ${this.playerId} - ${this.state} - ${this.timeValue} - ${this.startedAtMs}`);
   }
 
   // Server Dialogue ---------------------------------------------------------
   
   async syncStateWithServer() {
-    console.log(`syncing timing state: ${this.playerId} - ${this.state} - ${this.timeValue}`);
+    // console.log(`syncing timing state: ${this.playerId} - ${this.state} - ${this.timeValue}`);
     if (this.state === "active" && navigator.onLine && !this.inflightReload) {
       try {
         const body = {
@@ -278,9 +290,9 @@ export default class extends Controller {
         this.inflightReload = false;
       }
     }
-    console.log(
-      `synced timing state: ${this.playerId} - ${this.state} - ${this.timeValue}`
-    );
+    // console.log(
+    //   `synced timing state: ${this.playerId} - ${this.state} - ${this.timeValue}`
+    // );
 
   }
 
@@ -382,7 +394,7 @@ export default class extends Controller {
   }
 
   async flushQueue(body = null, url = this.syncUrlValue, headers = { "Content-Type": "application/json", "X-CSRF-Token": this.token }) {
-    console.log(`flushing queue: ${this.playerId} - ${this.state} - ${this.timeValue}`);
+    // console.log(`flushing queue: ${this.playerId} - ${this.state} - ${this.timeValue}`);
     if (!navigator.onLine) return;
     if (!url) return;
     if (this.inflightReload) return;
@@ -392,7 +404,7 @@ export default class extends Controller {
     if (!body) {
 
       ops = this.readQueue();
-      console.log(`ops to flush: ${ops.length} items`);
+      // console.log(`ops to flush: ${ops.length} items`);
       if (ops.length === 0) return; //{
       //   ops = [ { type: "sync", at_ms: Date.now() } ]
       // }
@@ -448,12 +460,12 @@ export default class extends Controller {
     if (url.match(/turbo/)){
       const html = await resp.text();
       Turbo.renderStreamMessage(html);
-      console.log(`synced timing state (turbo): ${this.playerId} - ${this.state} - ${this.timeValue}`);
+      // console.log(`synced timing state (turbo): ${this.playerId} - ${this.state} - ${this.timeValue}`);
       this.lastSyncAt = Date.now();
     } else {
       const snapshot = await resp.json();
       this.reconcileFromSnapshot(snapshot);
-      console.log(`synced timing state: ${this.playerId} - ${this.state} - ${this.timeValue}`);
+      // console.log(`synced timing state: ${this.playerId} - ${this.state} - ${this.timeValue}`);
   
       // Remove the batch we sent successfully and keep flushing until empty
       const remaining = ops.slice(batch.length);
@@ -469,7 +481,7 @@ export default class extends Controller {
 
   reconcileFromSnapshot(s) {
     // s: { id, state, total_seconds, registered_minutes, started_at, version }
-    console.log(`reconciling from snapshot: ${this.playerId} - ${s.state} - ${s.total_seconds} - ${s.started_at} - v${s.version}`);
+    // console.log(`reconciling from snapshot: ${this.playerId} - ${s.state} - ${s.total_seconds} - ${s.started_at} - v${s.version}`);
     this.setVersion(s.version);
     this.timeValue = s.total_seconds ?? this.timeValue;
     this.setItemDatasetCounter();
@@ -482,7 +494,7 @@ export default class extends Controller {
   }
 
   handleOffline() {
-    console.log(`handling offline state: ${this.playerId} - ${this.state} - ${this.timeValue}`);
+    // console.log(`handling offline state: ${this.playerId} - ${this.state} - ${this.timeValue}`);
     switch (this.state) {
       case "start":
         this.state = "active";
@@ -534,7 +546,7 @@ export default class extends Controller {
   // Actions ------------------------------------------------------------------
 
   changeState(e){
-    console.log(`changing state: ${this.playerId} - ${this.state} - ${this.timeValue}`);
+    // console.log(`changing state: ${this.playerId} - ${this.state} - ${this.timeValue}`);
     this.state = e.target.dataset.state;
 
     if (navigator.onLine) {
@@ -598,11 +610,7 @@ export default class extends Controller {
         if (document.querySelector("#time_material_customer_id").value !== this.initialCustomer) {
           this.initialCustomer = document.querySelector("#time_material_customer_id").value;
           let tmr = document.getElementById("time_material_rate");
-          tmr.value = this.empty_value(
-            tmr,
-            document.querySelector("#time_material_customer_id").dataset
-              .lookupCustomerHourlyRate
-          );
+          tmr.value = this.empty_value( tmr, document.querySelector("#time_material_customer_id").dataset.lookupCustomerHourlyRate );
           this.updateOverTime(document.getElementById("time_material_over_time"));
         }
       }
@@ -652,18 +660,18 @@ export default class extends Controller {
   }
 
   empty_value(e, value = 0.0) {
-    // console.log(`hourRate: ${this.hourRate}`);
+    console.log(`hourRate: ${this.hourRate} - value: ${value}`);
     if (
-      e.value === "" ||
-      e.value == 0 ||
-      e.value == "0,0" ||
-      e.value == this.hourRate && 
+      // e.value === "" ||
+      // e.value == 0 ||
+      // e.value == "0,0" && 
       value != 0.0
     ) {
       this.hourRate = value;
-      // console.log(`hourRate updated: ${this.hourRate}`);
+      console.log(`hourRate updated: ${this.hourRate}`);
       return value;
     }
+    console.log(`use current hourRate: ${this.hourRate}`);
     return e.value
   }
 

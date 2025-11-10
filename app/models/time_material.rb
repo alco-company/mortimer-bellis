@@ -369,7 +369,7 @@ class TimeMaterial < ApplicationRecord
     h = []
     Current.get_user.tenant.time_products.each do |p|
       h << p.base_amount_value.to_s
-    end
+    end if Current.get_user.tenant.present? && Current.get_user.tenant.time_products&.any?
     h.to_json
   end
 

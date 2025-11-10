@@ -20,11 +20,13 @@ module Serviceable
         tp= products.where("product_number like ?", "Time%").order(:base_amount_value).take(3)
       end
       return tp if tp.count > 0
-      [
-        SimpleProduct.new("Time", 100),
-        SimpleProduct.new("Time50", 150),
-        SimpleProduct.new("Time100", 200)
-      ]
+
+      # [
+      #   SimpleProduct.new("Time", 100),
+      #   SimpleProduct.new("Time50", 150),
+      #   SimpleProduct.new("Time100", 200)
+      # ]
+      nil
     end
   end
 

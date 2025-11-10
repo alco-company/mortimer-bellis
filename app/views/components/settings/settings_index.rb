@@ -92,9 +92,9 @@ class Settings::SettingsIndex < ApplicationComponent
   end
 
   def show_tab
-    res = @resource.nil? ? @params[:tab].classify.constantize : @resource
+    res = @resource.nil? ? (@params[:tab]&.classify&.constantize rescue nil) : @resource
     div(class: "p-4") do
-      case @params[:tab]
+      case @params[:tab]&.downcase
       when "general";         settings_tab Setting.general_settings
       when "time_material";   settings_tab Setting.time_material_settings(resource: res)
       when "customer";        settings_tab Setting.customer_settings(resource: res)

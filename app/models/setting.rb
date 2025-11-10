@@ -144,7 +144,7 @@ class Setting < ApplicationRecord
       when "default_time_material_about";         [ I18n.t("time_material.default_assigned_about"), "TimeMaterial" ]
       when "default_time_material_hour_time";     [ "0", "TimeMaterial" ]
       when "default_time_material_minute_time";   [ "15", "TimeMaterial" ]
-      # when "default_time_material_rate"; [ "500", "TimeMaterial" ]
+      # when "default_time_material_rate";          [ "500.00", "TimeMaterial" ]
       # when "default_time_material_over_time"; [ "0", "TimeMaterial" ]
       when "validate_time_material_done";         [ "false", "TimeMaterial" ]
       when "limit_time_to_quarters";              [ "false", "TimeMaterial" ]
@@ -171,7 +171,7 @@ class Setting < ApplicationRecord
       [ "default_time_material_about", I18n.t("settings.keys.default_time_material_about") ],
       [ "default_time_material_hour_time", I18n.t("settings.keys.default_time_material_hour_time") ],
       [ "default_time_material_minute_time", I18n.t("settings.keys.default_time_material_minute_time") ],
-      # [ "default_time_material_rate", I18n.t("settings.keys.default_time_material_rate") ],
+      [ "default_time_material_rate", I18n.t("settings.keys.default_time_material_rate") ],
       # [ "default_time_material_over_time", I18n.t("settings.keys.default_time_material_over_time") ],
       [ "add_time_materials", I18n.t("settings.keys.add_time_material") ],
       [ "add_customers", I18n.t("settings.keys.add_customer") ],
@@ -340,7 +340,7 @@ class Setting < ApplicationRecord
       "default_time_material_about" => { "type" => "text", "value" => I18n.t("time_material.default_assigned_about") },
       "default_time_material_hour_time" => { "type" => "text", "value" => "0" },
       "default_time_material_minute_time" => { "type" => "text", "value" => "15" },
-      "default_time_material_rate" => { "type" => "boolean", "value" => "750,75" },
+      "default_time_material_rate" => { "type" => "text", "value" => "750,00" },
       "default_time_material_over_time" => { "type" => "boolean", "value" => "true" },
       "add_time_materials" => { "type" => "boolean", "value" => "true" },
       "see_mileage_tab" => { "type" => "boolean", "value" => "false" },
