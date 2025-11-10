@@ -324,7 +324,7 @@ class ModalController < MortimerController
             @url.gsub!(/\/\d+$/, "") if @url.match?(/\d+$/)
             resource_class == TimeMaterial ? time_material_stream_destroy : Broadcasters::Resource.new(r).destroy
             r.notify(action: :destroy)
-            r.destroy
+            r.destroy!
             flash[:success] = t(".post")
             params[:step] == "delete_account" ? redirect_to(root_path) : do_respond
           else

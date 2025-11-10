@@ -23,7 +23,7 @@ class Broadcasters::Resource
     Turbo::StreamsChannel.broadcast_action_later_to(
       resources_stream,
       target: "flash_container",
-      action: :replace,
+      action: :append,
       partial: "application/flash_message", locals: { tenant: tenant, messages: fl, user: user }
     )
   end

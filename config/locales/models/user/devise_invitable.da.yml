@@ -2,6 +2,7 @@ da:
   devise:
     failure:
       invited: "Du har en uafsluttet invitation, accepter den for at færdiggøre oprettelsen af din konto."
+      invitation_failed: "Det lykkedes ikke at sende invitationen til %{invitee}."
     invitations:
       send_instructions: "En inviterende email er blev sendt til %{email}."
       send_instructions_count: "En inviterende email er blev sendt til %{count} personer."
