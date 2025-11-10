@@ -34,6 +34,7 @@
 - fix default team
 - fix {} on new empty t/m list
 - fix price setting
+- fix hour_rate in params
 
 ### 05/11/2025
 

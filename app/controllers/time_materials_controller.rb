@@ -266,7 +266,7 @@ class TimeMaterialsController < MortimerController
         time_spent: 0,
         hour_time: 0,
         minute_time: 0,
-        hour_rate: get_hourly_rate,
+        rate: get_hourly_rate,
         registered_minutes: 0,
         date: get_default_time_material_date,
         about: Current.user.default(:default_time_material_about, "")
