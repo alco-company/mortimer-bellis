@@ -105,7 +105,7 @@ class List < ApplicationComponent
         # div(class: "grid grid-cols-1 gap-6 sm:grid-cols-1 lg:grid-cols-1") do
         # end
       end
-    end
+    end if count > 0
   end
 
   def list_records
