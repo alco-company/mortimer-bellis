@@ -27,6 +27,11 @@
 
 ## CHANGELOG
 
+### 10/11/2025
+
+- fix tags not allow deletion
+- fix CRUD on tags
+
 ### 05/11/2025
 
 - fix show_matter_link,  error: "ActionView::Template::Error No route matches {}"

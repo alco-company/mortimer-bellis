@@ -272,3 +272,16 @@ https://getgrav.org/blog/macos-sequoia-apache-ssl
 ### N8N building
 
 * https://medium.com/@aksh8t/build-n8n-ai-agents-in-minutes-make-thousands-of-dollars-00d9b3acd369
+
+### Price Engine
+
+* https://medium.com/@roonglit/building-an-e-commerce-pricing-rules-engine-with-single-table-inheritance-in-ruby-on-rails-859d6721a013
+
+### KanBan
+
+* https://railsdesigner.com/extending-kanban-rails-hotwire
+* https://medium.com/jungletronics/drag-drop-kanban-with-rails-8-9df6f576bde6
+
+### Dashboard Best Practices
+
+* https://python.plainenglish.io/start-making-dashboards-that-dont-suck-87e7474d5572
