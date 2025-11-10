@@ -31,6 +31,7 @@
 
 - fix tags not allow deletion
 - fix CRUD on tags
+- fix default team
 
 ### 05/11/2025
 

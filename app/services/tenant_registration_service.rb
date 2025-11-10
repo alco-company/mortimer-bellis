@@ -36,6 +36,11 @@ class TenantRegistrationService
 
   def self.create_defaults_for_new(tenant, user)
     team = Team.find_or_create_by tenant: user.tenant, name: I18n.t("teams.default_team")
+    team.update(
+      country: tenant.country&.upcase || "DK",
+      locale: tenant.locale&.downcase || "da",
+      time_zone: tenant.time_zone || "Europe/Copenhagen"
+    )
     user.update team: team
     #
     location = Location.find_or_create_by tenant: user.tenant, name: I18n.t("locations.default_location")
@@ -46,6 +51,9 @@ class TenantRegistrationService
     #
     Product.create_defaults_for_new tenant
     #
-    tenant.update(license: "trial", license_expires_at: 30.days.from_now)
+    tenant.update(
+      license: "trial",
+      license_expires_at: 30.days.from_now
+    )
   end
 end
