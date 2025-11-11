@@ -30,6 +30,7 @@
 ### 11/11/2025
 
 - fix form layout t/m
+- fix price setting on customer/project
 
 ### 10/11/2025
 
