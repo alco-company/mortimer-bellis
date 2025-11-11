@@ -27,6 +27,10 @@
 
 ## CHANGELOG
 
+### 11/11/2025
+
+- fix form layout t/m
+
 ### 10/11/2025
 
 - fix tags not allow deletion

@@ -32,7 +32,7 @@ class ToggleButton < ApplicationComponent
           span(class: "sr-only") { "Use setting" }
           span(
             aria_hidden: "true",
-            class: "pointer-events-none absolute h-full w-full rounded-md bg-white"
+            class: "pointer-events-none absolute h-full w-full rounded-md bg-transparent"
           )
           comment { %(Enabled: "bg-sky-600", Not Enabled: "bg-gray-200") }
           span(
