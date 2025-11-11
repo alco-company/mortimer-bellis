@@ -125,12 +125,11 @@ Rails.application.routes.draw do
   resources :batches
   resources :invoice_items
 
-  resources :products, concerns: [ :lookupable, :erp_pullable ]
-  resources :customers, concerns: [ :lookupable, :erp_pullable ]
+  resources :products, concerns: [ :lookupable, :erp_pullable, :copyable ]
+  resources :customers, concerns: [ :lookupable, :erp_pullable, :copyable ]
   resources :invoices, concerns: [ :erp_pullable ]
 
-  resources :projects, concerns: [ :lookupable ]
-
+  resources :projects, concerns: [ :lookupable, :copyable ]
 
   resources :provided_services, concerns: [ :erp_pullable ]
   resources :settings
