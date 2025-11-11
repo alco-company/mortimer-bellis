@@ -34,6 +34,7 @@
 - add hourly_rate to teams and check for them
 - allow copy on product
 - confirm! first user on seed
+- safe confirmed? on Current.user
 
 ### 10/11/2025
 
