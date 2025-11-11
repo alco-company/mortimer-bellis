@@ -33,6 +33,7 @@
 - fix price setting on customer/project
 - add hourly_rate to teams and check for them
 - allow copy on product
+- confirm! first user on seed
 
 ### 10/11/2025
 

@@ -11,4 +11,5 @@ tenant = Tenant.find_or_create_by!(name: "Mortimer", email: "info@mortimer.pro",
 team = Team.find_or_create_by!(tenant: tenant, name: "Mortimer", email: "info@mortimer.pro", color: "bg-blue-200", locale: "en", time_zone: "UTC")
 user = User.new(email: 'info@mortimer.pro', tenant: tenant, global_queries: true, team: team, pincode: '1000', role: 2, password: 'M0r71m3r!', password_confirmation: 'M0r71m3r!')
 user.save!
+user.confirm!
 Task.create_tenant_template_tasks(user)
