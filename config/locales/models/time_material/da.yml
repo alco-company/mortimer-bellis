@@ -187,6 +187,7 @@ da:
 
     list:
       title: Tid/materialer
+      play: Start t/m stopur
       new: Ny tid/materiale
       time_logged: "%{time} logget"
       edit: Rediger

@@ -20,6 +20,7 @@ class TeamsController < MortimerController
       :contract_days_per_payroll,
       :contract_days_per_week,
       :hour_pay,
+      :hourly_rate,
       :ot1_add_hour_pay,
       :ot2_add_hour_pay,
       :tmp_overtime_allowed,

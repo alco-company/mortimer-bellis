@@ -882,6 +882,7 @@ da:
         contract_days_per_week: Aftalt antal arbejdsdage/uge
         hour_pay: Timeløn
         hour_rate_cent: Timepris i øre
+        hourly_rate: Timepris (salg af konsulent tid)
         ot1_add_hour_pay: Overtid 1 tillæg (fx 15,25 eller 50%)
         ot2_add_hour_pay: Overtid 2 tillæg (fx 30,50 eller 100%)
         tmp_overtime_allowed: Overtid midlertidigt tilladt i 24t fra kl

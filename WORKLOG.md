@@ -31,6 +31,7 @@
 
 - fix form layout t/m
 - fix price setting on customer/project
+- add hourly_rate to teams and check for them
 
 ### 10/11/2025
 
