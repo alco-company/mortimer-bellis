@@ -19,7 +19,7 @@ module ApplicationHelper
           content_tag(:span, "Add new", class: "sr-only") +
           content_tag(:span, class: "inline-flex items-center rounded-md bg-white px-1.5 py-2 text-xs font-medium text-gray-600 sm:ring-1 ring-inset ring-gray-500/10") do
             render(Icons::Play.new css: "h-6 w-6 text-gray-400") +
-            content_tag(:span, t("#{ resource_class.table_name }.list.new"), class: "hidden pl-2 sm:inline text-gray-400 text-2xs")
+            content_tag(:span, t("#{ resource_class.table_name }.list.play"), class: "hidden pl-2 sm:inline text-gray-400 text-2xs")
           end
         end
       ).html_safe if params.dig(:controller) == "time_materials"

@@ -35,6 +35,7 @@
 - allow copy on product
 - confirm! first user on seed
 - safe confirmed? on Current.user
+- label play button better on header
 
 ### 10/11/2025
 
