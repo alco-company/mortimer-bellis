@@ -43,7 +43,7 @@ class Broadcasters::Resource
 
   def replace
     return unless tenant
-
+    Rails.logger.debug "------------------------------------------------- params: #{params.inspect}"
     Turbo::StreamsChannel.broadcast_action_later_to(
       resources_stream,
       target: target,

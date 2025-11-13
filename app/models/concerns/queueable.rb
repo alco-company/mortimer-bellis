@@ -45,7 +45,7 @@ module Queueable
     # when resetting for a new 'day' remove the
     # next_run_at
     def job_reset
-      persist nil, nil
+      persist nil, nil, 0
     end
 
     # if job.schedule
@@ -53,6 +53,7 @@ module Queueable
     # and return the job id and planned run at time
     #
     def plan_job(first = true)
+      return if in_active?
       begin
         t = active? ? self.next_run(schedule, first) : nil
         # When rescheduling after completion (first=false), always use the new calculated time
@@ -83,7 +84,9 @@ module Queueable
         return if shouldnt?(:run)
         o = set_parms
         w = job_klass.constantize
-        id = t ? (w.set(wait_until: Time.at(t).in_time_zone("UTC")).perform_later(**o)).job_id : (w.perform_later(**o)).job_id
+        id = t ?
+          (w.set(wait_until: Time.at(t).in_time_zone("UTC")).perform_later(**o)).job_id :
+          (w.perform_later(**o)).job_id
         t = Time.at(t.to_i).utc rescue nil
         persist id, t
       rescue => exception
@@ -93,6 +96,10 @@ module Queueable
 
     def run_or_plan_job
       schedule.blank? ? run_job : plan_job
+    end
+
+    def get_parms
+      set_parms
     end
 
     #
@@ -111,6 +118,7 @@ module Queueable
       end
       o[:tenant] ||= tenant
       o[:user] ||= user
+      o[:background_job] = self
       o
     end
 
@@ -164,8 +172,8 @@ module Queueable
     # persist job_id and next_run_at
     # and broadcast the update
     #
-    def persist(job_id, next_run_at)
-      update_columns job_id: job_id, next_run_at: next_run_at
+    def persist(job_id, next_run_at, state = 2)
+      update_columns job_id: job_id, next_run_at: next_run_at, state: 2
       # broadcast_update
       [ job_id, next_run_at ]
     end
@@ -189,11 +197,11 @@ module Queueable
       # end
     end
 
-    def running?
-      # ss = Sidekiq::ScheduledSet.new
-      # jobs = ss.scan("BackgroundProcessingJob")
-      # jobs.any?
-    end
+    # def running?
+    #   # ss = Sidekiq::ScheduledSet.new
+    #   # jobs = ss.scan("BackgroundProcessingJob")
+    #   # jobs.any?
+    # end
 
 
     #

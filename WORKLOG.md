@@ -27,6 +27,10 @@
 
 ## CHANGELOG
 
+### 12/11/2025
+
+- improve handling of background jobs
+
 ### 11/11/2025
 
 - fix form layout t/m

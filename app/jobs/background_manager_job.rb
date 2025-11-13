@@ -2,25 +2,26 @@ class BackgroundManagerJob < ApplicationJob
   queue_as :default
 
   #
-  # step 1 background jobs will be running 3 jobs
-  #
-  #   1: user_state_job
-  #   2: user_eu_state_job
-  #   3: user_auto_punch_job
   #
   def perform
-    # dt = DateTime.current
-    # prepare_state_job if dt.hour == 5 and dt.min == 0
-    # prepare_eu_state_job if dt.hour == 5 and dt.min == 5
-    # prepare_auto_punch_job if dt.hour == 23 and dt.min == 50
     BackgroundJob.any_jobs_to_run.each do |job|
       case true
-      when job.un_planned?; job.plan_job
-        # when planned?; job.run if job.next_run_at <= dt
+      when job.un_planned?; plan_job(job)
+      when job.planned?; run_job(job) if job.next_run_at <= Time.current
       end
     end
   rescue => error
     ::UserMailer.error_report(error.to_s, "BackgroundManagerJob.perform").deliver_later
+  end
+
+  def plan_job(job)
+    job.plan_job
+    Broadcasters::Resource.new(job, job.get_parms, user: job.tenant.users.first, stream: "#{job.tenant.id}_background_jobs").replace
+  end
+
+  def run_job(job)
+    job.run_job
+    Broadcasters::Resource.new(job, job.get_parms, user: job.tenant.users.first, stream: "#{job.tenant.id}_background_jobs").replace
   end
 
 

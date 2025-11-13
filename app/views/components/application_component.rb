@@ -100,6 +100,8 @@ class ApplicationComponent < Phlex::HTML
   end
 
   def edit_resource_url(**options)
+    Rails.logger.debug "RESOURCE: #{@resource.inspect}"
+    Rails.logger.debug "params: #{rc_params.inspect}"
     options[:id] = @resource.try(:id) || options.delete(:id)
     build_url_for(controller: params_ctrl, action: :edit, **options)
   rescue

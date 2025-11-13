@@ -4,7 +4,7 @@ class BackupTenantJob < ApplicationJob
   def perform(**args)
     super(**args)
     tenant = @tenant
-    return unless tenant
+    return # unless tenant
 
     summary = []
     log_progress(summary, step: :start)
@@ -96,8 +96,11 @@ class BackupTenantJob < ApplicationJob
     end
 
     archive_path = Rails.root.join("tmp", "#{label}.tar.gz")
-    Dir.chdir(base_dir.dirname) do
+    begin
+      Dir.chdir(base_dir.dirname)
       system("tar -czf #{archive_path} #{label}")
+    ensure
+      Dir.chdir(Rails.root)
     end
     log_progress(summary, step: :archive_created, path: archive_path.to_s)
 

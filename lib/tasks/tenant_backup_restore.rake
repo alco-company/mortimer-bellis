@@ -15,8 +15,8 @@ namespace :tenant do
     if perform_now
       jid = "inline-#{SecureRandom.hex(6)}"
       bg.update_column(:job_id, jid)
-      bg.update!(state: :running)
-      job = BackupTenantJob.new
+      bg.running! # update!(state: :running)
+      # job = BackupTenantJob.new
       job.instance_variable_set(:@job_id, jid)
       job.perform(tenant: tenant, user: user, background_job: bg)
       bg.update!(state: :finished)

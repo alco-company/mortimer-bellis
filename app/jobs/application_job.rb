@@ -78,18 +78,19 @@ class ApplicationJob < ActiveJob::Base
 
     def mark_job_started
       # Find the background job record that scheduled this job
-      @background_job = BackgroundJob.find_by(job_id: job_id) if job_id
-      if @background_job
-        @background_job.update!(state: :running)
-        say "Job #{self.class.name} started"
+      bg = @background_job # BackgroundJob.find_by(job_id: job_id) if job_id
+      if bg
+        bg.update!(state: :running) unless bg.running?
+        Broadcasters::Resource.new(bg, bg.get_parms, user: bg.tenant.users.first, stream: "#{bg.tenant.id}_background_jobs").replace
       end
     end
 
     def mark_job_completed
-      if @background_job
-        @background_job.update!(state: :finished)
-        @background_job.job_done
-        say "Job #{self.class.name} completed and next run scheduled"
+      bg = @background_job # BackgroundJob.find_by(job_id: job_id) if job_id
+      if bg
+        bg.update!(state: :finished)
+        bg.job_done
+        Broadcasters::Resource.new(bg, bg.get_parms, user: bg.tenant.users.first, stream: "#{bg.tenant.id}_background_jobs").replace
       end
     end
 

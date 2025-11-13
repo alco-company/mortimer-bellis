@@ -114,9 +114,10 @@ class BackgroundJob < ApplicationRecord
       # [ "UserEuStateJob", "UserEuStateJob" ],
       # [ "UserStateJob", "UserStateJob" ],
       # [ "ImportUsersJob", "ImportUsersJob" ],
-      [ "PunchCardJob", "PunchCardJob" ],
+      # [ "PunchCardJob", "PunchCardJob" ],
       [ "RefreshErpTokenJob", "RefreshErpTokenJob" ],
-      [ "PunchReminderJob", "PunchReminderJob" ],
+      [ "BackupTenantJob", "BackupTenantJob" ],
+      # [ "PunchReminderJob", "PunchReminderJob" ],
       [ "PunchJob", "PunchJob" ]
     ]
   end
