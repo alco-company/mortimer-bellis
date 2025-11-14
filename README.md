@@ -13,8 +13,8 @@ allow you to bill your customers for the time your employees have spent on their
 
 ## REFERENCES
 
-See [the references](REFERENCES.md) for a detailed list of all the contributors to open source that has had an impact on the
-realization of this product.
+See [the references](REFERENCES.md) for a detailed list of all the contributors to open source that has 
+had an impact on the realization of this product.
 
 ## Installation
 
@@ -64,9 +64,61 @@ small dataset. All you have to do is sign up - with the first user being a 'supe
 
 ## Maintenance
 
-There are 2 shell scripts in the `bin` directory that you can use to maintain your MTA installation. The `bin/backup_dev` script
-will backup your development database to a file in the `db` directory. The `bin/backup_prod` will do the same for your production. 
+### Data Backup
 
-Please note that both scripts are cut to measure - you most likely will have to adjust them to your environment!
+MTA has 3 levels of data persistence security
+
+1. Versioning
+2. Tenant focused backup
+3. Database (multi-tenant) backup
+
+**1. Versioning**
+This level of security is yet to be implemented - but onoce implemented it will afford users to undo edits and deletes.
+
+**2. Tenant focused backup**
+This level of security is facilitated by running a background_job every so often. That stores a complete copy of all
+tables and blobs (files uploaded by tenant users) in a tmp/tenant_:id_date/time.tar.gz that has a default retension of
+7 days.
+
+**3. Database (multi-tenant) backup**
+The entire database is backup'ed up every morning at 1:01 UTC and the copy is placed off-site. This backup focuses on
+the database tables/records - and not the blobs! That is to say that blobs are not copied at this level - and thus will
+be lost if the entire MTA has to restore from a previous backup (which is not ideal)
+
+it's handled by this crontab entry
+
+`1 1 * * * /root/scripts/backup.rb >> /var/log/backup.log 2>&1`
+
+calling this script
+
+```
+#!/usr/bin/env ruby
+
+require 'net/sftp'
+
+backup_filename = "production_#{Time.now.strftime('%Y%m%d_%H%M%S')}.sqlite3"
+`cp /var/lib/docker/volumes/storage/_data/production.sqlite3 /root/backup_#{backup_filename}`
+
+file=""
+Net::SFTP.start(FTP_SERVER, FTP_USER, password: FTP_PASSWORD) do |sftp|
+  local_path = "/root/backup_#{backup_filename}"
+  remote_path = "#{OFFSITE_PATH}/#{backup_filename}"
+  sftp.upload!(local_path, remote_path)
+  sftp.dir.foreach(OFFSITE_PATH) do |entry|
+    file = entry.longname if entry.longname =~ /#{backup_filename}/
+  end
+end
+#
+#
+rsize = file.split(" ")[-5].to_i
+lsize = `ls -la /root/backup_#{backup_filename}`.split(" ")[-5].to_i
+if rsize == lsize
+  `rm -f /root/backup_#{backup_filename}`
+  puts "Backup of Docker5 (staging) /var/lib/docker/volumes/storage/_data/production.sqlite3 upload'et to #{FTP_SERVER}:#{OFFSITE_PATH}/#{backup_filename}"
+end
+```
+
+CAVEAT: You might have to install _ruby_ on your box to run the script, `chmod +x /root/scripts/backup.rb`,
+`touch /var/log/backup.log` and `chmod 666 /var/log/backup.log` - YMMV as the saying goes ;)
 
 If the SQLite3 database is broken there's a fair chance `bin/fixsql` just might come through for you.

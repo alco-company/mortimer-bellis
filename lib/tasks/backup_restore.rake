@@ -83,3 +83,22 @@ namespace :tenant do
     end
   end
 end
+
+namespace :db do
+  desc "List all tenants and their names"
+  task list_tenants: :environment do
+    Tenant.all.each do |tenant|
+      puts "Tenant ID: #{tenant.id} Name: #{tenant.name} "
+    end
+  end
+
+  desc "Backup database"
+  task backup: :environment do
+    DatabaseBackup.run
+  end
+
+  desc "Restore database from latest backup file in ./tmp"
+  task restore: :environment do
+    DatabaseRestore.run
+  end
+end

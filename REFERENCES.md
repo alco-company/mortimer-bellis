@@ -285,3 +285,7 @@ https://getgrav.org/blog/macos-sequoia-apache-ssl
 ### Dashboard Best Practices
 
 * https://python.plainenglish.io/start-making-dashboards-that-dont-suck-87e7474d5572
+
+### How to implement OCR capabilities
+
+* https://pub.towardsai.net/how-to-develop-a-powerful-ocr-pipeline-for-machine-learning-systems-bcc0b6df58b9

@@ -88,7 +88,6 @@ class ApplicationJob < ActiveJob::Base
     def mark_job_completed
       bg = @background_job # BackgroundJob.find_by(job_id: job_id) if job_id
       if bg
-        bg.update!(state: :finished)
         bg.job_done
         Broadcasters::Resource.new(bg, bg.get_parms, user: bg.tenant.users.first, stream: "#{bg.tenant.id}_background_jobs").replace
       end

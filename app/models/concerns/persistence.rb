@@ -154,7 +154,7 @@ module Persistence
       results = []
 
       record.class.reflections.values.select(&:belongs_to?).each do |reflection|
-        summary, record, result, msg = check_association(summary, record, reflection, remapped_ids)
+        summary, record, result, _msg = check_association(summary, record, reflection, remapped_ids)
         results << result
       end
       unless results.include?(:error)

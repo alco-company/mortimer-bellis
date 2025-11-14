@@ -9,6 +9,9 @@ class RefreshErpTokenJob < ApplicationJob
   #
   def perform(**args)
     super(**args)
+    #
+    # refresh the token for the tenant/user - if token needs refreshing
+    #
     Dinero::Service.new.token_fresh?
   end
 end

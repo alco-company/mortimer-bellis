@@ -6,7 +6,7 @@ module Queueable
     # once saved - make sure this job is getting
     # planned to run
     #
-    after_save :plan_job
+    # after_save :plan_job
 
     #
     # when the background_job has performed
@@ -14,6 +14,7 @@ module Queueable
     # is reset and next run is scheduled
     def job_done
       begin
+        finished! unless failed?
         if schedule.blank?
           # One-time job - clear job_id and next_run_at
           persist(nil, nil)
@@ -53,16 +54,16 @@ module Queueable
     # and return the job id and planned run at time
     #
     def plan_job(first = true)
-      return if in_active?
+      return unless active?
+
       begin
-        t = active? ? self.next_run(schedule, first) : nil
+        t = self.next_run(schedule, first)
         # When rescheduling after completion (first=false), always use the new calculated time
         # When scheduling for the first time (first=true), keep the earlier time if one exists
         if next_run_at && t && first
           t = Time.at(t).in_time_zone("UTC") < Time.at(next_run_at).in_time_zone("UTC") ? t : next_run_at
         end
-        result = t ? run_job(t) : persist(nil, nil)
-        result
+        t ? run_job(t) : persist(nil, nil)
       rescue => exception
         say "BackgroundJob.plan_job failed due to #{exception}"
       end
@@ -84,11 +85,16 @@ module Queueable
         return if shouldnt?(:run)
         o = set_parms
         w = job_klass.constantize
-        id = t ?
-          (w.set(wait_until: Time.at(t).in_time_zone("UTC")).perform_later(**o)).job_id :
-          (w.perform_later(**o)).job_id
+        s = 2
+        id = nil
+        if t
+          id = (w.set(wait_until: Time.at(t).in_time_zone("UTC")).perform_later(**o)).job_id
+        else
+          id = (w.perform_later(**o)).job_id
+          s = 3
+        end
         t = Time.at(t.to_i).utc rescue nil
-        persist id, t
+        persist id, t, s
       rescue => exception
         say "BackgroundJob.run_job failed due to #{exception}"
       end
@@ -173,7 +179,8 @@ module Queueable
     # and broadcast the update
     #
     def persist(job_id, next_run_at, state = 2)
-      update_columns job_id: job_id, next_run_at: next_run_at, state: 2
+      state = 5 if job_id.nil? && next_run_at.nil?
+      update_columns job_id: job_id, next_run_at: next_run_at, state: state
       # broadcast_update
       [ job_id, next_run_at ]
     end

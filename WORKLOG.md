@@ -24,8 +24,13 @@
 - find ways to utilise <output> - https://denodell.com/blog/html-best-kept-secret-output-tag
 - ways to test before launch: https://bhavyansh001.medium.com/the-rails-performance-checklist-i-run-before-every-launch-b02f605285cf
 - priser
+- make database backup incl blobs!!!
 
 ## CHANGELOG
+
+### 14/11/2025
+
+- setting up backup and documenting it - on docker5/docker6
 
 ### 12/11/2025
 

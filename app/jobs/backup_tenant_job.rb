@@ -4,7 +4,7 @@ class BackupTenantJob < ApplicationJob
   def perform(**args)
     super(**args)
     tenant = @tenant
-    return # unless tenant
+    return unless tenant
 
     summary = []
     log_progress(summary, step: :start)

@@ -100,8 +100,6 @@ class ApplicationComponent < Phlex::HTML
   end
 
   def edit_resource_url(**options)
-    Rails.logger.debug "RESOURCE: #{@resource.inspect}"
-    Rails.logger.debug "params: #{rc_params.inspect}"
     options[:id] = @resource.try(:id) || options.delete(:id)
     build_url_for(controller: params_ctrl, action: :edit, **options)
   rescue
@@ -173,7 +171,7 @@ class ApplicationComponent < Phlex::HTML
   end
 
   def build_url_for resource = nil, controller: nil, action: nil, id: nil, **options
-    if resource
+    unless resource.nil?
       Rails.application.routes.url_helpers.url_for(resource)
     else
       controller ||= resource_class.to_s.underscore.pluralize

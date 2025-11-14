@@ -1,7 +1,16 @@
 class BackgroundJobsController < MortimerController
   #
-  def mission_control
+  # def mission_control
+  # end
+
+  def create_callback
+    resource.plan_job
   end
+
+  def update_callback
+    resource.plan_job
+  end
+
 
   private
 
