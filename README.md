@@ -81,9 +81,7 @@ tables and blobs (files uploaded by tenant users) in a tmp/tenant_:id_date/time.
 7 days.
 
 **3. Database (multi-tenant) backup**
-The entire database is backup'ed up every morning at 1:01 UTC and the copy is placed off-site. This backup focuses on
-the database tables/records - and not the blobs! That is to say that blobs are not copied at this level - and thus will
-be lost if the entire MTA has to restore from a previous backup (which is not ideal)
+The entire database is backup'ed up every morning at 1:01 UTC and the copy is placed off-site.
 
 it's handled by this crontab entry
 
@@ -91,30 +89,38 @@ it's handled by this crontab entry
 
 calling this script
 
-```
+```bash
 #!/usr/bin/env ruby
 
 require 'net/sftp'
 
-backup_filename = "production_#{Time.now.strftime('%Y%m%d_%H%M%S')}.sqlite3"
-`cp /var/lib/docker/volumes/storage/_data/production.sqlite3 /root/backup_#{backup_filename}`
+# database
+time = Time.now.strftime("%Y%m%d_%H%M%S")
+backup_filename = "production_#{time}.sqlite3"
+`cd && mkdir -p backup && cp /var/lib/docker/volumes/storage/_data/production.sqlite3 /root/backup/backup_#{backup_filename}`
+
+# active_storage files
+`cd && mkdir -p /var/lib/docker/volumes/storage/_data/backup && cp -rf /var/lib/docker/volumes/storage/_data/?? /var/lib/docker/volumes/storage/_data/backup/`
+
+# build tar file
+`cd && tar -zcvf /root/backup.tar.gz /root/backup`
 
 file=""
-Net::SFTP.start(FTP_SERVER, FTP_USER, password: FTP_PASSWORD) do |sftp|
-  local_path = "/root/backup_#{backup_filename}"
-  remote_path = "#{OFFSITE_PATH}/#{backup_filename}"
+Net::SFTP.start('adslthi.alco.dk', 'restore', password: 'AlPass2021!()') do |sftp|
+  local_path = "/root/backup.tar.gz"
+  remote_path = "/Hetzner/staging/#{time}_backup.tar.gz"
   sftp.upload!(local_path, remote_path)
-  sftp.dir.foreach(OFFSITE_PATH) do |entry|
-    file = entry.longname if entry.longname =~ /#{backup_filename}/
+  sftp.dir.foreach("/Hetzner/staging") do |entry|
+    file = entry.longname if entry.longname =~ /#{time}_backup/
   end
 end
 #
 #
 rsize = file.split(" ")[-5].to_i
-lsize = `ls -la /root/backup_#{backup_filename}`.split(" ")[-5].to_i
+lsize = `ls -la /root/backup.tar.gz`.split(" ")[-5].to_i
 if rsize == lsize
-  `rm -f /root/backup_#{backup_filename}`
-  puts "Backup of Docker5 (staging) /var/lib/docker/volumes/storage/_data/production.sqlite3 upload'et to #{FTP_SERVER}:#{OFFSITE_PATH}/#{backup_filename}"
+  `rm -f /root/backup.tar.gz`
+  puts "Backup of Docker5 (staging) /var/lib/docker/volumes/storage/_data/production.sqlite3 upload'et to adslthi.alco.dk:/Hetzner/staging/#{time}_backup.tar.gz"
 end
 ```
 

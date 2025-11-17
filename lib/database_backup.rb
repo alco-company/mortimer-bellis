@@ -33,16 +33,17 @@ class DatabaseBackup
   def perform_backup(env:)
     d_env = env == "development" ? "development" : "production"
     db_file = YAML.load_file("config/database.yml", aliases: true)[d_env]["writer"]["database"]
-    backup_filename = db_file.split("/")[-1].split(".")[0] + "_#{Time.current.strftime('%Y%m%d_%H%M%S')}.sqlite3"
-    remote_temp_path = "storage/backup_#{backup_filename}"
+    time = Time.current.strftime("%Y%m%d_%H%M%S")
+    backup_filename = db_file.split("/")[-1].split(".")[0] + "_#{time}.sqlite3"
+    remote_temp_path = "backup_#{backup_filename}"
 
     if create_backup(env: env, db_file: db_file, remote_temp_path: remote_temp_path) &&
-       copy_to_host(env: env, backup_filename: backup_filename) &&
-       copy_to_local(env: env, backup_filename: backup_filename)
+       copy_to_host(env: env, time: time) &&
+       copy_to_local(env: env, time: time)
 
-       cleanup_remote_files(env: env, backup_filename: backup_filename)
-       ftp_backup(env: env, backup_filename: backup_filename)
-       verify_and_finalize_backup(env: env, backup_filename: backup_filename)
+       cleanup_remote_files(env: env)
+       ftp_backup(env: env, time: time)
+       verify_and_finalize_backup(env: env, time: time)
       #  cleanup_old_backups
     end
   end
@@ -50,15 +51,36 @@ class DatabaseBackup
   private
 
     def create_backup(env:, db_file:, remote_temp_path:)
-      log_message "Creating a backup of #{Dir.pwd}/#{db_file} in the container..."
+      bck_path = "storage/backup"
+      docker_storage = "/var/lib/docker/volumes/storage/_data"
+
       case env
       when "staging"
-        _, status = run_command "kamal app -d staging exec \"sqlite3 #{db_file} '.backup #{remote_temp_path}' || exit 1\""
-        # system "kamal app -d staging exec \"sqlite3 #{db_file} '.backup #{remote_temp_path}' || exit 1\""
+        _, status = run_command "kamal app -d staging exec \"mkdir -p #{bck_path} || exit 1\""
+        return false unless status.success?
+        log_message "Creating a backup of #{Dir.pwd}/#{db_file} in #{bck_path}, in the container..."
+        _, status = run_command "kamal app -d staging exec \"sqlite3 #{db_file} '.backup storage/backup/#{remote_temp_path}' || exit 1\""
+        return false unless status.success?
+        log_message "Copying Active Storage files to #{bck_path}, in the container..."
+        _, status = run_command "ssh root@135.181.202.106 \"cp -rf #{docker_storage}/?? #{docker_storage}/backup/ || exit 1\""
+
       when "production"
-        _, status = run_command "kamal app exec \"sqlite3 #{db_file} '.backup #{remote_temp_path}' || exit 1\""
+        _, status = run_command "kamal app exec \"mkdir -p #{bck_path} || exit 1\""
+        return false unless status.success?
+        log_message "Creating a backup of #{Dir.pwd}/#{db_file} in #{bck_path}, in the container..."
+        _, status = run_command "kamal app exec \"sqlite3 #{db_file} '.backup storage/backup/#{remote_temp_path}' || exit 1\""
+        return false unless status.success?
+        log_message "Copying Active Storage files to #{bck_path}, in the container..."
+        _, status = run_command "ssh root@65.108.89.110 \"cp -rf #{docker_storage}/?? #{docker_storage}/backup/ || exit 1\""
+
       else
-        _, status = run_command "sqlite3 #{db_file} \".backup #{remote_temp_path}\" || exit 1"
+        _, status = run_command "mkdir -p storage/backup || exit 1"
+        return false unless status.success?
+        _, status = run_command "sqlite3 #{db_file} \".backup storage/backup/#{remote_temp_path}\" || exit 1"
+        return false unless status.success?
+        log_message "Copying Active Storage files to storage/backup/.."
+        _, status = run_command "cp -rf storage/?? #{bck_path} || exit 1"
+
       end
 
       if !status.success?
@@ -68,17 +90,19 @@ class DatabaseBackup
       true
     end
 
-    def copy_to_host(env:, backup_filename:)
+    def copy_to_host(env:, time:)
       case env
       when "staging"
-        log_message "Moving the backup from staging container to /root/#{backup_filename}..."
-        _, status = run_command "ssh root@135.181.202.106 'mv /var/lib/docker/volumes/storage/_data/backup_#{backup_filename} /root/#{backup_filename}' || exit 1"
+        log_message "Taring the backup from staging container to /root/backup.tar.gz..."
+        _, status = run_command "ssh root@135.181.202.106 'tar -zcvf /root/backup.tar.gz /var/lib/docker/volumes/storage/_data/backup' || exit 1"
+        # _, status = run_command "ssh root@135.181.202.106 'mv /var/lib/docker/volumes/storage/_data/backup /root' || exit 1"
       when "production"
-        log_message "Moving the backup from production container to /root/#{backup_filename}..."
-        _, status = run_command "ssh root@65.108.89.110 'mv /var/lib/docker/volumes/storage/_data/backup_#{backup_filename} /root/#{backup_filename}' || exit 1"
+        log_message "Taring the backup from production container to /root/backup.tar.gz..."
+        _, status = run_command "ssh root@65.108.89.110 'tar -zcvf /root/backup.tar.gz /var/lib/docker/volumes/storage/_data/backup' || exit 1"
+        # _, status = run_command "ssh root@65.108.89.110 'mv /var/lib/docker/volumes/storage/_data/backup /root' || exit 1"
       else
-        log_message "Moving the backup from container to ~/sqlite3_dumps/#{backup_filename}..."
-        system "mv #{remote_temp_path} ~/sqlite3_dumps/#{backup_filename}"
+        log_message "Taring the backup to ~/backup.tar.gz..."
+        _, status = run_command "tar -zcvf ~/backup.tar.gz storage/backup || exit 1"
       end
 
       if !status.success?
@@ -89,79 +113,81 @@ class DatabaseBackup
       true
     end
 
-    def copy_to_local(env:, backup_filename:)
-      return true if env == "development"
-      log_message "Copying the #{backup_filename} backup to ~/sqlite3_dumps/#{env}/..."
+    def copy_to_local(env:, time:)
+      log_message "Copying the backup.tar.gz to ~/sqlite3_dumps/#{env}/#{time}_backup.tar.gz..."
       case env
       when "staging"
-        _, status = run_command "scp root@135.181.202.106:#{backup_filename} ~/sqlite3_dumps/staging/ || exit 1"
+        _, status = run_command "scp root@135.181.202.106:backup.tar.gz ~/sqlite3_dumps/staging/#{time}_backup.tar.gz || exit 1"
       when "production"
-        _, status = run_command "scp root@65.108.89.110:#{backup_filename} ~/sqlite3_dumps/production/ || exit 1"
+        _, status = run_command "scp root@65.108.89.110:backup.tar.gz ~/sqlite3_dumps/production/#{time}_backup.tar.gz || exit 1"
+      else
+        _, status = run_command "mv ~/backup.tar.gz ~/sqlite3_dumps/development/#{time}_backup.tar.gz || exit 1"
       end
 
       if !status.success?
-        log_message "ERROR: Failed to copy backup to ~/sqlite3_dumps/#{env}/"
+        log_message "ERROR: Failed to copy backup to ~/sqlite3_dumps/#{env}/#{time}_backup.tar.gz"
         return false
       end
       true
     end
 
-    def cleanup_remote_files(env:, backup_filename:)
-      return true if env == "development"
-      log_message "Cleaning up remote temporary files..."
+    def cleanup_remote_files(env:)
+      log_message "Cleaning up temporary files..."
       case env
       when "staging"
-        _, status = run_command "ssh root@135.181.202.106 'rm /root/#{backup_filename}' || exit 1"
+        _, status = run_command "ssh root@135.181.202.106 'rm /root/backup.tar.gz' || exit 1"
       when "production"
-        _, status = run_command "ssh root@65.108.89.110 'rm /root/#{backup_filename}' || exit 1"
+        _, status = run_command "ssh root@65.108.89.110 'rm /root/backup.tar.gz' || exit 1"
+      else
+        _, status = run_command "ls -la ~ || exit 1"
       end
 
       if !status.success?
-        log_message "ERROR: Failed to clean up remote backup file /root/#{backup_filename}"
+        log_message "ERROR: Failed to clean up remote backup file /root/backup.tar.gz"
         return false
       end
       true
     end
 
-    def ftp_backup(env:, backup_filename:)
+    def ftp_backup(env:, time:)
       return unless ftp_user && ftp_password && ftp_server
-      log_message "Uploading #{backup_filename} to FTP server #{ftp_server}..."
+      log_message "Uploading #{env}/#{time}_backup.tar.gz to FTP server #{ftp_server}..."
       Net::SFTP.start(ftp_server, ftp_user, password: ftp_password) do |sftp|
         case env
         when "staging"
-          local_path = File.join(Dir.home, "sqlite3_dumps", "staging", backup_filename)
-          remote_path = "/Hetzner/staging/#{backup_filename}"
+          local_path = File.join(Dir.home, "sqlite3_dumps", "staging", "#{time}_backup.tar.gz")
+          remote_path = "/Hetzner/staging/#{time}_backup.tar.gz"
         when "production"
-          local_path = File.join(Dir.home, "sqlite3_dumps", "production", backup_filename)
-          remote_path = "/Hetzner/mortimer/#{backup_filename}"
+          local_path = File.join(Dir.home, "sqlite3_dumps", "production", "#{time}_backup.tar.gz")
+          remote_path = "/Hetzner/mortimer/#{time}_backup.tar.gz"
         else
-          local_path = File.join(Dir.home, "sqlite3_dumps", backup_filename)
-          remote_path = "/Hetzner/staging/dev_#{backup_filename}"
+          local_path = File.join(Dir.home, "sqlite3_dumps", "development", "#{time}_backup.tar.gz")
+          remote_path = "/Hetzner/staging/dev_#{time}_backup.tar.gz"
         end
         sftp.upload!(local_path, remote_path)
       end
     end
 
-    def verify_and_finalize_backup(env:, backup_filename:)
+    def verify_and_finalize_backup(env:, time:)
       return unless ftp_user && ftp_password && ftp_server
-      log_message "Verifying and finalizing backup of #{backup_filename}..."
+      log_message "Verifying and finalizing backup of #{time}_backup.tar.gz..."
       dev = env == "development" ? "dev_" : ""
       local_path = remote_path = ""
       Net::SFTP.start(ftp_server, ftp_user, password: ftp_password) do |sftp|
         ftp_file = local_path = nil
         case env
         when "staging"
-          local_path = File.join(Dir.home, "sqlite3_dumps", "staging", backup_filename)
+          local_path = File.join(Dir.home, "sqlite3_dumps", "staging", "#{time}_backup.tar.gz")
           remote_path = "/Hetzner/staging"
         when "production"
-          local_path = File.join(Dir.home, "sqlite3_dumps", "production", backup_filename)
+          local_path = File.join(Dir.home, "sqlite3_dumps", "production", "#{time}_backup.tar.gz")
           remote_path = "/Hetzner/mortimer"
         else
-          local_path = File.join(Dir.home, "sqlite3_dumps", backup_filename)
+          local_path = File.join(Dir.home, "sqlite3_dumps", "development", "#{time}_backup.tar.gz")
           remote_path = "/Hetzner/staging"
         end
         sftp.dir.foreach(remote_path) do |entry|
-          ftp_file = entry.longname if entry.longname =~ /#{dev}#{backup_filename}/
+          ftp_file = entry.longname if entry.longname =~ /#{dev}#{time}_backup.tar.gz/
         end
 
         if !File.exist?(local_path) || File.zero?(local_path)
@@ -178,8 +204,8 @@ class DatabaseBackup
       # cleanup_old_backups
       backup_size = `du --si "#{local_path}"`.split.first
 
-      log_message "Backup completed successfully! File: #{backup_filename} (Size: #{backup_size})"
-      log_message "Backup location: #{remote_path}/#{dev}#{backup_filename}"
+      log_message "Backup completed successfully! File: #{time}_backup.tar.gz (Size: #{backup_size})"
+      log_message "Backup location: #{remote_path}/#{dev}#{time}_backup.tar.gz"
     end
 
     def cleanup_old_backups

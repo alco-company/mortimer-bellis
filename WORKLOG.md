@@ -28,6 +28,10 @@
 
 ## CHANGELOG
 
+### 17/11/2025
+
+- updated DatabaseBackup to include blobs - see README for docs on Maintenance/Backup
+
 ### 14/11/2025
 
 - setting up backup and documenting it - on docker5/docker6
