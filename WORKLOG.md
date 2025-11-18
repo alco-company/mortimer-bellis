@@ -28,6 +28,21 @@
 
 ## CHANGELOG
 
+### 18/11/2025
+
+- implemented comprehensive BackupTenantJob test suite
+- created BackupTenantJobTest with 9 test cases validating:
+  - complete backup file structure (dump.jsonl, metadata.json, manifest.json, blobs/)
+  - tenant data completeness across all tables
+  - tenant isolation (no data leakage)
+  - ActiveStorage attachments and blobs handling
+  - metadata accuracy with SHA256 checksums
+  - manifest record counts
+  - dependency ordering for referential integrity
+  - empty tenant edge case
+  - restorability smoke test
+- all tests passing (9 runs, 376 assertions)
+
 ### 17/11/2025
 
 - updated DatabaseBackup to include blobs - see README for docs on Maintenance/Backup
