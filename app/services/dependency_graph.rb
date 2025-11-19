@@ -21,7 +21,26 @@ class DependencyGraph
     end
 
     def models_and_children
-      @models_and_children ||= app_scoped_models.map { |m| [ m.table_name, m.reflections.values.select(&:belongs_to?).map(&:plural_name) ] }
+      @models_and_children ||= app_scoped_models.map do |m|
+        dependencies = m.reflections.values.select(&:belongs_to?).map do |reflection|
+          # For polymorphic associations, we can't determine the table, use plural_name
+          if reflection.polymorphic?
+            reflection.plural_name
+          else
+            # Use the actual table name from the reflection's class
+            begin
+              dep_table = reflection.klass.table_name
+              # Skip self-referential associations (would create cycles)
+              dep_table == m.table_name ? nil : dep_table
+            rescue
+              # Fallback to plural_name if klass can't be determined
+              reflection.plural_name
+            end
+          end
+        end.compact.uniq
+
+        [ m.table_name, dependencies ]
+      end
     end
 
     # there are two kinds of unique indexes,
@@ -115,44 +134,35 @@ class DependencyGraph
         order += remaining
       end
 
-      return order unless push_polymorphic_last
+      # Remove framework tables that we don't want to backup/restore
+      order = order.reject { |t| %w[solid_ action_ oauth_ noticed_].any? { |prefix| t.start_with?(prefix) } }
 
-      polymorphic = polymorphic_dependent_tables(pairs, original_deps, nodes)
+      # Ensure critical tenant-related tables are at the front in the right order
+      # This is important for backup/restore operations
+      critical_order = %w[tenants teams users]
+      critical_present = order & critical_order
+      other_tables = order - critical_order
 
-      # tables we will not handle
-      unhandled = order.select { |t| %w[solid_ action_ oauth_ noticed_].any? { |prefix| t.start_with?(prefix) } }
-      active_storage = order.select { |t| %w[active_storage].any? { |prefix| t.start_with?(prefix) } }
-
-      # Stable partition
-      dynamic = (order - active_storage).reject { |t| %w[tasks teams tenants users settings].include?(t) }
-      non_poly = dynamic.reject { |t| polymorphic.include?(t) }
-      poly     = dynamic.select { |t| polymorphic.include?(t) }
-      # non_poly + poly + %w[users settings] - unhandled
-      %w[tenants teams users] + non_poly + %w[tasks] + poly + %w[settings] + active_storage - unhandled
+      critical_present + other_tables
     end
 
     # Identify tables that should be pushed last:
     # 1) Have at least one dependency not present in the node set (likely polymorphic target name)
-    # 2) OR the model has any polymorphic belongs_to reflection (column *_type/*_id)
+    #
+    # Note: We used to also push tables that HAVE polymorphic associations to the end,
+    # but this breaks dependency chains. For example, 'calendars' is polymorphic but
+    # 'events' depends on it, so calendars must come before events.
+    #
+    # Only push tables that depend on UNKNOWN/EXTERNAL tables (like 'records' which
+    # doesn't exist as a concrete table but is a polymorphic target).
     def polymorphic_dependent_tables(pairs, original_deps, nodes)
       Rails.application.eager_load! unless Rails.application.config.eager_load
-      model_by_table = ApplicationRecord.descendants
-        .select { |m| m.respond_to?(:table_name) rescue false }
-        .index_by(&:table_name)
 
       tables = pairs.map(&:first)
       tables.select do |table|
         deps = original_deps[table] || []
-        unknown_dep = deps.any? { |d| !nodes.include?(d) }
-        poly_reflection =
-          begin
-            model = model_by_table[table]
-            model &&
-              model.reflections.values.any? { |r| r.belongs_to? && r.polymorphic? }
-          rescue
-            false
-          end
-        unknown_dep || poly_reflection
+        # Only push to end if this table depends on something that doesn't exist
+        deps.any? { |d| !nodes.include?(d) }
       end.to_set
     end
   end

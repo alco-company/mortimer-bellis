@@ -28,6 +28,52 @@
 
 ## CHANGELOG
 
+### 19/11/2025
+
+**RestoreTenantJob Complete Test Suite & Bug Fixes**
+
+- **Fixed critical purge_records bug**: Return value was `[summary, table_ids]` instead of `[summary, remapped_ids]`, breaking all ID remapping
+  - This single-line fix immediately resolved 2 test failures
+- **Implemented comprehensive tenant purge logic**:
+  - Purge ALL records belonging to target tenant (not just collision IDs)
+  - Never purge the tenant record itself (only child records)
+  - Always purge remapped temporary IDs created during remap phase
+  - Respects protected user/team IDs for session safety
+- **Added `update_tenant` setting** (defaults to `true`):
+  - When enabled: tenant attributes from backup ARE applied to target tenant
+  - When disabled: tenant attributes remain unchanged, only child records restored
+  - Properly maps source tenant ID → target tenant ID for cross-tenant restores
+- **Fixed ActiveStorage attachment restoration**:
+  - Attachments weren't being restored due to ID remapping
+  - Original backup IDs were lost after remapping
+  - Solution: Store original backup ID in instance variable for attachment matching
+  - Now properly restores mugshots and other attachments with remapped record IDs
+- **Implemented polymorphic association tests**:
+  - Verified Taggings (taggable) polymorphic associations restore correctly
+  - Verified Settings (setable) polymorphic associations restore correctly
+  - Both `_type` and `_id` fields handled properly with ID remapping
+- **Test suite results**: 16 runs, 80 assertions, 0 failures, 0 errors, 2 skips
+- **Tests implemented**:
+  1. ✅ Archive and tenant validation
+  2. ✅ Purge mode (clean slate restore)
+  3. ✅ Tenant attribute updates from backup
+  4. ✅ Tenant attribute preservation when update_tenant=false
+  5. ✅ Remap mode (preserve existing records)
+  6. ✅ Dry run mode
+  7. ✅ Tenant isolation
+  8. ✅ FK associations remapping
+  9. ✅ Dependency order compliance
+  10. ✅ Empty tenant handling
+  11. ✅ ActiveStorage attachments (mugshots)
+  12. ✅ Polymorphic associations (taggings, settings)
+- **Skipped tests** (2):
+  - Self-referential foreign keys (Editor::Block parent_id)
+  - Checksum validation in strict mode
+- **Documentation added**:
+  - Added notes to Editor::Block and Editor::Document about untested backup/restore coverage
+  - Self-referential parent/child relationships untested
+  - Hierarchical block structure restoration untested
+
 ### 18/11/2025
 
 - implemented comprehensive BackupTenantJob test suite

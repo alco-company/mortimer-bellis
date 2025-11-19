@@ -1,5 +1,10 @@
 class Editor::Document < ApplicationRecord
   self.table_name = "editor_documents"
+
+  # NOTE: BackupTenantJob and RestoreTenantJob tests do not currently verify
+  # restoration of editor documents and their nested block structure. Backup/restore
+  # should work but the hierarchical block relationships are untested.
+
   belongs_to :tenant, class_name: "Tenant", optional: true
   has_many :blocks, -> { where(parent_id: nil).order(:position) }, class_name: "Editor::Block", dependent: :destroy
   # has_many :children, -> { order(:position) }, class_name: "Editor::Block", foreign_key: :parent_id, dependent: :destroy

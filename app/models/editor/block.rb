@@ -3,6 +3,10 @@ class Editor::Block < ApplicationRecord
   # STI support (optional)
   self.inheritance_column = nil
 
+  # NOTE: BackupTenantJob and RestoreTenantJob tests do not currently verify
+  # self-referential parent/child relationships for this model. The parent_id
+  # foreign key remapping should work but is untested.
+
   belongs_to :document, class_name: "Editor::Document", foreign_key: "document_id"
   belongs_to :parent, class_name: "Editor::Block", optional: true
   has_many :children, class_name: "Editor::Block", foreign_key: "parent_id", dependent: :destroy

@@ -150,33 +150,31 @@ module Persistence
     #
     # - remap if necessary and !strict
     #
-    def restore(summary, extracted_root, record, remapped_ids)
+    def restore(summary, extracted_root, record, remapped_ids, dry_run = false)
       results = []
 
       record.class.reflections.values.select(&:belongs_to?).each do |reflection|
         summary, record, result, _msg = check_association(summary, record, reflection, remapped_ids)
         results << result
       end
-      unless results.include?(:error)
-        begin
-          old_id = record.id
-          remapped_ids[record.class.table_name] ||= { "id" => {} }
-          # WTF!
-          remapped_ids[record.class.table_name]["id"][old_id] = "0" unless old_id.nil?
-          record.save(validate: false) unless @dry_run
-          remapped_ids[record.class.table_name]["id"][old_id] = record.id.to_s
-          #
-          # restore attachments
-          restore_attachments(summary, record, extracted_root, old_id)
-        rescue => e
-          summary << ({ step: :restore_record, record: "#{record.class.table_name}, #{record.id}", error: e.message })
-        end
+      # Save the record even if association checks had errors - dependencies are restored in order
+      # so associations will be available when needed
+      begin
+        old_id = record.id
+        # Get original ID from backup for attachment restoration (may differ from old_id if remapped)
+        original_backup_id = record.instance_variable_get(:@_original_backup_id) || old_id
+        remapped_ids[record.class.table_name] ||= { "id" => {} }
+        record.save(validate: false) unless dry_run
+        remapped_ids[record.class.table_name]["id"][old_id.to_s] = record.id.to_s unless old_id.nil?
+        #
+        # restore attachments using original backup ID to match attachment records
+        restore_attachments(summary, record, extracted_root, original_backup_id)
+      rescue => e
+        summary << ({ step: :restore_record, record: "#{record.class.table_name}, #{record.id}", error: e.message, backtrace: e.backtrace.first(3) })
       end
 
       [ summary, record ]
-    end
-
-    #
+    end    #
     # remapped_ids["tenants"] = { "id" => { "2" => "3" } }
     #
     def check_association(summary, record, reflection, remapped_ids)
@@ -190,12 +188,12 @@ module Persistence
         # polymorphic association believed to be remapped
         if rid && record[reflection.foreign_type] && record[fk]
           _ = safe_constantize(record[reflection.foreign_type]).unscoped.find(rid)
-          record[fk] = rid
+          record[fk] = rid.to_i
         end
       else
         raise "ID missing" if rid.nil?
         _ = reflection.klass.unscoped.find(rid)
-        record[fk] = rid
+        record[fk] = rid.to_i
       end
       summary << ({ step: :check_association_done, record: "#{record.class.table_name}, #{record.id}", association: tbl, foreign_key: fk, remapped_foreign_key_value: record[fk].to_s })
       [ summary, record, :success, tbl ]
