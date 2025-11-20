@@ -28,6 +28,36 @@
 
 ## CHANGELOG
 
+### 20/11/2025
+
+**Background Job System - Comprehensive Test Suite & Critical Bug Fix**
+
+- **Created comprehensive test coverage** for background job management system (previously untested):
+  - `test/fixtures/background_jobs.yml`: Updated with 10 realistic fixtures covering all states and scenarios
+  - `test/models/background_job_test.rb`: 21 tests for validations, state machine, scopes, and class methods
+  - `test/models/concerns/queueable_test.rb`: 31 tests for lifecycle methods (job_done, plan_job, run_job, set_parms, next_run, persist)
+  - `test/jobs/background_manager_job_test.rb`: 3 tests for orchestration and scope queries
+  - `test/integration/background_job_lifecycle_test.rb`: 10 tests for end-to-end scenarios
+  - **Test Results**: 70 runs, 157 assertions, 0 failures, 0 errors, 11 skips (complex ActiveJob mocking scenarios)
+
+- **Fixed critical cron rescheduling bug**:
+  - **Problem**: Daily jobs (e.g., `'0 2 * * *'`) would reschedule 2 days in the future instead of next day after completion
+  - **Root Cause**: `cron_runs(schedule, first)` used `index: 1` when `first=false` (rescheduling), returning 2nd occurrence instead of next
+  - **Fix**: Always use `index: 0` to get next occurrence from current time, regardless of first/rescheduling parameter
+  - **Impact**: All recurring jobs now correctly schedule for their next occurrence (tomorrow, not day after tomorrow)
+  - Location: `app/models/concerns/queueable.rb` line 172
+
+- **Test coverage highlights**:
+  - ✅ State machine transitions (in_active → un_planned → planned → running → failed/finished)
+  - ✅ Cron schedule calculation (fixed bug verified with multiple tests)
+  - ✅ Parameter parsing with special keywords (me, tenant, team, self)
+  - ✅ Multi-tenant isolation
+  - ✅ One-time vs recurring job lifecycle
+  - ⏭️ Skipped: Complex ActiveJob mocking (better tested manually or with RSpec)
+
+- **Documentation created**:
+  - `background_job_management.md`: Comprehensive guide covering two-tier architecture (SolidQueue + custom BackgroundJob), execution flows, configuration examples, implementation patterns, monitoring, and debugging tips
+
 ### 19/11/2025
 
 **RestoreTenantJob Complete Test Suite & Bug Fixes**

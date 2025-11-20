@@ -171,7 +171,10 @@ module Queueable
     #
     def cron_runs(schedule, first)
       # crontask, dt=nil, number=0, scope='today', only_later=true
-      CronTask::CronTask.next_run(schedule: schedule, scope: "week", index: (first ? 0 : 1))
+      # BUG FIX: Always use index: 0 to get the next occurrence from now.
+      # The 'first' parameter indicates initial scheduling vs rescheduling,
+      # but both should return the next occurrence, not the second one.
+      CronTask::CronTask.next_run(schedule: schedule, scope: "week", index: 0)
     end
 
     #
