@@ -95,14 +95,17 @@ class BackupTenantJob < ApplicationJob
       log_progress(summary, step: :metadata_error, message: e.message)
     end
 
-    archive_path = Rails.root.join("tmp", "#{label}.tar.gz")
+    archive_path = Rails.root.join("tmp", "#{label}.tar.gz").to_s
     begin
       Dir.chdir(base_dir.dirname)
-      system("tar -czf #{archive_path} #{label}")
+      success = system("tar -czf #{archive_path} #{label}")
+      unless success
+        raise "tar command failed with exit code #{$?.exitstatus}"
+      end
     ensure
       Dir.chdir(Rails.root)
     end
-    log_progress(summary, step: :archive_created, path: archive_path.to_s)
+    log_progress(summary, step: :archive_created, path: archive_path)
 
     begin
       TenantMailer.with(tenant: tenant, link: archive_path.to_s).backup_created.deliver_later

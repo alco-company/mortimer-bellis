@@ -58,6 +58,8 @@
 - **Documentation created**:
   - `background_job_management.md`: Comprehensive guide covering two-tier architecture (SolidQueue + custom BackgroundJob), execution flows, configuration examples, implementation patterns, monitoring, and debugging tips
 
+**Fix error in saving backup for tenant**
+
 ### 19/11/2025
 
 **RestoreTenantJob Complete Test Suite & Bug Fixes**
