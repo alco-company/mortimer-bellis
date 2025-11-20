@@ -207,6 +207,9 @@ Rails.application.routes.draw do
   # Can be used by load balancers and uptime monitors to verify that the app is live.
   get "up" => "rails/health#show", as: :rails_health_check
 
+  # Tenant backup download
+  get "tenant_backups/:filename", to: "tenant_backups#download", as: :tenant_backup_download
+
   resources :modal, controller: "modal"
 
   # Render dynamic PWA files from app/views/pwa/*

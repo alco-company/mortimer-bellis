@@ -14,7 +14,8 @@ class BackupTenantJob < ApplicationJob
     # Setup working directory and backup files
     timestamp = Time.now.utc.strftime("%Y%m%d%H%M%S")
     label = "tenant_#{tenant.id}_#{timestamp}"
-    base_dir = Rails.root.join("tmp", label)
+    # Use storage directory instead of tmp - tmp is not persisted in Docker volumes
+    base_dir = Rails.root.join("storage", "tenant_backup", label)
     FileUtils.mkdir_p(base_dir)
 
     manifest = []
@@ -95,7 +96,7 @@ class BackupTenantJob < ApplicationJob
       log_progress(summary, step: :metadata_error, message: e.message)
     end
 
-    archive_path = Rails.root.join("tmp", "#{label}.tar.gz").to_s
+    archive_path = Rails.root.join("storage", "tenant_backup", "#{label}.tar.gz").to_s
     begin
       Dir.chdir(base_dir.dirname)
       success = system("tar -czf #{archive_path} #{label}")
@@ -108,8 +109,11 @@ class BackupTenantJob < ApplicationJob
     log_progress(summary, step: :archive_created, path: archive_path)
 
     begin
-      TenantMailer.with(tenant: tenant, link: archive_path.to_s).backup_created.deliver_later
-      log_progress(summary, step: :email_enqueued)
+      # Generate a proper download URL instead of file path
+      filename = File.basename(archive_path)
+      download_url = Rails.application.routes.url_helpers.tenant_backup_download_url(filename: filename, host: ENV["WEB_HOST"] || "localhost:3000", protocol: "https")
+      TenantMailer.with(tenant: tenant, link: download_url).backup_created.deliver_later
+      log_progress(summary, step: :email_enqueued, download_url: download_url)
     rescue => e
       say "BackupTenantJob email failed: #{e.message}"
       log_progress(summary, step: :error, phase: :email, message: e.message)

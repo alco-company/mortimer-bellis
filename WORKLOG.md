@@ -47,6 +47,26 @@
   - **Impact**: All recurring jobs now correctly schedule for their next occurrence (tomorrow, not day after tomorrow)
   - Location: `app/models/concerns/queueable.rb` line 172
 
+- **Fixed BackupTenantJob critical issues** (discovered on staging server):
+  - **Problem 1**: Backup archives not created - job ran, sent email, but no `.tar.gz` file existed
+  - **Root Cause 1**: Files written to `/rails/tmp` which is NOT mounted as Docker volume (ephemeral storage)
+  - **Fix 1**: Changed backup location from `tmp/` to `storage/tenant_backup/` (persisted volume mount)
+  - **Problem 2**: Archive path became relative when changing directories for tar command
+  - **Fix 2**: Convert `archive_path` to string (absolute path) before `Dir.chdir` to preserve full path
+  - **Problem 3**: No error checking on `system("tar -czf ...")` command - silent failures
+  - **Fix 3**: Check `system()` return value and raise exception if tar command fails
+  - **Problem 4**: Email contained file system path instead of downloadable URL
+  - **Fix 4**: Created `/tenant_backups/:filename` download route with security checks
+  - Location: `app/jobs/backup_tenant_job.rb`, `app/controllers/tenant_backups_controller.rb`, `config/routes.rb`
+
+- **TenantBackupsController** (new):
+  - Download endpoint for tenant backup archives at `/tenant_backups/:filename`
+  - Security validations:
+    - Filename format validation (`tenant_ID_TIMESTAMP.tar.gz`)
+    - File existence check
+    - Tenant ownership verification (user's tenant must match filename tenant ID)
+  - Serves files with proper `Content-Type: application/gzip` and `Content-Disposition: attachment`
+
 - **Test coverage highlights**:
   - ✅ State machine transitions (in_active → un_planned → planned → running → failed/finished)
   - ✅ Cron schedule calculation (fixed bug verified with multiple tests)
@@ -59,6 +79,8 @@
   - `background_job_management.md`: Comprehensive guide covering two-tier architecture (SolidQueue + custom BackgroundJob), execution flows, configuration examples, implementation patterns, monitoring, and debugging tips
 
 **Fix error in saving backup for tenant**
+
+
 
 ### 19/11/2025
 
