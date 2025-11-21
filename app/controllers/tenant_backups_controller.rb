@@ -1,6 +1,18 @@
-class TenantBackupsController < ApplicationController
-  before_action :authenticate_user!
+class TenantBackupsController < MortimerController
+  #
+  # defined in the batch_actions concern
+  skip_before_action :set_batch, only: %i[ new index destroy] # new b/c of modal
+  #
+  # defined in the resourceable concern
+  skip_before_action :set_resource, only: %i[ new show edit update destroy ]
+  skip_before_action :set_filter, only: %i[ new index destroy ] # new b/c of modal
+  skip_before_action :set_resources, only: %i[ index destroy ]
+  skip_before_action :set_resources_stream
+  skip_before_action :set_user_resources_stream, only: %i[ index ]
 
+  #
+  # GET /tenant_backups/tenant_1_20251121071300.tar.gz
+  #
   def download
     filename = params[:filename]
 

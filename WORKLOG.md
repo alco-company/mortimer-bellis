@@ -32,6 +32,7 @@
 
 - fix route on tenant_backup
 - missed an 's' on the path
+- fix'ed 403
 
 ### 20/11/2025
 
