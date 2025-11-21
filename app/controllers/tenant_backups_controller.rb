@@ -9,7 +9,7 @@ class TenantBackupsController < ApplicationController
       return head :not_found
     end
 
-    file_path = Rails.root.join("storage", "tenant_backup", filename)
+    file_path = Rails.root.join("storage", "tenant_backups", filename)
 
     # Check file exists
     unless File.exist?(file_path)

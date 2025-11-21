@@ -28,6 +28,10 @@
 
 ## CHANGELOG
 
+### 21/11/2025
+
+- fix route on tenant_backup
+
 ### 20/11/2025
 
 **Background Job System - Comprehensive Test Suite & Critical Bug Fix**

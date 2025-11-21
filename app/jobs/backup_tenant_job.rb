@@ -15,7 +15,7 @@ class BackupTenantJob < ApplicationJob
     timestamp = Time.now.utc.strftime("%Y%m%d%H%M%S")
     label = "tenant_#{tenant.id}_#{timestamp}"
     # Use storage directory instead of tmp - tmp is not persisted in Docker volumes
-    base_dir = Rails.root.join("storage", "tenant_backup", label)
+    base_dir = Rails.root.join("storage", "tenant_backups", label)
     FileUtils.mkdir_p(base_dir)
 
     manifest = []
