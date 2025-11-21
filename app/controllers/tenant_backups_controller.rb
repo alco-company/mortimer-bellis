@@ -39,4 +39,8 @@ class TenantBackupsController < MortimerController
               type: "application/gzip",
               disposition: "attachment"
   end
+
+  def restore
+    redirect_to root_path, alert: "Restore functionality is not implemented yet."
+  end
 end

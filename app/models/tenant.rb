@@ -223,4 +223,8 @@ class Tenant < ApplicationRecord
       pro: I18n.t("tenants.licenses.pro")
     }
   end
+
+  def available_backups
+    Dir.new(Rails.root.join("storage", "tenant_backups")).children.select { |f| f.start_with?("tenant_#{id}_") }.sort.reverse
+  end
 end
