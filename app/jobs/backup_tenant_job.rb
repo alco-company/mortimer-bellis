@@ -114,6 +114,10 @@ class BackupTenantJob < ApplicationJob
       download_url = Rails.application.routes.url_helpers.tenant_backup_download_url(filename: filename, host: ENV["WEB_HOST"] || "localhost:3000", protocol: "https")
       TenantMailer.with(tenant: tenant, link: download_url).backup_created.deliver_later
       log_progress(summary, step: :email_enqueued, download_url: download_url)
+
+      # Cleanup: Remove temporary directory after successful archive creation and email queuing
+      FileUtils.rm_rf(base_dir)
+      log_progress(summary, step: :cleanup_completed, removed: base_dir.to_s)
     rescue => e
       say "BackupTenantJob email failed: #{e.message}"
       log_progress(summary, step: :error, phase: :email, message: e.message)
