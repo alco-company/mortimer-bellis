@@ -34,6 +34,7 @@
 - missed an 's' on the path
 - fix'ed 403
 - cleanup after work
+- put help attribute under field, and background_job plan in particular
 
 ### 20/11/2025
 

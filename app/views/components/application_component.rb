@@ -48,7 +48,7 @@ class ApplicationComponent < Phlex::HTML
   end
 
   def t(key, **options)
-    I18n.t(key, **options)
+    I18n.t(key, **options).html_safe
   rescue
     key
   end

@@ -38,7 +38,7 @@ module FormSpecializations
               span { I18n.t("activerecord.attributes.#{component.field.parent.key}.#{component.field.key}") }
               span { label_suffix.to_s.html_safe }
             end
-            if component.send(:attributes).keys&.include?(:help)
+            if component.send(:attributes).keys&.include?(:help) && component.send(:attributes)[:help].include?("http")
               button(type: "button", data: { action: "click->input#help", src: component.send(:attributes)[:help] }, class: "absolute inset-y-0 right-0 -top-1 flex items-center") do
                 render Icons::Help.new css: "h-5 w-5 text-gray-400 rotate-15 hover:rotate-30 hover:text-gray-600"
               end
@@ -46,7 +46,12 @@ module FormSpecializations
           end
         end
         @editable ?
-          render(component) :
+          div() do
+            render(component)
+            if component.send(:attributes).keys&.include?(:help) && !component.send(:attributes)[:help].include?("http")
+              span(class: "relative -top-2 text-xs/0 text-gray-300") { component.send(:attributes)[:help] }
+            end
+          end :
           div(class: "mr-5") do
             model.field_formats(component.field.key) == :file ?
             display_image(component.field) :

@@ -46,6 +46,7 @@ da:
       new: Nyt baggrundsjob
       edit: Rediger baggrundsjob
       show: Vis baggrundsjob
+      schedule_help: "<b class='text-bold'>Cron-format</b> angives i UTC (f.eks. '0 3 * * *' for dagligt kl. 3)"
 
     new:
       title: Nyt baggrundsjob

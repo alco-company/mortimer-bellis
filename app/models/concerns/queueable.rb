@@ -169,8 +169,11 @@ module Queueable
     # crontask, dt=nil, number=0, scope='today', only_later=true
     # return the first - after DateTime.current - back
     #
+    # Cron schedules are interpreted as UTC times.
+    # The database stores UTC, and the UI layer is responsible for
+    # displaying times in each user's local timezone.
+    #
     def cron_runs(schedule, first)
-      # crontask, dt=nil, number=0, scope='today', only_later=true
       # BUG FIX: Always use index: 0 to get the next occurrence from now.
       # The 'first' parameter indicates initial scheduling vs rescheduling,
       # but both should return the next occurrence, not the second one.

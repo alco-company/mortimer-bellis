@@ -4,11 +4,14 @@ class BackgroundJobsController < MortimerController
   # end
 
   def create_callback
-    resource.plan_job
+    # Don't plan the job during create - it will be planned when the user clicks "toggle" or edits it
+    # This avoids URL generation issues during Turbo Stream broadcasting
+    true
   end
 
   def update_callback
     resource.plan_job
+    true
   end
 
 
