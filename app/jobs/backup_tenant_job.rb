@@ -96,7 +96,7 @@ class BackupTenantJob < ApplicationJob
       log_progress(summary, step: :metadata_error, message: e.message)
     end
 
-    archive_path = Rails.root.join("storage", "tenant_backup", "#{label}.tar.gz").to_s
+    archive_path = Rails.root.join("storage", "tenant_backups", "#{label}.tar.gz").to_s
     begin
       Dir.chdir(base_dir.dirname)
       success = system("tar -czf #{archive_path} #{label}")

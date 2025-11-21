@@ -31,6 +31,7 @@
 ### 21/11/2025
 
 - fix route on tenant_backup
+- missed an 's' on the path
 
 ### 20/11/2025
 
