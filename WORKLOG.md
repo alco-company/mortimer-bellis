@@ -28,6 +28,48 @@
 
 ## CHANGELOG
 
+### 24/11/2025
+
+- make sure next_run_at is in the future
+**Tenant Backup Restore Implementation & Background Job Fixes**
+
+- **Tenant Restore Functionality** (first functional implementation):
+  - Created confirmation modal for restore operations (`app/views/modal/_restore_backup.html.erb`)
+  - Modal displays backup date and warning about data overwrite
+  - Integrated with modal controller system using `new_modal_url`
+  - Route changed from GET to POST to allow database writes (`tenant_backup_restore_path`)
+  - Fixed "Write query attempted while in readonly mode" error by wrapping restore logic in `ActiveRecord::Base.connected_to(role: :writing)`
+  - Restore creates BackgroundJob and enqueues RestoreTenantJob
+  - Terminates user session after restore initiated (requires re-login after restore completes)
+  - Location: `app/controllers/tenant_backups_controller.rb`, `app/controllers/modal_controller.rb`, `app/views/modal/_restore_backup.html.erb`, `config/routes.rb`
+
+- **Background Job Multiple Execution Bug Fix**:
+  - **Problem**: BackupTenantJob running 5-6 times and sending multiple emails
+  - **Root Cause**: Jobs completing and rescheduling with `next_run_at` still in the past, getting immediately picked up again by BackgroundManagerJob
+  - **Fix**: Added safety check in `cron_runs` to ensure next_run_at is at least 10 seconds in the future; if not, get the second occurrence (index: 1) instead
+  - **Impact**: Prevents immediate re-execution of jobs that take longer than expected to complete
+  - Location: `app/models/concerns/queueable.rb` line 177-183
+
+- **Cron Schedule Timezone Clarification**:
+  - Reverted complex timezone calculations - cron schedules are now interpreted as **UTC times**
+  - Database always stores UTC timestamps
+  - UI layer responsible for displaying times in user's local timezone
+  - Simplifies logic and prevents timezone confusion across multi-tenant users in different timezones
+  - User enters `1 9 * * *` = "09:01 UTC", stored as `2025-11-22 09:01:00 +0000`
+  - Location: `app/models/concerns/queueable.rb` line 170-183
+
+- **BackgroundJobsController Fixes**:
+  - `create_callback` no longer calls `plan_job` to avoid URL generation issues during Turbo Stream broadcasting
+  - `update_callback` explicitly returns `true` to ensure callback success even when job is `in_active`
+  - Fixed issue preventing state changes to `in_active`
+  - Location: `app/controllers/background_jobs_controller.rb`
+
+- **BackupTenantJob Cleanup**:
+  - Added automatic cleanup of temporary directory after successful archive creation and email queuing
+  - Uses `FileUtils.rm_rf(base_dir)` to remove JSONL files, manifest, and metadata after tar archive is created
+  - Prevents disk space accumulation from temporary backup files
+  - Location: `app/jobs/backup_tenant_job.rb` line 118
+
 ### 21/11/2025
 
 - fix route on tenant_backup

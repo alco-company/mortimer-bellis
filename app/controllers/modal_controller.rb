@@ -7,15 +7,19 @@ class ModalController < MortimerController
 
   def new
     # resource
-    @resource = find_resource
-    case resource_class.to_s.underscore
-    when "calendar"; process_calendar_new
-    when "event"; process_event_new
-    when "employee"; process_employee_new
-    when "punch_card"; process_punch_card_new
-    when "tenant"; process_tenant_new
-    when "page"; process_help_new
-    else; process_other_new
+    case params[:modal_form]
+    when "restore_backup"; process_restore_backup_new
+    else
+      @resource = find_resource
+      case resource_class.to_s.underscore
+      when "calendar"; process_calendar_new
+      when "event"; process_event_new
+      when "employee"; process_employee_new
+      when "punch_card"; process_punch_card_new
+      when "tenant"; process_tenant_new
+      when "page"; process_help_new
+      else; process_other_new
+      end
     end
   end
 
@@ -29,13 +33,17 @@ class ModalController < MortimerController
 
   # Parameters: {"authenticity_token"=>"[FILTERED]", "modal_form"=>"payroll", "last_payroll_at"=>"2024-04-16", "update_payroll"=>"on", "button"=>""}
   def create
-    case resource_class.to_s.underscore
-    when "employee"; process_employee_create
-    when "punch_card"; process_punch_card_create
-    when "event"; process_event_create
-    when "time_material"; process_time_material_create
-    when "tenant"; process_tenant_create
-    else; process_other_create
+    case params[:modal_form]
+    when "restore_backup"; process_restore_backup_create
+    else
+      case resource_class.to_s.underscore
+      when "employee"; process_employee_create
+      when "punch_card"; process_punch_card_create
+      when "event"; process_event_create
+      when "time_material"; process_time_material_create
+      when "tenant"; process_tenant_create
+      else; process_other_create
+      end
     end
   end
 
@@ -366,9 +374,21 @@ class ModalController < MortimerController
       end
     end
 
+    def process_restore_backup_new
+      @filename = params[:filename]
+      @backup_date = DateTime.parse(@filename.split("_")[2].split(".")[0]).in_time_zone rescue Time.current
+    end
+
+    def process_restore_backup_create
+      # This shouldn't be called anymore since the form submits directly to tenant_backups#restore
+      # But keeping it for backwards compatibility
+      filename = params[:filename]
+      redirect_to root_path, alert: "Please use the modal to confirm restore."
+    end
+
   # def any_filters?
   #   return false if @filter.nil? or params.dig(:controller).split("/").last == "filters" or params.dig(:action) == "lookup"
-  #   # !@filter.id.nil?
+  #   # !@filter.id.nil?r
   #   @filter.persisted?
   # end
 

@@ -209,7 +209,7 @@ Rails.application.routes.draw do
 
   # Tenant backup download - constraints to handle .tar.gz extension properly
   get "tenant_backups/*filename", to: "tenant_backups#download", as: :tenant_backup_download, constraints: { filename: /.*/ }
-  get "tenant_restores/*filename", to: "tenant_backups#restore", as: :tenant_backup_restore, constraints: { filename: /.*/ }
+  post "tenant_restores/*filename", to: "tenant_backups#restore", as: :tenant_backup_restore, constraints: { filename: /.*/ }
 
   resources :modal, controller: "modal"
 

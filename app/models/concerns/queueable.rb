@@ -177,7 +177,16 @@ module Queueable
       # BUG FIX: Always use index: 0 to get the next occurrence from now.
       # The 'first' parameter indicates initial scheduling vs rescheduling,
       # but both should return the next occurrence, not the second one.
-      CronTask::CronTask.next_run(schedule: schedule, scope: "week", index: 0)
+      next_run = CronTask::CronTask.next_run(schedule: schedule, scope: "week", index: 0)
+
+      # Safety check: ensure next_run is in the future (at least 10 seconds from now)
+      # to prevent immediate re-execution if the job took longer than expected
+      if next_run && Time.at(next_run) <= Time.current + 60.seconds
+        # If the returned time is not sufficiently in the future, get the second occurrence
+        next_run = CronTask::CronTask.next_run(schedule: schedule, scope: "week", index: 1)
+      end
+
+      next_run
     end
 
     #

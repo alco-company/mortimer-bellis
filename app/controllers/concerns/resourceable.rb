@@ -57,7 +57,10 @@ module Resourceable
         model = params_cls.classify.constantize
         _m = model.new
       else
-        model = nil
+        model = case params.dig(:modal_form)
+        when "restore_backup"; Tenant
+        else nil
+        end
       end
 
       ctrl = params_ctrl&.split("/")&.last
