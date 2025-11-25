@@ -28,6 +28,10 @@
 
 ## CHANGELOG
 
+### 25/11/2025
+
+- cleanup old backups
+
 ### 24/11/2025
 
 - make sure next_run_at is in the future

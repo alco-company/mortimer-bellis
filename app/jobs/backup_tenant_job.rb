@@ -118,6 +118,9 @@ class BackupTenantJob < ApplicationJob
       # Cleanup: Remove temporary directory after successful archive creation and email queuing
       FileUtils.rm_rf(base_dir)
       log_progress(summary, step: :cleanup_completed, removed: base_dir.to_s)
+      
+      # Remove old backups (8+ days old) for this tenant
+      cleanup_old_backups(tenant)
     rescue => e
       say "BackupTenantJob email failed: #{e.message}"
       log_progress(summary, step: :error, phase: :email, message: e.message)
@@ -128,5 +131,33 @@ class BackupTenantJob < ApplicationJob
     say "BackupTenantJob failed: #{e.message}"
     log_progress(summary, step: :failed, message: e.message)
     UserMailer.error_report(e.full_message, "BackupTenantJob#perform").deliver_later rescue nil
+  end
+
+  private
+
+  def cleanup_old_backups(tenant)
+    backup_dir = Rails.root.join("storage", "tenant_backups")
+    return unless Dir.exist?(backup_dir)
+
+    cutoff_time = 8.days.ago
+    pattern = "tenant_#{tenant.id}_*.tar.gz"
+    
+    Dir.glob(File.join(backup_dir, pattern)).each do |file_path|
+      # Extract timestamp from filename: tenant_ID_TIMESTAMP.tar.gz
+      filename = File.basename(file_path)
+      if filename =~ /tenant_\d+_(\d{14})\.tar\.gz/
+        timestamp_str = $1
+        # Parse timestamp: YYYYMMDDHHMMSS
+        file_time = Time.strptime(timestamp_str, "%Y%m%d%H%M%S") rescue nil
+        
+        if file_time && file_time < cutoff_time
+          File.delete(file_path)
+          say "Deleted old backup: #{filename} (created #{file_time})"
+        end
+      end
+    end
+  rescue => e
+    say "Error cleaning up old backups: #{e.message}"
+    # Don't fail the job if cleanup fails
   end
 end
