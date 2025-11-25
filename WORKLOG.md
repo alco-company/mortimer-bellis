@@ -36,6 +36,7 @@
 - job.next_run_at nil!
 - job.shouldnt? returned !can? inverse: true - which was double neg!!
 - don't finish job - reschedule once finished
+- on backup background_jobs that are active? will be set to un_planned - to be prepared for restore
 
 ### 24/11/2025
 

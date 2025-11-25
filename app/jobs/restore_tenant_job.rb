@@ -622,6 +622,18 @@ class RestoreTenantJob < ApplicationJob
                 puts "DEBUG: Overriding tenant_id for #{table}: #{old_tenant_id} -> #{@tenant.id}"
               end
 
+              # Sanitize BackgroundJob records to reset runtime state
+              if table == "background_jobs"
+                # Reset active jobs to un_planned (1) so they can be rescheduled
+                # Keep inactive jobs as inactive (0)
+                # Clear job_id (SolidQueue job ID no longer valid)
+                # Keep schedule and other config, but reset next_run_at to nil
+                attrs["state"] = attrs["state"] == 0 ? 0 : 1  # Keep in_active (0), otherwise un_planned (1)
+                attrs["job_id"] = nil
+                attrs["next_run_at"] = nil
+                summary << ({ table: table, action: "sanitized_background_job", id: attrs["id"], state: attrs["state"] })
+              end
+
               if setting(:strict) || (!setting(:purge) && !setting(:remap))
                 record = klass.find_by(id: attrs["id"]) || raise("Record not found - cannot restore :strict!")
                 record.update(attrs) unless setting(:dry_run)
