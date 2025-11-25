@@ -32,6 +32,7 @@
 - cleanup old backups
 - commands to use proper shell escaping
 - lost recurring down the road - reintroduce the BackgroundManagerJob
+- wrong format, arghh!
 
 ### 24/11/2025
 
