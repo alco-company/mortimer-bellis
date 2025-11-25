@@ -38,6 +38,7 @@
 - don't finish job - reschedule once finished
 - on backup background_jobs that are active? will be set to un_planned - to be prepared for restore
 - active_jobs are removed when background_jobs are deleted/changing state
+- once done background_jobs should reschedule - not stay 'running'
 
 ### 24/11/2025
 

@@ -16,8 +16,8 @@ module Queueable
       begin
         if schedule.blank?
           # One-time job - mark as finished and clear job_id and next_run_at
-          finished! unless failed?
-          persist(nil, nil)
+          # Use update! instead of persist to trigger callbacks that cancel the ActiveJob
+          update!(state: :finished, job_id: nil, next_run_at: nil) unless failed?
         else
           # Recurring job - plan the next execution BEFORE marking as finished
           # (plan_job requires active? to be true)
