@@ -7,7 +7,7 @@ class BackgroundManagerJob < ApplicationJob
     BackgroundJob.any_jobs_to_run.each do |job|
       case true
       when job.un_planned?; plan_job(job)
-      when job.planned?; run_job(job) if job.next_run_at <= Time.current
+      when job.planned?; run_job(job) if job.next_run_at.nil? || job.next_run_at <= Time.current
       end
     end
   rescue => error

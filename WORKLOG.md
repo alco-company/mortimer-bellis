@@ -33,6 +33,7 @@
 - commands to use proper shell escaping
 - lost recurring down the road - reintroduce the BackgroundManagerJob
 - wrong format, arghh!
+- job.next_run_at nil!
 
 ### 24/11/2025
 
