@@ -65,9 +65,13 @@ module Queueable
         if next_run_at && t && first
           t = Time.at(t).in_time_zone("UTC") < Time.at(next_run_at).in_time_zone("UTC") ? t : next_run_at
         end
-        t ? run_job(t) : persist(nil, nil)
+        result = t ? run_job(t) : persist(nil, nil)
+        result
       rescue => exception
+        Rails.logger.error "BackgroundJob.plan_job failed: #{exception.message}"
+        Rails.logger.error exception.backtrace.join("\n")
         say "BackgroundJob.plan_job failed due to #{exception}"
+        nil
       end
     end
 
@@ -84,7 +88,7 @@ module Queueable
     #
     def run_job(t = nil)
       begin
-        return if shouldnt?(:run)
+        return nil if shouldnt?(:run)
         o = set_parms
         w = job_klass.constantize
         s = 2
@@ -96,9 +100,13 @@ module Queueable
           s = 3
         end
         t = Time.at(t.to_i).utc rescue nil
-        persist id, t, s
+        result = persist(id, t, s)
+        result
       rescue => exception
+        Rails.logger.error "BackgroundJob.run_job failed: #{exception.message}"
+        Rails.logger.error exception.backtrace.join("\n")
         say "BackgroundJob.run_job failed due to #{exception}"
+        nil
       end
     end
 
