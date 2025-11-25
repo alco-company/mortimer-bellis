@@ -21,12 +21,15 @@ module Queueable
         else
           # Recurring job - plan the next execution BEFORE marking as finished
           # (plan_job requires active? to be true)
-          result = plan_job(false) # false = get next occurrence, not first
+          # Skip permission check since this job is already running and rescheduling itself
+          Rails.logger.info "BGJ --------------------------------- BackgroundJob.job_done: job_id=#{job_id}, background_job_id=#{id}"
+          result = plan_job(false, skip_permission_check: true) # false = get next occurrence, not first
+          Rails.logger.info "BGJ --------------------------------- BackgroundJob.job_done: planned next run, result=#{result.inspect}"
           # Note: plan_job will update state to 'planned' via persist(), so no need to call finished!
           result
         end
       rescue => exception
-        Rails.logger.error "BackgroundJob.job_done failed due to #{exception}"
+        Rails.logger.error "BGJ BackgroundJob.job_done failed due to #{exception}"
         Rails.logger.error exception.backtrace.join("\n")
         [ nil, nil ]
       end
@@ -39,7 +42,7 @@ module Queueable
       begin
         schedule.blank? ? persist(nil, nil) : plan_job(false)
       rescue => exception
-        say "BackgroundJob.job_done failed due to #{exception}"
+        say "BGJ BackgroundJob.dropped_plan_next failed due to #{exception}"
         [ nil, nil ]
       end
     end
@@ -55,7 +58,7 @@ module Queueable
     # then get the next planned run, set the job to run at that time
     # and return the job id and planned run at time
     #
-    def plan_job(first = true)
+    def plan_job(first = true, skip_permission_check: false)
       return unless active?
 
       begin
@@ -65,12 +68,13 @@ module Queueable
         if next_run_at && t && first
           t = Time.at(t).in_time_zone("UTC") < Time.at(next_run_at).in_time_zone("UTC") ? t : next_run_at
         end
-        result = t ? run_job(t) : persist(nil, nil)
+        Rails.logger.info "BGJ plan_job: schedule=#{schedule}, first=#{first}, calculated next_run=#{t}, Time.at(t)=#{Time.at(t) rescue 'ERROR'}"
+        result = t ? run_job(t, skip_permission_check: skip_permission_check) : persist(nil, nil)
         result
       rescue => exception
-        Rails.logger.error "BackgroundJob.plan_job failed: #{exception.message}"
+        Rails.logger.error "BGJ plan_job failed: #{exception.message}"
         Rails.logger.error exception.backtrace.join("\n")
-        say "BackgroundJob.plan_job failed due to #{exception}"
+        say "BGJ plan_job failed due to #{exception}"
         nil
       end
     end
@@ -86,26 +90,39 @@ module Queueable
     #   else
     #   end
     #
-    def run_job(t = nil)
+    def run_job(t = nil, skip_permission_check: false)
       begin
-        return nil if shouldnt?(:run)
+        Rails.logger.info "BGJ tenant #{tenant&.name} settings: #{tenant&.settings&.where(key: :run)&.pluck(:value)}"
+        if !skip_permission_check && shouldnt?(:run)
+          Rails.logger.warn "BGJ run_job: shouldnt?(:run) returned true, aborting"
+          return nil
+        end
         o = set_parms
         w = job_klass.constantize
         s = 2
         id = nil
+        Rails.logger.info "BGJ run_job: params=#{o.inspect}, w=#{w}, state=#{s}"
         if t
+          Rails.logger.info "BGJ run_job: t=#{t}"
           id = (w.set(wait_until: Time.at(t).in_time_zone("UTC")).perform_later(**o)).job_id
+          Rails.logger.info "BGJ run_job: scheduled with wait_until, id=#{id}"
         else
           id = (w.perform_later(**o)).job_id
+          Rails.logger.info "BGJ run_job: later id=#{id}"
           s = 3
         end
-        t = Time.at(t.to_i).utc rescue nil
+        # Convert timestamp to Time object, but guard against nil/0 which becomes 1970-01-01
+        if t
+          t = Time.at(t.to_i).utc rescue nil
+        end
+        Rails.logger.info "BGJ run_job: job_id=#{id}, next_run_at=#{t}, state=#{s}"
         result = persist(id, t, s)
+        Rails.logger.info "BGJ run_job: persist returned #{result.inspect}"
         result
       rescue => exception
-        Rails.logger.error "BackgroundJob.run_job failed: #{exception.message}"
+        Rails.logger.error "BGJ run_job failed: #{exception.message}"
         Rails.logger.error exception.backtrace.join("\n")
-        say "BackgroundJob.run_job failed due to #{exception}"
+        say "BGJ run_job failed due to #{exception}"
         nil
       end
     end
@@ -189,11 +206,14 @@ module Queueable
       # but both should return the next occurrence, not the second one.
       next_run = CronTask::CronTask.next_run(schedule: schedule, scope: "week", index: 0)
 
+      Rails.logger.info "BGJ cron_runs: schedule=#{schedule}, first=#{first}, next_run=#{next_run}, Time.at(next_run)=#{Time.at(next_run) rescue 'ERROR'}"
+
       # Safety check: ensure next_run is in the future (at least 10 seconds from now)
       # to prevent immediate re-execution if the job took longer than expected
       if next_run && Time.at(next_run) <= Time.current + 60.seconds
         # If the returned time is not sufficiently in the future, get the second occurrence
         next_run = CronTask::CronTask.next_run(schedule: schedule, scope: "week", index: 1)
+        Rails.logger.info "cron_runs: Using index 1, next_run=#{next_run}"
       end
 
       next_run
@@ -204,6 +224,7 @@ module Queueable
     # and broadcast the update
     #
     def persist(job_id, next_run_at, state = 2)
+      Rails.logger.info "BGJ persist: job_id=#{job_id}, next_run_at=#{next_run_at}, state=#{state}"
       state = 5 if job_id.nil? && next_run_at.nil?
       update_columns job_id: job_id, next_run_at: next_run_at, state: state
       # broadcast_update

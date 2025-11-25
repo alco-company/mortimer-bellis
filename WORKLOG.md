@@ -29,16 +29,31 @@
 
 ### 25/11/2025
 
-- cleanup old backups
-- commands to use proper shell escaping
-- lost recurring down the road - reintroduce the BackgroundManagerJob
-- wrong format, arghh!
-- job.next_run_at nil!
-- job.shouldnt? returned !can? inverse: true - which was double neg!!
-- don't finish job - reschedule once finished
-- on backup background_jobs that are active? will be set to un_planned - to be prepared for restore
-- active_jobs are removed when background_jobs are deleted/changing state
-- once done background_jobs should reschedule - not stay 'running'
+**Backup/Restore Bug Fixes & Background Job Scheduling Fixes**
+
+- **Backup System Improvements**:
+  - Fixed tar extraction failure by using array form of `system()` for proper shell escaping
+  - Added automatic cleanup of backups older than 8 days (matching 7-day link validity + buffer)
+  - Sanitize BackgroundJob records during restore: reset state to `un_planned`, clear `job_id` and `next_run_at`
+  - Preserve inactive jobs as inactive during restore (don't reset disabled jobs to un_planned)
+
+- **Background Job Scheduling Fixes** (multiple critical bugs):
+  - Fixed SolidQueue startup: Changed `recurring.yml` schedule from `every 60.seconds` to `every 60 seconds`
+  - Fixed job scheduling blocked by `shouldnt?(:run)` permission check (was preventing all jobs from scheduling)
+  - Fixed recurring jobs stuck in `running` state after completion:
+    - Changed `job_done` to call `plan_job` BEFORE setting state to finished (plan_job requires active? to be true)
+    - For one-time jobs: use `update!` instead of `finished!` + `persist` to properly set state
+    - For recurring jobs: plan next run, which sets state to `planned` automatically
+  - Fixed concurrency issue: `shouldnt?(:run)` returned different values between initial scheduling and rescheduling
+    - Added `skip_permission_check` parameter to `run_job` and `plan_job`
+    - Jobs rescheduling themselves skip permission check (already validated when initially scheduled)
+  - Added ActiveJob cancellation when BackgroundJobs are deleted or deactivated
+  - Improved error logging in `plan_job` and `run_job` (was silently swallowing exceptions)
+
+- **Known Issues** (technical debt):
+  - Multiple workarounds and safety checks added ("tape and plaster")
+  - Permission system interaction with background jobs needs architectural review
+  - `persist` uses `update_columns` which bypasses callbacks (intentional for performance, but fragile)
 
 ### 24/11/2025
 
