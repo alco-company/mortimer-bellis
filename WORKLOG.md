@@ -35,6 +35,8 @@
 - wrong format, arghh!
 - job.next_run_at nil!
 - job.shouldnt? returned !can? inverse: true - which was double neg!!
+- don't finish job - reschedule once finished
+
 ### 24/11/2025
 
 - make sure next_run_at is in the future

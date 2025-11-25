@@ -14,13 +14,15 @@ module Queueable
     # is reset and next run is scheduled
     def job_done
       begin
-        finished! unless failed?
         if schedule.blank?
-          # One-time job - clear job_id and next_run_at
+          # One-time job - mark as finished and clear job_id and next_run_at
+          finished! unless failed?
           persist(nil, nil)
         else
-          # Recurring job - plan the next execution
+          # Recurring job - plan the next execution BEFORE marking as finished
+          # (plan_job requires active? to be true)
           result = plan_job(false) # false = get next occurrence, not first
+          # Note: plan_job will update state to 'planned' via persist(), so no need to call finished!
           result
         end
       rescue => exception
