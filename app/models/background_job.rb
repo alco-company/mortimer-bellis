@@ -44,6 +44,9 @@ class BackgroundJob < ApplicationRecord
 
   validates :job_klass, presence: true
 
+  before_destroy :cancel_active_job
+  before_update :cancel_active_job_if_deactivated
+
   def name
     job_klass
   end
@@ -135,4 +138,37 @@ class BackgroundJob < ApplicationRecord
       zting.update value: "false"
     end
   end
+
+  private
+
+    # Cancel the ActiveJob in SolidQueue when this BackgroundJob is destroyed
+    def cancel_active_job
+      return unless job_id.present?
+      return unless planned? || running?
+
+      begin
+        # Find and discard the job in SolidQueue
+        solid_job = SolidQueue::Job.find_by(active_job_id: job_id)
+        solid_job&.discard
+        Rails.logger.info "Cancelled SolidQueue job #{job_id} for BackgroundJob #{id}"
+      rescue => e
+        Rails.logger.warn "Failed to cancel SolidQueue job #{job_id}: #{e.message}"
+      end
+    end
+
+    # Cancel the ActiveJob when state changes away from planned/running
+    def cancel_active_job_if_deactivated
+      return unless job_id.present?
+      return unless state_changed?
+
+      # If changing from planned/running to something else (inactive, unplanned, failed, finished)
+      old_state = state_was
+      new_state = state
+      was_active = old_state == "planned" || old_state == "running"
+      now_inactive = new_state == "in_active" || new_state == "un_planned"
+
+      if was_active && now_inactive
+        cancel_active_job
+      end
+    end
 end
