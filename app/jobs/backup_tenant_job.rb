@@ -118,7 +118,7 @@ class BackupTenantJob < ApplicationJob
       # Cleanup: Remove temporary directory after successful archive creation and email queuing
       FileUtils.rm_rf(base_dir)
       log_progress(summary, step: :cleanup_completed, removed: base_dir.to_s)
-      
+
       # Remove old backups (8+ days old) for this tenant
       cleanup_old_backups(tenant)
     rescue => e
@@ -141,7 +141,7 @@ class BackupTenantJob < ApplicationJob
 
     cutoff_time = 8.days.ago
     pattern = "tenant_#{tenant.id}_*.tar.gz"
-    
+
     Dir.glob(File.join(backup_dir, pattern)).each do |file_path|
       # Extract timestamp from filename: tenant_ID_TIMESTAMP.tar.gz
       filename = File.basename(file_path)
@@ -149,7 +149,7 @@ class BackupTenantJob < ApplicationJob
         timestamp_str = $1
         # Parse timestamp: YYYYMMDDHHMMSS
         file_time = Time.strptime(timestamp_str, "%Y%m%d%H%M%S") rescue nil
-        
+
         if file_time && file_time < cutoff_time
           File.delete(file_path)
           say "Deleted old backup: #{filename} (created #{file_time})"
