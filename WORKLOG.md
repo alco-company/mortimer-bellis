@@ -31,6 +31,7 @@
 ### 25/11/2025
 
 - cleanup old backups
+- commands to use proper shell escaping
 
 ### 24/11/2025
 

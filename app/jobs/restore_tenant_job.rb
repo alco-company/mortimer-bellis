@@ -28,7 +28,10 @@ class RestoreTenantJob < ApplicationJob
     Rails.application.eager_load! unless Rails.application.config.eager_load
     @restore_work_dir = base_dir.join("restore_#{tenant.id}_#{Time.now.utc.strftime("%Y%m%d%H%M%S")}")
     FileUtils.mkdir_p(@restore_work_dir)
-    system("tar -xzf #{archive_path} -C #{@restore_work_dir}") or raise "Failed to extract archive"
+    success = system("tar", "-xzf", archive_path.to_s, "-C", @restore_work_dir.to_s)
+    unless success
+      raise "Failed to extract archive: tar exit code #{$?.exitstatus}"
+    end
     extracted_root = Dir.children(@restore_work_dir).map { |d| @restore_work_dir.join(d) }.find { |p| File.directory?(p) }
     raise "Could not determine extracted root" unless extracted_root
     log_progress(summary, step: :initialized, restore_work_dir: @restore_work_dir, extracted_root: extracted_root)

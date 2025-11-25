@@ -99,7 +99,7 @@ class BackupTenantJob < ApplicationJob
     archive_path = Rails.root.join("storage", "tenant_backups", "#{label}.tar.gz").to_s
     begin
       Dir.chdir(base_dir.dirname)
-      success = system("tar -czf #{archive_path} #{label}")
+      success = system("tar", "-czf", archive_path, label)
       unless success
         raise "tar command failed with exit code #{$?.exitstatus}"
       end
