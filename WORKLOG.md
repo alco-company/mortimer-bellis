@@ -24,7 +24,6 @@
 - find ways to utilise <output> - https://denodell.com/blog/html-best-kept-secret-output-tag
 - ways to test before launch: https://bhavyansh001.medium.com/the-rails-performance-checklist-i-run-before-every-launch-b02f605285cf
 - priser
-- make database backup incl blobs!!!
 
 ## CHANGELOG
 
@@ -32,6 +31,7 @@
 
 - cleanup old backups
 - commands to use proper shell escaping
+- lost recurring down the road - reintroduce the BackgroundManagerJob
 
 ### 24/11/2025
 
