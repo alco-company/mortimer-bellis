@@ -34,7 +34,7 @@
 - lost recurring down the road - reintroduce the BackgroundManagerJob
 - wrong format, arghh!
 - job.next_run_at nil!
-
+- job.shouldnt? returned !can? inverse: true - which was double neg!!
 ### 24/11/2025
 
 - make sure next_run_at is in the future

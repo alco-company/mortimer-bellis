@@ -126,7 +126,7 @@ module Settingable
 
     # do unless expressively denied
     def cannot?(action, resource: nil)
-      !can?(action, resource: resource, inverse: true)
+      can?(action, resource: resource, inverse: true)
       # key = action.to_s
       # tenant = try(:tenant) || Current.tenant
 
