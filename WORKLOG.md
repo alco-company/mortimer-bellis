@@ -55,6 +55,10 @@
   - Permission system interaction with background jobs needs architectural review
   - `persist` uses `update_columns` which bypasses callbacks (intentional for performance, but fragile)
 
+**fix sanitize_time**
+
+- make creating time_material records respect :limit_time_to_quarters
+
 ### 24/11/2025
 
 - make sure next_run_at is in the future

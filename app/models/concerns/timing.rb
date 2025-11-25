@@ -28,7 +28,9 @@ module Timing
     #
     def hour_time=(val)
       return if val.blank?
-      self.time = "%02d:%02d" % [ val.to_i, self.minute_time.to_i ]
+      ht = val.to_i
+      mt = self.minute_time.to_i
+      self.time = apply_quarter_rounding(ht, mt)
     end
 
     #
@@ -47,7 +49,9 @@ module Timing
     #
     def minute_time=(val)
       return if val.blank?
-      self.time = "%02d:%02d" % [ hour_time.to_i, val.to_i ]
+      ht = hour_time.to_i
+      mt = val.to_i
+      self.time = apply_quarter_rounding(ht, mt)
     end
 
     #
@@ -85,6 +89,26 @@ module Timing
       end
     rescue
       0.0
+    end
+
+    # Apply quarter-hour rounding if the limit_time_to_quarters setting is enabled
+    # This is a helper used by hour_time= and minute_time= setters
+    #
+    def apply_quarter_rounding(hours, minutes)
+      total_minutes = hours * 60 + minutes
+      h, m = total_minutes.divmod(60)
+
+      if Current.present? && Current.get_user.present? && Current.get_user.should?(:limit_time_to_quarters)
+        m = case m
+        when 0; h == 0 ? 15 : 0
+        when 1..15; 15
+        when 16..30; 30
+        when 31..45; 45
+        else h += 1; 0
+        end
+      end
+
+      "%02d:%02d" % [ h, m ]
     end
 
     # first make sure time is a number -
