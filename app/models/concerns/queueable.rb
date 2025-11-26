@@ -97,6 +97,27 @@ module Queueable
           Rails.logger.warn "BGJ run_job: shouldnt?(:run) returned true, aborting"
           return nil
         end
+
+        # Check if a valid scheduled job already exists
+        if job_id.present?
+          existing_job = SolidQueue::Job.find_by(active_job_id: job_id)
+          # If job exists and hasn't been executed yet (finished_at is nil), we can reuse it
+          if existing_job && existing_job.finished_at.nil?
+            Rails.logger.info "BGJ run_job: existing job #{job_id} found (scheduled_at: #{existing_job.scheduled_at}), skipping duplicate scheduling"
+            # Convert timestamp to Time object, but guard against nil/0
+            if t
+              t_obj = Time.at(t.to_i).utc rescue nil
+            end
+            # Just update our record with the (possibly new) next_run_at time
+            # State should already be 2 (planned) since the job exists
+            result = persist(job_id, t_obj, 2)
+            Rails.logger.info "BGJ run_job: reused existing job, persist returned #{result.inspect}"
+            return result
+          else
+            Rails.logger.info "BGJ run_job: job_id #{job_id} exists but job already finished or doesn't exist, creating new job"
+          end
+        end
+
         o = set_parms
         w = job_klass.constantize
         s = 2

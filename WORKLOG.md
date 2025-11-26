@@ -34,6 +34,7 @@
 
 - fix missing close on modal
 - send email after restore job finishes
+- fix adding multiple queued jobs
 
 ### 25/11/2025
 
