@@ -37,6 +37,7 @@
 - fix adding multiple queued jobs
 - fixed Users::RegistrationsController#update not working
 - fixed tenants#index not receiving broadcasts
+- fix removing SolidQueue jobs before purging records when restoring backups
 
 ### 25/11/2025
 

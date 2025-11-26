@@ -515,6 +515,18 @@ class RestoreTenantJob < ApplicationJob
           if !setting(:dry_run) && klass && ids_to_purge.any?
             purge_stats[:attempted] += ids_to_purge.size
 
+            # Special handling for background_jobs: cancel any active jobs in SolidQueue first
+            if table == "background_jobs"
+              cancelled_count = 0
+              BackgroundJob.unscoped.where(id: ids_to_purge).find_each do |bg_job|
+                if bg_job.job_id.present?
+                  bg_job.cancel_active_job
+                  cancelled_count += 1
+                end
+              end
+              summary << ({ table: table, cancelled_jobs: cancelled_count }) if cancelled_count > 0
+            end
+
             # Try to delete, handling FK constraint errors gracefully
             begin
               deleted_count = klass.unscoped.where(id: ids_to_purge).delete_all
