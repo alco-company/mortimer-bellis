@@ -69,17 +69,17 @@ class RestoreTenantJob < ApplicationJob
       begin
         email = tenant.email
         Rails.logger.info "RestoreTenantJob: Recipient email: #{email}"
-        
+
         mailer = TenantMailer.with(
           tenant: tenant,
           summary: summary,
           archive: File.basename(archive_path)
         ).restore_completed
-        
+
         Rails.logger.info "RestoreTenantJob: Mailer created, calling deliver_later"
         delivery_job = mailer.deliver_later
         Rails.logger.info "RestoreTenantJob: deliver_later returned job_id: #{delivery_job.job_id}"
-        
+
         log_progress(summary, step: :email_queued, job_id: delivery_job.job_id)
       rescue => e
         Rails.logger.error "RestoreTenantJob: Failed to queue email: #{e.message}"

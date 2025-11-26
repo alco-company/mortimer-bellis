@@ -1,6 +1,6 @@
 class TenantMailer < ApplicationMailer
   after_action :log_email_details
-  
+
   #
   #
   def welcome
@@ -99,17 +99,17 @@ class TenantMailer < ApplicationMailer
     @summary = params[:summary]
     @archive = params[:archive]
     @email = params.dig(:recipient) || @tenant.email
-    
+
     Rails.logger.info "TenantMailer.restore_completed: Tenant=#{@tenant.id} (#{@tenant.name}), Email=#{@email}, Archive=#{@archive}"
     Rails.logger.info "TenantMailer.restore_completed: Summary keys: #{@summary.keys.inspect}" if @summary
-    
+
     set_locale
-    
+
     Rails.logger.info "TenantMailer.restore_completed: Calling mail() with to=#{@email}"
     result = mail to: @email,
       subject: "Tenant Backup Restore Completed",
       headers: xtra_headers(@user)
-    
+
     Rails.logger.info "TenantMailer.restore_completed: mail() completed successfully"
     result
     # delivery_method: :mailersend,
