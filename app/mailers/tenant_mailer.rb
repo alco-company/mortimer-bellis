@@ -1,4 +1,6 @@
 class TenantMailer < ApplicationMailer
+  after_action :log_email_details
+  
   #
   #
   def welcome
@@ -91,15 +93,25 @@ class TenantMailer < ApplicationMailer
   end
 
   def restore_completed
+    Rails.logger.info "TenantMailer.restore_completed: Starting to build email"
     @tenant = params[:tenant]
     @user = @tenant.users.first || @tenant.users.build
     @summary = params[:summary]
     @archive = params[:archive]
     @email = params.dig(:recipient) || @tenant.email
+    
+    Rails.logger.info "TenantMailer.restore_completed: Tenant=#{@tenant.id} (#{@tenant.name}), Email=#{@email}, Archive=#{@archive}"
+    Rails.logger.info "TenantMailer.restore_completed: Summary keys: #{@summary.keys.inspect}" if @summary
+    
     set_locale
-    mail to: @email,
+    
+    Rails.logger.info "TenantMailer.restore_completed: Calling mail() with to=#{@email}"
+    result = mail to: @email,
       subject: "Tenant Backup Restore Completed",
       headers: xtra_headers(@user)
+    
+    Rails.logger.info "TenantMailer.restore_completed: mail() completed successfully"
+    result
     # delivery_method: :mailersend,
     # delivery_method_options: {
     #   api_key: ENV["MAILERSEND_API_TOKEN"]
@@ -112,5 +124,12 @@ class TenantMailer < ApplicationMailer
       "List-Unsubscribe" => "<mailto:unsubscribe@mortimer.pro>, <https://app.mortimer.pro/unsubscribe?user_token=#{token}>",
       "List-Unsubscribe-Post" => "List-Unsubscribe=One-Click"
     }
+  end
+
+  private
+
+  def log_email_details
+    Rails.logger.info "TenantMailer: Email prepared - Action: #{action_name}, To: #{message.to}, Subject: #{message.subject}"
+    Rails.logger.info "TenantMailer: Delivery method: #{message.delivery_method.class.name}"
   end
 end

@@ -65,12 +65,29 @@ class RestoreTenantJob < ApplicationJob
 
     # Send completion email notification
     unless @args.fetch(:skip_email, false)
-      TenantMailer.with(
-        tenant: tenant,
-        summary: summary,
-        archive: File.basename(archive_path)
-      ).restore_completed.deliver_later
-      log_progress(summary, step: :email_sent)
+      Rails.logger.info "RestoreTenantJob: Preparing to send restore completion email for tenant #{tenant.id} (#{tenant.name})"
+      begin
+        email = tenant.email
+        Rails.logger.info "RestoreTenantJob: Recipient email: #{email}"
+        
+        mailer = TenantMailer.with(
+          tenant: tenant,
+          summary: summary,
+          archive: File.basename(archive_path)
+        ).restore_completed
+        
+        Rails.logger.info "RestoreTenantJob: Mailer created, calling deliver_later"
+        delivery_job = mailer.deliver_later
+        Rails.logger.info "RestoreTenantJob: deliver_later returned job_id: #{delivery_job.job_id}"
+        
+        log_progress(summary, step: :email_queued, job_id: delivery_job.job_id)
+      rescue => e
+        Rails.logger.error "RestoreTenantJob: Failed to queue email: #{e.message}"
+        Rails.logger.error e.backtrace.join("\n")
+        log_progress(summary, step: :email_failed, error: e.message)
+      end
+    else
+      Rails.logger.info "RestoreTenantJob: Skipping email notification (skip_email=true)"
     end
 
     summary
