@@ -95,7 +95,7 @@ class RestoreTenantJob < ApplicationJob
           mailer = TenantMailer.with(
             tenant: tenant,
             summary: summary,
-            archive: File.basename(archive_path)
+            archive: File.basename(archive_path.to_s)
           ).restore_completed
 
           Rails.logger.info "RestoreTenantJob: Mailer created, calling deliver_later"
