@@ -4,11 +4,14 @@
 
 - using n8n on profeting on stock markets - https://medium.com/predict/the-crash-i-see-coming-why-ive-liquidated-my-portfolio-ea9bd4ae6837
 - using MCP's to automate development - https://generativeai.pub/model-context-protocol-mcp-10-must-try-mcp-servers-for-developers-4cf054836308 / https://ai.plainenglish.io/5-essential-mcp-servers-that-give-claude-cursor-real-superpowers-2025-509a822dd4fd
-
+- update the favicon depending on the number of open tasks - https://railsdesigner.com/update-favicon-badge-turbo-stream
+- https://medium.com/@raviskit2012/handling-multi-tenancy-in-a-ruby-on-rails-app-simple-secure-and-scalable-233dabaa6e77
+- use metrics to optimize speed - https://bhavyansh001.medium.com/how-we-made-our-rails-app-load-in-under-100ms-ceceea024c62
 
 ## ISSUES
 
 - security gems to add soon - https://blog.devops.dev/8-essential-rails-security-gems-you-shouldnt-deploy-without-2025-edition-8b89f7e3c743
+- run `rails security:audit` https://medium.com/@backendbyeli/rails-8-security-improvements-stop-missing-these-critical-protections-135e78d8b9e1
 - https://svgconverter.online/
 - consistent icons - https://phosphoricons.com/
 - https://railsdesigner.com/kanban-rails-hotwire/
@@ -26,6 +29,10 @@
 - priser
 
 ## CHANGELOG
+
+### 26/11/2025
+
+- fix missing close on modal
 
 ### 25/11/2025
 

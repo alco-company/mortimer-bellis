@@ -123,6 +123,10 @@ https://www.refactoredtelegram.net/2021/03/communication-among-stimulus-controll
 
 https://thoughtbot.com/blog/hotwire-typeahead-searching 
 
+### Search engines
+
+* building your own https://karboosx.net/post/4eZxhBon/building-a-simple-search-engine-that-actually-works
+
 ### ViewComponent & Storybook
 
 https://dev.to/abeidahmed/advanced-viewcomponent-patterns-in-rails-2b4m
@@ -198,6 +202,10 @@ https://boringrails.com/articles/tailwind-style-css-transitions-with-stimulusjs/
 ### Optimising Bulk Import Speed in Rails
 
 https://www.twnsnd.com/posts/how_i_100xd_bulk_import_speed_in_rails_with_some_gnarly_sql.html
+
+### Neat tricks when adding migrations
+
+https://medium.com/@nidhivya18_77320/stop-shooting-yourself-in-the-foot-rails-migration-tricks-they-dont-teach-you-04a30e3a67e3
 
 ### SSO with Azure AD (OAuth2)
 
@@ -289,3 +297,11 @@ https://getgrav.org/blog/macos-sequoia-apache-ssl
 ### How to implement OCR capabilities
 
 * https://pub.towardsai.net/how-to-develop-a-powerful-ocr-pipeline-for-machine-learning-systems-bcc0b6df58b9
+
+### MCP
+
+* how MCP is used - https://levelup.gitconnected.com/model-context-protocol-isnt-confusing-if-you-understand-it-this-way-49b39c9f38b6
+
+### Pillars of AI Agentic workflows
+
+* https://levelup.gitconnected.com/building-the-14-key-pillars-of-agentic-ai-229e50f65986
