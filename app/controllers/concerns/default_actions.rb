@@ -259,7 +259,7 @@ module DefaultActions
     #
     # default broadcaster stream for create
     def stream_create
-      Broadcasters::Resource.new(resource, params.permit!).create
+      Broadcasters::Resource.new(resource, params.permit!, user: Current.get_user).create
     end
 
     #
@@ -289,7 +289,7 @@ module DefaultActions
     #
     # default broadcaster stream for update
     def stream_update
-      Broadcasters::Resource.new(resource, params.permit!).replace
+      Broadcasters::Resource.new(resource, params.permit!, user: Current.get_user).replace
     end
 
     #

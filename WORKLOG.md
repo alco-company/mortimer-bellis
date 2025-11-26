@@ -36,6 +36,7 @@
 - send email after restore job finishes
 - fix adding multiple queued jobs
 - fixed Users::RegistrationsController#update not working
+- fixed tenants#index not receiving broadcasts
 
 ### 25/11/2025
 
