@@ -51,49 +51,66 @@ class RestoreTenantJob < ApplicationJob
     # purge or remap existing tables/records
     summary, purges = purge_or_remap_records(summary, manifest, @restore_work_dir, metadata, file_ids)
     log_progress(summary, step: :data_purged, purges: purges)
-    return summary if purges.nil? && setting(:purge)
-    return summary if !setting(:restore)
+
+    if purges.nil? && setting(:purge)
+      send_completion_email(tenant, summary, archive_path)
+      return summary
+    end
+
+    if !setting(:restore)
+      send_completion_email(tenant, summary, archive_path)
+      return summary
+    end
+
     #
     # restore data/records from archive
     summary, restores = restore_data_records(extracted_root, summary, file_ids, purges)
     log_progress(summary, step: :data_restored, restores: restores)
-    return summary if !setting(:remap)
+
+    if !setting(:remap)
+      send_completion_email(tenant, summary, archive_path)
+      return summary
+    end
+
     #
     # we need to sweep all tables looking for '-remap-' added during remapping
     summary, remaps = sweep_for_remaps(summary, restores)
     log_progress(summary, step: :remaps_swept, remaps: remaps)
 
     # Send completion email notification
-    unless @args.fetch(:skip_email, false)
-      Rails.logger.info "RestoreTenantJob: Preparing to send restore completion email for tenant #{tenant.id} (#{tenant.name})"
-      begin
-        email = tenant.email
-        Rails.logger.info "RestoreTenantJob: Recipient email: #{email}"
-
-        mailer = TenantMailer.with(
-          tenant: tenant,
-          summary: summary,
-          archive: File.basename(archive_path)
-        ).restore_completed
-
-        Rails.logger.info "RestoreTenantJob: Mailer created, calling deliver_later"
-        delivery_job = mailer.deliver_later
-        Rails.logger.info "RestoreTenantJob: deliver_later returned job_id: #{delivery_job.job_id}"
-
-        log_progress(summary, step: :email_queued, job_id: delivery_job.job_id)
-      rescue => e
-        Rails.logger.error "RestoreTenantJob: Failed to queue email: #{e.message}"
-        Rails.logger.error e.backtrace.join("\n")
-        log_progress(summary, step: :email_failed, error: e.message)
-      end
-    else
-      Rails.logger.info "RestoreTenantJob: Skipping email notification (skip_email=true)"
-    end
+    send_completion_email(tenant, summary, archive_path)
 
     summary
   end
 
   private
+
+    def send_completion_email(tenant, summary, archive_path)
+      unless @args.fetch(:skip_email, false)
+        Rails.logger.info "RestoreTenantJob: Preparing to send restore completion email for tenant #{tenant.id} (#{tenant.name})"
+        begin
+          email = tenant.email
+          Rails.logger.info "RestoreTenantJob: Recipient email: #{email}"
+
+          mailer = TenantMailer.with(
+            tenant: tenant,
+            summary: summary,
+            archive: File.basename(archive_path)
+          ).restore_completed
+
+          Rails.logger.info "RestoreTenantJob: Mailer created, calling deliver_later"
+          delivery_job = mailer.deliver_later
+          Rails.logger.info "RestoreTenantJob: deliver_later returned job_id: #{delivery_job.job_id}"
+
+          Rails.logger.info "RestoreTenantJob: Email queued successfully with job_id: #{delivery_job.job_id}"
+        rescue => e
+          Rails.logger.error "RestoreTenantJob: Failed to queue email: #{e.message}"
+          Rails.logger.error e.backtrace.join("\n")
+        end
+      else
+        Rails.logger.info "RestoreTenantJob: Skipping email notification (skip_email=true)"
+      end
+    end
 
     def setting(setting)
       case setting
