@@ -98,6 +98,13 @@ da:
     header:
       sync_with_ERP: Synkroniser med ERP
   
+  backup:
+    restore_backup:
+      title: Gendan backup
+      notice: "En bekræftelsesmail vil blive sendt til <strong>%{email}</strong> når gendannelsen er fuldført."
+      instruction: "Er du sikker på, at du vil gendanne backup fra <strong>%{date}</strong>?"
+      warning: "<strong>ADVARSEL:</strong> Denne handling vil overskrive alle nuværende data med data fra backupen. Dette kan ikke fortrydes!"
+      restore_button: Gendan backup
   select_country: Vælg land
 
   components:

@@ -63,6 +63,16 @@ class RestoreTenantJob < ApplicationJob
     summary, remaps = sweep_for_remaps(summary, restores)
     log_progress(summary, step: :remaps_swept, remaps: remaps)
 
+    # Send completion email notification
+    unless @args.fetch(:skip_email, false)
+      TenantMailer.with(
+        tenant: tenant,
+        summary: summary,
+        archive: File.basename(archive_path)
+      ).restore_completed.deliver_later
+      log_progress(summary, step: :email_sent)
+    end
+
     summary
   end
 

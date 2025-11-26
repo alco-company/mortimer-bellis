@@ -1,6 +1,12 @@
 module ApplicationHelper
   include Pagy::Frontend
 
+  def t(key, **options)
+    I18n.t(key, **options).html_safe
+  rescue
+    key
+  end
+
   #
   # helper for web_push
   def web_push_public_key_meta_tag(web_push_public_key: ENV.fetch("VAPID_PUBLIC_KEY"))

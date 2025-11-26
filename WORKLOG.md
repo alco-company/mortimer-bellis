@@ -33,6 +33,7 @@
 ### 26/11/2025
 
 - fix missing close on modal
+- send email after restore job finishes
 
 ### 25/11/2025
 
