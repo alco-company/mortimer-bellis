@@ -108,12 +108,14 @@ class Users::RegistrationsController < MortimerController
       resource.update global_queries: params[:global_queries] if params[:global_queries].present?
       resource.update tenant_id: params[:tenant_id] if params[:tenant_id].present?
     end
-    resource.update name: params[:name],
+    result = resource.update name: params[:name],
+      email: params[:email],
       # mugshot: params[:mugshot],
       pincode: params[:pincode],
       locale: params[:locale],
       time_zone: params[:time_zone]
-      Current.user.reload
+    Current.user.reload
+    result
   end
 
   #
