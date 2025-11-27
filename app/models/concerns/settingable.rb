@@ -6,7 +6,9 @@ module Settingable
 
     # do not unless expressively allowed
     def can?(action, resource: nil, inverse: false)
-      return true if Current.get_user&.superadmin?
+      if Current.get_user&.superadmin?
+        return inverse ? false : true
+      end
       key = action.to_s
       tenant = try(:tenant) || Current.tenant
       resource ||= self if self.class != Class
@@ -106,10 +108,10 @@ module Settingable
       # end
 
       # Default confirm (that user can perform the action)
-      false
+      inverse ? true : false
     rescue
       Rails.logger.error "Error in can? for #{action} on #{self.class.name}# with resource #{resource.id rescue 'nil'}"
-      false
+      inverse ? true : false
     end
 
     def can_query(key, rel, inverse = false)
