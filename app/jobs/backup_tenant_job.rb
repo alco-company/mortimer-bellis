@@ -137,10 +137,11 @@ class BackupTenantJob < ApplicationJob
 
       TenantMailer.with(tenant: tenant, link: download_url, pdf_report_url: pdf_report_url).backup_created.deliver_later
       log_progress(summary, step: :email_enqueued, download_url: download_url)
+      update_column :job_progress, { step: :completed, completed_at: Time.now.utc.iso8601, download_url: download_url, pdf_report_url: pdf_report_url }.to_json
 
       # Cleanup: Remove temporary directory after successful archive creation and email queuing
       FileUtils.rm_rf(base_dir)
-      log_progress(summary, step: :cleanup_completed, removed: base_dir.to_s)
+      # log_progress(summary, step: :cleanup_completed, removed: base_dir.to_s)
 
       # Remove old backups (8+ days old) for this tenant
       cleanup_old_backups(tenant)

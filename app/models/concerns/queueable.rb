@@ -100,53 +100,66 @@ module Queueable
         end
 
         # Check if a valid scheduled job already exists
-        if job_id.present?
-          existing_job = SolidQueue::Job.find_by(active_job_id: job_id)
-          # If job exists and hasn't been executed yet (finished_at is nil), we can reuse it
-          if existing_job && existing_job.finished_at.nil?
-            Rails.logger.info "BGJ run_job: existing job #{job_id} found (scheduled_at: #{existing_job.scheduled_at}), skipping duplicate scheduling"
-            # Convert timestamp to Time object, but guard against nil/0
-            if t
-              t_obj = Time.at(t.to_i).utc rescue nil
-            end
-            # Just update our record with the (possibly new) next_run_at time
-            # State should already be 2 (planned) since the job exists
-            result = persist(job_id, t_obj, 2)
-            Rails.logger.info "BGJ run_job: reused existing job, persist returned #{result.inspect}"
-            return result
-          else
-            Rails.logger.info "BGJ run_job: job_id #{job_id} exists but job already finished or doesn't exist, creating new job"
-          end
-        end
+        run_existing_job(t) || run_a_new_job(t)
 
-        o = set_parms
-        w = job_klass.constantize
-        s = 2
-        id = nil
-        Rails.logger.info "BGJ run_job: params=#{o.inspect}, w=#{w}, state=#{s}"
-        if t
-          Rails.logger.info "BGJ run_job: t=#{t}"
-          id = (w.set(wait_until: Time.at(t).in_time_zone("UTC")).perform_later(**o)).job_id
-          Rails.logger.info "BGJ run_job: scheduled with wait_until, id=#{id}"
-        else
-          id = (w.perform_later(**o)).job_id
-          Rails.logger.info "BGJ run_job: later id=#{id}"
-          s = 3
-        end
-        # Convert timestamp to Time object, but guard against nil/0 which becomes 1970-01-01
-        if t
-          t = Time.at(t.to_i).utc rescue nil
-        end
-        Rails.logger.info "BGJ run_job: job_id=#{id}, next_run_at=#{t}, state=#{s}"
-        result = persist(id, t, s)
-        Rails.logger.info "BGJ run_job: persist returned #{result.inspect}"
-        result
       rescue => exception
         Rails.logger.error "BGJ run_job failed: #{exception.message}"
         Rails.logger.error exception.backtrace.join("\n")
         say "BGJ run_job failed due to #{exception}"
         nil
       end
+    end
+
+    def run_existing_job(t)
+      if job_id.present?
+        existing_job = SolidQueue::Job.find_by(active_job_id: job_id)
+        # If job exists and hasn't been executed yet (finished_at is nil), we can reuse it
+        if existing_job && existing_job.finished_at.nil?
+          if t
+            t_obj = Time.at(t.to_i).utc rescue nil
+            if t_obj < existing_job.scheduled_at
+              Rails.logger.info "BGJ run_job: existing job #{job_id} found (scheduled_at: #{existing_job.scheduled_at}), but new scheduled time #{t_obj} is earlier, updating next_run_at - possibly manually triggered"
+              # Convert timestamp to Time object, but guard against nil/0
+              # Just update our record with the (possibly new) next_run_at time
+              # State should already be 2 (planned) since the job exists
+              existing_job.discard if persist(job_id, t_obj, 2)
+              false
+            else
+              Rails.logger.info "BGJ run_job: existing job #{job_id} found (scheduled_at: #{existing_job.scheduled_at}), skipping duplicate scheduling"
+              true
+            end
+          end
+        else
+          Rails.logger.info "BGJ run_job: job_id #{job_id} exists but job already finished or doesn't exist, creating new job"
+          false
+        end
+      else
+        false
+      end
+    end
+
+    def run_a_new_job(t)
+      o = set_parms
+      w = job_klass.constantize
+      s = 2
+      id = nil
+      Rails.logger.info "BGJ run_job: params=#{o.inspect}, w=#{w}, state=#{s}"
+      if t
+        Rails.logger.info "BGJ run_job: t=#{t}"
+        id = (w.set(wait_until: Time.at(t).in_time_zone("UTC")).perform_later(**o)).job_id
+        Rails.logger.info "BGJ run_job: scheduled with wait_until, id=#{id}"
+      else
+        id = (w.perform_later(**o)).job_id
+        Rails.logger.info "BGJ run_job: later id=#{id}"
+        s = 3
+      end
+      # Convert timestamp to Time object, but guard against nil/0 which becomes 1970-01-01
+      t_obj = t ?
+        (Time.at(t.to_i).utc rescue nil) :
+        Time.now.utc
+
+      Rails.logger.info "BGJ run_job: job_id=#{id}, next_run_at=#{t_obj}, state=#{s}"
+      persist(id, t_obj, s)
     end
 
     def run_or_plan_job
@@ -248,9 +261,12 @@ module Queueable
     def persist(job_id, next_run_at, state = 2)
       Rails.logger.info "BGJ persist: job_id=#{job_id}, next_run_at=#{next_run_at}, state=#{state}"
       state = 5 if job_id.nil? && next_run_at.nil?
-      update_columns job_id: job_id, next_run_at: next_run_at, state: state
+      r = false
+      ActiveRecord::Base.connected_to(role: :writing) do
+        r = update_columns job_id: job_id, next_run_at: next_run_at, state: state
+      end
       # broadcast_update
-      [ job_id, next_run_at ]
+      r # [ job_id, next_run_at ]
     end
   end
 

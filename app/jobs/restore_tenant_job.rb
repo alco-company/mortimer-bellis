@@ -238,6 +238,7 @@ class RestoreTenantJob < ApplicationJob
             archive: File.basename(archive_path.to_s),
             pdf_report_url: pdf_report_url
           ).restore_completed
+          update_column :job_progress, { step: :completed, completed_at: Time.now.utc.iso8601, archive_path: archive_path, pdf_report_url: pdf_report_url }.to_json
 
           Rails.logger.info "RestoreTenantJob: Mailer created, calling deliver_later"
           delivery_job = mailer.deliver_later
