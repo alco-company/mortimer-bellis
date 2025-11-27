@@ -76,7 +76,7 @@ class TenantBackupsController < MortimerController
         bg.job_done
         puts "Ran RestoreTenantJob inline job_id=#{jid} background_job_id=#{bg.id} dry_run=#{dry_run} purge=#{purge} restore=#{restore_flag} remap=#{remap}"
       else
-        job = RestoreTenantJob.perform_later(tenant: tenant, user: user, archive_path: archive, strict: strict, dry_run: dry_run, purge: purge, restore: restore_flag, remap: remap, skip_email: skip_email, background_job: bg)
+        job = RestoreTenantJob.perform_now(tenant: tenant, user: user, archive_path: archive, strict: strict, dry_run: dry_run, purge: purge, restore: restore_flag, remap: remap, skip_email: skip_email, background_job: bg)
         bg.update_column(:job_id, job.job_id)
         puts "Enqueued RestoreTenantJob job_id=#{job.job_id} background_job_id=#{bg.id} dry_run=#{dry_run} purge=#{purge} restore=#{restore_flag} remap=#{remap}"
       end
