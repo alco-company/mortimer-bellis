@@ -10,16 +10,21 @@ class BuildPdfJob < ApplicationJob
   def perform(**args)
     super(**args)
     url = "http://#{ENV["PDF_HOST"]}:8080"
+    html = args.fetch(:html)
+    raise "No HTML file provided" unless html && File.exist?(html)
+    pdf = args.fetch(:pdf)
+    raise "No PDF output file provided" unless pdf
+
     options = {
       headers: {
         "ContentType" => "multipart/form-data"
       },
       body: {
-        html: File.open(args[:html])
+        html: File.open(html, "rb")
       }
     }
     response = HTTParty.post(url, options)
-    File.open(args[:pdf], "wb") do |f|
+    File.open(pdf, "wb") do |f|
       f.write response.parsed_response
     end
     true

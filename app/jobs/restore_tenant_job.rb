@@ -8,6 +8,7 @@ class RestoreTenantJob < ApplicationJob
   def perform(**args)
     #
     # crucial checks - validate args before calling super
+    Rails.logger.info "RestoreTenantJob: args - #{args.inspect}"
     raise ArgumentError, "archive_path required" unless args[:archive_path]
     raise ArgumentError, "archive_path file does not exist" unless args[:archive_path] && File.exist?(args[:archive_path])
     raise ArgumentError, "tenant missing - ID required" unless args[:tenant] || args[:tenant_id]
