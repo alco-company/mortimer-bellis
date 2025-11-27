@@ -14,7 +14,7 @@ class RestoreTenantJob < ApplicationJob
     raise ArgumentError, "tenant missing - ID required" unless args[:tenant] || args[:tenant_id]
 
     super(**args)
-    @background_job = nil
+    @background_job = args.fetch(:background_job, nil)
     #
     # initialize variables
     tenant = @tenant
