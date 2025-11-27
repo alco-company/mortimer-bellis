@@ -15,6 +15,13 @@
   <p class="m-0 leading-6">
       <%== t("tenant.mailer.backup.how_to_download_instruction", link: @link ) %>
   </p>
+  <% if @pdf_report_url.present? %>
+    <p class="m-0 leading-6">
+      <strong>Download PDF Report:</strong>
+      <a href="<%= @pdf_report_url %>">Backup Report PDF</a>
+    </p>
+    <br>
+  <% end %>
   <div role="separator" class="false bg-slate-200" style="height: 1px; line-height: 1px; margin: 0; margin-top: 32px; margin-bottom: 32px">&zwj;</div>
   <%= render MortimerMailSignature.new %>
 <% end %>

@@ -25,6 +25,11 @@ class RestoreTenantJob < ApplicationJob
     summary = []
     base_dir = Rails.root.join("tmp")
     log_progress(summary, step: :initialize, tenant: @tenant, archive_path: archive_path, args: @args)
+    Rails.logger.info "RestoreTenantJob: archive_path is '#{archive_path}'"
+    unless archive_path.to_s.end_with?(".tar.gz")
+      Rails.logger.error "RestoreTenantJob: archive_path does not end with .tar.gz! Aborting restore."
+      raise ArgumentError, "RestoreTenantJob: archive_path must be a .tar.gz file, got: #{archive_path}"
+    end
     Rails.application.eager_load! unless Rails.application.config.eager_load
     @restore_work_dir = base_dir.join("restore_#{tenant.id}_#{Time.now.utc.strftime("%Y%m%d%H%M%S")}")
     FileUtils.mkdir_p(@restore_work_dir)
@@ -85,17 +90,152 @@ class RestoreTenantJob < ApplicationJob
 
   private
 
+    def generate_restore_report_pdf(tenant, summary, archive_path)
+      return unless @background_job
+
+      begin
+        # Create HTML report
+        html_content = generate_restore_html_report(tenant, summary, archive_path)
+
+        # Save HTML temporarily
+        html_path = Rails.root.join("tmp", "restore_report_#{tenant.id}_#{Time.now.to_i}.html")
+        File.write(html_path, html_content)
+
+        # Generate PDF path (same directory as archive)
+        archive_dir = File.dirname(archive_path.to_s)
+        pdf_filename = "restore_#{tenant.id}_#{Time.now.utc.strftime("%Y%m%d%H%M%S")}_report.pdf"
+        pdf_path = File.join(archive_dir, pdf_filename)
+
+        # Build PDF using external service (internal service, uses HTTP)
+        pdf_host = ENV["PDF_HOST"] || "localhost"
+        # Extract hostname (remove any existing port) and always use port 8080 for PDF service
+        hostname = pdf_host.split(":").first
+        url = "http://#{hostname}:8080"
+        options = {
+          headers: { "ContentType" => "multipart/form-data" },
+          body: { html: File.open(html_path) }
+        }
+        response = HTTParty.post(url, options)
+
+        # Check response status
+        unless response.success?
+          raise "PDF service returned status #{response.code}: #{response.body}"
+        end
+
+        # Write response body (binary PDF data)
+        File.open(pdf_path, "wb") do |f|
+          f.write(response.body)
+        end
+
+        # Verify PDF was created and has content
+        unless File.exist?(pdf_path) && File.size(pdf_path) > 0
+          raise "PDF file was not created or is empty"
+        end
+
+        # Update job_progress to only store PDF path
+        @background_job.update_column(:job_progress, { pdf_report: pdf_path, completed_at: Time.now.utc.iso8601 }.to_json)
+
+        # Cleanup temp HTML
+        File.delete(html_path) if File.exist?(html_path)
+
+        Rails.logger.info "RestoreTenantJob: PDF report saved to #{pdf_path} (#{File.size(pdf_path)} bytes)"
+      rescue => e
+        Rails.logger.error "RestoreTenantJob: Failed to generate PDF report: #{e.message}"
+        Rails.logger.error "URL: #{url}, HTML path: #{html_path}"
+        Rails.logger.error e.backtrace.join("\n") if e.backtrace
+      end
+    end
+
+    def generate_restore_html_report(tenant, summary, archive_path)
+      <<~HTML
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <title>Restore Report - #{tenant.name}</title>
+          <style>
+            body { font-family: Arial, sans-serif; margin: 40px; }
+            h1 { color: #333; }
+            h2 { color: #666; margin-top: 30px; }
+            table { border-collapse: collapse; width: 100%; margin-top: 20px; }
+            th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+            th { background-color: #f2f2f2; }
+            .meta { color: #666; font-size: 0.9em; }
+            .error { color: red; }
+            .warning { color: orange; }
+          </style>
+        </head>
+        <body>
+          <h1>Restore Report</h1>
+          <div class="meta">
+            <p><strong>Tenant:</strong> #{tenant.name} (ID: #{tenant.id})</p>
+            <p><strong>Archive:</strong> #{File.basename(archive_path.to_s)}</p>
+            <p><strong>Restored:</strong> #{Time.now.utc.iso8601}</p>
+          </div>
+        #{'  '}
+          <h2>Summary</h2>
+          <table>
+            <tr><th>Step</th><th>Details</th></tr>
+            #{summary.select { |item| item.is_a?(Hash) }.map do |item|
+              has_error = item.keys.any? { |k| k.to_s.match?(/_error/) }
+              has_warning = item.keys.any? { |k| k.to_s.match?(/_warning/) }
+              css_class = has_error ? 'error' : (has_warning ? 'warning' : '')
+              "<tr class='#{css_class}'><td>#{item[:step] || 'Info'}</td><td>#{item.except(:step).map { |k, v| "#{k}: #{v.is_a?(Array) ? v.size : v}" }.join(', ')}</td></tr>"
+            end.join("\n          ")}
+          </table>
+        </body>
+        </html>
+      HTML
+    end
+
+    # Recursively convert Pathname objects to strings for serialization
+    def sanitize_for_serialization(obj)
+      case obj
+      when Pathname
+        obj.to_s
+      when Hash
+        obj.transform_values { |v| sanitize_for_serialization(v) }
+      when Array
+        obj.map { |item| sanitize_for_serialization(item) }
+      else
+        obj
+      end
+    end
+
     def send_completion_email(tenant, summary, archive_path)
+      # Generate PDF report before sending email
+      generate_restore_report_pdf(tenant, summary, archive_path)
+
       unless @args.fetch(:skip_email, false)
         Rails.logger.info "RestoreTenantJob: Preparing to send restore completion email for tenant #{tenant.id} (#{tenant.name})"
         begin
           email = tenant.email
           Rails.logger.info "RestoreTenantJob: Recipient email: #{email}"
 
+          # Create condensed summary for email (remove per-table details, keep important items)
+          condensed_summary = summary.select do |item|
+            next false unless item.is_a?(Hash)
+            # Keep important milestone items, skip per-table processing details
+            item.key?(:step) || item.key?(:restore_scenario) ||
+            item.keys.any? { |k| k.to_s.match?(/_error|_warning|_complete|_stats|_strategy/) }
+          end
+
+          # Sanitize summary to remove non-serializable objects (like Pathname)
+          sanitized_summary = sanitize_for_serialization(condensed_summary)
+
+          pdf_report_path = archive_path.to_s.gsub(/\.tar\.gz$/, "_report.pdf")
+          Rails.logger.info "RestoreTenantJob: Checking for PDF report at #{pdf_report_path}"
+          pdf_report_url = nil
+          if File.exist?(pdf_report_path)
+            pdf_report_url = Rails.application.routes.url_helpers.tenant_backup_download_url(filename: File.basename(pdf_report_path), host: ENV["WEB_HOST"] || "localhost:3000", protocol: "https")
+            Rails.logger.info "RestoreTenantJob: PDF report found, url set to #{pdf_report_url}"
+          else
+            Rails.logger.warn "RestoreTenantJob: PDF report not found at #{pdf_report_path}, no URL will be set"
+          end
           mailer = TenantMailer.with(
             tenant: tenant,
-            summary: summary,
-            archive: File.basename(archive_path.to_s)
+            summary: sanitized_summary,
+            archive: File.basename(archive_path.to_s),
+            pdf_report_url: pdf_report_url
           ).restore_completed
 
           Rails.logger.info "RestoreTenantJob: Mailer created, calling deliver_later"

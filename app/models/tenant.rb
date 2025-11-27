@@ -225,6 +225,10 @@ class Tenant < ApplicationRecord
   end
 
   def available_backups
-    Dir.new(Rails.root.join("storage", "tenant_backups")).children.select { |f| f.start_with?("tenant_#{id}_") }.sort.reverse
+    Dir.new(Rails.root.join("storage", "tenant_backups"))
+    .children
+    .select { |f| f.start_with?("tenant_#{id}_") }
+    .select { |f| f.end_with?(".tar.gz") }
+    .sort.reverse
   end
 end

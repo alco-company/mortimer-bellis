@@ -4,4 +4,7 @@
 
 <%== t("tenant.mailer.backup.how_to_download_instruction", link: @link ) %>
 
+<% if @pdf_report_url.present? %>
+  Download PDF Report: <%= @pdf_report_url %>
+<% end %>
 <%= render MortimerMailSignature.new format: :text%>

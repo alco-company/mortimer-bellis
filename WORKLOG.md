@@ -30,6 +30,10 @@
 
 ## CHANGELOG
 
+### 27/11/2025
+
+- send PDF report along when emailing tenant on backup and restore
+
 ### 26/11/2025
 
 - fix missing close on modal

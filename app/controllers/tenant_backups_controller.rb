@@ -16,10 +16,10 @@ class TenantBackupsController < MortimerController
   def download
     filename = params[:filename]
 
-    # Security: validate filename format (tenant_ID_TIMESTAMP.tar.gz)
-    unless filename.match?(/\Atenant_\d+_\d{14}\.tar\.gz\z/)
+      # Security: validate filename format (tenant_ID_TIMESTAMP.tar.gz or tenant_ID_TIMESTAMP_report.pdf)
+      unless filename.match?(/\Atenant_\d+_\d{14}(\.tar\.gz|_report\.pdf)\z/)
       return head :not_found
-    end
+      end
 
     file_path = Rails.root.join("storage", "tenant_backups", filename)
 
@@ -34,10 +34,11 @@ class TenantBackupsController < MortimerController
       return head :forbidden
     end
 
-    send_file file_path,
-              filename: filename,
-              type: "application/gzip",
-              disposition: "attachment"
+      mime_type = filename.end_with?(".pdf") ? "application/pdf" : "application/gzip"
+      send_file file_path,
+                filename: filename,
+                type: mime_type,
+                disposition: "attachment"
   end
 
   # #<ActionController::Parameters {"controller"=>"tenant_backups", "action"=>"restore", "filename"=>"tenant_1_20251124104900.tar.gz"} permitted: false>

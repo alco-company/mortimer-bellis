@@ -112,7 +112,30 @@ class BackupTenantJob < ApplicationJob
       # Generate a proper download URL instead of file path
       filename = File.basename(archive_path)
       download_url = Rails.application.routes.url_helpers.tenant_backup_download_url(filename: filename, host: ENV["WEB_HOST"] || "localhost:3000", protocol: "https")
-      TenantMailer.with(tenant: tenant, link: download_url).backup_created.deliver_later
+      pdf_report_path = archive_path.to_s.gsub(/\.tar\.gz$/, "_report.pdf")
+      Rails.logger.info "BackupTenantJob: Checking for PDF report at #{pdf_report_path}"
+      pdf_report_url = nil
+      if File.exist?(pdf_report_path)
+        pdf_report_url = Rails.application.routes.url_helpers.tenant_backup_download_url(filename: File.basename(pdf_report_path), host: ENV["WEB_HOST"] || "localhost:3000", protocol: "https")
+        Rails.logger.info "BackupTenantJob: PDF report found, url set to #{pdf_report_url}"
+      else
+        Rails.logger.warn "BackupTenantJob: PDF report not found at #{pdf_report_path}, no URL will be set"
+      end
+      # Generate PDF report and store it
+      generate_backup_report_pdf(tenant, summary, archive_path)
+
+      # Now set up PDF link for email
+      pdf_report_path = archive_path.to_s.gsub(/\.tar\.gz$/, "_report.pdf")
+      Rails.logger.info "BackupTenantJob: Checking for PDF report at #{pdf_report_path}"
+      pdf_report_url = nil
+      if File.exist?(pdf_report_path)
+        pdf_report_url = Rails.application.routes.url_helpers.tenant_backup_download_url(filename: File.basename(pdf_report_path), host: ENV["WEB_HOST"] || "localhost:3000", protocol: "https")
+        Rails.logger.info "BackupTenantJob: PDF report found, url set to #{pdf_report_url}"
+      else
+        Rails.logger.warn "BackupTenantJob: PDF report not found at #{pdf_report_path}, no URL will be set"
+      end
+
+      TenantMailer.with(tenant: tenant, link: download_url, pdf_report_url: pdf_report_url).backup_created.deliver_later
       log_progress(summary, step: :email_enqueued, download_url: download_url)
 
       # Cleanup: Remove temporary directory after successful archive creation and email queuing
@@ -134,6 +157,96 @@ class BackupTenantJob < ApplicationJob
   end
 
   private
+
+    def generate_backup_report_pdf(tenant, summary, archive_path)
+      return unless @background_job
+
+      begin
+        # Create HTML report
+        html_content = generate_backup_html_report(tenant, summary, archive_path)
+
+        # Save HTML temporarily
+        html_path = Rails.root.join("tmp", "backup_report_#{tenant.id}_#{Time.now.to_i}.html")
+        File.write(html_path, html_content)
+
+        # Generate PDF path (same location as tar.gz)
+        pdf_path = archive_path.to_s.gsub(/\.tar\.gz$/, "_report.pdf")
+
+        # Build PDF using external service (internal service, uses HTTP)
+        pdf_host = ENV["PDF_HOST"] || "localhost"
+        # Extract hostname (remove any existing port) and always use port 8080 for PDF service
+        hostname = pdf_host.split(":").first
+        url = "http://#{hostname}:8080"
+        options = {
+          headers: { "ContentType" => "multipart/form-data" },
+          body: { html: File.open(html_path) }
+        }
+        response = HTTParty.post(url, options)
+
+        # Check response status
+        unless response.success?
+          raise "PDF service returned status #{response.code}: #{response.body}"
+        end
+
+        # Write response body (binary PDF data)
+        File.open(pdf_path, "wb") do |f|
+          f.write(response.body)
+        end
+
+        # Verify PDF was created and has content
+        unless File.exist?(pdf_path) && File.size(pdf_path) > 0
+          raise "PDF file was not created or is empty"
+        end
+
+        # Update job_progress to only store PDF path
+        @background_job.update_column(:job_progress, { pdf_report: pdf_path, completed_at: Time.now.utc.iso8601 }.to_json)
+
+        # Cleanup temp HTML
+        File.delete(html_path) if File.exist?(html_path)
+
+        Rails.logger.info "BackupTenantJob: PDF report saved to #{pdf_path} (#{File.size(pdf_path)} bytes)"
+      rescue => e
+        Rails.logger.error "BackupTenantJob: Failed to generate PDF report: #{e.message}"
+        Rails.logger.error "URL: #{url}, HTML path: #{html_path}"
+        Rails.logger.error e.backtrace.join("\n") if e.backtrace
+      end
+    end
+
+    def generate_backup_html_report(tenant, summary, archive_path)
+      <<~HTML
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <title>Backup Report - #{tenant.name}</title>
+          <style>
+            body { font-family: Arial, sans-serif; margin: 40px; }
+            h1 { color: #333; }
+            h2 { color: #666; margin-top: 30px; }
+            table { border-collapse: collapse; width: 100%; margin-top: 20px; }
+            th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+            th { background-color: #f2f2f2; }
+            .meta { color: #666; font-size: 0.9em; }
+          </style>
+        </head>
+        <body>
+          <h1>Backup Report</h1>
+          <div class="meta">
+            <p><strong>Tenant:</strong> #{tenant.name} (ID: #{tenant.id})</p>
+            <p><strong>Archive:</strong> #{File.basename(archive_path.to_s)}</p>
+            <p><strong>Created:</strong> #{Time.now.utc.iso8601}</p>
+          </div>
+        #{'  '}
+          <h2>Summary</h2>
+          <table>
+            <tr><th>Step</th><th>Details</th></tr>
+            #{summary.select { |item| item.is_a?(Hash) && (item.key?(:step) || item.keys.any? { |k| k.to_s.match?(/_complete|_stats/) }) }.map do |item|
+              "<tr><td>#{item[:step] || 'Info'}</td><td>#{item.except(:step).map { |k, v| "#{k}: #{v.is_a?(Array) ? v.size : v}" }.join(', ')}</td></tr>"
+            end.join("\n          ")}
+          </table>
+        </body>
+        </html>
+      HTML
+    end
 
   def cleanup_old_backups(tenant)
     backup_dir = Rails.root.join("storage", "tenant_backups")
