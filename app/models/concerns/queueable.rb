@@ -94,7 +94,8 @@ module Queueable
       begin
         Rails.logger.info "BGJ tenant #{tenant&.name} settings: #{tenant&.settings&.where(key: :run)&.pluck(:value)}"
         if !skip_permission_check && shouldnt?(:run)
-          Rails.logger.warn "BGJ run_job: shouldnt?(:run) returned true, aborting"
+          usr = Current.get_user&.name rescue "no user set"
+          Rails.logger.warn "BGJ run_job: #{usr} shouldnt?(:run) returned true, aborting"
           return nil
         end
 
