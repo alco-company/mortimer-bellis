@@ -61,8 +61,8 @@ class DependencyGraph
     # backup order: all tables with tenant_id first, then others (e.g. active_storage)
     def backup_order
       r = restore_order
-      r = r.reject { |t| %w[solid_ action_ oauth_ noticed_].any? { |prefix| t.start_with?(prefix) } }
-      r.reject { |t| %w[active_storage].any? { |prefix| t.start_with?(prefix) } } # + r.select { |t| %w[active_storage].any? { |prefix| t.start_with?(prefix) } }
+      r = r.reject { |t| %w[solid_ action_ active_storage_ oauth_ noticed_].any? { |prefix| t.start_with?(prefix) } }
+      # r.reject { |t| %w[active_storage].any? { |prefix| t.start_with?(prefix) } } # + r.select { |t| %w[active_storage].any? { |prefix| t.start_with?(prefix) } }
     end
 
     def purge_order
@@ -135,15 +135,17 @@ class DependencyGraph
       end
 
       # Remove framework tables that we don't want to backup/restore
-      order = order.reject { |t| %w[solid_ action_ oauth_ noticed_].any? { |prefix| t.start_with?(prefix) } }
+      order = order.reject { |t| %w[solid_ active_storage_ action_ oauth_ noticed_].any? { |prefix| t.start_with?(prefix) } }
 
       # Ensure critical tenant-related tables are at the front in the right order
       # This is important for backup/restore operations
       critical_order = %w[tenants teams users]
+      last_order = %w[background_jobs]
+      # active_storage = %w[active_storage_blobs active_storage_attachments active_storage_variant_records]
       critical_present = order & critical_order
-      other_tables = order - critical_order
+      other_tables = order - critical_order - last_order
 
-      critical_present + other_tables
+      critical_present + other_tables + last_order # + active_storage
     end
 
     # Identify tables that should be pushed last:

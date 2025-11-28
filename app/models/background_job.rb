@@ -171,4 +171,10 @@ class BackgroundJob < ApplicationRecord
         cancel_active_job
       end
     end
+
+    def finish_job
+      new_state = failed? ? state : "finished"
+      cancel_active_job
+      update!(state: new_state, job_id: nil, next_run_at: nil)
+    end
 end

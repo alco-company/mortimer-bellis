@@ -117,7 +117,7 @@ class Contextmenu < ApplicationComponent
       show_ERP_link
 
       show_mission_control_link
-      toggle_jobs
+      # toggle_jobs
 
       link2 url: new_modal_url(modal_form: "settings",
         all: true,
@@ -197,6 +197,11 @@ class Contextmenu < ApplicationComponent
         data: { turbo_action: "advance", turbo_frame: @turbo_frame },
         icon: "copy",
         label: t(".copy")) if %w[TimeMaterial Product].include?(resource_class.to_s)
+      # run now for background job
+      link2(url: run_background_job_url(resource),
+        data: { turbo_stream: true, turbo_prefetch: "false", turbo_action: "advance" },
+        icon: "background_job",
+        label: t("background_job.run_now")) if resource_class.to_s == "BackgroundJob" && @user.superadmin?
       # delete resource
       link2(url: erp_pull_link,
         data: { turbo_prefetch: "false" },

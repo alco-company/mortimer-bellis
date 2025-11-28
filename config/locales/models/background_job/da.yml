@@ -1,5 +1,6 @@
 da:
   background_job:
+    run_now: "Kør nu"
     in_active: "Inaktiv"
     modal:
       setting_all:

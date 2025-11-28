@@ -180,7 +180,7 @@ module Persistence
     def check_association(summary, record, reflection, remapped_ids)
       tbl = reflection.foreign_type ? safe_constantize(record[reflection.foreign_type])&.table_name : reflection.plural_name
       fk = reflection.foreign_key
-      summary << ({ step: :check_association, record: "#{record.class.table_name}, #{record.id}", association: tbl, foreign_key: fk, foreign_key_value: record[fk].to_s })
+      # summary << ({ step: :check_association, record: "#{record.class.table_name}, #{record.id}", association: tbl, foreign_key: fk, foreign_key_value: record[fk].to_s })
       rid = remapped_ids[tbl]["id"][record[fk].to_s] rescue nil
       if reflection.foreign_type
         raise "Orphaned Polymorphic Association discovered" if record[reflection.foreign_type].nil? && !record[fk].nil?
@@ -195,7 +195,7 @@ module Persistence
         _ = reflection.klass.unscoped.find(rid)
         record[fk] = rid.to_i
       end
-      summary << ({ step: :check_association_done, record: "#{record.class.table_name}, #{record.id}", association: tbl, foreign_key: fk, remapped_foreign_key_value: record[fk].to_s })
+      # summary << ({ step: :check_association_done, record: "#{record.class.table_name}, #{record.id}", association: tbl, foreign_key: fk, remapped_foreign_key_value: record[fk].to_s })
       [ summary, record, :success, tbl ]
 
     rescue ActiveRecord::RecordNotFound => e
@@ -214,7 +214,7 @@ module Persistence
 
       att_file = extracted_root.join("active_storage_attachments.jsonl")
       service  = ActiveStorage::Blob.service
-      summary << ({ step: :restore_attachments, record: "#{record.class.table_name}, #{record.id}", dry_run: @dry_run, att_file: att_file })
+      # summary << ({ step: :restore_attachments, record: "#{record.class.table_name}, #{record.id}", dry_run: @dry_run, att_file: att_file })
 
       File.foreach(att_file) do |line|
         next if line.strip.empty?
@@ -237,7 +237,7 @@ module Persistence
         )
         if duplicate
           duplicate.update record_id: record.id unless @dry_run
-          summary << ({ step: :restore_attachments, record: "#{record.class.table_name}, #{record.id}", dry_run: @dry_run, duplicate_att: duplicate.id, blob: blob.id })
+          # summary << ({ step: :restore_attachments, record: "#{record.class.table_name}, #{record.id}", dry_run: @dry_run, duplicate_att: duplicate.id, blob: blob.id })
           next
         end
 
@@ -248,8 +248,9 @@ module Persistence
           record_id: record.id,
           blob_id: blob.id
         )
-        summary << ({ step: :restore_attachments, record: "#{record.class.table_name}, #{record.id}", dry_run: @dry_run, att: att.id, blob: blob.id })
+        # summary << ({ step: :restore_attachments, record: "#{record.class.table_name}, #{record.id}", dry_run: @dry_run, att: att.id, blob: blob.id })
       rescue => e
+        summary << ({ step: :restore_attachments, record: "#{record&.class&.table_name}, #{record&.id}", dry_run: @dry_run, att: att&.id, blob: blob&.id, error: e.message })
         say "Attachment restore error (#{record_type}##{record_id} #{name}): #{e.message}"
       end
       summary
@@ -257,7 +258,7 @@ module Persistence
 
     def restore_blob(summary, service, extracted_root, blob_id)
       blob_file  = extracted_root.join("active_storage_blobs.jsonl")
-      summary << ({ step: :restore_blobs, blob_id: blob_id, dry_run: @dry_run, blob_file: blob_file })
+      # summary << ({ step: :restore_blobs, blob_id: blob_id, dry_run: @dry_run, blob_file: blob_file })
 
       File.foreach(blob_file) do |line|
         next if line.strip.empty?
@@ -268,7 +269,7 @@ module Persistence
         existing = ActiveStorage::Blob.find_by(key: key)
         if existing
           copy_blob_file(service, extracted_root, existing.key)
-          summary << ({ step: :restore_blobs, key: key, blob_id: existing.id, message: "exists!" })
+          # summary << ({ step: :restore_blobs, key: key, blob_id: existing.id, message: "exists!" })
           return [ summary, existing ]
         end
 
@@ -285,7 +286,7 @@ module Persistence
         # blob.id = attrs["id"] if attrs["id"]
 
         if @dry_run
-          summary << ({ step: :restore_blob, key: key, blob_id: blob.id, message: "new!" })
+          # summary << ({ step: :restore_blob, key: key, blob_id: blob.id, message: "new!" })
           copy_blob_file(service, extracted_root, key) # just check existence
           return [ summary, blob ]
         end
@@ -295,6 +296,7 @@ module Persistence
         return [ summary, blob ]
 
       rescue => e
+        summary << ({ step: :restore_blob, key: key, blob_id: blob&.id, error: e.message })
         say "Blob restore error (key=#{key}): #{e.message}"
         return nil
       end

@@ -30,6 +30,10 @@
 
 ## CHANGELOG
 
+### 28/11/2025
+
+- fix errors when sending PDF report
+
 ### 27/11/2025
 
 - send PDF report along when emailing tenant on backup and restore

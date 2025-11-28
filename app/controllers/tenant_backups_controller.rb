@@ -17,8 +17,8 @@ class TenantBackupsController < MortimerController
     filename = params[:filename]
 
       # Security: validate filename format (tenant_ID_TIMESTAMP.tar.gz or tenant_ID_TIMESTAMP_report.pdf)
-      unless filename.match?(/\Atenant_\d+_\d{14}(\.tar\.gz|_report\.pdf)\z/)
-      return head :not_found
+      unless filename.match?(/\A(?:tenant_|restore_)\d+_\d{14}(\.tar\.gz|_report\.pdf)\z/)
+        return head :not_found
       end
 
     file_path = Rails.root.join("storage", "tenant_backups", filename)
@@ -29,7 +29,7 @@ class TenantBackupsController < MortimerController
     end
 
     # Security: ensure user belongs to the tenant in the filename
-    tenant_id = filename.match(/tenant_(\d+)_/)[1].to_i
+    tenant_id = filename.match(/(?:tenant_|restore_)(\d+)_/)[1].to_i
     unless Current.tenant&.id == tenant_id
       return head :forbidden
     end
@@ -76,7 +76,7 @@ class TenantBackupsController < MortimerController
         bg.job_done
         puts "Ran RestoreTenantJob inline job_id=#{jid} background_job_id=#{bg.id} dry_run=#{dry_run} purge=#{purge} restore=#{restore_flag} remap=#{remap}"
       else
-        job = RestoreTenantJob.perform_now(tenant: tenant, user: user, archive_path: archive, strict: strict, dry_run: dry_run, purge: purge, restore: restore_flag, remap: remap, skip_email: skip_email, background_job: bg)
+        job = RestoreTenantJob.perform_later(tenant: tenant, user: user, archive_path: archive, strict: strict, dry_run: dry_run, purge: purge, restore: restore_flag, remap: remap, skip_email: skip_email, background_job: bg)
         bg.update_column(:job_id, job.job_id)
         puts "Enqueued RestoreTenantJob job_id=#{job.job_id} background_job_id=#{bg.id} dry_run=#{dry_run} purge=#{purge} restore=#{restore_flag} remap=#{remap}"
       end

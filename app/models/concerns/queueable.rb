@@ -14,20 +14,7 @@ module Queueable
     # is reset and next run is scheduled
     def job_done
       begin
-        if schedule.blank?
-          # One-time job - mark as finished and clear job_id and next_run_at
-          # Use update! instead of persist to trigger callbacks that cancel the ActiveJob
-          update!(state: :finished, job_id: nil, next_run_at: nil) unless failed?
-        else
-          # Recurring job - plan the next execution BEFORE marking as finished
-          # (plan_job requires active? to be true)
-          # Skip permission check since this job is already running and rescheduling itself
-          Rails.logger.info "BGJ --------------------------------- BackgroundJob.job_done: job_id=#{job_id}, background_job_id=#{id}"
-          result = plan_job(false, skip_permission_check: true) # false = get next occurrence, not first
-          Rails.logger.info "BGJ --------------------------------- BackgroundJob.job_done: planned next run, result=#{result.inspect}"
-          # Note: plan_job will update state to 'planned' via persist(), so no need to call finished!
-          result
-        end
+        schedule.blank? ? finish_job : plan_job(false)
       rescue => exception
         Rails.logger.error "BGJ BackgroundJob.job_done failed due to #{exception}"
         Rails.logger.error exception.backtrace.join("\n")
@@ -58,7 +45,7 @@ module Queueable
     # then get the next planned run, set the job to run at that time
     # and return the job id and planned run at time
     #
-    def plan_job(first = true, skip_permission_check: false)
+    def plan_job(first = true)
       return unless active?
 
       begin
@@ -69,7 +56,7 @@ module Queueable
           t = Time.at(t).in_time_zone("UTC") < Time.at(next_run_at).in_time_zone("UTC") ? t : next_run_at
         end
         Rails.logger.info "BGJ plan_job: schedule=#{schedule}, first=#{first}, calculated next_run=#{t}, Time.at(t)=#{Time.at(t) rescue 'ERROR'}"
-        result = t ? run_job(t, skip_permission_check: skip_permission_check) : persist(nil, nil)
+        result = t ? run_job(t) : persist(nil, nil)
         result
       rescue => exception
         Rails.logger.error "BGJ plan_job failed: #{exception.message}"
@@ -90,14 +77,9 @@ module Queueable
     #   else
     #   end
     #
-    def run_job(t = nil, skip_permission_check: false)
+    def run_job(t = nil)
       begin
         Rails.logger.info "BGJ tenant #{tenant&.name} settings: #{tenant&.settings&.where(key: :run)&.pluck(:value)}"
-        if !skip_permission_check && shouldnt?(:run)
-          usr = Current.get_user&.name rescue "no user set"
-          Rails.logger.warn "BGJ run_job: #{usr} shouldnt?(:run) returned true, aborting"
-          return nil
-        end
 
         # Check if a valid scheduled job already exists
         run_existing_job(t) || run_a_new_job(t)

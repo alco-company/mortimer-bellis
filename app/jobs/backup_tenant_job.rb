@@ -49,6 +49,8 @@ class BackupTenantJob < ApplicationJob
       File.open(attachments_path, "w") do |fa|
         File.open(blobs_path, "w") do |fb|
           tenant_tables.each do |table|
+            next if table == "sessions" # skip sessions table - as it contains sensitive auth data on currently logged in users
+
             begin
               model = models_by_table[table]
               count, table_ids[table], result = model.backup(f: f, fa: fa, fb: fb, seen_blob_ids: seen_blob_ids, storage_root: storage_root, tenant_id: tenant.id) if model

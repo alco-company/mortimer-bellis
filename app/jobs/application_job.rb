@@ -58,9 +58,9 @@ class ApplicationJob < ActiveJob::Base
     begin
       if @background_job
         current = JSON.parse(@background_job.job_progress || "{}") rescue {}
-        current["log"] ||= []
-        current["log"] << payload
-        current["log"] = current["log"].last(200)
+        # current["log"] ||= []
+        # current["log"] << payload
+        # current["log"] = current["log"].last(200)
         # Store only important summary items (skip per-table details to avoid bloat)
         # Keep items with keys like: step, error, purge_complete, restore_scenario, etc.
         # Skip items with keys like: table, model, file (per-table processing details)
@@ -74,9 +74,9 @@ class ApplicationJob < ActiveJob::Base
           current["summary"] = important_summary.last(100)
         end
         @background_job.update_column(:job_progress, current.to_json)
-        append_fallback_log(payload.merge(summary: summary.last(5))) if fallback_log_enabled?
+        # append_fallback_log(payload.merge(summary: summary.last(5))) if fallback_log_enabled?
       elsif fallback_log_enabled?
-        append_fallback_log(payload.merge(summary: summary.last(5)))
+        # append_fallback_log(payload.merge(summary: summary.last(5)))
       end
     rescue => e
       append_fallback_log(payload.merge(error: e.message)) if fallback_log_enabled?

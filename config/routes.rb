@@ -148,6 +148,9 @@ Rails.application.routes.draw do
     end
   end
   resources :background_jobs do
+    member do
+      get "run"
+    end
     collection do
       get "toggle"
     end

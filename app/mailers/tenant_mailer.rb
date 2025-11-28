@@ -97,13 +97,11 @@ class TenantMailer < ApplicationMailer
     Rails.logger.info "TenantMailer.restore_completed: Starting to build email"
     @tenant = params[:tenant]
     @user = @tenant.users.first || @tenant.users.build
-    @summary = params[:summary]
     @archive = params[:archive]
     @pdf_report_url = params[:pdf_report_url]
     @email = params.dig(:recipient) || @tenant.email
 
     Rails.logger.info "TenantMailer.restore_completed: Tenant=#{@tenant.id} (#{@tenant.name}), Email=#{@email}, Archive=#{@archive}"
-    Rails.logger.info "TenantMailer.restore_completed: Summary items: #{@summary.is_a?(Array) ? @summary.size : 'not an array'}" if @summary
 
     set_locale
 

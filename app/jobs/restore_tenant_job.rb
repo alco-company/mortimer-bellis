@@ -1,5 +1,6 @@
 class RestoreTenantJob < ApplicationJob
   queue_as :default
+  limits_concurrency to: 1, key: ->(args) { args.fetch(:tenant) || args.fetch(:tenant_id) }
 
   #
   # tenant  = the tenant to restore data for
@@ -15,6 +16,7 @@ class RestoreTenantJob < ApplicationJob
 
     super(**args)
     @background_job = args.fetch(:background_job, nil)
+    return unless job_can_run?
     #
     # initialize variables
     tenant = @tenant
@@ -91,6 +93,13 @@ class RestoreTenantJob < ApplicationJob
 
   private
 
+    def job_can_run?
+      return false if @background_job.nil?
+      return false if @background_job.running?
+      @background_job.running!
+      true
+    end
+
     def generate_restore_report_pdf(tenant, summary, archive_path)
       return unless @background_job
 
@@ -140,6 +149,7 @@ class RestoreTenantJob < ApplicationJob
         File.delete(html_path) if File.exist?(html_path)
 
         Rails.logger.info "RestoreTenantJob: PDF report saved to #{pdf_path} (#{File.size(pdf_path)} bytes)"
+        pdf_path
       rescue => e
         Rails.logger.error "RestoreTenantJob: Failed to generate PDF report: #{e.message}"
         Rails.logger.error "URL: #{url}, HTML path: #{html_path}"
@@ -204,7 +214,7 @@ class RestoreTenantJob < ApplicationJob
 
     def send_completion_email(tenant, summary, archive_path)
       # Generate PDF report before sending email
-      generate_restore_report_pdf(tenant, summary, archive_path)
+      pdf_report_path = generate_restore_report_pdf(tenant, summary, archive_path)
 
       unless @args.fetch(:skip_email, false)
         Rails.logger.info "RestoreTenantJob: Preparing to send restore completion email for tenant #{tenant.id} (#{tenant.name})"
@@ -213,17 +223,17 @@ class RestoreTenantJob < ApplicationJob
           Rails.logger.info "RestoreTenantJob: Recipient email: #{email}"
 
           # Create condensed summary for email (remove per-table details, keep important items)
-          condensed_summary = summary.select do |item|
-            next false unless item.is_a?(Hash)
-            # Keep important milestone items, skip per-table processing details
-            item.key?(:step) || item.key?(:restore_scenario) ||
-            item.keys.any? { |k| k.to_s.match?(/_error|_warning|_complete|_stats|_strategy/) }
-          end
+          # condensed_summary = summary.select do |item|
+          #   next false unless item.is_a?(Hash)
+          #   # Keep important milestone items, skip per-table processing details
+          #   item.key?(:step) || item.key?(:restore_scenario) ||
+          #   item.keys.any? { |k| k.to_s.match?(/_error|_warning|_complete|_stats|_strategy/) }
+          # end
 
-          # Sanitize summary to remove non-serializable objects (like Pathname)
-          sanitized_summary = sanitize_for_serialization(condensed_summary)
+          # # Sanitize summary to remove non-serializable objects (like Pathname)
+          # sanitized_summary = sanitize_for_serialization(condensed_summary)
 
-          pdf_report_path = archive_path.to_s.gsub(/\.tar\.gz$/, "_report.pdf")
+          # pdf_report_path = archive_path.to_s.gsub(/\.tar\.gz$/, "_report.pdf")
           Rails.logger.info "RestoreTenantJob: Checking for PDF report at #{pdf_report_path}"
           pdf_report_url = nil
           if File.exist?(pdf_report_path)
@@ -234,7 +244,7 @@ class RestoreTenantJob < ApplicationJob
           end
           mailer = TenantMailer.with(
             tenant: tenant,
-            summary: sanitized_summary,
+            # summary: sanitized_summary,
             archive: File.basename(archive_path.to_s),
             pdf_report_url: pdf_report_url
           ).restore_completed
@@ -345,7 +355,7 @@ class RestoreTenantJob < ApplicationJob
         [ summary, remapped_ids ]
       end
 
-      puts "DEBUG: After purge_or_remap: remapped_ids.keys = #{remapped_ids.keys.inspect}, remapped_ids['users'] = #{remapped_ids['users'].inspect}"
+      # puts "DEBUG: After purge_or_remap: remapped_ids.keys = #{remapped_ids.keys.inspect}, remapped_ids['users'] = #{remapped_ids['users'].inspect}"
 
       [ summary, remapped_ids ]
 
@@ -359,7 +369,7 @@ class RestoreTenantJob < ApplicationJob
       table_ids = {}
       processed = 0
       manifest.each do |m|
-        puts ""
+        # puts ""
         begin
           table = m["table"]
           print "Processing table: #{table}"
@@ -368,7 +378,7 @@ class RestoreTenantJob < ApplicationJob
 
           klass = safe_constantize(table)
           table_ids[table] = klass.collect_ids(tenant_id: @tenant.id) if klass
-          puts " - collected table IDs: #{table_ids[table]}"
+          # puts " - collected table IDs: #{table_ids[table]}"
           summary << { table: table, model: table.to_s, count: (table_ids[table]&.size || 0) }
 
           processed += table_ids[table]&.size if table_ids[table].is_a? Array
@@ -398,13 +408,13 @@ class RestoreTenantJob < ApplicationJob
         source_tenant_id = metadata["tenant_id"].to_s
         target_tenant_id = @tenant.id.to_s
         remapped_ids["tenants"] = { "id" => { source_tenant_id => target_tenant_id } }
-        puts "Initialized tenant remapping: #{source_tenant_id} -> #{target_tenant_id}"
+        # puts "Initialized tenant remapping: #{source_tenant_id} -> #{target_tenant_id}"
       end
 
       unless setting(:strict)
         if setting(:purge)
           # Purge mode: Remap existing colliding records, then purge originals
-          puts "Remapping table IDs...#{table_ids}"
+          # puts "Remapping table IDs...#{table_ids}"
           table_ids.each do |table, _ids|
             next if setting(:skip_models).include?(table)
             summary, remapped_ids = remap_table(summary, table_ids, table, remapped_ids)
@@ -412,7 +422,7 @@ class RestoreTenantJob < ApplicationJob
           summary, remapped_ids = purge_records(summary, table_ids, remapped_ids) # purge after remap to clean up 'old' records
         else
           # No purge mode: Don't remap existing records, let restore auto-generate new IDs
-          puts "No purge mode: Will restore with auto-generated IDs to avoid collisions"
+          # puts "No purge mode: Will restore with auto-generated IDs to avoid collisions"
         end
       end
       [ summary, remapped_ids ]
@@ -428,16 +438,16 @@ class RestoreTenantJob < ApplicationJob
           new_record.save(validate: false)
           new_record.update self_referencing => new_record.id if self_referencing
           if self_referencing
-            puts "self_referencing: #{self_referencing}, old_id: #{record.id}, new_id: #{new_record.id}"
+            # puts "self_referencing: #{self_referencing}, old_id: #{record.id}, new_id: #{new_record.id}"
           end
           remapped_ids[table]["id"][record.id.to_s] = new_record.id
-          puts "remapped #{table} #{record.id} to #{new_record.id}"
-          summary << ({ table: table, old_id: record.id, new_id: new_record.id })
+          # puts "remapped #{table} #{record.id} to #{new_record.id}"
+          # summary << ({ table: table, old_id: record.id, new_id: new_record.id })
         else
-          summary << ({ table: table, old_id: record.id, new_id: "-" })
+          # summary << ({ table: table, old_id: record.id, new_id: "-" })
         end
-        log_progress(summary, step: :remap_progress)
       end
+      log_progress(summary, step: :remap_progress, table: table, remapped_count: remapped_ids[table]["id"].size)
       [ summary, remapped_ids ]
     end
 
@@ -450,25 +460,25 @@ class RestoreTenantJob < ApplicationJob
       table = record.class.table_name
       foreign_keys, polymorphic_keys = foreign_polymorphic_keys(table)
       self_referencing = nil
-      puts "Remapping foreign keys for #{table}/#{record_id} with #{foreign_keys.inspect} and #{polymorphic_keys.inspect}"
-      print "----------"
+      # puts "Remapping foreign keys for #{table}/#{record_id} with #{foreign_keys.inspect} and #{polymorphic_keys.inspect}"
+      # print "----------"
       begin
         if unique_indexes.any?
-          print "i: "
+          # print "i: "
           # remap unique fields
           unique_indexes.each do |field|
             if record.respond_to?(field)
               record[field] = record[field] + "-remap-#{SecureRandom.hex(4)}" unless record[field].nil?
-              print "."
+              # print "."
             end
           end
         end
       rescue => e
          summary << { table: table, error: e.message }
          log_progress(summary, step: :remap_index_error, table: table, message: e.message)
-         print "e"
+        #  print "e"
       end
-      puts " "
+      # puts " "
       begin
         # remap foreign keys - user_id
         foreign_keys.each do |fk|
@@ -489,30 +499,30 @@ class RestoreTenantJob < ApplicationJob
               # possibly remap self-referential foreign keys (like parent_id)
               if fk[:table] == table && record[fk[:key]].to_s == record_id.to_s
                 self_referencing = fk[:key]
-                puts "self-referencing #{self_referencing} for #{table}/#{record_id}"
+                # puts "self-referencing #{self_referencing} for #{table}/#{record_id}"
               end
               if remapped_ids[fk[:table]]["id"].keys.include?(record[fk[:key]].to_s)
-                puts " #{fk[:key]}= #{record[fk[:key]]} -> #{ remapped_ids[fk[:table]]["id"][record[fk[:key]].to_s] }"
+                # puts " #{fk[:key]}= #{record[fk[:key]]} -> #{ remapped_ids[fk[:table]]["id"][record[fk[:key]].to_s] }"
                 record[fk[:key]] = remapped_ids[fk[:table]]["id"][record[fk[:key]].to_s]
                 self_referencing = nil
               end
             end
           end
         end
-        puts " "
+        # puts " "
       rescue => e
          summary << { table: table, error: e.message }
          log_progress(summary, step: :remap_foreign_key_error, table: table, message: e.message)
          print "e"
       end
-      puts " "
+      # puts " "
       begin
         #
         # remap polymorphic foreign keys
         polymorphic_keys.each do |pk|
           klass = safe_constantize(record["#{pk}_type"])
           if klass && table_ids[klass.table_name]
-            puts "Remapping polymorphic keys for #{table} record #{record["#{pk}_type"]}/#{record["#{pk}_id"]}"
+            # puts "Remapping polymorphic keys for #{table} record #{record["#{pk}_type"]}/#{record["#{pk}_id"]}"
             next if setting(:skip_models).include?(klass.table_name)
             print "Remapping polymorphic key #{pk} for #{table} record #{record.id} "
             summary, remapped_ids = remap_table(summary, table_ids, klass.table_name, remapped_ids) unless remapped_ids[klass.table_name]
@@ -525,12 +535,12 @@ class RestoreTenantJob < ApplicationJob
               begin
                 if remapped_ids[klass.table_name]["id"].keys.include?(record["#{pk}_id"].to_s)
                   record["#{pk}_id"] = remapped_ids[klass.table_name]["id"][record["#{pk}_id"].to_s]
-                  puts ", remapped #{record["#{pk}_id"]} to #{ remapped_ids[klass.table_name]["id"][record["#{pk}_id"].to_s] }"
+                  # puts ", remapped #{record["#{pk}_id"]} to #{ remapped_ids[klass.table_name]["id"][record["#{pk}_id"].to_s] }"
                 end
               rescue => e
                 summary << { table: table, field: pk, record_id: record.id, error: e.message }
                 log_progress(summary, step: :remap_polymorphic_key_error, table: table, message: e.message)
-                puts ", remapping failed: #{e.message}"
+                # puts ", remapping failed: #{e.message}"
               end
             end
           end
@@ -538,7 +548,7 @@ class RestoreTenantJob < ApplicationJob
       rescue => e
          summary << { table: table, error: e.message }
          log_progress(summary, step: :remap_polymorphic_key_error, table: table, message: e.message)
-         puts "Error - #{e.message}"
+        # puts "Error - #{e.message}"
       end
       summary << { table: table, foreign_keys: foreign_keys, polymorphic_keys: polymorphic_keys }
 
@@ -600,17 +610,17 @@ class RestoreTenantJob < ApplicationJob
       unless setting(:dry_run)
         # Check if we're in a transaction
         in_transaction = ActiveRecord::Base.connection.open_transactions > 0
-        puts "DEBUG: In transaction? #{in_transaction}, open transactions: #{ActiveRecord::Base.connection.open_transactions}"
+        # puts "DEBUG: In transaction? #{in_transaction}, open transactions: #{ActiveRecord::Base.connection.open_transactions}"
 
         if in_transaction
           # Can't disable FK in transaction, so we'll have to handle FK errors gracefully
-          puts "DEBUG: Cannot disable FK constraints - in active transaction"
+          # puts "DEBUG: Cannot disable FK constraints - in active transaction"
           summary << ({ purge_info: "In transaction - FK constraints cannot be disabled" })
         else
           ActiveRecord::Base.connection.execute("PRAGMA foreign_keys = OFF")
           fk_disabled = true
           fk_status = ActiveRecord::Base.connection.execute("PRAGMA foreign_keys").first
-          puts "DEBUG: FK constraints setting after disable: #{fk_status}"
+          # puts "DEBUG: FK constraints setting after disable: #{fk_status}"
         end
       end
 
@@ -661,7 +671,7 @@ class RestoreTenantJob < ApplicationJob
             if table == "background_jobs"
               cancelled_count = 0
               BackgroundJob.unscoped.where(id: ids_to_purge).find_each do |bg_job|
-                if bg_job.job_id.present?
+                if bg_job.job_id.present? && @background_job.job_id != bg_job.job_id
                   bg_job.cancel_active_job
                   cancelled_count += 1
                 end
@@ -673,7 +683,7 @@ class RestoreTenantJob < ApplicationJob
             begin
               deleted_count = klass.unscoped.where(id: ids_to_purge).delete_all
               purge_stats[:succeeded] += deleted_count
-              summary << ({ table: table, purged: deleted_count, ids: ids_to_purge })
+              # summary << ({ table: table, purged: deleted_count, ids: ids_to_purge })
             rescue ActiveRecord::InvalidForeignKey, SQLite3::ConstraintException => e
               # FK constraint - try deleting one by one to get as many as possible
               deleted = 0
@@ -687,7 +697,7 @@ class RestoreTenantJob < ApplicationJob
                 end
               end
               purge_stats[:succeeded] += deleted
-              summary << ({ table: table, purged: deleted, failed: ids_to_purge.size - deleted, error: "FK constraints", ids: ids_to_purge })
+              # summary << ({ table: table, purged: deleted, failed: ids_to_purge.size - deleted, error: "FK constraints", ids: ids_to_purge })
             end
           elsif ids_to_purge.empty?
             summary << ({ table: table, purged: 0, message: "no records to purge" })
@@ -716,9 +726,9 @@ class RestoreTenantJob < ApplicationJob
 
     def extract_file_ids_file(extracted_root, summary, manifest)
       file_ids_path = extracted_root.join("file_ids.jsonl")
-      puts "DEBUG extract_file_ids_file: file_ids_path exists? #{File.exist?(file_ids_path)}"
+      # puts "DEBUG extract_file_ids_file: file_ids_path exists? #{File.exist?(file_ids_path)}"
       unless File.exist?(file_ids_path)
-        puts "file_ids.jsonl missing - trying to get ids from dump!"
+        # puts "file_ids.jsonl missing - trying to get ids from dump!"
         # Try to extract file IDs from the dump
         dump_file = extracted_root.join("dump.jsonl")
         if File.exist?(dump_file)
@@ -739,20 +749,20 @@ class RestoreTenantJob < ApplicationJob
         begin
           ids = {}
           manifested_tables = manifest.filter { |t| t["table"] if t.keys.include?("count") || t.keys.include?(:count) } rescue []
-          puts "DEBUG: manifested_tables = #{manifested_tables.inspect}"
+          # puts "DEBUG: manifested_tables = #{manifested_tables.inspect}"
           file_ids_json = File.read(file_ids_path)
           file_ids = JSON.parse(file_ids_json)
-          puts "DEBUG: file_ids keys = #{file_ids.keys.inspect}, file_ids['users'] = #{file_ids['users'].inspect}"
+          # puts "DEBUG: file_ids keys = #{file_ids.keys.inspect}, file_ids['users'] = #{file_ids['users'].inspect}"
           manifested_tables.each do |table_entry|
             table_name = table_entry["table"]
             next if setting(:skip_models).include?(table_name)
             ids[table_name] = file_ids[table_name] || []
           end
-          puts "DEBUG: ids keys after processing = #{ids.keys.inspect}, ids['users'] = #{ids['users'].inspect}"
+          # puts "DEBUG: ids keys after processing = #{ids.keys.inspect}, ids['users'] = #{ids['users'].inspect}"
           summary << ({ file_ids_path: file_ids_path, file_tables: ids.keys })
         rescue => e
           summary << ({ file_ids_error: e.message })
-          puts "DEBUG: file_ids_error = #{e.message}, #{e.backtrace.first(3)}"
+          # puts "DEBUG: file_ids_error = #{e.message}, #{e.backtrace.first(3)}"
         end
       end
 
@@ -764,14 +774,17 @@ class RestoreTenantJob < ApplicationJob
       remapped_ids ||= {}
       begin
         restorable_records = read_dump_file(extracted_root)
-        puts "Restoring data records...#{restorable_records.keys}"
-        puts "DEBUG restore_data_records: purge=#{setting(:purge)}, remap=#{setting(:remap)}, strict=#{setting(:strict)}"
+        # puts "Restoring data records...#{restorable_records.keys}"
+        # puts "DEBUG restore_data_records: purge=#{setting(:purge)}, remap=#{setting(:remap)}, strict=#{setting(:strict)}"
         DependencyGraph.restore_order.each do |table|
+          next if table == "sessions" # skip sessions table - as it contains sensitive auth data on currently logged in users
+
           restores[table] = []
           begin
             remapped_ids[table] ||= { "id" => {} }
             klass = safe_constantize(table)
             raise "#{table} model not found when preparing to restore data records" unless klass
+            next if restorable_records[table].nil? || restorable_records[table].empty?
             restorable_records[table].each_with_index do |attrs, idx|
               # Apply remapped ID if available (from remap_table_ids when purge=true)
               # For purge=false, don't use remapped IDs - let DB auto-generate to avoid collisions
@@ -817,7 +830,7 @@ class RestoreTenantJob < ApplicationJob
               if attrs.key?("tenant_id") && @tenant
                 old_tenant_id = attrs["tenant_id"]
                 attrs["tenant_id"] = @tenant.id
-                puts "DEBUG: Overriding tenant_id for #{table}: #{old_tenant_id} -> #{@tenant.id}"
+                # puts "DEBUG: Overriding tenant_id for #{table}: #{old_tenant_id} -> #{@tenant.id}"
               end
 
               # Sanitize BackgroundJob records to reset runtime state
@@ -857,30 +870,30 @@ class RestoreTenantJob < ApplicationJob
                     summary, record = klass.restore(summary, extracted_root, record, remapped_ids, setting(:dry_run))
                   end
                 else
-                  puts "DEBUG: About to create record and call klass.restore for #{table}" if table == "users" || table == "teams"
+                  # puts "DEBUG: About to create record and call klass.restore for #{table}" if table == "users" || table == "teams"
                   begin
                     record = klass.new attrs
                     # Store original backup ID for attachment restoration (if ID was remapped)
                     record.instance_variable_set(:@_original_backup_id, original_backup_id) if original_backup_id
-                    puts "DEBUG: Created record, calling restore..." if table == "users" || table == "teams"
+                    # puts "DEBUG: Created record, calling restore..." if table == "users" || table == "teams"
                     summary, record = klass.restore(summary, extracted_root, record, remapped_ids, setting(:dry_run))
-                    puts "DEBUG: Restore returned" if table == "users" || table == "teams"
+                    # puts "DEBUG: Restore returned" if table == "users" || table == "teams"
                   rescue => e
-                    puts "DEBUG: Exception in restore: #{e.class} - #{e.message}" if table == "users" || table == "teams"
+                    # puts "DEBUG: Exception in restore: #{e.class} - #{e.message}" if table == "users" || table == "teams"
                     raise
                   end
                 end
               end
-              # summary, record = remap_record(summary, record, file_ids, remapped_ids, false) if setting(:allow_remap) && !setting(:strict)
+              summary, record = remap_record(summary, record, file_ids, remapped_ids, false) if setting(:allow_remap) && !setting(:strict)
               if klass && !setting(:dry_run)
                 # Already saved by klass.restore, just track it
                 restores[table] << { id: record.id, record: record }
                 remapped_ids[table]["id"][attrs["id"].to_s] = record.id.to_s
-                summary << ({ restored: { model: table, from: { id: attrs["id"], attrs: attrs }, to: { id: record.id, attrs: record.attributes } } })
-                log_progress(summary, step: :restored_data_record, model: table, id: record.id)
+                # summary << ({ restored: { model: table, from: { id: attrs["id"], attrs: attrs }, to: { id: record.id, attrs: record.attributes } } })
+                # log_progress(summary, step: :restored_data_record, model: table, id: record.id)
               else
-                summary << ({ restored: { model: table, id: record.id, attrs: record.attributes } }) if setting(:dry_run)
-                log_progress(summary, step: :restore_data_record)
+                # summary << ({ restored: { model: table, id: record.id, attrs: record.attributes } }) if setting(:dry_run)
+                # log_progress(summary, step: :restore_data_record)
               end
               # remapped_ids[table][attrs["id"]] = record
             end
@@ -941,7 +954,7 @@ class RestoreTenantJob < ApplicationJob
                 remaps[table] ||= []
                 remaps[table] << { id: record[:id], field: field, value: value }
               end
-              summary << ({ table: table, id: record[:id], field: field, value: value, cleaned_value: cleaned_value })
+              # summary << ({ table: table, id: record[:id], field: field, value: value, cleaned_value: cleaned_value })
             rescue => e
               summary << ({ table: table, id: record[:id], field: field, value: value, remap_error: e.message })
             end
@@ -957,9 +970,12 @@ class RestoreTenantJob < ApplicationJob
     #
     def safe_constantize(name)
       case name
-      when "editor_documents";  Editor::Document
-      when "editor_blocks";     Editor::Block
-      else;                     name.classify.constantize
+      when "editor_documents";                Editor::Document
+      when "editor_blocks";                   Editor::Block
+      # when "active_storage_attachments";      ActiveStorage::Attachment
+      # when "active_storage_blobs";            ActiveStorage::Blob
+      # when "active_storage_variant_records";  ActiveStorage::VariantRecord
+      else;                                   name.classify.constantize
       end
     rescue NameError
       nil
