@@ -33,6 +33,7 @@
 ### 28/11/2025
 
 - fix errors when sending PDF report
+- missing variable on rescue
 
 ### 27/11/2025
 

@@ -903,7 +903,7 @@ class RestoreTenantJob < ApplicationJob
           end
         end
       rescue => e
-        summary << ({ dump_file: dump_file, file_ids: file_ids })
+        summary << ({ file_ids: file_ids, remapped_ids: remapped_ids, error: e.message })
         log_progress(summary, step: :restore_data_records, message: e.message)
       end
       [ summary, restores ]
