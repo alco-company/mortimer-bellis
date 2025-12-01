@@ -33,6 +33,10 @@
 ### 01/12/2025
 
 - pushable missing argument
+- added comprehensive integration tests for time_materials with quarter-hour rounding validation (all 60 minute values)
+- added tests for hourly rate precedence: project rate > customer rate > user rate > team rate
+- fixed invoice_draft_test: corrected variable naming conflicts, added proper state (done) and customer_name to fixtures for ERP push validation
+- added rate precedence hierarchy tests to invoice_draft_test: verifies ERP invoices use correct rates (user/team/customer/project) when building invoice items
 
 ### 28/11/2025
 

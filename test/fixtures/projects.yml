@@ -10,7 +10,7 @@ one:
   state: 1
   budget: 9.99
   is_billable: false
-  hourly_rate: 9.99
+  hourly_rate: 300.00
   priority: 1
   estimated_minutes: 1
   actual_minutes: 1

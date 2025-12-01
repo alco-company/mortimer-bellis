@@ -292,7 +292,7 @@ two:
   date: <%= Date.today - 3.days %>
   time: 
   about: some text
-  customer_name:
+  customer_name: MyString
   customer: one
   project_name:
   project: 
@@ -301,7 +301,7 @@ two:
   quantity: 1.0
   rate: 
   discount: 0.0
-  state:
+  state: done
   is_invoice: true
   is_free:
   is_offer:
@@ -309,7 +309,7 @@ two:
   user: one
   comment: just a comment
   over_time:
-  unit_price: ""
+  unit_price: "100.00"
   unit: ""
   pushed_erp_timestamp:
   erp_guid:
@@ -321,7 +321,7 @@ two_a:
   date: <%= Date.today - 3.days %>
   time: 
   about: some text
-  customer_name:
+  customer_name: MyString
   customer: one
   project_name:
   project: 
@@ -330,7 +330,7 @@ two_a:
   quantity: 1.0
   rate: 
   discount: 0.0
-  state:
+  state: done
   is_invoice: true
   is_free:
   is_offer:
@@ -350,7 +350,7 @@ two_b:
   date: <%= Date.today - 3.days %>
   time: 
   about: some text
-  customer_name:
+  customer_name: MyString
   customer: one
   project_name:
   project: 
@@ -359,7 +359,7 @@ two_b:
   quantity: 1.0
   rate: 
   discount: "2,34"
-  state:
+  state: done
   is_invoice: true
   is_free:
   is_offer:
@@ -379,7 +379,7 @@ two_c:
   date: <%= Date.today - 3.days %>
   time: 
   about: some text
-  customer_name:
+  customer_name: MyString
   customer: one
   project_name:
   project: 
@@ -388,7 +388,7 @@ two_c:
   quantity: 1.0
   rate: 
   discount: "2,34"
-  state:
+  state: done
   is_invoice: true
   is_free:
   is_offer:
@@ -680,3 +680,122 @@ ten_project_2:
   pushed_erp_timestamp:
   erp_guid:
   push_log: 
+
+# Rate precedence test fixtures - tenant :three
+# User rate (100), Team rate (200), Customer rate (850.50), Project rate (300)
+
+# Test: user rate when no customer/project
+rate_test_user:
+  tenant: three
+  date: <%= Date.today - 1.day %>
+  time: "01:00"
+  about: Testing user rate
+  customer_name: MyString
+  customer: one
+  project_name:
+  project:
+  product_name:
+  product:
+  quantity:
+  rate: "100.00"
+  discount:
+  state: done
+  is_invoice: true
+  is_free:
+  is_offer:
+  is_separate:
+  user: one
+  comment:
+  over_time: 0
+  unit_price:
+  unit:
+  pushed_erp_timestamp:
+  erp_guid:
+  push_log:
+
+# Test: customer rate overrides user rate
+rate_test_customer:
+  tenant: three
+  date: <%= Date.today - 1.day %>
+  time: "01:00"
+  about: Testing customer rate
+  customer_name: MyString
+  customer: one
+  project_name:
+  project:
+  product_name:
+  product:
+  quantity:
+  rate: "850.50"
+  discount:
+  state: done
+  is_invoice: true
+  is_free:
+  is_offer:
+  is_separate:
+  user: one
+  comment:
+  over_time: 0
+  unit_price:
+  unit:
+  pushed_erp_timestamp:
+  erp_guid:
+  push_log:
+
+# Test: project rate overrides customer rate
+rate_test_project:
+  tenant: three
+  date: <%= Date.today - 1.day %>
+  time: "01:00"
+  about: Testing project rate
+  customer_name: MyString
+  customer: one
+  project_name: project one
+  project: one
+  product_name:
+  product:
+  quantity:
+  rate: "300.00"
+  discount:
+  state: done
+  is_invoice: true
+  is_free:
+  is_offer:
+  is_separate:
+  user: one
+  comment:
+  over_time: 0
+  unit_price:
+  unit:
+  pushed_erp_timestamp:
+  erp_guid:
+  push_log:
+
+# Test: team rate when user has no rate
+rate_test_team:
+  tenant: three
+  date: <%= Date.today - 1.day %>
+  time: "01:00"
+  about: Testing team rate
+  customer_name: MyString
+  customer: one
+  project_name:
+  project:
+  product_name:
+  product:
+  quantity:
+  rate: "200.00"
+  discount:
+  state: done
+  is_invoice: true
+  is_free:
+  is_offer:
+  is_separate:
+  user: three
+  comment:
+  over_time: 0
+  unit_price:
+  unit:
+  pushed_erp_timestamp:
+  erp_guid:
+  push_log:

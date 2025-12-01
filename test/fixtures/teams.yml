@@ -13,6 +13,7 @@ two:
   color: sky
   locale: en
   time_zone: London
+  hourly_rate: 200.00
 
 no_dinero_authorization:
   tenant: no_dinero_authorization
