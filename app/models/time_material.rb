@@ -384,7 +384,7 @@ class TimeMaterial < ApplicationRecord
   #
   # make sure this record is good for pushing to the ERP
   #
-  def pushable?(resource_params)
+  def pushable?(resource_params = {})
     shadow_tm = self.dup
     permitted = resource_params
     shadow_tm.assign_attributes(permitted)

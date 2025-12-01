@@ -30,6 +30,10 @@
 
 ## CHANGELOG
 
+### 01/12/2025
+
+- pushable missing argument
+
 ### 28/11/2025
 
 - fix errors when sending PDF report
