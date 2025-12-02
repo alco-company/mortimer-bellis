@@ -72,10 +72,19 @@ module FieldSpecializations
     def active_record_relation_options_enumerable(relation)
       Enumerator.new do |collection|
         relation.each do |object|
-          attributes = object.attributes
+          attributes = object.attributes.dup
           id = attributes.delete(relation.primary_key)
-          value = attributes.values.join(" ")
-          collection << [ id, value ]
+          value_key, value = attributes.first
+          data = attributes.except(value_key)
+          data.transform_values! do |v|
+            case v
+            when TrueClass, FalseClass, NilClass, String, Symbol, Integer
+              v
+            else
+              v.to_s
+            end
+          end
+          collection << [ id, value, data ]
         end
       end
     end

@@ -605,6 +605,33 @@ export default class extends Controller {
     // }
   }
 
+
+userChanged(event) {
+  const select = event.target;
+  const selectedOption = select.options[select.selectedIndex];
+  const hourlyRate = selectedOption.dataset.hourlyRate;
+  
+  // Set the time hour rate field
+  // Example: this.rateTarget.value = hourlyRate;
+}
+
+  userChanged(e) {
+    let tmr = document.getElementById("time_material_rate");
+
+    const select = e.target;
+    const selectedOption = select.options[select.selectedIndex];
+    const hourlyRate = selectedOption.dataset.hourly_rate;
+    const validRate = parseFloat(hourlyRate);
+    
+    if (!isNaN(validRate)) {
+      let val = this.empty_value(tmr, validRate);
+      tmr.value = val;
+    } else {
+      console.warn(`Invalid userHourlyRate: ${hourlyRate}`);
+      tmr.value = this.hourRate || 0.0;
+    }
+  }
+
   customerChange(e) {
     if (e.currentTarget.value === "") {
       e.target.previousSibling.value = "";

@@ -27,8 +27,13 @@
 - find ways to utilise <output> - https://denodell.com/blog/html-best-kept-secret-output-tag
 - ways to test before launch: https://bhavyansh001.medium.com/the-rails-performance-checklist-i-run-before-every-launch-b02f605285cf
 - priser
+- change price when changing user
 
 ## CHANGELOG
+
+### 02/12/2025
+
+- change user => set user hourly_rate
 
 ### 01/12/2025
 

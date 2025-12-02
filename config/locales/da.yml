@@ -93,6 +93,8 @@ da:
   greater_than_equal: større end eller lig med
   matches: indeholder
   not_matching: indeholder ikke
+  change_password: Skift adgangskode
+  change_password_action: Skift adgangskoden
 
   application:
     header:
