@@ -34,6 +34,7 @@
 ### 02/12/2025
 
 - change user => set user hourly_rate
+- setting default_time_material_hour_rate
 
 ### 01/12/2025
 
