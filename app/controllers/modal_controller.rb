@@ -9,6 +9,7 @@ class ModalController < MortimerController
     # resource
     case params[:modal_form]
     when "restore_backup"; process_restore_backup_new
+    when "settings"; process_settings_new
     else
       @resource = find_resource
       case resource_class.to_s.underscore
@@ -120,6 +121,9 @@ class ModalController < MortimerController
         end
       end
       @step = "accept"
+    end
+
+    def process_settings_new
     end
 
     def process_calendar_new

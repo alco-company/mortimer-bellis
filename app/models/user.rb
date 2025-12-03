@@ -118,7 +118,7 @@ class User < ApplicationRecord
       "CASE
         WHEN users.hourly_rate != 0 THEN users.hourly_rate
         WHEN teams.hourly_rate != 0 THEN teams.hourly_rate
-        ELSE #{default_rate}
+        ELSE '#{default_rate}'
       END as effective_hourly_rate"
     )
   }

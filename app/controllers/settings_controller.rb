@@ -88,9 +88,6 @@ class SettingsController < MortimerController
     end
 
     def before_update_callback
-      debugger
-      resource.setable_id = params[:rc_id] if params[:rc_id].present? && params[:rc_id].to_i.positive?
-      resource.setable_type = params[:rc] if params[:rc].present?
       resource.valid?
     end
 

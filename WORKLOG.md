@@ -34,6 +34,7 @@
 ### 03/12/2025
 
 - added hourly_rate to select with user_list
+- fixed attributes being wrongly applied to settings
 
 ### 02/12/2025
 

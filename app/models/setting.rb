@@ -274,7 +274,8 @@ class Setting < ApplicationRecord
 
   def self.time_material_settings(resource: nil)
     # return self.get_settings(DEFAULT_TIME_SETTINGS, resource:) unless Rails.env.test?
-    build_settings_for(resource:, keys: DEFAULT_TIME_SETTINGS, klass_name: klass_for(resource))
+    klass = klass_for(resource) || "TimeMaterial"
+    build_settings_for(resource:, keys: DEFAULT_TIME_SETTINGS, klass_name: klass)
   end
   def self.team_settings(resource: nil)
     # return self.get_settings(DEFAULT_TIME_SETTINGS, resource:) unless Rails.env.test?
@@ -321,10 +322,12 @@ class Setting < ApplicationRecord
   end
 
   def self.klass_for(resource)
-    return "User" if resource.is_a?(User) || resource == User
-    return "Team" if resource.is_a?(Team) || resource == Team
-    return "TimeMaterial" if resource.is_a?(TimeMaterial) || resource == TimeMaterial
-    resource&.class&.name || "TimeMaterial"
+    return nil if resource.nil?
+    return resource.name if resource.is_a?(Class)
+    # return "User" if resource.is_a?(User) || resource == User
+    # return "Team" if resource.is_a?(Team) || resource == Team
+    # return "TimeMaterial" if resource.is_a?(TimeMaterial) || resource == TimeMaterial
+    resource&.class&.name # || "TimeMaterial"
   end
 
   private_class_method :klass_for
@@ -380,11 +383,10 @@ class Setting < ApplicationRecord
 
     # Ensure one row per key at the chosen level. New rows use DEFAULT values,
     # existing rows are preserved.
-    rs = resource.nil? ? tenant.settings : resource.settings
-
+    rs = resource.nil? ? tenant.settings : (resource.id.nil? rescue true) ? klass_name.constantize.settings : resource.settings
     mapped = {}
     keys.each do |key, default_value|
-      Rails.logger.info "Looking for setting '#{key}' for #{setable_type}(#{setable_id || 'nil'})"
+      # Rails.logger.info "Looking for setting '#{key}' for #{setable_type}(#{setable_id || 'nil'})"
       rec = rs.find { |s| s.key == key && s.setable_type == setable_type && s.setable_id == setable_id }
       if rec.present?
         mapped[key] = default_value.merge({
