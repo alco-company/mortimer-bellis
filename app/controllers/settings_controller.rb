@@ -87,6 +87,13 @@ class SettingsController < MortimerController
       Broadcasters::Resource.new(resource, params.permit!, target: params[:target], user: Current.get_user, stream: "#{Current.get_tenant.id}_settings_view", partial: "settings/special").replace
     end
 
+    def before_update_callback
+      debugger
+      resource.setable_id = params[:rc_id] if params[:rc_id].present? && params[:rc_id].to_i.positive?
+      resource.setable_type = params[:rc] if params[:rc].present?
+      resource.valid?
+    end
+
     # TimeMaterial => Parameters: {"key"=>"limit_time_to_quarters", "value"=>"1", "id"=>"423", "setting"=>{"key"=>"limit_time_to_quarters", "value"=>"1"}}
     # User => Parameters: {"key"=>"limit_time_to_quarters", "value"=>"0", "id"=>"423", "setting"=>{"key"=>"limit_time_to_quarters", "value"=>"0"}}
     def update_callback

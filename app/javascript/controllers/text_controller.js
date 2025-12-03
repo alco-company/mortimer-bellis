@@ -34,6 +34,8 @@ export default class extends Controller {
     if (url !== undefined && url !== "") {
       this.savebuttonTarget.ariaBusy = true;
       let method = this.element.dataset.method || "POST";
+      let stype = this.inputTarget.dataset.setable_type || null;
+      let sid = this.inputTarget.dataset.setable_id || null;
       fetch(url, {
         method: method,
         headers: {
@@ -41,7 +43,12 @@ export default class extends Controller {
           "Accept": "text/vnd.turbo-stream.html",
           "X-CSRF-Token": this.csrfToken,
         },
-        body: JSON.stringify({ key: this.keyValue, value: this.inputTarget.value }),
+        body: JSON.stringify({
+          key: this.keyValue,
+          value: this.inputTarget.value,
+          setable_type: stype,
+          setable_id: sid
+        }),
       })
       .then((r) => r.text())
       .then((html) => {

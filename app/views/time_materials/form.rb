@@ -17,7 +17,7 @@ class TimeMaterials::Form < ApplicationForm
             row field(:date).date(class: "mort-form-date"), "mort-field my-0"
           end
           div(class: "my-0 col-span-4 xs:col-span-2") do
-            row field(:user_id).select(User.by_tenant.order(name: :asc).select(:id, :name, :hourly_rate), data: { action: "change->time-material#userChanged" }, class: "mort-form-select my-0"), "mort-field my-0"
+            row field(:user_id).select(User.user_list, data: { action: "change->time-material#userChanged" }, class: "mort-form-select my-0"), "mort-field my-0"
           end
         end
       else

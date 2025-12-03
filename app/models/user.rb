@@ -112,6 +112,17 @@ class User < ApplicationRecord
     end
   }
 
+  scope :with_effective_hourly_rate, ->(default_rate = "0") {
+    joins(:team).select(
+      "users.id, users.name",
+      "CASE
+        WHEN users.hourly_rate != 0 THEN users.hourly_rate
+        WHEN teams.hourly_rate != 0 THEN teams.hourly_rate
+        ELSE #{default_rate}
+      END as effective_hourly_rate"
+    )
+  }
+
   scope :by_fulltext, ->(query) { where("email LIKE :query or role LIKE :query or locale  LIKE :query or time_zone LIKE :query", query: "%#{query}%") if query.present? }
   scope :by_email, ->(email) { where("email LIKE ?", "%#{email}%") if email.present? }
   scope :by_role, ->(role) { where(role: role) if role.present? }
@@ -318,5 +329,18 @@ class User < ApplicationRecord
 
   def punches_settled_at
     Time.now
+  end
+
+  #
+  # get hourly rate for new time material
+  # first check user hourly_rate
+  # then check user.team.hourly_rate
+  def get_hourly_rate
+    return hourly_rate if hourly_rate != 0
+    return team.hourly_rate if team.hourly_rate != 0
+    rate = tenant.time_products&.first&.base_amount_value
+    rate || default(:default_time_material_rate, 0)
+  rescue
+    0
   end
 end

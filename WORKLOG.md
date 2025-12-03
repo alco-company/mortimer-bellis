@@ -31,6 +31,10 @@
 
 ## CHANGELOG
 
+### 03/12/2025
+
+- added hourly_rate to select with user_list
+
 ### 02/12/2025
 
 - change user => set user hourly_rate

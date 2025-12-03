@@ -278,11 +278,13 @@ class Setting < ApplicationRecord
   end
   def self.team_settings(resource: nil)
     # return self.get_settings(DEFAULT_TIME_SETTINGS, resource:) unless Rails.env.test?
-    build_settings_for(resource:, keys: DEFAULT_TIME_SETTINGS, klass_name: klass_for(resource))
+    klass = klass_for(resource) || "Team"
+    build_settings_for(resource:, keys: DEFAULT_TIME_SETTINGS, klass_name: klass)
   end
   def self.user_settings(resource: nil)
     # return self.get_settings(DEFAULT_TIME_SETTINGS, resource:) unless Rails.env.test?
-    build_settings_for(resource:, keys: DEFAULT_TIME_SETTINGS, klass_name: klass_for(resource))
+    klass = klass_for(resource) || "User"
+    build_settings_for(resource:, keys: DEFAULT_TIME_SETTINGS, klass_name: klass)
   end
 
   def self.customer_settings(resource: nil)

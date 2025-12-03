@@ -247,7 +247,12 @@ class Settings::SettingsIndex < ApplicationComponent
             target: target,
             url: url,
             action: "click->boolean#toggle",
-            attributes: {}
+            attributes: {
+              data: {
+                setable_type: rc,
+                setable_id: rc_id
+              }
+            }
           )
         end
       end
@@ -255,6 +260,7 @@ class Settings::SettingsIndex < ApplicationComponent
   end
 
   def text_input(setting, index)
+    rc, rc_id = get_class_for_setting(setting.second["object"])
     url = setting.second["id"] == "0" ? "/settings?target=setting_i_#{index}" : "/settings/#{setting.second["object"].id}"
     target = setting.second["id"] == "0" ? "setting_i_#{index}" : dom_id(setting.second["object"])
     div(class: "px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0") do
@@ -267,13 +273,20 @@ class Settings::SettingsIndex < ApplicationComponent
           url: url,
           state: "show",
           hint: setting.second["object"].description,
-          attributes: { class: "flex col-span-2 grow" },
+          attributes: {
+            class: "flex col-span-2 grow",
+            data: {
+              setable_type: rc,
+              setable_id: rc_id
+            }
+          },
         )
       end
     end
   end
 
   def select_input(setting, index)
+    rc, rc_id = get_class_for_setting(setting.second["object"])
     url = setting.second["id"] == "0" ? "/settings?target=setting_i_#{index}" : "/settings/#{setting.second["object"].id}"
     target = setting.second["id"] == "0" ? "setting_i_#{index}" : dom_id(setting.second["object"])
     div(id: "setting_#{index}", class: "px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0") do
@@ -291,7 +304,15 @@ class Settings::SettingsIndex < ApplicationComponent
           value_class: "flex flex-col grow",
           url: url,
           target: target,
-          attributes: { key: setting.second["key"], class: "flex col-span-2 grow", data: { action: "change->select#change" } },
+          attributes: {
+            key: setting.second["key"],
+            class: "flex col-span-2 grow",
+            data: {
+              action: "change->select#change",
+              setable_type: rc,
+              setable_id: rc_id
+            }
+          },
           editable: false
         )
       end

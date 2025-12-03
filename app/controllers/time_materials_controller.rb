@@ -1,7 +1,7 @@
 class TimeMaterialsController < MortimerController
   def new
     super
-    resource.initialize_new get_hourly_rate, get_default_time_material_date
+    resource.initialize_new Current.get_user.get_hourly_rate, get_default_time_material_date
   end
 
   def index
@@ -363,18 +363,5 @@ class TimeMaterialsController < MortimerController
       end
     rescue
       Time.current.to_date
-    end
-
-    #
-    # get hourly rate for new time material
-    # first check user hourly_rate
-    # then check user.team.hourly_rate
-    def get_hourly_rate
-      return Current.get_user.hourly_rate if Current.get_user.hourly_rate != 0
-      return Current.get_user.team.hourly_rate if Current.get_user.team.hourly_rate != 0
-      rate = Current.get_tenant.time_products&.first&.base_amount_value
-      rate || Current.get_user.default(:default_time_material_rate, 0)
-    rescue
-      0
     end
 end
