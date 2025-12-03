@@ -35,6 +35,7 @@
 
 - added hourly_rate to select with user_list
 - fixed attributes being wrongly applied to settings
+- paused the setting default_time_material_rate
 
 ### 02/12/2025
 

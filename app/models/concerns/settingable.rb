@@ -216,9 +216,15 @@ module Settingable
       cannot?(action, resource:)
     end
 
+    # get default setting value for key
+    # start at self, then User, then self.team, Team, TimeMaterial, and eventually Tenant
+    #
     def default(key, default)
       defaults = settings.where(key: key.to_s).any? ? settings.where(key: key.to_s) :
+        User.settings.where(key: key.to_s).any? ? User.settings.where(key: key.to_s) :
         team.settings.where(key: key.to_s).any? ? team.settings.where(key: key.to_s) :
+        Team.settings.where(key: key.to_s).any? ? Team.settings.where(key: key.to_s) :
+        TimeMaterial.settings.where(key: key.to_s).any? ? TimeMaterial.settings.where(key: key.to_s) :
         Current.get_tenant.settings.where(key: key.to_s)
       defaults.count.positive? ? defaults.first.value : default
     rescue

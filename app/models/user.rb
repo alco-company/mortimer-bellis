@@ -338,8 +338,8 @@ class User < ApplicationRecord
   def get_hourly_rate
     return hourly_rate if hourly_rate != 0
     return team.hourly_rate if team.hourly_rate != 0
-    rate = tenant.time_products&.first&.base_amount_value
-    rate || default(:default_time_material_rate, 0)
+    tenant.time_products&.first&.base_amount_value
+    # rate || default(:default_time_material_rate, 0)
   rescue
     0
   end

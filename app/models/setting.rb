@@ -85,7 +85,7 @@ class Setting < ApplicationRecord
       "default_time_material_about" => "text",
       "default_time_material_hour_time" => "text",
       "default_time_material_minute_time" => "text",
-      "default_time_material_rate" => "text",
+      # "default_time_material_rate" => "text",
       # "default_time_material_over_time" => "boolean",
       "add_time_materials" => "boolean",
       "add_customers" => "boolean",
@@ -120,12 +120,12 @@ class Setting < ApplicationRecord
       "default_time_material_state" => {
         "draft" => I18n.t("time_material.states.draft"),
         "done" => I18n.t("time_material.states.done")
-      },
-      "default_time_material_rate" => {
-        "750,75" => "750,75",
-        "500,00" => "500,00",
-        "250,00" => "250,00"
       }
+      # "default_time_material_rate" => {
+      #   "750,75" => "750,75",
+      #   "500,00" => "500,00",
+      #   "250,00" => "250,00"
+      # }
     }
   end
 
@@ -144,7 +144,7 @@ class Setting < ApplicationRecord
       when "default_time_material_about";         [ I18n.t("time_material.default_assigned_about"), "TimeMaterial" ]
       when "default_time_material_hour_time";     [ "0", "TimeMaterial" ]
       when "default_time_material_minute_time";   [ "15", "TimeMaterial" ]
-      when "default_time_material_rate";          [ "900.00", "TimeMaterial" ]
+      # when "default_time_material_rate";          [ "900.00", "TimeMaterial" ]
       # when "default_time_material_over_time"; [ "0", "TimeMaterial" ]
       when "validate_time_material_done";         [ "false", "TimeMaterial" ]
       when "limit_time_to_quarters";              [ "false", "TimeMaterial" ]
@@ -171,7 +171,9 @@ class Setting < ApplicationRecord
       [ "default_time_material_about", I18n.t("settings.keys.default_time_material_about") ],
       [ "default_time_material_hour_time", I18n.t("settings.keys.default_time_material_hour_time") ],
       [ "default_time_material_minute_time", I18n.t("settings.keys.default_time_material_minute_time") ],
-      [ "default_time_material_rate", I18n.t("settings.keys.default_time_material_rate") ],
+      # paused 03/12/2025 - too convoluted atm
+      # [ "default_time_material_rate", I18n.t("settings.keys.default_time_material_rate") ],
+      #
       # [ "default_time_material_over_time", I18n.t("settings.keys.default_time_material_over_time") ],
       [ "add_time_materials", I18n.t("settings.keys.add_time_material") ],
       [ "add_customers", I18n.t("settings.keys.add_customer") ],
@@ -345,7 +347,7 @@ class Setting < ApplicationRecord
       "default_time_material_about" => { "type" => "text", "value" => I18n.t("time_material.default_assigned_about") },
       "default_time_material_hour_time" => { "type" => "text", "value" => "0" },
       "default_time_material_minute_time" => { "type" => "text", "value" => "15" },
-      "default_time_material_rate" => { "type" => "text", "value" => "900,00" },
+      # "default_time_material_rate" => { "type" => "text", "value" => "900,00" },
       "default_time_material_over_time" => { "type" => "boolean", "value" => "true" },
       "add_time_materials" => { "type" => "boolean", "value" => "true" },
       "see_mileage_tab" => { "type" => "boolean", "value" => "false" },
