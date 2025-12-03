@@ -188,6 +188,12 @@ module FieldSpecializations
       def map_options(collection)
         OptionMapper.new(collection)
       end
+
+      def options(*collection)
+        map_options(collection).each do |key, value, data|
+          option(selected: field.value == key, value: key, data: data) { value }
+        end
+      end
   end
 
   class EnumSelectField < SelectField
