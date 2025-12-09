@@ -613,12 +613,14 @@ export default class extends Controller {
     const hourlyRate = selectedOption.dataset.effective_hourly_rate;
     const validRate = parseFloat(hourlyRate);
     
-    if (!isNaN(validRate)) {
-      let val = this.empty_value(tmr, validRate);
-      tmr.value = val;
-    } else {
-      console.warn(`Invalid userHourlyRate: ${hourlyRate}`);
-      tmr.value = this.hourRate || 0.0;
+    if (document.querySelector("#time_material_project_id").value == '' && document.querySelector("#time_material_customer_id").value == '') {
+      if (!isNaN(validRate)) {
+        let val = this.empty_value(tmr, validRate);
+        tmr.value = val;
+      } else {
+        console.warn(`Invalid userHourlyRate: ${hourlyRate}`);
+        tmr.value = this.hourRate || 0.0;
+      }
     }
   }
 
@@ -633,6 +635,7 @@ export default class extends Controller {
       if ( document.querySelector("#time_material_customer_id").dataset.lookupCustomerHourlyRate ) {
         if (document.querySelector("#time_material_customer_id").value !== this.initialCustomer) {
           this.initialCustomer = document.querySelector( "#time_material_customer_id" ).value;
+          this.resetProjectInfo();
           let tmr = document.getElementById("time_material_rate");
 
           // // Add validation here too
@@ -651,6 +654,14 @@ export default class extends Controller {
       }
     }
   }
+
+  resetProjectInfo() {
+    document.querySelector("#time_material_project_id").value = "";
+    document.querySelector("#time_material_project_name").value = "";
+    document.querySelector("#time_material_project_id").dataset.lookupCustomerId = "";
+    document.querySelector("#time_material_project_id").dataset.lookupCustomerName = "";
+    document.querySelector("#time_material_project_id").dataset.lookupProjectHourlyRate = "";
+  } 
 
   projectChange(e) {
     if (e.currentTarget.value === "") {

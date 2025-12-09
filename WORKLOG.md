@@ -7,6 +7,8 @@
 - update the favicon depending on the number of open tasks - https://railsdesigner.com/update-favicon-badge-turbo-stream
 - https://medium.com/@raviskit2012/handling-multi-tenancy-in-a-ruby-on-rails-app-simple-secure-and-scalable-233dabaa6e77
 - use metrics to optimize speed - https://bhavyansh001.medium.com/how-we-made-our-rails-app-load-in-under-100ms-ceceea024c62
+- find ways to utilise <output> - https://denodell.com/blog/html-best-kept-secret-output-tag
+- use Terraform to setup servers - https://dennmart.com/articles/review-apps-with-kamal-part-1-provisioning-servers/
 
 ## ISSUES
 
@@ -19,17 +21,20 @@
 - VMC, BIMI - https://www.valimail.com/resources/guides/bimi-email/verified-mark-certificate/
 - https://binarysolo.blog/custom-error-pages-in-rails/ && https://beon.tech/blog/how-to-handle-exceptions-in-rails-full-guide
 - impersonate user - not only tenant
-- backup/restore menu items
 - find proper hour_rate - see https://whimsical.com/priceable-PodwwnMvDvpAwybS916Ymj
 - deferred finish - set to automate closing
 - display turbo frames being busy - https://www.dotruby.com/articles/improving-turbo-frame-ux-with-the-busy-attribute
 - display other users editing the record you're wanting to edit: https://unagisoftware.com/articles/preventing-edit-conflicts-in-rails-with-turbo-hotwire-and-stimulusjs
-- find ways to utilise <output> - https://denodell.com/blog/html-best-kept-secret-output-tag
 - ways to test before launch: https://bhavyansh001.medium.com/the-rails-performance-checklist-i-run-before-every-launch-b02f605285cf
 - priser
+- backup/restore menu items
 - change price when changing user
 
 ## CHANGELOG
+
+### 09/12/2025
+
+- reset project when changing customer
 
 ### 03/12/2025
 
