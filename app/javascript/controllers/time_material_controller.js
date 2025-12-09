@@ -30,6 +30,7 @@ export default class extends Controller {
   }
 
   hourRate = 0.0;
+  userHourRate = 0.0;
   initialCustomer = "";
   initialProject = "";
 
@@ -61,6 +62,7 @@ export default class extends Controller {
       ).value;
       this.hourRate =
         parseFloat(document.getElementById("time_material_rate").value) || 0.0;
+      this.userHourRate = this.hourRate;
       this.initialProject = document.querySelector(
         "#time_material_project_id"
       ).value;
@@ -611,16 +613,24 @@ export default class extends Controller {
     const select = e.target;
     const selectedOption = select.options[select.selectedIndex];
     const hourlyRate = selectedOption.dataset.effective_hourly_rate;
-    const validRate = parseFloat(hourlyRate);
     
     if (document.querySelector("#time_material_project_id").value == '' && document.querySelector("#time_material_customer_id").value == '') {
-      if (!isNaN(validRate)) {
-        let val = this.empty_value(tmr, validRate);
-        tmr.value = val;
-      } else {
-        console.warn(`Invalid userHourlyRate: ${hourlyRate}`);
-        tmr.value = this.hourRate || 0.0;
-      }
+      this.setHourRate(hourlyRate);
+      this.userHourRate = this.hourRate;
+    }
+  }
+
+  setHourRate(valueRate, defaultRate = 0.0) {
+    console.log(`Setting hour rate to ${valueRate} with userHourRate at ${this.userHourRate}`);
+    let tmr = document.getElementById("time_material_rate");
+    valueRate = parseFloat(valueRate);
+
+    if( !isNaN(valueRate) ) {
+      this.hourRate = valueRate == 0 ? parseFloat(defaultRate) : valueRate;
+      this.hourRate = this.hourRate == 0 ? this.userHourRate : this.hourRate;
+      tmr.value = this.hourRate;
+    } else {
+      tmr.value = this.userHourRate || this.defaultRate || 0.0;
     }
   }
 
@@ -632,35 +642,35 @@ export default class extends Controller {
     } else {
       if (this.invoiceTarget.value == 0)
         this.invoiceTarget.nextElementSibling.click();
+      console.log(`Customer change detected: ${e.currentTarget.value}, ${document.querySelector("#time_material_customer_id").dataset.lookupCustomerHourlyRate}`);
+      this.resetProjectInfo();
       if ( document.querySelector("#time_material_customer_id").dataset.lookupCustomerHourlyRate ) {
+        console.log(`Setting customer hourly rate at ${document.querySelector("#time_material_customer_id").dataset.lookupCustomerHourlyRate}`);
         if (document.querySelector("#time_material_customer_id").value !== this.initialCustomer) {
           this.initialCustomer = document.querySelector( "#time_material_customer_id" ).value;
-          this.resetProjectInfo();
-          let tmr = document.getElementById("time_material_rate");
 
           // // Add validation here too
-          const dataRate = document.querySelector("#time_material_customer_id").dataset.lookupCustomerHourlyRate;
-          const validRate = parseFloat(dataRate);
+          const hourRate = document.querySelector("#time_material_customer_id").dataset.lookupCustomerHourlyRate;
+          this.setHourRate(hourRate);
 
-          if (!isNaN(validRate)) {
-            let val = this.empty_value(tmr, validRate);
-            tmr.value = val;
-          } else {
-            console.warn(`Invalid lookupCustomerHourlyRate: ${dataRate}`);
-            tmr.value = this.hourRate || 0.0;
-          }
           this.updateOverTime(document.getElementById("time_material_over_time"));
         }
+      } else {
+        this.setHourRate(this.userHourRate);
       }
     }
   }
 
   resetProjectInfo() {
-    document.querySelector("#time_material_project_id").value = "";
-    document.querySelector("#time_material_project_name").value = "";
-    document.querySelector("#time_material_project_id").dataset.lookupCustomerId = "";
-    document.querySelector("#time_material_project_id").dataset.lookupCustomerName = "";
-    document.querySelector("#time_material_project_id").dataset.lookupProjectHourlyRate = "";
+    try {
+      document.querySelector("#time_material_project_id").value = "";
+      document.querySelector("#time_material_project_name").value = "";
+      document.querySelector("#time_material_project_id").dataset.lookupCustomerId = "";
+      document.querySelector("#time_material_project_id").dataset.lookupCustomerName = "";
+      document.querySelector("#time_material_project_id").dataset.lookupProjectHourlyRate = "";
+    } catch (error) {
+      console.error("Error resetting project info:", error);
+    }
   } 
 
   projectChange(e) {
@@ -683,16 +693,12 @@ export default class extends Controller {
           let tmr = document.getElementById("time_material_rate");
 
           // // Add validation here too
-          const dataRate = document.querySelector("#time_material_project_id").dataset.lookupProjectHourlyRate;
-          const validRate = parseFloat(dataRate);
-
-          if (!isNaN(validRate)) {
-            let val = this.empty_value(tmr, validRate);
-            tmr.value = val;
-          } else {
-              console.warn(`Invalid lookupProjectHourlyRate: ${dataRate}`);
-              tmr.value = this.hourRate || 0.0;
-          }
+          const hourRate = document.querySelector("#time_material_project_id").dataset.lookupProjectHourlyRate;
+          this.setHourRate( hourRate,
+            document.querySelector("#time_material_customer_id")
+              .dataset
+              .lookupCustomerHourlyRate
+          );
           this.updateOverTime( document.getElementById("time_material_over_time") );
         }        
       }
@@ -714,26 +720,6 @@ export default class extends Controller {
   setMileage(e) {
     // this.mileageTarget.value =
     //   this.odotoTarget.value - this.odofromTarget.value;
-  }
-
-  empty_value(e, value = 0.0) {
-    console.log(`hourRate: ${this.hourRate} - value: ${value}`);
-
-    // Parse and validate the incoming value
-    const parsedValue = parseFloat(value);
-    const validValue = isNaN(parsedValue) ? 0.0 : parsedValue;
-
-    if (validValue !== 0.0) {
-      this.hourRate = validValue;
-      console.log(`hourRate updated: ${this.hourRate}`);
-      return validValue;
-    }
-
-    // Parse and validate the existing element value
-    const existingValue = parseFloat(e.value);
-    this.hourRate = isNaN(existingValue) ? 0.0 : existingValue;
-    console.log(`use current hourRate: ${this.hourRate}`);
-    return this.hourRate;
   }
 
   render() {

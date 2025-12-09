@@ -35,6 +35,7 @@
 ### 09/12/2025
 
 - reset project when changing customer
+- reset prices on customer change
 
 ### 03/12/2025
 
