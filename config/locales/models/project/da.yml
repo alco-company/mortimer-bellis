@@ -7,6 +7,9 @@ da:
       done: Afsluttet
       archived: Arkiveret
     modal:
+      setting_all:
+        title: Indstillinger for projekter
+        instruction: Her kan du indstille hvordan projekter skal fungere i Mortimer.
       delete_all: 
         title: Slet alle projekter
         instruction: Er du sikker på, at du vil slette alle %{count} projekter?

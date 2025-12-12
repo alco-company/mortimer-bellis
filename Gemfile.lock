@@ -177,6 +177,35 @@ GEM
       dotenv (= 3.1.8)
       railties (>= 6.1)
     drb (2.2.3)
+    dry-configurable (1.3.0)
+      dry-core (~> 1.1)
+      zeitwerk (~> 2.6)
+    dry-core (1.1.0)
+      concurrent-ruby (~> 1.0)
+      logger
+      zeitwerk (~> 2.6)
+    dry-inflector (1.2.0)
+    dry-initializer (3.2.0)
+    dry-logic (1.6.0)
+      bigdecimal
+      concurrent-ruby (~> 1.0)
+      dry-core (~> 1.1)
+      zeitwerk (~> 2.6)
+    dry-schema (1.14.1)
+      concurrent-ruby (~> 1.0)
+      dry-configurable (~> 1.0, >= 1.0.1)
+      dry-core (~> 1.1)
+      dry-initializer (~> 3.2)
+      dry-logic (~> 1.5)
+      dry-types (~> 1.8)
+      zeitwerk (~> 2.6)
+    dry-types (1.8.3)
+      bigdecimal (~> 3.0)
+      concurrent-ruby (~> 1.0)
+      dry-core (~> 1.0)
+      dry-inflector (~> 1.0)
+      dry-logic (~> 1.4)
+      zeitwerk (~> 2.6)
     ed25519 (1.4.0)
     erb (5.1.3)
     erubi (1.13.1)
@@ -191,6 +220,13 @@ GEM
       multipart-post (~> 2.0)
     faraday-net_http (3.4.1)
       net-http (>= 0.5.0)
+    fast-mcp (1.5.0)
+      addressable (~> 2.8)
+      base64
+      dry-schema (~> 1.14)
+      json (~> 2.0)
+      mime-types (~> 3.4)
+      rack (~> 3.1)
     ferrum (0.15)
       addressable (~> 2.5)
       concurrent-ruby (~> 1.1)
@@ -216,6 +252,14 @@ GEM
     globalid (1.3.0)
       activesupport (>= 6.1)
     hashie (5.0.0)
+    herb (0.7.3-aarch64-linux-gnu)
+    herb (0.7.3-aarch64-linux-musl)
+    herb (0.7.3-arm-linux-gnu)
+    herb (0.7.3-arm-linux-musl)
+    herb (0.7.3-arm64-darwin)
+    herb (0.7.3-x86_64-darwin)
+    herb (0.7.3-x86_64-linux-gnu)
+    herb (0.7.3-x86_64-linux-musl)
     hotwire-spark (0.1.13)
       listen
       rails (>= 7.0.0)
@@ -226,6 +270,7 @@ GEM
       http-cookie (~> 1.0)
       http-form_data (~> 2.2)
       llhttp-ffi (~> 0.5.0)
+    http-accept (1.7.0)
     http-cookie (1.0.8)
       domain_name (~> 0.5)
     http-form_data (2.3.0)
@@ -288,8 +333,14 @@ GEM
       http (~> 5.2)
       json (~> 2.9)
       uri (~> 1.0)
-    marcel (1.1.0)
+    mailtrap (2.4.1)
+      base64
+    marcel (1.0.4)
     matrix (0.4.3)
+    mime-types (3.7.0)
+      logger
+      mime-types-data (~> 3.2025, >= 3.2025.0507)
+    mime-types-data (3.2025.0819)
     mini_magick (5.3.0)
       logger
     mini_mime (1.1.5)
@@ -322,6 +373,7 @@ GEM
     net-smtp (0.5.1)
       net-protocol
     net-ssh (7.3.0)
+    netrc (0.11.0)
     nio4r (2.7.4)
     nokogiri (1.18.10-aarch64-linux-gnu)
       racc (~> 1.4)
@@ -428,6 +480,11 @@ GEM
     regexp_parser (2.11.0)
     reline (0.6.2)
       io-console (~> 0.5)
+    rest-client (2.1.0)
+      http-accept (>= 1.7.0, < 2.0)
+      http-cookie (>= 1.0.2, < 2.0)
+      mime-types (>= 1.16, < 4.0)
+      netrc (~> 0.8)
     rotp (6.3.0)
     rqrcode (3.1.0)
       chunky_png (~> 1.0)
@@ -569,6 +626,7 @@ DEPENDENCIES
   activerecord-enhancedsqlite3-adapter (~> 0.8.0)
   amazing_print
   anthropic (~> 0.4.0)
+  base64 (~> 0.3.0)
   bcrypt (~> 3.1.7)
   bootsnap
   brakeman
@@ -600,6 +658,7 @@ DEPENDENCIES
   psych (~> 5.2.6)
   puma (>= 5.0)
   rails!
+  reactionview (~> 0.1.2)
   redcarpet (~> 3.6)
   rqrcode (~> 3.1)
   rrule (~> 0.6.0)
@@ -614,6 +673,7 @@ DEPENDENCIES
   tailwindcss-rails
   tailwindcss-ruby (= 4.1.11)
   thruster
+  tidewave
   turbo-rails
   tzinfo-data
   web-console

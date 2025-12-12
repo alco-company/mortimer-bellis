@@ -1,0 +1,8 @@
+<%= I18n.t("tenant.mailer.salutations", name: @tenant.name) %>
+
+The tenant <%= @tenant.name %> has requested to become an ambassador. 
+
+You may contact them at <%= @tenant.email %>.
+
+<%= render MortimerMailSignature.new format: :text%>
+

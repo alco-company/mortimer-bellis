@@ -1,7 +1,9 @@
 class ListItems::Doorkeeper::Application < ListItems::ListItem
   def show_recipient_link
-    link_to resource_url, class: "hover:underline" do
-      plain resource.name
+    p(class: "text-sm/6 font-semibold text-gray-900 dark:text-white") do
+      link_to resource_url, class: "hover:underline" do
+        plain resource.name
+      end
     end
   end
 
@@ -17,6 +19,8 @@ class ListItems::Doorkeeper::Application < ListItems::ListItem
   end
 
   def show_secondary_info
-    plain resource.uid
+    p(class: "text-sm font-medium text-gray-900 dark:text-white") do
+      plain resource.uid
+    end
   end
 end

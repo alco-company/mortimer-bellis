@@ -13,6 +13,14 @@ module Authentication
     end
   end
 
+  class Terminator
+    def self.terminate_user_session
+      Current.user.update(current_sign_in_at: nil, current_sign_in_ip: nil)
+      Current.session.destroy
+      # cookies.delete(:session_id)
+    end
+  end
+
   private
     def authenticated?
       resume_session && Current.session.user.confirmed?
@@ -25,7 +33,7 @@ module Authentication
     def require_authentication
       if resume_session
         verify_otp_status
-        request_confirmation unless Current.user.confirmed?
+        request_confirmation unless Current.user&.confirmed?
       else
         request_authentication
       end
@@ -33,6 +41,8 @@ module Authentication
 
     def resume_session
       Current.session ||= find_session_by_cookie
+      Current.session.touch if Current.session.present?
+      Current.session
     end
 
     def find_session_by_cookie
@@ -57,7 +67,7 @@ module Authentication
       welcome_tenant(user)
       user.sessions.create!(user_agent: request.user_agent, ip_address: request.remote_ip, authentication_strategy: "password").tap do |session|
         Current.session = session
-        Current.user.update(sign_in_count: Current.user.sign_in_count + 1,
+        user.update(sign_in_count: Current.user.sign_in_count + 1,
           current_sign_in_at: Time.current,
           current_sign_in_ip: request.remote_ip,
           last_sign_in_at: Time.current,

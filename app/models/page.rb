@@ -1,5 +1,11 @@
 class Page < ApplicationRecord
   scope :by_tenant, -> { all }
+  # mortimer_scoped - override on tables with other tenant scoping association
+  scope :mortimer_scoped, ->(ids) { unscoped.where("0=#{ids}") } # effectively returns no records
+
+  def self.scoped_for_tenant(ids = 1)
+    mortimer_scoped(ids)
+  end
 
   def name
     title

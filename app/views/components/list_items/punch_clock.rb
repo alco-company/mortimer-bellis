@@ -17,6 +17,8 @@ class ListItems::PunchClock < ListItems::ListItem
   end
 
   def show_secondary_info
-    plain "%s %s" % [ resource.location.name, resource.ip_addr ]
+    p(class: "text-sm font-medium text-gray-900 dark:text-white") do
+      plain "%s %s" % [ resource.location.name, resource.ip_addr ]
+    end
   end
 end

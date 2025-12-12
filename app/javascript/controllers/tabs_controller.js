@@ -5,11 +5,11 @@ export default class extends Controller {
   static targets = ["tab", "tabPanel"];
 
   initialize() {
-    this.showTab(0);
+    //this.showTab(0);
   }
 
   connect() {
-    this.showTab(0);
+    // this.showTab(0);
   }
 
   change(e) {

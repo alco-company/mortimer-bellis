@@ -1,0 +1,9 @@
+<%= I18n.t("user_mailer.farewell.hi") %>         
+
+<%= raw I18n.t("user_mailer.farewell.you", name: @name, tenant: @company) %>
+
+<%= raw I18n.t("user_mailer.farewell.introduction") %>
+
+<%= I18n.t("user_mailer.farewell.rights") %>
+
+<%= render MortimerMailSignature.new format: :text %>

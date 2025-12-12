@@ -1,5 +1,6 @@
 class Invoice < ApplicationRecord
   include Tenantable
+  include Settingable
   include Localeable
 
   belongs_to :customer
@@ -82,7 +83,7 @@ class Invoice < ApplicationRecord
     invoice_number
   end
 
-  def self.add_from_erp(item)
+  def self.add_from_erp(item, resource: nil)
     return false unless item["Guid"].present?
     invoice = Invoice.find_or_create_by(tenant: Current.get_tenant, erp_guid: item["Guid"])
     invoice.invoice_number = item["Number"]

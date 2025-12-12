@@ -93,6 +93,7 @@ export default class extends Controller {
 
   close(e) {
     this.removeScrollBlock()
+    this.closeModal();
     // e.preventDefault();
     // const abortListener = new AbortController();
 

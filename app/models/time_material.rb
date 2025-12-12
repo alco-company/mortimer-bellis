@@ -18,13 +18,13 @@
 # t.string "about"                                                        |                                         default_time_material_about fx 'ongoing task'
 # t.text "comment"                                                        |
 #
-# t.string "customer_name"                                                                                          allow_create_customer
+# t.string "customer_name"                                                                                          add_customer
 # t.string "customer_id"                                                  required
 #
-# t.string "project_name"                                                                                           allow_create_project
+# t.string "project_name"                                                                                           add_project
 # t.string "project_id"
 #
-# t.string "product_name"                                                 |                                         allow_create_product
+# t.string "product_name"                                                 |                                         add_product
 # t.string "product_id"                                                   | either
 #
 # t.string "quantity"                                                     required                                  default_quantity            fx 1
@@ -73,8 +73,9 @@ class TimeMaterial < ApplicationRecord
   include TimeMaterialStateable
   include Settingable
   include Unitable
+  include Timing
 
-  attr_accessor :hour_time, :minute_time, :calculated_unit_price
+  attr_accessor :calculated_unit_price
 
   belongs_to :customer, optional: true
   belongs_to :project, optional: true
@@ -90,11 +91,73 @@ class TimeMaterial < ApplicationRecord
   scope :weekdays, -> { where("cast(strftime('%w', wdate) as integer) BETWEEN 1 AND 5") }
   scope :billed, -> { where("is_invoice = ?", 1).where(state: [ :done, :pushed_to_erp ]) }
   scope :drafted, -> { where(state: [ :draft, :active, :paused ]) }
+  scope :not_done_or_pushed, -> { where.not(state: [ states[:done], states[:pushed_to_erp] ]) }
   scope :by_state, ->(state) { where("state = ?", state) if state.present? }
   scope :by_customer, ->(customer) { where("customer_id = ?", customer.id) if customer.present? }
   scope :by_project, ->(project) { where("project_id = ?", project.id) if project.present? }
   scope :by_product, ->(product) { where("product_id = ?", product.id) if product.present? }
   scope :by_date, ->(date) { where("wdate = ?", date) if date.present? }
+  scope :this_month, -> { by_tenant.where_op(:gt, created_at: Time.current.at_beginning_of_month) }
+  scope :invoiceable, -> { by_tenant.where(is_invoice: true).where.not(customer_id: nil).where.not(state: states[:draft]) }
+
+  def name
+    # about
+    case false
+    when product_name.blank?; product_name
+    when about.blank?; about
+    when comment.blank?; comment
+    else; user.default(:default_time_material_about, I18n.t("time_material.default_assigned_about"))
+    end
+  rescue
+    ""
+  end
+
+  # STATS
+  def self.total_time_registered
+    h, m = this_month.sum(:registered_minutes).to_f.divmod(60)
+    "%d,%02d" % [ (h rescue 0), (m / 60 * 100 rescue 0) ]
+  end
+
+  def self.avg_total_time_per_day
+    h, m = (this_month.sum(:registered_minutes).to_f / weekdays_this_month rescue 0).divmod(60)
+    "%d,%02d" % [ (h rescue 0), (m / 60 * 100 rescue 0) ]
+  end
+
+  def self.total_invoiceable_time
+    h, m = invoiceable.this_month.sum(:registered_minutes).to_f.divmod(60)
+    "%d,%02d" % [ (h rescue 0), (m / 60 * 100 rescue 0) ]
+  end
+
+  def self.avg_total_invoiceable_per_day
+    h, m = (invoiceable.this_month.sum(:registered_minutes).to_f / weekdays_this_month rescue 0).divmod(60)
+    "%d,%02d" % [ (h rescue 0), (m / 60 * 100 rescue 0) ]
+  end
+
+  def self.weekdays_this_month
+    start_date = Time.current.at_beginning_of_month.to_date
+    end_date = Time.current.to_date
+    (start_date..end_date).select { |d| (1..5).include?(d.wday) }.count
+  end
+
+  def self.total_time_spent
+    time_spent.sum(:time_spent)
+  end
+
+  def self.total_billed_time_spent
+    billed.sum(:time_spent)
+  end
+
+  def self.average_time_per_day
+    return 0 if count == 0
+    (total_time_spent / count / 60.0).round(2)
+  end
+
+  def self.average_billed_time_per_day
+    return 0 if billed.count == 0
+    (total_billed_time_spent / billed.count / 60.0).round(2)
+  end
+  # --------
+
 
   # # SQLite
   # scope :weekdays_only, -> { where("strftime('%w', created_at) BETWEEN 1 AND 5") }
@@ -109,6 +172,7 @@ class TimeMaterial < ApplicationRecord
 
   # validates :about, presence: true
   # validates :about, presence: true, if: [ Proc.new { |c| c.comment.blank? && c.product_name.blank? } ]
+  # validates_with InvoiceItemValidator, on: :incoming_params
 
   before_save :set_wdate
 
@@ -118,13 +182,29 @@ class TimeMaterial < ApplicationRecord
 
   def has_insufficient_data?
     hid = false
-    hid = true if project_name.present? && project_id.blank? && Current.get_user.cannot?(:allow_create_project)
-    hid = true if customer_name.present? && customer_id.blank? && Current.get_user.cannot?(:allow_create_customer)
-    hid = true if product_name.present? && product_id.blank? && Current.get_user.cannot?(:allow_create_product)
+    hid = true if project_name.present? && project_id.blank? && Current.get_user.cannot?(:add_projects)
+    hid = true if customer_name.present? && customer_id.blank? && Current.get_user.cannot?(:add_customers)
+    hid = true if product_name.present? && product_id.blank? && Current.get_user.cannot?(:add_products)
     hid = true if is_invoice? && customer_id.blank?
     hid
   rescue
     false
+  end
+
+  def initialize_new(hr = 0, dd = "")
+    self.customer_name       = TimeMaterial.by_exact_user(Current.get_user).last&.customer_name
+    self.state               = Current.get_user.default(:default_time_material_state, "draft")
+    self.about               = Current.get_user.default(:default_time_material_about, "")
+    self.hour_time           = Current.get_user.default(:default_time_material_hour_time, "")
+    self.minute_time         = Current.get_user.default(:default_time_material_minute_time, "")
+    self.rate                = hr
+    # resource.over_time =      Current.user.default(:default_time_material_over_time, 0)
+    self.date                = dd
+    self.user_id             = Current.get_user.id
+    self.started_at          = Time.current
+    self.minutes_reloaded_at = Time.current
+    self.registered_minutes  = 0
+    self.time_spent          = 0
   end
 
   # def self.filtered(filter)
@@ -244,8 +324,8 @@ class TimeMaterial < ApplicationRecord
     destroy!
   end
 
-  def list_item(links: [], context:)
-    TimeMaterialDetailItem.new(item: self, links: links, id: context.dom_id(self))
+  def list_item(links: [], context:, user: nil)
+    TimeMaterialDetailItem.new(item: self, links: links, id: context.dom_id(self), user: user)
   end
 
   def notify(action: nil, title: nil, msg: nil, rcp: nil, priority: 0)
@@ -263,50 +343,6 @@ class TimeMaterial < ApplicationRecord
       TimeMaterialNotifier.with(record: self, current_user: Current.user, title: title, message: msg, delegator: Current.user.name).deliver(user)
       TimeMaterialNotifier.with(record: self, current_user: Current.user, title: title, message: msg, delegator: Current.user.name).deliver(rcp) unless rcp.blank?
     end
-  end
-
-  def name
-    # about
-    case false
-    when product_name.blank?; product_name
-    when about.blank?; about
-    when comment.blank?; comment
-    else; user.default(:default_time_material_about, I18n.t("time_material.default_assigned_about"))
-    end
-  rescue
-    ""
-  end
-
-  def hour_time
-    return "" if self.time.blank?
-    return self.time.split(":")[0] if self.time.include?(":")
-    return self.time.split(",")[0] if self.time.include?(",")
-    return self.time.split(".")[0] if self.time.include?(".")
-    time
-  end
-
-  def hour_time=(val)
-    return if val.blank?
-    self.time = "#{val}:00" if self.time.blank?
-    self.time = "%s:%s" % [ val, self.time.split(":")[1] ] if self.time.include?(":")
-    self.time = "%s:%s" % [ val, self.time.split(",")[1] ] if self.time.include?(",")
-    self.time = "%s:%s" % [ val, self.time.split(".")[1] ] if self.time.include?(".")
-  end
-
-  def minute_time
-    return "" if self.time.blank?
-    return self.time.split(":")[1] if self.time.include?(":")
-    return self.time.split(",")[1] if self.time.include?(",")
-    return self.time.split(".")[1] if self.time.include?(".")
-    time
-  end
-
-  def minute_time=(val)
-    return if val.blank?
-    self.time = "00:#{val}" if self.time.blank?
-    self.time = "%s:%s" % [ self.time.split(":")[0], val ] if self.time.include?(":")
-    self.time = "%s:%s" % [ self.time.split(",")[0], val ] if self.time.include?(",")
-    self.time = "%s:%s" % [ self.time.split(".")[0], val ] if self.time.include?(".")
   end
 
   def has_mugshot?
@@ -333,7 +369,7 @@ class TimeMaterial < ApplicationRecord
     h = []
     Current.get_user.tenant.time_products.each do |p|
       h << p.base_amount_value.to_s
-    end
+    end if Current.get_user.tenant.present? && Current.get_user.tenant.time_products&.any?
     h.to_json
   end
 
@@ -345,101 +381,14 @@ class TimeMaterial < ApplicationRecord
     ]
   end
 
-  def calc_hrs_minutes(t)
-      days, hours = t.to_i.divmod 86400
-      hours, minutes = hours.divmod 3600
-      minutes, seconds = minutes.divmod 60
-      [ days, hours, minutes, seconds ]
-  end
-
-  #
-  # return time as a decimal number
-  # eg 1:30 => 1.5
-  #
-  def calc_time_to_decimal(t = nil)
-    t ||= time
-    return 0.25 if t.blank?
-    return t if t.is_a?(Numeric)
-    t = if t.include?(":")
-      h, m = t.split(":")
-      m = (m.to_i*100.0/60.0).to_f.round
-      "%s.%i" % [ h, m ]
-    else
-      t = t.split(",") if t.include?(",")
-      t = t.split(".") if t.include?(".")
-      if t.is_a? Array
-        "%s.%i" % [ t[0], t[1] ]
-      else
-        t
-      end
-    end
-  end
-
-  # def sanitize_time_spent
-  #   split_time(time_spent, true)
-  # end
-
-  # first make sure time is a number -
-  # ie if it's a string with 1.25 or 1,25 or 1:25 reformat it
-  # then calculate the hours and minutes from the time integer
-  # if the resource should be limited to quarters, then round up the minutes to the nearest quarter
-  # finally return the hours and minutes as a string with a colon
-  #
-  def sanitize_time(ht, mt)
-    ptime = set_ptime ht, mt
-    # return "" if ptime.blank? or ptime.gsub(/[,.:]/, "").to_i == 0
-    t = ptime.split(":")
-    minutes = t[0].to_i*60 + t[1].to_i
-    # minutes = case true
-    # when ptime.to_s.include?(":"); t = ptime.split(":"); t[1]=t[1].to_i*10 if t[1].size==1; t[0].to_i*60 + t[1].to_i
-    #   # when ptime.to_s.include?(":"); t = ptime.split(":"); t[1]=t[1].to_i*10 if t[1].size==1; t[0].to_i*60 + t[1].to_i
-    #   # when ptime.to_s.include?(","); t = ptime.split(","); t[1]=t[1].to_i*10 if t[1].size==1; t[0].to_i*60 + t[1].to_i*60/100
-    #   # when ptime.to_s.include?("."); t = ptime.split("."); t[1]=t[1].to_i*10 if t[1].size==1; t[0].to_i*60 + t[1].to_i*60/100
-    #   # else ptime.to_i * 60
-    # end
-    hours, minutes = minutes.divmod 60
-    if should?(:limit_time_to_quarters) # && !ptime.include?(":")
-      minutes = case minutes
-      when 0; 0
-      when 1..15; 15
-      when 16..30; 30
-      when 31..45; 45
-      else hours += 1; 0
-      end
-    end
-    "%02d:%02d" % [ hours.to_i, minutes.to_i ] rescue "00:00"
-  end
-
-  def set_ptime(ht, mt)
-    self.hour_time=ht
-    self.minute_time=mt
-    self.time
-  end
-
-  # def split_time(time, minutes)
-  #   if minutes
-  #     d, h, m, _s = calc_hrs_minutes(time)
-  #     time = d * 24 * 60 + h * 60 + m
-  #     time = time.divmod 60
-  #   else
-  #     time = case true
-  #     when resource_params[:time].present? && resource_params[:time].include?(","); resource_params[:time].split(",")
-  #     when resource_params[:time].present? && resource_params[:time].include?("."); resource_params[:time].split(".")
-  #     else [ time, "0" ]
-  #     end
-  #     time[0] = time[0].blank? ? "0" : time[0].to_s
-  #     time[1] = (time[1].to_i*60.0/100.0).to_i if time.is_a? Array
-  #   end
-  #   time
-  # rescue
-  #   time
-  # end
-
   #
   # make sure this record is good for pushing to the ERP
   #
-  def pushable?
-    entry = InvoiceItemValidator.new(self, user)
+  def pushable?(resource_params = {})
+    shadow_tm = self.dup
+    permitted = resource_params
+    shadow_tm.assign_attributes(permitted)
+    entry = InvoiceItemValidator.new(shadow_tm, user)
     return true if entry.valid?
     self.project = entry.project if entry.project.present?
     self.errors.add(:base, entry.errors.full_messages.join(", "))
@@ -478,6 +427,7 @@ class TimeMaterial < ApplicationRecord
       resource_params[:rate] = ""
       resource_params[:over_time] = ""
       self.over_time = 0
+      self.time_spent = 0
     end
     if resource_params[:state].present? &&
       resource_params[:state] == "done"
@@ -490,7 +440,8 @@ class TimeMaterial < ApplicationRecord
           when "0"; ""
           when "0%"; 0
           when "100%"; 100
-          else resource_params[:discount].to_f
+          when /%/; resource_params[:discount].to_s.delete("%").gsub(",", ".").to_f
+          else resource_params[:discount].gsub(",", ".").to_f
           end
         end
 
@@ -498,7 +449,7 @@ class TimeMaterial < ApplicationRecord
           resource_params.delete(:played)
           return true
         end
-        unless pushable?
+        unless pushable?(resource_params)
           errors.add(:base, errors.full_messages.join(", "))
           return false
         end
@@ -513,19 +464,22 @@ class TimeMaterial < ApplicationRecord
   end
 
   def create_customer(resource_params)
-    return resource_params unless Current.get_user.can?(:allow_create_customer)
     resource_params[:customer_id] = "" if resource_params[:customer_name].blank?
+    return resource_params unless Current.get_user.can?(:add_customers, resource: self)
+
+
     if (resource_params[:customer_id].present? && (Customer.find(resource_params[:customer_id]).name != resource_params[:customer_name])) ||
       resource_params[:customer_name].present? && resource_params[:customer_id].blank?
-      customer = Customer.find_or_create_by(tenant: Current.get_tenant, name: resource_params[:customer_name], is_person: true)
+      customer = Customer.find_or_create_by(tenant: Current.get_tenant, name: resource_params[:customer_name], is_person: true, country_key: "DK")
       resource_params[:customer_id] = customer.id
     end
     resource_params
   end
 
   def create_project(resource_params)
-    return resource_params unless Current.get_user.can?(:allow_create_project)
     resource_params[:project_id] = "" if resource_params[:project_name].blank?
+    return resource_params unless Current.get_user.can?(:add_projects, resource: self)
+
     if (resource_params[:project_id].present? && (Project.find(resource_params[:project_id]).name != resource_params[:project_name])) ||
       resource_params[:project_name].present? && resource_params[:project_id].blank?
       project = Project.find_or_create_by(tenant: Current.get_tenant, name: resource_params[:project_name], customer_id: resource_params[:customer_id])

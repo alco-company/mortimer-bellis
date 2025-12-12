@@ -33,7 +33,7 @@ class SelectComponent < ApplicationComponent
           div(class: @field_class) do
             label(for: resource_field, class: @label_class) do
               span(class: "font-bold") do
-                plain I18n.t("activerecord.attributes.#{ resource_field("%s.%s") }")
+                plain t("activerecord.attributes.#{ resource_field("%s.%s") }")
               end
             end
             @editable ? editable_view : show_view

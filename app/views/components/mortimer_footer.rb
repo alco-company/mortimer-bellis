@@ -19,15 +19,11 @@ class MortimerFooter < ApplicationComponent
           class:
             "border-gray-200 py-2 text-xs text-gray-400 text-center sm:text-left text-nowrap"
         ) do
-          whitespace
           span(class: "inline text-nowrap") do
-            plain "© 2018-#{DateTime.current.year} &nbsp;&nbsp;M O R T I M E R&nbsp;&nbsp;".html_safe
+            plain "© 2018-#{DateTime.current.year} &nbsp;&nbsp;MORTIMER&nbsp;&nbsp;".html_safe
           end
-          whitespace
-          span(class: "text-nowrap inline") { helpers.t(:all_rights_reserved) }
-          whitespace
+          span(class: "text-nowrap inline") { t(:all_rights_reserved) }
           if Rails.env.local?
-            whitespace
             span(class: "inline text-green-900") do
               begin
                 plain platform
@@ -35,7 +31,6 @@ class MortimerFooter < ApplicationComponent
                 "N/A"
               end
             end
-            whitespace
           end
         end
       end

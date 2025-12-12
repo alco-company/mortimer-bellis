@@ -11,7 +11,7 @@ class Notifications::EnableNotificationButton < ApplicationComponent
         action: "click->profile#enable",
         profile_target: "enableNotifications"
       }) do
-        span(class: "group-aria-busy:hidden block text-sm mr-2") { I18n.t("enable_notifications") }
+        span(class: "group-aria-busy:hidden block text-sm mr-2") { t("enable_notifications") }
         render Icons::Link.new css: "mort-link-primary h-6 "
         div(class: "group-aria-busy:block hidden") do
           image_tag "motion-blur.svg", class: "size-6 fill-white"

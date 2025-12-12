@@ -31,6 +31,9 @@ da:
         save_percent: Spar %{percent}%
         we_got_notified_you_will_hear_from_us_soon: "Vi har modtaget din anmodning, og vil snart kontakte dig."
 
+      setting_all:
+        title: Indstillinger for konti
+        instruction: Her kan du indstille hvordan konti skal fungere i Mortimer.
       delete_all: 
         title: Slet alle konti
         instruction: Er du sikker på, at du vil slette alle konti?
@@ -41,25 +44,33 @@ da:
         button: Slet
 
     mailer:
+      salutations: "Hej %{name}"
+      regards: "Med venlig hilsen"
       welcome:
-        preheader: "Velkomst email fra  M O R T I M E R  - måske Europa's enkleste og billigste tidsregistreringssystem"
-        subject: Velkommen til M O R T I M E R
-        hello: Velkommen %{name},
-        we_created_an_tenant: "Vi har oprettet en konto til jer på  M O R T I M E R.<br>For at logge på, skal du <a href='https://app.mortimer.pro'>klikke her</a> og den nedenstående oplysning.<p>Du bør rette adgangskoden, når du er logget korrekt ind (faktisk vil vi endnu hellere at du straks efter første login vælger at føje 2FA til din konto):"
+        salutations: Velkommen %{name},
+        subject: Velkommen til MORTIMER
+        we_created_an_tenant: "Vi har oprettet en konto til jer på  MORTIMER.<br>For at logge på, skal du <a href='https://app.mortimer.pro'>klikke her</a> og den nedenstående oplysning.<p>Du bør rette adgangskoden, når du er logget korrekt ind (faktisk vil vi endnu hellere at du straks efter første login vælger at føje 2FA til din konto):"
         confirmation_instruction: "Brugernavn: %{email}"
         ignore: "Hvis du ikke har bedt om en konto, kan du ignorere denne e-mail, og så beklager vi ulejligheden."
-        regards: Med venlig hilsen,
-      send_ambassador_request:
-        regards: Med venlig hilsen,
       send_invoice:
         hello: "Hej %{name},"
         page_title: "Betal for Mortimer"
-        preheader: Invoice email from  M O R T I M E R  - maybe Europe's easiest and cheapest time tracking system
+        preheader: Invoice email from  MORTIMER  - maybe Europe's easiest and cheapest time tracking system
         confirmed_license: Du har nu valgt at betale for Mortimer. Du har valgt en %{license} licens, og det vil vi gerne sige mange tak for!
         license_subscription_renewal: Dit abonnement på licensen udløber %{renewal_date} - da skal du senest forny den for at fortsætte med at bruge de funktioner licensen giver adgang til.
         we_created_an_invoice_for_you: "Vi har oprettet en faktura for dig, som du kan hente her: <a href='%{url}'>PDF faktura</a>"
         regards: Med venlig hilsen,
-
+      backup:
+        page_title: "Backup af konto"
+        subject: "Backup af konto på MORTIMER oprettet"
+        we_created_a_backup: "Vi har oprettet en backup af jeres data til jer, på MORTIMER."
+        how_to_download_instruction: "For at downloade backup'en, skal du <a href='%{link}'>klikke her</a>. Linket er gyldigt i 7 dage."
+      restore:
+        page_title: "Gendannet data"
+        subject: "Gendannelse af konto på MORTIMER fuldført"
+        we_restored_a_backup: "Vi har gendannet jeres konto på MORTIMER."
+        summary: "Følgende er en kort opsummering af hvad der blev gendannet:"
+        archive: "Arkivfilen med backup'en er vedhæftet denne e-mail."
   tenants:
     validation_errors: Der er fejl i det indtastede
     licenses:
@@ -134,7 +145,7 @@ da:
           Den vedhæftede PDF viser en oversigt over medarbejdernes indstemplinger det sidste døgn, opsummeret på arbejdstid, pauser, overarbejde, mm.
 
           Med venlig hilsen,
-          M O R T I M E R
+          MORTIMER
       datalon_email:
         subject: Datafil til Datalon vedhæftet
         body: |
@@ -143,4 +154,4 @@ da:
           Her er den datafil, du har bedt om.
 
           Med venlig hilsen,
-          M O R T I M E R
+          MORTIMER

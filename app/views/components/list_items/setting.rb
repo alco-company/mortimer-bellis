@@ -11,8 +11,10 @@ class ListItems::Setting < ListItems::ListItem
 
 
   def show_recipient_link
-    link_to setting_url(resource), data: { turbo_action: "advance", turbo_frame: "form", tabindex: "-1" }, class: "hover:underline" do
-      plain I18n.t("settings.keys.#{resource.key}")
+    p(class: "text-sm/6 font-semibold text-gray-900 dark:text-white") do
+      link_to setting_url(resource), data: { turbo_action: "advance", turbo_frame: "form", tabindex: "-1" }, class: "hover:underline" do
+        plain t("settings.keys.#{resource.key}")
+      end
     end
   end
 
@@ -28,6 +30,8 @@ class ListItems::Setting < ListItems::ListItem
   end
 
   def show_secondary_info
-    plain "%s %s " % [ resource.setable_type, resource.setable_id ]
+    p(class: "text-sm font-medium text-gray-900 dark:text-white") do
+      plain "%s %s " % [ resource.setable_type, resource.setable_id ]
+    end
   end
 end

@@ -30,10 +30,13 @@ export default class extends Controller {
 
   update(event) {
     event.preventDefault()
+    console.log("update", this.element);
     const url = this.element.dataset.url;
     if (url !== undefined && url !== "") {
       this.savebuttonTarget.ariaBusy = true;
       let method = this.element.dataset.method || "POST";
+      let stype = this.inputTarget.dataset.setableType || null;
+      let sid = this.inputTarget.dataset.setableId || null;
       fetch(url, {
         method: method,
         headers: {
@@ -41,7 +44,14 @@ export default class extends Controller {
           "Accept": "text/vnd.turbo-stream.html",
           "X-CSRF-Token": this.csrfToken,
         },
-        body: JSON.stringify({ key: this.keyValue, value: this.inputTarget.value }),
+        body: JSON.stringify({
+          setting: {
+            key: this.keyValue,
+            value: this.inputTarget.value,
+            setable_type: stype,
+            setable_id: sid
+          }
+        }),
       })
       .then((r) => r.text())
       .then((html) => {

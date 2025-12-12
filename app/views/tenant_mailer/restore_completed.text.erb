@@ -1,0 +1,7 @@
+<%= I18n.t("tenant.mailer.salutations", name: @tenant.name) %>
+
+Your tenant backup has been successfully restored from archive: <%= @archive %>
+<% if @pdf_report_url.present? %>
+  Download PDF Report: <%= @pdf_report_url %>
+<% end %>
+<%= render MortimerMailSignature.new format: :text %>

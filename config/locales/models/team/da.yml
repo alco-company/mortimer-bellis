@@ -1,6 +1,9 @@
 da:
   team:
     modal:
+      setting_all:
+        title: Indstillinger for hold
+        instruction: Her kan du indstille hvordan hold skal fungere i Mortimer.
       delete_all: 
         title: Slet alle hold
         instruction: Er du sikker på, at du vil slette alle %{count} hold?

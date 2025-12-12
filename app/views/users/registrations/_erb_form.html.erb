@@ -1,0 +1,58 @@
+<%# Fallback ERB form to avoid Phlex/Superform helper timing issues %>
+<%= form_with model: resource, url: "/users/registrations", method: :put, html: { class: "mort-form" }, data: { form_target: "form" } do |f| %>
+  <div class="mort-field">
+    <h1 class="text-base font-semibold leading-6 text-gray-900"><%= t("users.edit_profile.name") %></h1>
+    <p class="text-xs font-thin pb-3 text-gray-400">version: <%= ENV["MORTIMER_VERSION"] %></p>
+  </div>
+
+  <% if Current.user&.superadmin? %>
+    <div class="mort-field">
+      <%= f.label :tenant_id, t("activerecord.attributes.user.tenant_id") %>
+      <%= f.collection_select :tenant_id, Tenant.order(name: :asc).select(:id, :name), :id, :name, { prompt: t("users.registrations.form.select_tenant") }, { class: "mort-form-select" } %>
+    </div>
+    <div class="mort-field">
+      <%= f.label :global_queries %>
+      <%= f.check_box :global_queries %>
+    </div>
+  <% else %>
+    <div class="mort-field">
+      <%= f.label :tenant, t("activerecord.attributes.user.tenant_id") %>
+      <div class="text-sm"><%= resource.tenant&.name %></div>
+    </div>
+  <% end %>
+
+  <div class="mort-field">
+    <%= f.label :name %>
+    <%= f.text_field :name, class: "mort-form-text" %>
+  </div>
+  <div class="mort-field">
+    <%= f.label :email %>
+    <%= f.email_field :email, class: "mort-form-text" %>
+  </div>
+  <div class="mort-field">
+    <%= f.label :pincode %>
+    <%= f.text_field :pincode, class: "mort-form-text" %>
+  </div>
+  <div class="mort-field">
+    <%= f.label :mugshot %>
+    <%= f.file_field :mugshot, class: "mort-form-file" %>
+    <% if resource.mugshot.attached? %>
+      <div class="mt-2">
+        <%= image_tag resource.mugshot.variant(resize_to_limit: [128,128]) rescue image_tag(resource.mugshot) %>
+      </div>
+    <% end %>
+  </div>
+  <div class="mort-field">
+    <%= f.label :locale %>
+    <%= f.select :locale, User.locales.map { |l| [l, l] }, { prompt: t("users.registrations.form.select_user_locale") }, class: "mort-form-select" %>
+  </div>
+  <div class="mort-field">
+    <%= f.label :time_zone %>
+    <%= f.select :time_zone, User.time_zones_for_phlex.map { |k,v| [v, k] }, {}, class: "mort-form-select" %>
+  </div>
+
+  <div class="mt-6 flex justify-end space-x-2">
+    <%= link_to t("cancel"), "/", class: "mort-btn-cancel", data: { turbo_frame: "form" } %>
+    <%= f.submit t("save", default: t(:update)), class: "mort-btn-primary" %>
+  </div>
+<% end %>

@@ -1,6 +1,9 @@
 da:
   customer:
     modal:
+      setting_all:
+        title: Indstillinger for kunder
+        instruction: Her kan du indstille hvordan kunder skal fungere i Mortimer.
       delete_all: 
         title: Slet alle kunder
         instruction: "Er du sikker på, at du vil slette alle kunder <p class='text-sm text-gray-500'>[BEMÆRK: tid/materialer, projekter, produkter hørende til kunderne slettes også]?"

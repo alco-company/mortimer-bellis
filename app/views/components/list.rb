@@ -5,7 +5,7 @@ class List < ApplicationComponent
   include Phlex::Rails::Helpers::Flash
   include Phlex::Rails::Helpers::LinkTo
 
-  attr_reader :records, :pagy, :order_by, :group_by, :initial, :user, :batch_form
+  attr_accessor :records, :pagy, :order_by, :group_by, :initial, :user, :batch_form, :params, :filter, :replace, :divider, :format
 
   def initialize(records:, pagy: nil, initial: false, replace: false, filter: nil, params: {}, batch_form: nil, divider: true, user: User.new, format: :html, group_by: nil, order_by: nil, &block)
     @order_by = order_by
@@ -30,6 +30,14 @@ class List < ApplicationComponent
     end
   end
 
+  #
+  # HTML list rendering
+  #
+  # This method renders the HTML list of records.
+  # If a order_by hash/key-value pairs is provided, it groups the records accordingly.
+  # and adds turbo_frames for each order_by group.
+  # ex. order_by: { due_date: :asc } => turbo_frame "due_date_2023-10-01", etc.
+  #
   def html_list(&block)
     if initial
       # list_records
@@ -47,10 +55,10 @@ class List < ApplicationComponent
       div(class: "class") do
         div(class: "min-w-full") do
           table(role: "list", class: "divide-y divide-gray-100") do
-            render "ListItems::#{rc}".classify.constantize.new(resource: records, params: params, user: user, format: :pdf_header)
+            render "ListItems::#{rc}".classify.constantize.new(resource: records, params: params, user: @user, format: :pdf_header)
             tbody do
               records.each do |record|
-                render "ListItems::#{rc}".classify.constantize.new(resource: record, params: params, user: user, format: :pdf)
+                render "ListItems::#{rc}".classify.constantize.new(resource: record, params: params, user: @user, format: :pdf)
               end
             end
           end
@@ -61,7 +69,11 @@ class List < ApplicationComponent
 
   def append_list
     turbo_stream.append "record_list" do
-      list_records
+      if order_by
+        grouped_list
+      else
+        list_records
+      end
       # next_pagy_page
     end
   end
@@ -70,9 +82,30 @@ class List < ApplicationComponent
     flash_it
     replace_list_header
     turbo_stream.replace "record_list" do
-      div(id: "record_list", class: "scrollbar-hide") { }
+      div(id: "record_list", class: "scrollbar-hide gap-y-4 grid grid-cols-1 gap-6 sm:grid-cols-1 lg:grid-cols-1 m-2 ") do
+        if order_by
+          grouped_list
+        else
+          list_records
+        end
+      end
     end
-    append_list
+  end
+
+  def grouped_list
+    count = records.count
+    records.group_by { |r| r.send(order_by) }.each do |ordby, recs|
+      turbo_frame_tag "#{recs.first.class}_#{ordby}" do
+        list_column(ordby)
+        recs.each do |rec|
+          next_pagy_page if (count -= 1) < 2
+          render "ListItems::#{rec.class}".classify.constantize.new(resource: rec, params: params, user: @user)
+        end
+        # div(class: "font-semibold text-gray-900") { plain ordby }
+        # div(class: "grid grid-cols-1 gap-6 sm:grid-cols-1 lg:grid-cols-1") do
+        # end
+      end
+    end if count > 0
   end
 
   def list_records
@@ -90,16 +123,16 @@ class List < ApplicationComponent
         list_column(fld)
       end if order_by
       next_pagy_page if (count -= 1) < 2
-      render "ListItems::#{resource_class}".classify.constantize.new(resource: record, params: params, user: user)
+      render "ListItems::#{resource_class}".classify.constantize.new(resource: record, params: params, user: @user)
     end
   end
 
   def flash_it
-    turbo_stream.replace("flash_container", partial: "application/flash_message", locals: { tenant: Current.get_tenant, messages: flash, user: Current.get_user }) if flash.any?
+    turbo_stream.replace("flash_container", partial: "application/flash_message", locals: { tenant: Current.get_tenant, messages: flash, user: @user }) if flash.any?
   end
 
   def replace_list_header
-    turbo_stream.replace("#{user.id}_list_header", partial: "application/header", locals: { batch_form: batch_form, divider: @divider })
+    turbo_stream.replace("#{@user.id}_list_header", partial: "application/header", locals: { tenant: Current.tenant, batch_form: batch_form, divider: @divider, user: @user, params: @params })
   end
 
   def next_pagy_page
@@ -110,18 +143,11 @@ class List < ApplicationComponent
 
   def list_column(field)
     div(class: "flex justify-between gap-x-6 mb-1 px-2 py-1") do
-      div(
-        class: "w-full pt-10 border-b border-gray-100 text-xs font-semibold"
-      ) do
-        whitespace
+      div(class: "w-full pl-4 pt-10 border-b border-gray-100 text-xs font-semibold") do
         if field.is_a? Date or field.is_a? Time or field.is_a? DateTime
-          whitespace
-          plain I18n.l field, format: :day_summary
-          whitespace
+          plain l(field, format: :day_summary)
         else
-          whitespace
           plain field
-          whitespace
         end
       end
     end

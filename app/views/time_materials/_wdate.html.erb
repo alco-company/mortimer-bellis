@@ -1,0 +1,7 @@
+<% resource = local_assigns["time_material"] %>
+<turbo-frame id="TimeMaterial_<%= resource.wdate %>">
+  <div class="flex justify-between gap-x-6 mb-1 px-2 py-1">
+    <div class="w-full pl-4 pt-10 border-b border-gray-100 text-xs font-semibold"><%= l(resource.wdate, format: :day_summary) %></div>
+  </div>
+  <%= render ListItems::TimeMaterial.new(resource: resource, params: params, user: user) %>
+</turbo-frame>

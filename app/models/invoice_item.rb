@@ -1,5 +1,7 @@
 class InvoiceItem < ApplicationRecord
   include Tenantable
+  include Settingable
+
   belongs_to :invoice
   belongs_to :product
   belongs_to :project, optional: true
@@ -74,7 +76,7 @@ class InvoiceItem < ApplicationRecord
   #
   # Note: Dinero has no sense of projects
   #
-  def self.add_from_erp(item, invoice)
+  def self.add_from_erp(item, invoice, resource: nil)
     product = Product.find_by erp_guid: item["ProductGuid"]
     if ii = InvoiceItem.create(
       tenant: Current.get_tenant,

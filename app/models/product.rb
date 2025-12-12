@@ -1,5 +1,6 @@
 class Product < ApplicationRecord
   include Tenantable
+  include Settingable
   include Unitable
 
   scope :by_fulltext, ->(query) { where("name LIKE :query OR product_number LIKE :query OR quantity LIKE :query OR unit LIKE :query OR base_amount_value LIKE :query OR account_number LIKE :query OR external_reference LIKE :query", query: "%#{query}%") if query.present? }
@@ -73,7 +74,7 @@ class Product < ApplicationRecord
     }
   end
 
-  def self.add_from_erp(item)
+  def self.add_from_erp(item, resource: nil)
     return false unless item["Name"].present?
     product = Product.find_or_create_by(tenant: Current.get_tenant, erp_guid: item["ProductGuid"])
     product.name = item["Name"]

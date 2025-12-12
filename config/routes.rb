@@ -19,13 +19,14 @@ Rails.application.routes.draw do
     end
   end
   get "time_material_stats", to: "time_material_stats#index", as: :time_material_stats
-  get "home/show"
+  get "changelog", to: "home#show", as: :changelog
   # -------- AUTHENTICATION ROUTES --------
   # use_doorkeeper do
   #   controllers applications: "oauth/applications"
   # end
   get "/users/sign_in", to: "users/sessions#new"
   get "/users/login", to: "users/sessions#new"
+  post "/unsubscribe", to: "users/registrations#unsubscribe", as: :unsubscribe
 
   namespace :tenants do
     resource :registrations
@@ -105,24 +106,30 @@ Rails.application.routes.draw do
     end
   end
 
+  concern :copyable do
+    member do
+      get "copy"
+    end
+  end
+
   resources :calls
   resources :tasks
 
-  resources :time_materials do
+  resources :time_materials, concerns: [ :copyable ] do
     member do
       post :archive
+      post :sync
     end
   end
 
   resources :batches
   resources :invoice_items
 
-  resources :products, concerns: [ :lookupable, :erp_pullable ]
-  resources :customers, concerns: [ :lookupable, :erp_pullable ]
+  resources :products, concerns: [ :lookupable, :erp_pullable, :copyable ]
+  resources :customers, concerns: [ :lookupable, :erp_pullable, :copyable ]
   resources :invoices, concerns: [ :erp_pullable ]
 
-  resources :projects, concerns: [ :lookupable ]
-
+  resources :projects, concerns: [ :lookupable, :copyable ]
 
   resources :provided_services, concerns: [ :erp_pullable ]
   resources :settings
@@ -141,6 +148,9 @@ Rails.application.routes.draw do
     end
   end
   resources :background_jobs do
+    member do
+      get "run"
+    end
     collection do
       get "toggle"
     end
@@ -200,6 +210,10 @@ Rails.application.routes.draw do
   # Can be used by load balancers and uptime monitors to verify that the app is live.
   get "up" => "rails/health#show", as: :rails_health_check
 
+  # Tenant backup download - constraints to handle .tar.gz extension properly
+  get "tenant_backups/*filename", to: "tenant_backups#download", as: :tenant_backup_download, constraints: { filename: /.*/ }
+  post "tenant_restores/*filename", to: "tenant_backups#restore", as: :tenant_backup_restore, constraints: { filename: /.*/ }
+
   resources :modal, controller: "modal"
 
   # Render dynamic PWA files from app/views/pwa/*
@@ -211,4 +225,9 @@ Rails.application.routes.draw do
   root "time_materials#index"
 
   # root "home#show"
+
+  # when adding singular routes - likes /users/:id/company
+  # add this to routes.rb: resolve("Company") { |company| [ :user, :company ] }
+  # as mentioned here: https://medium.com/@kristina.kabosiene/simplifying-your-rails-forms-for-singular-nested-resources-using-resolve-to-fix-a-routing-bug-e403a990a9ae
+  #
 end

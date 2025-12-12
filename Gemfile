@@ -77,6 +77,7 @@ group :development do
 
   # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
   # gem "spring"
+  gem "tidewave"
 end
 
 group :test do
@@ -137,3 +138,11 @@ gem "mailersend-ruby", "~> 3.0"
 # gem "turnstiled", "~> 0.1.14"
 
 gem "positioning"
+
+gem "reactionview", "~> 0.1.2"
+
+gem "rest-client", "~> 2.1"
+
+gem "base64", "~> 0.3.0"
+
+gem "mailtrap", "~> 2.4"

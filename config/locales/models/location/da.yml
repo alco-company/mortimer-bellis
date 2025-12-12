@@ -1,6 +1,9 @@
 da:
   location:
     modal:
+      setting_all:
+        title: Indstillinger for lokationer
+        instruction: Her kan du indstille hvordan lokationer skal fungere i Mortimer.
       delete_all: 
         title: Slet alle lokationer
         instruction: Er du sikker på, at du vil slette alle lokationer?

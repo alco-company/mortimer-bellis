@@ -10,6 +10,7 @@ one:
   email: MyString
   vat_number: MyString
   ean_number: MyString
+  hourly_rate: 850.50
 
 two:
   tenant: two

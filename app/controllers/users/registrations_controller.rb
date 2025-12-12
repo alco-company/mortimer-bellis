@@ -57,6 +57,16 @@ class Users::RegistrationsController < MortimerController
       ]
       flash.clear
     end
+
+    def unsubscribe
+      user = User.find_by(pos_token: params[:user_token])
+      if user
+        user.touch(:updated_at)
+        redirect_to root_path, notice: I18n.t("users.registrations.unsubscribed")
+      else
+        redirect_to root_path, alert: I18n.t("users.registrations.unsubscribe_failed")
+      end
+    end
   end
 
 
@@ -98,12 +108,14 @@ class Users::RegistrationsController < MortimerController
       resource.update global_queries: params[:global_queries] if params[:global_queries].present?
       resource.update tenant_id: params[:tenant_id] if params[:tenant_id].present?
     end
-    resource.update name: params[:name],
+    result = resource.update name: params[:name],
+      email: params[:email],
       # mugshot: params[:mugshot],
       pincode: params[:pincode],
       locale: params[:locale],
       time_zone: params[:time_zone]
-      Current.user.reload
+    Current.user.reload
+    result
   end
 
   #

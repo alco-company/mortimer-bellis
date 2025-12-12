@@ -1,2 +1,16 @@
-error: <%= @error %>
-method: <%= @klass_method %>
+<% content_for :head do %>
+
+  <title>ERROR Report</title>
+  <style>
+  </style>
+<% end %>
+<% content_for :email_body do %>
+  <h1 class="m-0 mb-6 text-base sm:leading-8 text-black font-semibold">
+    <%= @error %>
+  </h1>
+  <p class="m-0 leading-6">
+    <%= @klass_method %>
+  </p>
+  <div role="separator" class="false bg-slate-200" style="height: 1px; line-height: 1px; margin: 0; margin-top: 32px; margin-bottom: 32px">&zwj;</div>
+  <%= render MortimerMailSignature.new %>
+<% end %>

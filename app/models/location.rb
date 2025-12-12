@@ -1,5 +1,6 @@
 class Location < ApplicationRecord
   include Tenantable
+  include Settingable
   include Colorable
 
   has_many :punch_clocks, dependent: :destroy

@@ -27,7 +27,7 @@ class PunchClockPunch < PunchClockBase
   def punch_buttons
     div(class: "flex grow-0 items-center justify-center w-full p-5 font-medium rtl:text-right text-gray-500 gap-3") do
       user.archived? ?
-        I18n.t("user.archived") :
+        t("user.archived") :
         render(PunchClockButtons.new(punch_clock: resource, user: user, tab: tab, url:  pos_punch_clock_url))
     end
   end

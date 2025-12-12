@@ -16,6 +16,8 @@ class ListItems::Task < ListItems::ListItem
   end
 
   def show_secondary_info
-    plain "%s " % [ resource.completed_at&.strftime("%Y-%m-%d") ]
+    p(class: "text-sm font-medium text-gray-900 dark:text-white") do
+      plain "%s " % [ resource.completed_at&.strftime("%Y-%m-%d") ]
+    end
   end
 end

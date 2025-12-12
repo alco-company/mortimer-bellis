@@ -1,4 +1,31 @@
 en:
+  tenant:
+    mailer:
+      salutations: "Hey %{name}"
+      regards: "Best regards"
+      welcome:
+        salutations: Welcome %{name},
+        subject: Welcome to MORTIMER
+        we_created_an_tenant: "We have created an account for you on MORTIMER.<br>To log in, please <a href='https://app.mortimer.pro'>click here</a> and use the information below.<p>You should change your password once you are logged in (in fact, we would prefer that you enable 2FA on your account immediately after your first login):"
+        confirmation_instruction: "Username: %{email}"
+        ignore: "If you did not request an account, you can ignore this email, and we apologize for the inconvenience."
+      send_invoice:
+        page_title: "Pay for Mortimer"
+        confirmed_license: You have now chosen to pay for Mortimer. You have selected a %{license} license, and we would like to thank you for that!
+        license_subscription_renewal: Your subscription to the license expires %{renewal_date} - you must renew it by then to continue using the features the license provides access to.
+        we_created_an_invoice_for_you: "We have created an invoice for you, which you can download here: <a href='%{url}'>PDF invoice</a>"
+      backup:
+        page_title: "Backup of account"
+        subject: "Backup of account on MORTIMER created"
+        we_created_a_backup: "We have created a backup of your data for you on MORTIMER."
+        how_to_download_instruction: "To download the backup, please <a href='%{link}'>click here</a>. The link is valid for 7 days."
+      restore:
+        page_title: "Data restored"
+        subject: "Account restoration on MORTIMER completed"
+        we_restored_a_backup: "We have restored your account on MORTIMER."
+        summary: "The following is a brief summary of what was restored:"
+        archive: "The archive file with the backup is attached to this email."
+
   tenants:
     create:
       post: The tenant was created

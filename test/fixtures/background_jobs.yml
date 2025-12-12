@@ -1,21 +1,100 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
+# Daily backup job - un_planned, ready to be scheduled
+daily_backup:
   tenant: one
   user: one
-  state: 1
-  job_klass: MyString
-  params: MyText
-  schedule: MyText
-  next_run_at: 2024-05-16 15:40:14
-  job_id: MyString
+  state: 1  # un_planned
+  job_klass: BackupTenantJob
+  params: '{ compression: true }'
+  schedule: '0 2 * * *'  # Daily at 2am
+  next_run_at: 2025-11-21 02:00:00
+  job_id:
 
-two:
+# Weekly report job - planned, using RRULE
+weekly_report:
+  tenant: one
+  user: two
+  state: 2  # planned
+  job_klass: SendReportJob
+  params: '{ report_type: "sales" }'
+  schedule: 'FREQ=WEEKLY;BYDAY=MO;BYHOUR=9'  # Mondays at 9am
+  next_run_at: 2025-11-24 09:00:00
+  job_id:
+
+# One-time import job - planned, no recurrence
+one_time_import:
   tenant: two
   user: two
-  state: 1
-  job_klass: MyString
-  params: MyText
-  schedule: MyText
-  next_run_at: 2024-05-16 15:40:14
-  job_id: MyString
+  state: 2  # planned
+  job_klass: ImportDataJob
+  params: '{ file_id: 123 }'
+  schedule:
+  next_run_at: 2025-11-20 08:05:00
+  job_id:
+
+# Running job - currently executing
+running_backup:
+  tenant: one
+  user: one
+  state: 3  # running
+  job_klass: BackupTenantJob
+  params: '{ compression: false }'
+  schedule: '0 3 * * *'
+  next_run_at: 2025-11-20 08:00:00
+  job_id: 'solid-queue-job-123'
+
+# Failed job - previous execution failed
+failed_upload:
+  tenant: two
+  user: two
+  state: 4  # failed
+  job_klass: DineroUploadJob
+  params: '{ date: "2025-11-19" }'
+  schedule: '0 1 * * *'
+  next_run_at: 2025-11-19 01:00:00
+  job_id: 'solid-queue-job-456'
+
+# Finished one-time job
+finished_import:
+  tenant: one
+  user: one
+  state: 5  # finished
+  job_klass: ImportDataJob
+  params: '{ file_id: 456 }'
+  schedule:
+  next_run_at:
+  job_id:
+
+# Inactive job - disabled
+inactive_backup:
+  tenant: two
+  user: two
+  state: 0  # in_active
+  job_klass: BackupTenantJob
+  params: '{ compression: true }'
+  schedule: '0 4 * * *'
+  next_run_at:
+  job_id:
+
+# Job with dynamic params (uses special keywords)
+dynamic_params_job:
+  tenant: one
+  user: one
+  state: 1  # un_planned
+  job_klass: CustomJob
+  params: 'user_id:me,tenant_id:tenant,team_id:team'
+  schedule: '0 10 * * 1-5'  # Weekdays at 10am
+  next_run_at: 2025-11-21 10:00:00
+  job_id:
+
+# Job ready to run now - for testing any_jobs_to_run scope
+ready_to_run:
+  tenant: one
+  user: one
+  state: 1  # un_planned
+  job_klass: TestJob
+  params: '{ test: true }'
+  schedule: '*/5 * * * *'  # Every 5 minutes
+  next_run_at: 2025-11-20 07:55:00
+  job_id:

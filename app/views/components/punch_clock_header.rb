@@ -25,7 +25,7 @@ class PunchClockHeader < ApplicationComponent
                 "m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"
             )
           end
-          helpers.t(".close").upcase
+          t(".close").upcase
         end
       end if @user
       div(class: "pr-2") do
@@ -53,7 +53,7 @@ class PunchClockHeader < ApplicationComponent
           )
         end
 
-        span(class: "text-white px-4") { helpers.t(".network_not_available") }
+        span(class: "text-white px-4") { t(".network_not_available") }
       end
     end
   end

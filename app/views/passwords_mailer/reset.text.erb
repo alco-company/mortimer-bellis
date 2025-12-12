@@ -1,2 +1,11 @@
-You can reset your password within the next 15 minutes on this password reset page:
+<%= I18n.t("user_mailer.reset_password_instructions.hello", email: @resource.email) %>
+
+<%= I18n.t("user_mailer.reset_password_instructions.introduction") %>
+
 <%= edit_users_password_url(@resource.password_reset_token) %>
+
+<%= I18n.t("user_mailer.reset_password_instructions.action") %>
+
+<%= t("user_mailer.reset_password_instructions.ignore") %>
+
+<%= render MortimerMailSignature.new company: @company, format: :text %>

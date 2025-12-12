@@ -168,7 +168,7 @@ class Pos::EmployeeController < Pos::PosController
     def render_punches
       date_range = @first_punch.punched_at.beginning_of_day..@first_punch.punched_at.end_of_day
       @punches = Punch.where(user: @user, punched_at: date_range).order(punched_at: :desc)
-      render turbo_stream: turbo_stream.replace("payroll_#{helpers.dom_id(@first_punch)}", partial: "pos/punches/index")
+      render turbo_stream: turbo_stream.replace("payroll_#{dom_id(@first_punch)}", partial: "pos/punches/index")
     end
 
     def employee_time_zone(&block)

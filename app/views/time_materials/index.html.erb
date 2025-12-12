@@ -1,19 +1,46 @@
-<%= turbo_stream_from @resources_stream %>
+<%= turbo_stream_from @user_resources_stream %>
 <%= form_with model: @batch, id: "batch_form", data: { controller: "list" } do |form| %>
-  <%= render partial: "header", locals: { batch_form: form, divider: true } %>
+  <%= render partial: "header", locals: { tenant: Current.tenant, batch_form: form, divider: true, user: Current.user, params: params } %>
   <div id="list" role="list" class="">
     <%= form.hidden_field :id%>
     <%= form.hidden_field :entity %>
     <%= form.hidden_field :ids_range, value: @ids_range %>
-    <div id="record_list" class="scrollbar-hide">
+
+    <% if Current.user.can? :show_time_stats, resource: TimeMaterial.new %>
+      <div class="m-2 p-4 rounded-lg bg-white shadow-sm dark:divide-white/10 dark:bg-gray-800/50 dark:shadow-none dark:outline dark:-outline-offset-1 dark:outline-white/10">
+        <h3 class="text-base font-semibold text-gray-900 dark:text-white">Denne måned</h3>
+        <dl class="mt-5 grid grid-cols-2 gap-5">
+          <div class="flex flex-col overflow-hidden rounded-lg bg-white px-4 py-5 shadow-sm sm:p-6 dark:bg-gray-800/75 dark:inset-ring dark:inset-ring-white/10">
+            <div class="truncate text-sm font-medium text-gray-500 dark:text-gray-400">Timer ialt og gns /dag</div>
+            <div class="mt-1 w-full text-xl md:text-3xl font-semibold tracking-tight text-gray-900 dark:text-white">
+              <div class="flex items-stretch ">
+                <div class="py-2 grow"><%= TimeMaterial.by_tenant.total_time_registered %></div>
+                <div class="py-2 grow text-right"><%= TimeMaterial.by_tenant.avg_total_time_per_day %></div>
+              </div>
+            </div>
+          </div>
+          <div class="overflow-hidden rounded-lg bg-white px-4 py-5 shadow-sm sm:p-6 dark:bg-gray-800/75 dark:inset-ring dark:inset-ring-white/10">
+            <div class="truncate text-sm font-medium text-gray-500 dark:text-gray-400">Fakturérbare timer og gns /dag</div>
+            <div class="mt-1 w-full  text-xl md:text-3xl  font-semibold tracking-tight text-gray-900 dark:text-white">
+              <div class="flex items-stretch ">
+                <div class="py-2 grow"><%= TimeMaterial.by_tenant.total_invoiceable_time %></div>
+                <div class="py-2 grow text-right"><%= TimeMaterial.by_tenant.avg_total_invoiceable_per_day %></div>
+              </div>
+            </div>
+          </div>
+        </dl>
+      </div>
+    <% end %>
+
+    <div id="record_list" class="gap-y-4 grid grid-cols-1 gap-6 sm:grid-cols-1 lg:grid-cols-1 m-2 scrollbar-hide">
       <%= render List.new records: @records, pagy: @pagy, initial: true, params: params, order_by: {wdate: :desc}, user: Current.user %>
     </div>
 
   </div>
 <% end %>
-<%= time_material_button(user: current_user) %>
+<%= time_material_buttons(user: current_user) %>
 
-<% # notify user instead !! %>
-<% # if Current.user.tasks.first_tasks.uncompleted %>
-  <%#= render partial: "toast", locals: { count: Current.user.tasks.first_tasks.uncompleted.count } %>
-<% # end %> 
+<!-- # notify user instead !! -->
+<% if Current.user.tasks.first_tasks.uncompleted.count > 0 %>
+  <%= render partial: "toast", locals: { count: Current.user.tasks.first_tasks.uncompleted.count } %>
+<% end %>

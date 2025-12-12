@@ -72,7 +72,7 @@ class BatchesController < ApplicationController
       else
         range = get_ids_range
         ids_old = @batch&.ids.blank? ? [] : @batch&.ids.split(",").collect { |i| i.to_i }.sort
-        ids_new = params.dig(:batch, :ids).collect { |i| i.to_i }.sort
+        ids_new = params.dig(:batch, :ids) ? params.dig(:batch, :ids).collect { |i| i.to_i }.sort : []
         params[:batch][:ids] = ids_old.filter { |i| range.include? i }.empty? ? ids_old + ids_new : ids_new
       end
     end

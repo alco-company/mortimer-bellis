@@ -30,7 +30,9 @@ module DefaultActions
     def toggle
       posthog_capture
       resource_class.toggle
-      render turbo_stream: turbo_stream.replace("#{Current.tenant.id}_list_header", partial: "application/header", locals: { tenant: Current.tenant, user: Current.user, divider: true })
+      rs = params[:turbo_frame].present? ? params[:turbo_frame] : "#{(Current.tenant.id rescue false) || "1"}_list_header"
+      p = params[:partial].present? ? params[:partial] : "application/header"
+      render turbo_stream: turbo_stream.replace(rs, partial: p, locals: { tenant: Current.tenant, divider: true, params: @params, user: Current.user })
     end
 
     # GET /users/lookup
@@ -92,6 +94,12 @@ module DefaultActions
       redirect_to root_path, alert: I18n.t("errors.messages.something_went_wrong", error: e.message)
     end
 
+    def copy
+      posthog_capture
+      attribs = resource.attributes.except("id", "created_at", "updated_at")
+      @resource = resource_class.new(attribs)
+    end
+
     # GET /users/1/edit
     # renders default views/:models/edit.html.erb or views/application/edit.html.erb
     # which renders a views/:models/form.rb
@@ -118,15 +126,18 @@ module DefaultActions
 
       respond_to do |format|
         if before_create_callback && resource_create && create_callback
-          Broadcasters::Resource.new(resource, params.permit!).create
+          stream_create
           resource.notify action: :create
           flash[:success] = t(".post")
-          format.turbo_stream { render turbo_stream: [
-            turbo_stream.update("form", ""),
-            turbo_stream.replace("#{Current.get_user.id}_progress", partial: "dashboards/progress"),
-            turbo_stream.replace("flash_container", partial: "application/flash_message", locals: { tenant: Current.get_tenant, messages: flash, user: Current.get_user })
-            # special
-          ] ; flash.clear}
+          format.turbo_stream {
+            render turbo_stream: [
+              turbo_stream.update("form", ""),
+              turbo_stream.replace("#{Current.get_user.id}_progress", partial: "dashboards/progress"),
+              turbo_stream.replace("flash_container", partial: "application/flash_message", locals: { tenant: Current.get_tenant, messages: flash, user: Current.get_user })
+              # special
+            ]
+            flash.clear
+          }
           format.html { redirect_to resources_url, success: t(".post") }
           format.json { render :show, status: :created, location: resource }
         else
@@ -155,7 +166,7 @@ module DefaultActions
       posthog_capture
       respond_to do |format|
         if before_update_callback && resource_update && update_callback
-          Broadcasters::Resource.new(resource, params.permit!).replace
+          stream_update
           resource.notify action: :update
           flash[:success] = t(".post")
           format.turbo_stream { render turbo_stream: [
@@ -203,7 +214,7 @@ module DefaultActions
           begin
             ActiveRecord::Base.connected_to(role: :writing) do
               # All code in this block will be connected to the reading role.
-              eval(cb) && resource.notify(action: :destroy) && Broadcasters::Resource.new(resource).destroy if resource.destroy!
+              eval(cb) && resource.notify(action: :destroy) && stream_destroy if resource.destroy!
             end
           rescue => error
             say error
@@ -246,6 +257,12 @@ module DefaultActions
     end
 
     #
+    # default broadcaster stream for create
+    def stream_create
+      Broadcasters::Resource.new(resource, params.permit!, user: Current.get_user).create
+    end
+
+    #
     # implement on the controller inheriting this concern
     # in order to 'fix' stuff right before the resource gets updated
     #
@@ -270,6 +287,12 @@ module DefaultActions
     end
 
     #
+    # default broadcaster stream for update
+    def stream_update
+      Broadcasters::Resource.new(resource, params.permit!, user: Current.get_user).replace
+    end
+
+    #
     # implement on the controller inheriting this concern
     # in order to not having to extend the update method on this concern
     #
@@ -277,6 +300,12 @@ module DefaultActions
     # ie - it cannot call methods on the object istself!
     #
     def destroy_callback
+    end
+
+    #
+    # default broadcaster stream for destroy
+    def stream_destroy
+      Broadcasters::Resource.new(resource).destroy
     end
 
     private

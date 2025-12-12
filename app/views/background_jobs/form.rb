@@ -5,7 +5,7 @@ class BackgroundJobs::Form < ApplicationForm
     row field(:job_klass).select(BackgroundJob.job_klasses, class: "mort-form-select").focus
     row field(:state).select(BackgroundJob.BACKGROUND_STATES, class: "mort-form-select")
     row field(:params).textarea(class: "mort-form-text")
-    row field(:schedule).textarea(class: "mort-form-text")
+    row field(:schedule).textarea(class: "mort-form-text", help: t("background_jobs.form.schedule_help"))
     row field(:next_run_at).datetime(class: "mort-form-datetime")
     view_only field(:job_id).input()
   end

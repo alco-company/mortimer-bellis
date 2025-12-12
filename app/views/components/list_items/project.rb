@@ -15,11 +15,13 @@ class ListItems::Project < ListItems::ListItem
   # actual_minutes
 
   def show_recipient_link
-    link_to(resource_url,
-      class: "truncate hover:underline",
-      data: { turbo_action: "advance", turbo_frame: "form" },
-      tabindex: -1) do
-      plain resource.name
+    p(class: "text-sm/6 font-semibold text-gray-900 dark:text-white") do
+      link_to(resource_url,
+        class: "truncate hover:underline",
+        data: { turbo_action: "advance", turbo_frame: "form" },
+        tabindex: -1) do
+        plain resource.name
+      end
     end
   end
 
@@ -35,6 +37,8 @@ class ListItems::Project < ListItems::ListItem
   end
 
   def show_secondary_info
-    plain "%s %s " % [ resource.customer&.name, resource.state ]
+    p(class: "text-sm font-medium text-gray-900 dark:text-white") do
+      plain "%s %s " % [ resource.customer&.name, resource.state ]
+    end
   end
 end

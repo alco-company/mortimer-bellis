@@ -7,15 +7,20 @@ class ModalController < MortimerController
 
   def new
     # resource
-    @resource = find_resource
-    case resource_class.to_s.underscore
-    when "calendar"; process_calendar_new
-    when "event"; process_event_new
-    when "employee"; process_employee_new
-    when "punch_card"; process_punch_card_new
-    when "tenant"; process_tenant_new
-    when "page"; process_help_new
-    else; process_other_new
+    case params[:modal_form]
+    when "restore_backup"; process_restore_backup_new
+    when "settings"; process_settings_new
+    else
+      @resource = find_resource
+      case resource_class.to_s.underscore
+      when "calendar"; process_calendar_new
+      when "event"; process_event_new
+      when "employee"; process_employee_new
+      when "punch_card"; process_punch_card_new
+      when "tenant"; process_tenant_new
+      when "page"; process_help_new
+      else; process_other_new
+      end
     end
   end
 
@@ -29,13 +34,17 @@ class ModalController < MortimerController
 
   # Parameters: {"authenticity_token"=>"[FILTERED]", "modal_form"=>"payroll", "last_payroll_at"=>"2024-04-16", "update_payroll"=>"on", "button"=>""}
   def create
-    case resource_class.to_s.underscore
-    when "employee"; process_employee_create
-    when "punch_card"; process_punch_card_create
-    when "event"; process_event_create
-    when "time_material"; process_time_material_create
-    when "tenant"; process_tenant_create
-    else; process_other_create
+    case params[:modal_form]
+    when "restore_backup"; process_restore_backup_create
+    else
+      case resource_class.to_s.underscore
+      when "employee"; process_employee_create
+      when "punch_card"; process_punch_card_create
+      when "event"; process_event_create
+      when "time_material"; process_time_material_create
+      when "tenant"; process_tenant_create
+      else; process_other_create
+      end
     end
   end
 
@@ -112,6 +121,9 @@ class ModalController < MortimerController
         end
       end
       @step = "accept"
+    end
+
+    def process_settings_new
     end
 
     def process_calendar_new
@@ -278,16 +290,25 @@ class ModalController < MortimerController
 
     def process_destroy_all
       begin
-        DeleteAllJob.perform_later tenant: Current.tenant, user: Current.user, resource_class: resource_class.to_s,
-          ids: resources.pluck(:id),
-          batch: @batch,
-          user_ids: (resource_class.first.respond_to?(:user_id) ? resources.pluck(:user_id).uniq : User.by_tenant.by_role(:user).pluck(:id)) rescue nil
-        @url.gsub!(/\/\d+$/, "") if @url.match?(/\d+$/)
-        flash[:success] = t("delete_all_later")
-        respond_to do |format|
-          format.turbo_stream { }
-          format.html { redirect_to @url, status: 303, success: t("delete_all_later") }
-          format.json { head :no_content }
+        if resource_class == Setting && params[:reason] != t("setting.modal.delete.reason_typed")
+          flash[:error] = t("setting.modal.delete.reason_required")
+          respond_to do |format|
+            format.turbo_stream { }
+            format.html { redirect_to resources_url, status: 303, error: t("setting.modal.delete.reason_required") }
+            format.json { head :no_content }
+          end
+        else
+          DeleteAllJob.perform_now tenant: Current.tenant, user: Current.user, resource_class: resource_class.to_s,
+            ids: resources.pluck(:id),
+            batch: @batch,
+            user_ids: (resource_class.first.respond_to?(:user_id) ? resources.pluck(:user_id).uniq : User.by_tenant.by_role(:user).pluck(:id)) rescue nil
+          @url.gsub!(/\/\d+$/, "") if @url.match?(/\d+$/)
+          flash[:success] = t("delete_all_later")
+          respond_to do |format|
+            format.turbo_stream { }
+            format.html { redirect_to @url, status: 303, success: t("delete_all_later") }
+            format.json { head :no_content }
+          end
         end
       rescue => e
         say "ERROR on destroy: #{e.message}"
@@ -313,9 +334,9 @@ class ModalController < MortimerController
           if resource.remove params[:step]
             eval(cb) unless cb.nil?
             @url.gsub!(/\/\d+$/, "") if @url.match?(/\d+$/)
-            Broadcasters::Resource.new(r).destroy
+            resource_class == TimeMaterial ? time_material_stream_destroy : Broadcasters::Resource.new(r).destroy
             r.notify(action: :destroy)
-            r.destroy
+            r.destroy!
             flash[:success] = t(".post")
             params[:step] == "delete_account" ? redirect_to(root_path) : do_respond
           else
@@ -349,9 +370,29 @@ class ModalController < MortimerController
       render_to_string "employees/report_state", layout: "pdf", formats: :pdf
     end
 
+    def time_material_stream_destroy
+      Broadcasters::Resource.new(resource, user: Current.user, stream: "#{Current.user.id}_time_materials").destroy
+      Current.get_tenant.users.each do |u|
+        next unless u.current_sign_in_at.present? && u != Current.user
+        Broadcasters::Resource.new(resource, user: u, stream: "#{u.id}_time_materials").destroy
+      end
+    end
+
+    def process_restore_backup_new
+      @filename = params[:filename]
+      @backup_date = DateTime.parse(@filename.split("_")[2].split(".")[0]).in_time_zone rescue Time.current
+    end
+
+    def process_restore_backup_create
+      # This shouldn't be called anymore since the form submits directly to tenant_backups#restore
+      # But keeping it for backwards compatibility
+      filename = params[:filename]
+      redirect_to root_path, alert: "Please use the modal to confirm restore."
+    end
+
   # def any_filters?
   #   return false if @filter.nil? or params.dig(:controller).split("/").last == "filters" or params.dig(:action) == "lookup"
-  #   # !@filter.id.nil?
+  #   # !@filter.id.nil?r
   #   @filter.persisted?
   # end
 

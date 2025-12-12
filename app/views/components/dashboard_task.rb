@@ -73,7 +73,7 @@ class DashboardTask < ApplicationComponent
         class:
           "flex justify-between items-center gap-x-4 border-b border-slate-100 bg-gray-50 p-2"
       ) do
-        url, turbo = url.include?("/") ? [ url, true ] : helpers.send(url)
+        url, turbo = url.include?("/") ? [ url, true ] : [ eval(url), false ]
         div(class: "flex text-sm/6 text-gray-900") do
           link_to task.title, url, class: "mort-link-primary mr-2 text-sm", data: { turbo_stream: turbo }
           render Icons::Link.new css: "mort-link-primary h-6 "
@@ -83,13 +83,13 @@ class DashboardTask < ApplicationComponent
       end
       dl(class: "-my-3  px-2 py-4 text-sm/6") do
         div(class: "hidden flex justify-between gap-x-4 py-3 text-xs", data: { hidden_description_target: "description" }) { task.description } unless task.description.blank?
-        p { link_to I18n.t("tasks.dashboard.get_help_here"), help, class: "mort-link-error text-xs" }
+        p { link_to t("tasks.dashboard.get_help_here"), help, class: "mort-link-error text-xs" }
         # dt(class: "text-gray-500") { "Last invoice" }
         # dd(class: "text-gray-700") do
         #   time(datetime: "2022-12-13") { "December 13, 2022" }
         # end
         # end
-        # div(class: "flex justify-between  self-end gap-x-4 py-3") { link_to I18n.t(".start"), task.link, class: "mort-btn-primary" }
+        # div(class: "flex justify-between  self-end gap-x-4 py-3") { link_to t(".start"), task.link, class: "mort-btn-primary" }
         #   dt(class: "text-gray-500") { "Amount" }
         #   dd(class: "flex items-start gap-x-2") do
         #     div(class: "font-medium text-gray-900") { "$2,000.00" }
@@ -171,7 +171,8 @@ class DashboardTask < ApplicationComponent
   def completed_task(task)
     url, help = task.link.split(/,| |;/)
     help ||= "https://mortimer.pro/help"
-    url, turbo = url.include?("/") ? [ url, true ] : helpers.send(url)
+    url, turbo = url.include?("/") ? [ url, true ] : @_state.user_context[:rails_view_context].send(url)
+
     li(class: "relative") do
       comment { "Complete Step" }
       link_to(url, class: "relative flex text-sm group", data: { turbo_stream: turbo }) do
@@ -194,12 +195,16 @@ class DashboardTask < ApplicationComponent
         end
       end
     end
+  rescue => error
+    Rails.logger.error "Error in completed_task: #{error.message}"
+    nil
   end
 
   def incomplete_task(task)
     url, help = task.link.split(/,| |;/)
     help ||= "https://mortimer.pro/help"
-    url, turbo = url.include?("/") ? [ url, true ] : helpers.send(url)
+    url, turbo = url.include?("/") ? [ url, true ] : @_state.user_context[:rails_view_context].send(url)
+
     li(class: "relative") do
       comment { "Upcoming Step" }
       link_to(url, class: "relative flex text-sm group", data: { turbo_stream: turbo, turbo: turbo }) do
@@ -216,5 +221,8 @@ class DashboardTask < ApplicationComponent
         end
       end
     end
+  rescue => error
+    Rails.logger.error "Error in incomplete_task: #{error.message}"
+    nil
   end
 end

@@ -36,9 +36,14 @@ module Resourceable
         "%s_%s" % [ tenant&.id, resource_class.to_s.underscore.pluralize ]
     end
 
+    def set_user_resources_stream
+      user = Current.get_user || (@resource&.user rescue false) || User.first
+      @user_resources_stream ||= "%s_%s" % [ user&.id, resource_class.to_s.underscore.pluralize ]
+    end
+
     def set_resources
       # @resources ||= ResourceableResource.new(resource_class, request.path, params)
-      @resources = ResourceableResource.new(resource_class, request.path, params, @filter, @batch)
+      @resources = ResourceableResource.new(resource_class, request.path, params_all, @filter, @batch)
       .parent_or_class
       .filtered
       .batched
@@ -48,13 +53,17 @@ module Resourceable
     end
 
     def set_resource_class
-      if params.dig(:resource_class).present?
-        model = params.dig(:resource_class).classify.constantize
+      if params_cls.present?
+        model = params_cls.classify.constantize
         _m = model.new
       else
-        model = nil
+        model = case params.dig(:modal_form)
+        when "restore_backup"; Tenant
+        else nil
+        end
       end
-      ctrl = params.dig(:controller)&.split("/")&.last
+
+      ctrl = params_ctrl&.split("/")&.last
       case ctrl
       when "editor"; User
       when "modal"; model
@@ -67,10 +76,12 @@ module Resourceable
       when "notifications"; Noticed::Notification
       when "applications"; Oauth::Application
       when "time_material_stats"; TimeMaterial
-      else; model || ctrl.classify.constantize
+      else; model || ctrl&.classify&.constantize || (raise "Resource class not found for controller #{ctrl}")
       end
     rescue => e
-      redirect_to "/", alert: I18n.t("errors.resources.resource_class.not_found", ctrl: params.dig(:controller), reason: e.to_s) and return
+      if respond_to? :redirect_to
+        redirect_to "/", alert: I18n.t("errors.resources.resource_class.not_found", ctrl: (params_ctrl rescue "-"), reason: e.to_s) and return
+      end
     end
 
     def set_filter
@@ -83,21 +94,27 @@ module Resourceable
     end
 
     def new_resource_url
-      url_for(controller: params_ctrl, action: :new)
+      build_url_for(controller: params_ctrl, action: :new)
     end
 
     def resource_url(**options)
-      url_for(controller: params_ctrl, action: :show, id: @resource.id, **options)
+      build_url_for(controller: params_ctrl, action: :show, id: @resource.id, **options)
+    end
+
+    def copy_resource_url(**options)
+      options[:id] = @resource.try(:id) || options.delete(:id)
+      build_url_for(controller: params_ctrl, action: :copy, **options)
+    rescue
     end
 
     def edit_resource_url(**options)
       options[:id] = @resource.try(:id) || options.delete(:id)
-      url_for(controller: params_ctrl, action: :edit, **options)
+      build_url_for(controller: params_ctrl, action: :edit, **options)
     rescue
     end
 
     def delete_resource_url(resource)
-      url_for(resource)
+      build_url_for(resource)
     end
 
     #
@@ -105,8 +122,8 @@ module Resourceable
     # to skip using the memoized url
     #
     def resources_url(**options)
-      options[:search] = params.dig(:search) if params.dig(:search).present?
-      url_for(controller: params_ctrl, action: :index, **options)
+      options[:search] = params_search if params_search.present?
+      build_url_for(controller: params_ctrl, action: :index, **options)
     rescue => e
       Rails.logger.error("Error generating resources_url: #{e.message}")
       root_url
@@ -119,11 +136,11 @@ module Resourceable
     end
 
     def delete_all_url
-      url_for(controller: params_ctrl, id: 1, action: :show, all: true)
+      build_url_for(controller: params_ctrl, id: 1, action: :show, all: true)
     end
 
     def pos_delete_all_url(date: nil)
-      url_for(controller: params_ctrl, id: 1, action: :show, all: true, date: date, api_key: @resource.access_token)
+      build_url_for(controller: params_ctrl, id: 1, action: :show, all: true, date: date, api_key: @resource.access_token)
     end
 
     def find_resource
@@ -146,16 +163,32 @@ module Resourceable
     #   params.permit! # (:id, :s, :d, :page, :format, :_method, :commit, :authenticity_token, :controller)
     # end
 
+    def build_url_for controller: nil, action: nil, id: nil, **options
+      controller ||= resource_class.to_s.underscore.pluralize
+      action ||= :index
+      Rails.application.routes.url_helpers.url_for({ controller: controller, action: action, id: id, only_path: false }.merge(options))
+    rescue
+      root_url
+    end
+
+    def params_cls
+      params_all.dig :resource_class
+    end
+
+    def params_search
+      params_all.dig :search
+    end
+
     def params_ctrl
-      params.dig :controller
+      params_all.dig :controller
     end
 
     def params_s
-      params.dig :s
+      params_all.dig :s
     end
 
     def params_d
-      params.dig :d
+      params_all.dig :d
     end
 
     # def params_parent(ref)
@@ -163,7 +196,12 @@ module Resourceable
     # end
 
     def params_id
-      params&.dig(:id) || params.dig(resource_class.to_s.underscore.to_sym, :id)
+      params_all.dig(:id) || params_all.dig(resource_class.to_s.underscore.to_sym, :id)
+    end
+
+    def params_all
+      return params if params.present?
+      {}
     end
 
     # @resources = any_filters? ? @filter.do_filter(resource_class) : parent_or_class
@@ -219,8 +257,7 @@ module Resourceable
 
         def resource_resources
           case rc.to_s
-          # 2025/6/19 whd
-          # TODO not working as intended! when "TimeMaterial"; Current.user.can?(:show_all_time_material_posts) ? rc.by_tenant() : rc.by_user()
+          when "TimeMaterial"; Current.user.can?(:show_all_time_material_posts, resource: rc) ? rc.by_tenant() : rc.by_user()
           when "Noticed::Notification"; Current.user.notifications.unread.includes(event: :record)
           when "Oauth::Application"; rc.all
           else; rc.by_tenant

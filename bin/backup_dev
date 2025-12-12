@@ -1,4 +1,5 @@
-newdir=/Volumes/Data/Mortimer/Backups/development/$(date +%Y-%m-%d)
+#newdir=/Volumes/Data/Mortimer/Backups/development/$(date +%Y-%m-%d)
+newdir=/Users/walther/src/mortimer/redbox/bellis/tmp/staging/$(date +%Y-%m-%d)
 mkdir -p $newdir
 pushd $newdir
 scp docker5:'/var/lib/docker/volumes/storage/_data/prod*' ./

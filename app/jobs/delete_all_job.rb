@@ -13,10 +13,17 @@ class DeleteAllJob < ApplicationJob
     switch_locale do
       resources = rc.where id: ids
       user_ids ||= rc.first.respond_to?(:user_id) ? resources.pluck(:user_id).uniq : []
-      delete_all(rc, ids, user_ids) if ids.any?
+      rc == Setting ?
+        reset_settings :
+        delete_all(rc, ids, user_ids) if ids.any?
     end
   rescue => e
     UserMailer.error_report(e.to_s, "DeleteAllJob#perform #{rc}").deliver_later
+  end
+
+  def reset_settings
+    Setting.where(tenant: Current.tenant).destroy_all
+    Setting.create_defaults_for_new Current.tenant
   end
 
   def delete_all(rc, ids, user_ids)

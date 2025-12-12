@@ -3,7 +3,7 @@ require "test_helper"
 class DineroUploadJobTest < ActiveJob::TestCase
   setup do
     user = users(:superadmin)
-    sign_in user
+    ui_sign_in user
   end
 
   test "should mark tm as 'cannot_be_pushed'" do

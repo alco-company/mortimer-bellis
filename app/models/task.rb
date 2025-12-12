@@ -59,6 +59,7 @@
 
 class Task < ApplicationRecord
   include Tenantable
+  include Settingable
   include TaskStateable
 
   belongs_to :tasked_for, polymorphic: true
@@ -145,5 +146,59 @@ class Task < ApplicationRecord
 
   def self.form(resource:, editable: true)
     Tasks::Form.new resource: resource, editable: editable, fields: [ :title, :link, :description ]
+  end
+
+  def self.create_tenant_template_tasks(usr)
+    [
+      { title: I18n.t("tasks.template_tasks.notifications.title"),
+        link: "/users/registrations/edit",
+        description: I18n.t("tasks.template_tasks.notifications.instruction"),
+        priority: -100,
+        validation: "Current.user.web_push_subscriptions.any?",
+        state: nil },
+      { title: I18n.t("tasks.template_tasks.setup_user_profile.title"),
+        link: "/users/registrations/edit",
+        description: I18n.t("tasks.template_tasks.setup_user_profile.instruction"),
+        priority: -101,
+        validation: "Current.user.email != Current.user.name && !Current.user.name.blank?",
+        state: nil },
+      { title: I18n.t("tasks.template_tasks.enable_2fa.title"),
+        link: "dashboard_task_enable_2fa",
+        description: I18n.t("tasks.template_tasks.enable_2fa.instruction"),
+        priority: -102,
+        validation: "Current.user&.otp_required_for_login",
+        state: nil },
+      { title: I18n.t("tasks.template_tasks.setup_tenant.title"),
+        link: "edit_current_tenant_profile",
+        description: I18n.t("tasks.template_tasks.setup_tenant.instruction"),
+        priority: -1,
+        validation: "Current.tenant.name != Current.tenant.email && !Current.tenant.name.blank?",
+        state: nil },
+      { title: I18n.t("tasks.template_tasks.integrate_with_dinero.title"),
+        link: "/provided_services/new?service=dinero",
+        description: I18n.t("tasks.template_tasks.integrate_with_dinero.instruction"),
+        priority: -2,
+        validation: "Current.tenant.provided_services.where_op(:matches, name: '%dinero%').pluck(:name).count == 1",
+        state: nil },
+      { title: I18n.t("tasks.template_tasks.invite_colleagues.title"),
+        link: "/users/invitations/new",
+        description: I18n.t("tasks.template_tasks.invite_colleagues.instruction"),
+        priority: -3,
+        validation: "Current.tenant.users.count > 1",
+        state: nil }
+    ].each do |t|
+      Task.create(
+        tenant: usr.tenant,
+        title: t[:title],
+        link: t[:link],
+        description: t[:description],
+        priority: t[:priority],
+        validation: t[:validation],
+        state: t[:state],
+        tasked_for: usr
+      ) unless Task.where(tenant: usr.tenant, priority: t[:priority], title: t[:title]).any?
+    end
+  rescue => e
+    Rails.logger.error("Failed to create tenant template tasks: #{e.message}")
   end
 end

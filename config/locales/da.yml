@@ -21,6 +21,7 @@ da:
   archive: Arkivér
   unarchive: Aktivér
   edit: Redigér
+  copy: Kopiér
   cancel: Fortryd
   update: Opdatér
   save: Gem
@@ -54,6 +55,9 @@ da:
   no records were found: Ingen poster fundet
   enable_notifications: Abonnér på notifikationer
   disable_notifications: Abonnér ikke mere på notifikationer
+  mission_control_jobs: "Mission Control Jobs"
+  toggle_show_all: "Vis alle"
+  toggle_show_my_unfinished: "Vis uafsluttede"
 
   sign_in_info: "Du loggede ind kl %{signin} og din session udløber om %{session_done}"
   session_done_shortly: "%{seconds} sekunder"
@@ -89,11 +93,20 @@ da:
   greater_than_equal: større end eller lig med
   matches: indeholder
   not_matching: indeholder ikke
+  change_password: Skift adgangskode
+  change_password_action: Skift adgangskoden
 
   application:
     header:
       sync_with_ERP: Synkroniser med ERP
   
+  backup:
+    restore_backup:
+      title: Gendan backup
+      notice: "En bekræftelsesmail vil blive sendt til <strong>%{email}</strong> når gendannelsen er fuldført."
+      instruction: "Er du sikker på, at du vil gendanne backup fra <strong>%{date}</strong>?"
+      warning: "<strong>ADVARSEL:</strong> Denne handling vil overskrive alle nuværende data med data fra backupen. Dette kan ikke fortrydes!"
+      restore_button: Gendan backup
   select_country: Vælg land
 
   components:
@@ -272,7 +285,7 @@ da:
         instruction: | 
           Er du sikker på at du vil slette kontoen?
           Alle data vil blive slettet, og kan ikke gendannes.
-          Du vil herefter ikke kunne bruge  M O R T I M E R  mere, med denne konto.
+          Du vil herefter ikke kunne bruge  MORTIMER  mere, med denne konto.
 
           Vi vil være kede af at miste dig som kunde.
       post: Posten blev slettet korrekt.
@@ -878,6 +891,7 @@ da:
         contract_days_per_week: Aftalt antal arbejdsdage/uge
         hour_pay: Timeløn
         hour_rate_cent: Timepris i øre
+        hourly_rate: Timepris (salg af konsulent tid)
         ot1_add_hour_pay: Overtid 1 tillæg (fx 15,25 eller 50%)
         ot2_add_hour_pay: Overtid 2 tillæg (fx 30,50 eller 100%)
         tmp_overtime_allowed: Overtid midlertidigt tilladt i 24t fra kl

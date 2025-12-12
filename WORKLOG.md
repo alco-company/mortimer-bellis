@@ -1,70 +1,655 @@
 # WORKLOG
 
+## IDEAS
+
+- using n8n on profeting on stock markets - https://medium.com/predict/the-crash-i-see-coming-why-ive-liquidated-my-portfolio-ea9bd4ae6837
+- using MCP's to automate development - https://generativeai.pub/model-context-protocol-mcp-10-must-try-mcp-servers-for-developers-4cf054836308 / https://ai.plainenglish.io/5-essential-mcp-servers-that-give-claude-cursor-real-superpowers-2025-509a822dd4fd
+- update the favicon depending on the number of open tasks - https://railsdesigner.com/update-favicon-badge-turbo-stream
+- https://medium.com/@raviskit2012/handling-multi-tenancy-in-a-ruby-on-rails-app-simple-secure-and-scalable-233dabaa6e77
+- use metrics to optimize speed - https://bhavyansh001.medium.com/how-we-made-our-rails-app-load-in-under-100ms-ceceea024c62
+- find ways to utilise <output> - https://denodell.com/blog/html-best-kept-secret-output-tag
+- use Terraform to setup servers - https://dennmart.com/articles/review-apps-with-kamal-part-1-provisioning-servers/
+
+## ISSUES
+
+- security gems to add soon - https://blog.devops.dev/8-essential-rails-security-gems-you-shouldnt-deploy-without-2025-edition-8b89f7e3c743
+- run `rails security:audit` https://medium.com/@backendbyeli/rails-8-security-improvements-stop-missing-these-critical-protections-135e78d8b9e1
+- https://svgconverter.online/
+- consistent icons - https://phosphoricons.com/
+- https://railsdesigner.com/kanban-rails-hotwire/
+- https://radanskoric.com/articles/turbo-extraframe-updates
+- VMC, BIMI - https://www.valimail.com/resources/guides/bimi-email/verified-mark-certificate/
+- https://binarysolo.blog/custom-error-pages-in-rails/ && https://beon.tech/blog/how-to-handle-exceptions-in-rails-full-guide
+- impersonate user - not only tenant
+- find proper hour_rate - see https://whimsical.com/priceable-PodwwnMvDvpAwybS916Ymj
+- deferred finish - set to automate closing
+- display turbo frames being busy - https://www.dotruby.com/articles/improving-turbo-frame-ux-with-the-busy-attribute
+- display other users editing the record you're wanting to edit: https://unagisoftware.com/articles/preventing-edit-conflicts-in-rails-with-turbo-hotwire-and-stimulusjs
+- ways to test before launch: https://bhavyansh001.medium.com/the-rails-performance-checklist-i-run-before-every-launch-b02f605285cf
+- priser
+- backup/restore menu items
+- change price when changing user
+
 ## CHANGELOG
 
-### 27/8/2025 - cherry-picked
+### 09/12/2025
 
+- reset project when changing customer
+- reset prices on customer change
+
+### 03/12/2025
+
+- added hourly_rate to select with user_list
+- fixed attributes being wrongly applied to settings
+- paused the setting default_time_material_rate
+- custom fitting SelectField (Phlex)
+
+### 02/12/2025
+
+- change user => set user hourly_rate
+- setting default_time_material_hour_rate
+
+### 01/12/2025
+
+- pushable missing argument
+- added comprehensive integration tests for time_materials with quarter-hour rounding validation (all 60 minute values)
+- added tests for hourly rate precedence: project rate > customer rate > user rate > team rate
+- fixed invoice_draft_test: corrected variable naming conflicts, added proper state (done) and customer_name to fixtures for ERP push validation
+- added rate precedence hierarchy tests to invoice_draft_test: verifies ERP invoices use correct rates (user/team/customer/project) when building invoice items
+
+### 28/11/2025
+
+- fix errors when sending PDF report
+- missing variable on rescue
+
+### 27/11/2025
+
+- send PDF report along when emailing tenant on backup and restore
+
+### 26/11/2025
+
+- fix missing close on modal
+- send email after restore job finishes
+- fix adding multiple queued jobs
+- fixed Users::RegistrationsController#update not working
+- fixed tenants#index not receiving broadcasts
+- fix removing SolidQueue jobs before purging records when restoring backups
+
+### 25/11/2025
+
+**Backup/Restore Bug Fixes & Background Job Scheduling Fixes**
+
+- **Backup System Improvements**:
+  - Fixed tar extraction failure by using array form of `system()` for proper shell escaping
+  - Added automatic cleanup of backups older than 8 days (matching 7-day link validity + buffer)
+  - Sanitize BackgroundJob records during restore: reset state to `un_planned`, clear `job_id` and `next_run_at`
+  - Preserve inactive jobs as inactive during restore (don't reset disabled jobs to un_planned)
+
+- **Background Job Scheduling Fixes** (multiple critical bugs):
+  - Fixed SolidQueue startup: Changed `recurring.yml` schedule from `every 60.seconds` to `every 60 seconds`
+  - Fixed job scheduling blocked by `shouldnt?(:run)` permission check (was preventing all jobs from scheduling)
+  - Fixed recurring jobs stuck in `running` state after completion:
+    - Changed `job_done` to call `plan_job` BEFORE setting state to finished (plan_job requires active? to be true)
+    - For one-time jobs: use `update!` instead of `finished!` + `persist` to properly set state
+    - For recurring jobs: plan next run, which sets state to `planned` automatically
+  - Fixed concurrency issue: `shouldnt?(:run)` returned different values between initial scheduling and rescheduling
+    - Added `skip_permission_check` parameter to `run_job` and `plan_job`
+    - Jobs rescheduling themselves skip permission check (already validated when initially scheduled)
+  - Added ActiveJob cancellation when BackgroundJobs are deleted or deactivated
+  - Improved error logging in `plan_job` and `run_job` (was silently swallowing exceptions)
+
+- **Known Issues** (technical debt):
+  - Multiple workarounds and safety checks added ("tape and plaster")
+  - Permission system interaction with background jobs needs architectural review
+  - `persist` uses `update_columns` which bypasses callbacks (intentional for performance, but fragile)
+
+**fix sanitize_time**
+
+- make creating time_material records respect :limit_time_to_quarters
+
+### 24/11/2025
+
+- make sure next_run_at is in the future
+**Tenant Backup Restore Implementation & Background Job Fixes**
+
+- **Tenant Restore Functionality** (first functional implementation):
+  - Created confirmation modal for restore operations (`app/views/modal/_restore_backup.html.erb`)
+  - Modal displays backup date and warning about data overwrite
+  - Integrated with modal controller system using `new_modal_url`
+  - Route changed from GET to POST to allow database writes (`tenant_backup_restore_path`)
+  - Fixed "Write query attempted while in readonly mode" error by wrapping restore logic in `ActiveRecord::Base.connected_to(role: :writing)`
+  - Restore creates BackgroundJob and enqueues RestoreTenantJob
+  - Terminates user session after restore initiated (requires re-login after restore completes)
+  - Location: `app/controllers/tenant_backups_controller.rb`, `app/controllers/modal_controller.rb`, `app/views/modal/_restore_backup.html.erb`, `config/routes.rb`
+
+- **Background Job Multiple Execution Bug Fix**:
+  - **Problem**: BackupTenantJob running 5-6 times and sending multiple emails
+  - **Root Cause**: Jobs completing and rescheduling with `next_run_at` still in the past, getting immediately picked up again by BackgroundManagerJob
+  - **Fix**: Added safety check in `cron_runs` to ensure next_run_at is at least 10 seconds in the future; if not, get the second occurrence (index: 1) instead
+  - **Impact**: Prevents immediate re-execution of jobs that take longer than expected to complete
+  - Location: `app/models/concerns/queueable.rb` line 177-183
+
+- **Cron Schedule Timezone Clarification**:
+  - Reverted complex timezone calculations - cron schedules are now interpreted as **UTC times**
+  - Database always stores UTC timestamps
+  - UI layer responsible for displaying times in user's local timezone
+  - Simplifies logic and prevents timezone confusion across multi-tenant users in different timezones
+  - User enters `1 9 * * *` = "09:01 UTC", stored as `2025-11-22 09:01:00 +0000`
+  - Location: `app/models/concerns/queueable.rb` line 170-183
+
+- **BackgroundJobsController Fixes**:
+  - `create_callback` no longer calls `plan_job` to avoid URL generation issues during Turbo Stream broadcasting
+  - `update_callback` explicitly returns `true` to ensure callback success even when job is `in_active`
+  - Fixed issue preventing state changes to `in_active`
+  - Location: `app/controllers/background_jobs_controller.rb`
+
+- **BackupTenantJob Cleanup**:
+  - Added automatic cleanup of temporary directory after successful archive creation and email queuing
+  - Uses `FileUtils.rm_rf(base_dir)` to remove JSONL files, manifest, and metadata after tar archive is created
+  - Prevents disk space accumulation from temporary backup files
+  - Location: `app/jobs/backup_tenant_job.rb` line 118
+
+### 21/11/2025
+
+- fix route on tenant_backup
+- missed an 's' on the path
+- fix'ed 403
+- cleanup after work
+- put help attribute under field, and background_job plan in particular
+- prepare for restoring backups
+
+### 20/11/2025
+
+**Background Job System - Comprehensive Test Suite & Critical Bug Fix**
+
+- **Created comprehensive test coverage** for background job management system (previously untested):
+  - `test/fixtures/background_jobs.yml`: Updated with 10 realistic fixtures covering all states and scenarios
+  - `test/models/background_job_test.rb`: 21 tests for validations, state machine, scopes, and class methods
+  - `test/models/concerns/queueable_test.rb`: 31 tests for lifecycle methods (job_done, plan_job, run_job, set_parms, next_run, persist)
+  - `test/jobs/background_manager_job_test.rb`: 3 tests for orchestration and scope queries
+  - `test/integration/background_job_lifecycle_test.rb`: 10 tests for end-to-end scenarios
+  - **Test Results**: 70 runs, 157 assertions, 0 failures, 0 errors, 11 skips (complex ActiveJob mocking scenarios)
+
+- **Fixed critical cron rescheduling bug**:
+  - **Problem**: Daily jobs (e.g., `'0 2 * * *'`) would reschedule 2 days in the future instead of next day after completion
+  - **Root Cause**: `cron_runs(schedule, first)` used `index: 1` when `first=false` (rescheduling), returning 2nd occurrence instead of next
+  - **Fix**: Always use `index: 0` to get next occurrence from current time, regardless of first/rescheduling parameter
+  - **Impact**: All recurring jobs now correctly schedule for their next occurrence (tomorrow, not day after tomorrow)
+  - Location: `app/models/concerns/queueable.rb` line 172
+
+- **Fixed BackupTenantJob critical issues** (discovered on staging server):
+  - **Problem 1**: Backup archives not created - job ran, sent email, but no `.tar.gz` file existed
+  - **Root Cause 1**: Files written to `/rails/tmp` which is NOT mounted as Docker volume (ephemeral storage)
+  - **Fix 1**: Changed backup location from `tmp/` to `storage/tenant_backup/` (persisted volume mount)
+  - **Problem 2**: Archive path became relative when changing directories for tar command
+  - **Fix 2**: Convert `archive_path` to string (absolute path) before `Dir.chdir` to preserve full path
+  - **Problem 3**: No error checking on `system("tar -czf ...")` command - silent failures
+  - **Fix 3**: Check `system()` return value and raise exception if tar command fails
+  - **Problem 4**: Email contained file system path instead of downloadable URL
+  - **Fix 4**: Created `/tenant_backups/:filename` download route with security checks
+  - Location: `app/jobs/backup_tenant_job.rb`, `app/controllers/tenant_backups_controller.rb`, `config/routes.rb`
+
+- **TenantBackupsController** (new):
+  - Download endpoint for tenant backup archives at `/tenant_backups/:filename`
+  - Security validations:
+    - Filename format validation (`tenant_ID_TIMESTAMP.tar.gz`)
+    - File existence check
+    - Tenant ownership verification (user's tenant must match filename tenant ID)
+  - Serves files with proper `Content-Type: application/gzip` and `Content-Disposition: attachment`
+
+- **Test coverage highlights**:
+  - ✅ State machine transitions (in_active → un_planned → planned → running → failed/finished)
+  - ✅ Cron schedule calculation (fixed bug verified with multiple tests)
+  - ✅ Parameter parsing with special keywords (me, tenant, team, self)
+  - ✅ Multi-tenant isolation
+  - ✅ One-time vs recurring job lifecycle
+  - ⏭️ Skipped: Complex ActiveJob mocking (better tested manually or with RSpec)
+
+- **Documentation created**:
+  - `background_job_management.md`: Comprehensive guide covering two-tier architecture (SolidQueue + custom BackgroundJob), execution flows, configuration examples, implementation patterns, monitoring, and debugging tips
+
+**Fix error in saving backup for tenant**
+
+
+
+### 19/11/2025
+
+**RestoreTenantJob Complete Test Suite & Bug Fixes**
+
+- **Fixed critical purge_records bug**: Return value was `[summary, table_ids]` instead of `[summary, remapped_ids]`, breaking all ID remapping
+  - This single-line fix immediately resolved 2 test failures
+- **Implemented comprehensive tenant purge logic**:
+  - Purge ALL records belonging to target tenant (not just collision IDs)
+  - Never purge the tenant record itself (only child records)
+  - Always purge remapped temporary IDs created during remap phase
+  - Respects protected user/team IDs for session safety
+- **Added `update_tenant` setting** (defaults to `true`):
+  - When enabled: tenant attributes from backup ARE applied to target tenant
+  - When disabled: tenant attributes remain unchanged, only child records restored
+  - Properly maps source tenant ID → target tenant ID for cross-tenant restores
+- **Fixed ActiveStorage attachment restoration**:
+  - Attachments weren't being restored due to ID remapping
+  - Original backup IDs were lost after remapping
+  - Solution: Store original backup ID in instance variable for attachment matching
+  - Now properly restores mugshots and other attachments with remapped record IDs
+- **Implemented polymorphic association tests**:
+  - Verified Taggings (taggable) polymorphic associations restore correctly
+  - Verified Settings (setable) polymorphic associations restore correctly
+  - Both `_type` and `_id` fields handled properly with ID remapping
+- **Test suite results**: 16 runs, 80 assertions, 0 failures, 0 errors, 2 skips
+- **Tests implemented**:
+  1. ✅ Archive and tenant validation
+  2. ✅ Purge mode (clean slate restore)
+  3. ✅ Tenant attribute updates from backup
+  4. ✅ Tenant attribute preservation when update_tenant=false
+  5. ✅ Remap mode (preserve existing records)
+  6. ✅ Dry run mode
+  7. ✅ Tenant isolation
+  8. ✅ FK associations remapping
+  9. ✅ Dependency order compliance
+  10. ✅ Empty tenant handling
+  11. ✅ ActiveStorage attachments (mugshots)
+  12. ✅ Polymorphic associations (taggings, settings)
+- **Skipped tests** (2):
+  - Self-referential foreign keys (Editor::Block parent_id)
+  - Checksum validation in strict mode
+- **Documentation added**:
+  - Added notes to Editor::Block and Editor::Document about untested backup/restore coverage
+  - Self-referential parent/child relationships untested
+  - Hierarchical block structure restoration untested
+
+### 18/11/2025
+
+- implemented comprehensive BackupTenantJob test suite
+- created BackupTenantJobTest with 9 test cases validating:
+  - complete backup file structure (dump.jsonl, metadata.json, manifest.json, blobs/)
+  - tenant data completeness across all tables
+  - tenant isolation (no data leakage)
+  - ActiveStorage attachments and blobs handling
+  - metadata accuracy with SHA256 checksums
+  - manifest record counts
+  - dependency ordering for referential integrity
+  - empty tenant edge case
+  - restorability smoke test
+- all tests passing (9 runs, 376 assertions)
+
+### 17/11/2025
+
+- updated DatabaseBackup to include blobs - see README for docs on Maintenance/Backup
+
+### 14/11/2025
+
+- setting up backup and documenting it - on docker5/docker6
+
+### 12/11/2025
+
+- improve handling of background jobs
+
+### 11/11/2025
+
+- fix form layout t/m
+- fix price setting on customer/project
+- add hourly_rate to teams and check for them
+- allow copy on product
+- confirm! first user on seed
+- safe confirmed? on Current.user
+- label play button better on header
+
+### 10/11/2025
+
+- fix tags not allow deletion
+- fix CRUD on tags
+- fix default team
+- fix {} on new empty t/m list
+- fix price setting
+- fix hour_rate in params
+- fix inviting emails
+
+### 05/11/2025
+
+- fix show_matter_link,  error: "ActionView::Template::Error No route matches {}"
+- add_customer authorization does not work - actually it was create_customer missing country_key
+- add_project didn't work either
+- debug {} error on ActionJob
+- set user to resource.user
+- remove .logger statements
+
+### 04/11/2025
+
+- avoid {} on time_materials & render tags on time_materials
+
+### 30/10/2025
+
+- inject new job on wdate w/o any tasks
+
+### 29/10/2025
+
+- incrementally better settings - now Users can have different setups
+- button for play on header
+- actually make it a button for play
+
+### 28/10/2025
+
+- setting defaults for all settings
+- allowing delete_all settings (resetting to default)
+- add xtra safety for resetting settings - type SLET
+- make sure list honors infinite scroll
+- make sure customer form focus on name
+
+### 27/10/2025
+
+- set task_comment right
+- let ":ops" be part of the clean-up in the list_controller.js
+- setting strict params on _header
+- don't replace item_header - MIGHT BE WRONG!!
+- trying to inject new records in the correct work day area - works for days with > 0 records
+- don't pause when stopping - if paused
+- handle params better
+- keep fighting the timing of TimeMaterial - especially off-line
+
+### 17/10/2025
+
+- inching closer on sync by-the-minute
+- another inch
+- better ordering of list items
+
+### 16/10/2025
+
+- yet another sync try
+
+### 14/10/2025
+
+- redo sync from ground up - test 1
+- forgot about the reset password email 
+- calculating ticks using wall-clock approach
+
+### 09/10/2025
+
+- tried to make sync time work w/AI
+
+### 08/10/2025
+
+- Fix the i18n so no translation_missing appears; make the Danish copy clean in both HTML and plaintext. - tenant_mailer
+
+### 07/10/2025
+
+- Fix the i18n so no translation_missing appears; make the Danish copy clean in both HTML and plaintext. - user_mailer
+
+### 06/10/2025
+
+- Tidy subject (no spaced caps).
+- Add List-Unsubscribe + List-Unsubscribe-Post headers.
+- skiftet til MailTrap - fuldstændig problemløst
+- missed the deploy yaml
+
+### 03/10/2025
+
+- new account settings presets
+- stats by tenant
+- fix view_context err
+- missed session_timeout
+- fix errs on the can? method
+
+### 02/10/2025
+
+- tasks with helper link errs
+- emails for gmail go to spam
+
+### 01/10/2025
+
+- handle sessions better
+- last_activity missing
+- fix seeding
+- guard default hour_rate & default_date
+- admin user can create
+
+### 30/09/2025
+
+- make kill_tenant_job great again
+- make kill_tenant_job great again II
+- make kill_tenant_job great again III
+- make kill_tenant_job great again IV
+- make kill_tenant_job great again V
+- make kill_tenant_job great again VI
+- make kill_tenant_job great again VII
+- make kill_tenant_job great again VIII
+- make kill_tenant_job great again IX
+- make kill_tenant_job great again X
+- make kill_tenant_job great again XI
+- make kill_tenant_job great again XII
+
+### 29/09/2025
+
+- sync play time with server
+- url cannot be undefined
+- fix play time skewing
+- fix broadcasts across multiple devices
+- fix broadcasts across multiple devices II
+- sync registered_minutes when editing hr:min
+
+### 26/09/2025
+
+- clean time_material index
+- fix error on material tab when editing item with material on
+- fix tap title to reload
+- fix unequal size select/text input
+- error on create material
+- add reactionview gem with tooling for development
+- sketching for the changelog
+- route /changelog to /home/show
+- set version to 1.1.1
+- link to changelog on the dashboard
+- check tasks.count > 0
+- add user as argument for TurboStream broadcasts
+
+### 25/09/2025
+
+- move buttons on active tasks
+- show simple stats on dashboard - total invoiceable/invoiced
+- dont show 15min segments on playing time
+- undo dark mode
+- batches controller undefined collect for nil - line 75
+- show invoiced right + flow time right
+- allow to batch time_material list_item
+- show listings with proper format
+- forgot users listing - and show_secondary_info
+
+### 24/09/2025
+
+- pause/resume/stop not working on mobile, test
+
+### 23/09/2025
+
+- persist playing_time in local_storage
+
+### 18/09/2025
+
+- on resume start player time from now - not last paused_at
+- faster can?/should?
+- fix time_material.active reload every 60 sec
+- fix broadcast reloads
+- post process on create too
+
+### 17/09/2025
+
+- watch out for associationId on lookup fields
+
+### 15/09/2025
+
+- settings to decide updating time/minut with player time
+- set database back to production
+
+### 12/09/2025
+
+- allow user to copy time_material record from more/context_menu
+- fixing wrong url_for method
+
+### 08/09/2025
+
+- deploy to app2
+- restore strict
+
+### 05/09/2025
+
+- problem with initial index view for new user
+- work on backup/restore II
+
+### 28/08/2025
+
+- work on backup/restore
+
+### 27/08/2025
+
+- improve on restore_tenant_job
+- small change to tenant:backup/restore to update background_job
+- skip tenant_id
+- better purge
+
+### 26/08/2025
+
+- improve live search
+- debounce live search
+- kill live-search for now
+- disable show only some time_material
 - added backup/restore_tenant_job
 - added rake task to control backup/restore
 
+### 25/08/2025
 
-### 4/8/2025
+- batch does not work across scroll = more pages
+- improving tests
+
+### 22/08/2025
+
+- make batch work across infite scroll
+- make search work with batch enabled
+
+### 21/08/2025
+
+- get rid of the rest of helpers. references to clear out Phlex deprecated mention
+- make contextmenu work in background
+- initially list not_done_or_pushed time_materials
+- fix MCJ in contextmenu - only on background_jobs#contextmenu
+- toggle list_all in contextmenu
+- only show new_time_material_url if user.can? :add_time_materials
+
+### 20/08/2025
+
+- add session_timeout setting key
+- move Mission Control Jobs + toggle bj's to more
+- update dashboard displaying session_timeout
+- refining tests for settings
+- bug on add_from_erp
+- allow more classes to call .settings
+- add Tidewave
+- report on params error
+- fix setting next_run_at on jobs
+- rename the tag component test
+- fix missing customer pulls
+
+### 19/08/2025
+
+- bug in settings modal
+- make resource_class chip into the authorization/setting model
+- watch out for resouces w/o settings!
+- set title for settings
+- fix translations for settings + new button on Edge
+- fix add_from_erp
+- ret notifikation til success for 'din konto er godkendt'
+
+### 18/08/2025
+
+- manage settings better
+- missed class can? more
+
+### 14/08/2025
+
+- add settings link to contextmenu
+- fix language inspection on load
+- show description above settings
+- don't fail on team settings
+- cannot cancel changes on settings - they are ACID
+- make license_valid? respond straight to :pro, "pro", [:trial,"ambassador"]
+- warn when downgrading trial licenses
+
+### 13/08/2025
+
+- set clock straight in line with timezone
+- translations missing
+- make settings find 1|true, 0|false
+
+### 12/08/2025
+
+- remove helpers - shutting up Phlex in the process II
+- set .gitignore and backup scripts straight
+- fallback on localization in components
+
+### 8/08/2025
+
+- use localhost on development b/c puma-dev is hard to debug
+- remove helpers - shutting up Phlex in the process
+
+### 5/08/2025
+
+- bug on select_option
+
+### 4/08/2025
 
 - forced upgrade of Ruby to 3.3.3
-- fixing issues 
+- fixing issues
 - undefined method api_key
 
-### 20/6/2025
+### 20/06/2025
 
 - got a breakthrough on boolean and text settings
 - fix bug on filters
 - now the select was a walk in the park (almost)
 
-### 17/6/2025
+### 17/06/2025
 
 - settings basic navigation
 - debug and dev choices reestablished (dev using puma-dev -d test = mortimer.test)
 - fail on run_test.rake
 
-### 16/6/2025
+### 16/06/2025
 
 - WIP: work on settings
 - setup puma-dev to handle https://mortimer.dev
 - WIP: invoiceable
 
-### 10/6/2025
+### 10/06/2025
 
 - hide block tab for now
 - first render of {{}}
 
-### 6/6/2025
+### 6/06/2025
 
 - pick individual block
 
-### 4/6/2025
+### 4/06/2025
 
 - show editor as tabs
 - don't create blocks while sorting
 - nested blocks editing
 - invalid drop prevention (server side only)
 
-### 3/6/2025
+### 3/06/2025
 
 - drag/drop & sort blocks
 - debounce sort
 - deserializer for HTML -> blocks
 
-### 2/6/2025
+### 2/06/2025
 
 - remember to require 'posthog'
 
-### 27/5/2025
+### 27/05/2025
 
 - build html_serializer for documents and blocks
 - debounce on fetch to allow for slow input on tags - 500ms
 - fix calc overTime
 
-### 23/5/2025
+### 23/05/2025
 
 - started on building the HTML editor - preparing for the Report Generator
 - adding Resizable panes (resize-x and overflow-auto)
@@ -72,38 +657,38 @@
 - Toggle device preview sizes
 - create structure for editor_documents, _blocks
 
-### 22/5/2025
+### 22/05/2025
 
 - fix click on tag list element
 - change 'upload til Dinero' to dimmed unless available
 - change 'upload til Dinero' to sync w/ERP if provided_service 
 
-### 21/5/2025
+### 21/05/2025
 
 - add customer.name, project.name, product.name to CSV reports
 - fix dropdown on desktop and mobile
 - fix bug on update and delete TimeMaterial - taggings
 - fix taggings on CSV
 
-### 20/5/2025
+### 20/05/2025
 
 - add CRUD for tags
 - make caret position work with only 1 char in input
 - allow TimeMaterial to keep tags
 
-### 19/5/2025
+### 19/05/2025
 
 - 14 days work in 3 - part 1
 - try to show dropdown on mobile
 - fix bug on Enter and tap
 - hide PDF feature - make gray
 
-### 17/5/2025
+### 17/05/2025
 
 - use trial for free first 30 days
 - fix spelling error
 
-### 16/5/2025
+### 16/05/2025
 
 - export CSV w/selected fields
 - prepare DB for tags
@@ -113,11 +698,11 @@
 - drop contextmenu PDF
 - fix instructions for time_material export
 
-### 15/5/2025
+### 15/05/2025
 
 - add 2 fields to time_material for task and location comment
 
-### 14/5/2025
+### 14/05/2025
 
 - set country_key as select - and validate
 - prepare system_test for login_as using has_secure_password not Devise
@@ -127,18 +712,18 @@
 - don't write price if blank on project / customer - and link user and price
 - don't delete using export!
 
-### 13/5/2025
+### 13/05/2025
 
 - allow free licensees to use projects
 
-### 9/5/2025
+### 9/05/2025
 
 - fixed foreign key 'for now' (dropped to sqlite shell and 'delete from tenants...')
 - better validate of customer for upload to Dinero
 - issue with contacts vs customers ^^
 - add modal with choice on export; archive & report & column select - UI part only
 
-### 8/5/2025
+### 8/05/2025
 
 - expire free license after 30.days
 - make calls to time products more resilient
@@ -147,7 +732,7 @@
 - update tasks list on dashboard when done
 - FOREIGN KEY CONSTRAINT on KillTenantJob - debug
 
-### 7/5/2025
+### 7/05/2025
 
 - ambassador/pro - ingen arbejdssteder, kiosker, stemplinger, opgaver
 - essential = email support / pro det samme som essential
@@ -165,7 +750,7 @@
 - set product rates in order by value
 - set rates on new time_material post
 
-### 6/5/2025
+### 6/05/2025
 
 - turbolink to the tenants/1/edit + navigation fix
 - ass fix + added registered_minutes to time_material
@@ -174,19 +759,19 @@
 - overtime not presented when selected
 - allow user to set hour_rate on project, and customer
 
-### 5/5/2025
+### 5/05/2025
 
 - finish up the dashboard
 - don't give up the missing background sync
 
-### 2/5/2025
+### 2/05/2025
 
 - add turnstiled gem for counter 'attack of the bots'
 - buy_product small refactor
 - pause turnstiled
 - new dashboard - sketch
 
-### 1/5/2025
+### 1/05/2025
 
 - no keyboard shortcut icon on mobile
 - converting unpermitted params failing
@@ -196,14 +781,14 @@
 - make invitations page more resilient to input
 - when no open tasks menu_controller.js misses 'progress' target
 
-### 30/4/2025
+### 30/04/2025
 
 - fix two-factor-app (entraID)
 - fix users/invitations/edit - accepting invitation
 - favicon as prod today
 - sync as arrows-hunting on context + provided_service
 
-### 29/4/2025
+### 29/04/2025
 
 - forgot a few controllers pert. to authorize
 - fix list bottom blank "bar"
@@ -211,7 +796,7 @@
 - run rubocop a and brakeman repeatedly (33 ignores only half decent)
 - upgrade Brakeman
 
-### 28/4/2025
+### 28/04/2025
 
 - allow user to 'auto' create projects, customers on time_material cards
 - fix menu (show all if info@mortimer.pro)
@@ -219,7 +804,7 @@
 - authorize all controllers
 - comment 'archive' as menu option for now
 
-### 25/4/2025
+### 25/04/2025
 
 - try to set asset_path correct on images
 - try to set asset_path correct on images 2
@@ -229,7 +814,7 @@
 - fix error on keyboard modal
 - strategy for informing users on updates - https://whimsical.com/development-production-cycle-NDRwNWV3TGE4R2cFGkMRtK
 
-### 24/4/2025
+### 24/04/2025
 
 - add keyboard shotcuts modal help
 - refactor navigation sidebar
@@ -246,13 +831,13 @@
 - allow admins access to more admin menu items
 - show punch in/out/break if license == ambassador
 
-### 23/4/2025
+### 23/04/2025
 
 - allow meta + Enter to submit forms
 - make PDF work in production (missing firewall rule) + in development
 - Enter and Escape to show and close forms on lists
 
-### 22/4/2025
+### 22/04/2025
 
 - show user that they tapped the code to copy
 - show invoiced ikon when uploaded to Dinero
@@ -260,7 +845,7 @@
 - control sync contacts with setting
 - lay the ground for calls (and show edit current_list_item)
 
-### 16/4/2025
+### 16/04/2025
 
 - make profil accessable when on dashboard
 - when editing material - don't show time
@@ -269,7 +854,7 @@
 - fix index action - remove empty date lines
 - allow mobile users to copy 2FA QR code for authenticator
 
-### 15/4/2025
+### 15/04/2025
 
 - don't show buy_product unless user.admin? or user.superadmin?
 - collect email webhook and prepare to process
@@ -278,22 +863,22 @@
 - make robots unwelcome
 - filter - test dates
 
-### 14/4/2025
+### 14/04/2025
 
 - switching to Mailersend for sending emails from mortimer.pro
 - fix mailersend setting
 - fix mailersend setting II
 
-### 11/4/2025
+### 11/04/2025
 
 - trying to fix bug in index views (testing if it is pertaining to order_by)
 
-### 10/4/2025
+### 10/04/2025
 
 - first step into AI territory - define Anthropic service
 - switch to Mailjet for sending emails from mortimer.pro
 
-### 9/4/2025
+### 9/04/2025
 
 - allow default_time_material_date to be evaluated
 - fix bug on list paint
@@ -303,7 +888,7 @@
 - set user on form init
 - validate quantity and unit_price on time_material
 
-### 8/4/2025
+### 8/04/2025
 
 - add Ambassador to the buy_product - and fix emails
 - fix license dates = nil issue
@@ -315,7 +900,7 @@
 - react to [Delete] on current_list_item and [Enter] on delete modal
 - 2. try on fixing time_material
 
-### 7/4/2025
+### 7/04/2025
 
 - add Stripe integration for payment links
 - fix tenant send_invoice email
@@ -324,12 +909,12 @@
 - fix bug in field_specializations - include? not available to nil
 - sneak in on the time_material issue
 
-### 4/4/2025
+### 4/04/2025
 
 - prepare block in tenant profile + modal
 - move methods to application_form (shared on user and tenant)
 
-### 3/4/2025
+### 3/04/2025
 
 - provided_service/new - gemt under folden
 - scroll i ny form fanger listen bagved - I
@@ -342,7 +927,7 @@
 - infinite scrolling broken, thx Adam Wathan & Tailwind 4 >:(
 - missing initialization of a variable
 
-### 2/4/2025
+### 2/04/2025
 
 - flyt password-change ud i andet vindue - hide at first
 - use password change from email version
@@ -355,7 +940,7 @@
 - indstillinger alle tekster på dansk
 - sign in with Microsoft + logo
 
-### 1/4/2025
+### 1/04/2025
 
 - set verify=none to battle SSL error on localhost
 - report on Dinero Service errors
@@ -365,7 +950,7 @@
 - fix forms after changing lists
 - fix tenants delete_account - on tenant and admin user
 
-### 31/3/2025
+### 31/03/2025
 
 - add Inter font back in with Tailwind 4
 - align list_item
@@ -376,7 +961,7 @@
 - hunting down Dinero Service issue IV
 - hunting down Dinero Service issue V
 
-### 28/3/2025
+### 28/03/2025
 
 - 'Vælg' button visible even when no items selected and function not selected
 - provided_services list not updated on create service
@@ -384,11 +969,11 @@
 - filter does not post on tapping 'check'
 - position search better and prepare for 'AI' button
 
-### 27/3/2025
+### 27/03/2025
 
 - upgrading Tailwind to v4
 
-### 25/3/2025
+### 25/03/2025
 
 - update Pagy to allow faster infinite scroll with pagy_keyset
 - fix collateral bug - keyset pagination returns array, not AR set
@@ -399,24 +984,24 @@
 - show Tenant name unless superadmin
 - Orb/Docker issues - use port 8080 + Docker in development too
 
-### 24/3/2025
+### 24/03/2025
 
 - handle Dinero::Service.refresh_token error better - inform user to re-authenticate service
 - stop/start background_jobs
 - only read .env.development when Rails.env.development?
 - make jobs always run _later
 
-### 21/3/2025
+### 21/03/2025
 
 - add new SSL self-signed certificate using mkcert
 - remove .DS_Store files from repo
 - redraw provided_services (after new provided_service does not list provided_services)
 
-### 20/3/2025
+### 20/03/2025
 
 - upgraded workbench to Apple Macbook Air M4
 
-### 19/3/2025
+### 19/03/2025
 
 - make Dinero authorization work with new Current.user model
 - make Dinero SyncERP work with new Current.user model
@@ -426,7 +1011,7 @@
 - missing da.time_material.default_assigned_about
 - handle errors on mailers
 
-### 18/3/2025
+### 18/03/2025
 
 - use email address on new users on list
 - translation missing on invitation email - new user
@@ -438,19 +1023,19 @@
 - error 'end_date' on SyncERP
 - find_user dinero_controller
 
-### 17/3/2025
+### 17/03/2025
 
 - add translation for button on upload to Dinero
 - use filter and batch and search on upload
 - totp missing
 
-### 7/3/2025
+### 7/03/2025
 
 - stop registrations/new with missing pw
 - clear flash messages after streaming
 - fix bug on web_push_notifications
 
-### 6/3/2025
+### 6/03/2025
 
 - remove odometer validations (comment for now)
 - settings update wrong list_item (user?)
@@ -461,19 +1046,19 @@
 - fix bug on delete_all
 - fix tenant and user (Current.)
 
-### 5/3/2025
+### 5/03/2025
 
 - add default settings for time_material
 - handle playing time_materials better
 
-### 4/3/2025
+### 4/03/2025
 
 - fix profile update not working
 - fix profile update not working II
 - fix profile update not working III
 - upon confirmation set user state
 
-### 3/3/2025
+### 3/03/2025
 
 - foreign key constraint on tenant delete
 - cannot delete own account/tenant
@@ -486,14 +1071,14 @@
 - if email exist - tell user on sign_up
 - show user status on list
 
-### 1/3/2025
+### 1/03/2025
 
 - add new splash screens
 - add missing artwork
 - add manifest and header
 - slet konti og brugere
 
-### 27/2/2025
+### 27/02/2025
 
 - move from Devise to Rails 8.0.0 authentication - day 3 - comment entire API
 - drop change field names 20250225170102_change_fields
@@ -501,110 +1086,110 @@
 - fix bug set_resource
 - remove icons - start all over
 
-### 26/2/2025
+### 26/02/2025
 
 - move from Devise to Rails 8.0.0 authentication - day 2 - minus 2FA
 
-### 25/2/2025
+### 25/02/2025
 
 - icon files remove third shot
 - move from Devise to Rails 8.0.0 authentication - day 1
 
-### 21/2/2025
+### 21/02/2025
 
 - check all icon files - for PWA and all
 - check all icon files - for PWA and all - second shot
 - check all icon files - for PWA and all - third shot
 
-### 20/2/2025
+### 20/02/2025
 
 - fix _pdf partials for all models
 - fix deleting selected items on all models
 - fix other batch actions on all models
 - truncate on time_materials header
 
-### 18/2/2024
+### 18/02/2024
 
 - drop date filtering
 - allow 2. open on fields on filtering
 
-### 17/2/2025
+### 17/02/2025
 
 - fix bug on selecting time_materials on users.name, more
 - fix bug "expected :page in 1..1; got 2"
 
-### 14/2/2025 (12-14/2/2025)
+### 14/02/2025 (12-14/02/2025)
 
 - add batch_actions (brad_gessler inspiration) - take 3: SQL
 
-### 12/2/2025
+### 12/02/2025
 
 - add batch_actions (brad_gessler inspiration) - take 2: UI
 
-### 11/2/2025
+### 11/02/2025
 
 - add batch_actions (brad_gessler inspiration) - take 1: mechanics
 
-### 8/2/2025
+### 8/02/2025
 
 - make home prettier
 - forgot about a debugger statement or two
 - straighten the README.md and REFERENCE.md
 
-### 7/2/2025
+### 7/02/2025
 
 - add landing page (home#show)
 - fix redirects on sign_in and sign_up as a result of new landing page
 - bugs on invoice_draft 
 
-### 6/2/2025
+### 6/02/2025
 
 - background_jobs - run each */* to refresh token
 - provide better text on confirming email show action
 - add background_job when new dinero provided_service is created
 - update list of customers, products, invoices when sync_erp'ing
 
-### 5/2/2025
+### 5/02/2025
 
 - remove information on time logged on time_material/play
 - fix regression on kill_tenant_job
 - add posthog to project
 - inform user when wrong password used, more
 
-### 4/2/2025
+### 4/02/2025
 
 - add invoice items to invoice - if invoice exist on customer at Dinero
 - add hotwire-spark to project
 
-### 3/2/2025
+### 3/02/2025
 
 - allow setting team on user
 - filtering - take 8 (make scope consider users/teams)
 - fix bug on user profile
 - make filtering scopes work on all models
 
-### 31/1/2025
+### 31/01/2025
 
 - filtering - take 5 (present boolean attributes better)
 - set invoice date on invoice_item - not created_at
 - filtering - take 6 (present date attributes better )
 - filtering - take 7 (present state attributes better )
 
-### 30/1/2025
+### 30/01/2025
 
 - filtering - take 4 (first successful filtering)
 - filtering - take 4 (first successful delete of filter)
 
-### 27/1/2025
+### 27/01/2025
 
 - filtering - take 3 (remember values)
 - password strength
 
-### 24/1/2025
+### 24/01/2025
 
 - filtering - take 2 (navigation and presenting fields)
 
-### 21/1/2025
+### 21/01/2025
 
 - filtering - take 1
 - fix form flow - new -> edit -> show - on all models issue with url and reload of #index - 1: show
@@ -613,11 +1198,11 @@
 - optimize t/m form
 - fix bug in formatting date, user fields on t/m
 
-### 20/1/2025
+### 20/01/2025
 
 - list only users.by_tenant on selects!
 
-### 16/1/2025
+### 16/01/2025
 
 - make index actions send_file and send_csv
 - verify add material works ok
@@ -625,27 +1210,27 @@
 - fix bug in /tasks
 - set links and FAQ help page
 
-### 15/1/2025
+### 15/01/2025
 
 - fix bug on project create
 - allow project to set customer
 - change logo color
 
-### 14/1/2025
+### 14/01/2025
 
 - move CVR number up on form
 
-### 13/1/2025
+### 13/01/2025
 
 - toast user until having visited /dashboards/show_dashboard
 - notify user - don't toast on every page
 
-### 9/1/2025
+### 9/01/2025
 
 - fix bug on task 'enable 2FA'
 - fix bug in 2FA login - OTP input missing from login form 
 
-### 8/1/2025
+### 8/01/2025
 
 - first user cannot be deleted!
 - hide country && pp_identification on tenant
@@ -654,7 +1239,7 @@
 - add link to show/edit tenant on admin users' dashboard
 - protect objects from being edited from other tenants users
 
-### 7/1/2025
+### 7/01/2025
 
 - fix bug on resource.remove (missing argument)
 - make it visible that we are not on production
@@ -662,14 +1247,14 @@
 - fix error on kill_tenant_job
 - make creating new account(s) precise
 
-### 6/1/2025
+### 6/01/2025
 
 - fix wrong redirect on edit password
 - hide 'kørsel' tab on t/m's
 - fix redirect on accept invitation
 - fix bug on destroying account (admin user)
 
-### 3/1/2025
+### 3/01/2025
 
 - add hidden description to dashboard tasks
 - fix show form not using same layout as edit/new
@@ -1096,15 +1681,15 @@
 - move entity show to right side - like edit
 - missing authorize link on provided_services
 
-### 30/9/2024
+### 30/09/2024
 
 - keep going - making system tests green
 
-### 26/9/2024
+### 26/09/2024
 
 - more work on making tests green - now system tests work too, (or getting there)
 
-### 25/9/2024
+### 25/09/2024
 
 - rename employee to user
 - remove around_action on ActionCable connection
@@ -1112,7 +1697,7 @@
 - access Mortimer from iWatch - small test
 - getting tests to work after last table and field adjustments - wip
 
-### 23/9/2024
+### 23/09/2024
 
 - make top menu extend to borders
 - tell if no activity on dashboard
@@ -1122,68 +1707,68 @@
 - rotate sub_menu items on SidebarComponent - chevron-down
 - move employee fields to user
 
-### 22/9/2024
+### 22/09/2024
 
 - add settings table
 - add punch to the dashboard - wip
 - rename account to tenant
 
-### 21/9/2024
+### 21/09/2024
 
 - add vertical menu in sidebar
 - keep pagination to the right
 - Kamal config validation has an issue with 'servers/web/options - should be a hash'
 
-### 20/9/2024
+### 20/09/2024
 
 - add locale pick to sign_up, sign_in, more
 - first shot at work_schedule_templates UI
 - force SSL in development and allow box.mortimer:3000
 - show punch_button on user's dashboard
 
-### 19/9/2024
+### 19/09/2024
 
 - designing all views
 
 --- intermezzo on bluebox ---
 
-### 11/9/2024
+### 11/09/2024
 
 - persist work_schedule_templates
 - show work-template - wip II
 
-### 10/9/2024
+### 10/09/2024
 
 - show calendar name
 - show work-template - wip
 
-### 9/9/2024
+### 9/09/2024
 
 - color calendars on account, team, employee
 
-### 5/9/2024
+### 5/09/2024
 
 - small typo fixed on dividing with 60
 
-### 3/9/2024
+### 3/09/2024
 
 - stats on landing page - wip
 - fix small error on processing punches
 - finish landing page - v1
 
-### 2/9/2024
+### 2/09/2024
 
 - allow free and sick punches for the day
 - move invite to users
 - fresh landing page - welcoming new users - wip
 
-### 30/8/2024
+### 30/08/2024
 
 - fix yet another Current.account issue - set_resources_stream
 - overscroll-contain on edit.html and new.html
 - fix layout on main and index and new/edit/show
 
-### 29/8/2024
+### 29/08/2024
 
 - add bin/fixsql to fix SQLite database
 - mark notifications as read
@@ -1192,33 +1777,33 @@
 - fix bug on application.html.erb - missing check for Current.user
 - fix bug on set_resources_stream - missing check for Current.account
 
-### 27/8/2024
+### 27/08/2024
 
 - first stab at system testing with login
 - reduce object generation when logging
 
-### 26/8/2024
+### 26/08/2024
 
 - work on general turbo_stream model CRUD methods
 
-### 23/8/2024
+### 23/08/2024
 
 - fix error on holidays filter
 
-### 22/8/2024
+### 22/08/2024
 
 - add noticed gem for sending notifications - wip
 
-### 21/8/2024
+### 21/08/2024
 
 - fix background_jobs - solid queue issues
 - put punch methods in their place
 
-### 20/8/2024
+### 20/08/2024
 
 - work on background jobs - solid queue issues - wip
 
-### 19/8/2024
+### 19/08/2024
 
 - fix show events when none present
 - fix misssing add button on day_summary
@@ -1227,98 +1812,98 @@
 - show events spanning multiple days
 - show [whimsical](https://whimsical.com/pos-RGjYYm84RR3pbF4fL5XUzU) POS punch options
 
-### 16/8/2024
+### 16/08/2024
 
 - list punches on calendar views
   
-### 15/8/2024
+### 15/08/2024
 
 - fix regression on delete/delete_all II
 - disable delete_all when no records
 - link to list of calendars on team and employees and accounts
 
-### 14/8/2024
+### 14/08/2024
 
 - fix regression on delete/delete_all
 - edit events on day and week view
 - finish day_summary - wip
 
-### 13/8/2024
+### 13/08/2024
 
 - show events on week view
 - show events on day view - wip
 
-### 12/8/2024
+### 12/08/2024
 
 - show events on month view II
 - prepare for HTTP/2 - add httpx
 
-### 9/8/2024
+### 9/08/2024
 
 - persist most of event and event_metum
 - show events on month view
 
-### 8/8/2024
+### 8/08/2024
 
 - remove log error `Unpermitted parameter: :url.`
 
-### 7/8/2024
+### 7/08/2024
 
 - send mail after completing sign_up (employee)
 - persist most recurring event meta data
 
-### 6/8/2024
+### 6/08/2024
 
 - add ?lang=da to sign_up path
 
-### 20/7/2024
+### 20/07/2024
 
 - working on event save
 
-### 15-20/7/2024
+### 15-20/07/2024
 
 - add event model
 
-### 9-14/7/2024
+### 9-14/07/2024
 
 - add input form for events
 
-### 8/7/2024
+### 8/07/2024
 
 - work on week view on calendar - wip
 
-### 6/7/2024
+### 6/07/2024
 
 - show week view on calendar
   
-### 4/7/2024
+### 4/07/2024
 
 - build on events_list component - wip
 - add month view on calendar
 - show events on calendar - below month view
 
-### 3/7/2024
+### 3/07/2024
 
 - build day summary
 - add holiday scaffold
 - [ ] add country to account, team, employee - to show proper holidays
 
-### 2/7/2024
+### 2/07/2024
 
 - link to day view on year calendar
 
-### 1/7/2024
+### 1/07/2024
 
 - add a calendar table to account, team, and employee
 
-### 28/6/2024
+### 28/06/2024
 
 - [ ] activate x on toasts
 - [ ] show weekday name on pos/employees#payroll_period
 - [ ] add excluded_days to payroll_period#manual_punch
 - [ ] add start_time and end_time and duration to payroll_period#manual_punch
 
-### 27/6/2024
+### 27/06/2024
 
 - send confirmed email users to the root_path
 - [ ] model.team.blocked error on employees/new
@@ -1327,13 +1912,13 @@
 - [ ] try out lang=da on html tag
 - [ ] fix error on punch_card.recalculate when sick or free
 
-### 26/6/2024
+### 26/06/2024
 
 - first stab at schedules: days
 - wrong toast on profile update - should be success
 - mail on new account added by us
 
-### 25/6/2024
+### 25/06/2024
 
 - tooltip on punch#comment
 - hide empty flash messages "{}"
@@ -1347,28 +1932,28 @@
 - forgot to show navn in any case !!"#€!
 - show version & locale and time_zone on profile only
   
-### 24/6/2024
+### 24/06/2024
 
 - fix missing sort by punch_clock on punches
 
-### 23/6/2024
+### 23/06/2024
 
 - prepare for hotwired flash messages (and later notifications)
 - prepare for tooltips - wip: turbo_frame not loading!
 
-### 21/6/2024
+### 21/06/2024
 
 - archive employees once they off-board (or only work as temps)
 - bug in test for archived? if no punches
 - use ADD button as SAVE too on pos/employee
 - show comment icon on punches where applicable
 
-### 20/6/2024
+### 20/06/2024
 
 - mail format on password_change & email_changed touch up
 - advice on new 'lead' on accounts to <walther@alco.dk>
 
-### 19/6/2024
+### 19/06/2024
 
 - change ringcolor to ring-sky-600 on input fields
 - trying to signup with <user@existing.domain> does not work - if no users exist!
@@ -1379,11 +1964,11 @@
 - place sign_in in :writer ActiveRecord connection
 - trying to avoid: Net::SMTPServerBusy (450 4.1.2 <waboo@wabidu.dk>: Recipient address rejected: Domain not found
 
-### 18/6/2024
+### 18/06/2024
 
 - add prettier mail layouts
 
-### 17/6/2024
+### 17/06/2024
 
 - make 'traefik' answer to ur.alco.company
 - make 'traefik' not answer to ur.alco.company - but app.mortimer.pro
@@ -1392,26 +1977,26 @@
 - work on translations
 - fix favicon
 
-### 16/6/2024
+### 16/06/2024
 
 - fix error on sum_punches - when across midnight
 - brakeman - ignore false positives
 - format code - rubocop -a
   
-### 14/6/2024
+### 14/06/2024
 
 - (undefined method `[]' for nil:NilClass) - punch_clock_base:50
 - allow employee to close day listing (payroll_period)
 - translate menu on pos/employee
 - fix timing issue on punch_card.recalculate
 
-### 13/6/2024
+### 13/06/2024
 
 - add stats on payroll_period (like today)
 - add work_minutes today on payroll_period
 - perfect the UI on pos/employee (some)
 
-### 12/6/2024
+### 12/06/2024
 
 - fix "(No route matches [PUT] "/pos/employee")"
 - fix discrepancy in Time.parse - use Time.zone.parse
@@ -1419,7 +2004,7 @@
 - format invitation/edit - Du er blevet inviteret af navn, ALCO
 - suggest time_zone to user and employee
 
-### 11/6/2024
+### 11/06/2024
 
 - allow employees to delete their mugshots
 - fixing wrong loading of config/locales
@@ -1428,7 +2013,7 @@
 - employee - show spent time on payroll_period
 - send first punch success email - w/links to attach app to home screen (iPhone & Android)
 
-### 10/6/2024
+### 10/06/2024
 
 - add dashboards to accounts destroy action
 - show confetti on employee sign up complete
@@ -1438,23 +2023,23 @@
 - allow employee to set locale and time_zone on profile
 - make header fixed - not sticky
   
-### 9/6/2024
+### 9/06/2024
 
 - solve error on punching with no contract_minutes set
 - make first punch_clock the employee's own device
 - handle error on deleting (account)
 
-### 8/6/2024
+### 8/06/2024
 
 - allow admin to invite employee
 
-### 7/6/2024
+### 7/06/2024
 
-### 4/6/2024
+### 4/06/2024
 
 - allow delete photo - account, user, employee
 
-### 3/6/2024
+### 3/06/2024
 
 - add comments on manual punches (and on edit)
 - fix missing entries in payroll_punches (missing on smartphone only)
@@ -1464,12 +2049,12 @@
 - show only select elements current to account
 - allow delete logo
 
-### 31/5/2024
+### 31/05/2024
 
 - add delete modal
 - fix timezone issue when incorrect zone
 
-### 29/5/2024
+### 29/05/2024
 
 - passed an object to plain that is not handled by format_object
 - change use of console enhancements to use IRB::Command API
@@ -1482,7 +2067,7 @@
 - fix <ActiveRecord::ReadOnlyError: Write query attempted while in readonly mode: UPDATE..> - perhaps use: <https://blog.saeloun.com/2023/12/06/rails-dual-database-setup/>
 - link on punch err's
 
-### 28/5/2024
+### 28/05/2024
 
 - locale, time_zone = same as creator on create employee
 - locale, time_zone = same as creator on create user
@@ -1490,13 +2075,13 @@
 - add staging server - anemone.mortimer.pro - and scripts stage and prod
 - undefined method `format_date' for #<DateColumn
 
-### 27/5/2024
+### 27/05/2024
 
 - prettier file input
 - add dashboard - fix home = today
 - fix listing punches in pos/employee in correct timezone
   
-### 24/5/2024
+### 24/05/2024
 
 - handle view_only for account_id and user_id
 - add /background_jobs listing
@@ -1504,7 +2089,7 @@
 - fix bad URL to employee on /punches
 - fix punch form - make state selectable
 
-### 23/5/2024
+### 23/05/2024
 
 - make time_zone select's
 - show work_time / break_time stats
@@ -1512,7 +2097,7 @@
 - show payroll_period punches on pos/employee
 - fix edit punches on pos/employee
 
-### 22/5/2024
+### 22/05/2024
 
 - link to employee on punch_card list
 - avoid to downgrade role on superuser
@@ -1522,7 +2107,7 @@
 - make lists sortable - ?s=column_name&d=asc
 - make locale and time_zone select's
 
-### 21/5/2024
+### 21/05/2024
 
 - users/new - missing name
 - add employee mugshot
@@ -1535,19 +2120,19 @@
 - set account color as select
 - error on color generation
 
-### 20/5/2024
+### 20/05/2024
 
 - make employees delete all punches today if they like
 - show flashes with a component - proper styling
 - place header button right
 - do callbacks on punches
 
-### 18/5/2024
+### 18/05/2024
 
 - add boolean field format, forms and lists
 - make payroll_employee_ident semi-optional - auto-generate if not set
   
-### 17/5/2024
+### 17/05/2024
 
 - add background job mgmt - wip
 - list payroll_period punches on punch_clocks
@@ -1562,11 +2147,11 @@
 - add punching_absence
 - fix employees punching same state on multiple devices
 
-### 16/5/2024
+### 16/05/2024
 
 - adjust screen on employee app
 
-### 15/5/2024
+### 15/05/2024
 
 - add accounts.pdf
 - add teams.pdf
@@ -1579,7 +2164,7 @@
 - add split of SQLite into writer/reader
 - send_file on PDFs from modal_controller
 
-### 14/5/2024
+### 14/05/2024
 
 - make teams and locations optional (add defaults when signing up)
 - show only required fields on employee for a start
@@ -1590,33 +2175,33 @@
 - prepare for accounts persisting time to send reports
 - try sending PDF report
 
-### 13/5/2024
+### 13/05/2024
 
 - add employee_state_job
 - add employee_eu_state_job
 - add build_pdf_job
 
-### 11/5/2024
+### 11/05/2024
 
 - setup container w/weasyprint and use httparty to consume 'PDF webservice'
 
-### 10/5/2024
+### 10/05/2024
 
 - fix employee's timezone on punches
 - set time_zone right on POS controllers
 
-### 8/5/2024
+### 8/05/2024
 
 - add pos/employee - wip 3
 - add pos/employee - delete one/all on the day
 - add pos/employee - edit punches one by one
 - add pos/employee - add free (hrs) & sick (days)
 
-### 6/5/2024
+### 6/05/2024
 
 - add pos/employee - wip 2
 
-### 5/5/2024
+### 5/05/2024
 
 - add pages - current roadmap
 - add Redcarpet for Markdown
@@ -1626,7 +2211,7 @@
 - comment team state on form - for now
 - add pos/employee - wip 1
 
-### 4/5/2024
+### 4/05/2024
 
 - mark m pink if superadmin
 - add deleting all in background job
@@ -1640,7 +2225,7 @@
 - fix Teams being listed on other accounts
 - fix Employees punching on other accounts
 
-### 3/5/2024
+### 3/05/2024
 
 - refactor inheritance to base_controller
 - refactor punch code
@@ -1662,7 +2247,7 @@
 - missing by_account on filters
 - fix format (rubocop)
 
-### 2/5/2024
+### 2/05/2024
 
 - add invitable to user
 - refactor default_scope to by_account
@@ -1673,7 +2258,7 @@
 - eager_load on production
 - account not being set on models
 
-### 1/5/2024
+### 1/05/2024
 
 - add devise gem
 - add user_mailer
@@ -1683,7 +2268,7 @@
 - implement Devise authentication
 - add trackable, confirmable to user
 
-### 30/4/2024
+### 30/04/2024
 
 - add punches
 - refactor CSV
@@ -1693,7 +2278,7 @@
 - add account_mailer - lon_email
 - fix unsupported argument_type PathName
 
-### 29/4/2024
+### 29/04/2024
 
 - add CSV import on every model - use employee as template
 - prepare background jobs
@@ -1702,7 +2287,7 @@
 - add memory_logger - see config/initializers/memory_logger.rb
 - postpone tests for now
 
-### 26/4/2024
+### 26/04/2024
 
 - bumped rails
 - add console - `t` setting Current.account
@@ -1712,7 +2297,7 @@
 - add time_zoned - lookup module for time_zone field on models
 - add upload field
 
-### 25/4/2024
+### 25/04/2024
 
 - added access_token for punch_clocks
 - added filter to punch_clocks
@@ -1725,7 +2310,7 @@
 - removed fingerprint - 04da67036737a473cae0e30551635be46588c707fe88c372fbe7518e99fe968b
 - brakeman + rails test
 
-### 24/4/2024
+### 24/04/2024
 
 - add pagy for pagination
 - refactor filtering
@@ -1736,7 +2321,7 @@
 - add location
 - add punch_clock
 
-### 23/4/2024
+### 23/04/2024
 
 - <https://guillaumebriday.fr/how-to-deploy-rails-with-kamal-and-ssl-certificate-on-vps> to the rescue on setting up Letsencrypt
 - add account

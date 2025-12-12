@@ -10,14 +10,14 @@ class PunchClockManual < ApplicationComponent
   end
 
   def view_template(&block)
-    form_with id: "manualpunch", data: { pos_employee_target: "manualForm" }, url: helpers.pos_employee_url(api_key: user.access_token, tab: "payroll"), method: :post do
+    form_with id: "manualpunch", data: { pos_employee_target: "manualForm" }, url: pos_employee_url(api_key: user.access_token, tab: "payroll"), method: :post do
       div(class: "mx-4 my-2") do
         div do
           h2(class: "text-base font-semibold leading-7 text-gray-900") do
-            helpers.t(".manuel_entry")
+            t(".manuel_entry")
           end
           p(class: "mt-1 max-w-2xl text-sm leading-6 text-gray-600") do
-            helpers.t(".manuel_entry_description")
+            t(".manuel_entry_description")
           end
           # set the type of registration
           set_registration
@@ -35,10 +35,10 @@ class PunchClockManual < ApplicationComponent
           set_comment
 
           # set the free Options
-          set_options(reason: "free", label: helpers.t(".free_reason"), reasons: %w[rr_free senior_free unpaid_free maternity_free leave_free])
+          set_options(reason: "free", label: t(".free_reason"), reasons: %w[rr_free senior_free unpaid_free maternity_free leave_free])
 
           # set the sick Options
-          set_options(reason: "sick", label: helpers.t(".sick_reason"), reasons: %w[iam_sick child_sick nursing_sick lost_work_sick p56_sick])
+          set_options(reason: "sick", label: t(".sick_reason"), reasons: %w[iam_sick child_sick nursing_sick lost_work_sick p56_sick])
         end
       end
     end
@@ -47,8 +47,8 @@ class PunchClockManual < ApplicationComponent
   # def punch_in
   #   return if user.in?
   #   div(class: "justify-self-end") do
-  #     button_tag helpers.t("+"), type: "submit", form: "inform", class: "bg-green-500 text-white block rounded-md px-3 py-2 text-xl font-medium"
-  #     form_with url: helpers.pos_employee_url(api_key: user.access_token), id: "inform", method: :post do
+  #     button_tag t("+"), type: "submit", form: "inform", class: "bg-green-500 text-white block rounded-md px-3 py-2 text-xl font-medium"
+  #     form_with url: pos_employee_url(api_key: user.access_token), id: "inform", method: :post do
   #       hidden_field :user, :api_key, value: user.access_token
   #       hidden_field :user, :state, value: :in
   #       hidden_field :user, :id, value: user.id
@@ -58,13 +58,13 @@ class PunchClockManual < ApplicationComponent
 
   def set_registration
     div(class: "mt-4 sm:grid sm:grid-cols-3 sm:items-start") do
-      label(for: "reason", class: "block text-sm font-medium leading-6 text-gray-900") { helpers.t(".type_of_registration") }
+      label(for: "reason", class: "block text-sm font-medium leading-6 text-gray-900") { t(".type_of_registration") }
       div(class: "mt-2 sm:col-span-2 sm:mt-0") do
         div(class: "flex sm:max-w-md") do
           div(class: "grid grid-flow-row-dense grid-cols-3 grid-rows-2 gap-x-4 gap-y1") do
-            div(class: "text-xs font-medium") { helpers.t(".work") }
-            div(class: "text-xs font-medium") { helpers.t(".sick") }
-            div(class: "text-xs font-medium") { helpers.t(".free") }
+            div(class: "text-xs font-medium") { t(".work") }
+            div(class: "text-xs font-medium") { t(".sick") }
+            div(class: "text-xs font-medium") { t(".free") }
             slider(action: "click->pos-employee#toggleWork", enabled: true, reason: "work")
             slider(action: "click->pos-employee#toggleSick", enabled: false, reason: "sick")
             slider(action: "click->pos-employee#toggleFree", enabled: false, reason: "free")
@@ -90,7 +90,7 @@ class PunchClockManual < ApplicationComponent
         for: "from_at",
         class:
           "block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5"
-      ) { helpers.t(".from_at") }
+      ) { t(".from_at") }
       div(class: "mt-2 flex sm:col-span-2 sm:mt-0") do
         input(
           name: "punch[from_date]",
@@ -123,7 +123,7 @@ class PunchClockManual < ApplicationComponent
         for: "to_at",
         class:
           "block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5"
-      ) { helpers.t(".to_at") }
+      ) { t(".to_at") }
       div(class: "mt-2 flex sm:col-span-2 sm:mt-0") do
         input(
           name: "punch[to_date]",
@@ -150,7 +150,7 @@ class PunchClockManual < ApplicationComponent
   def set_days
     fieldset(class: "w-full") do
       div(class: "flex text-base font-semibold leading-6 text-gray-900") do
-        div(class: "w-1/2") { helpers.t("weekdays") }
+        div(class: "w-1/2") { t("weekdays") }
         div(class: "w-1/2 cursor-pointer ", data: { action: "click->pos-employee#toggleWeekDays" }) do
           svg(class: "float-right", data: { pos_employee_target: "downArrow" }, xmlns: "http://www.w3.org/2000/svg", height: "24px", viewBox: "0 -960 960 960", width: "24px", fill: "currentColor") do |s|
             s.path(d: "M480-344 240-584l56-56 184 184 184-184 56 56-240 240Z")
@@ -167,7 +167,7 @@ class PunchClockManual < ApplicationComponent
               label(
                 for: "#{day}_checkbox",
                 class: "select-none font-medium text-gray-900"
-              ) { helpers.t(day) }
+              ) { t(day) }
             end
             div(class: "ml-3 flex h-6 items-center") do
               input(id: "#{day}_checkbox", name: "punch[days][]", type: "checkbox", value: day, class: "h-4 w-4 rounded-sm border-gray-300 text-sky-600 focus:ring-sky-600", checked: (day != "saturday" && day != "sunday"))
@@ -186,7 +186,7 @@ class PunchClockManual < ApplicationComponent
         for: "excluded_days",
         class:
           "block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5"
-      ) { helpers.t(".excluded_days") }
+      ) { t(".excluded_days") }
       div(class: "mt-2 sm:col-span-2 sm:mt-0") do
         input(
           name: "punch[excluded_days]",
@@ -208,7 +208,7 @@ class PunchClockManual < ApplicationComponent
         for: "comment",
         class:
           "block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5"
-      ) { helpers.t(".comment") }
+      ) { t(".comment") }
       div(class: "mt-2 sm:col-span-2 sm:mt-0") do
         input(
           name: "punch[comment]",
@@ -266,7 +266,7 @@ class PunchClockManual < ApplicationComponent
                       # checked: "checked" if punch.state == r,
                       class: "h-4 w-4 border-gray-300 text-sky-600 focus:ring-sky-600"
                     )
-                    label(for: r, class: "ml-3 block text-sm font-medium leading-6 text-gray-900") { helpers.t(".#{r}") }
+                    label(for: r, class: "ml-3 block text-sm font-medium leading-6 text-gray-900") { t(".#{r}") }
                   end
                 end
               end

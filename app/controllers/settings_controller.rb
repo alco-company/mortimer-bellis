@@ -63,14 +63,39 @@ class SettingsController < MortimerController
     #   @setting = Setting.find(params[:id])
     # end
 
-    def create_callback
-      params[:type] = resource.type
-      Broadcasters::Resource.new(resource, params.permit!, params[:target], Current.get_user, "#{Current.get_tenant.id}_settings_view", "settings/special").replace
+    # <ActionController::Parameters {
+    #   "key"=>"add_comments_on_time_material",
+    #   "value"=>"1",
+    #   "rc"=>"TimeMaterial",
+    #   "rc_id"=>"0",
+    #   "target"=>"setting_i_20",
+    #   "controller"=>"settings",
+    #   "action"=>"create",
+    #   "setting"=>
+    #     "key"=>"add_comments_on_time_material",
+    #     "value"=>"1"
+    #     }
+    # } permitted: false>
+    def before_create_callback
+      resource.setable_id = params[:rc_id] if params[:rc_id].present? && params[:rc_id].to_i.positive?
+      resource.setable_type = params[:rc] if params[:rc].present?
+      resource.valid?
     end
 
+    def create_callback
+      params[:type] = resource.type
+      Broadcasters::Resource.new(resource, params.permit!, target: params[:target], user: Current.get_user, stream: "#{Current.get_tenant.id}_settings_view", partial: "settings/special").replace
+    end
+
+    def before_update_callback
+      resource.valid?
+    end
+
+    # TimeMaterial => Parameters: {"key"=>"limit_time_to_quarters", "value"=>"1", "id"=>"423", "setting"=>{"key"=>"limit_time_to_quarters", "value"=>"1"}}
+    # User => Parameters: {"key"=>"limit_time_to_quarters", "value"=>"0", "id"=>"423", "setting"=>{"key"=>"limit_time_to_quarters", "value"=>"0"}}
     def update_callback
       params[:type] = resource.type
-      Broadcasters::Resource.new(resource, params.permit!, params[:target], Current.get_user, "#{Current.get_tenant.id}_settings_view", "settings/special").replace
+      Broadcasters::Resource.new(resource, params.permit!, target: params[:target], user: Current.get_user, stream: "#{Current.get_tenant.id}_settings_view", partial: "settings/special").replace
     end
 
     # Only allow a list of trusted parameters through.

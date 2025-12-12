@@ -18,6 +18,8 @@ class ListItems::Dashboard < ListItems::ListItem
   end
 
   def show_secondary_info
-    plain "%s %s" % [ resource.feed, resource.last_feed_at ]
+    p(class: "text-sm font-medium text-gray-900 dark:text-white") do
+      plain "%s %s" % [ resource.feed, resource.last_feed_at ]
+    end
   end
 end
