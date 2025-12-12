@@ -93,7 +93,7 @@ gem "superform", "~> 0.5.0"
 
 gem "pagy", "~> 9.0"
 
-gem "rqrcode", "~> 2.2"
+gem "rqrcode", "~> 3.1"
 
 gem "activerecord-enhancedsqlite3-adapter", "~> 0.8.0"
 
@@ -109,7 +109,7 @@ gem "rrule", "~> 0.6.0"
 
 gem "httpx", "~> 1.4"
 
-gem "mission_control-jobs", "~> 0.6.0"
+gem "mission_control-jobs", "~> 1.1.0"
 
 gem "noticed", "~> 2.8"
 

@@ -1,67 +1,141 @@
 # Work State Summary
 
-## Recent Updates (Aug 27 2025 – Backup/Restore Hardening Phase 2)
-- Added metadata.json to backups (schema_version, git SHA, created_at, tenant_id, dump SHA256, attachment count).
-- Removed raw ActiveStorage direct insert fallback; now uniform save! logic.
-- Implemented full purge (always all tenant-scoped models via DependencyGraph.purge_order) to prevent orphan FK violations.
-- Enhanced collision handling:
-  - pre_scan_collisions now scans regardless of allow_remap; collisions recorded even when remap disabled.
-  - Early abort when RESTORE_NO_REMAP=1 and collisions detected.
-  - Always persist id remap entries (even unchanged IDs) in id_remap_manifest.
-- Added feature-flagged per-record diagnostics (RESTORE_DEBUG_RECORDS) limited to first 200 records per model.
-- Added multi-level collision test (Customer -> Project -> Invoice) verifying remap propagation to grandchildren.
-- Added RESTORE_NO_REMAP failure test asserting early raise on collision with remap disabled.
-- Updated backup completeness test to assert metadata.json presence.
-- Added comprehensive full purge helper for tests to avoid legacy FK residue.
-- Improved restore logging: fk violations captured into summary instead of immediate raise; detailed sample rows logged.
+## Accomplished
 
-## Current Gaps / Issues
-- BackupRestoreStrictTest: consistent restore test required full purge pre-step; fixture adjusted but need to re-run to confirm green (ensure test file saved & executed successfully after edits).
-- Need to clean/confirm remaining foreign key constraint failures do not appear with new full purge; if they persist, add pre-run full purge for all restore tests.
-- Per-record diagnostics currently silent unless RESTORE_DEBUG_RECORDS set; consider adding summary counts (records_attempted, deferred_count, remaps_total).
-- ActiveStorage restore still copies blob files but does not validate checksum alignment; potential enhancement.
-- No verification step for dump SHA256 on restore (metadata.json hash currently only produced on backup).
-- Tests do not yet assert fk_violations total_fk_violations == 0 for successful restores; could add.
+1. Fixed failing model tests:
+   - Refactored `Setting.time_material_settings`, `team_settings`, and `user_settings` to use a unified `klass_for` + `build_settings_for` approach for deterministic test behavior.
+   - Adjusted settings test expectations now passing (confirmed by running `test/models/setting_test.rb`).
 
-## Next Steps (Prioritized)
-1. Test Stabilization & Coverage
-   - Re-run full test suite; ensure backup_restore_strict_test passes after full purge additions.
-   - Add assertion in collision tests for presence of id_remap_manifest mapping value (symbol :pending should be resolved to final id; verify no lingering :pending entries post-restore).
-   - Add test asserting fk_violations total == 0 for a clean restore scenario.
-2. Manifest & Integrity
-   - Generate metadata.json during restore to echo backup metadata & optionally verify dump.jsonl SHA256.
-   - Write verification log step (step: :metadata_verified or :metadata_mismatch).
-3. Summary Metrics
-   - Add summary counters: collisions_detected, remaps_finalized, deferred_records_total, retry_passes_used.
-   - Include these counters in background job job_progress for UI.
-4. Configurability
-   - Introduce RESTORE_MAX_PASSES env var (default 5) replacing hard-coded max_passes.
-   - Add RESTORE_DISABLE_ACTIVE_STORAGE flag for faster dry-runs.
-5. Foreign Key Robustness
-   - After final insert pass, attempt targeted re-insert of any deferred records still failing (log reason) before reporting violations.
-   - Provide optional ENV to ignore specific models (RESTORE_SKIP_MODELS) for emergency partial loads.
-6. ActiveStorage Enhancements
-   - Compute and log each blob checksum; skip copy if identical blob exists (deduplicate).
-   - Optionally compress blobs directory inside archive (tar already does global compression; measure benefit).
-7. Code Cleanup
-   - Remove duplicate purge invocation remnants (already fixed) & ensure no residual debug logs outside flag.
-   - Extract restore phases into smaller private methods for maintainability.
-8. Documentation
-   - Update README / internal docs to describe new feature flags and metadata.json fields.
-   - Provide runbook for handling collision failures and interpreting id_remap_manifest.
+2. Added / refined default settings logic:
+   - Prevents duplicate creation at different scoping levels (tenant, class, instance) in test mode.
 
-## Open Decisions
-- Should restore validate dump SHA against metadata.json and abort on mismatch (integrity guarantee) or only warn?
-- Limit remap manifest size in job_progress (truncate large maps) vs full file only.
-- Whether to persist per-record diagnostics to a separate debug log for post-mortem (current fallback log rotates daily).
+3. Live search improvements:
+   - Debounce increased to 500ms.
+   - Prevent duplicate / nested query params.
+   - Immediate execution on Enter.
+   - Composition (IME) safe.
+   - Avoid redundant requests on identical input.
 
-## Ready For Next Session
-Provide / Decide:
-- Full test suite results after current changes.
-- Decision on implementing metadata verification during restore.
-- Preference for adding fk_violations==0 assertions in tests.
-- Approval to add RESTORE_MAX_PASSES and RESTORE_SKIP_MODELS.
-- Any additional metrics desired in summary/job_progress.
+4. Fixed time/material permissions & consistency issues uncovered by tests.
 
-## Suggested Next Chat Prompt
-"Run full test suite; ensure backup_restore_strict_test passes with full purge. Then add fk_violations==0 assertion, metadata verification on restore (using metadata.json + SHA256), and summary counters (collisions_detected, remaps_finalized, deferred_records_total, retry_passes_used). Implement RESTORE_MAX_PASSES env and optional RESTORE_SKIP_MODELS."
+5. Added comprehensive tenant backup system:
+   - `BackupTenantJob` created.
+   - Scans all tables with `tenant_id` (DB-introspection based, not just loaded models).
+   - Dumps newline-delimited JSON (dump.jsonl) for each row.
+   - Writes `manifest.json` with per-table counts and errors.
+   - Captures related ActiveStorage attachments & blobs and copies binary blob files (disk service) into archive.
+   - Archives everything into `tenant_<id>_<timestamp>.tar.gz` in `tmp/`.
+   - Sends notification email (`TenantMailer.backup_created`).
+   - Added progress logging to `BackupTenantJob` stored in new `background_jobs.job_progress` (JSON structure with capped log array).
+
+6. Added tenant restore system:
+   - `RestoreTenantJob` created.
+   - Supports options: `dry_run`, `purge`, `restore` (three-phase, each optional). Default: restore (no purge, no dry run).
+   - Tenant ID remapping (`remap`) supported.
+   - Priority-based model ordering to respect dependencies.
+   - Transaction wrapper around entire purge + restore operation.
+   - Dry run reports planned insert/update counts and planned purges without changing data.
+   - Purge mode deletes existing tenant rows first (unless dry run).
+   - Restores ActiveStorage blobs then attachments (with key collision safety) only when not dry run and restore enabled.
+   - Sends completion email (`TenantMailer.restore_completed`).
+
+7. Extended restore job features:
+   - Integrated progress logging hook calls (placeholders present) similar to backup job.
+   - Added migration for `background_jobs.job_progress` and updated `BackupTenantJob` to use it.
+
+8. Added migration:
+   - `20250826220000_add_job_progress_to_background_jobs.rb` introducing `job_progress` column (text) to capture structured progress info.
+
+## Pending / TODO
+
+1. `RestoreTenantJob` progress logging method not yet implemented (log calls exist but method body missing).
+   - Need to add a `log_progress` method (similar to backup) that writes to `background_jobs.job_progress`.
+   - Decide logging style: either keep existing calls with signature `log_progress(summary, step: ..., **data)` or simplify to `log_progress(step:, **data)`.
+
+2. Optionally cap or rotate archive retention (cleanup job for old backups in `tmp/`).
+
+3. Optional enhancements:
+   - Encryption/compression hardening (e.g. AES encryption of archive).
+   - Integrity checks (store SHA256 of dump + manifest).
+   - Partial restore (model whitelist / blacklist).
+   - Bulk inserts (e.g. `insert_all`) for performance (if moving off SQLite).
+   - Validation toggle per model during restore.
+   - Sequence/PK reset logic (not critical on SQLite).
+
+4. UI / API surface:
+   - Expose progress (poll `background_job.job_progress` JSON) in an admin or jobs dashboard.
+
+5. Add `log_progress` to `RestoreTenantJob` and include final summary in `job_progress` (and mark completion / failure steps similarly to backup).
+
+## Usage Examples
+
+### Backup
+```
+background = BackgroundJob.create!(tenant: Tenant.first, job_klass: 'BackupTenantJob', state: :planned)
+BackupTenantJob.perform_later(tenant: Tenant.first, user: User.first, background_job: background)
+```
+Progress JSON accumulates in `background.job_progress`.
+
+### Restore (Dry Run + Purge Plan)
+```
+RestoreTenantJob.perform_later(
+  tenant: Tenant.first,
+  user: User.first,
+  archive_path: '/path/to/tenant_1_2025....tar.gz',
+  dry_run: true,
+  purge: true,
+  restore: true
+)
+```
+No data changed; summary and planned counts logged.
+
+### Full Purge + Restore
+```
+RestoreTenantJob.perform_later(
+  tenant: Tenant.first,
+  user: User.first,
+  archive_path: '/path/to/archive.tar.gz',
+  purge: true,
+  restore: true
+)
+```
+
+### Backup Progress Structure (example)
+`background_jobs.job_progress` JSON:
+```
+{
+  "log": [
+    {"step":"start","at":"2025-08-26T20:57:36Z"},
+    {"step":"scan_tables","at":"..."},
+    {"step":"dump_progress","table":"products","processed":120,...},
+    {"step":"archive_created","path":"/.../tenant_1_...tar.gz","at":"..."},
+    {"step":"email_enqueued","at":"..."}
+  ]
+}
+```
+
+## Implementation Notes
+
+- All dump and restore operations are tenant-scoped by presence of `tenant_id` column on tables.
+- ActiveStorage export only includes blobs referenced by tenant-owned attachments.
+- Restore logic remaps `tenant_id` if `remap: true` and assigns to target tenant.
+- Restore runs inside a DB transaction for atomicity (SQLite: still provides rollback on failure).
+- Dry run path never alters DB, only computes planning metadata.
+
+## Resetting the Chat / Reloading Context
+
+To start a fresh conversation while preserving context:
+
+1. Commit or keep this `WORKSTATE.md` file as the canonical state summary.
+2. Begin the new chat with a short message referencing this file, e.g.:
+   "Context: see WORKSTATE.md for current backup/restore + settings state. Next task: implement log_progress in RestoreTenantJob (Option B)."
+3. If using a system that cannot read files automatically, paste only the pertinent excerpt (Accomplished + Pending sections) into the first new message.
+4. For future tasks, append changes to `WORKSTATE.md` (do not overwrite) under new dated sections to maintain a changelog.
+5. To reload context for the assistant: provide the latest `WORKSTATE.md` contents (or at minimum the Pending / TODO section) in the first prompt of the new session.
+
+## Recommendation for Next Step
+
+Implement `RestoreTenantJob#log_progress` (choose Option A or B) and unify logging patterns between backup and restore.
+
+---
+Generated on: #{Time.now.utc.iso8601}
