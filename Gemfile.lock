@@ -292,8 +292,8 @@ GEM
     mini_magick (5.3.0)
       logger
     mini_mime (1.1.5)
-    minitest (5.26.0)
-    mission_control-jobs (0.6.0)
+    minitest (5.25.5)
+    mission_control-jobs (1.1.0)
       actioncable (>= 7.1)
       actionpack (>= 7.1)
       activejob (>= 7.1)
@@ -427,10 +427,10 @@ GEM
     reline (0.6.2)
       io-console (~> 0.5)
     rotp (6.3.0)
-    rqrcode (2.2.0)
+    rqrcode (3.1.0)
       chunky_png (~> 1.0)
-      rqrcode_core (~> 1.0)
-    rqrcode_core (1.2.0)
+      rqrcode_core (~> 2.0)
+    rqrcode_core (2.0.0)
     rrule (0.6.0)
       activesupport (>= 2.3)
     rubocop (1.79.1)
@@ -513,11 +513,11 @@ GEM
     tailwindcss-ruby (4.1.11-x86_64-linux-gnu)
     tailwindcss-ruby (4.1.11-x86_64-linux-musl)
     thor (1.4.0)
-    thruster (0.1.14)
-    thruster (0.1.14-aarch64-linux)
-    thruster (0.1.14-arm64-darwin)
-    thruster (0.1.14-x86_64-darwin)
-    thruster (0.1.14-x86_64-linux)
+    thruster (0.1.16)
+    thruster (0.1.16-aarch64-linux)
+    thruster (0.1.16-arm64-darwin)
+    thruster (0.1.16-x86_64-darwin)
+    thruster (0.1.16-x86_64-linux)
     timeout (0.4.3)
     tsort (0.2.0)
     turbo-rails (2.0.16)
@@ -584,7 +584,7 @@ DEPENDENCIES
   jbuilder
   kamal
   mailersend-ruby (~> 3.0)
-  mission_control-jobs (~> 0.6.0)
+  mission_control-jobs (~> 1.1.0)
   net-pop!
   noticed (~> 2.8)
   omniauth (~> 2.1)
@@ -599,7 +599,7 @@ DEPENDENCIES
   puma (>= 5.0)
   rails!
   redcarpet (~> 3.6)
-  rqrcode (~> 2.2)
+  rqrcode (~> 3.1)
   rrule (~> 0.6.0)
   rubocop-rails-omakase
   solid_cable!
