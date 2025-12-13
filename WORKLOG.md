@@ -32,6 +32,10 @@
 
 ## CHANGELOG
 
+### 13/12/2025
+
+- while merging into production/main picked up a few errors
+
 ### 09/12/2025
 
 - reset project when changing customer

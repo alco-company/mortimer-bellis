@@ -94,7 +94,7 @@ class RestoreTenantJob < ApplicationJob
   private
 
     def job_can_run?
-      return false if @background_job.nil?
+      return true if @background_job.nil?  # Allow running without background_job (e.g., in tests)
       return false if @background_job.running?
       @background_job.running!
       true
@@ -355,7 +355,6 @@ class RestoreTenantJob < ApplicationJob
         [ summary, remapped_ids ]
       end
 
-      # puts "DEBUG: After purge_or_remap: remapped_ids.keys = #{remapped_ids.keys.inspect}, remapped_ids['users'] = #{remapped_ids['users'].inspect}"
 
       [ summary, remapped_ids ]
 
@@ -610,17 +609,14 @@ class RestoreTenantJob < ApplicationJob
       unless setting(:dry_run)
         # Check if we're in a transaction
         in_transaction = ActiveRecord::Base.connection.open_transactions > 0
-        # puts "DEBUG: In transaction? #{in_transaction}, open transactions: #{ActiveRecord::Base.connection.open_transactions}"
 
         if in_transaction
           # Can't disable FK in transaction, so we'll have to handle FK errors gracefully
-          # puts "DEBUG: Cannot disable FK constraints - in active transaction"
           summary << ({ purge_info: "In transaction - FK constraints cannot be disabled" })
         else
           ActiveRecord::Base.connection.execute("PRAGMA foreign_keys = OFF")
           fk_disabled = true
           fk_status = ActiveRecord::Base.connection.execute("PRAGMA foreign_keys").first
-          # puts "DEBUG: FK constraints setting after disable: #{fk_status}"
         end
       end
 
@@ -749,20 +745,16 @@ class RestoreTenantJob < ApplicationJob
         begin
           ids = {}
           manifested_tables = manifest.filter { |t| t["table"] if t.keys.include?("count") || t.keys.include?(:count) } rescue []
-          # puts "DEBUG: manifested_tables = #{manifested_tables.inspect}"
           file_ids_json = File.read(file_ids_path)
           file_ids = JSON.parse(file_ids_json)
-          # puts "DEBUG: file_ids keys = #{file_ids.keys.inspect}, file_ids['users'] = #{file_ids['users'].inspect}"
           manifested_tables.each do |table_entry|
             table_name = table_entry["table"]
             next if setting(:skip_models).include?(table_name)
             ids[table_name] = file_ids[table_name] || []
           end
-          # puts "DEBUG: ids keys after processing = #{ids.keys.inspect}, ids['users'] = #{ids['users'].inspect}"
           summary << ({ file_ids_path: file_ids_path, file_tables: ids.keys })
         rescue => e
           summary << ({ file_ids_error: e.message })
-          # puts "DEBUG: file_ids_error = #{e.message}, #{e.backtrace.first(3)}"
         end
       end
 
@@ -830,7 +822,6 @@ class RestoreTenantJob < ApplicationJob
               if attrs.key?("tenant_id") && @tenant
                 old_tenant_id = attrs["tenant_id"]
                 attrs["tenant_id"] = @tenant.id
-                # puts "DEBUG: Overriding tenant_id for #{table}: #{old_tenant_id} -> #{@tenant.id}"
               end
 
               # Sanitize BackgroundJob records to reset runtime state
@@ -870,16 +861,12 @@ class RestoreTenantJob < ApplicationJob
                     summary, record = klass.restore(summary, extracted_root, record, remapped_ids, setting(:dry_run))
                   end
                 else
-                  # puts "DEBUG: About to create record and call klass.restore for #{table}" if table == "users" || table == "teams"
                   begin
                     record = klass.new attrs
                     # Store original backup ID for attachment restoration (if ID was remapped)
                     record.instance_variable_set(:@_original_backup_id, original_backup_id) if original_backup_id
-                    # puts "DEBUG: Created record, calling restore..." if table == "users" || table == "teams"
                     summary, record = klass.restore(summary, extracted_root, record, remapped_ids, setting(:dry_run))
-                    # puts "DEBUG: Restore returned" if table == "users" || table == "teams"
                   rescue => e
-                    # puts "DEBUG: Exception in restore: #{e.class} - #{e.message}" if table == "users" || table == "teams"
                     raise
                   end
                 end

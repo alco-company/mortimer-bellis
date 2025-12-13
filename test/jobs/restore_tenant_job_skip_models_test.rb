@@ -12,7 +12,7 @@ class RestoreTenantJobSkipModelsTest < ActiveSupport::TestCase
     end
 
     # Intercept the 'puts row["data"]' side‑effect to record model names instead
-    def restore_data_records(extracted_root, summary, file_ids)
+    def restore_data_records(extracted_root, summary, file_ids, remapped_ids = {})
       restores = {}
       begin
         dump_file = extracted_root.join("dump.jsonl")
