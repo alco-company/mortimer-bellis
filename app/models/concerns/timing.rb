@@ -100,7 +100,7 @@ module Timing
 
       if Current.present? && Current.get_user.present? && Current.get_user.should?(:limit_time_to_quarters)
         m = case m
-        when 0; h == 0 ? 15 : 0
+        when 0; 0 # h == 0 ? 15 : 0
         when 1..15; 15
         when 16..30; 30
         when 31..45; 45

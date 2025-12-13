@@ -254,7 +254,6 @@ class TimeMaterialsController < MortimerController
 
     def create_play
       return unless params[:play].present?
-
       # ht, mt = resource.sanitize_time("0", "0").split(":")
 
       params[:time_material] = {
@@ -266,7 +265,7 @@ class TimeMaterialsController < MortimerController
         time_spent: 0,
         hour_time: 0,
         minute_time: 0,
-        rate: get_hourly_rate,
+        rate: Current.get_user.get_hourly_rate,
         registered_minutes: 0,
         date: get_default_time_material_date,
         about: Current.user.default(:default_time_material_about, "")
