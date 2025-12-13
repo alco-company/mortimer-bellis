@@ -5,10 +5,10 @@ class BackupTenantJob < ApplicationJob
     return unless @background_job
     payload = { step: step, at: Time.now.utc.iso8601 }.merge(data)
     begin
-      current = JSON.parse(@background_job.job_progress || '{}') rescue {}
-      current['log'] ||= []
-      current['log'] << payload
-      current['log'] = current['log'].last(100)
+      current = JSON.parse(@background_job.job_progress || "{}") rescue {}
+      current["log"] ||= []
+      current["log"] << payload
+      current["log"] = current["log"].last(100)
       @background_job.update_column(:job_progress, current.to_json)
     rescue
     end
@@ -20,7 +20,7 @@ class BackupTenantJob < ApplicationJob
     return unless tenant
 
     summary = []
-    log_progress(summary, step: :start)
+    log_progress(step: :start)
 
     Rails.application.eager_load! unless Rails.application.config.eager_load
 
@@ -33,7 +33,7 @@ class BackupTenantJob < ApplicationJob
 
     manifest = []
     summary << ({ timestamp: timestamp, label: label, base_dir: base_dir })
-    log_progress(summary, step: :scan_tables)
+    log_progress(step: :scan_tables)
 
     # - part of Rails
     log_progress(step: :start)
@@ -72,7 +72,7 @@ class BackupTenantJob < ApplicationJob
     FileUtils.mkdir_p(storage_root)
 
     summary << ({ dump_path: dump_path, attachments_path: attachments_path, blobs_path: blobs_path, storage_root: storage_root })
-    log_progress(summary, step: :paths_created)
+    log_progress(step: :paths_created)
 
     processed = 0
     table_ids = {}
@@ -88,16 +88,24 @@ class BackupTenantJob < ApplicationJob
               next if count == 0
               processed += count
               manifest << ({ table: table, model: table.to_s, count: count })
-              log_progress(summary, step: :dump_progress, table: table, processed: processed, result: result)
+              log_progress(step: :dump_progress, table: table, processed: processed, result: result)
 
             rescue => e
               manifest << { table: table, model: (model&.name), error: e.message }
-              log_progress(summary, step: :error, table: table, message: e.message)
+              log_progress(step: :error, table: table, message: e.message)
             end
           end
+        end
+      end
+    end
     dump_path = base_dir.join("dump.jsonl")
     processed = 0
     File.open(dump_path, "w") do |f|
+      # First, backup the tenant itself
+      f.puts({ model: "tenants", data: tenant.attributes }.to_json)
+      processed += 1
+      manifest << { table: "tenants", model: "Tenant", count: 1 }
+
       tenant_tables.sort.each do |table|
         model = models_by_table[table]
         model = nil if model && model.abstract_class?
@@ -106,7 +114,7 @@ class BackupTenantJob < ApplicationJob
             count = model.unscoped.where(tenant_id: tenant.id).count
             next if count == 0
             model.unscoped.where(tenant_id: tenant.id).find_in_batches(batch_size: 500) do |batch|
-              batch.each { |rec| f.puts({ model: model.name, data: rec.attributes }.to_json) }
+              batch.each { |rec| f.puts({ model: table, data: rec.attributes }.to_json) }
               processed += batch.size
               log_progress(step: :dump_progress, table: table, processed: processed)
             end
@@ -126,11 +134,14 @@ class BackupTenantJob < ApplicationJob
       end
     end
 
+    # Add tenant id to table_ids
+    table_ids["tenants"] = [ tenant.id ]
+
     File.write(file_ids_path, JSON.pretty_generate(table_ids))
-    log_progress(summary, step: :file_ids_written)
+    log_progress(step: :file_ids_written)
 
     File.write(base_dir.join("manifest.json"), JSON.pretty_generate(manifest))
-    log_progress(summary, step: :manifest_written, entries: manifest.size)
+    log_progress(step: :manifest_written, entries: manifest.size)
 
     begin
       require "digest"
@@ -151,9 +162,9 @@ class BackupTenantJob < ApplicationJob
       }
       File.write(base_dir.join("metadata.json"), JSON.pretty_generate(metadata))
       summary << ({ dump_file: dump_file, dump_sha256: dump_sha256, attachments_count: attachments_count, git_sha: git_sha })
-      log_progress(summary, step: :metadata_written)
+      log_progress(step: :metadata_written)
     rescue => e
-      log_progress(summary, step: :metadata_error, message: e.message)
+      log_progress(step: :metadata_error, message: e.message)
     end
 
     archive_path = Rails.root.join("storage", "tenant_backups", "#{label}.tar.gz").to_s
@@ -166,7 +177,7 @@ class BackupTenantJob < ApplicationJob
     ensure
       Dir.chdir(Rails.root)
     end
-    log_progress(summary, step: :archive_created, path: archive_path)
+    log_progress(step: :archive_created, path: archive_path)
 
     begin
       # Generate a proper download URL instead of file path
@@ -196,18 +207,20 @@ class BackupTenantJob < ApplicationJob
       end
 
       TenantMailer.with(tenant: tenant, link: download_url, pdf_report_url: pdf_report_url).backup_created.deliver_later
-      log_progress(summary, step: :email_enqueued, download_url: download_url)
+      log_progress(step: :email_enqueued, download_url: download_url)
       @background_job.update_column :job_progress, { step: :completed, completed_at: Time.now.utc.iso8601, download_url: download_url, pdf_report_url: pdf_report_url }.to_json
 
       # Cleanup: Remove temporary directory after successful archive creation and email queuing
       FileUtils.rm_rf(base_dir)
-      # log_progress(summary, step: :cleanup_completed, removed: base_dir.to_s)
+      # log_progress(step: :cleanup_completed, removed: base_dir.to_s)
 
       # Remove old backups (8+ days old) for this tenant
       cleanup_old_backups(tenant)
     rescue => e
       say "BackupTenantJob email failed: #{e.message}"
-      log_progress(summary, step: :error, phase: :email, message: e.message)
+      log_progress(step: :error, phase: :email, message: e.message)
+    end
+
     File.write(base_dir.join("manifest.json"), JSON.pretty_generate(manifest))
     log_progress(step: :manifest_written, entries: manifest.size)
 
@@ -274,7 +287,7 @@ class BackupTenantJob < ApplicationJob
     archive_path
   rescue => e
     say "BackupTenantJob failed: #{e.message}"
-    log_progress(summary, step: :failed, message: e.message)
+    log_progress(step: :failed, message: e.message)
     UserMailer.error_report(e.full_message, "BackupTenantJob#perform").deliver_later rescue nil
   end
 
@@ -396,8 +409,3 @@ class BackupTenantJob < ApplicationJob
     # Don't fail the job if cleanup fails
   end
 end
-    log_progress(step: :failed, message: e.message)
-    UserMailer.error_report(e.full_message, "BackupTenantJob#perform").deliver_later rescue nil
-  end
-end
-
