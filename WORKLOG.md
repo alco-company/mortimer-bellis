@@ -9,6 +9,7 @@
 - use metrics to optimize speed - https://bhavyansh001.medium.com/how-we-made-our-rails-app-load-in-under-100ms-ceceea024c62
 - find ways to utilise <output> - https://denodell.com/blog/html-best-kept-secret-output-tag
 - use Terraform to setup servers - https://dennmart.com/articles/review-apps-with-kamal-part-1-provisioning-servers/
+- use https://github.com/FrigadeHQ/remote-storage to go off-line
 
 ## ISSUES
 
@@ -28,13 +29,14 @@
 - ways to test before launch: https://bhavyansh001.medium.com/the-rails-performance-checklist-i-run-before-every-launch-b02f605285cf
 - priser
 - backup/restore menu items
-- change price when changing user
+- cannot use cron schema like 1 1 */2 * * ie every second day at 1:1AM
 
 ## CHANGELOG
 
 ### 13/12/2025
 
 - while merging into production/main picked up a few errors
+- missing an ENV variable in production
 
 ### 09/12/2025
 
