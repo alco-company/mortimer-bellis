@@ -59,13 +59,13 @@ export default class extends Controller {
       this.setTimerOnState();
       this.initialCustomer = document.querySelector(
         "#time_material_customer_id"
-      ).value;
+      )?.value || null;
       this.hourRate =
-        parseFloat(document.getElementById("time_material_rate").value) || 0.0;
+        parseFloat(document.getElementById("time_material_rate")?.value || "0") || 0.0;
       this.userHourRate = this.hourRate;
       this.initialProject = document.querySelector(
         "#time_material_project_id"
-      ).value;
+      )?.value || null;
       if (
         this.state === "active" ||
         this.state === "resume" ||
@@ -113,14 +113,14 @@ export default class extends Controller {
       case "resume":
         this.state = "active";
         // this.lastSyncAt = Date.now();
-        this.timeValue = parseInt(this.counterTarget.dataset.counter, 10) || 0;
+        this.timeValue = parseInt(this.counterTarget?.dataset?.counter, 10) || 0;
         this.setStartedAtMs();
         this.persistTimingState();
         this.startTimer();
         break;
       case "active":
         // this.lastSyncAt = Date.now();
-        this.timeValue = parseInt(this.counterTarget.dataset.counter, 10) || 0;
+        this.timeValue = parseInt(this.counterTarget?.dataset?.counter, 10) || 0;
         this.setStartedAtMs();
         this.persistTimingState();
         this.startTimer();
@@ -242,7 +242,7 @@ export default class extends Controller {
       this.startedAtMs = null;
     }
     try {
-      let value = parseInt(this.counterTarget.dataset.counter, 10) || 0;
+      let value = parseInt(this.counterTarget?.dataset?.counter, 10) || 0;
       if (Math.abs(value - this.timeValue) > 30) {
         this.timeValue = value;
         if (this.state === "active") {
@@ -594,9 +594,10 @@ export default class extends Controller {
 
   updateOverTime(e) {
     let elem = document.getElementById("time_material_over_time");
-    if (this.productsValue.length >= elem.value) {
-      document.getElementById("time_material_rate").value =
-        this.hourRate * (this.productsValue[ elem.value ] / this.productsValue[0] );
+    let rate = document.getElementById("time_material_rate");
+    if (!elem || !rate) return;
+    if (this.productsValue.length >= (elem?.value || 0) ) {
+      rate.value = this.hourRate * (this.productsValue[ elem.value ] / this.productsValue[0] );
     }
   }
 
@@ -609,12 +610,13 @@ export default class extends Controller {
 
   userChanged(e) {
     let tmr = document.getElementById("time_material_rate");
-
+    let tmpid = document.querySelector("#time_material_project_id");
+    let tmcid = document.querySelector("#time_material_customer_id");
     const select = e.target;
     const selectedOption = select.options[select.selectedIndex];
     const hourlyRate = selectedOption.dataset.effective_hourly_rate;
     
-    if (document.querySelector("#time_material_project_id").value == '' && document.querySelector("#time_material_customer_id").value == '') {
+    if (tmpid?.value == '' && tmcid?.value == '') {
       this.setHourRate(hourlyRate);
       this.userHourRate = this.hourRate;
     }
@@ -635,6 +637,8 @@ export default class extends Controller {
   }
 
   customerChange(e) {
+    let tmcid = document.querySelector("#time_material_customer_id");
+
     if (e.currentTarget.value === "") {
       e.target.previousSibling.value = "";
       if (this.invoiceTarget.value == 1)
@@ -644,13 +648,13 @@ export default class extends Controller {
         this.invoiceTarget.nextElementSibling.click();
       console.log(`Customer change detected: ${e.currentTarget.value}, ${document.querySelector("#time_material_customer_id").dataset.lookupCustomerHourlyRate}`);
       this.resetProjectInfo();
-      if ( document.querySelector("#time_material_customer_id").dataset.lookupCustomerHourlyRate ) {
-        console.log(`Setting customer hourly rate at ${document.querySelector("#time_material_customer_id").dataset.lookupCustomerHourlyRate}`);
-        if (document.querySelector("#time_material_customer_id").value !== this.initialCustomer) {
-          this.initialCustomer = document.querySelector( "#time_material_customer_id" ).value;
+      if ( tmcid?.dataset?.lookupCustomerHourlyRate ) {
+        console.log(`Setting customer hourly rate at ${tmcid.dataset.lookupCustomerHourlyRate}`);
+        if (tmcid?.value !== this.initialCustomer) {
+          this.initialCustomer = tmcid.value;
 
           // // Add validation here too
-          const hourRate = document.querySelector("#time_material_customer_id").dataset.lookupCustomerHourlyRate;
+          const hourRate = tmcid.dataset.lookupCustomerHourlyRate;
           this.setHourRate(hourRate);
 
           this.updateOverTime(document.getElementById("time_material_over_time"));
@@ -674,31 +678,26 @@ export default class extends Controller {
   } 
 
   projectChange(e) {
+    let tmcid = document.querySelector("#time_material_customer_id");
+    let tmpid = document.querySelector("#time_material_project_id");
+    if (!tmpid || !tmcid) return;
+
     if (e.currentTarget.value === "") {
       e.target.previousSibling.value = "";
       return
     }
-    if (document.querySelector("#time_material_project_id").dataset.lookupCustomerName) {
-      document.querySelector("#time_material_customer_id").value =
-      document.querySelector(
-        "#time_material_project_id"
-      ).dataset.lookupCustomerId;
+    if (tmpid.dataset.lookupCustomerName) {
+      tmcid.value = tmpid.dataset.lookupCustomerId;
       document.querySelector("#time_material_customer_name").value =
-      document.querySelector(
-        "#time_material_project_id"
-      ).dataset.lookupCustomerName;
-      if ( document.querySelector("#time_material_project_id").dataset.lookupProjectHourlyRate ) {
-        if (document.querySelector("#time_material_project_id").value !== this.initialProject) {
-          this.initialProject = document.querySelector( "#time_material_project_id" ).value;
+      tmpid.dataset.lookupCustomerName;
+      if ( tmpid.dataset.lookupProjectHourlyRate ) {
+        if (tmpid.value !== this.initialProject) {
+          this.initialProject = tmpid.value;
           let tmr = document.getElementById("time_material_rate");
 
           // // Add validation here too
-          const hourRate = document.querySelector("#time_material_project_id").dataset.lookupProjectHourlyRate;
-          this.setHourRate( hourRate,
-            document.querySelector("#time_material_customer_id")
-              .dataset
-              .lookupCustomerHourlyRate
-          );
+          const hourRate = tmpid.dataset.lookupProjectHourlyRate;
+          this.setHourRate( hourRate, tmcid.dataset.lookupCustomerHourlyRate );
           this.updateOverTime( document.getElementById("time_material_over_time") );
         }        
       }

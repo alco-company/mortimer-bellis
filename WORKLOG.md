@@ -37,6 +37,7 @@
 
 - while merging into production/main picked up a few errors
 - missing an ENV variable in production
+- 1-2 minor js bugs and some null/error handling
 
 ### 09/12/2025
 
