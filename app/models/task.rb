@@ -132,12 +132,12 @@ class Task < ApplicationRecord
   end
 
   def notify(action: nil, title: nil, msg: nil, rcp: nil, priority: 0)
-    recipient = rcp.blank? ? self : (rcp.is_a?(User) ? rcp : User.find(rcp))
+    # recipient = rcp.blank? ? self : (rcp.is_a?(User) ? rcp : User.find(rcp))
 
-    case action
-    when :tasks_remaining
-      TaskNotifier.with(record: self, current_user: Current.user, title: title, message: msg, delegator: self.name).deliver(recipient)
-    end
+    # case action
+    # when :tasks_remaining
+    #   TaskNotifier.with(record: self, current_user: Current.user, title: title, message: msg, delegator: self.name).deliver(recipient)
+    # end
   end
 
   def notified?(action)

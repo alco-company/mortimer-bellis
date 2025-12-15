@@ -38,6 +38,7 @@
 
 - fix translations
 - get otp and my tasks to work
+- squelch most notifications for now
 
 ### 13/12/2025
 
