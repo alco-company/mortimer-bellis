@@ -37,6 +37,7 @@
 ### 15/12/2025
 
 - fix translations
+- get otp and my tasks to work
 
 ### 13/12/2025
 

@@ -156,7 +156,7 @@ class Task < ApplicationRecord
         priority: -100,
         validation: "Current.user.web_push_subscriptions.any?",
         state: nil },
-        { title: I18n.t("tasks.template_tasks.setup_user_profile.title"),
+      { title: I18n.t("tasks.template_tasks.setup_user_profile.title"),
         link: "/users/registrations/edit",
         description: I18n.t("tasks.template_tasks.setup_user_profile.instruction"),
         priority: -101,
