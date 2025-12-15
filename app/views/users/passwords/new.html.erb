@@ -3,7 +3,7 @@
     <div class="flex flex-shrink-0 items-center">
     <%= render_logo %>
     </div>
-    <h1> <%= t(".reset_password") %> </h1>
+    <h1> <%= t("users.passwords.new.reset_password") %> </h1>
     
     <%= form_with( url: users_passwords_url, method: :post, class: "my-5") do |f| %>
       <%= render "users/shared/error_messages", resource: resource %>
@@ -14,7 +14,7 @@
       </div>
 
       <div class="actions mort-field">
-        <%= f.submit t(".reset_password"), class: "mort-btn-primary" %>
+        <%= f.submit t("users.passwords.new.reset_password"), class: "mort-btn-primary" %>
       </div>
     <% end %>
 

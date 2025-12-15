@@ -30,8 +30,14 @@
 - priser
 - backup/restore menu items
 - cannot use cron schema like 1 1 */2 * * ie every second day at 1:1AM
+- somehow i managed to f**k-up the batch (udvælg)
 
 ## CHANGELOG
+
+### 15/12/2025
+
+- fix translations
+- get otp and my tasks to work
 
 ### 13/12/2025
 

@@ -7,7 +7,7 @@
     <div class="flex flex-shrink-0 items-center">
     <%= render_logo %>
     </div>
-    <h1 class="font-bold text-gray-200 text-2xl"> <%= t(".sign_up.title") %> </h1>
+    <h1 class="font-bold text-gray-200 text-2xl"> <%= t("tenants.registrations.new.sign_up.title") %> </h1>
 
     <%= form_for(resource, as: resource_name, url: tenants_registrations_url,  data: { controller: "email-taken password-strength" }) do |f| %>
       <%= render "users/shared/error_messages", resource: resource %>

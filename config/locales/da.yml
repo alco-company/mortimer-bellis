@@ -59,6 +59,7 @@ da:
   toggle_show_all: "Vis alle"
   toggle_show_my_unfinished: "Vis uafsluttede"
 
+  sign_in: Log ind
   sign_in_info: "Du loggede ind kl %{signin} og din session udløber om %{session_done}"
   session_done_shortly: "%{seconds} sekunder"
   session_done_minutes: "%{minutes} minutter"

@@ -4,7 +4,7 @@
     <%= render_logo %>
     </div>
 
-    <h1> <%= t(".resend_confirmation.title") %> </h1>
+    <h1> <%= t("users.confirmations.new.resend_confirmation.title") %> </h1>
 
     <%= form_with(model: User,  url: users_confirmations_url, html: { method: :post }) do |f| %>
       <%= render "users/shared/error_messages", resource: resource %>
@@ -15,7 +15,7 @@
       </div>
 
       <div class="actions mort-field">
-        <%= f.submit t(".resend"), class: "mort-btn-primary" %>
+        <%= f.submit t("users.confirmations.new.resend_confirmation.action"), class: "mort-btn-primary" %>
       </div>
     <% end %>
 

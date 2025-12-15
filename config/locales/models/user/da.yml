@@ -64,7 +64,7 @@ da:
         resend: Send igen
         resend_confirmation: 
           title: Bekræftelses email
-          action: Send igen
+          action: Send mig en email (igen)
       show:
         confirmation:
           title: Oprettelse godkendt!
