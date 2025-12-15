@@ -107,7 +107,7 @@ gem "psych", "~> 5.2.6"
 
 gem "rrule", "~> 0.6.0"
 
-gem "httpx", "~> 1.4"
+gem "httpx", "~> 1.6"
 
 gem "mission_control-jobs", "~> 1.1.0"
 
