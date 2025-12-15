@@ -39,6 +39,7 @@
 - fix translations
 - get otp and my tasks to work
 - squelch most notifications for now
+- squelch most notifications for now II
 
 ### 13/12/2025
 
