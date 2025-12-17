@@ -22,6 +22,25 @@ class ListItems::Tenant < ListItems::ListItem
     end
   end
 
+  def show_matter_link
+    div(class: "flex flex-row items-center") do
+      show_matter_mugshot
+      if user&.global_queries? && resource.respond_to?(:tenant)
+        span(class: "hidden md:inline text-xs mr-2 truncate ") { show_resource_link(resource: resource.tenant) }
+      end unless resource_class == Tenant
+      span(class: "md:inline text-xs truncate") do
+        resource.time_zone
+        # link_to(customer_url(resource&.customer),
+        #   class: "truncate hover:underline inline grow flex-nowrap",
+        #   data: { turbo_action: "advance", turbo_frame: "form" },
+        #   tabindex: -1) do
+        #   span(class: "hidden") { show_secondary_info }
+        #   plain resource&.customer&.name
+        # end
+      end
+    end
+  end
+
   def show_left_mugshot
     div(class: "flex items-center") do
       input(type: "checkbox", name: "batch[ids][]", value: resource.id, class: "hidden batch mort-form-checkbox mr-2")
@@ -35,7 +54,7 @@ class ListItems::Tenant < ListItems::ListItem
 
   def show_secondary_info
     p(class: "text-sm font-medium text-gray-900 dark:text-white") do
-      plain "%s %s " % [ resource.email, resource.time_zone ]
+      plain resource.email
     end
   end
 end
