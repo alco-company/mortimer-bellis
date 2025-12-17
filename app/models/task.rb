@@ -123,6 +123,16 @@ class Task < ApplicationRecord
     self.title
   end
 
+  def customer_name
+    customer_id.nil? ? "" : Customer.find(customer_id).name
+  end
+  def project_name
+    project_id.nil? ? "" : Project.find(project_id).name
+  end
+  def is_invoice?
+    true
+  end
+
   def completed?
     self.completed_at.present?
   end
@@ -145,7 +155,13 @@ class Task < ApplicationRecord
   end
 
   def self.form(resource:, editable: true)
-    Tasks::Form.new resource: resource, editable: editable, fields: [ :title, :link, :description ]
+    Tasks::Form.new resource: resource, editable: editable,
+      fields: [ :title, :link, :description, :tasked_for_id, :tasked_for_type, :priority, :validation ]
+  end
+
+  def self.modal_form(resource:, editable: true)
+    Tasks::ModalForm.new resource: resource, editable: editable,
+      fields: [ :title, :description, :due_at, :tasked_for_id, :tasked_for_type, :priority, :customer_id, :project_id  ]
   end
 
   def self.create_tenant_template_tasks(usr)

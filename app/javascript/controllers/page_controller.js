@@ -55,6 +55,9 @@ export default class extends Controller {
         case "+":
           document.getElementById("new_list_item").click();
           break;
+        case "o":
+          document.getElementById("new_task_item").click();
+          break;
         case ",":
           this.editCurrentListItem();
           break;

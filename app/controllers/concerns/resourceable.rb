@@ -59,6 +59,7 @@ module Resourceable
       else
         model = case params.dig(:modal_form)
         when "restore_backup"; Tenant
+        when "new_task"; Task
         else nil
         end
       end

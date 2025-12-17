@@ -62,10 +62,15 @@ da:
       default_time_material_rate: Standard pris for ny tid og materialer post
       default_time_material_over_time: Standard overtid for ny tid og materialer post
       default_time_material_date: Standard arbejdsdato for ny tid og materialer post
-      add_time_material: Tillad bruger at oprette tid og materialer
-      add_product: Tillad bruger at oprette produkter på tid og materialer
-      add_customer: Tillad bruger at oprette kunder på tid og materialer
-      add_project: Tillad bruger at oprette projekter på tid og materialer
+      add_time_materials: Tillad bruger at oprette tid og materialer
+      add_products: Tillad bruger at oprette produkter på tid og materialer
+      add_customers: Tillad bruger at oprette kunder på tid og materialer
+      add_projects: Tillad bruger at oprette projekter på tid og materialer
+      do_invoicing: Aktivér fakturering
+      use_products: Tillad bruger at bruge produkter på tid og materialer
+      use_customers: Tillad bruger at bruge kunder på tid og materialer
+      use_projects: Tillad bruger at bruge projekter på tid og materialer
+      use_tasks: Tillad bruger at bruge opgaver
       add_comments_on_time_material: Tillad kommentarer på tid og materialer
       import_customers_only: Tillad kun import af kunder
       sync_with_erp: Synkronisér med ERP
@@ -88,10 +93,12 @@ da:
       default_time_material_rate: Standard pris for ny tid og materialer post
       default_time_material_over_time: Standard overtid for ny tid og materialer post
       default_time_material_date: Standard arbejdsdato for ny tid og materialer post
-      add_time_material: Tillad bruger at oprette tid og materialer poster
-      add_product: Tillad bruger at oprette produkter på tid og materialer poster
-      add_customer: Tillad bruger at oprette kunder på tid og materialer poster
-      add_project: Tillad bruger at oprette projekter på tid og materialer poster
+      add_time_materials: Tillad bruger at oprette tid og materialer poster
+      add_products: Tillad bruger at oprette produkter på tid og materialer poster
+      add_customers: Tillad bruger at oprette kunder på tid og materialer poster
+      add_projects: Tillad bruger at oprette projekter på tid og materialer poster
+      do_invoicing: Gør det muligt at registrere tid i Mortimer, som kan faktureres til kunder
+      use_tasks: Gør det muligt at oprette opgaver - som kan overføres til tid og materialer poster om ønsket
       add_comments_on_time_material: Tillad kommentarer på tid og materialer poster
       import_customers_only: Tillad kun import af kunder, ikke alle kontakter (privatpersoner og leverandører)
       sync_with_erp: Synkronisér med ERP systemet, hvis det er konfigureret

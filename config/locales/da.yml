@@ -866,6 +866,9 @@ da:
         due_at: Klar senest den
         completed_at: Færdig den
         user_id: Ansvarlig
+        tasked_for_id: Delegeret til
+        customer_id: Kunde
+        project_id: Projekt
         link: URL
       team:
         created_at: Oprettet den

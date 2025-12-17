@@ -66,14 +66,14 @@ class DashboardTask < ApplicationComponent
   end
 
   def dashboard_task
-    url, help = task.link.split(/,| |;/)
+    url, help = task&.link&.split(/,| |;/) rescue [ task_url(task), "https://mortimer.pro/help" ]
     help ||= "https://mortimer.pro/help"
-    li(class: "overflow-hidden rounded-xl border border-gray-200", data: { controller: "hidden-description" }) do
+    li(id: "task_#{task.id}", class: "overflow-hidden rounded-xl border border-gray-200", data: { controller: "hidden-description" }) do
       div(
         class:
           "flex justify-between items-center gap-x-4 border-b border-slate-100 bg-gray-50 p-2"
       ) do
-        url, turbo = url.include?("/") ? [ url, true ] : [ eval(url), false ]
+        url, turbo = url.include?("/") ? [ url, true ] : [ eval(url), false ] rescue [ "#", true ]
         div(class: "flex text-sm/6 text-gray-900") do
           link_to task.title, url, class: "mort-link-primary mr-2 text-sm", data: { turbo_stream: turbo }
           render Icons::Link.new css: "mort-link-primary h-6 "
@@ -169,7 +169,7 @@ class DashboardTask < ApplicationComponent
   private
 
   def completed_task(task)
-    url, help = task.link.split(/,| |;/)
+    url, help = task.link.split(/,| |;/) rescue [ task_url(task), "https://mortimer.pro/help" ]
     help ||= "https://mortimer.pro/help"
     url, turbo = url.include?("/") ? [ url, true ] : @_state.user_context[:rails_view_context].send(url)
 
@@ -201,7 +201,7 @@ class DashboardTask < ApplicationComponent
   end
 
   def incomplete_task(task)
-    url, help = task.link.split(/,| |;/)
+    url, help = task.link.split(/,| |;/) rescue [ task_url(task), "https://mortimer.pro/help" ]
     help ||= "https://mortimer.pro/help"
     url, turbo = url.include?("/") ? [ url, true ] : @_state.user_context[:rails_view_context].send(url)
 

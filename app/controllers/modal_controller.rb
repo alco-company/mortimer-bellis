@@ -10,6 +10,7 @@ class ModalController < MortimerController
     case params[:modal_form]
     when "restore_backup"; process_restore_backup_new
     when "settings"; process_settings_new
+    when "new_task"; process_task_new
     else
       @resource = find_resource
       case resource_class.to_s.underscore
@@ -36,6 +37,7 @@ class ModalController < MortimerController
   def create
     case params[:modal_form]
     when "restore_backup"; process_restore_backup_create
+    when "new_task"; process_task_create
     else
       case resource_class.to_s.underscore
       when "employee"; process_employee_create
@@ -153,8 +155,17 @@ class ModalController < MortimerController
     def process_help_new
     end
 
+    def process_task_new
+      @modal_form = "new_task"
+      @step = params[:modal_next_step] || "accept"
+      @url = params.dig(:url) || resources_url rescue root_url
+      @resource.due_at = Date.current
+      @ids = @filter.filter != {} || @batch&.batch_set? || @search.present? ? resources.pluck(:id) : []
+    end
+
     def process_other_new
       @step = params[:modal_next_step] || "accept"
+      @url = params.dig(:url) || resources_url rescue root_url
       @ids = @filter.filter != {} || @batch&.batch_set? || @search.present? ? resources.pluck(:id) : []
     end
 
@@ -246,7 +257,35 @@ class ModalController < MortimerController
       end
     end
 
-    def process_other_create
+    def process_task_create
+      new_resource params.dig(:task).permit(:title, :description, :tasked_for_id, :due_at, :priority, :customer_id, :project_id)
+      resource.tasked_for_type = "User"
+      resource.priority ||= 0
+      resource.tenant = Current.get_tenant
+      if before_create_callback && resource_create && create_callback
+        Broadcasters::Resource.new(resource,
+          params.permit!,
+          stream: "#{Current.get_user.id}_tasks",
+          target: "task_list",
+          # partial: DashboardTask.new(task: resource, show_options: false, menu: true),
+          user: Current.get_user).create
+        resource.notify action: :create
+        flash.now[:success] = t("tasks.create.post")
+        render turbo_stream: [
+          turbo_stream.close_remote_modal { },
+          turbo_stream.replace("flash_container", partial: "application/flash_message", locals: { tenant: Current.get_tenant, messages: flash, user: Current.get_user })
+          # special
+        ]
+        flash.clear
+      else
+        flash.now[:alert] = "FEJL!" # t("tasks.create.post")
+        render turbo_stream: [
+          # turbo_stream.close_remote_modal { },
+          turbo_stream.replace("flash_container", partial: "application/flash_message", locals: { tenant: Current.get_tenant, messages: flash, user: Current.get_user })
+          # special
+        ]
+        flash.clear
+      end
     end
 
     def process_time_material_create
@@ -257,6 +296,9 @@ class ModalController < MortimerController
         turbo_stream.close_remote_modal { },
         turbo_stream.replace("flash_container", partial: "application/flash_message", locals: { tenant: Current.get_tenant, messages: flash, user: Current.get_user })
       ]
+    end
+
+    def process_other_create
     end
 
     #

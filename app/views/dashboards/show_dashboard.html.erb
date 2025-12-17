@@ -46,7 +46,7 @@
       <!-- Open Tasks -->
 
       <div class="relative lg:col-span-2">
-        <div class="absolute inset-px rounded-lg bg-white"></div>  
+        <div class="absolute inset-px rounded-lg bg-white"> </div>          
         <%= render Account::Progress.new %>
         <div class="pointer-events-none absolute inset-px rounded-lg shadow-sm ring-1 ring-black/5"></div>
       </div>
@@ -85,7 +85,7 @@
                         <span class="text-slate-700 truncate "> <%= ps.name %></span>
                         <span class="text-slate-700 whitespace-nowrap"> <%= l(ps.last_sync_at, format: :short) rescue "-" %></span>
                       </div>
-                      <%= link_to t("provided_service.sync_now"), provided_service_url(ps), class: "rounded-full bg-sky-700 px-4 py-2 text-2xs text-white hover:bg-sky-800" %>
+                      <%= link_to t("provided_service.sync_now"), erp_pull_provided_services_url, class: "rounded-full bg-sky-700 px-4 py-2 text-2xs text-white hover:bg-sky-800" %>
                     </li>
                   <% end %>
                 </ul>

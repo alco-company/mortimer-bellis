@@ -34,6 +34,10 @@
 
 ## CHANGELOG
 
+### 17/12/2025
+
+- start using tasks
+
 ### 15/12/2025
 
 - fix translations

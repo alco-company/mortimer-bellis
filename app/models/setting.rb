@@ -96,6 +96,7 @@ class Setting < ApplicationRecord
       "use_customers" => "boolean",
       "use_projects" => "boolean",
       "do_invoicing" => "boolean",
+      "use_tasks" => "boolean",
       "edit_hourly_rate" => "boolean",
       "edit_overtime" => "boolean",
       "add_tags_on_time_material" => "boolean",
@@ -154,6 +155,7 @@ class Setting < ApplicationRecord
       when "add_tags_on_time_material";           [ "false", "TimeMaterial" ]
       when "add_comments_on_time_material";       [ "false", "TimeMaterial" ]
       when "session_timeout";                     [ "7.days", nil ]
+      when "use_tasks";                           [ "false", "Tenant" ]
       else                                        [ "true", "TimeMaterial" ]
       end
       self.create tenant: tenant, key: k[0], setable_type: setable_type, value: value
@@ -175,15 +177,16 @@ class Setting < ApplicationRecord
       # [ "default_time_material_rate", I18n.t("settings.keys.default_time_material_rate") ],
       #
       # [ "default_time_material_over_time", I18n.t("settings.keys.default_time_material_over_time") ],
-      [ "add_time_materials", I18n.t("settings.keys.add_time_material") ],
-      [ "add_customers", I18n.t("settings.keys.add_customer") ],
-      [ "add_projects", I18n.t("settings.keys.add_project") ],
-      [ "add_products", I18n.t("settings.keys.add_product") ],
+      [ "add_time_materials", I18n.t("settings.keys.add_time_materials") ],
+      [ "add_customers", I18n.t("settings.keys.add_customers") ],
+      [ "add_projects", I18n.t("settings.keys.add_projects") ],
+      [ "add_products", I18n.t("settings.keys.add_products") ],
       [ "delegate_time_materials", I18n.t("settings.keys.delegate_time_materials") ],
       [ "see_mileage_tab", I18n.t("settings.keys.see_mileage_tab") ],
       [ "use_customers", I18n.t("settings.keys.use_customers") ],
       [ "use_projects", I18n.t("settings.keys.use_projects") ],
       [ "do_invoicing", I18n.t("settings.keys.do_invoicing") ],
+      [ "use_tasks", I18n.t("settings.keys.use_tasks") ],
       [ "edit_hourly_rate", I18n.t("settings.keys.edit_hourly_rate") ],
       [ "edit_overtime", I18n.t("settings.keys.edit_overtime") ],
       [ "add_tags_on_time_material", I18n.t("settings.keys.add_tags_on_time_material") ],
@@ -270,6 +273,7 @@ class Setting < ApplicationRecord
       "session_timeout" => { "type" => "text", "value" => "7.days" },
       "run" => { "type" => "boolean", "value" => "0", "setable_type" => "BackgroundJob", "setable_id" => nil },
       "import_customers_only" => { "type" => "boolean", "value" => "1" },
+      "use_tasks" => { "type" => "boolean", "value" => "0" },
       "sync_with_erp" => { "type" => "boolean", "value" => "1" }
     }, resource: resource)
   end

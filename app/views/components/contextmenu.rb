@@ -91,6 +91,12 @@ class Contextmenu < ApplicationComponent
         end
       end
 
+      if resource_class.to_s == "TimeMaterial"
+        link2 url: new_modal_url(modal_form: "new_task", id: nil, resource_class: "task", modal_next_step: "accept", url: new_task_url),
+            a_id: "new_task_item",
+            label: t("tasks.new.title"),
+            icon: "add"
+      end
       # if resource_class.to_s == "TimeMaterial"
       #   current_param = request.query_parameters.dig(:show_all)
       #   current = ActiveModel::Type::Boolean.new.cast(current_param)
@@ -321,12 +327,13 @@ class Contextmenu < ApplicationComponent
       end
     end
 
-    def link2(url:, label:, action: nil, data: { turbo_stream: true }, icon: nil, css: "flex justify-between px-4 py-2 text-sm text-gray-700 hover:text-gray-900")
+    def link2(url:, label:, action: nil, data: { turbo_stream: true }, a_id: nil, icon: nil, css: "flex justify-between px-4 py-2 text-sm text-gray-700 hover:text-gray-900")
       data[:action] = action if action
       link_to url,
         data: data,
         class: css,
         role: "menuitem",
+        id: a_id,
         tabindex: "-1" do
         render_icon icon
         span(class: "text-nowrap pl-2") { label }
