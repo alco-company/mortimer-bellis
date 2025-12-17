@@ -17,6 +17,7 @@ da:
   tasks:
     default_task: Opgave
     validation_errors: Der er fejl i det indtastede
+    no_tasks_message: Der er ingen åbne opgaver, som du bør tage dig af
 
     create:
       post: Opgaven blev oprettet
@@ -36,6 +37,7 @@ da:
 
 
     dashboard:
+      new: Ny opgave
       get_help_here: Få hjælp her
       no_unfinished_tasks: Du har ingen opgaver, der ikke er afsluttet
 

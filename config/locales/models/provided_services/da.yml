@@ -1,6 +1,7 @@
 da:
   provided_service:
     authorize_now: "Autorisér nu!"
+    sync_now: "Synkronisér nu!"
     modal:
       setting_all:
         title: Indstillinger for udvidelser/integrationer
