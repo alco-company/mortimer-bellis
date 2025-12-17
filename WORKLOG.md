@@ -37,6 +37,7 @@
 ### 17/12/2025
 
 - start using tasks
+- bump ruby to 3.4.4
 
 ### 15/12/2025
 
