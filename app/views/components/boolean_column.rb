@@ -26,6 +26,6 @@ class BooleanColumn < Column
   end
 
   def true_false(value)
-    value ? I18n.t("yes") : I18n.t("no")
+    value ? t("yes") : t("no")
   end
 end

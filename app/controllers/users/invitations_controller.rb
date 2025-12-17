@@ -8,20 +8,23 @@ class Users::InvitationsController < MortimerController
   def create
     msg = invite_params[:invitation_message]
     count = 0
+    info = {}
     invite_params[:invitees].strip.split(/[ ,;]/).each do |invitee|
-      next unless invitee =~ /\A[a-zA-Z0-9.!\#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+\z/
-      invitee_user = User.new email: invitee, tenant: Current.user.tenant, password: SecureRandom.hex(8), locale: Current.user.locale, time_zone: Current.user.time_zone, invited_by: Current.user, invitation_sent_at: Time.now
+      if invitee =~ /\A[a-zA-Z0-9.!\#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+\z/
+        invitee_user = User.new email: invitee, tenant: Current.user.tenant, password: SecureRandom.hex(8), locale: Current.user.locale, time_zone: Current.user.time_zone, invited_by: Current.user, invitation_sent_at: Time.now
+      else
+        invitee_user = User.new
+      end
       if invitee_user.valid? && invitee_user.save
         Current.user.update invitations_count: Current.user.invitations_count + 1
         UserMailer.invitation_instructions(invitee_user, Current.user, msg).deliver_later
-        flash[:info] = I18n.t("devise.invitations.send_instructions", email: invitee)
+        info[:info] = I18n.t("devise.invitations.send_instructions", email: invitee)
         invitee_user.invited!
         count += 1
       else
-        flash[:alert] = I18n.t("devise.failure.invitation_failed", invitee: invitee)
+        info[:alert] = I18n.t("devise.failure.invitation_failed", invitee: invitee)
       end
-      Broadcasters::Resource.new(Current.user, stream: "%s_%s_%s" % [ Current.tenant.id, "new_invitation", Current.user.id ]).flash
-      flash.clear
+      Broadcasters::Resource.new(Current.user, stream: "%s_%s_%s" % [ Current.tenant.id, "new_invitation", Current.user.id ]).flash(info)
     end
 
     flash[:info] = I18n.t("devise.invitations.send_instructions_count", count: count)

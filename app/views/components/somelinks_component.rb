@@ -3,7 +3,21 @@
 class SomelinksComponent < ApplicationComponent
   include Phlex::Rails::Helpers::LinkTo
 
+  attr_accessor :footer
+
+  def initialize(footer: false)
+    @footer = footer
+  end
+
   def view_template
+    footer ? view_footer : email_footer
+  end
+
+  def email_footer
+    ""
+  end
+
+  def view_footer
     div(class: "flex justify-center space-x-6") do
       whitespace
       a(

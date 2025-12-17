@@ -1,5 +1,6 @@
 class Project < ApplicationRecord
   include Tenantable
+  include Settingable
   include ProjectStateable
 
   belongs_to :customer

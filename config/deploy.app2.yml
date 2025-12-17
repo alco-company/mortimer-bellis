@@ -1,0 +1,140 @@
+
+# Name of your application. Used to uniquely configure containers.
+service: mortimer-bellis
+
+# Name of the container image.
+image: wdiechmann/mortimer-bellis
+
+# Deploy to these servers.
+servers:
+  web:
+    - 65.108.89.110
+  # job:
+  #   hosts:
+  #     - 65.108.89.110
+  #   cmd: bin/jobs
+
+# Enable SSL auto certification via Let's Encrypt and allow for multiple apps on a single web server.
+# Remove this section when using multiple web servers and ensure you terminate SSL at your load balancer.
+#
+# Note: If using Cloudflare, set encryption mode in SSL/TLS setting to "Full" to enable CF-to-app encryption. 
+proxy: 
+  ssl: true
+  host: app2.mortimer.pro
+  # Proxy connects to your container on port 80 by default.
+  # app_port: 3000
+
+# Credentials for your image host.
+registry:
+  # Specify the registry server, if you're not using Docker Hub
+  # server: registry.digitalocean.com / ghcr.io / ...
+  username: wdiechmann
+
+  # Always use an access token rather than real password (pulled from .kamal/secrets).
+  password:
+    - KAMAL_REGISTRY_PASSWORD
+
+# Configure builder setup.
+builder:
+  remote: ssh://root@135.181.202.106
+  arch: arm64
+
+# Inject ENV variables into containers (secrets come from .kamal/secrets).
+#
+env:
+  secret:
+    - CLOUDFLARE_TURNSTILE_SITE
+    - CLOUDFLARE_TURNSTILE_SECRET
+    - MAILERSEND_API_WEBHOOK_SECRET
+    - MAILERSEND_API_TOKEN
+    - SECRET_KEY_BASE
+    - RAILS_MASTER_KEY
+    - DINERO_APP_ID
+    - DINERO_APP_SECRET
+    - STRIPE_SECRET_KEY
+    - ANTHROPIC_API_KEY
+    - SMTP_PASSWORD
+    - VAPID_PRIVATE_KEY
+    - VAPID_PUBLIC_KEY
+    - WAVIX_APP_ID
+    - OTP_KEY
+    - ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY
+    - ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY
+    - ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT    
+    - MS_AD_ID
+    - MS_AD_SECRET
+    - SMTP_USER_NAME
+    - SMTP_PORT
+    - SMTP_AUTHENTICATION
+    - SMTP_HOST
+    - MORTIMER_VERSION
+  clear:
+    # Run the Solid Queue Supervisor inside the web server's Puma process to do jobs.
+    # When you start using multiple servers, you should split out job processing to a dedicated machine.
+    SOLID_QUEUE_IN_PUMA: true
+    WEB_HOST: app2.mortimer.pro
+    PORT: 3002
+    RAILS_ENV: production
+    PDF_HOST: 135.181.202.106 
+    SMTP_DOMAIN: mortimer.pro
+    SMTP_ENABLE_STARTTLS_AUTO: 'false'
+    SSL_DOMAIN: app2.mortimer.pro
+    DINERO_APP_CALLBACK: 'https://app2.mortimer.pro/dinero/callback'
+
+
+# Aliases are triggered with "bin/kamal <alias>". You can overwrite arguments on invocation:
+# "bin/kamal logs -r job" will tail logs from the first server in the job section.
+aliases:
+  console: app exec --interactive --reuse "bin/rails console --sandbox"
+  shell: app exec --interactive --reuse "bash"
+  logs: app logs -f
+  dbc: app exec --interactive --reuse "bin/rails dbconsole"
+#
+# aliases:
+#   shell: app exec --interactive --reuse "bash"
+
+# Use a different ssh user than root
+#
+# ssh:
+#   user: app
+
+# Use a persistent storage volume.
+#
+volumes:
+  - "storage:/rails/storage"
+
+# Bridge fingerprinted assets, like JS and CSS, between versions to avoid
+# hitting 404 on in-flight requests. Combines all files from new and old
+# version inside the asset_path.
+#
+# asset_path: /app/public/assets
+
+# Configure rolling deploys by setting a wait time between batches of restarts.
+#
+# boot:
+#   limit: 10 # Can also specify as a percentage of total hosts, such as "25%"
+#   wait: 2
+
+# Use accessory services (secrets come from .kamal/secrets).
+#
+# accessories:
+#   db:
+#     image: mysql:8.0
+#     host: 192.168.0.2
+#     port: 3306
+#     env:
+#       clear:
+#         MYSQL_ROOT_HOST: '%'
+#       secret:
+#         - MYSQL_ROOT_PASSWORD
+#     files:
+#       - config/mysql/production.cnf:/etc/mysql/my.cnf
+#       - db/production.sql:/docker-entrypoint-initdb.d/setup.sql
+#     directories:
+#       - data:/var/lib/mysql
+#   redis:
+#     image: valkey/valkey:8
+#     host: 192.168.0.2
+#     port: 6379
+#     directories:
+#       - data:/data

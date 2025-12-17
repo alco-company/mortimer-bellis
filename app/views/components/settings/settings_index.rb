@@ -2,18 +2,31 @@ class Settings::SettingsIndex < ApplicationComponent
   include Phlex::Rails::Helpers::TurboStreamFrom
   include Phlex::Rails::Helpers::TurboFrameTag
   include Phlex::Rails::Helpers::DOMID
+  include Phlex::Rails::Helpers::ImageTag
 
-  def initialize(resources_stream: nil, divider: true, params: {})
+  def initialize(resources_stream: nil, divider: true, params: {}, breadcrumb: true, resource: nil)
     @resources_stream = resources_stream || "settings:resources"
     @divider = divider
     @params = params
+    @breadcrumb = breadcrumb
+    @resource = resource
   end
 
   def view_template
     if @params[:tab].present?
       turbo_frame_tag "settings_list" do
-        bread_crumb
-        show_tab
+        div(id: "list", role: "list", class: "") do
+          comment { "Help Box" }
+          div(class: "mx-4 mb-6 p-4 bg-blue-50 border border-blue-200 rounded-xl") do
+            h2(class: "font-semibold text-sky-700 mb-1") { t("settings.tabs.h2-title") }
+            p(class: "text-sm text-sky-700") do
+              plain t("settings.tabs.descriptions.#{@params[:tab]}")
+            end
+          end
+
+          bread_crumb # if @breadcrumb
+          show_tab
+        end
       end
     else
       show_index
@@ -22,14 +35,18 @@ class Settings::SettingsIndex < ApplicationComponent
 
   def show_index
     turbo_stream_from @resources_stream
-    render partial: "header", locals: { batch_form: form, divider: @divider }
+    # NOTE: Phlex components can't use the Rails partial API (render partial: ...)
+    # so we delegate to the Rails view context manually and inject the HTML.
+    # Using unsafe_raw since the partial returns already-safe HTML.
+    # unsafe_raw render(partial: "application/header", locals: { batch_form: nil, divider: @divider })
+    render(partial: "application/header", locals: { tenant: Current.tenant, batch_form: nil, divider: @divider, params: @params, user: Current.user })
     turbo_frame_tag "settings_list" do
       div(id: "list", role: "list", class: "") do
         comment { "Help Box" }
         div(class: "mx-4 mb-6 p-4 bg-blue-50 border border-blue-200 rounded-xl") do
-          h2(class: "font-semibold text-sky-700 mb-1") { "Need help?" }
+          h2(class: "font-semibold text-sky-700 mb-1") { t("settings.tabs.h2-title") }
           p(class: "text-sm text-sky-700") do
-            "Adjust how your time and material tracking works. Your changes apply to all users unless otherwise noted."
+            plain t("settings.tabs.description")
           end
         end
 
@@ -61,42 +78,47 @@ class Settings::SettingsIndex < ApplicationComponent
 
   def bread_crumb
     div(class: "mx-8 flex items-center space-x-2 mb-4") do
-      a(
-        href: "/settings",
-        class: "text-sm text-gray-500 hover:text-gray-700"
-      ) { "Settings" }
-      span(class: "text-sm text-gray-400") { ">" }
+      if @breadcrumb
+        a(
+          href: "/settings",
+          class: "text-sm text-sky-500 hover:text-sky-700"
+        ) { t("settings.label") }
+      else
+        span(class: "text-sm text-gray-400") { t("settings.label") }
+      end
+      span(class: "text-sm text-gray-400") { " > " }
       span(class: "text-sm font-medium text-gray-900") { @params[:tab].humanize }
     end
   end
 
   def show_tab
+    res = @resource.nil? ? (@params[:tab]&.classify&.constantize rescue nil) : @resource
     div(class: "p-4") do
-      case @params[:tab]
+      case @params[:tab]&.downcase
       when "general";         settings_tab Setting.general_settings
-      when "time_material";   settings_tab Setting.time_material_settings
-      when "customer";        settings_tab Setting.customer_settings
-      when "project";         settings_tab Setting.project_settings
-      when "product";         settings_tab Setting.product_settings
-      when "team";            settings_tab Setting.team_settings
-      when "user";            settings_tab Setting.user_settings
-      when "erp_integration"; settings_tab Setting.erp_integration_settings
-      when "permissions";     settings_tab Setting.permissions_settings
+      when "time_material";   settings_tab Setting.time_material_settings(resource: res), res
+      when "customer";        settings_tab Setting.customer_settings(resource: res), res
+      when "project";         settings_tab Setting.project_settings(resource: res), res
+      when "product";         settings_tab Setting.product_settings(resource: res), res
+      when "team";            settings_tab Setting.team_settings(resource: res), res
+      when "user";            settings_tab Setting.user_settings(resource: res), res
+      when "erp_integration"; settings_tab Setting.erp_integration_settings(resource: res)
+      when "permissions";     settings_tab Setting.permissions_settings(resource: res)
       end
     end
   end
 
-  def settings_tab(settings)
+  def settings_tab(settings, res = nil)
     div(class: "ml-6 mr-1") do
-      div(class: "text-sm/6 pt-6") { "Settings for organization, team, or user - choose wisely in some situations" }
+      div(class: "text-sm/6 pt-6") { t("settings.tabs.descriptions.#{@params[:tab]}") }
       dl(class: "divide-y divide-gray-100") do
         index = 1
         settings.each do |setting|
           case setting.second["type"]
-          when "boolean"; true_false setting, index
-          when "text";    text_input setting, index
-          when "option";  select_input setting, index
-          when "color";   color_input setting, index
+          when "boolean"; true_false setting, index, res
+          when "text";    text_input setting, index, res
+          when "option";  select_input setting, index, res
+          when "color";   color_input setting, index, res
           end
           index += 1
         end
@@ -145,7 +167,7 @@ class Settings::SettingsIndex < ApplicationComponent
     ) do
       div(class: "flex items-center space-x-3") do
         div(class: "p-2 rounded-md") do
-          helpers.user_mugshot(Current.get_user, css: "w-8", size: "32x32!")
+          user_mugshot(Current.get_user, css: "w-8", size: "32x32!")
         end
         div do
           p(class: "font-medium text-gray-900") { "User Profile" }
@@ -203,8 +225,16 @@ class Settings::SettingsIndex < ApplicationComponent
     end
   end
 
-  def true_false(setting, index)
-    url = setting.second["id"] == "0" ? "/settings?target=setting_i_#{index}" : "/settings/#{setting.second["object"].id}"
+  def get_class_for_setting(setting_object, res = nil)
+    rc = @resource&.class&.name || (res.is_a?(Class) ? res.name : nil rescue nil) || nil # || setting_object.class.name
+    # rc = @params[:tab].classify if @params[:tab].present? && rc == "Setting"
+    rc_id = @resource&.id || (res&.id rescue nil) || nil #  setting_object&.id || 0
+    [ rc, rc_id ]
+  end
+
+  def true_false(setting, index, res = nil)
+    rc, rc_id = get_class_for_setting(setting.second["object"], res)
+    url = setting.second["id"] == "0" ? "/settings?rc=#{rc}&rc_id=#{rc_id}&target=setting_i_#{index}" : "/settings/#{setting.second["object"].id}"
     target = setting.second["id"] == "0" ? "setting_i_#{index}" : dom_id(setting.second["object"])
     div(class: "px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0") do
       dt(class: "text-sm/6 font-medium text-gray-900") { setting.second["object"].label }
@@ -217,15 +247,22 @@ class Settings::SettingsIndex < ApplicationComponent
             target: target,
             url: url,
             action: "click->boolean#toggle",
-            attributes: {}
+            attributes: {
+              data: {
+                setable_type: rc,
+                setable_id: rc_id
+              }
+            }
           )
         end
       end
     end
   end
 
-  def text_input(setting, index)
-    url = setting.second["id"] == "0" ? "/settings?target=setting_i_#{index}" : "/settings/#{setting.second["object"].id}"
+  def text_input(setting, index, res = nil)
+    rc, rc_id = get_class_for_setting(setting.second["object"], res)
+    # url = setting.second["id"] == "0" ? "/settings?target=setting_i_#{index}" : "/settings/#{setting.second["object"].id}"
+    url = setting.second["id"] == "0" ? "/settings?rc=#{rc}&rc_id=#{rc_id}&target=setting_i_#{index}" : "/settings/#{setting.second["object"].id}"
     target = setting.second["id"] == "0" ? "setting_i_#{index}" : dom_id(setting.second["object"])
     div(class: "px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0") do
       dt(class: "text-sm/6 font-medium text-gray-900") { setting.second["object"].label }
@@ -237,13 +274,22 @@ class Settings::SettingsIndex < ApplicationComponent
           url: url,
           state: "show",
           hint: setting.second["object"].description,
-          attributes: { class: "flex col-span-2 grow" },
+          attributes: {
+            class: "flex col-span-2 grow",
+            data: {
+              setable_type: rc,
+              setable_id: rc_id
+            }
+          },
         )
       end
     end
   end
-  def select_input(setting, index)
-    url = setting.second["id"] == "0" ? "/settings?target=setting_i_#{index}" : "/settings/#{setting.second["object"].id}"
+
+  def select_input(setting, index, res = nil)
+    rc, rc_id = get_class_for_setting(setting.second["object"], res)
+    # url = setting.second["id"] == "0" ? "/settings?target=setting_i_#{index}" : "/settings/#{setting.second["object"].id}"
+    url = setting.second["id"] == "0" ? "/settings?rc=#{rc}&rc_id=#{rc_id}&target=setting_i_#{index}" : "/settings/#{setting.second["object"].id}"
     target = setting.second["id"] == "0" ? "setting_i_#{index}" : dom_id(setting.second["object"])
     div(id: "setting_#{index}", class: "px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0") do
       dt(class: "text-sm/6 font-medium text-gray-900") { setting.second["object"].label }
@@ -260,14 +306,37 @@ class Settings::SettingsIndex < ApplicationComponent
           value_class: "flex flex-col grow",
           url: url,
           target: target,
-          attributes: { key: setting.second["key"], class: "flex col-span-2 grow", data: { action: "change->select#change" } },
+          attributes: {
+            key: setting.second["key"],
+            class: "flex col-span-2 grow",
+            data: {
+              action: "change->select#change",
+              setable_type: rc,
+              setable_id: rc_id
+            }
+          },
           editable: false
         )
       end
     end
   end
 
-  def color_input(setting, index)
+  #
+  def user_mugshot(user, size: nil, css: "")
+    size = size.blank? ? "40x40!" : size
+    if (user.mugshot.attached? rescue false)
+      image_tag(url_for(user.mugshot), class: css)
+    else
+      # size.gsub!("x", "/") if size =~ /x/
+      # size.gsub!("!", "") if size =~ /!/
+      image_tag "icons8-customer-64.png", class: css
+    end
+  rescue
+    image_tag "icons8-customer-64.png", class: css
+  end
+
+
+  def color_input(setting, index, res = nil)
     div(id: "setting_#{index}", class: "px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0") do
       dt(class: "text-sm/6 font-medium text-gray-900") { "Company Color" }
       dd(class: "mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0") do

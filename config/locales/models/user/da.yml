@@ -1,6 +1,12 @@
 da:
   user:
     modal:
+      setting:
+        title: Indstillinger for bruger
+        instruction: Her kan du indstille hvordan brugeren skal fungere i Mortimer.
+      setting_all:
+        title: Indstillinger for brugere
+        instruction: Her kan du indstille hvordan brugere skal fungere i Mortimer.
       delete_all: 
         title: Slet alle brugere
         instruction: Er du sikker på, at du vil slette alle brugere?
@@ -58,7 +64,7 @@ da:
         resend: Send igen
         resend_confirmation: 
           title: Bekræftelses email
-          action: Send igen
+          action: Send mig en email (igen)
       show:
         confirmation:
           title: Oprettelse godkendt!
@@ -92,7 +98,9 @@ da:
           leave_empty: "Lad være tom, hvis du ikke vil ændre adgangskoden"
           minimum: "(mindst %{count} tegn)"
           need_current_password: "Du skal indtaste din nuværende adgangskode for at ændre den."
-        
+      unsubscribed: "Du er blevet afmeldt"
+      unsubscribe_failed: "Afmelding mislykkedes"
+
     passwords:
       new: 
         reset_password: Nulstil adgangskoden
@@ -124,37 +132,56 @@ da:
       messages:
         pincode_exist_for_tenant: "Pinkoden er allerede i brug af en anden bruger."
   user_mailer:
+    salutations: "Hej %{name}"
+    regards: "Med venlig hilsen"
     welcome:
       title: "ding ding!"
-      preheader: "Nyt lead!"
       subject: "ding ding!"
-      hello: "Hej,"
-      introduction: "nu krøb der en rotte mere i fælden! Registranten er %{email} - "
+      message: "nu krøb der en rotte mere i fælden! Registranten er %{email} - "
+    invitation_instructions:
+      page_title: "Invitation til at oprette en brugerprofil på Mortimer"
+      subject: "Invitation til at oprette en brugerprofil på  MORTIMER"
+      title: "Er %{email} din email adresse?"
+      introduction: "%{sender} hos %{tenant} har inviteret dig til at færdiggøre oprettelsen af en brugerprofil på %{url}. Du kan acceptere invitationen ved at trykke på knappen her nedenfor."
+      accept: "Ja det er min email adresse"
+      action: "Jeg accepterer invitationen"
+      accept_until: "Invitationen er gyldig indtil %{due_date}."
+      ignore: "Ønsker du ikke at acceptere invitationen, behøver du intet at gøre (måske bortset fra evt at smide email'en bort). <br /><br />Din bruger konto bliver først oprettet i det øjeblik, du klikker på link'et her ovenfor, og derefter angiver din adgangskode."
+    confirmation_instructions:
+      title: "Instruktion"
+      subject: "Instruktioner til at bekræfte din email-adresse"
+      introduction: "Vi er vældigt glade for at se dig her! For at du ikke bliver overrasket, så er det sådan, at vi har brug for at bekræfte din email adresse. Det kan du gøre ved at klikke på knappen herunder."
+      action: "Jeg accepterer oprettelsen af min brugerprofil"
+      ignore: "Har du fortrudt, ønsker du ikke at oprette din profil alligevel, eller har du modtaget denne email ved en fejl, behøver du intet at gøre (måske bortset fra evt at smide email'en bort). <br /><br />Din bruger konto bliver først oprettet i det øjeblik, du klikker på knappen her ovenfor."
       regards: "Med venlig hilsen"
+    reset_password_instructions:
+      title: "Instruktion"
+      subject: "Instruktioner til at nulstille din adgangskode"
+      hello: "Hej %{email},"
+      introduction: "nogen har bedt om at få din adgangskode nulstillet. Det kan du gøre ved at klikke på knappen herunder."
+      action: "Nulstil min adgangskode"
+      ignore: "Har du fortrudt, ønsker du ikke at nulstille din adgangskode alligevel, eller har du modtaget denne email ved en fejl, behøver du intet at gøre (måske bortset fra evt at smide email'en bort). Din adgangskode bliver først nulstillet i det øjeblik, du klikker på knappen her ovenfor."
     confetti:
       title: "Succes!"
-      preheader: "Fejring af din første stempling"
       subject: "Fejring af din første stempling"
-      hi: Hej,
-      you: "%{name} - du har lige stemplet ind for første gang på  M O R T I M E R. Tillykke! Du er nu en del af holdet hos <strong>%{tenant}</strong>."
+      you: "%{name} - du har lige stemplet ind for første gang på  MORTIMER. Tillykke! Du er nu en del af holdet hos <strong>%{tenant}</strong>."
       introduction: "Husk at tidsregistrering er i din egen interesse! Du kan bruge det i samtalen med din leder, din personlige udvikling, og hvis du har brug for at dokumentere din arbejdstid."
       rights: "Du har ret til at se og rette dine egne data, og du kan slette din profil, hvis du ikke længere skal arbejde i virksomheden. Dine data skal virksomheden opbevare i 5 år. Hvis du har spørgsmål, så kontakt din leder."
-      salutations: "Med venlig hilsen"
     user_farewell:
       title: "Din konto er blevet slettet!"
-      preheader: "Du er blevet slettet fra  M O R T I M E R"
-      subject: "Æv altså! Du er blevet slettet fra  M O R T I M E R - og det er vi kede af!"
+      preheader: "Du er blevet slettet fra  MORTIMER"
+      subject: "Æv altså! Du er blevet slettet fra  MORTIMER - og det er vi kede af!"
       hi: Hej,
-      you: "%{name} - uanset årsagen, så er din konto blevet slettet på   M O R T I M E R. Du skal ikke længere spekulere på <strong>%{tenant}</strong> - så kan du nu blot slette denne email, så er alt fjernet."
+      you: "%{name} - uanset årsagen, så er din konto blevet slettet på   MORTIMER. Du skal ikke længere spekulere på <strong>%{tenant}</strong> - så kan du nu blot slette denne email, så er alt fjernet."
       introduction: "Du har benyttet din ret til at slette din profil - eller din foresatte har truffet valget - og sammen med den, slettet alle data på dig."
       rights: "De eneste data, der er tilbage, er de data, som vi er forpligtet til at opbevare i 5 år. Hvis du har spørgsmål, så tal med din foresatte."
       salutations: "Med venlig hilsen"
     farewell:
       title: "Det er en skam, men din konto er blevet slettet!"
-      preheader: "Du er blevet slettet fra  M O R T I M E R"
-      subject: "Æv altså! Du er blevet slettet fra  M O R T I M E R - og det er vi kede af!"
+      preheader: "Du er blevet slettet fra  MORTIMER"
+      subject: "Æv altså! Du er blevet slettet fra  MORTIMER - og det er vi kede af!"
       hi: Hej,
-      you: "%{name} - uanset om det er dit eget værk, eller os der har været nødsaget til det, så er din konto blevet slettet på   M O R T I M E R. Du skal ikke længere spekulere på <strong>%{tenant}</strong> - og er det dit eget valg, så kan du nu blot slette denne email, så er alt fjernet."
+      you: "%{name} - uanset om det er dit eget værk, eller os der har været nødsaget til det, så er din konto blevet slettet på   MORTIMER. Du skal ikke længere spekulere på <strong>%{tenant}</strong> - og er det dit eget valg, så kan du nu blot slette denne email, så er alt fjernet."
       introduction: "Du har benyttet din ret til at slette din profil - og sammen med den, alle data på din kollegaer, og på kontoen."
       rights: "De eneste data, der er tilbage, er de data, som vi er forpligtet til at opbevare i 5 år. Hvis du har spørgsmål, så skriv til os på info@mortimer.pro, så gennemgår vi gerne, hvilke data vi fortsat gemmer (i 5 år) og vores lovhjemmel til at gøre det."
       salutations: "Med venlig hilsen"
@@ -184,18 +211,6 @@ da:
       unauthenticated: "Du skal logge ind eller oprette en konto for at fortsætte."
       unconfirmed: "Du skal bekræfte din email-adresse for at fortsætte."
     mailer:
-      invitation_instructions:
-        page_title: "Invitation til at oprette en brugerprofil på Mortimer"
-        subject: "Invitation til at oprette en brugerprofil på  M O R T I M E R"
-        preheader: "Invitation til at oprette en brugerprofil på Mortimer"
-        hi: "Hej"
-        title: "Er %{email} din email adresse?"
-        introduction: "%{sender} hos %{tenant} har inviteret dig til at færdiggøre oprettelsen af en brugerprofil på %{url}. Du kan acceptere invitationen ved at trykke på knappen her nedenfor."
-        accept: "Ja det er min email adresse"
-        action: "Jeg accepterer invitationen"
-        accept_until: "Invitationen er gyldig indtil %{due_date}."
-        ignore: "Ønsker du ikke at acceptere invitationen, behøver du intet at gøre (måske bortset fra evt at smide email'en bort). <br /><br />Din bruger konto bliver først oprettet i det øjeblik, du klikker på link'et her ovenfor, og derefter angiver din adgangskode."
-        regards: "Med venlig hilsen"
 
       confirmation_instructions:
         title: "Instruktion"
@@ -224,7 +239,7 @@ da:
         hello: "Hej %{email},"
         introduction: "nogen har forsøgt at logge ind på din profil, uden at kunne din adgangskode. Derfor er din konto blevet låst. Du kan låse den op ved at klikke på knappen herunder."
         action: "Lås min konto op"
-        ignore: "Er du i tvivl om, hvordan du skal forholde dig, er det måske en god idé at kontakte den ansvarlige for jeres brug af  M O R T I M E R. Din konto bliver først låst op i det øjeblik, du klikker på knappen her ovenfor."
+        ignore: "Er du i tvivl om, hvordan du skal forholde dig, er det måske en god idé at kontakte den ansvarlige for jeres brug af  MORTIMER. Din konto bliver først låst op i det øjeblik, du klikker på knappen her ovenfor."
         regards: "Med venlig hilsen"
 
       email_changed:
@@ -233,7 +248,7 @@ da:
         subject: "Din email adresse er blevet ændret"
         hello: "Hej %{email},"
         introduction: "nogen har ændret email adressen til din profil til %{email}! Det vigtigste at bemærke her, er at du derfor, fremover, skal bruge dén email adresse til at logge ind med."
-        ignore: "Har du selv gjort det, er alt i orden, men hvis det ikke er dig selv, bør du som minimum kontakte den ansvarlige for jeres brug af  M O R T I M E R."
+        ignore: "Har du selv gjort det, er alt i orden, men hvis det ikke er dig selv, bør du som minimum kontakte den ansvarlige for jeres brug af  MORTIMER."
         regards: "Med venlig hilsen"
 
       password_change:
@@ -242,7 +257,7 @@ da:
         subject: "Din adgangskode er blevet ændret"
         hello: "Hej %{email},"
         introduction: "nogen har ændret adgangskoden til din profil!"
-        ignore: "Har du selv gjort det, er alt i orden, men hvis det ikke er dig selv, bør du som minimum kontakte den ansvarlige for jeres brug af  M O R T I M E R."
+        ignore: "Har du selv gjort det, er alt i orden, men hvis det ikke er dig selv, bør du som minimum kontakte den ansvarlige for jeres brug af  MORTIMER."
         regards: "Med venlig hilsen"
 
     second_factor:

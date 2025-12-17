@@ -108,16 +108,22 @@ export default class extends Controller {
     } else {
       options.classList.add("hidden");
       this.items_connected = false;
+      if (this.inputTarget.value != "" && this.selectIdTarget.value == "") {
+        await new Promise(r => setTimeout(r, 50));
+        this.searchIconTarget.classList.remove("hidden");
+        this.optionsIconTarget.classList.add("hidden");
+      }
     }
   }
 
   search(e) {
     let association = "";
-    if (e.target.dataset.lookupAssociationDivId) {
+    let elem = this.inputTarget
+    if (elem.dataset.lookupAssociationDivId) {
       association = document.querySelector(
-        `#${e.target.dataset.lookupAssociationDivId}`
+        `#${elem.dataset.lookupAssociationDivId}`
       );
-      association = `&${e.target.dataset.lookupAssociation}=${association.value}`;
+      association = `&${elem.dataset.lookupAssociation}=${association.value}`;
     }
     let el = e.target
     this.items_connected = false;

@@ -1,5 +1,15 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
+very_first:
+  id: 1
+  name: Testing Backup/Restore
+  email: john@joe.com
+  pp_identification: 100
+  locale: da
+  color: green
+  time_zone: Europe/Copenhagen
+  access_token: "12345678"
+
 one:
   name: Danish Company
   email: MyString

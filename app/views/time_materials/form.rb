@@ -2,20 +2,22 @@ class TimeMaterials::Form < ApplicationForm
   def view_template(&)
     div(class: "overflow-y-auto", data: {
       controller: "time-material tabs",
-      time_material_products_value: TimeMaterial.overtimes_products,
+      time_material_target: "item",
+      form: "true",
+      time_material_products_value: TimeMaterial.overtimes_products || {},
       tabs_index: @resource.is_time? ? "0" : "1" }) do
       if model.cannot_be_pushed?
         show_possible_issues
       end
       # date_field
       # user
-      if user.can?(:delegate_time_materials)
+      if user.can?(:delegate_time_materials, resource: @resource)
         div(class: "my-1 grid grid-cols-4 gap-x-1 md:gap-x-4 gap-y-1 ") do
           div(class: "my-0 col-span-4 xs:col-span-2") do
             row field(:date).date(class: "mort-form-date"), "mort-field my-0"
           end
           div(class: "my-0 col-span-4 xs:col-span-2") do
-            row field(:user_id).select(User.by_tenant.order(name: :asc).select(:id, :name), class: "mort-form-select my-0"), "mort-field my-0"
+            row field(:user_id).select(User.user_list, data: { action: "change->time-material#userChanged" }, class: "mort-form-select my-0"), "mort-field my-0"
           end
         end
       else
@@ -28,16 +30,16 @@ class TimeMaterials::Form < ApplicationForm
         div(class: "") do
           # p(class: "text-xs text-gray-400") { I18n.t("time_material.type.warning") }
           div(class: "w-full") do
-            nav(class: "-mb-px flex space-x-2", aria_label: "Tabs") do
+            nav(class: "-mb-px flex space-x-2 border-b border-gray-900/10", aria_label: "Tabs") do
               time_tab
               material_tab
-              # mileage_tab
+              mileage_tab
             end
           end
         end
         show_time_tab
         show_material_tab
-        # show_mileage_tab
+        show_mileage_tab if Current.get_user.can? :see_mileage_tab, resource: @resource
       end
       #
       #
@@ -71,7 +73,7 @@ class TimeMaterials::Form < ApplicationForm
       type: "button",
       data: { tabs_target: "tab", action: "tabs#change" },
       value: 0,
-      class: "flex justify-center tab-header w-1/3 border-b-2 border-transparent p-2 pt-1 text-center text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700  #{'hidden' unless @resource.is_time?}",
+      class: "flex items-center justify-center tab-header w-1/3 border-b-2 border-transparent p-2 pt-1 text-center text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700  #{'hidden' unless @resource.is_time?}",
       role: "switch",
       aria_checked: "false") do
         # comment do
@@ -86,11 +88,12 @@ class TimeMaterials::Form < ApplicationForm
     # comment do
     #   %(Current: "border-sky-500 text-sky-600", Default: "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700")
     # end
+    return unless Current.get_user.can? :see_material_tab, resource: @resource
     button(
       type: "button",
       data: { tabs_target: "tab", action: "tabs#change" },
       value: 1,
-      class: "flex justify-center tab-header w-1/3 border-b-2 border-transparent p-2 pt-1 text-center text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700",
+      class: "flex items-center justify-center tab-header w-1/3 border-b-2 border-transparent p-2 pt-1 text-center text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700",
       role: "switch",
       aria_checked: "false") do
         # comment do
@@ -105,11 +108,12 @@ class TimeMaterials::Form < ApplicationForm
     # comment do
     #   %(Current: "border-sky-500 text-sky-600", Default: "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700")
     # end
+    return unless Current.get_user.can? :see_mileage_tab, resource: @resource
     button(
       type: "button",
       data: { tabs_target: "tab", action: "tabs#change" },
       value: 2,
-      class: "flex justify-center tab-header w-1/3 border-b-2 border-transparent p-2 pt-4 text-center text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700",
+      class: "flex items-center justify-center tab-header w-1/3 border-b-2 border-transparent p-2 text-center text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700",
       role: "switch",
       aria_checked: "false") do
         # comment do
@@ -142,12 +146,12 @@ class TimeMaterials::Form < ApplicationForm
               row field(:minute_time).input(type: "tel"), "mort-field my-1"
             end
             #
-            rate_field I18n.t("time_material.rate.hourly")
+            rate_field(I18n.t("time_material.rate.hourly")) if Current.get_user.can?(:edit_hourly_rate, resource: @resource)
             #
             div(class: "col-span-4") do
               div(class: "hidden", id: "time_values", data: {})
               row field(:over_time).select(TimeMaterial.overtimes, data: { action: "change->time-material#updateOverTime" }, class: "mort-form-select"), "mort-field my-1"
-            end
+            end if Current.get_user.can?(:edit_overtime, resource: @resource)
           end
         end
       end
@@ -163,12 +167,13 @@ class TimeMaterials::Form < ApplicationForm
   # discount
   #
   def show_material_tab
+    return unless Current.get_user.can? :see_material_tab, resource: @resource
     div(id: "material", data: { tabs_target: "tabPanel" }, class: "time-material-type material tab #{'hidden' if @resource.is_time?}") do
       div(class: "space-y-2") do
         div(class: " pb-2") do
           div(class: "mt-2 grid grid-cols-4 gap-x-4 gap-y-1") do
             div(class: "col-span-4") do
-              row field(:product_id).lookup(class: "mort-form-text #{ field_id_error(resource.product_name, resource.product_id, user.cannot?(:allow_create_product)) }",
+              row field(:product_id).lookup(class: "mort-form-text #{ field_id_error(resource.product_name, resource.product_id, user.cannot?(:add_products)) }",
                 data: {
                   url: "/products/lookup",
                   div_id: "time_material_product_id",
@@ -186,7 +191,7 @@ class TimeMaterials::Form < ApplicationForm
                 row field(:quantity).input(), "mort-field my-1  #{ field_relation_error(resource.product_id, resource.quantity) }"
               end
               div(class: "col-span-2") do
-                row field(:unit).select(@resource.units, class: "mort-form-select text-sm"), "mort-field my-1"
+                row field(:unit).select(@resource.units, class: "mort-form-select"), "mort-field my-1"
               end
             end
             div(class: "col-span-4 grid gap-x-2 grid-cols-5") do
@@ -204,7 +209,8 @@ class TimeMaterials::Form < ApplicationForm
   end
 
   def show_mileage_tab
-    div(id: "material", data: { tabs_target: "tabPanel" }, class: "time-material-type material tab hidden") do
+    return unless Current.get_user.can? :see_mileage_tab, resource: @resource
+    div(id: "mileage", data: { tabs_target: "tabPanel" }, class: "time-material-type material tab hidden") do
       div(class: "space-y-2") do
         div(class: "pb-2") do
           div(class: "mt-2 grid grid-cols-4 gap-x-4 gap-y-1") do
@@ -243,11 +249,12 @@ class TimeMaterials::Form < ApplicationForm
   def about_field
     div(class: "col-span-full") do
       div(class: "mort-field my-0") do
-        div(class: "flex justify-between", data: { controller: "time-material" }) do
+        div(class: "flex justify-between", data: {}) do
           label(for: "time_material_about", class: "block text-sm font-medium leading-6 text-gray-900") { I18n.t("time_material.about.lbl") }
           if resource.active? or resource.paused?
             color = resource.paused? ? "text-gray-500" : "text-lime-500"
-            counter = resource.time_spent # resource.paused? ? resource.time_spent : (Time.current.to_i - resource.started_at.to_i) +
+            seconds = resource.minutes_reloaded_at.nil? ? (Time.current.to_i - resource.started_at.to_i) : (Time.current.to_i - resource.minutes_reloaded_at.to_i)
+            counter = (resource.registered_minutes || 0) * 60 + seconds
             _days, hours, minutes, seconds = resource.calc_hrs_minutes counter
             timestring = "%02d:%02d:%02d" % [ hours, minutes, seconds ]
             div(class: "float-right") do
@@ -273,6 +280,7 @@ class TimeMaterials::Form < ApplicationForm
   end
 
   def customer_field
+    return unless Current.get_user.can? :use_customers, resource: @resource
     row field(:customer_id).lookup(class: "mort-form-text #{field_id_error(resource.customer_name, resource.customer_id, resource.is_invoice?)}",
       data: {
         url: "/customers/lookup",
@@ -284,7 +292,10 @@ class TimeMaterials::Form < ApplicationForm
   end
 
   def project_field
-    return unless Current.get_tenant.license_valid? && %w[trial ambassador pro].include?(Current.get_tenant.license) || Current.user.superadmin?
+    return unless Current.get_user.can?(:use_projects, resource: @resource) &&
+      Current.get_tenant.license_valid? &&
+      %w[trial ambassador pro].include?(Current.get_tenant.license)
+
     row field(:project_id).lookup(class: "mort-form-text #{field_id_error(resource.project_name, resource.project_id)}",
       data: {
         url: "/projects/lookup",
@@ -304,7 +315,8 @@ class TimeMaterials::Form < ApplicationForm
   end
 
   def invoicing
-    div(class: "pb-4") do
+    return unless Current.get_user.can? :do_invoicing, resource: @resource
+    div(class: "pb-4 rounded-md border border-gray-300 bg-gray-50 p-2") do
       div(class: "mt-1 space-y-1") do
         row field(:state).select(TimeMaterial.time_material_states, class: "my-auto mort-form-select"), "mort-field" # , "flex justify-end flex-row-reverse items-center"
         fieldset do
@@ -385,27 +397,27 @@ class TimeMaterials::Form < ApplicationForm
   end
 
   def show_comments
-    return unless Current.get_user.should? :allow_comments_on_time_material
     render TagComponent.new(resource: resource,
-        field: :tag_list,
-        show_label: true,
-        value_class: "mr-5",
-        value: resource.tags,
-        editable: true)
+    field: :tag_list,
+    show_label: true,
+    value_class: "mr-5",
+    value: resource.tags,
+    editable: true) if Current.get_user.can?(:add_tags_on_time_material, resource: @resource)
 
+    return unless Current.get_user.can? :add_comments_on_time_material, resource: @resource
     div(class: "col-span-full") do
-      div(class: "mort-field my-0") do
-        div(class: "flex justify-between", data: { controller: "time-material" }) do
+      div(class: "mort-field my-1") do
+        div(class: "flex justify-between", data: {}) do
           label(for: "time_material_task_comment") do
             span { I18n.t("activerecord.attributes.time_material.task_comment") }
           end
         end
         textarea(id: "time_material_task_comment", name: "time_material[task_comment]", class: "mort-form-text") do
-          plain resource.comment
+          plain resource.task_comment
         end
       end
       div(class: "mort-field my-0") do
-        div(class: "flex justify-between", data: { controller: "time-material" }) do
+        div(class: "flex justify-between", data: {}) do
           label(for: "time_material_location_comment") do
             span { I18n.t("activerecord.attributes.time_material.location_comment") }
           end

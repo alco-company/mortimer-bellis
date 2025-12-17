@@ -1,5 +1,6 @@
 class Customer  < ApplicationRecord
   include Tenantable
+  include Settingable
   include Countryable
 
   has_many :projects, dependent: :destroy
@@ -95,9 +96,9 @@ class Customer  < ApplicationRecord
     Customers::Form.new resource: resource, editable: editable
   end
 
-  def self.add_from_erp(item)
+  def self.add_from_erp(item, resource: nil)
     return false unless item["Name"].present?
-    return true if User.can?(:import_customers_only) and !item["IsDebitor"]
+    return true if Current.user&.should?(:import_customers_only, resource: Customer) and !item["IsDebitor"]
 
     customer = Customer.find_or_create_by(tenant: Current.get_tenant, erp_guid: item["ContactGuid"])
     customer.name = item["Name"]
@@ -122,7 +123,7 @@ class Customer  < ApplicationRecord
     customer.company_status = item["CompanyStatus"]
     customer.vat_region_key = item["VatRegionKey"]
     customer.invoice_mail_out_option_key = item["InvoiceMailOutOptionKey"]
-    if customer.save
+    if customer.save(validate: false)
        Broadcasters::Resource.new(customer, { controller: "customers" }).create
     end
   rescue => error

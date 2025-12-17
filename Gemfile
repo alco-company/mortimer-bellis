@@ -61,7 +61,7 @@ group :development, :test do
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
 
-  gem "amazing_print"
+  # gem "amazing_print"
 
   gem "dotenv-rails"
 end
@@ -77,6 +77,7 @@ group :development do
 
   # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
   # gem "spring"
+  gem "tidewave"
 end
 
 group :test do
@@ -92,7 +93,7 @@ gem "superform", "~> 0.5.0"
 
 gem "pagy", "~> 9.0"
 
-gem "rqrcode", "~> 2.2"
+gem "rqrcode", "~> 3.1"
 
 gem "activerecord-enhancedsqlite3-adapter", "~> 0.8.0"
 
@@ -108,7 +109,7 @@ gem "rrule", "~> 0.6.0"
 
 gem "httpx", "~> 1.4"
 
-gem "mission_control-jobs", "~> 0.6.0"
+gem "mission_control-jobs", "~> 1.1.0"
 
 gem "noticed", "~> 2.8"
 
@@ -137,3 +138,11 @@ gem "mailersend-ruby", "~> 3.0"
 # gem "turnstiled", "~> 0.1.14"
 
 gem "positioning"
+
+gem "reactionview", "~> 0.1.2"
+
+gem "rest-client", "~> 2.1"
+
+gem "base64", "~> 0.3.0"
+
+gem "mailtrap", "~> 2.4"

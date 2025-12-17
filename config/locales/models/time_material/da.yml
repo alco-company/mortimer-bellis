@@ -19,6 +19,7 @@ da:
     draft: Kladde
     active: Aktiv
     paused: Opgaven blev parkeret
+    stopped: Opgaven blev stoppet
     done: Afsluttet
     resumed: Opgaven blev genoptaget
     pushed_to_erp: Overført til ERP
@@ -84,6 +85,9 @@ da:
       session: Session
       tonne: Ton
     modal:
+      setting_all:
+        title: Indstillinger for tid/materialer
+        instruction: Her kan du indstille hvordan tid/materialer skal fungere i Mortimer.
       delete_all: 
         title: Slet alle tid/materialer
         instruction: Er du sikker på, at du vil slette alle tid/materialer?
@@ -183,6 +187,7 @@ da:
 
     list:
       title: Tid/materialer
+      play: Start t/m stopur
       new: Ny tid/materiale
       time_logged: "%{time} logget"
       edit: Rediger

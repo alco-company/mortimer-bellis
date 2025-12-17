@@ -13,12 +13,15 @@ class TopbarComponent < ApplicationComponent
     # topbar for mobile & desktop
     div(data: { controller: "navigation" }, class: "sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 bg-gradient-to-r #{gradient} bg-white px-4 shadow-xs sm:gap-x-6 sm:px-6 lg:px-8") do
       mobile_menu_button if Current.user
-      # separator
-      div(class: "h-6 w-px bg-gray-900/10 lg:hidden", aria_hidden: "true") { }
+    # separator
+    # div(class: "h-6 w-px bg-gray-900/10 lg:hidden", aria_hidden: "true") { }
 
-      div(class: "flex flex-1 gap-x-4 self-stretch lg:gap-x-6") do
+    # Search bar - route to current index so query param gets applied
+    div(class: "flex flex-1 gap-x-4 self-stretch lg:gap-x-6") do
         # div(class: "flex flex-1 justify-between px-4 sm:px-6 lg:mx-auto lg:max-w-6xl lg:px-8") do
+        # div(data: { controller: "live-search", "live-search-url-value": url_for(controller: params_ctrl, action: :index) }) do
         render SearchComponent.new params: params
+        # end
 
         div(class: "flex items-center gap-x-4 lg:gap-x-6") do
           # div(class: "ml-4 flex items-center md:ml-6")

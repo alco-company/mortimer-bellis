@@ -3,9 +3,11 @@ class User < ApplicationRecord
   include Punchable
   include Settingable
   include Stateable
+  include Taggable
   include Tenantable
   include TimeMaterialable
   include TimeZoned
+  include Calendarable
 
   belongs_to :team
 
@@ -32,6 +34,10 @@ class User < ApplicationRecord
 
   enum :role, { user: 0, admin: 1, superadmin: 2 }
   has_one_attached :mugshot
+
+  #
+  # 6/10/2025 using it for unsubscribe links in emails!!!
+  #
   has_secure_token :pos_token
 
   has_secure_password
@@ -53,6 +59,10 @@ class User < ApplicationRecord
     uniqueness: { scope: :tenant_id, message: I18n.t("users.errors.messages.pincode_exist_for_tenant"), unless: ->(u) { u.pincode.blank? } }
 
   normalizes :email, with: ->(e) { e.strip.downcase }
+
+  def signed_in?
+    !current_sign_in_at.nil? && sessions.pluck(:updated_at).max > 8.hours.ago
+  end
 
   def confirm!
     update!(confirmed_at: Time.current, confirmation_token: nil)
@@ -100,6 +110,17 @@ class User < ApplicationRecord
     else
       all
     end
+  }
+
+  scope :with_effective_hourly_rate, ->(default_rate = "0") {
+    joins(:team).select(
+      "users.id, users.name",
+      "CASE
+        WHEN users.hourly_rate != 0 THEN users.hourly_rate
+        WHEN teams.hourly_rate != 0 THEN teams.hourly_rate
+        ELSE '#{default_rate}'
+      END as effective_hourly_rate"
+    )
   }
 
   scope :by_fulltext, ->(query) { where("email LIKE :query or role LIKE :query or locale  LIKE :query or time_zone LIKE :query", query: "%#{query}%") if query.present? }
@@ -236,15 +257,25 @@ class User < ApplicationRecord
     name.split(" ").map { |n| n[0] }.join.upcase
   end
 
-  def self.form(resource:, editable: true, registration: false)
-    registration ?
-      Users::Registrations::Form.new(resource: resource,
-        editable: editable,
+  def self.form(resource:, editable: true, registration: false, **options)
+    form_class = registration ? Users::Registrations::Form : Users::Form
+    default_options = if registration
+      {
         enctype: "multipart/form-data",
-        class: "group mort-form", method: :put,
-        data: { form_target: "form", profile_target: "buttonForm", controller: "profile password-strength" })
-      :
-      Users::Form.new(resource: resource, editable: editable, enctype: "multipart/form-data")
+        class: "group mort-form",
+        method: :put,
+        data: { form_target: "form", profile_target: "buttonForm", controller: "profile password-strength" }
+      }
+    else
+      { enctype: "multipart/form-data" }
+    end
+    LazyFormComponent.new(
+      form_class: form_class,
+      resource: resource,
+      editable: editable,
+      fields: options.delete(:fields) || [],
+      **default_options.merge(options)
+    )
   end
 
   def add_role
@@ -298,5 +329,18 @@ class User < ApplicationRecord
 
   def punches_settled_at
     Time.now
+  end
+
+  #
+  # get hourly rate for new time material
+  # first check user hourly_rate
+  # then check user.team.hourly_rate
+  def get_hourly_rate
+    return hourly_rate if hourly_rate != 0
+    return team.hourly_rate if team.hourly_rate != 0
+    tenant.time_products&.first&.base_amount_value
+    # rate || default(:default_time_material_rate, 0)
+  rescue
+    0
   end
 end

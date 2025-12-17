@@ -16,7 +16,7 @@ class Users::OtpsController < MortimerController
   def create
     @user = Current.user
     if @user.authenticate_otp(params[:user][:otp_code_token])
-      @user.update!(otp_enabled: true, otp_enabled_at: Time.current)
+      @user.update!(otp_enabled: true, otp_enabled_at: Time.current, otp_required_for_login: true)
       flash[:success] = t("devise.second_factor.enabled")
       render turbo_stream: [
         turbo_stream.remove("new_form_modal"),

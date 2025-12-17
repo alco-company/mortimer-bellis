@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_05_23_172511) do
+ActiveRecord::Schema[8.2].define(version: 2025_12_16_083809) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
@@ -43,6 +43,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_05_23_172511) do
     t.datetime "created_at", null: false
     t.string "job_id"
     t.string "job_klass"
+    t.text "job_progress"
     t.datetime "next_run_at"
     t.text "params"
     t.text "schedule"
@@ -406,7 +407,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_05_23_172511) do
 
   create_table "provided_services", force: :cascade do |t|
     t.string "account_for_one_off"
-    t.integer "authorized_by_id", null: false
+    t.integer "authorized_by_id"
     t.datetime "created_at", null: false
     t.datetime "last_sync_at"
     t.text "last_sync_status"
@@ -647,11 +648,13 @@ ActiveRecord::Schema[8.1].define(version: 2025_05_23_172511) do
     t.boolean "archived"
     t.datetime "completed_at"
     t.datetime "created_at", null: false
+    t.integer "customer_id"
     t.text "description"
     t.datetime "due_at"
     t.string "link"
     t.integer "priority"
     t.integer "progress"
+    t.integer "project_id"
     t.integer "state"
     t.integer "tasked_for_id"
     t.string "tasked_for_type"
@@ -659,6 +662,8 @@ ActiveRecord::Schema[8.1].define(version: 2025_05_23_172511) do
     t.string "title"
     t.datetime "updated_at", null: false
     t.text "validation"
+    t.index ["customer_id"], name: "index_tasks_on_customer_id"
+    t.index ["project_id"], name: "index_tasks_on_project_id"
     t.index ["tasked_for_type", "tasked_for_id"], name: "index_tasks_on_tasked_for"
     t.index ["tenant_id"], name: "index_tasks_on_tenant_id"
   end
@@ -678,6 +683,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_05_23_172511) do
     t.string "eu_state"
     t.string "hour_pay"
     t.integer "hour_rate_cent", default: 0
+    t.decimal "hourly_rate", precision: 11, scale: 2, default: "0.0", null: false
     t.string "locale"
     t.string "name"
     t.string "ot1_add_hour_pay"
@@ -729,6 +735,8 @@ ActiveRecord::Schema[8.1].define(version: 2025_05_23_172511) do
     t.boolean "is_separate"
     t.integer "kilometers"
     t.text "location_comment"
+    t.integer "lock_version"
+    t.datetime "minutes_reloaded_at"
     t.integer "odo_from"
     t.datetime "odo_from_time"
     t.integer "odo_to"
@@ -809,9 +817,11 @@ ActiveRecord::Schema[8.1].define(version: 2025_05_23_172511) do
     t.integer "team_id", default: 1, null: false
     t.integer "tenant_id", null: false
     t.string "time_zone", default: "UTC"
+    t.boolean "two_factor_app_enabled", default: false, null: false
+    t.datetime "two_factor_app_enabled_at"
     t.string "unlock_token"
     t.datetime "updated_at", null: false
-    t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["email"], name: "index_users_on_email"
     t.index ["invitation_token"], name: "index_users_on_invitation_token", unique: true
     t.index ["invited_by_id"], name: "index_users_on_invited_by_id"
     t.index ["invited_by_type", "invited_by_id"], name: "index_users_on_invited_by"
@@ -875,6 +885,8 @@ ActiveRecord::Schema[8.1].define(version: 2025_05_23_172511) do
   add_foreign_key "taggings", "users"
   add_foreign_key "tags", "tenants"
   add_foreign_key "tags", "users"
+  add_foreign_key "tasks", "customers"
+  add_foreign_key "tasks", "projects"
   add_foreign_key "tasks", "tenants"
   add_foreign_key "teams", "tenants"
   add_foreign_key "teams", "tenants", on_delete: :cascade

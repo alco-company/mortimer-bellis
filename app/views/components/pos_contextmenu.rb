@@ -1,7 +1,7 @@
-class PosContextmenu < Phlex::HTML
+class PosContextmenu < ApplicationComponent
   include Phlex::Rails::Helpers::Routes
   include Phlex::Rails::Helpers::LinkTo
-  include Rails.application.routes.url_helpers
+  # include Rails.application.routes.url_helpers
 
   attr_accessor :resource, :resource_class, :list, :user, :punch_clock
 
@@ -24,7 +24,7 @@ class PosContextmenu < Phlex::HTML
   def folded
     div(data_controller: "contextmenu", class: "relative flex-none") do
       whitespace
-      link_to(helpers.pos_employee_punches_url(id: resource.id, user_id: employee&.id, punch_clock_id: punch_clock&.id), data: { turbo_stream: "" }) do
+      link_to(pos_employee_punches_url(id: resource.id, user_id: employee&.id, punch_clock_id: punch_clock&.id), data: { turbo_stream: "" }) do
         whitespace
         span(class: "sr-only") { "Get todays punches" }
         whitespace
@@ -99,12 +99,12 @@ class PosContextmenu < Phlex::HTML
       whitespace
       comment { %(Active: "bg-gray-50", Not Active: "") }
       whitespace
-      link_to helpers.pos_delete_all_url(date: resource.punched_at.to_date),
+      link_to pos_delete_all_url(date: resource.punched_at.to_date),
         data: { turbo_method: :delete, turbo_confirm: "Are you sure?", turbo_stream: true, action: "click->contextmenu#hide" },
         class: "block px-3 py-1 text-sm leading-6 text-gray-900",
         role: "menuitem",
         tabindex: "-1" do
-        plain I18n.t(".delete_all")
+        plain t(".delete_all")
         span(class: "sr-only") do
           plain ", "
           plain "delete all"
@@ -135,7 +135,7 @@ class PosContextmenu < Phlex::HTML
         role: "menuitem",
         data: { turbo_action: "advance", turbo_frame: @turbo_frame, turbo_stream: true },
         tabindex: "-1") do
-        plain I18n.t(".edit")
+        plain t(".edit")
         span(class: "sr-only") do
           plain ", "
           plain resource.name rescue ""
@@ -147,7 +147,7 @@ class PosContextmenu < Phlex::HTML
         role: "menuitem",
         tabindex: "-1",
         data: { turbo_method: :delete, turbo_confirm: "Are you sure?" }) do
-        plain I18n.t(".delete")
+        plain t(".delete")
       end
     end
   end

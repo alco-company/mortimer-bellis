@@ -2,18 +2,18 @@
 
 one:
   tenant: one
-  setable: one
-  setable_type: Setable
-  key: MyString
+  setable_id:
+  setable_type: User
+  key: delegate_time_materials
   priority: 1
-  formating: MyString
-  value: MyString
+  formating:
+  value: "true"
 
 two:
-  tenant: two
-  setable: two
-  setable_type: Setable
-  key: deleteable
+  tenant: one
+  setable_type: User
+  setable_id: <%= ActiveRecord::FixtureSet.identify(:two) %>
+  key: delegate_time_materials
   priority: 1
-  formating: MyString
-  value: MyString
+  formating:
+  value: "false"

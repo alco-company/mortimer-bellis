@@ -1,6 +1,9 @@
 da:
   product:
     modal:
+      setting_all:
+        title: Indstillinger for produkter
+        instruction: Her kan du indstille hvordan produkter skal fungere i Mortimer.
       delete_all: 
         title: Slet alle produkter
         instruction: Er du sikker på, at du vil slette alle produkter?

@@ -2,6 +2,7 @@ da:
   devise:
     failure:
       invited: "Du har en uafsluttet invitation, accepter den for at færdiggøre oprettelsen af din konto."
+      invitation_failed: "Det lykkedes ikke at sende invitationen til %{invitee}."
     invitations:
       send_instructions: "En inviterende email er blev sendt til %{email}."
       send_instructions_count: "En inviterende email er blev sendt til %{count} personer."
@@ -23,7 +24,7 @@ da:
       invitation_instructions:
         hello: "Hej"
         page_title: "Invitation til at oprette en brugerprofil på Mortimer"
-        subject: "Invitation til at oprette en brugerprofil på  M O R T I M E R"
+        subject: "Invitation til at oprette en brugerprofil på  MORTIMER"
         preheader: "Invitation til at oprette en brugerprofil på Mortimer"
         hi: "Hej"
         title: "Er %{email} din email adresse?"

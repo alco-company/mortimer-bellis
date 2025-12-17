@@ -6,7 +6,7 @@ class ProvidedServices::Form < ApplicationForm
     row field(:product_for_time).input()
     row field(:product_for_overtime).input()
     row field(:product_for_overtime_100).input()
-    row field(:product_for_mileage).input()
+    # row field(:product_for_mileage).input()
     row field(:account_for_one_off).input()
     # row field(:product_for_hardware).input()
     hr

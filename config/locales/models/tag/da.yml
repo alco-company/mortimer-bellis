@@ -2,6 +2,9 @@ da:
 
   tag:
     modal:
+      setting_all:
+        title: Indstillinger for mærker
+        instruction: Her kan du indstille hvordan mærker skal fungere i Mortimer.
       delete_all: 
         title: Slet alle mærker
         instruction: Er du sikker på, at du vil slette alle mærker?

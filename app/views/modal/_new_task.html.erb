@@ -1,0 +1,5 @@
+<div data-controller="task form" data-action="keydown->form#keydown">
+  <div id="backdrop" data-form-target="backdrop"></div>
+  <div id="panel" data-form-target="panel"></div>
+  <%= render Task.modal_form resource: resource, editable: true %>
+</div>

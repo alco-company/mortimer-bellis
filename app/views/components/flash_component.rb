@@ -20,7 +20,7 @@ class FlashComponent < ApplicationComponent
       #  "Global notification live region, render this permanently at the end of the document"
       div(class: "flex w-full flex-col items-center space-y-4 sm:items-end") do
         messages.each do |type, msg|
-          render ToastComponent.new(type: type, message: msg, title: I18n.t(type)) if msg.class == String
+          render ToastComponent.new(type: type, message: msg, title: t(type)) if msg.class == String
           # flash_message(type, msg) if msg.class == String
           # p(data_controller: "notice", class: "mort-flash-#{type}", id: "flash_#{type}") { msg }
         end

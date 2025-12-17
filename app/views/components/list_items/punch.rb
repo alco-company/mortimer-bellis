@@ -11,6 +11,8 @@ class ListItems::Punch < ListItems::ListItem
   # comment
 
   def show_secondary_info
-    plain "%s %s " % [ resource.punch_clock&.name, resource.state ]
+    p(class: "text-sm font-medium text-gray-900 dark:text-white") do
+      plain "%s %s " % [ resource.punch_clock&.name, resource.state ]
+    end
   end
 end

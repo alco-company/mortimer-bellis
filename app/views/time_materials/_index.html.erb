@@ -1,0 +1,2 @@
+<% @records = eval(sql_stmt); %>
+<%= render List.new records: @records, pagy: @pagy, replace: replace, params: params, order_by: {wdate: :desc}, user: user %>

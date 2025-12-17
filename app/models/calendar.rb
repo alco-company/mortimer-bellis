@@ -1,5 +1,7 @@
 class Calendar < ApplicationRecord
   include Tenantable
+  include Settingable
+
   belongs_to :calendarable, polymorphic: true
   has_many :events, dependent: :destroy
 

@@ -18,7 +18,7 @@ export default class extends Controller {
     document.body.classList.add('lock-scroll'); // For body
     
     if (this.backdropTarget) enter(this.backdropTarget);
-    enter(this.panelTarget);
+    if (this.panelTarget) enter(this.panelTarget);
   }
 
   disconnect() {
@@ -61,10 +61,12 @@ export default class extends Controller {
     } else {
       switch (e.key) {
         case "Escape":
-          leave(this.backdropTarget);
-          leave(this.panelTarget).then(() => {
-            this.cancelFormTarget.click();
-          });
+          if (this.backdropTarget) leave(this.backdropTarget);
+          if (this.panelTarget) 
+            leave(this.panelTarget)
+            .then(() => {
+              this.cancelFormTarget.click();
+            });
           break;
         case "Enter":
           this.submitForm(e);
@@ -96,7 +98,7 @@ export default class extends Controller {
 
   submitForm(e) {
     e.preventDefault();
-    leave(this.backdropTarget);
+    if (this.backdropTarget) leave(this.backdropTarget);
     leave(this.panelTarget)
     .then(() => {
       this.formTarget.requestSubmit();

@@ -23,28 +23,26 @@ class ListItems::ListItem < ApplicationComponent
   end
 
   def html_list
-    div(id: (dom_id resource), class: "list_item relative bg-gray-50", data: { list_target: "item", controller: "list-item" }) do
-      div(class: "flex grow min-w-0 gap-x-4") do
-        show_left_mugshot
-        div(class: "min-w-0 flex-auto") do
-          p(class: "text-sm font-semibold leading-6 text-gray-900 truncate") do
+    div(id: (dom_id resource), class: "list_item group", data: { list_target: "item", controller: "list-item" }) do
+      div(class: "relative flex justify-between gap-x-6 px-4 py-2 group-hover:bg-gray-50 sm:px-6 dark:group-hover:bg-white/2.5 ") do
+        div(class: "flex min-w-0 gap-x-2") do
+          show_left_mugshot
+          div(class: "min-w-0 flex-auto ") do
             show_recipient_link
-          end
-          p(class: "mt-1 flex text-xs leading-5 text-gray-500") do
             show_matter_link
           end
         end
-      end
-      div(class: "flex shrink-0 items-center gap-x-6") do
-        div(class: "hidden 2xs:flex 2xs:flex-col 2xs:items-end") do
-          p(class: "text-sm leading-6 text-gray-900") do
-            show_secondary_info
+        div(class: "flex shrink-0 items-center") do
+          div(class: "flex -mt-1 items-center") do
+            div(class: "flex flex-col items-end") do
+              div(class: "flex flex-row") do
+                show_secondary_info
+              end
+              p(class: "truncate text-xs/5 text-gray-500 dark:text-gray-400") { show_time_info }
+            end
           end
-          p(class: "mt-1 text-xs leading-5 text-gray-500 flex items-center") do
-            show_time_info
-          end
+          render_context_menu "relative justify-self-center"
         end
-        render_context_menu
       end
     end
   end
@@ -69,34 +67,52 @@ class ListItems::ListItem < ApplicationComponent
 
 
   def show_recipient_link
-    link_to resource_url, data: { turbo_action: "advance", turbo_frame: "form", tabindex: "-1" }, class: "hover:underline" do
-      plain resource.name
-    end
-  end
-
-  def show_matter_link
-    show_matter_mugshot
-    if user&.global_queries? && resource.respond_to?(:tenant)
-      span(class: "hidden md:inline text-xs mr-2 truncate ") { show_resource_link(resource.tenant) }
-    end unless resource_class == Tenant
-    span(class: "md:inline text-xs truncate") do
-      link_to(resource_url,
-        class: "truncate hover:underline inline grow flex-nowrap",
-        data: { turbo_action: "advance", turbo_frame: "form" },
-        tabindex: -1) do
-        span(class: "2xs:hidden") { show_secondary_info }
+    p(class: "text-sm/6 font-semibold text-gray-900 dark:text-white") do
+      link_to resource_url, data: { turbo_action: "advance", turbo_frame: "form", tabindex: "-1" }, class: "hover:underline" do
         plain resource.name
       end
     end
   end
 
-  def show_secondary_info
-    plain "implement show_secondary_info"
+  def show_matter_link
+    div(class: "flex flex-row items-center") do
+      show_matter_mugshot
+      if user&.global_queries? && resource.respond_to?(:tenant)
+        span(class: "hidden md:inline text-xs mr-2 truncate ") { show_resource_link(resource: resource.tenant) }
+      end unless resource_class == Tenant
+      span(class: "md:inline text-xs truncate") do
+        link_to(resource_url,
+          class: "truncate hover:underline inline grow flex-nowrap",
+          data: { turbo_action: "advance", turbo_frame: "form" },
+          tabindex: -1) do
+          span(class: "2xs:hidden") { show_secondary_info }
+          plain resource.name
+        end
+      end
+    end
   end
+
+  def show_secondary_info
+    p(class: "text-sm font-medium text-gray-900 dark:text-white") do
+      plain "implement show_secondary_info"
+    end
+  end
+  #
+  # show_secondary_info is placed in the upper right corner of the ListItem
+  #
+  # def show_secondary_info(resource:)
+  #   case resource.class.name
+  #   when "User"
+  #   when "TimeMaterial"; show_time_material_quantative resource: resource
+  #   else; ""
+  #   end
+  # end
+
+
 
   def show_time_info
     span(class: "truncate") do
-      plain I18n.l resource.created_at, format: :date
+      plain l(resource.created_at, format: :date)
     end
   end
 
@@ -131,7 +147,8 @@ class ListItems::ListItem < ApplicationComponent
       turbo_frame: "form",
       resource_class: resource_class,
       alter: true,
-      links: [ edit_resource_url, resource_url ]
+      links: [ edit_resource_url, resource_url ],
+      user: user
   end
 
   #

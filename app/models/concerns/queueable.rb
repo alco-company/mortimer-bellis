@@ -6,17 +6,18 @@ module Queueable
     # once saved - make sure this job is getting
     # planned to run
     #
-    after_save :plan_job
+    # after_save :plan_job
 
     #
     # when the background_job has performed
     # it will callback and make sure the job_id
-    # is reset
+    # is reset and next run is scheduled
     def job_done
       begin
-        schedule.blank? ? persist(nil, nil) : plan_job
+        schedule.blank? ? finish_job : plan_job(false)
       rescue => exception
-        say "BackgroundJob.job_done failed due to #{exception}"
+        Rails.logger.error "BGJ BackgroundJob.job_done failed due to #{exception}"
+        Rails.logger.error exception.backtrace.join("\n")
         [ nil, nil ]
       end
     end
@@ -28,7 +29,7 @@ module Queueable
       begin
         schedule.blank? ? persist(nil, nil) : plan_job(false)
       rescue => exception
-        say "BackgroundJob.job_done failed due to #{exception}"
+        say "BGJ BackgroundJob.dropped_plan_next failed due to #{exception}"
         [ nil, nil ]
       end
     end
@@ -37,7 +38,7 @@ module Queueable
     # when resetting for a new 'day' remove the
     # next_run_at
     def job_reset
-      persist nil, nil
+      persist nil, nil, 0
     end
 
     # if job.schedule
@@ -45,14 +46,23 @@ module Queueable
     # and return the job id and planned run at time
     #
     def plan_job(first = true)
+      return unless active?
+
       begin
-        t = active? ? self.next_run(schedule, first) : nil
-        if next_run_at && t
+        t = self.next_run(schedule, first)
+        # When rescheduling after completion (first=false), always use the new calculated time
+        # When scheduling for the first time (first=true), keep the earlier time if one exists
+        if next_run_at && t && first
           t = Time.at(t).in_time_zone("UTC") < Time.at(next_run_at).in_time_zone("UTC") ? t : next_run_at
         end
-        t ? run_job(t) : persist(nil, nil)
+        Rails.logger.info "BGJ plan_job: schedule=#{schedule}, first=#{first}, calculated next_run=#{t}, Time.at(t)=#{Time.at(t) rescue 'ERROR'}"
+        result = t ? run_job(t) : persist(nil, nil)
+        result
       rescue => exception
-        say "BackgroundJob.plan_job failed due to #{exception}"
+        Rails.logger.error "BGJ plan_job failed: #{exception.message}"
+        Rails.logger.error exception.backtrace.join("\n")
+        say "BGJ plan_job failed due to #{exception}"
+        nil
       end
     end
 
@@ -69,19 +79,77 @@ module Queueable
     #
     def run_job(t = nil)
       begin
-        return if shouldnt?(:run)
-        o = set_parms
-        w = job_klass.constantize
-        id = t ? (w.set(wait_until: Time.at(t).in_time_zone("UTC")).perform_later(**o)).job_id : (w.perform_later(**o)).job_id
-        t = Time.at(t.to_i).utc rescue nil
-        persist id, t
+        Rails.logger.info "BGJ tenant #{tenant&.name} settings: #{tenant&.settings&.where(key: :run)&.pluck(:value)}"
+
+        # Check if a valid scheduled job already exists
+        run_existing_job(t) || run_a_new_job(t)
+
       rescue => exception
-        say "BackgroundJob.run_job failed due to #{exception}"
+        Rails.logger.error "BGJ run_job failed: #{exception.message}"
+        Rails.logger.error exception.backtrace.join("\n")
+        say "BGJ run_job failed due to #{exception}"
+        nil
       end
+    end
+
+    def run_existing_job(t)
+      if job_id.present?
+        existing_job = SolidQueue::Job.find_by(active_job_id: job_id)
+        # If job exists and hasn't been executed yet (finished_at is nil), we can reuse it
+        if existing_job && existing_job.finished_at.nil?
+          if t
+            t_obj = Time.at(t.to_i).utc rescue nil
+            if t_obj < existing_job.scheduled_at
+              Rails.logger.info "BGJ run_job: existing job #{job_id} found (scheduled_at: #{existing_job.scheduled_at}), but new scheduled time #{t_obj} is earlier, updating next_run_at - possibly manually triggered"
+              # Convert timestamp to Time object, but guard against nil/0
+              # Just update our record with the (possibly new) next_run_at time
+              # State should already be 2 (planned) since the job exists
+              existing_job.discard if persist(job_id, t_obj, 2)
+              false
+            else
+              Rails.logger.info "BGJ run_job: existing job #{job_id} found (scheduled_at: #{existing_job.scheduled_at}), skipping duplicate scheduling"
+              true
+            end
+          end
+        else
+          Rails.logger.info "BGJ run_job: job_id #{job_id} exists but job already finished or doesn't exist, creating new job"
+          false
+        end
+      else
+        false
+      end
+    end
+
+    def run_a_new_job(t)
+      o = set_parms
+      w = job_klass.constantize
+      s = 2
+      id = nil
+      Rails.logger.info "BGJ run_job: params=#{o.inspect}, w=#{w}, state=#{s}"
+      if t
+        Rails.logger.info "BGJ run_job: t=#{t}"
+        id = (w.set(wait_until: Time.at(t).in_time_zone("UTC")).perform_later(**o)).job_id
+        Rails.logger.info "BGJ run_job: scheduled with wait_until, id=#{id}"
+      else
+        id = (w.perform_later(**o)).job_id
+        Rails.logger.info "BGJ run_job: later id=#{id}"
+        s = 3
+      end
+      # Convert timestamp to Time object, but guard against nil/0 which becomes 1970-01-01
+      t_obj = t ?
+        (Time.at(t.to_i).utc rescue nil) :
+        Time.now.utc
+
+      Rails.logger.info "BGJ run_job: job_id=#{id}, next_run_at=#{t_obj}, state=#{s}"
+      persist(id, t_obj, s)
     end
 
     def run_or_plan_job
       schedule.blank? ? run_job : plan_job
+    end
+
+    def get_parms
+      set_parms
     end
 
     #
@@ -100,6 +168,7 @@ module Queueable
       end
       o[:tenant] ||= tenant
       o[:user] ||= user
+      o[:background_job] = self
       o
     end
 
@@ -144,19 +213,42 @@ module Queueable
     # crontask, dt=nil, number=0, scope='today', only_later=true
     # return the first - after DateTime.current - back
     #
+    # Cron schedules are interpreted as UTC times.
+    # The database stores UTC, and the UI layer is responsible for
+    # displaying times in each user's local timezone.
+    #
     def cron_runs(schedule, first)
-      # crontask, dt=nil, number=0, scope='today', only_later=true
-      CronTask::CronTask.next_run(schedule: schedule, scope: "week", index: (first ? 0 : 1))
+      # BUG FIX: Always use index: 0 to get the next occurrence from now.
+      # The 'first' parameter indicates initial scheduling vs rescheduling,
+      # but both should return the next occurrence, not the second one.
+      next_run = CronTask::CronTask.next_run(schedule: schedule, scope: "week", index: 0)
+
+      Rails.logger.info "BGJ cron_runs: schedule=#{schedule}, first=#{first}, next_run=#{next_run}, Time.at(next_run)=#{Time.at(next_run) rescue 'ERROR'}"
+
+      # Safety check: ensure next_run is in the future (at least 10 seconds from now)
+      # to prevent immediate re-execution if the job took longer than expected
+      if next_run && Time.at(next_run) <= Time.current + 60.seconds
+        # If the returned time is not sufficiently in the future, get the second occurrence
+        next_run = CronTask::CronTask.next_run(schedule: schedule, scope: "week", index: 1)
+        Rails.logger.info "cron_runs: Using index 1, next_run=#{next_run}"
+      end
+
+      next_run
     end
 
     #
     # persist job_id and next_run_at
     # and broadcast the update
     #
-    def persist(job_id, next_run_at)
-      update_columns job_id: job_id, next_run_at: next_run_at
+    def persist(job_id, next_run_at, state = 2)
+      Rails.logger.info "BGJ persist: job_id=#{job_id}, next_run_at=#{next_run_at}, state=#{state}"
+      state = 5 if job_id.nil? && next_run_at.nil?
+      r = false
+      ActiveRecord::Base.connected_to(role: :writing) do
+        r = update_columns job_id: job_id, next_run_at: next_run_at, state: state
+      end
       # broadcast_update
-      [ job_id, next_run_at ]
+      r # [ job_id, next_run_at ]
     end
   end
 
@@ -178,11 +270,11 @@ module Queueable
       # end
     end
 
-    def running?
-      # ss = Sidekiq::ScheduledSet.new
-      # jobs = ss.scan("BackgroundProcessingJob")
-      # jobs.any?
-    end
+    # def running?
+    #   # ss = Sidekiq::ScheduledSet.new
+    #   # jobs = ss.scan("BackgroundProcessingJob")
+    #   # jobs.any?
+    # end
 
 
     #

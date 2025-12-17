@@ -1,13 +1,13 @@
-<%= t("devise.mailer.invitation_instructions.hello", email: @resource.email) %>
 
-<%= t("devise.mailer.invitation_instructions.someone_invited_you", url: root_url, sender: @resource.invited_by.name, tenant: @resource.tenant.name) %>
+<%= I18n.t("user_mailer.salutations", name: @name) %>
 
+<%= t("user_mailer.invitation_instructions.introduction", url: root_url, sender: @resource.invited_by.name, tenant: @resource.tenant.name) %>
+
+<%= I18n.t("user_mailer.invitation_instructions.action") %>
 <%= @accept_url %>
 
-<%= t("devise.mailer.invitation_instructions.ignore") %>
+<%== I18n.t("user_mailer.invitation_instructions.accept_until", due_date: (@resource.invitation_expires_at.to_s(:long) rescue 2.days.since)) %>
 
-<%= @invitation_message %>
+<%== I18n.t("user_mailer.invitation_instructions.ignore") %>
 
-<%= t("devise.mailer.invitation_instructions.regards") %>
-<%= @resource.tenant.name %>
-<%= @resource.invited_by.name %>
+<%= render MortimerMailSignature.new format: :text %>

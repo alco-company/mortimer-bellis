@@ -7,10 +7,10 @@ class WorkScheduleTemplateList < ApplicationComponent
   def view_template(&block)
     div(class: "grid gap-x-4 grid-cols-1 xl:grid-cols-2") do
       div(data: { toggle_button_target: "newTemplate" }, class: "hidden my-4 w-full grid grid-cols-2") do
-        p(class: "col-span-2 my-2 ") { I18n.t("calendar.template.instructions_1") }
-        p(class: "col-span-2 my-2 ") { I18n.t("calendar.template.instructions_2") }
-        p(class: "col-span-2 my-2 ") { I18n.t("calendar.template.instructions_3") }
-        label(class: "my-2 font-bold mx-2 ") { I18n.t("calendar.template.event_name") }
+        p(class: "col-span-2 my-2 ") { t("calendar.template.instructions_1") }
+        p(class: "col-span-2 my-2 ") { t("calendar.template.instructions_2") }
+        p(class: "col-span-2 my-2 ") { t("calendar.template.instructions_3") }
+        label(class: "my-2 font-bold mx-2 ") { t("calendar.template.event_name") }
         input(type: "text", name: "event[name]", class: "mort-form-text my-2")
         render SelectComponent.new(resource: Event.new,
           field: :color,
@@ -19,7 +19,7 @@ class WorkScheduleTemplateList < ApplicationComponent
           value_class: "mt-2 ",
           collection: Team.colors,
           show_label: true,
-          prompt: I18n.t(".select_team_color"),
+          prompt: t(".select_team_color"),
           editable: true)
         button(type: "submit", class: "col-span-2 place-self-end mort-btn-primary") { "Gem" }
       end

@@ -15,16 +15,18 @@ module Serviceable
     def time_products
       if has_service("Dinero")
         es = provided_services.where(name: "Dinero").first
-        tp= products.where(product_number: [ es.product_for_time, es.product_for_overtime, es.product_for_overtime_100 ]).order :base_amount_value
+        tp= products.where(product_number: [ es.product_for_time, es.product_for_overtime, es.product_for_overtime_100 ]) # .order :base_amount_value
       else
         tp= products.where("product_number like ?", "Time%").order(:base_amount_value).take(3)
       end
       return tp if tp.count > 0
-      [
-        SimpleProduct.new("Time", 100),
-        SimpleProduct.new("Time50", 150),
-        SimpleProduct.new("Time100", 200)
-      ]
+
+      # [
+      #   SimpleProduct.new("Time", 100),
+      #   SimpleProduct.new("Time50", 150),
+      #   SimpleProduct.new("Time100", 200)
+      # ]
+      nil
     end
   end
 

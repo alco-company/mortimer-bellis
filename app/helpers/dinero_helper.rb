@@ -1,2 +1,0 @@
-module DineroHelper
-end

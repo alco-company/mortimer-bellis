@@ -1,6 +1,9 @@
 da:
   invoice:
     modal:
+      setting_all:
+        title: Indstillinger for fakturaer
+        instruction: Her kan du indstille hvordan fakturaer skal fungere i Mortimer.
       delete_all: 
         title: Slet alle fakturaer
         instruction: Er du sikker på, at du vil slette alle fakturaer?
@@ -11,6 +14,15 @@ da:
         button: Slet
 
   invoices:
+
+    list:
+      title: Fakturaer
+      new: Ny faktura
+      edit: Rediger
+      delete: Slet
+      show: Vis
+      updated_at: Opdateret den
+
     validation_errors: Der er fejl i det indtastede
 
     

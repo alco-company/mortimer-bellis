@@ -1,9 +1,9 @@
 module BackgroundJobsHelper
   def show_background_job_toggle_label
     if Tenant.first.background_jobs.build.shouldnt? :run
-      "Start Background Jobs"
+      t("settings.run.start")
     else
-      "Stop Background Jobs"
+      t("settings.run.stop")
     end
   end
 end

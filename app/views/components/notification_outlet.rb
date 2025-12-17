@@ -1,7 +1,4 @@
-class NotificationOutlet < Phlex::HTML
-  include Phlex::Rails::Helpers::TurboFrameTag
-  include Phlex::Rails::Helpers::ImageTag
-
+class NotificationOutlet < ApplicationComponent
   def initialize(enable: "hidden", disabled: "hidden")
     @enable = enable
     @disabled = disabled
@@ -17,7 +14,7 @@ class NotificationOutlet < Phlex::HTML
         data_action: " click->profile#enable"
       ) do
         span(class: "group-aria-busy:hidden block") do
-          plain I18n.t("enable_notifications")
+          plain t("enable_notifications")
         end
         div(class: "group-aria-busy:block hidden") do
           image_tag "motion-blur.svg", class: "size-6 fill-white"
@@ -36,7 +33,7 @@ class NotificationOutlet < Phlex::HTML
         data_profile_target: "disableNotifications",
         data_action: " click->profile#disable"
       ) do
-        plain I18n.t("disable_notifications")
+        plain t("disable_notifications")
       end
     end
   end

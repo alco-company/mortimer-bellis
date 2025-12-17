@@ -76,16 +76,55 @@ en:
         action: Slet!
 
   user_mailer:
+    salutations: Hello %{name}
+    regards: Best regards
     welcome:
-      subject: Velkommen til vores service
-      body: |
-        Hej %{name},
-        Velkommen til vores service.
+      title: "ding ding!"
+      subject: "ding ding !"
+      message: "another rodent in the trap! The registrant is %{email} - "
+    invitation_instructions:
+      page_title: "Invitation to setting up a user profile on Mortimer"
+      subject: "Invitation to setting up a user profile on MORTIMER"
+      title: "Is %{email} your email address?"
+      introduction: "%{sender} at %{tenant} has invited you to complete the creation of a user profile at %{url}. You can accept the invitation by clicking the button below."
+      accept: "Yes, this is my email address"
+      action: "I accept the invitation"
+      accept_until: "The invitation is valid until %{due_date}."
+      ignore: "If you do not wish to accept the invitation, you do not need to do anything (perhaps apart from possibly throwing the email away). <br /><br />Your user account will only be created at the moment you click the button above, and then enter your password."
+    confirmation_instructions:
+      title: "Instruction"
+      subject: "Instructions for confirming your email address"
+      introduction: "We are very happy to see you here! To avoid any surprises, we need to confirm your email address. You can do this by clicking the button below."
+      action: "I accept the creation of my user profile"
+      ignore: "If you have changed your mind, do not wish to create your profile after all, or have received this email by mistake, you do not need to do anything (perhaps apart from possibly throwing the email away). <br /><br />Your user account will only be created at the moment you click the button above."
+    reset_password_instructions:
+      title: "Instruction"
+      subject: "Instructions for resetting your password"
+      hello: "Hello %{email},"
+      introduction: "Someone has requested to reset your password. You can do this by clicking the button below."
+      action: "Reset my password"
+      ignore: "If you have changed your mind, do not wish to reset your password after all, or have received this email by mistake, you do not need to do anything (perhaps apart from possibly throwing the email away). Your password will only be reset at the moment you click the button above."
+    confetti:
+      title: "Success!"
+      subject: "Celebrating your first clock-in"
+      you: "%{name} - you just clocked in for the first time on MORTIMER. Congratulations! You are now part of the team at <strong>%{tenant}</strong>."
+      introduction: "Remember that time tracking is in your own interest! You can use it in conversations with your manager, for your personal development, and if you need to document your working hours."
+      rights: "You have the right to view and correct your own data, and you can delete your profile if you no longer work at the company. The company must retain your data for 5 years. If you have any questions, please contact your manager."
+    user_farewell:
+      title: "Your account has been deleted!"
+      subject: "Oh no! You have been deleted from MORTIMER - and we are sorry to see you go!"
+      you: "%{name} - whatever the reason, your account has been deleted on MORTIMER. You no longer need to worry about <strong>%{tenant}</strong> - you can now simply delete this email, and everything will be removed."
+      introduction: "You have exercised your right to delete your profile - or your guardian has made the choice - and along with it, deleted all data about you."
+      rights: "The only data that remains is the data that we are required to keep for 5 years. If you have any questions, please talk to your guardian."
+    farewell:
+      title: "It's a pity but your account has been deleted!"
+      subject: "Oh no! You have been deleted from MORTIMER - and we are sorry to see you go!"
+      you: "%{name} - regardless of whether it was your own doing or us who had to do it, your account has been deleted on MORTIMER. You no longer need to worry about <strong>%{tenant}</strong> - and if it was your own choice, you can now simply delete this email, and everything will have been removed."
+      introduction: "You have exercised your right to delete your profile - or your guardian has made the choice - and along with it, deleted all data about you."
+      rights: "The only data that remains is the data that we are required to keep for 5 years. If you have any questions, please talk to your guardian."
 
 
-        Med venlig hilsen
-        M O R T I M E R
-        
+
   devise:
     login: "Log in"
     remember_me: "Remember me"

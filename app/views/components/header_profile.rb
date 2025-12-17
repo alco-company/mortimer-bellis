@@ -1,8 +1,5 @@
-class HeaderProfile < Phlex::HTML
-  include Phlex::Rails::Helpers::ImageTag
+class HeaderProfile < ApplicationComponent
   include Phlex::Rails::Helpers::LinkTo
-
-
 
   # <div class="flex items-center">
   #   <img src="your-logo.png" alt="Logo" class="h-10 w-10 mr-4">
@@ -11,8 +8,6 @@ class HeaderProfile < Phlex::HTML
   #     <p class="text-sm text-gray-500">Du loggede ind kl torsdag d. 1. maj 2025, 10.26 og din session udløber om 5 dage, 21 timer og 47 minutter</p>
   #   </div>
   # </div>
-
-
 
   def view_template
     return unless Current.user
@@ -85,7 +80,7 @@ class HeaderProfile < Phlex::HTML
     #                 if Current.user.user?
     #                   plain Current.user.tenant.name
     #                 else
-    #                   link_to Current.user.tenant.name, helpers.edit_tenant_path(Current.user.tenant), class: "mort-link-primary", data: { turbo_stream: true, turbo_action: "advance", turbo_frame: "form" }
+    #                   link_to Current.user.tenant.name, edit_tenant_path(Current.user.tenant), class: "mort-link-primary", data: { turbo_stream: true, turbo_action: "advance", turbo_frame: "form" }
     #                 end
     #               end
     #               render SessionInformation.new Current.user
@@ -114,7 +109,7 @@ class HeaderProfile < Phlex::HTML
     #         end
     #       end
     #       # div(class: "mt-6 flex space-x-3 md:ml-4 md:mt-0") do
-    #       #   link_to(I18n.t("profile.invite_new_user"), helpers.users_invitations_new_url, class: "mort-btn-primary", role: "menuitem", tabindex: "-1", id: "user-menu-item-0") unless Current.user.user?
+    #       #   link_to(t("profile.invite_new_user"), users_invitations_new_url, class: "mort-btn-primary", role: "menuitem", tabindex: "-1", id: "user-menu-item-0") unless Current.user.user?
     #       # end
     #       # div(class: "mort-field ml-2 ") do
     #       #   form(class: "group m-0", data: { profile_target: "buttonForm" }) do
@@ -123,7 +118,7 @@ class HeaderProfile < Phlex::HTML
     #       #         action: "click->profile#enable",
     #       #         profile_target: "enableNotifications"
     #       #       }) do
-    #       #         span(class: "group-aria-busy:hidden block") { I18n.t("enable_notifications") }
+    #       #         span(class: "group-aria-busy:hidden block") { t("enable_notifications") }
     #       #         div(class: "group-aria-busy:block hidden") do
     #       #           image_tag "motion-blur.svg", class: "size-6 fill-white"
     #       #         end
@@ -142,10 +137,10 @@ class HeaderProfile < Phlex::HTML
   def salutation
     user_name = Current.user.name
     case Time.now.hour
-    when 0..4; I18n.t("salutations.good_night", name: user_name)
-    when 5..11; I18n.t("salutations.good_morning", name: user_name)
-    when 12..17; I18n.t("salutations.good_afternoon", name: user_name)
-    when 18..23; I18n.t("salutations.good_evening", name: user_name)
+    when 0..4; t("salutations.good_night", name: user_name)
+    when 5..11; t("salutations.good_morning", name: user_name)
+    when 12..17; t("salutations.good_afternoon", name: user_name)
+    when 18..23; t("salutations.good_evening", name: user_name)
     end
   end
 
@@ -169,7 +164,7 @@ class HeaderProfile < Phlex::HTML
         if Current.user.user?
           plain Current.user.tenant.name
         else
-          link_to Current.user.tenant.name, helpers.edit_tenant_path(Current.user.tenant), class: "mort-link-primary", data: { turbo_stream: true, turbo_action: "advance", turbo_frame: "form" }
+          link_to Current.user.tenant.name, edit_tenant_path(Current.user.tenant), class: "mort-link-primary", data: { turbo_stream: true, turbo_action: "advance", turbo_frame: "form" }
         end
       end
     end

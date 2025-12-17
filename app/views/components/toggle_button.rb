@@ -32,7 +32,7 @@ class ToggleButton < ApplicationComponent
           span(class: "sr-only") { "Use setting" }
           span(
             aria_hidden: "true",
-            class: "pointer-events-none absolute h-full w-full rounded-md bg-white"
+            class: "pointer-events-none absolute h-full w-full rounded-md bg-transparent"
           )
           comment { %(Enabled: "bg-sky-600", Not Enabled: "bg-gray-200") }
           span(
@@ -54,13 +54,13 @@ class ToggleButton < ApplicationComponent
   end
 
   def setValue
-    (value == true || value.to_s == "1") ? "1" : "0"
+    (value == true || value == "true" || value.to_s == "1") ? "1" : "0"
   end
   def setIndicator
-    (value == true || value.to_s == "1") ? "bg-sky-600" : "bg-gray-200"
+    (value == true || value == "true" || value.to_s == "1") ? "bg-sky-600" : "bg-gray-200"
   end
   def setHandle
-    (value == true || value.to_s == "1") ? "translate-x-5" : "translate-x-0"
+    (value == true || value == "true" || value.to_s == "1") ? "translate-x-5" : "translate-x-0"
   end
 end
 

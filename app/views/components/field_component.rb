@@ -1,4 +1,4 @@
-class FieldComponent < Phlex::HTML
+class FieldComponent < ApplicationComponent
   include Phlex::Rails::Helpers::Routes
   include Phlex::Rails::Helpers::LinkTo
   include Phlex::Rails::Helpers::OptionsForSelect
@@ -53,7 +53,7 @@ class FieldComponent < Phlex::HTML
         value: "#{selected}|#{value}"
       )
       span(class: "text-sm font-semibold leading-6") do
-        plain I18n.t("activerecord.attributes.#{model_name}.#{field}")
+        plain t("activerecord.attributes.#{model_name}.#{field}")
       end
       span(class: "ml-2 text-sm font-thin") { field_value }
     end
@@ -61,7 +61,7 @@ class FieldComponent < Phlex::HTML
 
   def string_field_input
     div(class: "mort-field grid grid-cols-5 gap-2") do
-      label(class: "col-span-5", for: "id_#{model_name}-#{field}") { I18n.t("activerecord.attributes.#{model_name}.#{field}") }
+      label(class: "col-span-5", for: "id_#{model_name}-#{field}") { t("activerecord.attributes.#{model_name}.#{field}") }
       select(
         name: %(#{"#{model_name}_#{field}"}_selector),
         data_filter_target: "selector",
@@ -72,7 +72,7 @@ class FieldComponent < Phlex::HTML
       input(
         name: "#{model_name}-#{field}",
         id: "id_#{model_name}-#{field}",
-        placeholder: I18n.t("value"),
+        placeholder: t("value"),
         class: "mort-form-text col-span-2",
         value: value,
         data_filter_target: "input"
@@ -89,7 +89,7 @@ class FieldComponent < Phlex::HTML
 
   def date_field_input(type)
     div(class: "mort-field grid grid-cols-5 gap-2") do
-      label(class: "col-span-5", for: "id_#{model_name}-#{field}") { I18n.t("activerecord.attributes.#{model_name}.#{field}") }
+      label(class: "col-span-5", for: "id_#{model_name}-#{field}") { t("activerecord.attributes.#{model_name}.#{field}") }
       select(
         name: %(#{"#{model_name}_#{field}"}_selector),
         data_filter_target: "selector",
@@ -101,7 +101,7 @@ class FieldComponent < Phlex::HTML
         type: type,
         name: "#{model_name}-#{field}",
         id: "id_#{model_name}-#{field}",
-        placeholder: I18n.t("value"),
+        placeholder: t("value"),
         class: "mort-form-text col-span-2",
         value: value,
         data_filter_target: "input"
@@ -118,7 +118,7 @@ class FieldComponent < Phlex::HTML
 
   def boolean_field_input
     div(class: "mort-field grid grid-cols-5 gap-2") do
-      label(class: "col-span-5", for: "id_#{model_name}-#{field}") { I18n.t("activerecord.attributes.#{model_name}.#{field}") }
+      label(class: "col-span-5", for: "id_#{model_name}-#{field}") { t("activerecord.attributes.#{model_name}.#{field}") }
       input(type: "hidden",
         name: %(#{"#{model_name}_#{field}"}_selector),
         id: "id_#{model_name}-#{field}_selector",
@@ -181,7 +181,7 @@ class FieldComponent < Phlex::HTML
 
   def integer_field_input
     div(class: "mort-field grid grid-cols-5 gap-2") do
-      label(class: "col-span-5", for: "id_#{model_name}-#{field}") { I18n.t("activerecord.attributes.#{model_name}.#{field}") }
+      label(class: "col-span-5", for: "id_#{model_name}-#{field}") { t("activerecord.attributes.#{model_name}.#{field}") }
       if field == "state"
         input(type: "hidden",
           name: %(#{"#{model_name}_#{field}"}_selector),
@@ -212,7 +212,7 @@ class FieldComponent < Phlex::HTML
         input(
           name: "#{model_name}-#{field}",
           id: "id_#{model_name}-#{field}",
-          placeholder: I18n.t("value"),
+          placeholder: t("value"),
           class: "mort-form-text col-span-2",
           value: value,
           data_filter_target: "input"

@@ -1,6 +1,16 @@
 # app/views/editor/form.rb
 class Editors::Html::EditorBlock < ApplicationComponent
   attr_accessor :document
+
+  # mortimer_scoped - override on tables with other tenant scoping association
+  scope :mortimer_scoped, ->(ids) { unscoped.where("0=#{ids}") } # effectively returns no records
+
+  validates :name, presence: true
+
+  def self.scoped_for_tenant(ids = 1)
+    mortimer_scoped(ids)
+  end
+
   # This component is used to render the HTML structure editor UI.
   # It allows users to add, drag, and drop blocks or fields to create a structured HTML document.
   #

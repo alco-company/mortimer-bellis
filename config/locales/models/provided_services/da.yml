@@ -1,7 +1,11 @@
 da:
   provided_service:
     authorize_now: "Autorisér nu!"
+    sync_now: "Synkronisér nu!"
     modal:
+      setting_all:
+        title: Indstillinger for udvidelser/integrationer
+        instruction: Her kan du indstille hvordan udvidelser/integrationer skal fungere i Mortimer.
       delete_all: 
         title: Slet alle udvidelser/integrationer
         instruction: Er du sikker på, at du vil slette alle udvidelser/integrationer?

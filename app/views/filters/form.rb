@@ -68,10 +68,10 @@ class Filters::Form < ApplicationForm
     super(resource: resource, **options)
     @resource = @model = resource
     @filter_form = filter_form
-    @filtered_model = filter_form.classify.constantize rescue resource.view.classify.constantize
+    @filtered_model = filter_form.classify.constantize rescue resource.view&.classify&.constantize
     @params = params
     @fields = options[:fields] || []
-    @fields = @fields.any? ? @fields : filtered_model.attribute_types.keys
+    @fields = @fields.any? ? @fields : filtered_model&.attribute_types&.keys || []
     @url = url
   end
 
@@ -185,7 +185,7 @@ class Filters::Form < ApplicationForm
             I18n.t("filters.period.title")
           end
           select(name: "filter[date][attribute]", id: "", class: "mort-form-select mt-2") do
-            filtered_model.columns.each do |col|
+            filtered_model&.columns&.each do |col|
               next if col.name =~ /^odo/
               option(value: col.name, selected: date_attr == col.name) { I18n.t("activerecord.attributes.#{filtered_model.to_s.underscore}.#{col.name}") } if %w[ date datetime time ].include? col.type.to_s
               # option(value: col.name, selected: date_attr == col.name) { I18n.t("activerecord.attributes.#{filtered_model.to_s.underscore}.#{col.name}") } if col.name =~ /^date/
@@ -225,7 +225,7 @@ class Filters::Form < ApplicationForm
     div(class: "hidden", data_filter_target: "tabs", id: "fields") do
       ul(role: "list", class: "-mx-2 mt-2 space-y-1") do
         # 24/1/2025 TODO allow user to filter on has_many associations (the _hm)
-        bt, _hm = filtered_model.associations
+        bt, _hm = filtered_model&.associations || [ [], [] ]
         bt.each do |assoc|
           list_association_fields(assoc)
         end
@@ -241,7 +241,7 @@ class Filters::Form < ApplicationForm
         p(class: "mt-1 text-sm leading-6 text-gray-600") { I18n.t("filters.scope.user.description") }
         user_scope
       end
-      bt, _hm = filtered_model.associations
+      bt, _hm = filtered_model&.associations || [ [], [] ]
       bt.each do |assoc|
         association_scope(assoc)
         # case 0
@@ -376,6 +376,7 @@ class Filters::Form < ApplicationForm
   # selected = one of <, >, =, !=, between, not_between, matches, does_not_match, more
   #
   def list_fields(model)
+    return unless model
     (model.filterable_fields).each do |col|
       render FieldComponent.new model: model, field: col, filter: resource
     end

@@ -3,8 +3,8 @@ require "application_system_test_case"
 class TenantsTest < ApplicationSystemTestCase
   setup do
     @tenant = tenants(:one)
-    user = users(:superadmin)
-    sign_in user
+    @user = users(:superadmin)
+    ui_sign_in @user
   end
 
   test "visiting the index" do

@@ -1,94 +1,70 @@
 module ApplicationHelper
   include Pagy::Frontend
 
+  def t(key, **options)
+    I18n.t(key, **options).html_safe
+  rescue
+    key
+  end
+
   #
   # helper for web_push
   def web_push_public_key_meta_tag(web_push_public_key: ENV.fetch("VAPID_PUBLIC_KEY"))
     tag.meta name: "web_push_public", content: Base64.urlsafe_decode64(web_push_public_key).bytes.to_json
   end
 
-  #
-  # helpers for List and ListItem
-  #
-  # show_resource_mugshot is placed in the left side of the ListItem
-  def show_resource_mugshot(resource:, css: "hidden sm:block h-12 w-12 flex-none rounded-full bg-gray-50")
-    case resource.class.name
-    when "TimeMaterial"; user_mugshot(resource.user, css: css)
-    end
-  end
-  #
-  # show_secondary_info is placed in the upper right corner of the ListItem
-  #
-  def show_secondary_info(resource:)
-    case resource.class.name
-    when "User"
-    when "TimeMaterial"; show_time_material_quantative resource: resource
-    else; ""
-    end
-  end
-  # end helpers for List and ListItem
-  #
-
-
-
-  def archive_resource_url(resource)
-    case resource.class.name
-    when "User"; archive_user_url(resource)
-    when "TimeMaterial"; archive_time_material_url(resource)
-    else; ""
-    end
-  end
-
-  def prev_page_link(url, page)
-    if url =~ /page=/
-      url.sub(/page=\d+/, "page=#{page || 1}")
+  def show_add_new_button
+    case params.dig(:controller)
+    when "settings"
+    when "calls"; link_to("New Call", new_call_path, data: { turbo_stream: true }, class: "mort-btn-primary", role: "menuitem", tabindex: "-1", id: "user-menu-item-0")
+    when "users"; link_to(t("profile.invite_new_user"), users_invitations_new_url, data: { turbo_stream: false }, class: "mort-btn-primary mr-2", role: "menuitem", tabindex: "-1", id: "user-menu-item-0") unless Current.user.user?
     else
-      url + "?page=#{page || 1}"
-    end
+      links = []
+      links.push (
+        button_to(time_materials_url, params: { "play" => "start" }) do
+          content_tag(:span, "Add new", class: "sr-only") +
+          content_tag(:span, class: "inline-flex items-center rounded-md bg-white px-1.5 py-2 text-xs font-medium text-gray-600 sm:ring-1 ring-inset ring-gray-500/10") do
+            render(Icons::Play.new css: "h-6 w-6 text-gray-400") +
+            content_tag(:span, t("#{ resource_class.table_name }.list.play"), class: "hidden pl-2 sm:inline text-gray-400 text-2xs")
+          end
+        end
+      ).html_safe if params.dig(:controller) == "time_materials"
+      # links.push (link_to(new_resource_url, id: "new_list_item", class: "-my-2 flex items-center rounded-md p-2 text-gray-400 hover:text-gray-600 focus:outline-hidden focus:ring-1 focus:ring-sky-200", data: { turbo_frame: "form" }) do
+      #   content_tag(:span, "Add new", class: "sr-only") +
+      #   content_tag(:span, class: "inline-flex items-center rounded-md bg-white px-1.5 py-2 text-xs font-medium text-gray-600 sm:ring-1 ring-inset ring-gray-500/10") do
+      #     render(Icons::Play.new css: "h-6 w-6 text-gray-400") +
+      #     content_tag(:span, t("#{ resource_class.table_name }.list.new"), class: "hidden pl-2 sm:inline text-gray-400 text-2xs")
+      #   end
+      # end).html_safe if params.dig(:controller) == "time_materials"
+      links.push (link_to(new_resource_url, id: "new_list_item", class: "-my-2 flex items-center rounded-md p-2 text-gray-400 hover:text-gray-600 focus:outline-hidden focus:ring-1 focus:ring-sky-200", data: { turbo_frame: "form" }) do
+        content_tag(:span, "Add new", class: "sr-only") +
+        content_tag(:span, class: "inline-flex items-center rounded-md bg-white px-1.5 py-2 text-xs font-medium text-gray-600 sm:ring-1 ring-inset ring-gray-500/10") do
+          render(Icons::Add.new css: "h-6 w-6 text-gray-400") +
+          content_tag(:span, t("#{ resource_class.table_name}.list.new"), class: "hidden pl-2 sm:inline text-gray-400 text-2xs")
+        end
+      end).html_safe
+      links.join.html_safe
+    end if user_can_create? && !(resource_class == Filter)
   end
+  # def prev_page_link(url, page)
+  #   if url =~ /page=/
+  #     url.sub(/page=\d+/, "page=#{page || 1}")
+  #   else
+  #     url + "?page=#{page || 1}"
+  #   end
+  # end
 
-  def next_page_link(url, page)
-    if url =~ /page=/
-      url.sub(/page=\d+/, "page=#{page || 1}")
-    else
-      url + "?page=#{page || 1}"
-    end
-  end
+  # def next_page_link(url, page)
+  #   if url =~ /page=/
+  #     url.sub(/page=\d+/, "page=#{page || 1}")
+  #   else
+  #     url + "?page=#{page || 1}"
+  #   end
+  # end
 
   def say(msg)
     Rails.logger.info { "===============================" }
     Rails.logger.info { msg }
     Rails.logger.info { "===============================" }
   end
-
-  # def menu_items
-  #   items = []
-  #   if Current.user
-  #     if current_user.superadmin?
-  #       items += [
-  #         { title: I18n.t("menu.tenants"), url: tenants_url },
-  #         { title: I18n.t("menu.holidays"), url: holidays_url },
-  #         { title: I18n.t("menu.pages"), url: pages_url },
-  #         { title: I18n.t("menu.users"), url: users_url }
-  #       ]
-  #     end
-  #     if current_user.admin?
-  #       items += [
-  #         { title: I18n.t("menu.tenant"), url: tenant_url(Current.tenant) },
-  #         { title: I18n.t("menu.users"), url: users_url }
-  #       ]
-  #     end
-  #     items + [
-  #       { title: I18n.t("menu.teams"), url: teams_url },
-  #       { title: I18n.t("menu.locations"), url: locations_url },
-  #       { title: I18n.t("menu.punch_clocks"), url: punch_clocks_url },
-  #       { title: I18n.t("menu.users"), url: employees_url },
-  #       { title: I18n.t("menu.punch_cards"), url: punch_cards_url },
-  #       { title: I18n.t("menu.punches"), url: punches_url }
-  #       # { title: I18n.t("menu.motds"), url: motds_url },
-  #     ]
-  #   else
-  #     items << { title: I18n.t("menu.login"), url: new_user_session_url }
-  #   end
-  # end
 end

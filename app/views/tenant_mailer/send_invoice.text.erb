@@ -1,0 +1,9 @@
+<%= I18n.t("tenant.mailer.salutations", name: @tenant.name) %>
+
+<%== t("tenant.mailer.send_invoice.confirmed_license", license: "Mortimer #{@tenant.license}") %>
+
+<%== t("tenant.mailer.send_invoice.license_subscription_renewal", renewal_date: I18n.l(@tenant.license_expires_at, format: :short)) %>
+
+<%== t("tenant.mailer.send_invoice.we_created_an_invoice_for_you", url: @pdf) %>
+
+<%= render MortimerMailSignature.new format: :text %>

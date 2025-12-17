@@ -7,6 +7,7 @@ class Teams::Form < ApplicationForm
       row field(:locale).select(Team.locales, prompt: I18n.t(".select_team_locale"), class: "mort-form-select")
       row field(:time_zone).select(Team.time_zones_for_phlex, class: "mort-form-select")
       row field(:blocked).boolean(class: "mort-form-bool"), "mort-field flex justify-end flex-row-reverse items-center"
+      row field(:hourly_rate).input()
       div do
         div(class: "mort-btn-secondary", data: { action: "click->employee#toggleAdvanced" }) { I18n.t("teams.advanced_configuration") }
       end if @editable

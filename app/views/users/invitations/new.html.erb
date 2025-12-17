@@ -1,2 +1,2 @@
-<%= turbo_stream_from "%s_%s_%s" % [Current.tenant.id, "new_invitation", Current.user.id] %>
+<%= turbo_stream_from "%s_%s_%s" % [Current.tenant.id, "new_invitation", Current.user.id] if Current.get_tenant.present? %>
 <%= render partial: "new" %>

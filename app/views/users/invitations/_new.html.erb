@@ -1,4 +1,4 @@
-<%= turbo_frame_tag "#{Current.tenant.id}_new_invitations" do %>
+<%= turbo_frame_tag "#{(Current.tenant.id rescue false) || "1"}_new_invitations" do %>
   <div class="my-6 mx-auto w-72 sm:w-96">
     <h1> <%= t("devise.invitations.new.header") %> </h1>
     <div class="text-gray-600 text-sm"><%== t("devise.invitations.new.description") %></div>

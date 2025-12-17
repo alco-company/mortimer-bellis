@@ -28,6 +28,8 @@ class ListItems::InvoiceItem < ListItems::ListItem
   end
 
   def show_secondary_info
-    plain "%s %s" % [ resource.product.name, resource.quantity ]
+    p(class: "text-sm font-medium text-gray-900 dark:text-white") do
+      plain "%s %s" % [ resource.product.name, resource.quantity ]
+    end
   end
 end

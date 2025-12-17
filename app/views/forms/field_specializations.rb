@@ -72,10 +72,19 @@ module FieldSpecializations
     def active_record_relation_options_enumerable(relation)
       Enumerator.new do |collection|
         relation.each do |object|
-          attributes = object.attributes
+          attributes = object.attributes.dup
           id = attributes.delete(relation.primary_key)
-          value = attributes.values.join(" ")
-          collection << [ id, value ]
+          value_key, value = attributes.first
+          data = attributes.except(value_key)
+          data.transform_values! do |v|
+            case v
+            when TrueClass, FalseClass, NilClass, String, Symbol, Integer
+              v
+            else
+              v.to_s
+            end
+          end
+          collection << [ id, value, data ]
         end
       end
     end
@@ -179,6 +188,12 @@ module FieldSpecializations
       def map_options(collection)
         OptionMapper.new(collection)
       end
+
+      def options(*collection)
+        map_options(collection).each do |key, value, data|
+          option(selected: field.value == key, value: key, data: data) { value }
+        end
+      end
   end
 
   class EnumSelectField < SelectField
@@ -209,6 +224,7 @@ module FieldSpecializations
 
   class FileField < InputField
     include Phlex::Rails::Helpers::LinkTo
+    include Phlex::Rails::Helpers::Routes
 
     def field_attributes
       @attributes.keys&.include?(:multiple) ? super.merge(type: "file", accept: "image/*", multiple: true) : super.merge(type: "file", accept: "image/*")
@@ -222,7 +238,7 @@ module FieldSpecializations
             img(src: url_for(field.value), class: "mort-img m-2")
             div(class: "absolute top-0 right-0 w-8 h-8 rounded-lg bg-white/75") do
               link_to(
-                helpers.new_modal_url(modal_form: "delete", id: field.parent.object.id, attachment: field.value.name, api_key: @_parent&.api_key, resource_class: field.parent.object.class.to_s.underscore, modal_next_step: "accept"),
+                new_modal_url(modal_form: "delete", id: field.parent.object.id, attachment: field.value.name, api_key: @_parent&.api_key, resource_class: field.parent.object.class.to_s.underscore, modal_next_step: "accept"),
                 data: { turbo_stream: true },
                 # link_to((@links[1] || resource),
                 class: "absolute top-1 right-1",
