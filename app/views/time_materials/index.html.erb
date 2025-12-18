@@ -31,7 +31,7 @@
         </dl>
       </div>
     <% end %>
-    <% if Current.get_user.can? :use_tasks %>
+    <% if Current.get_user.can? :use_tasks, force: true %>
       <%= turbo_stream_from "#{Current.get_user.id}_tasks" %>
       <div class="m-2 p-4 h-40 rounded-lg bg-white shadow-sm dark:divide-white/10 dark:bg-gray-800/50 dark:shadow-none dark:outline dark:-outline-offset-1 dark:outline-white/10">
         <%= render Account::Progress.new priority: 0.., no_tasks_message: t("tasks.no_tasks_message") %>
