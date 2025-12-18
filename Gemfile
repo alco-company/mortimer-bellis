@@ -105,7 +105,7 @@ gem "httparty", "~> 0.23.1"
 
 gem "psych", "~> 5.2.6"
 
-gem "rrule", "~> 0.6.0"
+gem "rrule", "~> 0.7.0"
 
 gem "httpx", "~> 1.6"
 
