@@ -89,7 +89,7 @@ end
 
 gem "phlex-rails"
 
-gem "superform", "~> 0.5.0"
+gem "superform", "~> 0.6.1"
 
 gem "pagy", "~> 9.0"
 
