@@ -67,8 +67,8 @@ class ListItems::ListItem < ApplicationComponent
 
 
   def show_recipient_link
-    p(class: "text-sm/6 font-semibold text-gray-900 dark:text-white") do
-      link_to resource_url, data: { turbo_action: "advance", turbo_frame: "form", tabindex: "-1" }, class: "hover:underline" do
+    p(class: "text-sm/6 font-semibold text-gray-900 truncate dark:text-white") do
+      link_to resource_url, data: { turbo_action: "advance", turbo_frame: "form", tabindex: "-1" }, class: "hover:underline truncate" do
         plain resource.name
       end
     end
@@ -93,7 +93,7 @@ class ListItems::ListItem < ApplicationComponent
   end
 
   def show_secondary_info
-    p(class: "text-sm font-medium text-gray-900 dark:text-white") do
+    p(class: "text-sm font-medium text-gray-900 truncate dark:text-white") do
       plain "implement show_secondary_info"
     end
   end

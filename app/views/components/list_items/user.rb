@@ -70,7 +70,7 @@ class ListItems::User < ListItems::ListItem
           class: "truncate hover:underline inline grow flex-nowrap",
           data: { turbo_action: "advance", turbo_frame: "form" },
           tabindex: -1) do
-          span(class: "2xs:hidden") { show_secondary_info }
+          span(class: "hidden sm:inline mr-2") { resource&.team&.name }
           plain lbl
         end
       end
@@ -90,7 +90,8 @@ class ListItems::User < ListItems::ListItem
 
   def show_secondary_info
     p(class: "text-sm font-medium text-gray-900 dark:text-white") do
-      plain "%s %s " % [ resource.sign_in_count, resource.last_sign_in_at ]
+      span(class: "truncate mr-2") { resource.sign_in_count }
+      span(class: "hidden sm:inline truncate") { l(resource.last_sign_in_at, format: :short) }
     end
   end
 

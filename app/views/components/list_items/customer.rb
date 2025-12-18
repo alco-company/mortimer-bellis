@@ -38,8 +38,9 @@ class ListItems::Customer < ListItems::ListItem
   end
 
   def show_secondary_info
-    p(class: "text-sm font-medium text-gray-900 dark:text-white") do
-      plain "%s %s" % [ resource.name, resource.street ]
+    p(class: "text-sm font-medium text-gray-900 truncate dark:text-white") do
+      plain resource&.phone
+      # plain "%s %s" % [ resource.name, resource.street ]
     end
   end
 end

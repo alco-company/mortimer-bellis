@@ -15,12 +15,30 @@ class ListItems::Project < ListItems::ListItem
   # actual_minutes
 
   def show_recipient_link
-    p(class: "text-sm/6 font-semibold text-gray-900 dark:text-white") do
+    p(class: "text-sm/6 font-semibold text-gray-900 truncate dark:text-white") do
       link_to(resource_url,
         class: "truncate hover:underline",
         data: { turbo_action: "advance", turbo_frame: "form" },
         tabindex: -1) do
         plain resource.name
+      end
+    end
+  end
+
+  def show_matter_link
+    div(class: "flex flex-row items-center") do
+      show_matter_mugshot
+      if user&.global_queries? && resource.respond_to?(:tenant)
+        span(class: "hidden md:inline text-xs mr-2 truncate ") { show_resource_link(resource: resource.tenant) }
+      end unless resource_class == Tenant
+      span(class: "md:inline text-xs truncate") do
+        link_to(customer_url(resource&.customer),
+          class: "truncate hover:underline inline grow flex-nowrap",
+          data: { turbo_action: "advance", turbo_frame: "form" },
+          tabindex: -1) do
+          span(class: "hidden") { show_secondary_info }
+          plain resource&.customer&.name
+        end
       end
     end
   end
@@ -37,8 +55,9 @@ class ListItems::Project < ListItems::ListItem
   end
 
   def show_secondary_info
-    p(class: "text-sm font-medium text-gray-900 dark:text-white") do
-      plain "%s %s " % [ resource.customer&.name, resource.state ]
+    p(class: "text-sm font-medium text-gray-900 truncate dark:text-white") do
+      # span(class: "") { resource&.customer&.name }
+      span(class: "") { resource.state }
     end
   end
 end
