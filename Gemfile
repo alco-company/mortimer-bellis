@@ -139,7 +139,7 @@ gem "mailersend-ruby", "~> 3.0"
 
 gem "positioning"
 
-gem "reactionview", "~> 0.1.2"
+gem "reactionview", "~> 0.2.0"
 
 gem "rest-client", "~> 2.1"
 
