@@ -127,7 +127,7 @@ gem "posthog-ruby", "~> 3.0"
 
 gem "active_model_otp"
 
-gem "stripe", "~> 15.1"
+gem "stripe", "~> 18.1"
 
 gem "anthropic", "~> 0.4.0"
 
