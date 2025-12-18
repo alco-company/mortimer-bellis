@@ -113,7 +113,7 @@ gem "mission_control-jobs", "~> 1.1.0"
 
 gem "noticed", "~> 2.9"
 
-gem "x", "~> 0.16.0"
+gem "x", "~> 0.17.0"
 
 gem "omniauth", "~> 2.1"
 gem "omniauth-entra-id", "~> 3.0"
