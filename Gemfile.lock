@@ -560,12 +560,12 @@ GEM
     tailwindcss-rails (4.4.0)
       railties (>= 7.0.0)
       tailwindcss-ruby (~> 4.0)
-    tailwindcss-ruby (4.1.11)
-    tailwindcss-ruby (4.1.11-aarch64-linux-gnu)
-    tailwindcss-ruby (4.1.11-aarch64-linux-musl)
-    tailwindcss-ruby (4.1.11-arm64-darwin)
-    tailwindcss-ruby (4.1.11-x86_64-linux-gnu)
-    tailwindcss-ruby (4.1.11-x86_64-linux-musl)
+    tailwindcss-ruby (4.1.18)
+    tailwindcss-ruby (4.1.18-aarch64-linux-gnu)
+    tailwindcss-ruby (4.1.18-aarch64-linux-musl)
+    tailwindcss-ruby (4.1.18-arm64-darwin)
+    tailwindcss-ruby (4.1.18-x86_64-linux-gnu)
+    tailwindcss-ruby (4.1.18-x86_64-linux-musl)
     thor (1.4.0)
     thruster (0.1.17)
     thruster (0.1.17-aarch64-linux)
@@ -669,7 +669,7 @@ DEPENDENCIES
   stripe (~> 15.1)
   superform (~> 0.5.0)
   tailwindcss-rails
-  tailwindcss-ruby (= 4.1.11)
+  tailwindcss-ruby (= 4.1.18)
   thruster
   tidewave
   turbo-rails
@@ -880,12 +880,12 @@ CHECKSUMS
   stripe (15.5.0) sha256=e61cac450194df863697039559e314bad41c1b0e10c627039c28019349a570d0
   superform (0.5.1) sha256=2b163434a910ae5d9bd3e750ffde902212290c067a4ca2f1893e4f5f8dda0b71
   tailwindcss-rails (4.4.0) sha256=efa2961351a52acebe616e645a81a30bb4f27fde46cc06ce7688d1cd1131e916
-  tailwindcss-ruby (4.1.11) sha256=a244698cfa8beb95e351371d0838808b3f5662901622985d7efcec1fe580a952
-  tailwindcss-ruby (4.1.11-aarch64-linux-gnu) sha256=834c29e857951da6828c99e499e95f8d9b25d979491dcf5c82365ee2e72c6a16
-  tailwindcss-ruby (4.1.11-aarch64-linux-musl) sha256=d7f1df856681a58fe1e739820da5d2109e473d280bcb63a10a73a554179f9911
-  tailwindcss-ruby (4.1.11-arm64-darwin) sha256=24be4c4a73a155177e3c1a7366af55a7c29ed98c605f3e3199acae52777cf3b9
-  tailwindcss-ruby (4.1.11-x86_64-linux-gnu) sha256=5633d76566839bc675960cd841d30795a3189b81c53a8c49bcf1629210b7a3b1
-  tailwindcss-ruby (4.1.11-x86_64-linux-musl) sha256=6a9845bc086a846c9b1b0d70c0e469d34a3a9b0a820df6ee94b7a81715fb1439
+  tailwindcss-ruby (4.1.18) sha256=b62fad5b00494e92987ee319dfb5c5ad272f0ed93649963d62f08d2ba0f03fa7
+  tailwindcss-ruby (4.1.18-aarch64-linux-gnu) sha256=e10f9560bccddbb4955fd535b3bcc8c7071a7df07404dd473a23fa791ec4e46b
+  tailwindcss-ruby (4.1.18-aarch64-linux-musl) sha256=3c8426674718a2c98a0649c825ac0b3286ff52acd0b4052d7d19126cd74904f3
+  tailwindcss-ruby (4.1.18-arm64-darwin) sha256=f940531d5a030c566d3d616004235bcd4c361abdd328f7d6c7e3a953a32e0155
+  tailwindcss-ruby (4.1.18-x86_64-linux-gnu) sha256=e0a2220163246fe0126c5c5bafb95bc6206e7d21fce2a2878fd9c9a359137534
+  tailwindcss-ruby (4.1.18-x86_64-linux-musl) sha256=d957cf545b09d2db7eb6267450cc1fc589e126524066537a0c4d5b99d701f4b2
   thor (1.4.0) sha256=8763e822ccb0f1d7bee88cde131b19a65606657b847cc7b7b4b82e772bcd8a3d
   thruster (0.1.17) sha256=6f3f1de43e22f0162d81cbc363f45ee42a1b8460213856c1a899cbf0d3297235
   thruster (0.1.17-aarch64-linux) sha256=1b3a34b2814185c2aeaf835b5ecff5348cdcf8e77809f7a092d46e4b962a16ba
