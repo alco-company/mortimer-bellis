@@ -5,8 +5,8 @@ module Settingable
     has_many :settings, as: :setable, dependent: :destroy
 
     # do not unless expressively allowed
-    def can?(action, resource: nil, inverse: false)
-      if Current.get_user&.superadmin?
+    def can?(action, resource: nil, inverse: false, force: false)
+      if !force && Current.get_user&.superadmin?
         return inverse ? false : true
       end
       key = action.to_s

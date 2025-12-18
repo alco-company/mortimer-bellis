@@ -34,6 +34,10 @@
 
 ## CHANGELOG
 
+### 18/12/2025
+
+- force can? even on superadmins
+
 ### 17/12/2025
 
 - start using tasks
