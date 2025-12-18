@@ -91,7 +91,7 @@ gem "phlex-rails"
 
 gem "superform", "~> 0.5.0"
 
-gem "pagy", "~> 9.0"
+gem "pagy", "~> 43.2"
 
 gem "rqrcode", "~> 3.1"
 
