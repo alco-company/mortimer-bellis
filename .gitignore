@@ -45,3 +45,6 @@
 /TODO.md
 .DS_Store
 /config/credentials/production.key
+
+# SSL certificates for local development
+config/certs/*.pem

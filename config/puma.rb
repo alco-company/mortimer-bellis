@@ -28,7 +28,8 @@ threads_count = ENV.fetch("RAILS_MAX_THREADS", 3)
 threads threads_count, threads_count
 
 # Specifies the `port` that Puma will listen on to receive requests; default is 3000.
-port ENV.fetch("PORT", 3000)
+# Commented out when using SSL in development - see ssl_bind in the development section below
+# port ENV.fetch("PORT", 3000)
 
 # Allow puma to be restarted by `bin/rails restart` command.
 plugin :tmp_restart
@@ -60,4 +61,11 @@ when "development"
   # Specifies a very generous `worker_timeout` so that the worker
   # isn't killed by Puma when suspended by a debug-ger.
   worker_timeout 3600
+  
+  # Enable SSL in development
+  ssl_bind '0.0.0.0', '3000', {
+    key: "config/certs/localhost-key.pem",
+    cert: "config/certs/localhost.pem",
+    verify_mode: "none"
+  }
 end

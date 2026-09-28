@@ -1,0 +1,222 @@
+/* Tasks Index Styles - Microsoft To Do inspired */
+
+.tasks-container {
+  @apply flex h-screen bg-gray-100 dark:bg-gray-900;
+}
+
+/* Sidebar Styles */
+.tasks-sidebar {
+  @apply w-[280px] bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 flex flex-col border-r border-gray-300 dark:border-gray-700;
+}
+
+.sidebar-header {
+  @apply p-5 border-b border-gray-300 dark:border-gray-700;
+}
+
+.user-profile {
+  @apply flex items-center gap-3;
+}
+
+.user-avatar {
+  @apply w-8 h-8 rounded-full bg-blue-600 dark:bg-blue-500 text-white flex items-center justify-center font-semibold text-sm;
+}
+
+.user-name {
+  @apply text-sm font-semibold text-gray-800 dark:text-gray-100;
+}
+
+.user-email {
+  @apply text-[11px] text-gray-500 dark:text-gray-400;
+}
+
+.sidebar-search {
+  @apply px-5 py-3;
+}
+
+.search-input {
+  @apply w-full px-3 py-2 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded text-gray-800 dark:text-gray-100 text-[13px];
+  @apply focus:outline-none focus:border-blue-600 dark:focus:border-blue-500;
+  @apply placeholder:text-gray-400 dark:placeholder:text-gray-500;
+}
+
+.sidebar-nav {
+  @apply flex-1 overflow-y-auto py-2;
+}
+
+.nav-list {
+  @apply list-none p-0 m-0;
+}
+
+.nav-item {
+  @apply m-0;
+}
+
+.nav-link {
+  @apply flex items-center gap-3 px-5 py-2.5 text-gray-600 dark:text-gray-300 no-underline text-sm transition-colors;
+}
+
+.nav-item.active .nav-link,
+.nav-link:hover {
+  @apply bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-100;
+}
+
+.nav-icon {
+  @apply text-base;
+}
+
+.nav-text {
+  @apply flex-1;
+}
+
+.nav-count {
+  @apply text-xs text-gray-500 dark:text-gray-400;
+}
+
+.nav-divider {
+  @apply h-px bg-gray-300 dark:bg-gray-700 mx-5 my-3;
+}
+
+.nav-projects {
+  @apply mt-3;
+}
+
+.sidebar-footer {
+  @apply px-5 py-4 border-t border-gray-300 dark:border-gray-700;
+}
+
+.new-list-btn {
+  @apply flex items-center gap-2 text-gray-600 dark:text-gray-300 no-underline text-sm px-3 py-2 rounded transition-colors;
+}
+
+.new-list-btn:hover {
+  @apply bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-100;
+}
+
+/* Main Content Styles */
+.tasks-main {
+  @apply flex-1 flex flex-col bg-white dark:bg-gray-900 overflow-hidden;
+}
+
+.tasks-header {
+  @apply flex items-center justify-between px-8 py-6 border-b border-gray-300 dark:border-gray-700;
+}
+
+.header-content {
+  @apply flex items-center gap-4;
+}
+
+.header-icon {
+  @apply text-[32px];
+}
+
+.header-title {
+  @apply text-[28px] font-semibold m-0 text-gray-800 dark:text-gray-100;
+}
+
+.header-actions {
+  @apply flex gap-2;
+}
+
+.header-action-btn {
+  @apply px-3 py-2 bg-transparent border-0 cursor-pointer rounded text-lg text-gray-600 dark:text-gray-400 no-underline transition-colors;
+}
+
+.header-action-btn:hover {
+  @apply bg-gray-100 dark:bg-gray-800;
+}
+
+.tasks-content {
+  @apply flex-1 overflow-y-auto px-8 py-6;
+}
+
+.tasks-list {
+  @apply mb-6;
+}
+
+.task-item {
+  @apply flex items-start gap-3 p-4 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded mb-2 transition-all;
+}
+
+.task-item:hover {
+  @apply bg-gray-50 dark:bg-gray-700 border-gray-400 dark:border-gray-600 shadow-sm;
+}
+
+.task-checkbox {
+  @apply pt-0.5;
+}
+
+.task-check {
+  @apply w-5 h-5 cursor-pointer m-0;
+}
+
+.task-content {
+  @apply flex-1 min-w-0;
+}
+
+.task-link {
+  @apply no-underline text-inherit block;
+}
+
+.task-title {
+  @apply text-sm text-gray-800 dark:text-gray-100 mb-1.5 leading-[1.4];
+}
+
+.task-meta {
+  @apply flex flex-wrap gap-3 text-xs text-gray-600 dark:text-gray-400;
+}
+
+.task-project,
+.task-customer {
+  @apply text-gray-600 dark:text-gray-400;
+}
+
+.task-due {
+  @apply text-blue-600 dark:text-blue-400;
+}
+
+.task-due.overdue {
+  @apply text-red-600 dark:text-red-400;
+}
+
+.task-actions {
+  @apply pt-0.5;
+}
+
+.task-star {
+  @apply text-lg no-underline text-gray-400 dark:text-gray-500 transition-colors p-1 block;
+}
+
+.task-star:hover,
+.task-star.starred {
+  @apply text-yellow-400 dark:text-yellow-300;
+}
+
+.add-task {
+  @apply mt-4;
+}
+
+.add-task-form {
+  @apply flex;
+}
+
+.add-task-input {
+  @apply flex-1;
+}
+
+.task-input {
+  @apply w-full px-4 py-3 border border-gray-300 dark:border-gray-700 rounded text-sm text-gray-800 dark:text-gray-100 bg-white dark:bg-gray-800 transition-colors;
+  @apply focus:outline-none focus:border-blue-600 dark:focus:border-blue-500;
+  @apply placeholder:text-gray-400 dark:placeholder:text-gray-500;
+}
+
+.empty-state {
+  @apply text-center py-[60px] px-5 text-gray-400 dark:text-gray-500;
+}
+
+.empty-icon {
+  @apply text-[64px] mb-4;
+}
+
+.empty-text {
+  @apply text-lg;
+}

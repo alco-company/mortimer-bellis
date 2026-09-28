@@ -10,7 +10,7 @@ class Anthropic::Service < SaasService
 
   def empty_params
     {
-      "api_key": ENV["ANTHROPIC_API_KEY"],
+      # "api_key": ENV["ANTHROPIC_API_KEY"],
       "model": "claude--3-7-sonnet-latest",
       "max_tokens": 1000,
       "temperature": 0.0,

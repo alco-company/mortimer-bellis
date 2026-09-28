@@ -2,6 +2,8 @@
 
 @config '../../../config/tailwind.config.js';
 
+@import "../stylesheets/tasks.css";
+
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
@@ -65,11 +67,11 @@
   }
 
   .mort-btn-start-time-material {
-    @apply flex justify-center rounded-md bg-sky-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-xs hover:bg-sky-500 hover:cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-200;
+    @apply flex justify-center rounded-md bg-sky-700 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-xs hover:bg-sky-600 hover:cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-200;
   }
 
   .mort-btn-primary {
-    @apply flex justify-center rounded-md bg-sky-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-xs hover:bg-sky-500 hover:cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-200;
+    @apply flex justify-center rounded-md bg-sky-700 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-xs hover:bg-sky-600 hover:cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-200;
   }
 
   .mort-btn-save {
@@ -139,8 +141,7 @@
   }
 
   .mort-link-primary {
-    /* bg-gray-900 text-white block rounded-md px-3 py-2 text-base font-medium */
-    @apply bg-transparent text-sky-500 hover:text-sky-700 text-base font-medium;
+    @apply bg-transparent text-sky-700 hover:text-sky-900 text-base font-medium;
   }
 
   .mort-link-error {
@@ -152,11 +153,11 @@
     @apply my-5;
 
     & label {
-      @apply text-xs font-medium text-gray-400;
+      @apply text-xs font-medium text-gray-900;
     }
 
     & em {
-      @apply text-xs font-light text-gray-400;
+      @apply text-xs font-light text-gray-600;
     }
   }
 
@@ -311,7 +312,7 @@ hr {
 }
 
 h1 {
-  @apply font-bold text-slate-400 text-2xl;
+  @apply font-bold text-slate-900 text-2xl;
 }
 
 .list_item {

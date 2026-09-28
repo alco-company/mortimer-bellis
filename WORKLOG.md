@@ -2,6 +2,8 @@
 
 ## IDEAS
 
+- https://railsdesigner.com/extending-kanban-rails-hotwire/
+- use https://github.com/datalab-to/chandra for OCR
 - using n8n on profeting on stock markets - https://medium.com/predict/the-crash-i-see-coming-why-ive-liquidated-my-portfolio-ea9bd4ae6837
 - using MCP's to automate development - https://generativeai.pub/model-context-protocol-mcp-10-must-try-mcp-servers-for-developers-4cf054836308 / https://ai.plainenglish.io/5-essential-mcp-servers-that-give-claude-cursor-real-superpowers-2025-509a822dd4fd
 - update the favicon depending on the number of open tasks - https://railsdesigner.com/update-favicon-badge-turbo-stream
@@ -33,6 +35,7 @@
 - somehow i managed to f**k-up the batch (udvælg)
 
 ## CHANGELOG
+
 
 ### 18/12/2025
 
