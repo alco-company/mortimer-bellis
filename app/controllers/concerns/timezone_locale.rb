@@ -16,8 +16,8 @@ module TimezoneLocale
 
   class Resolver
     def self.call(params: {}, request: nil, user: nil, tenant: nil)
-      user ||= Current.user
-      tenant ||= Current.tenant
+      user ||= Current.get_user
+      tenant ||= Current.get_tenant
       (normalize(params.dig(:locale)) rescue false) ||
       (normalize(params.dig(:lang)) rescue false) ||
       normalize(user&.locale) ||

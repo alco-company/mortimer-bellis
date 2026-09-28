@@ -1,0 +1,185 @@
+<div class="tasks-container">
+  <!-- Sidebar -->
+  <aside class="tasks-sidebar">
+    <div class="sidebar-header">
+      <div class="user-profile">
+        <div class="user-avatar">
+          <%= Current.user.name.first.upcase %>
+        </div>
+        <div class="user-info">
+          <div class="user-name"><%= Current.user.name %></div>
+          <div class="user-email"><%= Current.user.email %></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sidebar-search">
+      <%= form_with url: tasks_path, method: :get, class: "search-form" do |f| %>
+        <%= f.text_field :q, placeholder: "Search", class: "search-input" %>
+      <% end %>
+    </div>
+
+    <nav class="sidebar-nav">
+      <ul class="nav-list">
+        <li class="nav-item <%= 'active' if params[:filter] == 'my_day' %>">
+          <%= link_to tasks_path(filter: 'my_day'), class: "nav-link" do %>
+            <span class="nav-icon">☀️</span>
+            <span class="nav-text">My Day</span>
+            <span class="nav-count"><%= @tasks.where("due_at <= ?", Date.today).count %></span>
+          <% end %>
+        </li>
+
+        <li class="nav-item <%= 'active' if params[:filter] == 'important' %>">
+          <%= link_to tasks_path(filter: 'important'), class: "nav-link" do %>
+            <span class="nav-icon">⭐</span>
+            <span class="nav-text">Important</span>
+            <span class="nav-count"><%= @tasks.where(priority: 1..).count %></span>
+          <% end %>
+        </li>
+
+        <li class="nav-item <%= 'active' if params[:filter] == 'planned' %>">
+          <%= link_to tasks_path(filter: 'planned'), class: "nav-link" do %>
+            <span class="nav-icon">📅</span>
+            <span class="nav-text">Planned</span>
+            <span class="nav-count"><%= @tasks.where.not(due_at: nil).count %></span>
+          <% end %>
+        </li>
+
+        <li class="nav-item <%= 'active' if params[:filter].nil? %>">
+          <%= link_to tasks_path, class: "nav-link" do %>
+            <span class="nav-icon">👤</span>
+            <span class="nav-text">Assigned to me</span>
+            <span class="nav-count"><%= @tasks.count %></span>
+          <% end %>
+        </li>
+
+        <li class="nav-item <%= 'active' if params[:filter] == 'flagged' %>">
+          <%= link_to tasks_path(filter: 'flagged'), class: "nav-link" do %>
+            <span class="nav-icon">🚩</span>
+            <span class="nav-text">Flagged email</span>
+            <span class="nav-count">0</span>
+          <% end %>
+        </li>
+
+        <li class="nav-item <%= 'active' if params[:filter] == 'tasks' %>">
+          <%= link_to tasks_path(filter: 'tasks'), class: "nav-link" do %>
+            <span class="nav-icon">📝</span>
+            <span class="nav-text">Tasks</span>
+            <span class="nav-count"><%= Task.by_tenant.count %></span>
+          <% end %>
+        </li>
+      </ul>
+
+      <div class="nav-divider"></div>
+
+      <ul class="nav-list nav-projects">
+        <% if defined?(Project) %>
+          <% Project.by_tenant.limit(10).each do |project| %>
+            <li class="nav-item <%= 'active' if params[:project_id] == project.id.to_s %>">
+              <%= link_to tasks_path(project_id: project.id), class: "nav-link" do %>
+                <span class="nav-icon">📋</span>
+                <span class="nav-text"><%= project.name %></span>
+                <span class="nav-count"><%= @tasks.where(project_id: project.id).count %></span>
+              <% end %>
+            </li>
+          <% end %>
+        <% end %>
+      </ul>
+    </nav>
+
+    <div class="sidebar-footer">
+      <%= link_to "#", class: "new-list-btn" do %>
+        <span class="btn-icon">+</span>
+        <span class="btn-text">New list</span>
+      <% end %>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="tasks-main">
+    <header class="tasks-header">
+      <div class="header-content">
+        <div class="header-icon">
+          <span>👤</span>
+        </div>
+        <h1 class="header-title">
+          <%= case params[:filter]
+              when 'my_day' then 'My Day'
+              when 'important' then 'Important'
+              when 'planned' then 'Planned'
+              when 'flagged' then 'Flagged email'
+              when 'tasks' then 'Tasks'
+              else 'Assigned to me'
+              end %>
+        </h1>
+      </div>
+      <div class="header-actions">
+        <%= link_to "🔍", "#", class: "header-action-btn" %>
+        <%= link_to "⋯", "#", class: "header-action-btn" %>
+      </div>
+    </header>
+
+    <div class="tasks-content">
+      <div class="tasks-list">
+        <% @tasks.uncompleted.order(priority: :desc, due_at: :asc).each do |task| %>
+          <div class="task-item" data-task-id="<%= task.id %>">
+            <div class="task-checkbox">
+              <%= check_box_tag "task_#{task.id}", "1", task.completed?, 
+                  class: "task-check", 
+                  data: { 
+                    controller: "tasks",
+                    action: "change->tasks#toggle",
+                    tasks_url_value: task_path(task)
+                  } %>
+            </div>
+
+            <div class="task-content">
+              <%= link_to task_path(task), class: "task-link" do %>
+                <div class="task-title"><%= task.title %></div>
+                <div class="task-meta">
+                  <% if task.tasked_for.present? %>
+                    <span class="task-project"><%= task.tasked_for.try(:name) %></span>
+                  <% end %>
+                  <% if task.due_at.present? %>
+                    <span class="task-due <%= 'overdue' if task.due_at < Date.today %>">
+                      📅 <%= l(task.due_at, format: :short) %>
+                    </span>
+                  <% end %>
+                  <% if task.try(:customer_name).present? %>
+                    <span class="task-customer"><%= task.customer_name %></span>
+                  <% end %>
+                  <% if task.try(:project_name).present? %>
+                    <span class="task-customer"><%= task.project_name %></span>
+                  <% end %>
+                </div>
+              <% end %>
+            </div>
+
+            <div class="task-actions">
+              <% priority = task.priority || 0 %>
+              <%= link_to "⭐", task_path(task, task: { priority: priority > 0 ? 0 : 1 }), 
+                  method: :patch, 
+                  class: "task-star #{'starred' if priority > 0}" %>
+            </div>
+          </div>
+        <% end %>
+
+        <% if @tasks.empty? %>
+          <div class="empty-state">
+            <div class="empty-icon">✓</div>
+            <div class="empty-text">No tasks found</div>
+          </div>
+        <% end %>
+      </div>
+
+      <div class="add-task">
+        <%= form_with model: Task.new, url: tasks_path, class: "add-task-form" do |f| %>
+          <div class="add-task-input">
+            <%= f.text_field :title, placeholder: "+ Add a task", class: "task-input", 
+                data: { controller: "tasks", action: "keydown->tasks#submit" } %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </main>
+</div>

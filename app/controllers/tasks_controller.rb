@@ -1,14 +1,26 @@
 class TasksController < MortimerController
-  # before_action :set_task, only: %i[ show edit update destroy ]
+  before_action :set_task, only: %i[ show edit update destroy ]
 
-  # # GET /tasks or /tasks.json
-  # def index
-  #   @tasks = Task.all
-  # end
+  # GET /tasks or /tasks.json
+  def index
+    @tasks = Task.by_tenant
 
-  # # GET /tasks/1 or /tasks/1.json
-  # def show
-  # end
+    case params[:filter]
+    when "my_day"
+      @tasks = @tasks.where("due_at <= ?", Date.today)
+    when "important"
+      @tasks = @tasks.where(priority: 1..)
+    when "planned"
+      @tasks = @tasks.where.not(due_at: nil)
+    end
+
+    @tasks = @tasks.where(project_id: params[:project_id]) if params[:project_id].present?
+    @tasks = @tasks.where("title LIKE ?", "%#{params[:q]}%") if params[:q].present?
+  end
+
+  # GET /tasks/1 or /tasks/1.json
+  def show
+  end
 
   # # GET /tasks/new
   # def new
@@ -59,9 +71,9 @@ class TasksController < MortimerController
 
   private
     # Use callbacks to share common setup or constraints between actions.
-    # def set_task
-    #   @task = Task.find(params.expect(:id))
-    # end
+    def set_task
+      @task = Task.find(params.expect(:id))
+    end
 
     # Only allow a list of trusted parameters through.
     #  :tenant_id
